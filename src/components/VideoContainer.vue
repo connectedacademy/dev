@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 	export default {
 	  name: 'video-container',
 	  data() {
@@ -14,9 +15,9 @@
 	    };
 	  },
 	};
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
 
 @import "../assets/stylus/shared/*"

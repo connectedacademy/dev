@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
 	export default {
 	  name: 'message-composer',
 	  data() {
@@ -35,6 +36,7 @@
 	    },
 	  },
 	};
+	
 </script>
 
 <style lang="stylus" scoped>

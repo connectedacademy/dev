@@ -1,14 +1,13 @@
 <template lang="pug">
 
-	.main-page
-		.col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
-			.stream
-				video-container
-				.msg-container
-					.msg.visible.animated.fadeInUp(v-for="msg in msgs()" v-bind:style="{ top: msg.position + 'px' }")
-						p
-							strong {{ msg.username }}
-						p {{ ' ' + msg.text }}
+	.col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
+		.stream
+			video-container
+			.msg-container
+				.msg.visible.animated.fadeInUp(v-for="msg in msgs()" v-bind:style="{ top: msg.position + 'px' }")
+					p
+						strong {{ msg.username }}
+					p {{ ' ' + msg.text }}
 
 		message-composer(v-bind:scroll-position="scrollPosition")
 

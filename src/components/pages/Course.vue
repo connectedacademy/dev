@@ -1,11 +1,9 @@
 <template lang="pug">
 
-	.main-page
-
-		.col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
-			.container
-				h1.text-white Course
-				.pure-button.pure-button-primary(@click="toggleColumnState") View Course
+	.col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
+		.container
+			h1.text-white Course
+			.pure-button.pure-button-primary(@click="toggleColumnState") View Course
 
 </template>
 
@@ -28,11 +26,11 @@
       },
     },
   };
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/layout/page"
+	@import "../../assets/stylus/layout/page"
 
 </style>

@@ -1,25 +1,29 @@
 <template lang="pug">
+
 	.burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
 		transition(name="rotate")
 			ul.stack
 				li.bar
 				li.bar
+
 </template>
 
 <script>
-export default {
-  name: 'burger-menu',
-  methods: {
-    toggleLeftDrawer() {
-      this.$store.commit('toggleLeftDrawer');
-    },
-  },
-  computed: {
-    state() {
-      return this.$store.state.navigation.burger.state;
-    },
-  },
-};
+
+	export default {
+	  name: 'burger-menu',
+	  methods: {
+	    toggleLeftDrawer() {
+	      this.$store.commit('toggleLeftDrawer');
+	    },
+	  },
+	  computed: {
+	    state() {
+	      return this.$store.state.navigation.burger.state;
+	    },
+	  },
+	};
+
 </script>
 
 <style lang="stylus" scoped>
