@@ -14,7 +14,7 @@
 	  name: 'burger-menu',
 	  methods: {
 	    toggleLeftDrawer() {
-	      this.$store.commit('toggleLeftDrawer');
+	      this.$store.dispatch('toggleLeftDrawer');
 	    },
 	  },
 	  computed: {

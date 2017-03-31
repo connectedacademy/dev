@@ -12,7 +12,7 @@
   export default {
     name: 'course',
     created() {
-      this.$store.commit('setColumnState', 'wide');
+      this.$store.dispatch('setColumnState', 'wide');
     },
     data() {
       return {
@@ -22,7 +22,7 @@
     components: { },
     methods: {
       toggleColumnState() {
-        this.$store.commit('toggleColumnState');
+        this.$store.dispatch('toggleColumnState');
       },
     },
   };

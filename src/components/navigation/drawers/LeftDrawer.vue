@@ -33,7 +33,7 @@
 	  name: 'left-drawer',
 	  methods: {
 	    toggleLeftDrawer() {
-	      this.$store.commit('toggleLeftDrawer');
+	      this.$store.dispatch('toggleLeftDrawer');
 	    },
 	  },
 	  computed: {

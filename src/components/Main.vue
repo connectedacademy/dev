@@ -21,7 +21,7 @@
   export default {
     name: 'main',
     created() {
-      this.$store.commit('setColumnState', 'narrow');
+      this.$store.dispatch('setColumnState', 'narrow');
     },
     data() {
       return {
