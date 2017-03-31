@@ -1,0 +1,48 @@
+@require "../shared/*"
+
+.main-page
+  pinned(0)
+  background-color $color-main-page
+  position fixed
+  z-index -1
+
+  .col
+    background-color $color-col
+    box-sizing border-box
+    padding 0
+    position fixed
+    top 60px
+    bottom 0
+    left 0
+    right 0
+
+    .container
+      padding 20px
+      h1
+        nomargin()
+        nopadding()
+        color white
+        padding-bottom 20px
+
+  .col#col-main
+    background-color $color-col-main
+    overflow auto
+    transition all 0.2s ease-in-out
+    .stream
+      min-height 2400px
+
+    @media (min-width: 640px)
+      &.narrow
+        left 50%
+        margin-left -300px
+        width 600px
+      &.wide
+        left 0
+        margin-left 0
+        width 100%
+
+    @media (min-width: 1240px)
+      &.wide
+        left 50%
+        margin-left -600px
+        width 1200px
