@@ -28,14 +28,12 @@
     background-color $color-col-main
     overflow auto
     transition all 0.2s ease-in-out
-    .stream
-      min-height 2400px
 
-    @media (min-width: 640px)
+    @media (min-width: 800px)
       &.narrow
         left 50%
-        margin-left -300px
-        width 600px
+        margin-left -400px
+        width 800px
       &.wide
         left 0
         margin-left 0
@@ -46,3 +44,11 @@
         left 50%
         margin-left -600px
         width 1200px
+
+
+.content-block
+  border-radius 2px
+  padding 20px
+  margin 20px 0 0 0
+  &.white-block
+    background-color white

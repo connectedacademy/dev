@@ -1,8 +1,9 @@
 <template lang="pug">
 
+
 	.authentication-wrapper(v-bind:class="{ visible: this.$store.state.auth.visible }")
 		.content-overlay
-			.auth-modal.animated(v-bind:class="{ bounceIn: this.$store.state.auth.visible }")
+			.auth-modal.animated(v-bind:class="{ fadeIn: this.$store.state.auth.visible }")
 				.auth-modal--header
 					h1 {{ (this.$store.state.auth.authenticating) ? $t('auth.authenticating') : $t('auth.authenticate') }}
 				.auth-modal--container
@@ -18,25 +19,34 @@
 								input#cb(type="checkbox" v-bind:disabled="this.$store.state.auth.authenticating")
 								| {{ $t('auth.i_agree_to_terms_and_conditions') }}
 						fieldset
-							button.pure-button.pure-button-primary(v-on:click.once="authenticate" v-bind:disabled="this.$store.state.auth.authenticating")
+							button.pure-button.pure-button-primary(v-on:click.once="attemptAuth" v-bind:disabled="this.$store.state.auth.authenticating")
 								| {{ (this.$store.state.auth.authenticating) ? $t('auth.authenticating') : $t('auth.login_with_twitter') }}
+
 
 </template>
 
 <script>
-
-	export default {
-	  name: 'authentication-flow',
-	  methods: {
-	    authenticate() {
-	      this.$store.commit('attemptAuth', {
-	        name: 'Edward Jenkins',
-	        organisation: 'Newcastle University',
-	      });
-	    },
-	  },
-	};
-
+export default {
+  name: 'authentication-flow',
+  created() {
+    this.checkCallback();
+  },
+  methods: {
+    checkCallback() {
+      if (this.$route.query.oauth_token && this.$route.query.oauth_verifier) {
+        this.$store.commit('authenticate');
+      } else {
+        // Auth failed
+      }
+    },
+    attemptAuth() {
+      this.$store.commit('attemptAuth', {
+        name: this.$t('auth.test.user.name'),
+        organisation: this.$t('auth.test.user.organisation'),
+      });
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>

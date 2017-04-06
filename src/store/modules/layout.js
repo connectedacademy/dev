@@ -16,8 +16,8 @@ const getters = {
 
 // actions
 const actions = {
-  setColumnState({ commit }, newState) {
-    state.columns.main.state = newState;
+  setColumnState({ commit }, colState) {
+    state.columns.main.state = colState;
   },
   toggleColumnState({ commit }) {
     if (state.columns.main.state === COL_STATE_NARROW) {

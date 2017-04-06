@@ -1,3 +1,5 @@
+<meta id="token" name="token" value="{{ csrf_token() }}"></meta>
+
 <template lang="pug">
 
   #app
@@ -24,6 +26,11 @@
 
   export default {
     name: 'app',
+    created() {
+      this.$store.dispatch('setColumnState', 'wide');
+      this.$store.dispatch('getCourse');
+      this.$store.dispatch('getHubs');
+    },
     data() {
       return {
         navTitle: 'Connected Academy',

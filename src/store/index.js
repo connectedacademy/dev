@@ -9,6 +9,8 @@ import layout from './modules/layout';
 import navigation from './modules/navigation';
 import auth from './modules/auth';
 
+import course from './modules/course';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -17,8 +19,12 @@ export default new Vuex.Store({
     layout,
     navigation,
     auth,
+
+    course,
   },
-  state: { },
+  state: {
+    debug: false,
+  },
   getters,
   mutations,
 });

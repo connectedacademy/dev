@@ -3,6 +3,7 @@ const BURGER_CLOSE = 'close';
 
 // initial state
 const state = {
+  debug: true,
   burger: {
     state: BURGER_DEFAULT,
   },
@@ -20,6 +21,9 @@ const actions = {
   toggleLeftDrawer({ commit }) {
     state.leftDrawer.visible = !state.leftDrawer.visible;
     state.burger.state = (state.leftDrawer.visible) ? BURGER_CLOSE : BURGER_DEFAULT;
+  },
+  toggleDebugMode({ commit }) {
+    state.debug = !state.debug;
   },
 };
 

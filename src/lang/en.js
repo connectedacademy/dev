@@ -1,4 +1,7 @@
 export default {
+  common: {
+    toggle_column: 'Toggle Column',
+  },
   nav: {
     home: 'Home',
     course: 'Course',
@@ -24,11 +27,22 @@ export default {
       your_organisation: 'Your Organisation',
       organisation_placeholder: 'e.g. Newcastle University',
     },
+
+    test: {
+      user: {
+        name: 'John Smith',
+        organisation: 'Newcastle University',
+      },
+    },
   },
   composer: {
     compose_message: 'Compose message',
     compose_message_active: 'Write your message',
     message_placeholder: 'Write something here...',
     duration: '{scrollPosition}s',
+  },
+  course: {
+    load_course: 'Load Course',
+    load_hubs: 'Load Hubs',
   },
 };

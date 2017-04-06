@@ -1,48 +1,54 @@
 <template lang="pug">
 
-	.content-overlay(v-bind:class="{ visible: state.visible }" v-on:click="toggleLeftDrawer()")
-		.drawer.drawer-left
-			.brand-logo
-				p connected
-				p academy
+  .content-overlay(v-bind:class="{ visible: state.visible }" v-on:click="toggleLeftDrawer")
+    .drawer.drawer-left
+      .brand-logo
+        p connected
+        p academy
 
-			ul.drawer-list
+      ul.drawer-list
 
-				router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-					h1.drawer-list-item--header Week One
-					h2.drawer-list-item--body Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
+          h1.drawer-list-item--header Class One
+          h2.drawer-list-item--body Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-				router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-					h1.drawer-list-item--header Week Two
-					h2.drawer-list-item--body Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
+          h1.drawer-list-item--header Class Two
+          h2.drawer-list-item--body Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-				router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-					h1.drawer-list-item--header Week Three
-					h2.drawer-list-item--body Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
+          h1.drawer-list-item--header Class Three
+          h2.drawer-list-item--body Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-			ul.drawer--footer
-				router-link(tag="li" to="/") {{ $t('nav.home') }}
-				router-link(tag="li" to="/about") {{ $t('nav.about') }}
-				router-link(tag="li" to="/terms") {{ $t('nav.terms') }}
+        li.drawer-list-item(v-on:click="toggleDebugMode" v-bind:class="{ visible: state.visible }")
+          h2.drawer-list-item--body
+            span(v-if="!this.$store.state.navigation.debug") Enable debug mode
+            span(v-if="this.$store.state.navigation.debug") Disable debug mode
+
+      ul.drawer--footer
+        router-link(tag="li" to="/") {{ $t('nav.home') }}
+        router-link(tag="li" to="/about") {{ $t('nav.about') }}
+        router-link(tag="li" to="/terms") {{ $t('nav.terms') }}
 
 </template>
 
 <script>
-
-	export default {
-	  name: 'left-drawer',
-	  methods: {
-	    toggleLeftDrawer() {
-	      this.$store.dispatch('toggleLeftDrawer');
-	    },
-	  },
-	  computed: {
-	    state() {
-	      return this.$store.state.navigation.leftDrawer;
-	    },
-	  },
-	};
-
+export default {
+  name: 'left-drawer',
+  methods: {
+    toggleLeftDrawer() {
+      this.$store.dispatch('toggleLeftDrawer');
+    },
+    toggleDebugMode() {
+      this.$store.dispatch('toggleDebugMode');
+    },
+  },
+  computed: {
+    state() {
+      return this.$store.state.navigation.leftDrawer;
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -157,5 +163,5 @@
 			pointer-events all
 			.drawer.drawer-left
 				left 0px
-				
+
 </style>

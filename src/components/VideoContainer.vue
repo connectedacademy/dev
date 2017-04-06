@@ -1,21 +1,26 @@
 <template lang="pug">
 
-	.video-container
-		iframe(src="http://www.youtube.com/embed/T5YOZbzJ-ko" frameborder="0" allowfullscreen)
+  .video-container
+    iframe(v-bind:src="src" frameborder="0" allowfullscreen)
+    button.pure-button(v-on:click="loadVideoById('bHQqvYy5KYo', 5, 'large')") Load Video
 
 </template>
 
 <script>
-
-	export default {
-	  name: 'video-container',
-	  data() {
-	    return {
-	      msg: 'Welcome to Connected Academy',
-	    };
-	  },
-	};
-
+export default {
+  name: 'video-container',
+  props: ['videoSrc'],
+  data() {
+    return {
+      msg: 'Welcome to Connected Academy',
+    };
+  },
+  computed: {
+    src() {
+      return `http://www.youtube.com/embed/${this.videoSrc}`;
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>
