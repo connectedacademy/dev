@@ -15,9 +15,9 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/auth/twitter_callback',
-      name: 'AuthenticationFlow',
-      component: AuthenticationFlow,
+      path: '/dashboard',
+      name: 'Main',
+      component: Main,
     },
     {
       path: '/',

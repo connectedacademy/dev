@@ -12,7 +12,6 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'webinar-content',
-  props: ['content'],
   computed: {
     ...mapGetters([
       'coursePreContent',

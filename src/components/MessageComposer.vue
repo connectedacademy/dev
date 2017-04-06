@@ -19,24 +19,24 @@
 </template>
 
 <script>
-
-	export default {
-	  name: 'message-composer',
-	  data() {
-	    return {
-	      visible: false,
-	    };
-	  },
-	  props: {
-	    scrollPosition: Number,
-	  },
-	  methods: {
-	    dismissComposer() {
-	      this.visible = false;
-	    },
-	  },
-	};
-	
+export default {
+  name: 'message-composer',
+  data() {
+    return {
+      visible: false,
+    };
+  },
+  methods: {
+    dismissComposer() {
+      this.visible = false;
+    },
+  },
+  computed: {
+    scrollPosition() {
+      return this.$store.getters.scrollPosition;
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import _ from 'lodash';
 
 import * as actions from './actions';
 import * as getters from './getters';
@@ -24,7 +25,10 @@ export default new Vuex.Store({
   },
   state: {
     debug: false,
+    scrollPosition: 0,
   },
-  getters,
+  getters: {
+    scrollPosition: state => _.ceil(state.scrollPosition),
+  },
   mutations,
 });

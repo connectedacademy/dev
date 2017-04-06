@@ -12,7 +12,6 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'post-class-content',
-  props: ['content'],
   computed: {
     ...mapGetters([
       'coursePostClassContent',

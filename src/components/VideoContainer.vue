@@ -1,12 +1,17 @@
 <template lang="pug">
 
-  .video-container
-    iframe(v-bind:src="src" frameborder="0" allowfullscreen)
-    button.pure-button(v-on:click="loadVideoById('bHQqvYy5KYo', 5, 'large')") Load Video
+  .video-wrapper
+    .video-controls(hidden)
+      button.pure-button(@click="pause") Pause
+      button.pure-button(@click="play") Play
+      button.pure-button(@click="seek") Seek
+    youtube.video-container(v-bind:video-id="videoSrc" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" player-width="auto" player-height="auto")
 
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   name: 'video-container',
   props: ['videoSrc'],
@@ -15,9 +20,42 @@ export default {
       msg: 'Welcome to Connected Academy',
     };
   },
+  watch: {
+    scrollPosition(oldPosition, newPosition) {
+      this.seek();
+      // _.debounce(this.seek(), 5000);
+    },
+  },
+  methods: {
+    ready(player) {
+      this.player = player;
+      this.play();
+    },
+    playing(player) {
+      // The player is playing a video.
+    },
+    change() {
+      // this.videoId = 'another video id';
+    },
+    seek() {
+      this.player.seekTo(this.scrollPosition);
+    },
+    play() {
+      this.player.playVideo();
+    },
+    stop() {
+      this.player.stopVideo();
+    },
+    pause() {
+      this.player.pauseVideo();
+    },
+  },
   computed: {
     src() {
       return `http://www.youtube.com/embed/${this.videoSrc}`;
+    },
+    scrollPosition() {
+      return this.$store.getters.scrollPosition;
     },
   },
 };
@@ -26,30 +64,5 @@ export default {
 <style lang="stylus" scoped>
 
 @import "../assets/stylus/shared/*"
-
-	.video-container
-		background-color alpha(white, 0.025)
-		box-sizing border-box
-		height 0
-		overflow hidden
-		padding 0
-		padding-bottom 56.25%
-		position relative
-		width 100%
-
-		.play-icon
-			display none
-			color white
-			position absolute
-			left 50%
-			top 50%
-			transform scale(2) translate(-50%, -50%)
-
-		iframe, object, embed
-			position absolute
-			top 0
-			left 0
-			width 100%
-			height 100%
 
 </style>
