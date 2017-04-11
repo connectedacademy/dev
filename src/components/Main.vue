@@ -19,6 +19,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import PreContent from './content/PreContent';
 import ClassContent from './content/ClassContent';
 import PostClassContent from './content/PostClassContent';
@@ -29,8 +30,14 @@ import MessageComposer from './MessageComposer';
 
 export default {
   name: 'main',
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.$store.dispatch('checkAuth');
+    });
+  },
   created() {
     this.$store.dispatch('setColumnState', 'narrow');
+    this.$store.commit('setSession', { sid: this.$cookie.get('sails.sid') });
   },
   data() {
     return {

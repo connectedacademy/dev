@@ -2,7 +2,7 @@
 
 	.message-composer-wrapper
 
-		.message-composer(v-bind:class="{ active: visible, hidden: this.$store.state.navigation.leftDrawer.visible }")
+		.message-composer(v-bind:class="{ active: visible, hidden: hidden }")
 
 			.message-composer--header(v-on:click="visible = !visible")
 
@@ -32,6 +32,10 @@ export default {
     },
   },
   computed: {
+    hidden() {
+      return (this.$store.state.navigation.leftDrawer.visible ||
+        !this.$store.state.auth.isAuthenticated);
+    },
     scrollPosition() {
       return this.$store.getters.scrollPosition;
     },

@@ -2,39 +2,36 @@
 
   .conversation-container
 
-    .msg.visible(v-for="msg in msgs()" v-bind:style="{ top: msg.position + 'px' }")
+    .message.visible(v-for="message in messages.data" v-bind:style="{ top: message.position + 'px' }")
 
-      p {{ msg.username }}
+      img(v-bind:src="message.user.profile")
+      
+      p {{ message.user.name }} - {{ message.user.account }}
 
-      p {{ ' ' + msg.text }}
+      p {{ ' ' + message.text }}
 
 </template>
 
 <script>
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'conversation-container',
+  created() {
+    this.$store.dispatch('getMessages');
+  },
+  methods: {
+  },
+  computed: {
+    messages() {
+      return this.$store.getters.messages;
+    },
+  },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
       scrollPosition: 0,
-      msgs() {
-        const msgHeight = 90;
-        let i = 0;
-        let msgs = [];
-        while (i < 10) {
-          msgs.push({
-            username: '@username',
-            text: `Test msg ${Math.ceil(this.scrollPosition * i)} #hashtag`,
-            position: 0, // + ((i - 5) * 40) + (this.scrollPosition * 100),
-          });
-          i += 1;
-        }
-        const minAllowable = (msgs.length < 20) ? msgs.length : 20;
-        msgs = msgs.slice(msgs.length - minAllowable, msgs.length);
-        return msgs;
-      },
     };
   },
 };
@@ -47,7 +44,7 @@ export default {
 .conversation-container
   padding 0
   width 50%
-  .msg
+  .message
     border-left $color-primary 2px solid
     margin 15px 0
     padding 5px 10px

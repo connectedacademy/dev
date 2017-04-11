@@ -1,12 +1,14 @@
-import Router from 'vue-router';
-
-const router = new Router();
+import * as types from '../mutation-types';
+import API from '../../api';
 
 // initial state
 const state = {
   visible: false,
   authenticating: false,
   isAuthenticated: false,
+  session: {
+    sid: '',
+  },
   user: {
     name: '',
     organisation: '',
@@ -19,33 +21,63 @@ const getters = {
 
 // actions
 const actions = {
+  checkAuth({
+    commit,
+  }) {
+    API.auth.checkAuth(
+      response => commit(types.CHECK_AUTH_SUCCESS, {
+        response,
+      }),
+      response => commit(types.CHECK_AUTH_FAILURE, {
+        response,
+      }),
+    );
+  },
+  logout({
+    commit,
+  }) {
+    API.auth.logout(
+      response => commit(types.LOGOUT_SUCCESS, { response }),
+      response => commit(types.LOGOUT_FAILURE, { response }),
+    );
+  },
 };
 
 // mutations
 const mutations = {
-  login({ commit }) {
-    state.visible = true;
+  [types.CHECK_AUTH_SUCCESS](initialState, {
+    response,
+  }) {
+    state.isAuthenticated = true;
   },
-  logout({ commit }) {
+  [types.CHECK_AUTH_FAILURE](initialState, {
+    response,
+  }) {
+    state.isAuthenticated = false;
+    // error in response
+  },
+  [types.LOGOUT_SUCCESS](initialState, {
+    response,
+  }) {
     state.visible = false;
     state.authenticating = false;
     state.isAuthenticated = false;
     state.user = undefined;
   },
+  [types.LOGOUT_FAILURE](initialState, {
+    response,
+  }) {
+    // error in response
+  },
+  login({ commit }) {
+    state.visible = true;
+  },
+  setSession({ commit }, session) {
+    state.session = session;
+  },
   attemptAuth({ commit }, user) {
     state.user = user;
     document.location = 'http://localhost:4000/auth/login';
-  },
-  authenticate({ commit }) {
-    state.visible = true;
-    state.authenticating = true;
-    state.isAuthenticated = true;
-    setTimeout(() => {
-      state.authenticating = false;
-      state.isAuthenticated = true;
-      state.visible = false;
-      router.push('/schedule');
-    }, 1000);
   },
 };
 

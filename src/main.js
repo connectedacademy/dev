@@ -6,6 +6,7 @@ import VueResource from 'vue-resource';
 import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
+import VueCookie from 'vue-cookie';
 
 import VueYouTubeEmbed from 'vue-youtube-embed';
 
@@ -22,21 +23,26 @@ Vue.component('icon', Icon);
 
 require('animate.css');
 
-// Attach cookies to API request
-// Vue.http.interceptors.push((request, next) => {
-//   request.headers.set('Access-Control-Allow-Origin', '*');
-//   request.headers.set('Access-Control-Allow-Credentials', true);
-//   // request.credentials = true;
-//   next();
-// });
-
 Vue.use(VueResource);
 Vue.use(Vuex);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
+Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
 
 // General config
 Vue.config.productionTip = false;
+
+// Http config
+Vue.http.options = { credentials: true, responseType: 'json' };
+Vue.http.interceptors.push((request, next) => {
+  next((response) => {
+    if (response.status === 403) {
+      // eslint-disable-next-line
+      console.log('Session invalid');
+      store.dispatch('logout');
+    }
+  });
+});
 
 // I18n config
 Vue.config.lang = 'en';
@@ -51,6 +57,7 @@ new Vue({
   components: {
     App,
     Lang,
+    VueCookie,
   },
   data() {
     return {

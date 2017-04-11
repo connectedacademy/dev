@@ -39,7 +39,7 @@
         this.$store.commit('login');
       },
       logout() {
-        this.$store.commit('logout');
+        this.$store.dispatch('logout');
       },
     },
   };

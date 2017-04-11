@@ -5,7 +5,7 @@
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
       button.pure-button(@click="seek") Seek
-    youtube.video-container(v-bind:video-id="videoSrc" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" player-width="auto" player-height="auto")
+    //- youtube.video-container(v-bind:video-id="videoSrc" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" player-width="auto" player-height="auto")
 
 </template>
 

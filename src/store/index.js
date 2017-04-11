@@ -11,6 +11,7 @@ import navigation from './modules/navigation';
 import auth from './modules/auth';
 
 import course from './modules/course';
+import message from './modules/message';
 
 Vue.use(Vuex);
 
@@ -22,13 +23,12 @@ export default new Vuex.Store({
     auth,
 
     course,
+    message,
   },
   state: {
     debug: false,
     scrollPosition: 0,
   },
-  getters: {
-    scrollPosition: state => _.ceil(state.scrollPosition),
-  },
+  getters,
   mutations,
 });

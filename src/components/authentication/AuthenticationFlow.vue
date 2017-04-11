@@ -28,17 +28,7 @@
 <script>
 export default {
   name: 'authentication-flow',
-  created() {
-    this.checkCallback();
-  },
   methods: {
-    checkCallback() {
-      if (this.$route.query.oauth_token && this.$route.query.oauth_verifier) {
-        this.$store.commit('authenticate');
-      } else {
-        // Auth failed
-      }
-    },
     attemptAuth() {
       this.$store.commit('attemptAuth', {
         name: this.$t('auth.test.user.name'),

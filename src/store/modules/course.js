@@ -1,5 +1,5 @@
-import course from '../../api/course';
 import * as types from '../mutation-types';
+import API from '../../api';
 
 // initial state
 const state = {
@@ -37,8 +37,8 @@ const actions = {
   getCourse({
     commit,
   }) {
-    course.getSpec(
-      course,
+    API.course.getSpec(
+      API.course,
       response => commit(types.GET_COURSE_SPEC_SUCCESS, {
         response,
       }),
@@ -50,8 +50,8 @@ const actions = {
   getHubs({
     commit,
   }) {
-    course.getHubs(
-      course,
+    API.course.getHubs(
+      API.course,
       response => commit(types.GET_HUBS_SUCCESS, {
         response,
       }),
