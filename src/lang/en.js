@@ -1,5 +1,7 @@
 export default {
   common: {
+    enable_debug_mode: 'Enable Debug Mode',
+    disable_debug_mode: 'Disable Debug Mode',
     toggle_column: 'Toggle Column',
     optional: 'Optional',
   },

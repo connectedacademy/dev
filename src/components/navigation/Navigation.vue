@@ -15,7 +15,7 @@
 			li.navigation-item.navigation-item-page(v-if="!this.$store.state.auth.isAuthenticated" v-on:click="login") {{ $t('auth.login') }}
 			li.navigation-item.navigation-item-page(v-if="this.$store.state.auth.isAuthenticated" v-on:click="logout") {{ $t('auth.logout') }}
 
-		profile-icon(v-if="this.$store.state.auth.isAuthenticated")
+		profile-icon(v-if="authenticated")
 
 </template>
 
@@ -31,6 +31,11 @@
       ProfileIcon,
     },
     data() { return {}; },
+    computed: {
+      authenticated() {
+        return this.$store.state.auth.isAuthenticated;
+      },
+    },
     props: {
       navTitle: String,
     },
