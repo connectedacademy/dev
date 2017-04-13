@@ -4,8 +4,12 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuex from 'vuex';
+import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
+import VueCookie from 'vue-cookie';
+
+import VueYouTubeEmbed from 'vue-youtube-embed';
 
 import 'vue-awesome/icons';
 import Icon from 'vue-awesome/components/Icon';
@@ -22,10 +26,25 @@ require('animate.css');
 
 Vue.use(VueResource);
 Vue.use(Vuex);
+Vue.use(VueConfig, Vue.config);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
+Vue.use(VueCookie);
+Vue.use(VueYouTubeEmbed);
 
 // General config
 Vue.config.productionTip = false;
+
+// Http config
+Vue.http.options = { credentials: true, responseType: 'json' };
+Vue.http.interceptors.push((request, next) => {
+  next((response) => {
+    if (response.status === 403) {
+      // eslint-disable-next-line
+      console.log('Session invalid');
+      store.dispatch('logout');
+    }
+  });
+});
 
 // I18n config
 Vue.config.lang = 'en';
@@ -39,11 +58,8 @@ new Vue({
   template: '<App/>',
   components: {
     App,
+    Icon,
     Lang,
-  },
-  data() {
-    return {
-      test: 'true',
-    };
+    VueCookie,
   },
 });

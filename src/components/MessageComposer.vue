@@ -2,7 +2,7 @@
 
 	.message-composer-wrapper
 
-		.message-composer(v-bind:class="{ active: visible, hidden: this.$store.state.navigation.leftDrawer.visible }")
+		.message-composer(v-bind:class="{ active: visible, hidden: hidden }")
 
 			.message-composer--header(v-on:click="visible = !visible")
 
@@ -19,24 +19,28 @@
 </template>
 
 <script>
-
-	export default {
-	  name: 'message-composer',
-	  data() {
-	    return {
-	      visible: false,
-	    };
-	  },
-	  props: {
-	    scrollPosition: Number,
-	  },
-	  methods: {
-	    dismissComposer() {
-	      this.visible = false;
-	    },
-	  },
-	};
-	
+export default {
+  name: 'message-composer',
+  data() {
+    return {
+      visible: false,
+    };
+  },
+  methods: {
+    dismissComposer() {
+      this.visible = false;
+    },
+  },
+  computed: {
+    hidden() {
+      return (this.$store.state.navigation.leftDrawer.visible ||
+        !this.$store.state.auth.isAuthenticated);
+    },
+    scrollPosition() {
+      return this.$store.getters.scrollPosition;
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>

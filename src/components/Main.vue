@@ -14,42 +14,50 @@
 
       post-webinar-content
 
-    message-composer(v-bind:scroll-position="scrollPosition")
+    message-composer
 
 </template>
 
 <script>
-import MessageComposer from './MessageComposer';
-
+/* eslint-disable */
 import PreContent from './content/PreContent';
 import ClassContent from './content/ClassContent';
 import PostClassContent from './content/PostClassContent';
 import WebinarContent from './content/WebinarContent';
 import PostWebinarContent from './content/PostWebinarContent';
 
+import MessageComposer from './MessageComposer';
+
 export default {
   name: 'main',
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.$store.dispatch('checkAuth');
+    });
+  },
   created() {
     this.$store.dispatch('setColumnState', 'narrow');
+    this.$store.commit('setSession', { sid: this.$cookie.get('sails.sid') });
+    this.$store.dispatch('getCourse');
   },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      scrollPosition: 0,
     };
   },
   components: {
-    MessageComposer,
     PreContent,
     ClassContent,
     PostClassContent,
     WebinarContent,
     PostWebinarContent,
+    MessageComposer,
   },
   methods: {
     onScroll() {
-      this.scrollPosition = this.$refs.main.scrollTop / 100;
-      this.scrollPosition = (this.scrollPosition < 0) ? 0 : this.scrollPosition;
+      let scrollPosition = this.$refs.main.scrollTop / 100;
+      scrollPosition = (scrollPosition < 0) ? 0 : scrollPosition;
+      this.$store.dispatch('setScrollPosition', scrollPosition);
     },
   },
 };
@@ -61,24 +69,5 @@ export default {
 
   .stream
     padding-bottom 80px
-  	.msg-container
-  		padding 20px
-      width 50%
-  		.msg
-  			border-radius 6px
-  			margin 10px 0
-  			padding 10px 15px
-
-  			position relative
-
-  			opacity 0
-
-  			transition opacity 1s
-  			p
-  				nomargin()
-  				nopadding()
-  				color white
-  			&.visible
-  				opacity 1
 
 </style>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import _ from 'lodash';
 
 import * as actions from './actions';
 import * as getters from './getters';
@@ -10,6 +11,7 @@ import navigation from './modules/navigation';
 import auth from './modules/auth';
 
 import course from './modules/course';
+import message from './modules/message';
 
 Vue.use(Vuex);
 
@@ -21,9 +23,11 @@ export default new Vuex.Store({
     auth,
 
     course,
+    message,
   },
   state: {
     debug: false,
+    scrollPosition: 0,
   },
   getters,
   mutations,

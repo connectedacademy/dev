@@ -1,22 +1,33 @@
 <template lang="pug">
 
   .course-content-wrapper
-    .course-content.pre-content(v-for="content in coursePreContent")
+
+    .course-content.pre-content(v-for="content in coursePreContent" v-bind:class="{ optional: content.optional }")
+
       h1 {{ content.title }}
-      a(v-bind:href="content.url" target="_blank") {{ content.url }}
+
+      video-thumbnail(:video-src="content.video" v-if="content.video" )
+
+      markdown-link(v-bind:md-content="content" v-if="content.url")
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import MarkdownLink from '../MarkdownLink';
+import VideoThumbnail from '../VideoThumbnail';
+
 export default {
   name: 'webinar-content',
-  props: ['content'],
   computed: {
     ...mapGetters([
       'coursePreContent',
     ]),
+  },
+  components: {
+    MarkdownLink,
+    VideoThumbnail,
   },
 };
 </script>
