@@ -38,6 +38,7 @@ export default {
   created() {
     this.$store.dispatch('setColumnState', 'narrow');
     this.$store.commit('setSession', { sid: this.$cookie.get('sails.sid') });
+    this.$store.dispatch('getCourse');
   },
   data() {
     return {

@@ -2,11 +2,11 @@
 
   .course-content-wrapper
 
-    .course-content.class-content(v-for="content in courseClassContent")
+    .course-content.class-content(v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
 
       h1 {{ content.title }}
 
-      img(v-bind:src="content.video | thumbnail" width="200")
+      video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       video-container(:video-src="content.video")
 
@@ -17,7 +17,9 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import MarkdownLink from '../MarkdownLink';
 import VideoContainer from '../VideoContainer';
+import VideoThumbnail from '../VideoThumbnail';
 import ConversationContainer from '../ConversationContainer';
 
 export default {
@@ -27,11 +29,6 @@ export default {
       'courseClassContent',
     ]),
   },
-  filters: {
-    thumbnail(video) {
-      return `http://img.youtube.com/vi/${video}/hqdefault.jpg`;
-    },
-  },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
@@ -39,7 +36,9 @@ export default {
   },
   components: {
     ConversationContainer,
+    MarkdownLink,
     VideoContainer,
+    VideoThumbnail,
   },
 };
 </script>

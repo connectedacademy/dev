@@ -49,6 +49,8 @@ const mutations = {
     response,
   }) {
     state.isAuthenticated = true;
+    // Save user in session
+    state.user = response.user;
   },
   [types.CHECK_AUTH_FAILURE](initialState, {
     response,

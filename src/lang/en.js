@@ -1,6 +1,7 @@
 export default {
   common: {
     toggle_column: 'Toggle Column',
+    optional: 'Optional',
   },
   nav: {
     home: 'Home',

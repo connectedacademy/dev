@@ -1,14 +1,22 @@
 <template lang="pug">
 
   .course-content-wrapper
-    .course-content.post-webinar-content(v-for="content in coursePostWebinarContent")
+
+    .course-content.post-webinar-content(v-for="content in coursePostWebinarContent" v-bind:class="{ optional: content.optional }")
+
       h1 {{ content.title }}
-      a(v-bind:href="content.url" target="_blank") {{ content.url }}
+
+      video-thumbnail(:video-src="content.video" v-if="content.video" )
+
+      markdown-link(v-bind:md-content="content" v-if="content.url")
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+
+import MarkdownLink from '../MarkdownLink';
+import VideoThumbnail from '../VideoThumbnail';
 
 export default {
   name: 'post-webinar-content',
@@ -16,6 +24,10 @@ export default {
     ...mapGetters([
       'coursePostWebinarContent',
     ]),
+  },
+  components: {
+    MarkdownLink,
+    VideoThumbnail,
   },
 };
 </script>

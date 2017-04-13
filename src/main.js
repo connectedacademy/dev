@@ -4,6 +4,7 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuex from 'vuex';
+import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
@@ -25,6 +26,7 @@ require('animate.css');
 
 Vue.use(VueResource);
 Vue.use(Vuex);
+Vue.use(VueConfig, Vue.config);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
@@ -56,12 +58,8 @@ new Vue({
   template: '<App/>',
   components: {
     App,
+    Icon,
     Lang,
     VueCookie,
-  },
-  data() {
-    return {
-      test: 'true',
-    };
   },
 });

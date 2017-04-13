@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
 
 import Main from '@/components/Main';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 import Course from '@/components/pages/Course';
 import About from '@/components/pages/About';
@@ -16,13 +17,23 @@ export default new Router({
   routes: [
     {
       path: '/dashboard',
-      name: 'Main',
-      component: Main,
+      redirect: '/',
     },
     {
       path: '/',
       name: 'Main',
       component: Main,
+    },
+    {
+      path: '/markdown/:url',
+      redirect: (to) => {
+        const { hash, params, query } = to;
+        return { path: '/markdown', query: { url: params.url } };
+      },
+    },
+    {
+      path: '/markdown',
+      component: MarkdownRenderer,
     },
     {
       path: '/course',
