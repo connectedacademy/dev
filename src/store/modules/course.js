@@ -3,6 +3,7 @@ import API from '../../api';
 
 // initial state
 const state = {
+  current_class: 0,
   course: {},
   hubs: {},
 };
@@ -16,22 +17,23 @@ const getters = {
     return state.hubs;
   },
   coursePreContent() {
-    return state.course.classes[0].content.filter(item => (item.content_type === 'submission'));
+    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'submission'));
   },
   courseClassContent() {
-    return state.course.classes[0].content.filter(item => (item.content_type === 'class'));
+    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'class'));
   },
   coursePostClassContent() {
-    return state.course.classes[0].content.filter(item => (item.content_type === 'postclass'));
+    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'postclass'));
   },
   courseWebinarContent() {
-    return state.course.classes[0].content.filter(item => (item.content_type === 'webinar'));
+    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'webinar'));
   },
   coursePostWebinarContent() {
-    return state.course.classes[0].content.filter(item => (item.content_type === 'postwebinar'));
+    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'postwebinar'));
   },
 };
 
+/* eslint-disable */
 // actions
 const actions = {
   getCourse({
@@ -85,6 +87,9 @@ const mutations = {
   }) {
     state.hubs = {};
     // error in response
+  },
+  [types.SET_CURRENT_CLASS](initialState, selectedClass) {
+    state.current_class = selectedClass;
   },
 };
 

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .content-overlay(v-bind:class="{ visible: state.visible }" v-on:click="toggleLeftDrawer")
+  .content-overlay(v-bind:class="{ visible: state.visible }")
     .drawer.drawer-left
       .brand-logo
         p connected
@@ -8,22 +8,14 @@
 
       ul.drawer-list
 
-        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-          h1.drawer-list-item--header Class One
-          h2.drawer-list-item--body Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-          h1.drawer-list-item--header Class Two
-          h2.drawer-list-item--body Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-
-        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-          h1.drawer-list-item--header Class Three
-          h2.drawer-list-item--body Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        li.drawer-list-item(v-for="(currentClass, index) in classes" v-bind:key="currentClass.name" v-bind:class="{ visible: state.visible }" v-on:click="setCurrentClass(index)")
+          h1.drawer-list-item--header {{ currentClass.name }}
+          h2.drawer-list-item--body {{ currentClass.description }}
 
         li.drawer-list-item(v-on:click="toggleDebugMode" v-bind:class="{ visible: state.visible }")
           h2.drawer-list-item--body
-            span(v-if="!this.$store.state.navigation.debug") Enable debug mode
-            span(v-if="this.$store.state.navigation.debug") Disable debug mode
+            span(v-if="!this.$store.state.navigation.debug") {{ $t('common.enable_debug_mode') }}
+            span(v-if="this.$store.state.navigation.debug") {{ $t('common.disable_debug_mode') }}
 
       ul.drawer--footer
         router-link(tag="li" to="/") {{ $t('nav.home') }}
@@ -33,6 +25,8 @@
 </template>
 
 <script>
+import * as types from '../../../store/mutation-types';
+
 export default {
   name: 'left-drawer',
   methods: {
@@ -42,8 +36,15 @@ export default {
     toggleDebugMode() {
       this.$store.dispatch('toggleDebugMode');
     },
+    setCurrentClass(newClass) {
+      this.$store.commit(types.SET_CURRENT_CLASS, newClass);
+      this.$store.dispatch('toggleLeftDrawer');
+    },
   },
   computed: {
+    classes() {
+      return this.$store.getters.course.classes;
+    },
     state() {
       return this.$store.state.navigation.leftDrawer;
     },
