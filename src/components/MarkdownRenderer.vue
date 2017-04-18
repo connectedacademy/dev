@@ -91,25 +91,22 @@ export default {
 
 <style lang="stylus">
 
-  @import "../assets/stylus/shared/*"
-  @import "../assets/stylus/layout/page"
+.markdown-nav
+  border-bottom alpha(white, 0.2) 1px solid
+  margin-bottom 20px
+  padding-bottom 20px
+  .pure-button
+    margin 0 5px
+  a
+    color white
 
-  .markdown-nav
-    border-bottom alpha(white, 0.2) 1px solid
-    margin-bottom 20px
-    padding-bottom 20px
-    .pure-button
-      margin 0 5px
-    a
-      color white
-
-  .rendered-markdown
-    h1, h2, h3, h4, h5, p, a, li
-      nomargin()
-      nopadding()
-      color white
-      margin-bottom 5px
-    img
-      max-width 100%
+.rendered-markdown
+  h1, h2, h3, h4, h5, p, a, li
+    nomargin()
+    nopadding()
+    color white
+    margin-bottom 5px
+  img
+    max-width 100%
 
 </style>

@@ -3,7 +3,7 @@ import API from '../../api';
 
 // initial state
 const state = {
-  current_class: 0,
+  current_class: undefined,
   course: {},
   hubs: {},
 };
@@ -17,18 +17,23 @@ const getters = {
     return state.hubs;
   },
   coursePreContent() {
+    if (state.current_class === undefined) { return undefined; }
     return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'submission'));
   },
   courseClassContent() {
+    if (state.current_class === undefined) { return undefined; }
     return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'class'));
   },
   coursePostClassContent() {
+    if (state.current_class === undefined) { return undefined; }
     return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'postclass'));
   },
   courseWebinarContent() {
+    if (state.current_class === undefined) { return undefined; }
     return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'webinar'));
   },
   coursePostWebinarContent() {
+    if (state.current_class === undefined) { return undefined; }
     return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'postwebinar'));
   },
 };

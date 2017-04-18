@@ -14,24 +14,19 @@
 
       post-webinar-content
 
-    message-composer
-
 </template>
 
 <script>
-/* eslint-disable */
 import PreContent from './content/PreContent';
 import ClassContent from './content/ClassContent';
 import PostClassContent from './content/PostClassContent';
 import WebinarContent from './content/WebinarContent';
 import PostWebinarContent from './content/PostWebinarContent';
 
-import MessageComposer from './MessageComposer';
-
 export default {
   name: 'main',
   beforeRouteEnter(to, from, next) {
-    next(vm => {
+    next((vm) => {
       vm.$store.dispatch('checkAuth');
     });
   },
@@ -51,7 +46,6 @@ export default {
     PostClassContent,
     WebinarContent,
     PostWebinarContent,
-    MessageComposer,
   },
   methods: {
     onScroll() {
@@ -65,9 +59,7 @@ export default {
 
 <style lang="stylus">
 
-@import "../assets/stylus/layout/page"
-
-  .stream
-    padding-bottom 80px
+.stream
+  padding-bottom 80px
 
 </style>

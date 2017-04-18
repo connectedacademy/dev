@@ -1,9 +1,7 @@
 <template lang="pug">
 
-
-	.profile-icon.animated.bounceIn
+	.profile-icon.animated.bounceIn(v-on:click="showProfile")
 		.profile-image(v-bind:style="{ 'background-image': profile }")
-
 
 </template>
 
@@ -20,12 +18,15 @@ export default {
       return `url('${this.$store.state.auth.user.profile}')`;
     },
   },
+  methods: {
+    showProfile() {
+      this.$store.commit('TOGGLE_RIGHT_DRAWER');
+    },
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
-
-@import "../../assets/stylus/shared/*"
 
 .profile-icon
   position absolute

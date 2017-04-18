@@ -9,6 +9,7 @@ import * as mutations from './mutations';
 import layout from './modules/layout';
 import navigation from './modules/navigation';
 import auth from './modules/auth';
+import composer from './modules/composer';
 
 import course from './modules/course';
 import message from './modules/message';
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     layout,
     navigation,
     auth,
+    composer,
 
     course,
     message,

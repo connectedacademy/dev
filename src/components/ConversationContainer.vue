@@ -5,7 +5,7 @@
     .message.visible(v-for="message in messages.data" v-bind:style="{ top: message.position + 'px' }")
 
       img(v-bind:src="message.user.profile")
-      
+
       p {{ message.user.name }} - {{ message.user.account }}
 
       p {{ ' ' + message.text }}
@@ -38,8 +38,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-@import "../assets/stylus/shared/*"
 
 .conversation-container
   padding 0

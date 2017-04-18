@@ -34,6 +34,4 @@ export default {
 
 <style lang="stylus" scoped>
 
-	@import "../../assets/stylus/layout/page"
-
 </style>

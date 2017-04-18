@@ -4,47 +4,81 @@
 
   #app
 
-    authentication-flow
-
     .main-page
 
       navigation(v-bind:nav-title="navTitle")
 
-      left-drawer
-
       router-view(transition transition-mode="out-in")
+
+    burger-menu
+
+    left-drawer
+
+    right-drawer
+
+    message-composer
+
+    authentication-flow
+
+    .content-overlay(v-on:click="dismiss" v-bind:class="{ 'visible': overlayVisible }")
 
 </template>
 
 <script>
 
-  import AuthenticationFlow from './components/authentication/AuthenticationFlow';
-  import Navigation from './components/navigation/Navigation';
-  import LeftDrawer from './components/navigation/drawers/LeftDrawer';
+import AuthenticationFlow from './components/authentication/AuthenticationFlow';
+import Navigation from './components/navigation/Navigation';
+import BurgerMenu from './components/navigation/BurgerMenu';
+import LeftDrawer from './components/navigation/drawers/LeftDrawer';
+import RightDrawer from './components/navigation/drawers/RightDrawer';
+import MessageComposer from './components/MessageComposer';
 
-  import store from './store/index';
+import store from './store/index';
+import * as types from './store/mutation-types';
 
-  export default {
-    name: 'app',
-    created() {
-      this.$store.dispatch('setColumnState', 'wide');
-      this.$store.dispatch('getCourse');
-      this.$store.dispatch('getHubs');
+export default {
+  name: 'app',
+  created() {
+    this.$store.dispatch('setColumnState', 'wide');
+    this.$store.dispatch('getCourse');
+    this.$store.dispatch('getHubs');
+  },
+  data() {
+    return {
+      navTitle: 'Connected Academy',
+    };
+  },
+  computed: {
+    overlayVisible() {
+      return this.$store.state.navigation.overlayVisible
+      || this.$store.state.auth.visible
+      || this.$store.state.composer.visible;
     },
-    data() {
-      return {
-        navTitle: 'Connected Academy',
-      };
+  },
+  store,
+  components: {
+    AuthenticationFlow,
+    Navigation,
+    BurgerMenu,
+    LeftDrawer,
+    RightDrawer,
+    MessageComposer,
+  },
+  methods: {
+    dismiss() {
+      this.$store.commit(types.DISMISS_AUTH);
+      this.$store.commit(types.DISMISS_COMPOSER);
+      this.$store.commit(types.DISMISS_LEFT_DRAWER);
+      this.$store.commit(types.DISMISS_RIGHT_DRAWER);
     },
-    store,
-    components: { AuthenticationFlow, Navigation, LeftDrawer },
-    methods: { },
-  };
+  },
+};
 
 </script>
 
 <style lang="styl">
 
+@import "./assets/stylus/shared/*";
 @import "./assets/stylus/layout/page";
 
 </style>
