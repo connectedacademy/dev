@@ -4,6 +4,8 @@ export default {
     disable_debug_mode: 'Disable Debug Mode',
     toggle_column: 'Toggle Column',
     optional: 'Optional',
+    current_language: 'Current language',
+    current_service: 'Current service',
   },
   nav: {
     home: 'Home',
@@ -47,5 +49,6 @@ export default {
   course: {
     load_course: 'Load Course',
     load_hubs: 'Load Hubs',
+    current_course_language: 'Current course language',
   },
 };

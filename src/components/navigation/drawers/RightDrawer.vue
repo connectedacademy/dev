@@ -6,6 +6,15 @@
       h1.user-name {{ user.name }}
       h2.user-account {{ `@${user.account}` }}
 
+    .settings-container
+      form.pure-form.pure-form-stacked
+        fieldset
+          label {{ $t('common.current_language') }}
+          label {{ `- ${user.lang}` }}
+        fieldset
+          label {{ $t('common.current_service') }}
+          label {{ `- ${user.service}` }}
+
     pre(hidden) {{ user }}
 
 </template>
@@ -67,5 +76,13 @@ export default {
       font-size 1em
       font-weight normal
 
-
+  // Settings container
+  .settings-container
+    padding 20px
+    fieldset
+      label
+        color white
+        margin-bottom 5px
+      select
+        width 100%
 </style>

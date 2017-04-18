@@ -36,7 +36,8 @@ ul.class-selector
   cleanlist()
   li.class-selector--item
     cleanlist()
-    background-color alpha(white, 0.8)
+    background-color white
+    border white 4px solid
     margin 20px
     padding 15px
     width 160px
@@ -54,7 +55,7 @@ ul.class-selector
       font-size 1em
       font-weight normal
     &:hover
-      background-color white
+      border-color $color-primary
       cursor pointer
 
 </style>

@@ -41,7 +41,7 @@ Vue.http.interceptors.push((request, next) => {
     if (response.status === 403) {
       // eslint-disable-next-line
       console.log('Session invalid');
-      store.dispatch('logout');
+      // store.dispatch('logout');
     }
   });
 });

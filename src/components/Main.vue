@@ -4,6 +4,8 @@
 
     class-selector(v-if="!currentClass")
 
+    language-selector(v-if="currentClass")
+
     .stream(v-if="currentClass")
       pre-content
       class-content
@@ -15,6 +17,7 @@
 
 <script>
 import ClassSelector from './ClassSelector';
+import LanguageSelector from './LanguageSelector';
 
 import PreContent from './content/PreContent';
 import ClassContent from './content/ClassContent';
@@ -41,6 +44,7 @@ export default {
   },
   components: {
     ClassSelector,
+    LanguageSelector,
     PreContent,
     ClassContent,
     PostClassContent,
