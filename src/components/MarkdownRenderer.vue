@@ -6,9 +6,9 @@
 
       .markdown-nav
         .pure-button.pure-button-primary(@click="back") Back
-        .pure-button.pure-button-primary(v-if="loading") Loading
-        a.pure-button.pure-button-primary.pull-right(:href="url" target="_blank") Open
-        .pure-button.pure-button-primary.pull-right(@click="toggleColumnState") Toggle
+        .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
+
+        a.pure-button.pure-button-primary.pull-right(:href="url" target="_blank") {{ loading ? 'Loading' : 'Open' }}
 
       .rendered-markdown(v-html="result")
 

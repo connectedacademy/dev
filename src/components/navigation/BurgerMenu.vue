@@ -1,10 +1,10 @@
 <template lang="pug">
 
-	.burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
-		transition(name="rotate")
-			ul.stack
-				li.bar
-				li.bar
+  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
+    transition(name="rotate")
+      ul.stack
+        li.bar
+        li.bar
 
 </template>
 
@@ -34,39 +34,40 @@ rotate_transform(args)
   transform args
 
 .burger-menu
-	height 60px
-	width 60px
+  height 60px
+  width 60px
 
-	position absolute
-	top 0
-	left 0
-	z-index 52
+  position absolute
+  top 0
+  left 0
+  z-index 50
 
-	transition left 0.4s
+  transition left 0.4s
 
-	&:hover
-		cursor pointer
+  &:hover
+    cursor pointer
 
-	ul.stack
-		list-style none
-		margin 0
-		padding	12px 15px
-		li.bar
-			list-style none
-			margin 10px 0
-			padding 0
+  ul.stack
+    list-style none
+    margin 0
+    padding	12px 15px
+    li.bar
+      list-style none
+      margin 10px 0
+      padding 0
 
-			background-color white
-			height 2px
-			position relative
-			top 0
+      background-color white
+      height 2px
+      position relative
+      top 0
 
-			transition transform 0.6s, top 0.6s
+      transition transform 0.6s, top 0.6s
 
   /* Active styles */
-	&.active
-		left calc(100% - 120px)
-		@media(min-width: 400px)
+  &.active
+    left calc(100% - 120px)
+    z-index 52
+    @media(min-width: 400px)
       left 260px
     ul.stack li.bar:first-child
       top 6px

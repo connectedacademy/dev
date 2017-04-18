@@ -16,6 +16,10 @@ const getters = {
   hubs() {
     return state.hubs;
   },
+  currentClass() {
+    if (state.current_class === undefined) { return undefined; }
+    return state.course.classes[state.current_class];
+  },
   coursePreContent() {
     if (state.current_class === undefined) { return undefined; }
     return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'submission'));
