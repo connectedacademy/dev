@@ -41,3 +41,25 @@ html, body
       left 0 !important
       width 100% !important
       height 100% !important
+
+.drawer
+  background-color $color-dark-grey
+  overflow scroll
+  padding-bottom 60px
+  position fixed
+  z-index 51
+
+.content-overlay
+  background-color rgba(0, 0, 0, 0.1)
+  pointer-events none
+  position fixed
+  top 0
+  bottom 0
+  left 0
+  right 0
+  transition background-color 0.6s
+  z-index -1
+  &.visible
+    background-color rgba(0, 0, 0, 0.5)
+    pointer-events all
+    z-index 50

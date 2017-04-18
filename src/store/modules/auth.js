@@ -4,7 +4,6 @@ import API from '../../api';
 // initial state
 const state = {
   visible: false,
-  authenticating: false,
   isAuthenticated: false,
   session: {
     sid: '',
@@ -45,6 +44,12 @@ const actions = {
 
 // mutations
 const mutations = {
+  [types.SHOW_AUTH](initialState) {
+    state.visible = true;
+  },
+  [types.DISMISS_AUTH](initialState) {
+    state.visible = false;
+  },
   [types.CHECK_AUTH_SUCCESS](initialState, {
     response,
   }) {
@@ -62,7 +67,6 @@ const mutations = {
     response,
   }) {
     state.visible = false;
-    state.authenticating = false;
     state.isAuthenticated = false;
     state.user = undefined;
   },

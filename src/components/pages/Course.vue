@@ -56,15 +56,12 @@ export default {
 
 <style lang="stylus" scoped>
 
-  @import "../../assets/stylus/shared/*"
-  @import "../../assets/stylus/layout/page"
-
-  h1, h2
-    nomargin()
-    nopadding()
-    color white
-    margin-bottom 5px
-  h2
-    color white
+h1, h2
+  nomargin()
+  nopadding()
+  color white
+  margin-bottom 5px
+h2
+  color white
 
 </style>
