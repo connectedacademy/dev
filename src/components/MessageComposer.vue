@@ -39,7 +39,8 @@ export default {
       return this.$store.state.composer.hidden ||
         this.$store.state.auth.visible ||
         this.$store.state.navigation.leftDrawer.visible ||
-        this.$store.state.navigation.rightDrawer.visible;
+        this.$store.state.navigation.rightDrawer.visible ||
+        this.$store.state.route.name !== 'main';
     },
     scrollPosition() {
       return this.$store.getters.scrollPosition;

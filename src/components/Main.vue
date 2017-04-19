@@ -4,7 +4,11 @@
 
     class-selector(v-if="!currentClass")
 
-    language-selector(v-if="currentClass")
+    .toolbar
+      button.pure-button.pure-button-primary(v-on:click="settingsVisible =! settingsVisible") Settings
+
+    .settings-container(v-if="settingsVisible && currentClass")
+      language-selector
 
     .stream(v-if="currentClass")
       pre-content
@@ -36,10 +40,15 @@ export default {
     this.$store.dispatch('setColumnState', 'narrow');
     this.$store.commit('setSession', { sid: this.$cookie.get('sails.sid') });
     this.$store.dispatch('getCourse');
+    // Check if user has registered
+    if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
+      this.$router.push('/registration');
+    }
   },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
+      settingsVisible: false,
     };
   },
   components: {
@@ -72,6 +81,11 @@ export default {
 <style lang="stylus">
 
 @import '../assets/stylus/shared/*'
+
+.toolbar
+  background-color $color-course-content-block
+  margin-bottom 3px
+  padding 20px
 
 ul.class-selector
   cleanlist()

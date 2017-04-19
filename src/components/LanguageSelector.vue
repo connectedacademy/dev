@@ -16,7 +16,6 @@ export default {
   name: 'language-selector',
   methods: {
     setCourseLang() {
-      // this.$store.commit(types.SET_CURRENT_CLASS, newClass);
     },
   },
   computed: {

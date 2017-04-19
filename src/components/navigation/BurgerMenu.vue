@@ -75,4 +75,11 @@ rotate_transform(args)
     ul.stack li.bar:last-child
       top -6px
       rotate_transform(rotate(-45deg))
+
+/* App states */
+
+#app.authenticating
+  .burger-menu
+    display none
+    
 </style>

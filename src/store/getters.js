@@ -17,4 +17,13 @@ export const computedMessages = (state) => {
   return messages;
 };
 
+export const pageStyle = (state) => {
+  // Return classes
+  const activeClasses = {
+    authenticating: (state.route.name === 'registration'),
+    authenticated: state.auth.isAuthenticated,
+  };
+  return activeClasses;
+};
+
 export const scrollPosition = state => _.ceil(state.scrollPosition);

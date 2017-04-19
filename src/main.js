@@ -8,6 +8,7 @@ import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
+import { sync } from 'vuex-router-sync';
 
 import VueYouTubeEmbed from 'vue-youtube-embed';
 
@@ -19,6 +20,8 @@ import Lang from './Lang';
 
 import store from './store';
 import router from './router';
+
+sync(store, router);
 
 Vue.component('icon', Icon);
 

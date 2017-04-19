@@ -5,17 +5,17 @@ import API from '../../api';
 const state = {
   visible: false,
   isAuthenticated: false,
-  session: {
-    sid: '',
-  },
-  user: {
-    name: '',
-    organisation: '',
-  },
+  isAuthenticating: false,
+  session: {},
+  user: {},
 };
 
 // getters
 const getters = {
+  isRegistered: (initialState) => {
+    const hasRegistered = initialState.user.registration;
+    return hasRegistered;
+  },
 };
 
 // actions
@@ -75,8 +75,8 @@ const mutations = {
   }) {
     // error in response
   },
-  login({ commit }) {
-    state.visible = true;
+  isAuthenticating({ commit }, isAuthenticating) {
+    state.isAuthenticating = isAuthenticating;
   },
   setSession({ commit }, session) {
     state.session = session;
