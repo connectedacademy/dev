@@ -1,11 +1,12 @@
 // Default
 $color-white = #ffffff
-$color-primary = #1D59E8
+$color-primary = #0078e7
 
 // Greys
-$color-darkest-grey = #0F1519
-$color-dark-grey = lighten(#0F1519, 5%)
-$color-grey = #666
+$color-grey = lighten(#0F1519, 5%)
+$color-dark-grey = darken($color-grey, 10%)
+$color-darker-grey = darken($color-grey, 20%)
+$color-darkest-grey = darken($color-grey, 30%)
 $color-light-grey = #e1e1e1
 $color-lightest-grey = #f9f9f9
 
@@ -19,9 +20,11 @@ $navigation-background-color = $color-darkest-grey
 $navigation-text-color = $color-white
 
 // Layout
-$color-main-page = lighten($color-darkest-grey, 5%)
+$color-main-page = $color-dark-grey
 $color-col = alpha(white, 0)
-$color-col-main = alpha(white, 0.03)
+$color-col-main = $color-dark-grey
+
+$color-course-content-block = $color-col-main //lighten($color-col-main, 2%)
 
 // Authentication
 $color-auth-background-color = $color-dark-grey

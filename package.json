@@ -37,6 +37,7 @@
     "vue-scroll": "^2.0.2",
     "vue-youtube-embed": "^2.1.0",
     "vuex": "^2.2.1",
+    "vuex-router-sync": "^4.1.2",
     "vuikit": "^0.6.2"
   },
   "devDependencies": {

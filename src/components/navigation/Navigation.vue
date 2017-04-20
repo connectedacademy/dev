@@ -1,7 +1,7 @@
 <template lang="pug">
 
 
-  .navigation.clearfix(v-bind:class="{ authenticated: this.$store.state.auth.isAuthenticated }")
+  .navigation.clearfix(v-bind:class="{ authenticated: authenticated, hidden: hidden }")
 
     ul.navigation-items.pull-left
       router-link.navigation-item.navigation-item-brand(tag="li" to="/") {{ navTitle }}
@@ -11,7 +11,7 @@
 
     ul.navigation-items.pull-right
       // router-link.navigation-item.navigation-item-page(tag="li" to="/auth") Login
-      li.navigation-item.navigation-item-page(v-if="!this.$store.state.auth.isAuthenticated" v-on:click="login") {{ $t('auth.login') }}
+      li.navigation-item.navigation-item-page(v-if="!this.$store.state.auth.isAuthenticated" v-on:click="showAuth") {{ $t('auth.login') }}
       li.navigation-item.navigation-item-page(v-if="this.$store.state.auth.isAuthenticated" v-on:click="logout") {{ $t('auth.logout') }}
 
     profile-icon(v-if="authenticated")
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import * as types from '../../store/mutation-types';
 import ProfileIcon from './ProfileIcon';
 
 export default {
@@ -34,13 +35,16 @@ export default {
     authenticated() {
       return this.$store.state.auth.isAuthenticated;
     },
+    hidden() {
+      return !this.$store.state.navigation.visible;
+    },
   },
   props: {
     navTitle: String,
   },
   methods: {
-    login() {
-      this.$store.commit('login');
+    showAuth() {
+      this.$store.commit(types.SHOW_AUTH);
     },
     logout() {
       this.$store.dispatch('logout');
@@ -59,7 +63,11 @@ export default {
   box-sizing border-box
   height 60px
   padding 0 0 0 60px
+  position relative
+  z-index 2
   width 100%
+  &.hidden
+    display none
   &.authenticated
     padding 0 60px
   ul.navigation-items
@@ -89,4 +97,9 @@ export default {
     li.navigation-item.navigation-item-brand
       display none
 
+/* App states */
+
+#app.authenticating
+  .navigation
+    display none
 </style>

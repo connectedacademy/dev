@@ -2,7 +2,7 @@
 
 <template lang="pug">
 
-  #app
+  #app(v-bind:class="pageStyle")
 
     .main-page
 
@@ -49,6 +49,9 @@ export default {
     };
   },
   computed: {
+    pageStyle() {
+      return this.$store.getters.pageStyle;
+    },
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible

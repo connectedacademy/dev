@@ -4,6 +4,8 @@ export default {
     disable_debug_mode: 'Disable Debug Mode',
     toggle_column: 'Toggle Column',
     optional: 'Optional',
+    loading: 'Loading',
+    cancel: 'Cancel',
     current_language: 'Current language',
     current_service: 'Current service',
   },
@@ -20,6 +22,12 @@ export default {
 
     login_with_twitter: 'Login with Twitter',
 
+    register: 'Register',
+    welcome_to_registration: 'Welcome to registration',
+    attempt_registration: 'Register',
+    read_the_following: 'Please read the following',
+    answer_the_following: 'Please answer the following',
+
     authenticate: 'Authenticate',
     authenticating: 'Authenticating...',
 
@@ -31,13 +39,6 @@ export default {
 
       your_organisation: 'Your Organisation',
       organisation_placeholder: 'e.g. Newcastle University',
-    },
-
-    test: {
-      user: {
-        name: 'John Smith',
-        organisation: 'Newcastle University',
-      },
     },
   },
   composer: {

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
+import Registration from '@/components/authentication/Registration';
 
 import Main from '@/components/Main';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
@@ -16,15 +17,22 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/dashboard',
-      redirect: '/',
+      name: 'authenticated',
+      path: '/authenticated',
+      redirect: '/registration',
     },
     {
+      name: 'main',
       path: '/',
-      name: 'Main',
       component: Main,
     },
     {
+      name: 'registration',
+      path: '/registration',
+      component: Registration,
+    },
+    {
+      name: 'markdown',
       path: '/markdown/:url',
       redirect: (to) => {
         const { hash, params, query } = to;
@@ -32,22 +40,23 @@ export default new Router({
       },
     },
     {
+      name: 'markdown',
       path: '/markdown',
       component: MarkdownRenderer,
     },
     {
+      name: 'course',
       path: '/course',
-      name: 'Course',
       component: Course,
     },
     {
+      name: 'schedule',
       path: '/schedule',
-      name: 'Schedule',
       component: Schedule,
     },
     {
+      name: 'about',
       path: '/about',
-      name: 'About',
       component: About,
     },
   ],

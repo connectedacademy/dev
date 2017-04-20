@@ -4,20 +4,10 @@
     .auth-modal--header
       h1 {{ $t('auth.authenticate') }}
     .auth-modal--container
-      form.pure-form.pure-form-stacked(v-on:submit.prevent="authenticate")
-        fieldset
-          label {{ $t('auth.form.your_name') }}
-          input(type="text" v-bind:placeholder="$t('auth.form.name_placeholder')")
-        fieldset
-          label {{ $t('auth.form.your_organisation') }}
-          input(type="text" v-bind:placeholder="$t('auth.form.organisation_placeholder')")
-        fieldset
-          label.pure-checkbox(for="cb")
-            input#cb(type="checkbox")
-            | {{ $t('auth.i_agree_to_terms_and_conditions') }}
-        fieldset
-          button.pure-button.pure-button-primary(v-on:click.once="attemptAuth")
-            | {{ $t('auth.login_with_twitter') }}
+      p Click the button below to authenticate with Twitter, this will give you access to advanced functionality within the platform.
+
+      button.pure-button.pure-button-primary(v-on:click.once="attemptAuth")
+        | {{ $t('auth.login_with_twitter') }}
 
 </template>
 
@@ -31,10 +21,7 @@ export default {
   },
   methods: {
     attemptAuth() {
-      this.$store.commit('attemptAuth', {
-        name: this.$t('auth.test.user.name'),
-        organisation: this.$t('auth.test.user.organisation'),
-      });
+      this.$store.commit('attemptAuth');
     },
   },
 };
@@ -71,21 +58,9 @@ export default {
   .auth-modal--container
     radius(12px)
     background-color white
-    min-height 200px
     padding 20px 30px
     text-align center
-    form
-      text-align center
-      fieldset
-        text-align center
-        label
-          color $color-grey
-          text-align left
-      input
-        text-align left
-        width 100%
-      input[type="checkbox"]
-        margin-right 10px
-        width auto
+    p
+      margin 0 0 20px 0
 
 </style>
