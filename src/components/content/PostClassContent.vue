@@ -2,7 +2,7 @@
 
   .course-content-wrapper
 
-    .course-content.post-class-content(v-for="content in coursePostClassContent" v-bind:class="{ optional: content.optional }")
+    .course-content.postclass-content(v-for="content in coursePostClassContent" v-bind:class="{ optional: content.optional }")
 
       h1 {{ content.title }}
 
@@ -19,7 +19,7 @@ import MarkdownLink from '../MarkdownLink';
 import VideoThumbnail from '../VideoThumbnail';
 
 export default {
-  name: 'post-class-content',
+  name: 'postclass-content',
   computed: {
     ...mapGetters([
       'coursePostClassContent',

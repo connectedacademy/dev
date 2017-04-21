@@ -3,9 +3,12 @@
   .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
     .container
       h1.text-white Schedule
-      .pure-button.pure-button-primary View Schedule
 
-      .debug-wrapper(v-if="this.$store.state.navigation.debug")
+      hub-selector
+      
+      .pure-button.pure-button-primary(@click="previewVisible =! previewVisible") Toggle Preview
+
+      .debug-wrapper(v-if="this.$store.state.navigation.debug && previewVisible")
         .content-block.white-block
           pre(v-if="course") {{ course }}
 
@@ -17,6 +20,7 @@ export default {
   data() {
     return {
       navTitle: 'Schedule - Connected Academy',
+      previewVisible: false,
     };
   },
   computed: {

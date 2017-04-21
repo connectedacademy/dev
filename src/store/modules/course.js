@@ -4,6 +4,7 @@ import API from '../../api';
 // initial state
 const state = {
   current_class: undefined,
+  current_lang: 'en',
   course: {},
   hubs: {},
 };
@@ -22,7 +23,7 @@ const getters = {
   },
   coursePreContent() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'submission'));
+    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'pre'));
   },
   courseClassContent() {
     if (state.current_class === undefined) { return undefined; }
@@ -99,6 +100,9 @@ const mutations = {
   },
   [types.SET_CURRENT_CLASS](initialState, selectedClass) {
     state.current_class = selectedClass;
+  },
+  [types.SET_COURSE_LANG](initialState, currentLang) {
+    state.current_lang = currentLang;
   },
 };
 

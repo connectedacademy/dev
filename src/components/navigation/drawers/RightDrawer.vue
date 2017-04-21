@@ -8,14 +8,17 @@
 
     .settings-container
       form.pure-form.pure-form-stacked
-        fieldset
+        fieldset(v-if="user.registration")
           label {{ $t('common.current_language') }}
-          label {{ `- ${user.lang}` }}
+          label {{ `- ${user.registration.lang}` }}
         fieldset
           label {{ $t('common.current_service') }}
           label {{ `- ${user.service}` }}
+        fieldset(v-if="user.registration")
+          label {{ $t('common.current_hub') }}
+          label {{ `- ${user.registration.hub_id}` }}
 
-    pre(hidden) {{ user }}
+    pre() {{ user }}
 
 </template>
 

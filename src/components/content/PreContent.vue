@@ -2,6 +2,8 @@
 
   .course-content-wrapper
 
+    pre.hidden {{ coursePreContent }}
+
     .course-content.pre-content(v-for="content in coursePreContent" v-bind:class="{ optional: content.optional }")
 
       h1 {{ content.title }}

@@ -8,6 +8,7 @@ export default {
     cancel: 'Cancel',
     current_language: 'Current language',
     current_service: 'Current service',
+    current_hub: 'Current hub',
   },
   nav: {
     home: 'Home',

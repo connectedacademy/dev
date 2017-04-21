@@ -2,9 +2,9 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
 
-    class-selector(v-if="!currentClass")
+    class-selector(v-bind:class="{ 'class-selected': currentClass }")
 
-    .toolbar
+    .toolbar(v-if="currentClass")
       button.pure-button.pure-button-primary(v-on:click="settingsVisible =! settingsVisible") Settings
 
     .settings-container(v-if="settingsVisible && currentClass")
@@ -13,7 +13,7 @@
     .stream(v-if="currentClass")
       pre-content
       class-content
-      post-class-content
+      postclass-content
       webinar-content
       post-webinar-content
 

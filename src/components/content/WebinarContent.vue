@@ -2,7 +2,7 @@
 
   .course-content-wrapper
 
-    .course-content.class-content(v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
+    .course-content.webinar-content(v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
 
       h1 {{ content.title }}
 

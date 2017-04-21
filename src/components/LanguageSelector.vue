@@ -4,8 +4,8 @@
     form.pure-form.pure-form-stacked
       fieldset
         label {{ $t('course.current_course_language') }}
-        select(v-for="lang in availableCourseLangs")
-          option() {{ lang }}
+        select(v-model="selectedCourse")
+          option(v-for="lang in availableCourseLangs") {{ lang }}
 
 </template>
 
@@ -17,6 +17,11 @@ export default {
   methods: {
     setCourseLang() {
     },
+  },
+  data() {
+    return {
+      selectedCourse: '',
+    };
   },
   computed: {
     availableCourseLangs() {

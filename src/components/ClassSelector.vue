@@ -2,7 +2,7 @@
 
   ul.class-selector
     li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(index)")
-      h1.class-selector--item--header {{ theClass.name }}
+      h1.class-selector--item--header {{ theClass.title }}
       h2.class-selector--item--body {{ theClass.description }}
 
 </template>
@@ -34,12 +34,15 @@ export default {
 
 ul.class-selector
   cleanlist()
+  padding 10px
   li.class-selector--item
     cleanlist()
     background-color white
     border white 4px solid
-    margin 20px
+    display inline-block
+    margin 10px
     padding 15px
+    text-align center
     width 160px
     animate()
     h1.class-selector--item--header
@@ -47,15 +50,21 @@ ul.class-selector
       nopadding()
       color $color-text-dark-grey
       font-size 1.1em
-      margin-bottom 5px
     h2.class-selector--item--body
       nomargin()
       nopadding()
       color $color-text-grey
       font-size 1em
       font-weight normal
+      margin-top 5px
     &:hover
       border-color $color-primary
       cursor pointer
+
+  &.class-selected
+    li.class-selector--item
+      text-align center
+      h2.class-selector--item--body
+        display none
 
 </style>

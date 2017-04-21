@@ -9,7 +9,7 @@
     ul.drawer-list
 
       li.drawer-list-item(v-for="(currentClass, index) in classes" v-bind:key="currentClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(index)")
-        h1.drawer-list-item--header {{ currentClass.name }}
+        h1.drawer-list-item--header {{ currentClass.title }}
         h2.drawer-list-item--body {{ currentClass.description }}
 
       li.drawer-list-item(v-on:click="toggleDebugMode" v-bind:class="{ visible: state.visible }")

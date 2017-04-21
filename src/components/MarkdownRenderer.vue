@@ -9,6 +9,10 @@
         .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
 
         a.pure-button.pure-button-primary.pull-right(:href="url" target="_blank") {{ loading ? 'Loading' : 'Open' }}
+        .pure-button.pure-button-primary.pull-right(@click="frontMatterVisible =!frontMatterVisible") FM
+
+      .container.white-block(v-if="frontMatterVisible")
+        pre {{ frontMatter }}
 
       .rendered-markdown(v-html="result")
 
@@ -19,6 +23,7 @@ import _ from 'lodash';
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
+import MarkdownItFrontMatter from 'markdown-it-front-matter';
 
 import API from '../api';
 
@@ -62,13 +67,16 @@ export default {
             const currentUrl = this.url.substring(0, this.url.lastIndexOf('/') + 1);
             return `#${currentUrl}${link}`;
           }
-          return `${this.$store.getters.course.baseUri}${this.$config.lang}${link}`;
+          return `${this.$store.getters.course.baseUri}${link}`;
         },
       })
       .use(MarkdownItReplaceLink)
       .use(MarkdownItVideo, {
         youtube: { width: 640, height: 390 },
         vimeo: { width: 500, height: 281 },
+      })
+      .use(MarkdownItFrontMatter, (fm) => {
+        this.frontMatter = fm;
       });
 
       return md.render(this.renderedMarkdown);
@@ -77,13 +85,15 @@ export default {
       const content = (this.$route.hash) ? this.$route.hash : this.$route.query.url;
       if (_.startsWith(content, 'http')) { return content; }
       if (_.startsWith(content, '#')) { return _.replace(content, '#', ''); }
-      return `${this.$store.getters.course.baseUri}${this.$config.lang}${content}`;
+      return `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${content}`;
     },
   },
   data() {
     return {
       loading: true,
       renderedMarkdown: 'Loading...',
+      frontMatter: {},
+      frontMatterVisible: false,
     };
   },
 };
