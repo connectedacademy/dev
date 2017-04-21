@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  ul.class-selector.animated
+  ul.class-selector
     li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(index)")
       h1.class-selector--item--header {{ theClass.title }}
       h2.class-selector--item--body {{ theClass.description }}

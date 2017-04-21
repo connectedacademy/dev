@@ -3,11 +3,11 @@
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
 
     .toolbar(v-if="currentClass")
-      button.pure-button.pure-button-primary.pull-left(v-on:click="classSelectorVisible =! classSelectorVisible") Select Class
+      button.pure-button.pure-button-primary.pull-left(@click="leaveClass") Select Class
       button.pure-button.pure-button-primary.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
       .clearfix
 
-    class-selector(v-bind:class="{ 'class-selected': currentClass, 'hidden': classSelectorVisible }")
+    class-selector(v-bind:class="{ 'hidden': currentClass }")
 
     .stream(v-if="currentClass")
       pre-content
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import * as types from '../store/mutation-types';
 import ClassSelector from './ClassSelector';
 
 import PreContent from './content/PreContent';
@@ -59,6 +60,9 @@ export default {
     PostWebinarContent,
   },
   methods: {
+    leaveClass() {
+      this.$store.commit(types.SET_CURRENT_CLASS, undefined);
+    },
     onScroll() {
       let scrollPosition = this.$refs.main.scrollTop / 100;
       scrollPosition = (scrollPosition < 0) ? 0 : scrollPosition;
