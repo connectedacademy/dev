@@ -4,6 +4,7 @@
 
     .container
 
+      //- markdown-nav
       .markdown-nav
         .pure-button.pure-button-primary(@click="back") Back
         .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
@@ -11,7 +12,7 @@
         a.pure-button.pure-button-primary.pull-right(:href="url" target="_blank") {{ loading ? 'Loading' : 'Open' }}
         .pure-button.pure-button-primary.pull-right(@click="frontMatterVisible =!frontMatterVisible") FM
 
-      .container.white-block(v-if="frontMatterVisible")
+      .content-block.white-block(v-if="frontMatterVisible")
         pre {{ frontMatter }}
 
       .rendered-markdown(v-html="result")
@@ -20,6 +21,7 @@
 
 <script>
 import _ from 'lodash';
+// import MarkdownNav from 'markdown-nav'
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
