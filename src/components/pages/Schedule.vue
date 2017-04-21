@@ -4,8 +4,8 @@
     .container
       h1.text-white Schedule
 
-      hub-selector
-      
+      //- hub-selector
+
       .pure-button.pure-button-primary(@click="previewVisible =! previewVisible") Toggle Preview
 
       .debug-wrapper(v-if="this.$store.state.navigation.debug && previewVisible")

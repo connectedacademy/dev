@@ -1,7 +1,7 @@
 <template lang="pug">
 
 
-  .navigation.clearfix(v-bind:class="{ authenticated: authenticated, hidden: hidden }")
+  .navigation.clearfix(v-bind:class="{ registered: registered, hidden: hidden }")
 
     ul.navigation-items.pull-left
       router-link.navigation-item.navigation-item-brand(tag="li" to="/") {{ navTitle }}
@@ -11,10 +11,10 @@
 
     ul.navigation-items.pull-right
       // router-link.navigation-item.navigation-item-page(tag="li" to="/auth") Login
-      li.navigation-item.navigation-item-page(v-if="!this.$store.state.auth.isAuthenticated" v-on:click="showAuth") {{ $t('auth.login') }}
-      li.navigation-item.navigation-item-page(v-if="this.$store.state.auth.isAuthenticated" v-on:click="logout") {{ $t('auth.logout') }}
+      li.navigation-item.navigation-item-page(v-if="!registered" v-on:click="showAuth") {{ $t('auth.login') }}
+      li.navigation-item.navigation-item-page(v-if="registered" v-on:click="logout") {{ $t('auth.logout') }}
 
-    profile-icon(v-if="authenticated")
+    profile-icon(v-if="registered")
 
 
 </template>
@@ -32,8 +32,8 @@ export default {
     return {};
   },
   computed: {
-    authenticated() {
-      return this.$store.state.auth.isAuthenticated;
+    registered() {
+      return this.$store.getters.isRegistered;
     },
     hidden() {
       return !this.$store.state.navigation.visible;
@@ -68,7 +68,7 @@ export default {
   width 100%
   &.hidden
     display none
-  &.authenticated
+  &.registered
     padding 0 60px
   ul.navigation-items
     cleanlist()

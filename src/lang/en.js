@@ -6,9 +6,16 @@ export default {
     optional: 'Optional',
     loading: 'Loading',
     cancel: 'Cancel',
+
+    age: 'Your age',
     current_language: 'Current language',
     current_service: 'Current service',
     current_hub: 'Current hub',
+
+    continue: 'Continue',
+    next_page: 'Next Page',
+    previous_page: 'Previous Page',
+    choose_one: 'Choose one',
   },
   nav: {
     home: 'Home',
@@ -28,6 +35,10 @@ export default {
     attempt_registration: 'Register',
     read_the_following: 'Please read the following',
     answer_the_following: 'Please answer the following',
+
+    enter_your_email: 'Enter your email',
+    enter_your_age: 'Enter your age (optional)',
+    select_your_language: 'Select your language',
 
     authenticate: 'Authenticate',
     authenticating: 'Authenticating...',

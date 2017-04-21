@@ -9,6 +9,9 @@
     .settings-container
       form.pure-form.pure-form-stacked
         fieldset(v-if="user.registration")
+          label {{ $t('common.age') }}
+          label {{ `- ${user.registration.age}` }}
+        fieldset(v-if="user.registration")
           label {{ $t('common.current_language') }}
           label {{ `- ${user.registration.lang}` }}
         fieldset
@@ -18,7 +21,9 @@
           label {{ $t('common.current_hub') }}
           label {{ `- ${user.registration.hub_id}` }}
 
-    pre() {{ user }}
+      pre() {{ user }}
+
+      router-link.pure-button.pure-button-primary(to="/registration") Register
 
 </template>
 
