@@ -14,7 +14,7 @@
 
     left-drawer
 
-    right-drawer
+    right-drawer(v-if="registered")
 
     message-composer
 
@@ -49,6 +49,9 @@ export default {
     };
   },
   computed: {
+    registered() {
+      return this.$store.getters.isRegistered;
+    },
     pageStyle() {
       return this.$store.getters.pageStyle;
     },

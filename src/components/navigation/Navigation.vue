@@ -1,6 +1,5 @@
 <template lang="pug">
 
-
   .navigation.clearfix(v-bind:class="{ registered: registered, hidden: hidden }")
 
     ul.navigation-items.pull-left
@@ -10,12 +9,9 @@
       router-link.navigation-item.navigation-item-page(tag="li" to="/about") {{ $t('nav.about') }}
 
     ul.navigation-items.pull-right
-      // router-link.navigation-item.navigation-item-page(tag="li" to="/auth") Login
       li.navigation-item.navigation-item-page(v-if="!registered" v-on:click="showAuth") {{ $t('auth.login') }}
-      li.navigation-item.navigation-item-page(v-if="registered" v-on:click="logout") {{ $t('auth.logout') }}
 
     profile-icon(v-if="registered")
-
 
 </template>
 
@@ -45,9 +41,6 @@ export default {
   methods: {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
-    },
-    logout() {
-      this.$store.dispatch('logout');
     },
   },
 };

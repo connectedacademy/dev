@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  ul.class-selector
+  ul.class-selector.animated
     li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(index)")
       h1.class-selector--item--header {{ theClass.title }}
       h2.class-selector--item--body {{ theClass.description }}
@@ -34,16 +34,18 @@ export default {
 
 ul.class-selector
   cleanlist()
+  background-color alpha(white, 0.1)
   padding 10px
   li.class-selector--item
     cleanlist()
     background-color white
     border white 4px solid
     display inline-block
+    overflow hidden
     margin 10px
     padding 15px
-    text-align center
-    width 160px
+    text-align left
+    width 180px
     animate()
     h1.class-selector--item--header
       nomargin()
@@ -60,11 +62,5 @@ ul.class-selector
     &:hover
       border-color $color-primary
       cursor pointer
-
-  &.class-selected
-    li.class-selector--item
-      text-align center
-      h2.class-selector--item--body
-        display none
 
 </style>

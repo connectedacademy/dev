@@ -1,7 +1,7 @@
 <template lang="pug">
 
-  a(:href="src" target="_blank")
-    img(v-bind:src="thumbnail" width="200")
+  a.thumbnail-link(:href="src" target="_blank")
+    img(v-bind:src="thumbnail")
 
 </template>
 
@@ -24,4 +24,7 @@ export default {
 
 <style lang="stylus" scoped>
 
+a.thumbnail-link
+  img
+    height 100px
 </style>

@@ -105,7 +105,7 @@ export default {
 
 .markdown-nav
   border-bottom alpha(white, 0.2) 1px solid
-  margin-bottom 20px
+  margin 0 -5px 20px -5px
   padding-bottom 20px
   .pure-button
     margin 0 5px

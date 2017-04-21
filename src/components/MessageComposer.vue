@@ -36,7 +36,8 @@ export default {
       return this.$store.state.composer.visible;
     },
     hidden() {
-      return this.$store.state.composer.hidden ||
+      return !this.$store.getters.isRegistered ||
+        this.$store.state.composer.hidden ||
         this.$store.state.auth.visible ||
         this.$store.state.navigation.leftDrawer.visible ||
         this.$store.state.navigation.rightDrawer.visible ||
@@ -58,6 +59,7 @@ export default {
   .message-composer
     background-color white
     border-radius 6px
+    box-shadow 0px 0px 15px 0px alpha(black, 0.3)
     box-sizing border-box
 
     position fixed
@@ -128,5 +130,6 @@ export default {
 
   .message-composer.unactive, .message-composer.unactive:hover
     bottom -160px
+    box-shadow none
 
 </style>

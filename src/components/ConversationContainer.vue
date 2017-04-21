@@ -1,12 +1,13 @@
 <template lang="pug">
 
-  .conversation-container
+  .conversation-container(v-if="registered")
 
     .message.visible(v-for="message in messages.data" v-bind:style="{ top: message.position + 'px' }")
 
       img(v-bind:src="message.user.profile")
 
-      p {{ message.user.name }} - {{ message.user.account }}
+      p
+        strong {{ message.user.account }}
 
       p {{ ' ' + message.text }}
 
@@ -24,6 +25,9 @@ export default {
   methods: {
   },
   computed: {
+    registered() {
+      return this.$store.getters.isRegistered;
+    },
     messages() {
       return this.$store.getters.messages;
     },
@@ -38,20 +42,28 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+@import '../assets/stylus/shared/*'
 .conversation-container
   padding 0
   width 50%
   .message
-    border-left $color-primary 2px solid
     margin 15px 0
     padding 5px 10px
+    padding-left 50px
 
     position relative
 
     opacity 0
 
     transition opacity 1s
+
+    img
+      radius(50%)
+      height 40px
+      width 40px
+      position absolute
+      top 5px
+      left 0
     p
       nomargin()
       nopadding()

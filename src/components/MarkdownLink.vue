@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  router-link.pure-button.pure-button-primary(:to="url") {{ title }}
+  router-link.pure-button.pure-button-primary(:to="url") {{ $t('common.read_more') }}
 
 </template>
 
@@ -12,9 +12,6 @@ export default {
   name: 'markdown-link',
   props: ['mdContent'],
   computed: {
-    title() {
-      return `View content for ${this.mdContent.title}`;
-    },
     url() {
       return `/markdown/?url=${this.mdContent.url}`;
     },

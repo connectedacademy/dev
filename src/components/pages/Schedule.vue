@@ -4,7 +4,7 @@
     .container
       h1.text-white Schedule
 
-      //- hub-selector
+      hub-selector
 
       .pure-button.pure-button-primary(@click="previewVisible =! previewVisible") Toggle Preview
 
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import HubSelector from '../HubSelector';
+
 export default {
   name: 'schedule',
   data() {
@@ -31,7 +33,9 @@ export default {
       return this.$store.getters.hubs;
     },
   },
-  components: {},
+  components: {
+    HubSelector,
+  },
   methods: {},
 };
 </script>

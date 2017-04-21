@@ -13,8 +13,8 @@ const state = {
 // getters
 const getters = {
   isRegistered: (initialState) => {
-    const hasRegistered = initialState.user.registration;
-    return hasRegistered;
+    const isRegistered = Object.prototype.hasOwnProperty.call(initialState, 'user');
+    return (isRegistered) ? Object.prototype.hasOwnProperty.call(initialState.user, 'registration') : false;
   },
 };
 

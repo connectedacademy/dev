@@ -4,9 +4,13 @@
 
     .course-content.webinar-content(v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
 
-      h1 {{ content.title }}
+      .course-content--header
+        h1.content-title {{ content.title }}
 
-      video-thumbnail(:video-src="content.video" v-if="content.video" )
+      .course-content--body
+        p.content-description {{ content.description }}
+
+        video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       video-container(:video-src="content.video")
 

@@ -21,9 +21,13 @@
           label {{ $t('common.current_hub') }}
           label {{ `- ${user.registration.hub_id}` }}
 
-      pre() {{ user }}
+        fieldset
+          .pure-button.pure-button-primary.full-width(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
+          router-link.pure-button.pure-button-primary.full-width(to="/registration" @click="toggleRightDrawer") Register
 
-      router-link.pure-button.pure-button-primary(to="/registration") Register
+      pre.hidden {{ user }}
+
+
 
 </template>
 
@@ -36,13 +40,22 @@ export default {
     toggleRightDrawer() {
       this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
     },
+    logout() {
+      this.toggleRightDrawer();
+      this.$store.dispatch('logout');
+    },
+  },
+  data() {
+    return {
+      visible: false,
+    };
   },
   computed: {
-    state() {
-      return this.$store.state.navigation.rightDrawer;
-    },
     user() {
       return this.$store.state.auth.user;
+    },
+    state() {
+      return this.$store.state.navigation.rightDrawer;
     },
   },
 };

@@ -6,11 +6,17 @@
 
     .course-content.pre-content(v-for="content in coursePreContent" v-bind:class="{ optional: content.optional }")
 
-      h1 {{ content.title }}
+      .course-content--header
+        h1.content-title {{ content.title }}
 
-      video-thumbnail(:video-src="content.video" v-if="content.video" )
+      .course-content--body
+        p.content-description {{ content.description }}
 
-      markdown-link(v-bind:md-content="content" v-if="content.url")
+        video-thumbnail(:video-src="content.video" v-if="content.video" )
+
+      .course-content--footer
+        markdown-link.pull-right(v-bind:md-content="content" v-if="content.url")
+        .clearfix
 
 </template>
 
@@ -34,7 +40,7 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 @import "../../assets/stylus/layout/course-content"
 

@@ -6,6 +6,7 @@ export default {
     optional: 'Optional',
     loading: 'Loading',
     cancel: 'Cancel',
+    read_more: 'Read More',
 
     age: 'Your age',
     current_language: 'Current language',

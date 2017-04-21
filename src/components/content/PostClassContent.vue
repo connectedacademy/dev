@@ -4,11 +4,15 @@
 
     .course-content.postclass-content(v-for="content in coursePostClassContent" v-bind:class="{ optional: content.optional }")
 
-      h1 {{ content.title }}
+      .course-content--header
+        h1.content-title {{ content.title }}
 
-      video-thumbnail(:video-src="content.video" v-if="content.video" )
+      .course-content--body
+        p.content-description {{ content.description }}
 
-      markdown-link(v-bind:md-content="content" v-if="content.url")
+        video-thumbnail(:video-src="content.video" v-if="content.video" )
+
+        markdown-link(v-bind:md-content="content" v-if="content.url")
 
 </template>
 

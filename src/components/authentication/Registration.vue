@@ -92,7 +92,8 @@ export default {
   name: 'registration',
   created() {
     // Push user to home if not authenticated
-    // if (!this.$store.state.auth.isAuthenticated) { this.$router.push('/'); }
+    if (!this.$store.state.auth.isAuthenticated) { this.$router.push('/'); }
+    if (this.$store.state.auth.isRegistered) { this.$router.push('/'); }
 
     API.auth.fetchQuestions(
       (response) => {

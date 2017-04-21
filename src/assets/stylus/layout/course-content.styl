@@ -1,40 +1,62 @@
 @require "../shared/*"
 
 .course-content
-  background-color $color-course-content-block
-  border-left white 3px solid
-  margin-bottom 3px
   padding 20px
-  h1
+  h1.content-title
     nomargin()
     nopadding()
-    color white
+    color #444
     font-size 1.3em
-    margin-bottom 15px
-  h5
+    margin 5px 0px
+  h5.content-subheader
     nomargin()
     nopadding()
-    color white
+    color #444
     margin 15px 0
+  p.content-description
+    nomargin()
+    nopadding()
+    color #777
+    font-size 1em
+    margin 5px 0px
   a
     color white
     text-decoration none
-  &.class-content, &.webinar-content
-    h1
-      margin-bottom 20px
 
+  .course-content--header
+    background-color transparent
+    padding 5px 10px
+    h1.content-title
+      color white !important
+  .course-content--body
+    background-color white
+    overflow hidden
+    padding 20px
+    position relative
+    &:before
+      content ''
+      border-color transparent transparent transparent $color-primary
+      border-width 40px 0 40px 6px
+      border-style solid
+      position absolute
+      top 0
+      left 0
+  .course-content--footer
+    background-color white
+    border-top #e1e1e1 1px solid
+    padding 10px
 
-.course-content.pre-content
+.course-content.pre-content .course-content--body:before
   border-left-color #FCC04E
 
-.course-content.class-content
+.course-content.class-content .course-content--body:before
   border-left-color $color-primary
 
-.course-content.postclass-content
+.course-content.postclass-content .course-content--body:before
   border-left-color $color-primary
 
-.course-content.webinar-content
+.course-content.webinar-content .course-content--body:before
   border-left-color #F97A66
 
-.course-content.postwebinar-content
+.course-content.postwebinar-content .course-content--body:before
   border-left-color #F97A66
