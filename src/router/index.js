@@ -7,7 +7,6 @@ import Registration from '@/components/authentication/Registration';
 import Main from '@/components/Main';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
-import Course from '@/components/pages/Course';
 import About from '@/components/pages/About';
 import Schedule from '@/components/pages/Schedule';
 
@@ -43,11 +42,6 @@ export default new Router({
       name: 'markdown',
       path: '/markdown',
       component: MarkdownRenderer,
-    },
-    {
-      name: 'course',
-      path: '/course',
-      component: Course,
     },
     {
       name: 'schedule',
