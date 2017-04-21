@@ -10,7 +10,7 @@
       .course-content--body
         p.content-description {{ content.description }}
 
-        video-thumbnail(:video-src="content.video" v-if="content.video" )
+        //-video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       .course-content--footer
         .pure-button.pure-button-primary.pull-right(@click="showAuth") Login to Participate

@@ -17,6 +17,9 @@
           span(v-if="!this.$store.state.navigation.debug") {{ $t('common.enable_debug_mode') }}
           span(v-if="this.$store.state.navigation.debug") {{ $t('common.disable_debug_mode') }}
 
+      li.drawer-list-item.visible
+        h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
+
     ul.drawer--footer
       router-link(tag="li" to="/") {{ $t('nav.home') }}
       router-link(tag="li" to="/about") {{ $t('nav.about') }}
@@ -35,6 +38,9 @@ export default {
     },
     toggleDebugMode() {
       this.$store.commit(types.TOGGLE_DEBUG_MODE);
+    },
+    toggleColumnState() {
+      this.$store.dispatch('toggleColumnState');
     },
     setCurrentClass(newClass) {
       this.$store.commit(types.TOGGLE_LEFT_DRAWER);

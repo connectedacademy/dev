@@ -10,7 +10,7 @@
       .course-content--body
         p.content-description {{ content.description }}
 
-        video-thumbnail(:video-src="content.video" v-if="content.video" )
+        //-video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       video-container(:video-src="content.video")
 

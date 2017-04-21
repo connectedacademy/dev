@@ -4,7 +4,7 @@
 
     ul.navigation-items.pull-left
       router-link.navigation-item.navigation-item-brand(tag="li" to="/") {{ navTitle }}
-      router-link.navigation-item.navigation-item-page(tag="li" to="/course") {{ $t('nav.course') }}
+      router-link.navigation-item.navigation-item-page(tag="li" to="/") {{ $t('nav.course') }}
       router-link.navigation-item.navigation-item-page(tag="li" to="/schedule") {{ $t('nav.schedule') }}
       router-link.navigation-item.navigation-item-page(tag="li" to="/about") {{ $t('nav.about') }}
 
