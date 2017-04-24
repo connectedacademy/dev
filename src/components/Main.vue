@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
+  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
 
     .main-container
 
@@ -21,6 +21,10 @@
 </template>
 
 <script>
+/* eslint-disable */
+import _ from 'lodash';
+import VueScroll from 'vue-scroll';
+
 import * as types from '../store/mutation-types';
 import ClassSelector from './ClassSelector';
 
@@ -54,6 +58,7 @@ export default {
     };
   },
   components: {
+    VueScroll,
     ClassSelector,
     PreContent,
     ClassContent,
@@ -62,13 +67,14 @@ export default {
     PostWebinarContent,
   },
   methods: {
+    onScroll(e, position) {
+      var debounce = _.debounce((e) => {
+        this.$store.dispatch('setScrollPosition', position.scrollTop);
+      }, 500);
+      debounce();
+    },
     leaveClass() {
       this.$store.commit(types.SET_CURRENT_CLASS, undefined);
-    },
-    onScroll() {
-      let scrollPosition = this.$refs.main.scrollTop / 100;
-      scrollPosition = (scrollPosition < 0) ? 0 : scrollPosition;
-      this.$store.dispatch('setScrollPosition', scrollPosition);
     },
   },
   computed: {
@@ -78,11 +84,20 @@ export default {
     currentClass() {
       return this.$store.getters.currentClass;
     },
+    scrollPosition() {
+      return this.$store.getters.scrollPosition;
+    },
+    currentTime() {
+      return this.$store.getters.currentTime;
+    },
+    currentSection() {
+      return this.$store.getters.currentSection;
+    },
   },
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
 

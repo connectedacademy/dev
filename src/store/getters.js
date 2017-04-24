@@ -7,7 +7,7 @@ export const computedMessages = (state) => {
     messages.push({
       username: '@username',
       text: `Test message ${i} #hashtag`,
-      position: 0, // + ((i - 5) * 40) + (this.scrollPosition * 100),
+      position: 0,
     });
     i += 1;
   }
@@ -27,3 +27,9 @@ export const pageStyle = (state) => {
 };
 
 export const scrollPosition = state => _.ceil(state.scrollPosition);
+
+export const currentTime = (state) => {
+  let time = state.scrollPosition / 100;
+  time = (time < 0) ? 0 : time;
+  return _.ceil(time);
+};

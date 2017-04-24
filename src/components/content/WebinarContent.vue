@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .course-content-wrapper
+  .course-content-wrapper(ref="webinarContent" v-bind:class="{ 'active': isActive }")
 
     .course-content.webinar-content(v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
 
@@ -10,9 +10,7 @@
       .course-content--body
         p.content-description {{ content.description }}
 
-        //-video-thumbnail(:video-src="content.video" v-if="content.video" )
-
-      video-container(:video-src="content.video")
+        //- video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       conversation-container
 
@@ -28,10 +26,25 @@ import ConversationContainer from '../ConversationContainer';
 
 export default {
   name: 'class-content',
+  mounted() {
+    this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.webinarContent.offsetTop });
+  },
   computed: {
+    currentSection() {
+      return this.$store.getters.currentSection;
+    },
+    isActive() {
+      return (this.currentSection === this.label);
+    },
     ...mapGetters([
       'courseWebinarContent',
     ]),
+  },
+  data() {
+    return {
+      navTitle: 'Connected Academy - Main',
+      label: 'webinar',
+    };
   },
   components: {
     ConversationContainer,
@@ -43,5 +56,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
+@import "../../assets/stylus/layout/course-content"
+
+.course-content-wrapper.active
+  .course-content
+    background-color green !important
 
 </style>

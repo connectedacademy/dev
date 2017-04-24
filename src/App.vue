@@ -10,6 +10,13 @@
 
       router-view(transition transition-mode="out-in")
 
+      video-container
+
+    .debug-panel
+      p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
+      p {{ `currentTime - ${$store.getters.currentTime}` }}
+      p {{ `currentSection - ${$store.getters.currentSection}` }}
+
     burger-menu
 
     left-drawer
@@ -32,6 +39,7 @@ import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
 import MessageComposer from './components/MessageComposer';
+import VideoContainer from './components/VideoContainer';
 
 import store from './store/index';
 import * as types from './store/mutation-types';
@@ -69,6 +77,7 @@ export default {
     LeftDrawer,
     RightDrawer,
     MessageComposer,
+    VideoContainer,
   },
   methods: {
     dismiss() {
@@ -82,9 +91,19 @@ export default {
 
 </script>
 
-<style lang="styl">
+<style lang="stylus" scoped>
 
-@import "./assets/stylus/shared/*";
-@import "./assets/stylus/layout/page";
+@import './assets/stylus/shared/*'
+@import './assets/stylus/layout/page'
+
+.debug-panel
+  background-color red
+  color white
+  min-width 200px
+  padding 10px
+  position fixed
+  bottom 10px
+  left 10px
+  z-index 52
 
 </style>

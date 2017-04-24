@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .course-content-wrapper
+  .course-content-wrapper(ref="classContent" v-bind:class="{ 'active': isActive }")
 
     .course-content.class-content(v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
 
@@ -10,13 +10,11 @@
       .course-content--body
         p.content-description {{ content.description }}
 
-        //-video-thumbnail(:video-src="content.video" v-if="content.video" )
+        video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       .course-content--footer
-        .pure-button.pure-button-primary.pull-right(@click="showAuth") Login to Participate
+        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") Login to Participate
         .clearfix
-
-      video-container(:video-src="content.video")
 
       conversation-container
 
@@ -27,13 +25,24 @@ import { mapGetters } from 'vuex';
 
 import * as types from '../../store/mutation-types';
 import MarkdownLink from '../MarkdownLink';
-import VideoContainer from '../VideoContainer';
 import VideoThumbnail from '../VideoThumbnail';
 import ConversationContainer from '../ConversationContainer';
 
 export default {
   name: 'class-content',
+  mounted() {
+    this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.classContent.offsetTop });
+  },
   computed: {
+    registered() {
+      return this.$store.getters.isRegistered;
+    },
+    currentSection() {
+      return this.$store.getters.currentSection;
+    },
+    isActive() {
+      return (this.currentSection === this.label);
+    },
     ...mapGetters([
       'courseClassContent',
     ]),
@@ -41,6 +50,7 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
+      label: 'class',
     };
   },
   methods: {
@@ -51,14 +61,17 @@ export default {
   components: {
     ConversationContainer,
     MarkdownLink,
-    VideoContainer,
     VideoThumbnail,
   },
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 @import "../../assets/stylus/layout/course-content"
+
+.course-content-wrapper.active
+  .course-content
+    background-color green !important
 
 </style>

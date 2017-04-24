@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import * as types from '../store/mutation-types';
 
 export default {
@@ -44,7 +45,8 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     scrollPosition() {
-      return this.$store.getters.scrollPosition;
+      // const debounce = _.debounce(e => this.$store.getters.currentTime, 500);
+      return this.$store.getters.currentTime; // debounce();
     },
   },
 };

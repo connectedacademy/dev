@@ -9,6 +9,8 @@ import * as mutations from './mutations';
 import layout from './modules/layout';
 import navigation from './modules/navigation';
 import auth from './modules/auth';
+
+import conversation from './modules/conversation';
 import composer from './modules/composer';
 
 import course from './modules/course';
@@ -22,6 +24,8 @@ export default new Vuex.Store({
     layout,
     navigation,
     auth,
+
+    conversation,
     composer,
 
     course,
@@ -30,6 +34,7 @@ export default new Vuex.Store({
   state: {
     debug: false,
     scrollPosition: 0,
+    currentSection: 0,
   },
   getters,
   mutations,
