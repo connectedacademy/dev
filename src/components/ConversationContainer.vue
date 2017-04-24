@@ -47,7 +47,7 @@ export default {
   padding 0
   width 50%
   .message
-    margin 15px 0
+    margin 15px
     padding 5px 10px
     padding-left 50px
 
@@ -67,7 +67,7 @@ export default {
     p
       nomargin()
       nopadding()
-      color white
+      color $color-text-dark-grey
     &.visible
       opacity 1
 

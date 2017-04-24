@@ -2,19 +2,21 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
 
-    .toolbar(v-if="currentClass")
-      button.pure-button.pure-button-primary.pull-left(@click="leaveClass") Select Class
-      button.pure-button.pure-button-primary.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
-      .clearfix
+    .main-container
 
-    class-selector(v-bind:class="{ 'hidden': currentClass }")
+      .toolbar(v-if="currentClass")
+        button.pure-button.pure-button-primary.pull-left(@click="classSelectorVisible = !classSelectorVisible") {{ `Current Class: ${currentClass.title}` }}
+        button.pure-button.pure-button-primary.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
+        .clearfix
 
-    .stream(v-if="currentClass")
-      pre-content
-      class-content
-      postclass-content
-      webinar-content
-      post-webinar-content
+      class-selector(v-bind:class="{ 'hidden': !classSelectorVisible }")
+
+      .stream(v-if="currentClass")
+        pre-content
+        class-content
+        postclass-content
+        webinar-content
+        post-webinar-content
 
 </template>
 
@@ -47,7 +49,7 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      classSelectorVisible: false,
+      classSelectorVisible: true,
       settingsVisible: false,
     };
   },
@@ -85,7 +87,8 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .toolbar
-  border-bottom alpha(white, 0.1) 1px solid
+  background-color white
+  border-bottom #e1e1e1 1px solid
   padding 20px
 
 ul.class-selector

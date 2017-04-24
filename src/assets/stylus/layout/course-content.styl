@@ -1,62 +1,60 @@
 @require "../shared/*"
 
 .course-content
-  padding 20px
+  background-color white
+  border-bottom darken($color-purple, 20%) 6px solid
+  margin 0
+  padding 0
+  position relative
+  &:before
+    radius(50%)
+    content ''
+    background-color $color-primary
+    height 16px
+    width 16px
+    position absolute
+    top 10px
+    right 10px
   h1.content-title
     nomargin()
     nopadding()
-    color #444
+    color $color-text-dark-grey
     font-size 1.3em
-    margin 5px 0px
   h5.content-subheader
     nomargin()
     nopadding()
-    color #444
-    margin 15px 0
+    color $color-text-dark-grey
   p.content-description
     nomargin()
     nopadding()
-    color #777
+    color $color-text-grey
     font-size 1em
-    margin 5px 0px
   a
-    color white
     text-decoration none
 
   .course-content--header
     background-color transparent
-    padding 5px 10px
+    padding 20px 20px 10px 20px
     h1.content-title
-      color white !important
+      color $color-text-dark-grey !important
   .course-content--body
-    background-color white
     overflow hidden
-    padding 20px
-    position relative
-    &:before
-      content ''
-      border-color transparent transparent transparent $color-primary
-      border-width 40px 0 40px 6px
-      border-style solid
-      position absolute
-      top 0
-      left 0
+    padding 10px 20px
   .course-content--footer
-    background-color white
-    border-top #e1e1e1 1px solid
-    padding 10px
+    background-color transparent
+    padding 10px 20px 20px 20px
 
-.course-content.pre-content .course-content--body:before
-  border-left-color #FCC04E
+.course-content.pre-content:before
+  background-color #FCC04E
 
-.course-content.class-content .course-content--body:before
-  border-left-color $color-primary
+.course-content.class-content:before
+  background-color $color-primary
 
-.course-content.postclass-content .course-content--body:before
-  border-left-color $color-primary
+.course-content.postclass-content:before
+  background-color $color-primary
 
-.course-content.webinar-content .course-content--body:before
-  border-left-color #F97A66
+.course-content.webinar-content:before
+  background-color #F97A66
 
-.course-content.postwebinar-content .course-content--body:before
-  border-left-color #F97A66
+.course-content.postwebinar-content:before
+  background-color #F97A66

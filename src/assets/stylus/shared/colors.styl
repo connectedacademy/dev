@@ -4,12 +4,16 @@ $color-primary = #0078e7
 $color-success = #24b424
 $color-danger = #FF3B23
 
+// Highlights
+$color-purple = #404566
+
+// Purples
+$color-dark-purple = darken($color-purple, 10%)
+$color-darker-purple = darken($color-purple, 20%)
+$color-darkest-purple = darken($color-purple, 30%)
+
 // Greys
-$color-grey = lighten(#0F1519, 5%)
-$color-dark-grey = darken($color-grey, 10%)
-$color-darker-grey = darken($color-grey, 20%)
-$color-darkest-grey = darken($color-grey, 30%)
-$color-light-grey = #e1e1e1
+$color-light-grey = #e9e9e9
 $color-lightest-grey = #f9f9f9
 
 // Text
@@ -18,13 +22,13 @@ $color-text-grey = #999
 $color-text-light-grey = #ccc
 
 // Navigation
-$navigation-background-color = $color-darkest-grey
+$navigation-background-color = darken($color-purple, 20%)
 $navigation-text-color = $color-white
 
 // Layout
-$color-main-page = $color-dark-grey
-$color-col = alpha(white, 0)
-$color-col-main = $color-dark-grey
+$color-main-page = darken($color-purple, 20%)//$color-lightest-grey
+$color-col = white
+$color-col-main = darken($color-purple, 20%)
 
 $color-course-content-block = $color-col-main //lighten($color-col-main, 2%)
 

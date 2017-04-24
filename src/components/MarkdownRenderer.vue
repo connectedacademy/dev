@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
+  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
 
     .container
 
@@ -103,6 +103,8 @@ export default {
 
 <style lang="stylus">
 
+@import '../assets/stylus/shared/*'
+
 .markdown-nav
   border-bottom alpha(white, 0.2) 1px solid
   margin 0 -5px 20px -5px
@@ -116,7 +118,7 @@ export default {
   h1, h2, h3, h4, h5, p, a, li
     nomargin()
     nopadding()
-    color white
+    color $color-text-dark-grey
     margin-bottom 5px
   img
     max-width 100%

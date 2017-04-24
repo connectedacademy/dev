@@ -11,7 +11,7 @@
     box-sizing border-box
     padding 0
     position fixed
-    top 60px
+    top 120px
     bottom 0
     left 0
     right 0
@@ -21,16 +21,19 @@
       h1
         nomargin()
         nopadding()
-        color white
+        color #444
 
   .col#col-main
     background-color $color-col-main
-    // border-left darken($color-col-main, 15%) 3px solid
-    // border-right darken($color-col-main, 15%) 3px solid
-    box-shadow 0px 0px 30px 0px alpha(black, 0.4)
     overflow auto
     transition all 0.2s ease-in-out
 
+    &.background-white
+      background-color white
+
+    .main-container
+      background-color alpha(black, 0.05)
+      
     @media (min-width: 800px)
       &.narrow
         left 50%

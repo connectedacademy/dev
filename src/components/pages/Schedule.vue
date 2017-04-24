@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
+  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
     .container
-      h1.text-white Schedule
+      h1 Schedule
 
       hub-selector
 

@@ -34,7 +34,8 @@ export default {
 
 ul.class-selector
   cleanlist()
-  background-color alpha(white, 0.1)
+  background-color $color-light-grey
+  border-bottom #e1e1e1 1px solid
   padding 10px
   li.class-selector--item
     cleanlist()
