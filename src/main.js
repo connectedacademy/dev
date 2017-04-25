@@ -9,6 +9,8 @@ import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
 import VueScroll from 'vue-scroll';
+import VueSmoothScroll from 'vue-smoothscroll';
+
 import { sync } from 'vuex-router-sync';
 
 import VueYouTubeEmbed from 'vue-youtube-embed';
@@ -29,6 +31,7 @@ Vue.component('icon', Icon);
 require('animate.css');
 
 Vue.use(VueScroll);
+Vue.use(VueSmoothScroll);
 Vue.use(VueResource);
 Vue.use(Vuex);
 Vue.use(VueConfig, Vue.config);

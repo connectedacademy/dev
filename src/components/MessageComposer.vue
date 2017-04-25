@@ -37,7 +37,8 @@ export default {
       return this.$store.state.composer.visible;
     },
     hidden() {
-      return !this.$store.getters.isRegistered ||
+      return (this.$store.getters.currentSection === undefined) ||
+        !this.$store.getters.isRegistered ||
         this.$store.state.composer.hidden ||
         this.$store.state.auth.visible ||
         this.$store.state.navigation.leftDrawer.visible ||

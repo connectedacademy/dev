@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as types from '../mutation-types';
 import API from '../../api';
 import globalState from '../index';
@@ -14,23 +15,29 @@ const getters = {
   segementId() {
     return state.segment_id;
   },
-  videoId() {
-    return '123';
-  },
   videoIsActive() {
-    return (this.currentSection === 'webinar');
+    return (globalState.getters.currentSection !== undefined);
   },
   currentSection() {
     if (state.scrollPoints.length === 0) {
-      return 'no points';
+      return undefined;
     }
     for (let i = (state.scrollPoints.length - 1); i > -1; i -= 1) {
-      if (globalState.scrollPosition > state.scrollPoints[i].position) {
-        return state.scrollPoints[i].label;
+      if (globalState.getters.scrollPosition > state.scrollPoints[i].position) {
+        return state.scrollPoints[i];
       }
     }
 
-    return 'no section';
+    return undefined;
+  },
+  currentSectionScrollPosition() {
+    if (!globalState.getters.currentSection) {
+      return 0;
+    }
+    return globalState.getters.scrollPosition - globalState.getters.currentSection.position;
+  },
+  currentSectionSegment() {
+    return _.ceil(globalState.getters.currentSectionScrollPosition / 158);
   },
 };
 

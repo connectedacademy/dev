@@ -13,9 +13,12 @@
       video-container
 
     .debug-panel
+      p currentSection
+      pre {{ $store.getters.currentSection }}
       p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
       p {{ `currentTime - ${$store.getters.currentTime}` }}
-      p {{ `currentSection - ${$store.getters.currentSection}` }}
+      p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
+      p {{ `currentSectionSegment - ${$store.getters.currentSectionSegment}` }}
 
     burger-menu
 

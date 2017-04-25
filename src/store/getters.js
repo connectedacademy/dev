@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import globalState from './index';
 
 export const computedMessages = (state) => {
   let messages = [];
@@ -29,7 +30,10 @@ export const pageStyle = (state) => {
 export const scrollPosition = state => _.ceil(state.scrollPosition);
 
 export const currentTime = (state) => {
-  let time = state.scrollPosition / 100;
+  if (!globalState.getters.currentSectionScrollPosition) {
+    return 0;
+  }
+  let time = globalState.getters.currentSectionScrollPosition / 158;
   time = (time < 0) ? 0 : time;
   return _.ceil(time);
 };

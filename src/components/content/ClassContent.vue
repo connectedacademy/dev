@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
 import * as types from '../../store/mutation-types';
@@ -31,7 +32,9 @@ import ConversationContainer from '../ConversationContainer';
 export default {
   name: 'class-content',
   mounted() {
-    this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.classContent.offsetTop });
+    _.forEach(this.courseClassContent, (content) => {
+      this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.classContent.offsetTop, videoId: content.video });
+    });
   },
   computed: {
     registered() {

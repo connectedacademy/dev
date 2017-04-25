@@ -4,12 +4,12 @@
 
     .dialogue-container
 
-      .time-slot(v-for="(index, slot) in slots" v-bind:style="slotStyle")
+      .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
         p.timestamp-label {{ index }}
 
     .messages-container
 
-      .time-slot(v-for="slot in slots" v-bind:style="slotStyle")
+      .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
 
         .message.visible(v-for="message in messages.data" v-bind:style="{ top: message.position + 'px' }")
 
@@ -60,13 +60,14 @@ export default {
     dialogue() {
       return this.$store.getters.dialogue;
     },
+    slotStyle() {
+      const heightVal = 158;
+      return { height: `${heightVal}px` };
+    },
   },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      slotStyle: {
-        height: '158px',
-      },
     };
   },
 };
@@ -85,20 +86,22 @@ export default {
       background-color #f2f2f2
       border-bottom #e1e1e1 1px solid
       height 108px
+      animate()
       p.timestamp-label
         nomargin()
         nopadding()
 
   .dialogue-container
     .time-slot
-      background-color blue
+      background-color #f2f2f2
 
   .messages-container
     border-left $color-light-grey 1px solid
     width calc(50% - 1px)
     .time-slot
-      background-color yellow
       overflow hidden
+      &.active
+        background-color #e1e1e1
 
   .message
     margin 15px

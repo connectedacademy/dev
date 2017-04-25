@@ -14,7 +14,7 @@
       .stream(v-if="currentClass")
         pre-content
         class-content
-        postclass-content
+        //- postclass-content
         webinar-content
         post-webinar-content
 
@@ -43,12 +43,18 @@ export default {
   },
   created() {
     this.$store.dispatch('setColumnState', 'narrow');
-    this.$store.commit('setSession', { sid: this.$cookie.get('sails.sid') });
     this.$store.dispatch('getCourse');
     // Check if user has registered
     if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
       this.$router.push('/registration');
     }
+    // var self = this;
+    // setInterval(() => {
+    //   const target = this.$store.getters.scrollPosition + 1;
+    //   self.$refs.main.scrollTop = target;
+    //   this.$SmoothScroll(target, 6.25);
+    // }, 12.25);
+    this.$SmoothScroll(1000, 500);
   },
   data() {
     return {
@@ -67,11 +73,11 @@ export default {
     PostWebinarContent,
   },
   methods: {
+    throttledMethod: _.throttle(function(self, position) {
+      self.$store.dispatch('setScrollPosition', position.scrollTop);
+    }, 200, { leading: true, trailing: true }),
     onScroll(e, position) {
-      var debounce = _.debounce((e) => {
-        this.$store.dispatch('setScrollPosition', position.scrollTop);
-      }, 500);
-      debounce();
+      this.throttledMethod(this, position);
     },
     leaveClass() {
       this.$store.commit(types.SET_CURRENT_CLASS, undefined);

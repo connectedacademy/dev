@@ -10,13 +10,14 @@
       .course-content--body
         p.content-description {{ content.description }}
 
-        //- video-thumbnail(:video-src="content.video" v-if="content.video" )
+        video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       conversation-container
 
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
 import MarkdownLink from '../MarkdownLink';
@@ -27,7 +28,9 @@ import ConversationContainer from '../ConversationContainer';
 export default {
   name: 'class-content',
   mounted() {
-    this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.webinarContent.offsetTop });
+    _.forEach(this.courseWebinarContent, (content) => {
+      this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.webinarContent.offsetTop, videoId: content.video });
+    });
   },
   computed: {
     currentSection() {
