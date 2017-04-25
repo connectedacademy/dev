@@ -11,7 +11,7 @@
 
       .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
 
-        .message.visible(v-for="message in messages.data" v-bind:style="{ top: message.position + 'px' }")
+        .message.visible(v-for="message in messages.data")
 
           img(v-bind:src="message.user.profile")
 

@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .course-content-wrapper(ref="classContent" v-bind:class="{ 'active': isActive }")
+  .course-content-wrapper(v-bind:class="{ 'active': isActive }")
 
-    .course-content.class-content(v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
+    .course-content.class-content(ref="classContent" v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
 
       .course-content--header
         h1.content-title {{ content.title }}
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
@@ -32,9 +33,7 @@ import ConversationContainer from '../ConversationContainer';
 export default {
   name: 'class-content',
   mounted() {
-    _.forEach(this.courseClassContent, (content) => {
-      this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.classContent.offsetTop, videoId: content.video });
-    });
+    this.setScrollPoints();
   },
   computed: {
     registered() {
@@ -44,7 +43,8 @@ export default {
       return this.$store.getters.currentSection;
     },
     isActive() {
-      return (this.currentSection === this.label);
+      return (typeof this.currentSection != 'undefined' && this.currentSection.label === this.label);
+      // return (this.currentSection.label === this.label);
     },
     ...mapGetters([
       'courseClassContent',
@@ -53,10 +53,15 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      label: 'class',
+      label: 'classContent',
     };
   },
   methods: {
+    setScrollPoints() {
+      _.forEach(this.courseClassContent, (content) => {
+        this.$store.dispatch('setScrollPoint', { label: this.label, top: this.$refs.classContent[0].offsetTop, bottom: this.$refs.classContent[0].offsetTop + this.$refs.classContent[0].scrollHeight, videoId: content.video });
+      });
+    },
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
     },
@@ -72,9 +77,5 @@ export default {
 <style lang="stylus" scoped>
 
 @import "../../assets/stylus/layout/course-content"
-
-.course-content-wrapper.active
-  .course-content
-    background-color green !important
 
 </style>

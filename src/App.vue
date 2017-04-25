@@ -14,7 +14,7 @@
 
     .debug-panel
       p currentSection
-      pre {{ $store.getters.currentSection }}
+      pre {{ currentSection }}
       p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
       p {{ `currentTime - ${$store.getters.currentTime}` }}
       p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
@@ -70,6 +70,9 @@ export default {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
       || this.$store.state.composer.visible;
+    },
+    currentSection() {
+      return this.$store.getters.currentSection;
     },
   },
   store,

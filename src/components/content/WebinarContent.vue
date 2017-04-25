@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .course-content-wrapper(ref="webinarContent" v-bind:class="{ 'active': isActive }")
+  .course-content-wrapper(v-bind:class="{ 'active': isActive }")
 
-    .course-content.webinar-content(v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
+    .course-content.webinar-content(ref="webinarContent" v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
 
       .course-content--header
         h1.content-title {{ content.title }}
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
@@ -28,16 +29,15 @@ import ConversationContainer from '../ConversationContainer';
 export default {
   name: 'class-content',
   mounted() {
-    _.forEach(this.courseWebinarContent, (content) => {
-      this.$store.dispatch('addScrollPoint', { label: this.label, position: this.$refs.webinarContent.offsetTop, videoId: content.video });
-    });
+    this.setScrollPoints();
   },
   computed: {
     currentSection() {
       return this.$store.getters.currentSection;
     },
     isActive() {
-      return (this.currentSection === this.label);
+      return (typeof this.currentSection != 'undefined' && this.currentSection.label === this.label);
+      // return (this.currentSection.label === this.label);
     },
     ...mapGetters([
       'courseWebinarContent',
@@ -46,8 +46,19 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      label: 'webinar',
+      label: 'webinarContent',
     };
+  },
+  methods: {
+    setScrollPoints() {
+      console.log(this.$refs);
+      _.forEach(this.courseWebinarContent, (content) => {
+        this.$store.dispatch('setScrollPoint', { label: this.label, top: this.$refs.webinarContent[0].offsetTop, bottom: this.$refs.webinarContent[0].offsetTop + this.$refs.webinarContent[0].scrollHeight, videoId: content.video });
+      });
+    },
+    showAuth() {
+      this.$store.commit(types.SHOW_AUTH);
+    },
   },
   components: {
     ConversationContainer,
@@ -61,9 +72,5 @@ export default {
 <style lang="stylus" scoped>
 
 @import "../../assets/stylus/layout/course-content"
-
-.course-content-wrapper.active
-  .course-content
-    background-color green !important
 
 </style>

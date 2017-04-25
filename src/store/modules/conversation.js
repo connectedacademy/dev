@@ -1,3 +1,4 @@
+/* eslint-disable */
 import _ from 'lodash';
 import * as types from '../mutation-types';
 import API from '../../api';
@@ -5,36 +6,37 @@ import globalState from '../index';
 
 // initial state
 const state = {
-  segment_id: undefined,
-  video_src: '',
-  scrollPoints: [],
+  scrollPoints: {},
 };
 
 // getters
 const getters = {
-  segementId() {
-    return state.segment_id;
-  },
   videoIsActive() {
     return (globalState.getters.currentSection !== undefined);
   },
   currentSection() {
-    if (state.scrollPoints.length === 0) {
+    if (!state.scrollPoints) {
       return undefined;
     }
-    for (let i = (state.scrollPoints.length - 1); i > -1; i -= 1) {
-      if (globalState.getters.scrollPosition > state.scrollPoints[i].position) {
-        return state.scrollPoints[i];
+
+    const scrollPosition = globalState.getters.scrollPosition;
+
+    console.log(state.scrollPoints);
+
+    for (const key in state.scrollPoints ) {
+      console.log(key);
+      const scrollPoint = state.scrollPoints[key];
+      if ((scrollPosition > scrollPoint.top) && (scrollPosition < scrollPoint.bottom)) {
+        console.log(scrollPoint);
+        return scrollPoint;
       }
-    }
+    };
 
     return undefined;
   },
   currentSectionScrollPosition() {
-    if (!globalState.getters.currentSection) {
-      return 0;
-    }
-    return globalState.getters.scrollPosition - globalState.getters.currentSection.position;
+    if (!globalState.getters.currentSection) { return 0; }
+    return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
   },
   currentSectionSegment() {
     return _.ceil(globalState.getters.currentSectionScrollPosition / 158);
@@ -43,15 +45,21 @@ const getters = {
 
 // actions
 const actions = {
-  addScrollPoint({ commit }, scrollPoint) {
-    commit('addScrollPoint', scrollPoint);
+  clearScrollPoints({ commit }) {
+    commit('clearScrollPoints');
+  },
+  setScrollPoint({ commit }, scrollPoint) {
+    commit('setScrollPoint', scrollPoint);
   },
 };
 
 // mutations
 const mutations = {
-  addScrollPoint(initialState, scrollPoint) {
-    state.scrollPoints.push(scrollPoint);
+  setScrollPoint(initialState, scrollPoint) {
+    state.scrollPoints[scrollPoint.label] = scrollPoint;
+  },
+  clearScrollPoints(initialState) {
+    state.scrollPoints = [];
   },
 };
 

@@ -34,7 +34,6 @@ export default new Vuex.Store({
   state: {
     debug: false,
     scrollPosition: 0,
-    currentSection: 0,
   },
   getters,
   mutations,
