@@ -16,8 +16,8 @@
             label Select your hub
             ul.hub-selector
               li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
-                h1 {{ hub.name }}
-                h2 {{ hub.timezone }}
+                h1.hub-title {{ hub.name }}
+                h2.hub-timezone {{ hub.timezone }}
 
           fieldset.validate(v-bind:class="{ valid: validatedResponse.email }")
             label {{ $t('auth.enter_your_email') }}
@@ -189,13 +189,14 @@ export default {
 @import '../../assets/stylus/layout/page'
 @import '../../assets/stylus/shared/*'
 
-.col#col-main.narrow
+.col#col-main
   .registration-container
     .registration-container--header
       text-align center
       h1, h2
         nomargin()
         nopadding()
+        color white
         padding 20px 0px 20px 0px
 
     form
@@ -211,11 +212,6 @@ export default {
         border-top $color-light-grey 1px solid
         height 0
         margin-bottom 20px
-
-      h5
-        nomargin()
-        color $color-text-grey
-        padding 10px 0
 
       input, select
         margin 10px 0
@@ -253,13 +249,16 @@ ul.hub-selector
     width 120px
 
     h1, h2
+      color white
       nomargin()
       nopadding()
 
-    h1
+    h1.hub-title
+    color white
       font-size 1.2em
       line-height 30px
-    h2
+    h2.hub-timezone
+      color white
       font-size 1em
       line-height 30px
 

@@ -21,13 +21,9 @@ const getters = {
 
     const scrollPosition = globalState.getters.scrollPosition;
 
-    console.log(state.scrollPoints);
-
     for (const key in state.scrollPoints ) {
-      console.log(key);
       const scrollPoint = state.scrollPoints[key];
       if ((scrollPosition > scrollPoint.top) && (scrollPosition < scrollPoint.bottom)) {
-        console.log(scrollPoint);
         return scrollPoint;
       }
     };

@@ -13,7 +13,7 @@
         video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       .course-content--footer
-        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") Login to Participate
+        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('common.login_to_participate') }}
         .clearfix
 
       conversation-container
