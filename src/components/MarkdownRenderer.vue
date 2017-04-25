@@ -104,18 +104,18 @@ export default {
 <style lang="stylus">
 
 @import '../assets/stylus/shared/*'
+@import '../assets/stylus/layout/page'
 
 .markdown-nav
   border-bottom $color-light-grey 1px solid
   margin 0 -5px 20px -5px
-  padding 20px
+  padding-bottom 20px
   .pure-button
     margin 0 5px
   a
     color white
 
 .rendered-markdown
-  padding 20px
   h1, h2, h3, h4, h5, p, a, li
     nomargin()
     nopadding()
