@@ -37,7 +37,7 @@ export default {
       // this.videoId = 'another video id';
     },
     seek: _.throttle(function(self, position) {
-      if (!this.$store.state.autoPlaying) {
+      if (!this.$store.state.autoPlaying && self.player) {
         self.player.seekTo(position);
       }
     }, (100), { leading: false, trailing: true }),

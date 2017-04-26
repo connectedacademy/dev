@@ -84,18 +84,16 @@ export default {
   },
   watch: {
     'isAutoScrolling': {
-      handler: function(oldVal, newVal) {
-        console.log('newVal');
-        console.log(newVal);
-        this.$store.commit('setAutoPlaying', newVal);
+      handler: function(oV, nV) {
+        this.$store.commit('setAutoPlaying', nV);
       },
       deep: true,
     },
     'currentSection': {
-      handler: function(oldVal, newVal) {
+      handler: function(oV, nV) {
 
         if (!this.canAutoScroll) {
-          if ((oldVal !== newVal) && (newVal !== undefined)) {
+          if ((oV !== nV) && (nV !== undefined)) {
             this.canAutoScroll = true;
           }
         }

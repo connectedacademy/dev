@@ -15,9 +15,7 @@ const getters = {
     return (globalState.getters.currentSection !== undefined);
   },
   currentSection() {
-    if (!state.scrollPoints) {
-      return undefined;
-    }
+    if (state.scrollPoints.length === 0) { return undefined; }
 
     const scrollPosition = globalState.getters.scrollPosition;
 
@@ -35,9 +33,11 @@ const getters = {
     return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
   },
   currentVideoTime() {
+    if (!globalState.getters.currentSection) { return 0; }
     return (globalState.getters.currentSectionScrollPosition / 158);
   },
   currentSectionSegment() {
+    if (!globalState.getters.currentSection) { return 0; }
     return _.ceil(globalState.getters.currentSectionScrollPosition / 158);
   },
 };
