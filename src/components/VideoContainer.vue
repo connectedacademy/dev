@@ -5,11 +5,12 @@
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
       button.pure-button(@click="seek") Seek
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" player-width="auto" player-height="auto")
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" player-width="auto" player-height="169")
 
 </template>
 
 <script>
+/* eslint-disable */
 import _ from 'lodash';
 
 export default {
@@ -20,9 +21,8 @@ export default {
     };
   },
   watch: {
-    scrollPosition(oldPosition, newPosition) {
-      this.seek();
-      // _.debounce(this.seek, 1000);
+    currentVideoTime(oldTime, newTime) {
+      this.seek(this, this.currentVideoTime);
     },
   },
   methods: {
@@ -36,9 +36,11 @@ export default {
     change() {
       // this.videoId = 'another video id';
     },
-    seek() {
-      this.player.seekTo(this.scrollPosition);
-    },
+    seek: _.throttle(function(self, position) {
+      if (!this.$store.state.autoPlaying) {
+        self.player.seekTo(position);
+      }
+    }, (100), { leading: false, trailing: true }),
     play() {
       this.player.playVideo();
     },
@@ -56,7 +58,10 @@ export default {
     isActive() {
       return this.$store.getters.videoIsActive;
     },
-    scrollPosition() {
+    currentVideoTime() {
+      return this.$store.getters.currentVideoTime;
+    },
+    currentSectionSegment() {
       return this.$store.getters.currentSectionSegment;
     },
   },

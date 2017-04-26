@@ -34,6 +34,9 @@ const getters = {
     if (!globalState.getters.currentSection) { return 0; }
     return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
   },
+  currentVideoTime() {
+    return (globalState.getters.currentSectionScrollPosition / 158);
+  },
   currentSectionSegment() {
     return _.ceil(globalState.getters.currentSectionScrollPosition / 158);
   },

@@ -14,7 +14,7 @@
       .stream(v-if="currentClass")
         pre-content
         class-content
-        //- postclass-content
+        post-class-content
         webinar-content
         post-webinar-content
 
@@ -42,25 +42,35 @@ export default {
     });
   },
   created() {
-    this.$store.dispatch('setColumnState', 'narrow');
-    this.$store.dispatch('getCourse');
     // Check if user has registered
     if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
       this.$router.push('/registration');
     }
-    // var self = this;
-    // setInterval(() => {
-    //   const target = this.$store.getters.scrollPosition + 1;
-    //   self.$refs.main.scrollTop = target;
-    //   this.$SmoothScroll(target, 6.25);
-    // }, 12.25);
-    this.$SmoothScroll(1000, 500);
+  },
+  mounted() {
+    this.$store.dispatch('setColumnState', 'narrow');
+    this.$store.dispatch('getCourse');
+
+    var self = this;
+
+    // Listen for wheel events
+    window.addEventListener('wheel', () => { self.wheelMovement(self); });
+
+    // Attempt auto scroll every second
+    setInterval(function() { self.attemptAutoScroll(); }, self.reattemptAutoScroll);
   },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
       classSelectorVisible: true,
       settingsVisible: false,
+      canAutoScroll: false,
+      isAutoScrolling: false,
+
+      reattemptAutoScroll: 500,
+      restartAutoScroll: 500,
+      wheelMovementThrottle: 200,
+      scrollPositionThrottle: 200,
     };
   },
   components: {
@@ -72,15 +82,76 @@ export default {
     WebinarContent,
     PostWebinarContent,
   },
+  watch: {
+    'isAutoScrolling': {
+      handler: function(oldVal, newVal) {
+        console.log('newVal');
+        console.log(newVal);
+        this.$store.commit('setAutoPlaying', newVal);
+      },
+      deep: true,
+    },
+    'currentSection': {
+      handler: function(oldVal, newVal) {
+
+        if (!this.canAutoScroll) {
+          if ((oldVal !== newVal) && (newVal !== undefined)) {
+            this.canAutoScroll = true;
+          }
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
-    throttledMethod: _.throttle(function(self, position) {
+    wheelMovement: _.throttle(function(self) {
+      self.canAutoScroll = self.isAutoScrolling = false;
+      setTimeout(function() { self.canAutoScroll = true; }, self.restartAutoScroll);
+    }, self.wheelMovementThrottle),
+    setScrollPosition: _.throttle(function(self, position) {
       self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 200, { leading: true, trailing: true }),
+    }, self.scrollPositionThrottle, { leading: true, trailing: true }),
     onScroll(e, position) {
-      this.throttledMethod(this, position);
+      this.setScrollPosition(this, position);
     },
     leaveClass() {
       this.$store.commit(types.SET_CURRENT_CLASS, undefined);
+    },
+    attemptAutoScroll() {
+
+      var self = this;
+
+      if (self.isAutoScrolling || !self.canAutoScroll || !self.$store.getters.currentSection) { return; }
+
+      self.isAutoScrolling = true;
+
+      var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
+
+      var position = function(start, end, elapsed, duration) {
+  	    if (elapsed > duration) return end;
+  	    // return start + (end - start) * easingFunction(elapsed / duration); // Easing
+  	    return start + (end - start) * (elapsed / duration); // Linear
+    	}
+
+      var clock = Date.now();
+      var requestAnimationFrame = window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
+        function(fn) { window.setTimeout(fn, 15); };
+
+      var start = this.$store.getters.scrollPosition;
+      var end = this.$store.getters.currentSection.bottom;
+      var duration = (((end - start) / 158) * 1000);
+
+      var step = function() {
+        var elapsed = Date.now() - clock;
+
+        self.$refs.main.scrollTop = position(start, end, elapsed, duration); //target; // position(start, end, elapsed, duration);
+
+        if ((elapsed <= duration) && self.canAutoScroll) {
+          requestAnimationFrame(step);
+        }
+      }
+      step();
     },
   },
   computed: {
@@ -98,6 +169,9 @@ export default {
     },
     currentSection() {
       return this.$store.getters.currentSection;
+    },
+    currentSectionLabel() {
+      return this.$store.getters.currentSection.label;
     },
   },
 };

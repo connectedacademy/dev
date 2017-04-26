@@ -2,7 +2,7 @@
 
   .course-content-wrapper(v-bind:class="{ 'active': isActive }")
 
-    .course-content.class-content(ref="classContent" v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
+    .course-content.class-content(v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
 
       .course-content--header
         h1.content-title {{ content.title }}
@@ -13,10 +13,10 @@
         video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       .course-content--footer
-        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('common.login_to_participate') }}
+        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('auth.login_to_participate') }}
         .clearfix
 
-      conversation-container
+      conversation-container(ref="conversationContainer")
 
 </template>
 
@@ -44,7 +44,6 @@ export default {
     },
     isActive() {
       return (typeof this.currentSection != 'undefined' && this.currentSection.label === this.label);
-      // return (this.currentSection.label === this.label);
     },
     ...mapGetters([
       'courseClassContent',
@@ -58,8 +57,15 @@ export default {
   },
   methods: {
     setScrollPoints() {
+      const element = this.$refs.conversationContainer[0].$el;
       _.forEach(this.courseClassContent, (content) => {
-        this.$store.dispatch('setScrollPoint', { label: this.label, top: this.$refs.classContent[0].offsetTop, bottom: this.$refs.classContent[0].offsetTop + this.$refs.classContent[0].scrollHeight, videoId: content.video });
+        this.$store.dispatch('setScrollPoint', {
+          label: this.label,
+          top: (element.offsetParent.offsetTop + element.offsetTop),
+          bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
+          duration: 10000,
+          videoId: content.video,
+        });
       });
     },
     showAuth() {

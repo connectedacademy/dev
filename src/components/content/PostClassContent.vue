@@ -23,7 +23,7 @@ import MarkdownLink from '../MarkdownLink';
 import VideoThumbnail from '../VideoThumbnail';
 
 export default {
-  name: 'postclass-content',
+  name: 'post-class-content',
   computed: {
     ...mapGetters([
       'coursePostClassContent',

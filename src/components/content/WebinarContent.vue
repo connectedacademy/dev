@@ -2,7 +2,7 @@
 
   .course-content-wrapper(v-bind:class="{ 'active': isActive }")
 
-    .course-content.webinar-content(ref="webinarContent" v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
+    .course-content.webinar-content(v-for="content in courseWebinarContent" v-bind:class="{ optional: content.optional }")
 
       .course-content--header
         h1.content-title {{ content.title }}
@@ -13,9 +13,10 @@
         video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       .course-content--footer
-        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('common.login_to_participate') }}
+        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('auth.login_to_participate') }}
+        .clearfix
 
-      conversation-container
+      conversation-container(ref="conversationContainer")
 
 </template>
 
@@ -35,12 +36,14 @@ export default {
     this.setScrollPoints();
   },
   computed: {
+    registered() {
+      return this.$store.getters.isRegistered;
+    },
     currentSection() {
       return this.$store.getters.currentSection;
     },
     isActive() {
       return (typeof this.currentSection != 'undefined' && this.currentSection.label === this.label);
-      // return (this.currentSection.label === this.label);
     },
     ...mapGetters([
       'courseWebinarContent',
@@ -54,9 +57,15 @@ export default {
   },
   methods: {
     setScrollPoints() {
-      console.log(this.$refs);
+      const element = this.$refs.conversationContainer[0].$el;
       _.forEach(this.courseWebinarContent, (content) => {
-        this.$store.dispatch('setScrollPoint', { label: this.label, top: this.$refs.webinarContent[0].offsetTop, bottom: this.$refs.webinarContent[0].offsetTop + this.$refs.webinarContent[0].scrollHeight, videoId: content.video });
+        this.$store.dispatch('setScrollPoint', {
+          label: this.label,
+          top: (element.offsetParent.offsetTop + element.offsetTop),
+          bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
+          duration: 10000,
+          videoId: content.video,
+        });
       });
     },
     showAuth() {

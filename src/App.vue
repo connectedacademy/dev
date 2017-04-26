@@ -12,12 +12,14 @@
 
       video-container
 
-    .debug-panel
+    .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
       p currentSection
       pre {{ currentSection }}
+      p {{ `autoPlaying - ${$store.state.autoPlaying}` }}
       p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
       p {{ `currentTime - ${$store.getters.currentTime}` }}
       p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
+      p {{ `currentVideoTime - ${$store.getters.currentVideoTime}` }}
       p {{ `currentSectionSegment - ${$store.getters.currentSectionSegment}` }}
 
     burger-menu
@@ -35,7 +37,7 @@
 </template>
 
 <script>
-
+/* eslint-disable */
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
 import Navigation from './components/navigation/Navigation';
 import BurgerMenu from './components/navigation/BurgerMenu';

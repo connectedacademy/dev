@@ -1,9 +1,11 @@
 <template lang="pug">
 
-  ul.class-selector
-    li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(index)")
-      h1.class-selector--item--header {{ theClass.title }}
-      h2.class-selector--item--body {{ theClass.description }}
+  .class-selector-wrapper
+    ul.class-selector
+      li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(index)")
+        h1.class-selector--item--header {{ theClass.title }}
+        h2.class-selector--item--body {{ theClass.description }}
+      .clearfix
 
 </template>
 
@@ -32,36 +34,46 @@ export default {
 
 @import '../assets/stylus/shared/*'
 
-ul.class-selector
-  cleanlist()
+.class-selector-wrapper
   background-color $color-light-grey
-  border-bottom #e1e1e1 1px solid
-  padding 10px
-  li.class-selector--item
+  height 160px
+  overflow-x scroll
+  overflow-y hidden
+  ul.class-selector
     cleanlist()
-    background-color white
-    border white 4px solid
-    display inline-block
-    overflow hidden
-    margin 10px
-    padding 15px
-    text-align left
-    width 180px
-    animate()
-    h1.class-selector--item--header
-      nomargin()
-      nopadding()
-      color $color-text-dark-grey
-      font-size 1.1em
-    h2.class-selector--item--body
-      nomargin()
-      nopadding()
-      color $color-text-grey
-      font-size 1em
-      font-weight normal
-      margin-top 5px
-    &:hover
-      border-color $color-primary
-      cursor pointer
+    border-bottom #e1e1e1 1px solid
+    height 160px
+    padding 10px
+    white-space nowrap
+    width calc(200px * 2)
+    li.class-selector--item
+      cleanlist()
+      background-color white
+      border white 4px solid
+      box-sizing border-box
+      display inline-block
+      overflow hidden
+      margin 10px
+      padding 15px
+      text-align left
+      height 120px
+      width 180px
+      white-space normal
+      animate()
+      h1.class-selector--item--header
+        nomargin()
+        nopadding()
+        color $color-text-dark-grey
+        font-size 1.05em
+      h2.class-selector--item--body
+        nomargin()
+        nopadding()
+        color $color-text-grey
+        font-size 0.95em
+        font-weight normal
+        margin-top 5px
+      &:hover
+        border-color $color-primary
+        cursor pointer
 
 </style>

@@ -14,8 +14,8 @@
 
       li.drawer-list-item(v-on:click="toggleDebugMode" v-bind:class="{ visible: state.visible }")
         h2.drawer-list-item--body
-          span(v-if="!this.$store.state.navigation.debug") {{ $t('common.enable_debug_mode') }}
-          span(v-if="this.$store.state.navigation.debug") {{ $t('common.disable_debug_mode') }}
+          span(v-if="!this.$store.state.debug") {{ $t('common.enable_debug_mode') }}
+          span(v-if="this.$store.state.debug") {{ $t('common.disable_debug_mode') }}
 
       li.drawer-list-item.visible
         h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}

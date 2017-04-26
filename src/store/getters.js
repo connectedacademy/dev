@@ -37,3 +37,5 @@ export const currentTime = (state) => {
   time = (time < 0) ? 0 : time;
   return _.ceil(time);
 };
+
+export const autoPlaying = state => globalState.autoPlaying;

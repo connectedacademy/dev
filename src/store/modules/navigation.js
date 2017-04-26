@@ -5,7 +5,6 @@ const BURGER_CLOSE = 'close';
 
 // initial state
 const state = {
-  debug: true,
   overlayVisible: false,
   visible: true,
   burger: {

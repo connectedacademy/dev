@@ -30,6 +30,7 @@ export default {
     logout: 'Logout',
 
     login_with_twitter: 'Login with Twitter',
+    login_to_participate: 'Login to Participate',
 
     register: 'Register',
     welcome_to_registration: 'Welcome to registration',
