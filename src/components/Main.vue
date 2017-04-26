@@ -5,8 +5,10 @@
     .main-container
 
       .toolbar(v-if="currentClass")
-        button.pure-button.pure-button-primary.pull-left(@click="classSelectorVisible = !classSelectorVisible") {{ `Current Class: ${currentClass.title}` }}
-        button.pure-button.pure-button-primary.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
+        button.pure-button.pull-left(@click="classSelectorVisible = !classSelectorVisible")
+          i.fa.fa-cog
+          | {{ `${currentClass.title}` }}
+        button.pure-button.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
         .clearfix
 
       class-selector(v-bind:class="{ 'hidden': !classSelectorVisible }")

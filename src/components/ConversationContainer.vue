@@ -1,24 +1,18 @@
 <template lang="pug">
 
-  .conversation-container(v-if="registered")
+  .conversation-container(v-if="registered" v-bind:class="{ 'message-priority': messagePriority }")
 
     .dialogue-container
 
       .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
-        p.timestamp-label {{ index }}
+        p.hidden.timestamp-label {{ index }}
 
     .messages-container
 
       .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
+        //- div(v-for="message in messages")
 
-        .message.visible(v-for="message in messages.data")
-
-          img(v-bind:src="message.user.profile")
-
-          p
-            strong {{ message.user.account }}
-
-          p {{ ' ' + message.text }}
+        message(:message="messages[index]")
 
     .clearfix
 
@@ -27,6 +21,8 @@
 <script>
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
+
+import Message from './conversation/Message';
 
 export default {
   /* eslint-disable */
@@ -68,13 +64,19 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
+      messagePriority: true,
     };
+  },
+  components: {
+    Message,
   },
 };
 </script>
 
 <style lang="stylus" scoped>
+
 @import '../assets/stylus/shared/*'
+
 .conversation-container
   padding 0
 
@@ -85,11 +87,19 @@ export default {
     .time-slot
       background-color #f2f2f2
       border-bottom #e1e1e1 1px solid
+      border-color transparent
       height 108px
       animate()
       p.timestamp-label
-        nomargin()
-        nopadding()
+        radius(20px)
+        background-color $color-primary
+        color white
+        display inline-block
+        line-height 40px
+        min-width 20px
+        margin 5px
+        padding 0 10px
+        text-align center
 
   .dialogue-container
     .time-slot
@@ -97,35 +107,18 @@ export default {
 
   .messages-container
     border-left $color-light-grey 1px solid
+    border-color transparent
     width calc(50% - 1px)
     .time-slot
       overflow hidden
       &.active
         background-color #e1e1e1
 
-  .message
-    margin 15px
-    padding 5px 10px
-    padding-left 50px
-
-    position relative
-
-    opacity 0
-
-    transition opacity 1s
-
-    img
-      radius(50%)
-      height 40px
-      width 40px
-      position absolute
-      top 5px
-      left 0
-    p
-      nomargin()
-      nopadding()
-      color $color-text-dark-grey
-    &.visible
-      opacity 1
+  @media(max-width: 600px)
+    &.message-priority
+      .dialogue-container
+        width 50px
+      .messages-container
+        width calc(100% - 1px - 50px)
 
 </style>

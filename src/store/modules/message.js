@@ -34,7 +34,7 @@ const mutations = {
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-    state.messages = response;
+    state.messages = response.data;
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,

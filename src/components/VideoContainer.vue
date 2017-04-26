@@ -5,7 +5,7 @@
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
       button.pure-button(@click="seek") Seek
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" player-width="auto" player-height="169")
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight")
 
 </template>
 
@@ -15,9 +15,17 @@ import _ from 'lodash';
 
 export default {
   name: 'video-container',
+  mounted() {
+    this.$nextTick(function() {
+      window.addEventListener('resize', this.getWindowWidth);
+      this.getWindowWidth();
+    });
+  },
   data() {
     return {
       msg: 'Welcome to Connected Academy',
+      pHeight: 90,
+      pWidth: 160,
     };
   },
   watch: {
@@ -50,6 +58,18 @@ export default {
     pause() {
       this.player.pauseVideo();
     },
+    getWindowWidth(event) {
+      if (document.documentElement.clientWidth < 600)
+      {
+        this.pHeight = 112;
+        this.pWidth = 200;
+      }
+      else
+      {
+        this.pHeight = 169;
+        this.pWidth = 300;
+      }
+    },
   },
   computed: {
     src() {
@@ -73,11 +93,16 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .video-wrapper
-  bottom 20px
+  bottom 65px
   right 20px
   position fixed
   z-index 52
   width 300px
+  @media(max-width: 600px)
+    bottom auto
+    top 135px
+    right 15px
+    width 200px
   .video-container
     background-color black
     box-sizing border-box
@@ -87,13 +112,12 @@ export default {
     padding-bottom 56.25%
     position relative
     width 100%
-iframe, object, embed
-  position absolute !important
-  top 0 !important
-  bottom 0 !important
-  left 0 !important
-  right 0 !important
-  width 100% !important
-  height 100% !important
+
+  iframe, object, embed, video
+    position absolute !important
+    top 0 !important
+    bottom 0 !important
+    left 0 !important
+    right 0 !important
 
 </style>
