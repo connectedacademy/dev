@@ -1,3 +1,5 @@
+/* eslint-disable */
+import Vue from 'vue';
 import * as types from '../mutation-types';
 import API from '../../api';
 
@@ -17,8 +19,9 @@ const getters = {
 const actions = {
   getMessages({
     commit,
-  }) {
+  }, request) {
     API.message.getMessages(
+      request,
       response => commit(types.GET_MESSAGES_SUCCESS, {
         response,
       }),
@@ -34,12 +37,14 @@ const mutations = {
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-    state.messages = response.data;
+    for (const segment in response.data) {
+      state.messages[segment] = response.data[segment];
+    }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,
   }) {
-    state.messages = {};
+    state.messages = [];
     // error in response
   },
 };

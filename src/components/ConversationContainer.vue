@@ -2,17 +2,14 @@
 
   .conversation-container(v-if="registered" v-bind:class="{ 'message-priority': messagePriority }")
 
-    .dialogue-container
+    .subtitle-container
 
-      .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
-        p.hidden.timestamp-label {{ index }}
+      subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
     .messages-container
+      .time-segment(v-for="(segment, index) in segments" v-bind:style="segmentStyle" v-bind:class="{ active: (currentSectionSegment === index) }")
 
-      .time-slot(v-for="(slot, index) in slots" v-bind:style="slotStyle" v-bind:class="{ active: ($store.getters.currentSectionSegment === index) }")
-        //- div(v-for="message in messages")
-
-        message(:message="messages[index]")
+        message(v-for="message in messages[index]" v-bind:key="message.id" v-bind:message="message")
 
     .clearfix
 
@@ -22,41 +19,70 @@
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
+import Subtitle from './conversation/Subtitle';
 import Message from './conversation/Message';
 
 export default {
   /* eslint-disable */
 
   name: 'conversation-container',
-  created() {
-    this.$store.dispatch('getMessages');
+  mounted() {
+    this.getMessages(0);
   },
   ready() {
     this.$nextTick(() => {
       this.getPosition();
     });
   },
-  methods: {},
+  watch: {
+    currentSectionSegment(oldVal, newVal) {
+      if (oldVal !== newVal) {
+        console.log(`Segment changed - ${newVal}`);
+
+        this.getMessages(newVal);
+      }
+    },
+  },
+  methods: {
+    getMessages(segment) {
+      const length = 10;
+      const request = {
+        theClass: this.$store.getters.currentClass.slug,
+        theContent: this.contentSlug,
+        startSegment: `${segment}`,
+        endSegment: `${segment + length}`,
+      };
+
+      if ((segment % length) === 0) {
+        console.log('Requesting segments');
+        this.$store.dispatch('getMessages', request);
+      }
+    },
+  },
+  props: ['contentSlug'],
   computed: {
+    currentSectionSegment() {
+      return this.$store.getters.currentSectionSegment;
+    },
     registered() {
       return this.$store.getters.isRegistered;
     },
-    slots() {
-      const slots = [];
-      let i = 20;
+    segments() {
+      const segments = [];
+      let i = 200;
       while (i > 0) {
-        slots.push(i);
+        segments.push(i);
         i -= 1;
       }
-      return slots;
+      return segments;
     },
     messages() {
       return this.$store.getters.messages;
     },
-    dialogue() {
-      return this.$store.getters.dialogue;
+    subtitles() {
+      return this.$store.getters.subtitles;
     },
-    slotStyle() {
+    segmentStyle() {
       const heightVal = 158;
       return { height: `${heightVal}px` };
     },
@@ -68,6 +94,7 @@ export default {
     };
   },
   components: {
+    Subtitle,
     Message,
   },
 };
@@ -78,15 +105,17 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .conversation-container
+  background-color #f2f2f2
+  overflow hidden
   padding 0
 
-  .dialogue-container, .messages-container
+  .subtitle-container, .messages-container
     float left
+    min-height 158px
+    position relative
     width 50%
 
-    .time-slot
-      background-color #f2f2f2
-      border-bottom #e1e1e1 1px solid
+    .time-segment
       border-color transparent
       height 108px
       animate()
@@ -101,22 +130,22 @@ export default {
         padding 0 10px
         text-align center
 
-  .dialogue-container
-    .time-slot
+  .subtitle-container
+    .time-segment
       background-color #f2f2f2
 
   .messages-container
     border-left $color-light-grey 1px solid
     border-color transparent
     width calc(50% - 1px)
-    .time-slot
+    .time-segment
       overflow hidden
       &.active
         background-color #e1e1e1
 
   @media(max-width: 600px)
     &.message-priority
-      .dialogue-container
+      .subtitle-container
         width 50px
       .messages-container
         width calc(100% - 1px - 50px)

@@ -16,7 +16,7 @@
         .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('auth.login_to_participate') }}
         .clearfix
 
-      conversation-container(ref="conversationContainer")
+      conversation-container(ref="conversationContainer" v-if="registered" v-bind:content-slug="content.slug")
 
 </template>
 

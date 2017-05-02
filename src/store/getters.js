@@ -1,23 +1,6 @@
 import _ from 'lodash';
 import globalState from './index';
 
-export const computedMessages = (state) => {
-  let messages = [];
-  let i = 0;
-  while (i < 10) {
-    messages.push({
-      username: '@username',
-      text: `Test message ${i} #hashtag`,
-      position: 0,
-    });
-    i += 1;
-  }
-
-  const minAllowable = (messages.length < 20) ? messages.length : 20;
-  messages = messages.slice(messages.length - minAllowable, messages.length);
-  return messages;
-};
-
 export const pageStyle = (state) => {
   // Return classes
   const activeClasses = {
@@ -27,7 +10,10 @@ export const pageStyle = (state) => {
   return activeClasses;
 };
 
-export const scrollPosition = state => _.ceil(state.scrollPosition);
+export const scrollPosition = (state) => {
+  const offset = 0.0; // (158.0 * 2.5); // (840.0 / 2.0);
+  return (state.scrollPosition + offset); // _.ceil
+};
 
 export const currentTime = (state) => {
   if (!globalState.getters.currentSectionScrollPosition) {

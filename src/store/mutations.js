@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as types from './mutation-types';
 
-export const setScrollPosition = (state, { scrollPosition }) => {
+export const setScrollPosition = (state, scrollPosition) => {
   state.scrollPosition = scrollPosition;
 };
 

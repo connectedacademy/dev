@@ -5,7 +5,7 @@
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
       button.pure-button(@click="seek") Seek
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight")
+    //- youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight")
 
 </template>
 
@@ -48,7 +48,7 @@ export default {
       if (!this.$store.state.autoPlaying && self.player) {
         self.player.seekTo(position);
       }
-    }, (100), { leading: false, trailing: true }),
+    }, 500, { leading: false, trailing: true }),
     play() {
       this.player.playVideo();
     },

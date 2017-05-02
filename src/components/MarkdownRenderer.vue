@@ -4,7 +4,6 @@
 
     .container
 
-      //- markdown-nav
       .markdown-nav
         .pure-button.pure-button-primary(@click="back") Back
         .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
@@ -21,7 +20,7 @@
 
 <script>
 import _ from 'lodash';
-// import MarkdownNav from 'markdown-nav'
+
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';

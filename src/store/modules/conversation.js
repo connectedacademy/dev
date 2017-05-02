@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Vue from 'vue';
 import _ from 'lodash';
 import * as types from '../mutation-types';
 import API from '../../api';
@@ -7,10 +8,14 @@ import globalState from '../index';
 // initial state
 const state = {
   scrollPoints: {},
+  subtitles: [],
 };
 
 // getters
 const getters = {
+  subtitles() {
+    return state.subtitles;
+  },
   videoIsActive() {
     return (globalState.getters.currentSection !== undefined);
   },
@@ -50,6 +55,19 @@ const actions = {
   setScrollPoint({ commit }, scrollPoint) {
     commit('setScrollPoint', scrollPoint);
   },
+  getSubtitles({
+    commit,
+  }) {
+    API.message.getSubtitles(
+      `${globalState.getters.course.baseUri}${globalState.getters.currentClass.dir}/${globalState.getters.currentSection.transcript}`,
+      response => commit(types.GET_SUBTITLES_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_SUBTITLES_FAILURE, {
+        response,
+      }),
+    );
+  },
 };
 
 // mutations
@@ -59,6 +77,17 @@ const mutations = {
   },
   clearScrollPoints(initialState) {
     state.scrollPoints = [];
+  },
+  [types.GET_SUBTITLES_SUCCESS](initialState, {
+    response,
+  }) {
+    state.subtitles = response;
+  },
+  [types.GET_SUBTITLES_FAILURE](initialState, {
+    response,
+  }) {
+    state.subtitles = [];
+    // error in response
   },
 };
 

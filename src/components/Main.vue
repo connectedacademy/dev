@@ -2,6 +2,8 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
 
+    .playhead
+
     .main-container
 
       .toolbar(v-if="currentClass")
@@ -71,8 +73,8 @@ export default {
 
       reattemptAutoScroll: 500,
       restartAutoScroll: 500,
-      wheelMovementThrottle: 200,
-      scrollPositionThrottle: 200,
+      wheelMovementThrottle: 500,
+      scrollPositionThrottle: 500,
     };
   },
   components: {
@@ -93,7 +95,9 @@ export default {
     },
     'currentSection': {
       handler: function(oV, nV) {
-
+        if (oV !== nV) {
+          this.$store.dispatch('getSubtitles');
+        }
         if (!this.canAutoScroll) {
           if ((oV !== nV) && (nV !== undefined)) {
             this.canAutoScroll = true;
@@ -107,10 +111,10 @@ export default {
     wheelMovement: _.throttle(function(self) {
       self.canAutoScroll = self.isAutoScrolling = false;
       setTimeout(function() { self.canAutoScroll = true; }, self.restartAutoScroll);
-    }, self.wheelMovementThrottle),
+    }, 500),
     setScrollPosition: _.throttle(function(self, position) {
-      self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, self.scrollPositionThrottle, { leading: true, trailing: true }),
+      self.$store.commit('setScrollPosition', position.scrollTop);
+    }, 500),
     onScroll(e, position) {
       this.setScrollPosition(this, position);
     },
@@ -180,6 +184,25 @@ export default {
 <style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
+
+.playhead
+  &:before, &:after
+    content ''
+    border-width 20px 6px 20px 6px
+    border-style solid
+    position fixed
+    top 50%
+    margin-top -5px
+    height 0px
+    width 0px
+    z-index 50
+
+  &:before
+    left 0
+    border-color transparent transparent transparent white
+  &:after
+    right 0
+    border-color transparent white transparent transparent
 
 .toolbar
   background-color white
