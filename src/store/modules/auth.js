@@ -13,8 +13,8 @@ const state = {
 // getters
 const getters = {
   isRegistered: (initialState) => {
-    const isRegistered = Object.prototype.hasOwnProperty.call(initialState, 'user');
-    return (isRegistered) ? Object.prototype.hasOwnProperty.call(initialState.user, 'registration') : false;
+    const isRegistered = (initialState.user);
+    return (isRegistered) ? initialState.user.registration : false;
   },
 };
 
@@ -83,7 +83,7 @@ const mutations = {
   },
   attemptAuth({ commit }, user) {
     state.user = user;
-    document.location = 'http://localhost:4000/auth/login';
+    document.location = 'http://localhost:4000/v1/auth/login';
   },
 };
 

@@ -1,24 +1,34 @@
 <template lang="pug">
 
-  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" @scroll="onScroll")
+  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
 
-    .toolbar(v-if="currentClass")
-      button.pure-button.pure-button-primary.pull-left(@click="leaveClass") Select Class
-      button.pure-button.pure-button-primary.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
-      .clearfix
+    .playhead
 
-    class-selector(v-bind:class="{ 'hidden': currentClass }")
+    .main-container
 
-    .stream(v-if="currentClass")
-      pre-content
-      class-content
-      postclass-content
-      webinar-content
-      post-webinar-content
+      .toolbar(v-if="currentClass")
+        button.pure-button.pull-left(@click="classSelectorVisible = !classSelectorVisible")
+          i.fa.fa-cog
+          | {{ `${currentClass.title}` }}
+        button.pure-button.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
+        .clearfix
+
+      class-selector(v-bind:class="{ 'hidden': !classSelectorVisible }")
+
+      .stream(v-if="currentClass")
+        pre-content
+        class-content
+        post-class-content
+        webinar-content
+        post-webinar-content
 
 </template>
 
 <script>
+/* eslint-disable */
+import _ from 'lodash';
+import VueScroll from 'vue-scroll';
+
 import * as types from '../store/mutation-types';
 import ClassSelector from './ClassSelector';
 
@@ -36,22 +46,41 @@ export default {
     });
   },
   created() {
-    this.$store.dispatch('setColumnState', 'narrow');
-    this.$store.commit('setSession', { sid: this.$cookie.get('sails.sid') });
-    this.$store.dispatch('getCourse');
     // Check if user has registered
     if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
       this.$router.push('/registration');
     }
   },
+  mounted() {
+    this.$store.dispatch('setColumnState', 'narrow');
+    this.$store.dispatch('getCourse');
+
+    var self = this;
+
+    // Listen for wheel events
+    window.addEventListener('wheel', () => {
+      self.throttledWheelMovement(self);
+      self.wheelMovement(self);
+    });
+
+    // Attempt auto scroll every second
+    setInterval(function() { self.attemptAutoScroll(); }, self.reattemptAutoScroll);
+  },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      classSelectorVisible: false,
+      classSelectorVisible: true,
       settingsVisible: false,
+      canAutoScroll: false,
+      isAutoScrolling: false,
+      reattemptAutoScroll: 500,
+      restartAutoScroll: 500,
+      wheelMovementThrottle: 500,
+      scrollPositionThrottle: 500,
     };
   },
   components: {
+    VueScroll,
     ClassSelector,
     PreContent,
     ClassContent,
@@ -59,14 +88,79 @@ export default {
     WebinarContent,
     PostWebinarContent,
   },
+  watch: {
+    'isAutoScrolling': {
+      handler: function(oV, nV) {
+        this.$store.commit('setAutoPlaying', nV);
+      },
+      deep: true,
+    },
+    'currentSection': {
+      handler: function(oV, nV) {
+        if (oV !== nV) {
+          this.$store.dispatch('getSubtitles');
+        }
+        if (!this.canAutoScroll) {
+          if ((oV !== nV) && (nV !== undefined)) {
+            this.canAutoScroll = true;
+          }
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
+    wheelMovement() {
+      this.canAutoScroll = false;
+      this.isAutoScrolling = false;
+    },
+    throttledWheelMovement: _.throttle(function(self) {
+      setTimeout(function() { self.canAutoScroll = true; }, 500);
+    }, 500), // self.wheelMovementThrottle
+    setScrollPosition: _.throttle(function(self, position) {
+      self.$store.dispatch('setScrollPosition', position.scrollTop);
+    }, 500), // self.scrollPositionThrottle
+    onScroll(e, position) {
+      this.setScrollPosition(this, position);
+    },
     leaveClass() {
       this.$store.commit(types.SET_CURRENT_CLASS, undefined);
     },
-    onScroll() {
-      let scrollPosition = this.$refs.main.scrollTop / 100;
-      scrollPosition = (scrollPosition < 0) ? 0 : scrollPosition;
-      this.$store.dispatch('setScrollPosition', scrollPosition);
+    attemptAutoScroll() {
+
+      var self = this;
+
+      if (self.isAutoScrolling || !self.canAutoScroll || !self.$store.getters.currentSection) { return; }
+
+      self.isAutoScrolling = true;
+
+      var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
+
+      var position = function(start, end, elapsed, duration) {
+  	    if (elapsed > duration) return end;
+  	    // return start + (end - start) * easingFunction(elapsed / duration); // Easing
+  	    return start + (end - start) * (elapsed / duration); // Linear
+    	}
+
+      var clock = Date.now();
+      var requestAnimationFrame = window.requestAnimationFrame ||
+      window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
+        function(fn) { window.setTimeout(fn, 15); };
+
+      var start = this.$store.getters.scrollPosition;
+      var end = this.$store.getters.currentSection.bottom;
+      var duration = (((end - start) / (158.0 * 1.0)) * 1000);
+
+      var step = function() {
+        var elapsed = Date.now() - clock;
+
+        self.$refs.main.scrollTop = position(start, end, elapsed, duration);
+
+        if ((elapsed <= duration) && self.canAutoScroll) {
+          requestAnimationFrame(step);
+        }
+      }
+      step();
     },
   },
   computed: {
@@ -76,16 +170,48 @@ export default {
     currentClass() {
       return this.$store.getters.currentClass;
     },
+    scrollPosition() {
+      return this.$store.getters.scrollPosition;
+    },
+    currentTime() {
+      return this.$store.getters.currentTime;
+    },
+    currentSection() {
+      return this.$store.getters.currentSection;
+    },
+    currentSectionLabel() {
+      return this.$store.getters.currentSection.label;
+    },
   },
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
 
+.playhead
+  &:before, &:after
+    content ''
+    border-width 20px 6px 20px 6px
+    border-style solid
+    position fixed
+    top 50%
+    margin-top -5px
+    height 0px
+    width 0px
+    z-index 50
+
+  &:before
+    left 0
+    border-color transparent transparent transparent white
+  &:after
+    right 0
+    border-color transparent white transparent transparent
+
 .toolbar
-  border-bottom alpha(white, 0.1) 1px solid
+  background-color white
+  border-bottom #e1e1e1 1px solid
   padding 20px
 
 ul.class-selector

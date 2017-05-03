@@ -30,6 +30,7 @@ export default {
     logout: 'Logout',
 
     login_with_twitter: 'Login with Twitter',
+    login_to_participate: 'Login to Participate',
 
     register: 'Register',
     welcome_to_registration: 'Welcome to registration',
@@ -58,7 +59,7 @@ export default {
     compose_message: 'Compose message',
     compose_message_active: 'Write your message',
     message_placeholder: 'Write something here...',
-    duration: '{scrollPosition}s',
+    duration: '{currentTime}s',
   },
   course: {
     load_course: 'Load Course',

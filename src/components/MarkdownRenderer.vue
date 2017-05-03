@@ -1,10 +1,9 @@
 <template lang="pug">
 
-  .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
+  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
 
     .container
 
-      //- markdown-nav
       .markdown-nav
         .pure-button.pure-button-primary(@click="back") Back
         .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
@@ -21,7 +20,7 @@
 
 <script>
 import _ from 'lodash';
-// import MarkdownNav from 'markdown-nav'
+
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
@@ -103,8 +102,11 @@ export default {
 
 <style lang="stylus">
 
+@import '../assets/stylus/shared/*'
+@import '../assets/stylus/layout/page'
+
 .markdown-nav
-  border-bottom alpha(white, 0.2) 1px solid
+  border-bottom $color-light-grey 1px solid
   margin 0 -5px 20px -5px
   padding-bottom 20px
   .pure-button
@@ -116,7 +118,7 @@ export default {
   h1, h2, h3, h4, h5, p, a, li
     nomargin()
     nopadding()
-    color white
+    color $color-text-dark-grey
     margin-bottom 5px
   img
     max-width 100%

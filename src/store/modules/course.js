@@ -80,6 +80,7 @@ const mutations = {
     response,
   }) {
     state.course = response;
+    state.current_class = 0;
   },
   [types.GET_COURSE_SPEC_FAILURE](initialState, {
     response,

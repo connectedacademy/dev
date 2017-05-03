@@ -8,6 +8,9 @@ import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
+
+import VueScroll from 'vue-scroll';
+
 import { sync } from 'vuex-router-sync';
 
 import VueYouTubeEmbed from 'vue-youtube-embed';
@@ -33,6 +36,8 @@ Vue.use(VueConfig, Vue.config);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
+
+Vue.use(VueScroll);
 
 // General config
 Vue.config.productionTip = false;

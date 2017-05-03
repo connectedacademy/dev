@@ -10,6 +10,18 @@
 
       router-view(transition transition-mode="out-in")
 
+      video-container
+
+    .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+      p currentSection
+      pre {{ currentSection }}
+      p {{ `autoPlaying - ${$store.state.autoPlaying}` }}
+      p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
+      p {{ `currentTime - ${$store.getters.currentTime}` }}
+      p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
+      p {{ `currentVideoTime - ${$store.getters.currentVideoTime}` }}
+      p {{ `currentSectionSegment - ${$store.getters.currentSectionSegment}` }}
+
     burger-menu
 
     left-drawer
@@ -25,13 +37,14 @@
 </template>
 
 <script>
-
+/* eslint-disable */
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
 import Navigation from './components/navigation/Navigation';
 import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
 import MessageComposer from './components/MessageComposer';
+import VideoContainer from './components/VideoContainer';
 
 import store from './store/index';
 import * as types from './store/mutation-types';
@@ -60,6 +73,9 @@ export default {
       || this.$store.state.auth.visible
       || this.$store.state.composer.visible;
     },
+    currentSection() {
+      return this.$store.getters.currentSection;
+    },
   },
   store,
   components: {
@@ -69,6 +85,7 @@ export default {
     LeftDrawer,
     RightDrawer,
     MessageComposer,
+    VideoContainer,
   },
   methods: {
     dismiss() {
@@ -82,9 +99,19 @@ export default {
 
 </script>
 
-<style lang="styl">
+<style lang="stylus" scoped>
 
-@import "./assets/stylus/shared/*";
-@import "./assets/stylus/layout/page";
+@import './assets/stylus/shared/*'
+@import './assets/stylus/layout/page'
+
+.debug-panel
+  background-color red
+  color white
+  min-width 200px
+  padding 10px
+  position fixed
+  bottom 10px
+  left 10px
+  z-index 52
 
 </style>

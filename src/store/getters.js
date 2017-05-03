@@ -1,21 +1,5 @@
 import _ from 'lodash';
-
-export const computedMessages = (state) => {
-  let messages = [];
-  let i = 0;
-  while (i < 10) {
-    messages.push({
-      username: '@username',
-      text: `Test message ${i} #hashtag`,
-      position: 0, // + ((i - 5) * 40) + (this.scrollPosition * 100),
-    });
-    i += 1;
-  }
-
-  const minAllowable = (messages.length < 20) ? messages.length : 20;
-  messages = messages.slice(messages.length - minAllowable, messages.length);
-  return messages;
-};
+import globalState from './index';
 
 export const pageStyle = (state) => {
   // Return classes
@@ -26,4 +10,18 @@ export const pageStyle = (state) => {
   return activeClasses;
 };
 
-export const scrollPosition = state => _.ceil(state.scrollPosition);
+export const scrollPosition = (state) => {
+  const offset = 0.0;
+  return (state.scrollPosition + offset); // _.ceil
+};
+
+export const currentTime = (state) => {
+  if (!globalState.getters.currentSectionScrollPosition) {
+    return 0;
+  }
+  let time = globalState.getters.currentSectionScrollPosition / (158.0 * 1.0);
+  time = (time < 0) ? 0 : time;
+  return _.ceil(time);
+};
+
+export const autoPlaying = state => globalState.autoPlaying;

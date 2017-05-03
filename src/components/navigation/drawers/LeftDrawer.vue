@@ -14,16 +14,11 @@
 
       li.drawer-list-item(v-on:click="toggleDebugMode" v-bind:class="{ visible: state.visible }")
         h2.drawer-list-item--body
-          span(v-if="!this.$store.state.navigation.debug") {{ $t('common.enable_debug_mode') }}
-          span(v-if="this.$store.state.navigation.debug") {{ $t('common.disable_debug_mode') }}
+          span(v-if="!this.$store.state.debug") {{ $t('common.enable_debug_mode') }}
+          span(v-if="this.$store.state.debug") {{ $t('common.disable_debug_mode') }}
 
       li.drawer-list-item.visible
         h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
-
-    ul.drawer--footer
-      router-link(tag="li" to="/") {{ $t('nav.home') }}
-      router-link(tag="li" to="/about") {{ $t('nav.about') }}
-      router-link(tag="li" to="/terms") {{ $t('nav.terms') }}
 
 </template>
 
@@ -72,19 +67,6 @@ export default {
   transition left 0.4s
   &.visible
     left 0px
-
-  ul.drawer--footer
-    nomargin()
-    nopadding()
-    background-color $color-dark-grey
-    border-top alpha(black, 0.2) 1px solid
-    text-align center
-    width 100%
-    li
-      color $color-grey
-      display inline-block
-      margin 0
-      padding 20px
 
   ul.navigation-items
     list-style none
@@ -137,7 +119,7 @@ export default {
         font-size 1.6em
 
       h2
-        color grey
+        color alpha(white, 0.6)
         margin 0
         padding 0
         font-size 1em
