@@ -17,4 +17,12 @@ export default {
       errorCb({slug: slug, response: response});
     });
   },
+  sendMessage(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.post(`${config.WATERCOOLER_API}/messages/create`, postData).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
 };

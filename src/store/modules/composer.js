@@ -37,6 +37,17 @@ const mutations = {
     state.visible = false;
     state.hidden = false;
   },
+  [types.SEND_MESSAGE_SUCCESS](initialState, {
+    response,
+  }) {
+    alert('Message sent');
+  },
+  [types.SEND_MESSAGE_FAILURE](initialState, {
+    response,
+  }) {
+    alert('Message failed to send');
+    // error in response
+  },
 };
 
 export default {

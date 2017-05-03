@@ -64,7 +64,7 @@ export default {
           slug: content.slug,
           top: (element.offsetParent.offsetTop + element.offsetTop),
           bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
-          duration: 10000,
+          duration: 100,
           videoId: content.video,
           transcript: content.transcript,
         });

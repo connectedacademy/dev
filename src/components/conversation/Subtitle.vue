@@ -2,7 +2,7 @@
 
   .subtitle.active(v-bind:style="subtitleStyle" @click="quote")
     h1(v-html="subtitle.text")
-    p {{ subtitle.start }} {{ subtitle.end }}
+    p.hidden {{ subtitle.start }} {{ subtitle.end }}
 
 </template>
 

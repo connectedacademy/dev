@@ -25,6 +25,9 @@ const getters = {
   videoIsActive() {
     return (globalState.getters.currentSection !== undefined);
   },
+  scrollPoints() {
+    return state.scrollPoints;
+  },
   currentSection() {
     if (state.scrollPoints.length === 0) { return undefined; }
 
@@ -45,7 +48,7 @@ const getters = {
   },
   currentSectionSegment() {
     if (!globalState.getters.currentSection) { return 0; }
-    return _.round(globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
+    return _.floor(globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
   },
 };
 

@@ -64,7 +64,7 @@ export default {
     },
     segments() {
       const segments = [];
-      let i = 200;
+      let i = 50;
       while (i > 0) {
         segments.push(i);
         i -= 1;

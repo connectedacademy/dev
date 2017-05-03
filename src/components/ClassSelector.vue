@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .class-selector-wrapper
+  .class-selector-wrapper(v-bind:class="{ 'hidden': !classSelectorVisible }")
     ul.class-selector
-      li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(index)")
+      li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)")
         h1.class-selector--item--header {{ theClass.title }}
         h2.class-selector--item--body {{ theClass.description }}
       .clearfix
@@ -14,6 +14,7 @@ import * as types from '../store/mutation-types';
 
 export default {
   name: 'class-selector',
+  props: ['classSelectorVisible'],
   methods: {
     setCurrentClass(newClass) {
       this.$store.commit(types.SET_CURRENT_CLASS, newClass);
@@ -75,5 +76,4 @@ export default {
       &:hover
         border-color $color-primary
         cursor pointer
-
 </style>

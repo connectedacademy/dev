@@ -13,7 +13,7 @@
         button.pure-button.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
         .clearfix
 
-      class-selector(v-bind:class="{ 'hidden': !classSelectorVisible }")
+      class-selector(class-selector-visible="classSelectorVisible")
 
       .stream(v-if="currentClass")
         pre-content
@@ -65,6 +65,8 @@ export default {
 
     // Attempt auto scroll every second
     setInterval(function() { self.attemptAutoScroll(); }, self.reattemptAutoScroll);
+
+    this.toMessage(this.$route.query);
   },
   data() {
     return {
@@ -162,6 +164,25 @@ export default {
       }
       step();
     },
+    toMessage(query) {
+      if (query.class && query.content) {
+        console.log(`${query.class} - ${query.content} - ${query.segment}`);
+
+        // Set the class
+        this.$store.commit(types.SET_CURRENT_CLASS, query.class);
+
+        // Set the current section/scroll position
+        var self = this;
+        setTimeout(function() {
+          const scrollPoint = self.$store.getters.scrollPoints[query.content];
+          self.$refs.main.scrollTop = scrollPoint.top + (query.segment * (158.0 * 0.2));
+        }, 1000);
+
+      }
+      else {
+        console.log('No query passed');
+      }
+    },
   },
   computed: {
     course() {
@@ -213,29 +234,6 @@ export default {
   background-color white
   border-bottom #e1e1e1 1px solid
   padding 20px
-
-ul.class-selector
-  cleanlist()
-  &.hidden
-    display none
-  li.class-selector--item
-    cleanlist()
-    background-color white
-    margin 20px
-    padding 15px
-    width 160px
-    h1.class-selector--item--header
-      nomargin()
-      nopadding()
-      color $color-text-dark-grey
-      font-size 1.1em
-      margin-bottom 5px
-    h2.class-selector--item--body
-      nomargin()
-      nopadding()
-      color $color-text-grey
-      font-size 1em
-      font-weight normal
 
 .stream
   padding-bottom 80px

@@ -19,27 +19,32 @@ const getters = {
   },
   currentClass() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class];
+    return _.find(state.course.classes, ['slug', state.current_class]);
   },
   coursePreContent() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'pre'));
+    let result = _.find(state.course.classes, ['slug', state.current_class]);
+    return _.filter(result.content, item => (item.content_type === 'pre'));
   },
   courseClassContent() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'class'));
+    let result = _.find(state.course.classes, ['slug', state.current_class]);
+    return _.filter(result.content, item => (item.content_type === 'class'));
   },
   coursePostClassContent() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'postclass'));
+    let result = _.find(state.course.classes, ['slug', state.current_class]);
+    return _.filter(result.content, item => (item.content_type === 'postclass'));
   },
   courseWebinarContent() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'webinar'));
+    let result = _.find(state.course.classes, ['slug', state.current_class]);
+    return _.filter(result.content, item => (item.content_type === 'webinar'));
   },
   coursePostWebinarContent() {
     if (state.current_class === undefined) { return undefined; }
-    return state.course.classes[state.current_class].content.filter(item => (item.content_type === 'postwebinar'));
+    let result = _.find(state.course.classes, ['slug', state.current_class]);
+    return _.filter(result.content, item => (item.content_type === 'postwebinar'));
   },
 };
 
@@ -80,7 +85,6 @@ const mutations = {
     response,
   }) {
     state.course = response;
-    state.current_class = 0;
   },
   [types.GET_COURSE_SPEC_FAILURE](initialState, {
     response,

@@ -15,7 +15,7 @@
         textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
 
       .message-composer--footer
-        button.pure-button.pure-button-primary.pull-right Send
+        button.pure-button.pure-button-primary.pull-right(@click="sendMessage") Send
         .clearfix
 
 
@@ -24,16 +24,10 @@
 <script>
 import _ from 'lodash';
 import * as types from '../store/mutation-types';
+import API from '../api';
 
 export default {
   name: 'message-composer',
-  data() {
-    return {
-      message: {
-        text: 'Placeholder text',
-      },
-    };
-  },
   methods: {
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
@@ -42,13 +36,32 @@ export default {
       this.$store.commit(types.DISMISS_COMPOSER);
     },
     sendMessage() {
-      const body = {
+      const postData = {
         text: this.message.text,
       };
-      this.$store.dispatch(types.SEND_MESSAGE, body);
+
+      API.message.sendMessage(
+        postData,
+        (response) => {
+          this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response })
+        },
+        (response) => {
+          this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
+        },
+      );
     },
   },
   computed: {
+    url() {
+      if (this.$store.getters.currentSection === undefined) { return ''; }
+      return `http://localhost:8080/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSectionSegment}`;
+    },
+    message() {
+      if (this.$store.getters.currentSection === undefined) { return ''; }
+      return {
+        text: `Test message ${this.$store.getters.course.hashtag} - ${this.url}`,
+      };
+    },
     visible() {
       return this.$store.state.composer.visible;
     },
