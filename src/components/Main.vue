@@ -8,12 +8,12 @@
 
       .toolbar(v-if="currentClass")
         button.pure-button.pull-left(@click="classSelectorVisible = !classSelectorVisible")
-          i.fa.fa-cog
+          //- icon(name="cog")
           | {{ `${currentClass.title}` }}
         button.pure-button.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
         .clearfix
 
-      class-selector(class-selector-visible="classSelectorVisible")
+      class-selector(:class-selector-visible="classSelectorVisible")
 
       .stream(v-if="currentClass")
         pre-content

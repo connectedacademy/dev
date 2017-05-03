@@ -17,6 +17,7 @@ export default {
   props: ['classSelectorVisible'],
   methods: {
     setCurrentClass(newClass) {
+      this.classSelectorVisible = false;
       this.$store.commit(types.SET_CURRENT_CLASS, newClass);
     },
   },
