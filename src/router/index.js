@@ -13,7 +13,7 @@ import Schedule from '@/components/pages/Schedule';
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       name: 'authenticated',

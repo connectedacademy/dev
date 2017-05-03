@@ -54,7 +54,7 @@ export default {
   computed: {
     url() {
       if (this.$store.getters.currentSection === undefined) { return ''; }
-      return `http://localhost:8080/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSectionSegment}`;
+      return `http://localhost:8080/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSectionSegment}`;
     },
     message() {
       if (this.$store.getters.currentSection === undefined) { return ''; }
