@@ -59,7 +59,7 @@ export default {
     compose_message: 'Compose message',
     compose_message_active: 'Write your message',
     message_placeholder: 'Write something here...',
-    duration: '{scrollPosition}s',
+    duration: '{currentTime}s',
   },
   course: {
     load_course: 'Load Course',

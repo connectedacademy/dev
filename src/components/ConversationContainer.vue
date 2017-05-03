@@ -7,7 +7,7 @@
       subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
     .messages-container
-      .time-segment(v-for="(segment, index) in segments" v-bind:style="segmentStyle" v-bind:class="{ active: (currentSectionSegment === index) }")
+      .time-segment(v-for="(segment, index) in segments" v-bind:class="{ active: (currentSectionSegment === index) }")
 
         message(v-for="message in messages[index]" v-bind:key="message.id" v-bind:message="message")
 
@@ -26,9 +26,7 @@ export default {
   /* eslint-disable */
 
   name: 'conversation-container',
-  mounted() {
-    this.getMessages(0);
-  },
+  mounted() {},
   ready() {
     this.$nextTick(() => {
       this.getPosition();
@@ -37,24 +35,21 @@ export default {
   watch: {
     currentSectionSegment(oldVal, newVal) {
       if (oldVal !== newVal) {
-        console.log(`Segment changed - ${newVal}`);
-
         this.getMessages(newVal);
       }
     },
   },
   methods: {
     getMessages(segment) {
-      const length = 10;
+      const length = 5
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.contentSlug,
-        startSegment: `${segment}`,
-        endSegment: `${segment + length}`,
+        startSegment: `${segment + length}`,
+        endSegment: `${segment + length + length}`,
       };
 
-      if ((segment % length) === 0) {
-        console.log('Requesting segments');
+      if (((segment % length) === 0) && (this.contentSlug === this.$store.getters.currentSection.slug)) {
         this.$store.dispatch('getMessages', request);
       }
     },
@@ -82,10 +77,6 @@ export default {
     subtitles() {
       return this.$store.getters.subtitles;
     },
-    segmentStyle() {
-      const heightVal = 158;
-      return { height: `${heightVal}px` };
-    },
   },
   data() {
     return {
@@ -107,17 +98,18 @@ export default {
 .conversation-container
   background-color #f2f2f2
   overflow hidden
+  min-height 600px
   padding 0
 
   .subtitle-container, .messages-container
     float left
-    min-height 158px
+    min-height (158.0 * 1.0)px
     position relative
     width 50%
 
     .time-segment
       border-color transparent
-      height 108px
+      height (158.0 * 1.0)px
       animate()
       p.timestamp-label
         radius(20px)

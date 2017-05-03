@@ -11,7 +11,7 @@ export const pageStyle = (state) => {
 };
 
 export const scrollPosition = (state) => {
-  const offset = 0.0; // (158.0 * 2.5); // (840.0 / 2.0);
+  const offset = 0.0;
   return (state.scrollPosition + offset); // _.ceil
 };
 
@@ -19,7 +19,7 @@ export const currentTime = (state) => {
   if (!globalState.getters.currentSectionScrollPosition) {
     return 0;
   }
-  let time = globalState.getters.currentSectionScrollPosition / 158;
+  let time = globalState.getters.currentSectionScrollPosition / (158.0 * 1.0);
   time = (time < 0) ? 0 : time;
   return _.ceil(time);
 };

@@ -10,11 +10,11 @@ export default {
       errorCb(response);
     });
   },
-  getSubtitles(url, cb, errorCb) {
+  getSubtitles(slug, url, cb, errorCb) {
     Vue.http.get(url, { credentials: false, responseType: 'json' }).then((response) => {
-      cb(response.body);
+      cb({slug: slug, response: response.body});
     }, (response) => {
-      errorCb(response);
+      errorCb({slug: slug, response: response});
     });
   },
 };

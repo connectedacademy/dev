@@ -10,6 +10,6 @@ export const setAutoPlaying = (state, isAutoPlaying) => {
 };
 
 
-export const TOGGLE_DEBUG_MODE = (state, isAutoPlaying) => {
+export const TOGGLE_DEBUG_MODE = (state) => {
   state.debug = !state.debug;
 };

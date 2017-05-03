@@ -1,6 +1,5 @@
 <template lang="pug">
 
-
   .message-composer-wrapper
 
     .message-composer(v-bind:class="{ isactive: visible, unactive: hidden }")
@@ -10,10 +9,14 @@
         p.action-label {{ visible ? $t('composer.compose_message_active') : $t('composer.compose_message') }}
 
         p.position-label
-          | {{ $t('composer.duration', { scrollPosition: scrollPosition }) }}
+          | {{ $t('composer.duration', { currentTime: currentTime }) }}
 
       .message-composer--body
-        textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')")
+        textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
+
+      .message-composer--footer
+        button.pure-button.pure-button-primary.pull-right Send
+        .clearfix
 
 
 </template>
@@ -24,12 +27,25 @@ import * as types from '../store/mutation-types';
 
 export default {
   name: 'message-composer',
+  data() {
+    return {
+      message: {
+        text: 'Placeholder text',
+      },
+    };
+  },
   methods: {
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
     },
     dismissComposer() {
       this.$store.commit(types.DISMISS_COMPOSER);
+    },
+    sendMessage() {
+      const body = {
+        text: this.message.text,
+      };
+      this.$store.dispatch(types.SEND_MESSAGE, body);
     },
   },
   computed: {
@@ -45,9 +61,8 @@ export default {
         this.$store.state.navigation.rightDrawer.visible ||
         this.$store.state.route.name !== 'main';
     },
-    scrollPosition() {
-      // const debounce = _.debounce(e => this.$store.getters.currentTime, 500);
-      return this.$store.getters.currentTime; // debounce();
+    currentTime() {
+      return this.$store.getters.currentTime;
     },
   },
 };
@@ -66,13 +81,13 @@ export default {
     box-sizing border-box
 
     position fixed
-    bottom -110px
+    bottom -128px
     left 50%
     margin-left calc(-370px / 2)
     overflow hidden
     z-index 51
 
-    height 160px
+    height 178px
     width 370px
     max-width 100%
 
@@ -84,7 +99,7 @@ export default {
 
     &:hover
       cursor pointer
-      bottom -105px
+      bottom -115px
 
     .message-composer--header
       height 50px
@@ -103,7 +118,7 @@ export default {
 
     .message-composer--body
       background-color #f9f9f9
-      height 120px
+      height 80px
 
       textarea
         background-color #f9f9f9
@@ -112,9 +127,15 @@ export default {
 
         box-sizing border-box
         padding 15px
-        height 110px
+        height 70px
+        resize none
         width 100%
         outline 0
+
+    .message-composer--footer
+      background-color #f9f9f9
+      height 38px
+      padding 5px
 
   .message-composer.isactive, .message-composer.isactive:hover
     bottom 50%

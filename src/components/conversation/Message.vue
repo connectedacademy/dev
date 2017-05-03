@@ -2,8 +2,6 @@
 
   .message.visible
 
-    pre.hidden {{ message }}
-
     img.profile-image(v-bind:src="message.author.profile")
 
     p.author-label

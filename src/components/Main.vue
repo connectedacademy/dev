@@ -58,7 +58,10 @@ export default {
     var self = this;
 
     // Listen for wheel events
-    window.addEventListener('wheel', () => { self.wheelMovement(self); });
+    window.addEventListener('wheel', () => {
+      self.throttledWheelMovement(self);
+      self.wheelMovement(self);
+    });
 
     // Attempt auto scroll every second
     setInterval(function() { self.attemptAutoScroll(); }, self.reattemptAutoScroll);
@@ -70,7 +73,6 @@ export default {
       settingsVisible: false,
       canAutoScroll: false,
       isAutoScrolling: false,
-
       reattemptAutoScroll: 500,
       restartAutoScroll: 500,
       wheelMovementThrottle: 500,
@@ -108,13 +110,16 @@ export default {
     },
   },
   methods: {
-    wheelMovement: _.throttle(function(self) {
-      self.canAutoScroll = self.isAutoScrolling = false;
-      setTimeout(function() { self.canAutoScroll = true; }, self.restartAutoScroll);
-    }, 500),
+    wheelMovement() {
+      this.canAutoScroll = false;
+      this.isAutoScrolling = false;
+    },
+    throttledWheelMovement: _.throttle(function(self) {
+      setTimeout(function() { self.canAutoScroll = true; }, 500);
+    }, 500), // self.wheelMovementThrottle
     setScrollPosition: _.throttle(function(self, position) {
-      self.$store.commit('setScrollPosition', position.scrollTop);
-    }, 500),
+      self.$store.dispatch('setScrollPosition', position.scrollTop);
+    }, 500), // self.scrollPositionThrottle
     onScroll(e, position) {
       this.setScrollPosition(this, position);
     },
@@ -144,12 +149,12 @@ export default {
 
       var start = this.$store.getters.scrollPosition;
       var end = this.$store.getters.currentSection.bottom;
-      var duration = (((end - start) / 158) * 1000);
+      var duration = (((end - start) / (158.0 * 1.0)) * 1000);
 
       var step = function() {
         var elapsed = Date.now() - clock;
 
-        self.$refs.main.scrollTop = position(start, end, elapsed, duration); //target; // position(start, end, elapsed, duration);
+        self.$refs.main.scrollTop = position(start, end, elapsed, duration);
 
         if ((elapsed <= duration) && self.canAutoScroll) {
           requestAnimationFrame(step);

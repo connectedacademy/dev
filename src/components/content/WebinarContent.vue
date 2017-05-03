@@ -25,8 +25,8 @@
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
+import * as types from '../../store/mutation-types';
 import MarkdownLink from '../MarkdownLink';
-import VideoContainer from '../VideoContainer';
 import VideoThumbnail from '../VideoThumbnail';
 import ConversationContainer from '../ConversationContainer';
 
@@ -43,7 +43,7 @@ export default {
       return this.$store.getters.currentSection;
     },
     isActive() {
-      return (typeof this.currentSection != 'undefined' && this.currentSection.label === this.label);
+      return (typeof this.currentSection != 'undefined' && this.currentSection.slug === this.slug);
     },
     ...mapGetters([
       'courseWebinarContent',
@@ -52,21 +52,23 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      label: 'webinarContent',
+      slug: undefined,
     };
   },
   methods: {
     setScrollPoints() {
       const element = this.$refs.conversationContainer[0].$el;
-      _.forEach(this.courseWebinarContent, (content) => {
-        this.$store.dispatch('setScrollPoint', {
-          label: this.label,
+      for (const content of this.courseWebinarContent) {
+        this.slug = content.slug;
+        this.$store.commit('setScrollPoint', {
+          slug: content.slug,
           top: (element.offsetParent.offsetTop + element.offsetTop),
           bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
           duration: 10000,
           videoId: content.video,
+          transcript: content.transcript,
         });
-      });
+      }
     },
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
@@ -75,7 +77,6 @@ export default {
   components: {
     ConversationContainer,
     MarkdownLink,
-    VideoContainer,
     VideoThumbnail,
   },
 };

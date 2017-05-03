@@ -9,12 +9,10 @@ import * as mutations from './mutations';
 import layout from './modules/layout';
 import navigation from './modules/navigation';
 import auth from './modules/auth';
-
-import conversation from './modules/conversation';
 import composer from './modules/composer';
 
 import course from './modules/course';
-import message from './modules/message';
+import conversation from './modules/conversation';
 
 Vue.use(Vuex);
 
@@ -24,16 +22,15 @@ export default new Vuex.Store({
     layout,
     navigation,
     auth,
-
-    conversation,
     composer,
 
     course,
-    message,
+    conversation,
   },
   state: {
     debug: false,
-    scrollPosition: 0,
+    scrollPosition: 0.0,
+    autoPlaying: false,
   },
   getters,
   mutations,

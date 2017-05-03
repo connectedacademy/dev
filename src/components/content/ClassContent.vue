@@ -43,7 +43,7 @@ export default {
       return this.$store.getters.currentSection;
     },
     isActive() {
-      return (typeof this.currentSection != 'undefined' && this.currentSection.label === this.label);
+      return (typeof this.currentSection != 'undefined' && this.currentSection.slug === this.slug);
     },
     ...mapGetters([
       'courseClassContent',
@@ -52,22 +52,23 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      label: 'classContent',
+      slug: undefined,
     };
   },
   methods: {
     setScrollPoints() {
       const element = this.$refs.conversationContainer[0].$el;
-      _.forEach(this.courseClassContent, (content) => {
-        this.$store.dispatch('setScrollPoint', {
-          label: this.label,
+      for (const content of this.courseClassContent) {
+        this.slug = content.slug;
+        this.$store.commit('setScrollPoint', {
+          slug: content.slug,
           top: (element.offsetParent.offsetTop + element.offsetTop),
           bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
           duration: 10000,
           videoId: content.video,
           transcript: content.transcript,
         });
-      });
+      }
     },
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);

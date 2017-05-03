@@ -2,7 +2,7 @@
 
   .subtitle.active(v-bind:style="subtitleStyle" @click="quote")
     h1(v-html="subtitle.text")
-    p.hidden {{ subtitle.start }} {{ subtitle.end }}
+    p {{ subtitle.start }} {{ subtitle.end }}
 
 </template>
 
@@ -15,9 +15,8 @@ export default {
   props: ['subtitle'],
   computed: {
     subtitleStyle() {
-      const duration = ((this.subtitle.end - this.subtitle.start) * 158.0);
-      const offset = (740.0 / 2.0);
-      const topVal = (this.subtitle.start * 158.0) + offset; //  + (duration / 2.0)
+      const duration = ((this.subtitle.end - this.subtitle.start) * (158.0 * 0.2));
+      const topVal = (this.subtitle.start * (158.0 * 0.2));
       return { top: `${topVal}px`, height: `${duration}px` };
     },
   },
