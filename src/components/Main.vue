@@ -149,7 +149,7 @@ export default {
 
       var start = this.$store.getters.scrollPosition;
       var end = this.$store.getters.currentSection.bottom;
-      var duration = (((end - start) / (158.0 * 1.0)) * 1000);
+      var duration = (((end - start) / (158.0 * 1.0)) * 5000);
 
       var step = function() {
         var elapsed = Date.now() - clock;

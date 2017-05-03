@@ -79,7 +79,7 @@ export default {
       return this.$store.getters.videoIsActive;
     },
     currentVideoTime() {
-      return this.$store.getters.currentVideoTime;
+      return this.$store.getters.currentTime;
     },
     currentSectionSegment() {
       return this.$store.getters.currentSectionSegment;

@@ -19,7 +19,6 @@
       p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
       p {{ `currentTime - ${$store.getters.currentTime}` }}
       p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
-      p {{ `currentVideoTime - ${$store.getters.currentVideoTime}` }}
       p {{ `currentSectionSegment - ${$store.getters.currentSectionSegment}` }}
 
     burger-menu

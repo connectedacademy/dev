@@ -43,13 +43,9 @@ const getters = {
     if (!globalState.getters.currentSection) { return 0; }
     return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
   },
-  currentVideoTime() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return (globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
-  },
   currentSectionSegment() {
     if (!globalState.getters.currentSection) { return 0; }
-    return _.ceil(globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
+    return _.round(globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
   },
 };
 

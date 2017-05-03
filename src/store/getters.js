@@ -12,16 +12,16 @@ export const pageStyle = (state) => {
 
 export const scrollPosition = (state) => {
   const offset = 0.0;
-  return (state.scrollPosition + offset); // _.ceil
+  return (state.scrollPosition + offset);
 };
 
 export const currentTime = (state) => {
   if (!globalState.getters.currentSectionScrollPosition) {
     return 0;
   }
-  let time = globalState.getters.currentSectionScrollPosition / (158.0 * 1.0);
+  let time = globalState.getters.currentSectionScrollPosition / (158.0 * 0.2);
   time = (time < 0) ? 0 : time;
-  return _.ceil(time);
+  return _.round(time, 2);
 };
 
 export const autoPlaying = state => globalState.autoPlaying;
