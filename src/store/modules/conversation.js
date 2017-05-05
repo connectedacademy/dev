@@ -162,7 +162,6 @@ const mutations = {
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,
   }) {
-    state.messages[response.scope.content] = {};
     // error in response
   },
 };

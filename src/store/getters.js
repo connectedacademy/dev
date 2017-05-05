@@ -24,4 +24,4 @@ export const currentTime = (state) => {
   return _.round(time, 2);
 };
 
-export const autoPlaying = state => globalState.autoPlaying;
+export const autoPlaying = state => state.autoPlaying;

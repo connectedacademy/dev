@@ -3,23 +3,36 @@
 .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
   p currentSection
   pre {{ currentSection }}
-  p {{ `videoEnabled - ${$store.state.videoEnabled}` }}
-  p {{ `autoPlaying - ${$store.state.autoPlaying}` }}
-  p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
-  p {{ `currentTime - ${$store.getters.currentTime}` }}
-  p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
-  p {{ `currentSegmentGroup - ${$store.getters.currentSegmentGroup}` }}
-  p {{ `currentSegment - ${$store.getters.currentSegment}` }}
+  p {{ `videoEnabled - ${videoEnabled}` }}
+  p {{ `autoPlaying - ${autoPlaying}` }}
+  p {{ `scrollPosition - ${scrollPosition}` }}
+  p {{ `currentTime - ${currentTime}` }}
+  p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
+  p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
+  p {{ `currentSegment - ${currentSegment}` }}
 
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 export default {
   name: 'debug-panel',
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'currentSection',
+      'videoEnabled',
+      'autoPlaying',
+      'scrollPosition',
+      'currentTime',
+      'currentSectionScrollPosition',
+      'currentSegmentGroup',
+      'currentSegment',
+    ]),
+  },
   components: {},
   methods: {},
 };

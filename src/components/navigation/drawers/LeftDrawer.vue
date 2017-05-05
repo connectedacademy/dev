@@ -8,7 +8,7 @@
 
     ul.drawer-list
 
-      li.drawer-list-item(v-for="(theClass, index) in classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
+      li.drawer-list-item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
         h1.drawer-list-item--header {{ theClass.title }}
         h2.drawer-list-item--body {{ theClass.description }}
 
@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'classes',
+      'course',
     ]),
     state() {
       return this.$store.state.navigation.leftDrawer;
