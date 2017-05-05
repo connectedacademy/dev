@@ -12,21 +12,13 @@
 
       video-container
 
-    .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
-      p currentSection
-      pre {{ currentSection }}
-      p {{ `videoEnabled - ${$store.state.videoEnabled}` }}
-      p {{ `autoPlaying - ${$store.state.autoPlaying}` }}
-      p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
-      p {{ `currentTime - ${$store.getters.currentTime}` }}
-      p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
-      p {{ `currentSectionSegment - ${$store.getters.currentSectionSegment}` }}
+    debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
     burger-menu
 
     left-drawer
 
-    right-drawer(v-if="registered")
+    right-drawer(v-if="isRegistered")
 
     message-composer
 
@@ -38,16 +30,21 @@
 
 <script>
 /* eslint-disable */
+import { mapGetters } from 'vuex';
+
+import store from './store/index';
+import * as types from './store/mutation-types';
+
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
+
 import Navigation from './components/navigation/Navigation';
 import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
+
+import DebugPanel from './components/DebugPanel';
 import MessageComposer from './components/MessageComposer';
 import VideoContainer from './components/VideoContainer';
-
-import store from './store/index';
-import * as types from './store/mutation-types';
 
 export default {
   name: 'app',
@@ -62,24 +59,19 @@ export default {
     };
   },
   computed: {
-    registered() {
-      return this.$store.getters.isRegistered;
-    },
-    pageStyle() {
-      return this.$store.getters.pageStyle;
-    },
+    ...mapGetters([
+      'isRegistered', 'pageStyle', 'currentSection',
+    ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
       || this.$store.state.composer.visible;
     },
-    currentSection() {
-      return this.$store.getters.currentSection;
-    },
   },
   store,
   components: {
     AuthenticationFlow,
+    DebugPanel,
     Navigation,
     BurgerMenu,
     LeftDrawer,
@@ -103,15 +95,5 @@ export default {
 
 @import './assets/stylus/shared/*'
 @import './assets/stylus/layout/page'
-
-.debug-panel
-  background-color red
-  color white
-  min-width 200px
-  padding 10px
-  position fixed
-  bottom 10px
-  left 10px
-  z-index 52
 
 </style>

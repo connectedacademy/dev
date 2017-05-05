@@ -1,19 +1,19 @@
 <template lang="pug">
 
-  .conversation-container(ref="conversationContainer" v-if="registered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
+  .conversation-container(ref="conversationContainer" v-if="isRegistered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
     .subtitle-container
 
       .activity-visualisation
         svg(width="200" v-bind:height="(segments.length * 158.0)")
           g
-            polygon(v-bind:points="points")
+            polygon(v-bind:points="visualisationPoints")
 
       subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
     .messages-container
 
-      .time-segment(v-for="(segment, index) in segments" v-bind:class="{ active: (currentSectionSegment === index) }")
+      .time-segment(v-for="(segment, index) in segments" v-bind:class="{ active: (currentSegmentGroup === index) }")
 
         .message-count(v-if="messages && messages[index]")
           | {{ messages[index].length }}
@@ -45,9 +45,14 @@ export default {
     });
   },
   watch: {
-    currentSectionSegment(oldVal, newVal) {
+    currentSegmentGroup(oldVal, newVal) {
       if (oldVal !== newVal) {
-        this.getMessages((newVal * 5));
+        // this.getMessages((newVal * 5));
+      }
+    },
+    currentSegment(oldVal, newVal) {
+      if (oldVal !== newVal) {
+        this.getMessages(newVal);
       }
     },
   },
@@ -65,7 +70,8 @@ export default {
       });
     },
     getMessages(segment) {
-      const length = 100
+      console.log(`Segment - ${segment}`);
+      const length = 20
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.content.slug,
@@ -80,29 +86,17 @@ export default {
   },
   props: ['content'],
   computed: {
-    points() {
-      return this.$store.getters.visualisationPoints;
-    },
+    ...mapGetters([
+      'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'isRegistered', 'messages', 'subtitles',
+    ]),
     conversationContainerStyles() {
       return {
         height: `${this.segments.length * 158.0}px`,
       };
     },
-    currentSectionSegment() {
-      return this.$store.getters.currentSectionSegment;
-    },
-    registered() {
-      return this.$store.getters.isRegistered;
-    },
     segments() {
       // Calculate number of segments
-      return _.map(_.range(_.ceil(this.content.duration * 0.2)), function () { return undefined; });;
-    },
-    messages() {
-      return this.$store.getters.messages;
-    },
-    subtitles() {
-      return this.$store.getters.subtitles;
+      return _.map(_.range(_.ceil(this.content.duration * 0.2)), function () { return undefined; });
     },
   },
   data() {

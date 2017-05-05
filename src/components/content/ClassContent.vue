@@ -33,15 +33,15 @@ import ConversationContainer from '../ConversationContainer';
 export default {
   name: 'class-content',
   computed: {
+    ...mapGetters([
+      'courseClassContent', 'currentSection', 'isRegistered',
+    ]),
     isActive() {
       return (typeof this.currentSection != 'undefined' && this.currentSection.slug === this.slug);
     },
     content() {
       return this.courseClassContent;
     },
-    ...mapGetters([
-      'courseClassContent', 'currentSection', 'isRegistered',
-    ]),
   },
   data() {
     return {

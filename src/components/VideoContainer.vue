@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .video-wrapper.animated.fadeInUp(v-if="isActive && isEnabled")
+  .video-wrapper.animated.fadeInUp(v-if="videoIsActive && videoEnabled")
     .video-controls.hidden
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
@@ -12,6 +12,7 @@
 <script>
 /* eslint-disable */
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'video-container',
@@ -29,8 +30,8 @@ export default {
     };
   },
   watch: {
-    currentVideoTime(oldTime, newTime) {
-      this.seek(this, this.currentVideoTime);
+    currentTime(oldTime, newTime) {
+      this.seek(this, this.currentTime);
     },
   },
   methods: {
@@ -75,18 +76,9 @@ export default {
     src() {
       return this.$store.getters.currentSection.videoId;
     },
-    isActive() {
-      return this.$store.getters.videoIsActive;
-    },
-    isEnabled() {
-      return this.$store.getters.videoEnabled;
-    },
-    currentVideoTime() {
-      return this.$store.getters.currentTime;
-    },
-    currentSectionSegment() {
-      return this.$store.getters.currentSectionSegment;
-    },
+    ...mapGetters([
+      'videoIsActive', 'videoEnabled', 'currentTime',
+    ]),
   },
 };
 </script>

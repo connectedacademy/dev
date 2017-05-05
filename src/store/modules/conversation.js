@@ -67,9 +67,13 @@ const getters = {
     if (!globalState.getters.currentSection) { return 0; }
     return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
   },
-  currentSectionSegment() {
+  currentSegmentGroup() {
     if (!globalState.getters.currentSection) { return 0; }
-    return _.floor(globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
+    return _.ceil(globalState.getters.currentSectionScrollPosition / 158.0);
+  },
+  currentSegment() {
+    if (!globalState.getters.currentSection) { return 0; }
+    return _.ceil(globalState.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };
 

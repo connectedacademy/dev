@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 import * as types from '../../../store/mutation-types';
 
 export default {
@@ -49,9 +50,9 @@ export default {
     },
   },
   computed: {
-    classes() {
-      return this.$store.getters.course.classes;
-    },
+    ...mapGetters([
+      'classes',
+    ]),
     state() {
       return this.$store.state.navigation.leftDrawer;
     },

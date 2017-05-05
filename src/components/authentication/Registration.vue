@@ -83,9 +83,12 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 import _ from 'lodash';
 import validator from 'validator';
 import vueSlider from 'vue-slider-component';
+
 import API from '../../api';
 
 export default {
@@ -125,15 +128,9 @@ export default {
     };
   },
   computed: {
-    course() {
-      return this.$store.getters.course;
-    },
-    hubs() {
-      return this.$store.getters.hubs;
-    },
-    user() {
-      return this.$store.state.auth.user;
-    },
+    ...mapGetters([
+      'course', 'hubs', 'user',
+    ]),
     sanitizedResponse() {
       return {
         consent: this.response.consent,
@@ -163,10 +160,10 @@ export default {
   },
   methods: {
     nextPage() {
-      this.currentPage = this.currentPage + 1;
+      this.currentPage += 1;
     },
     previousPage() {
-      this.currentPage = this.currentPage - 1;
+      this.currentPage -= 1;
     },
     attemptRegistration() {
       API.auth.register(
