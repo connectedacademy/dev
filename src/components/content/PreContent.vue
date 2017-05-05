@@ -2,9 +2,9 @@
 
   .course-content-wrapper
 
-    pre.hidden {{ coursePreContent }}
-
     .course-content.pre-content(v-for="content in coursePreContent" v-bind:class="{ optional: content.optional }")
+
+      like-indicator(v-bind:content="content")
 
       .course-content--header
         h1.content-title {{ content.title }}
@@ -25,9 +25,10 @@ import { mapGetters } from 'vuex';
 
 import MarkdownLink from '../MarkdownLink';
 import VideoThumbnail from '../VideoThumbnail';
+import LikeIndicator from '../LikeIndicator';
 
 export default {
-  name: 'webinar-content',
+  name: 'pre-content',
   computed: {
     ...mapGetters([
       'coursePreContent',
@@ -36,6 +37,7 @@ export default {
   components: {
     MarkdownLink,
     VideoThumbnail,
+    LikeIndicator,
   },
 };
 </script>

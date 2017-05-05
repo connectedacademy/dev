@@ -16,4 +16,11 @@ export default {
       errorCb(response);
     });
   },
+  getLikeCount(request, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/likes/${request.class}/${request.content}`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
 };

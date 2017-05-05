@@ -40,7 +40,7 @@ export default {
   max-width 300px
   padding 0 10px
   h1
-    font-size 1.2em
+    font-size 1em
   &:hover
     color $color-purple
     cursor pointer

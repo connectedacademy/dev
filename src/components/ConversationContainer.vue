@@ -1,15 +1,25 @@
 <template lang="pug">
 
-  .conversation-container(v-if="registered" v-bind:class="{ 'message-priority': messagePriority }")
+  .conversation-container(ref="conversationContainer" v-if="registered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
     .subtitle-container
+
+      .activity-visualisation
+        svg(width="200" v-bind:height="(segments.length * 158.0)")
+          g
+            polygon(v-bind:points="points")
 
       subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
     .messages-container
+
       .time-segment(v-for="(segment, index) in segments" v-bind:class="{ active: (currentSectionSegment === index) }")
 
-        message(v-for="message in messages[index]" v-bind:key="message.id" v-bind:message="message")
+        .message-count(v-if="messages && messages[index]")
+          | {{ messages[index].length }}
+
+        span(v-if="messages && messages[index]")
+          message(v-for="message in messages[index]" v-bind:key="message.id" v-bind:message="message")
 
     .clearfix
 
@@ -26,7 +36,9 @@ export default {
   /* eslint-disable */
 
   name: 'conversation-container',
-  mounted() {},
+  mounted() {
+    this.setScrollPoints();
+  },
   ready() {
     this.$nextTick(() => {
       this.getPosition();
@@ -35,27 +47,47 @@ export default {
   watch: {
     currentSectionSegment(oldVal, newVal) {
       if (oldVal !== newVal) {
-        this.getMessages(newVal);
+        this.getMessages((newVal * 5));
       }
     },
   },
   methods: {
+    setScrollPoints() {
+      const element = this.$refs.conversationContainer;
+
+      this.$store.commit('setScrollPoint', {
+        slug: this.content.slug,
+        top: (element.offsetParent.offsetTop + element.offsetTop),
+        bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
+        duration: this.content.duration,
+        videoId: this.content.video,
+        transcript: this.content.transcript,
+      });
+    },
     getMessages(segment) {
-      const length = 5
+      const length = 100
       const request = {
         theClass: this.$store.getters.currentClass.slug,
-        theContent: this.contentSlug,
-        startSegment: `${segment + length}`,
-        endSegment: `${segment + length + length}`,
+        theContent: this.content.slug,
+        startSegment: `${segment}`,
+        endSegment: `${(segment) + length}`,
       };
 
-      if (((segment % length) === 0) && (this.contentSlug === this.$store.getters.currentSection.slug)) {
+      if (((segment % length) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
         this.$store.dispatch('getMessages', request);
       }
     },
   },
-  props: ['contentSlug'],
+  props: ['content'],
   computed: {
+    points() {
+      return this.$store.getters.visualisationPoints;
+    },
+    conversationContainerStyles() {
+      return {
+        height: `${this.segments.length * 158.0}px`,
+      };
+    },
     currentSectionSegment() {
       return this.$store.getters.currentSectionSegment;
     },
@@ -63,13 +95,8 @@ export default {
       return this.$store.getters.isRegistered;
     },
     segments() {
-      const segments = [];
-      let i = 50;
-      while (i > 0) {
-        segments.push(i);
-        i -= 1;
-      }
-      return segments;
+      // Calculate number of segments
+      return _.map(_.range(_.ceil(this.content.duration * 0.2)), function () { return undefined; });;
     },
     messages() {
       return this.$store.getters.messages;
@@ -97,9 +124,20 @@ export default {
 
 .conversation-container
   background-color #f2f2f2
+  min-height 500px
   overflow hidden
-  min-height 600px
   padding 0
+
+  .activity-visualisation
+    position absolute
+    top 158px
+    left 0
+    z-index 0
+    svg
+      polygon
+        fill $color-purple
+        opacity 0.2
+
 
   .subtitle-container, .messages-container
     float left
@@ -110,7 +148,15 @@ export default {
     .time-segment
       border-color transparent
       height (158.0 * 1.0)px
+      position relative
       animate()
+      .message-count
+        background-color red
+        color white
+        padding 10px
+        position absolute
+        top 0
+        right 0
       p.timestamp-label
         radius(20px)
         background-color $color-primary

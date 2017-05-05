@@ -2,6 +2,8 @@
 
   .message.visible
 
+    p {{ message.segment }}
+
     img.profile-image(v-bind:src="message.author.profile")
 
     p.author-label

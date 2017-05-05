@@ -10,6 +10,7 @@ const state = {
   scrollPoints: {},
   messages: {},
   subtitles: {},
+  visualisation: {},
 };
 
 // getters
@@ -21,6 +22,26 @@ const getters = {
   subtitles() {
     if (!globalState.getters.currentSection) { return {}; }
     return state.subtitles[globalState.getters.currentSection.slug];
+  },
+  visualisation() {
+    if (!globalState.getters.currentSection) { return {}; }
+    return state.visualisation[globalState.getters.currentSection.slug];
+  },
+  visualisationPoints() {
+    if (!globalState.getters.currentSection) { return []; }
+
+    const visualisation = state.visualisation[globalState.getters.currentSection.slug];
+    const segmentHeight = (158.0 * 0.2);
+    const width = 200.0;
+
+    let points = _.map(visualisation, function(o, i){
+      return [(o * width), (i * segmentHeight)];
+    });
+
+    points[0] = [0,0];
+    points.push([0,(points.length * segmentHeight)]);
+
+    return points;
   },
   videoIsActive() {
     return (globalState.getters.currentSection !== undefined);
@@ -81,6 +102,19 @@ const actions = {
       }),
     );
   },
+  getVisualisation({
+    commit,
+  }, request) {
+    API.visualisation.getVisualisation(
+      request,
+      response => commit(types.GET_VISUALISATION_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_VISUALISATION_FAILURE, {
+        response,
+      }),
+    );
+  },
 };
 
 // mutations
@@ -102,12 +136,23 @@ const mutations = {
     state.subtitles[response.slug] = [];
     // error in response
   },
+  [types.GET_VISUALISATION_SUCCESS](initialState, {
+    response,
+  }) {
+    state.visualisation[response.scope.content] = response.data;
+  },
+  [types.GET_VISUALISATION_FAILURE](initialState, {
+    response,
+  }) {
+    state.visualisation[response.slug] = {};
+    // error in response
+  },
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
     state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
     for (const segment in response.data) {
-      state.messages[response.scope.content][segment] = response.data[segment];
+      state.messages[response.scope.content][_.ceil(segment * 0.2)] = response.data[segment];
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {

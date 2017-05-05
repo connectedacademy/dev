@@ -1,7 +1,7 @@
 <template lang="pug">
 
-  .video-wrapper.animated.fadeInUp(v-if="isActive")
-    .video-controls(hidden)
+  .video-wrapper.animated.fadeInUp(v-if="isActive && isEnabled")
+    .video-controls.hidden
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
       button.pure-button(@click="seek") Seek
@@ -77,6 +77,9 @@ export default {
     },
     isActive() {
       return this.$store.getters.videoIsActive;
+    },
+    isEnabled() {
+      return this.$store.getters.videoEnabled;
     },
     currentVideoTime() {
       return this.$store.getters.currentTime;

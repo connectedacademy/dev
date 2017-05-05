@@ -15,6 +15,7 @@
     .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
       p currentSection
       pre {{ currentSection }}
+      p {{ `videoEnabled - ${$store.state.videoEnabled}` }}
       p {{ `autoPlaying - ${$store.state.autoPlaying}` }}
       p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
       p {{ `currentTime - ${$store.getters.currentTime}` }}

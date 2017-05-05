@@ -20,9 +20,9 @@ export default {
   sendMessage(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
     Vue.http.post(`${config.WATERCOOLER_API}/messages/create`, postData).then((response) => {
-      cb(response.body);
+      cb({slug: response.scope.content, response: response.body});
     }, (response) => {
-      errorCb(response);
+      errorCb({slug: response.scope.content, response: response.data});
     });
   },
 };

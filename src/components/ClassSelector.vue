@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .class-selector-wrapper(v-bind:class="{ 'hidden': !classSelectorVisible }")
+  .class-selector-wrapper(v-bind:class="{ 'hidden': !visible }")
     ul.class-selector
       li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)")
         h1.class-selector--item--header {{ theClass.title }}
@@ -14,14 +14,16 @@ import * as types from '../store/mutation-types';
 
 export default {
   name: 'class-selector',
-  props: ['classSelectorVisible'],
+  props: ['isVisible'],
   methods: {
     setCurrentClass(newClass) {
-      this.classSelectorVisible = false;
       this.$store.commit(types.SET_CURRENT_CLASS, newClass);
     },
   },
   computed: {
+    visible() {
+      return this.isVisible;
+    },
     course() {
       return this.$store.getters.course;
     },

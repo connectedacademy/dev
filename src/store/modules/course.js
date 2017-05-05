@@ -29,7 +29,7 @@ const getters = {
   courseClassContent() {
     if (state.current_class === undefined) { return undefined; }
     let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.filter(result.content, item => (item.content_type === 'class'));
+    return _.head(_.filter(result.content, item => (item.content_type === 'class')));
   },
   coursePostClassContent() {
     if (state.current_class === undefined) { return undefined; }
@@ -39,7 +39,7 @@ const getters = {
   courseWebinarContent() {
     if (state.current_class === undefined) { return undefined; }
     let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.filter(result.content, item => (item.content_type === 'webinar'));
+    return _.head(_.filter(result.content, item => (item.content_type === 'webinar')));
   },
   coursePostWebinarContent() {
     if (state.current_class === undefined) { return undefined; }

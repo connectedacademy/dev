@@ -20,6 +20,9 @@
       li.drawer-list-item.visible
         h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
 
+      li.drawer-list-item.visible
+        h2.drawer-list-item--body(@click="toggleVideo") {{ $t('common.toggle_video') }}
+
 </template>
 
 <script>
@@ -33,6 +36,9 @@ export default {
     },
     toggleDebugMode() {
       this.$store.commit(types.TOGGLE_DEBUG_MODE);
+    },
+    toggleVideo() {
+      this.$store.commit(types.TOGGLE_VIDEO);
     },
     toggleColumnState() {
       this.$store.dispatch('toggleColumnState');
