@@ -10,8 +10,6 @@
 
       router-view(transition transition-mode="out-in")
 
-      video-container
-
     debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
     burger-menu
@@ -20,7 +18,13 @@
 
     right-drawer(v-if="isRegistered")
 
-    message-composer
+    .action-panel.animated.fadeInUp(v-if="videoIsActive && videoEnabled")
+
+      playhead
+
+      video-container
+
+      message-composer
 
     authentication-flow
 
@@ -45,6 +49,7 @@ import RightDrawer from './components/navigation/drawers/RightDrawer';
 import DebugPanel from './components/DebugPanel';
 import MessageComposer from './components/MessageComposer';
 import VideoContainer from './components/VideoContainer';
+import Playhead from './components/Playhead';
 
 export default {
   name: 'app',
@@ -60,7 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'pageStyle', 'currentSection',
+      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
@@ -78,6 +83,7 @@ export default {
     RightDrawer,
     MessageComposer,
     VideoContainer,
+    Playhead,
   },
   methods: {
     dismiss() {
@@ -95,5 +101,19 @@ export default {
 
 @import './assets/stylus/shared/*'
 @import './assets/stylus/layout/page'
+
+.action-panel
+  background-color $color-purple
+  position absolute
+  bottom 0
+  left 50%
+  margin-left -400px
+  height 140px
+  width 800px
+  z-index 50
+  @media(max-width: 800px)
+    left 0
+    margin-left 0
+    width 100%
 
 </style>

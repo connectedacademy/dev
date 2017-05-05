@@ -13,6 +13,7 @@ import composer from './modules/composer';
 
 import course from './modules/course';
 import conversation from './modules/conversation';
+import video from './modules/video';
 
 Vue.use(Vuex);
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
 
     course,
     conversation,
+    video,
   },
   state: {
     debug: false,

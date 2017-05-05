@@ -28,6 +28,7 @@
 <script>
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
+import * as types from '../store/mutation-types';
 
 import Subtitle from './conversation/Subtitle';
 import Message from './conversation/Message';
@@ -71,7 +72,7 @@ export default {
     },
     getMessages(segment) {
       console.log(`Segment - ${segment}`);
-      const length = 20
+      const length = 5
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.content.slug,
@@ -82,6 +83,9 @@ export default {
       if (((segment % length) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
         this.$store.dispatch('getMessages', request);
       }
+    },
+    showComposer() {
+      this.$store.commit(types.SHOW_COMPOSER);
     },
   },
   props: ['content'],
@@ -145,12 +149,17 @@ export default {
       position relative
       animate()
       .message-count
-        background-color red
+        radius(13px)
+        background-color $color-primary
         color white
-        padding 10px
+        font-size 0.8em
+        line-height 14px
+        min-width 14px
+        padding 6px
         position absolute
-        top 0
-        right 0
+        text-align center
+        top 5px
+        right 5px
       p.timestamp-label
         radius(20px)
         background-color $color-primary
@@ -167,19 +176,21 @@ export default {
       background-color #f2f2f2
 
   .messages-container
-    border-left $color-light-grey 1px solid
-    border-color transparent
-    width calc(50% - 1px)
+    width 50%
     .time-segment
+      border-right transparent 3px solid
       overflow hidden
+      animate()
       &.active
-        background-color #e1e1e1
+        border-right-color $color-primary
 
   @media(max-width: 600px)
     &.message-priority
       .subtitle-container
+        display none
         width 50px
       .messages-container
-        width calc(100% - 1px - 50px)
+        display block
+        width 100%
 
 </style>

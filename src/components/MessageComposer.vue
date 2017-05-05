@@ -4,18 +4,15 @@
 
     .message-composer(v-bind:class="{ isactive: visible, unactive: hidden }")
 
-      .message-composer--header(v-on:click="showComposer")
-
-        p.action-label {{ visible ? $t('composer.compose_message_active') : $t('composer.compose_message') }}
-
-        p.position-label
-          | {{ $t('composer.duration', { currentTime: currentTime }) }}
-
       .message-composer--body
         textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
 
       .message-composer--footer
-        button.pure-button.pure-button-primary.pull-right(@click="sendMessage") Send
+        button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
+          | Send Tweet
+        p.info-label
+          span#time {{ $t('composer.duration', { currentTime: currentTime }) }}
+          span#url {{ url }}
         .clearfix
 
 
@@ -28,6 +25,13 @@ import API from '../api';
 
 export default {
   name: 'message-composer',
+  data() {
+    return {
+      message: {
+        text: '',
+      },
+    };
+  },
   methods: {
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
@@ -37,7 +41,7 @@ export default {
     },
     sendMessage() {
       const postData = {
-        text: this.message.text,
+        text: `${this.message.text} ${this.$store.getters.course.hashtag} ${this.url}`,
       };
 
       API.message.sendMessage(
@@ -56,12 +60,6 @@ export default {
       if (this.$store.getters.currentSection === undefined) { return ''; }
       return `http://localhost:8080/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSegment}`;
     },
-    message() {
-      if (this.$store.getters.currentSection === undefined) { return ''; }
-      return {
-        text: `Test message ${this.$store.getters.course.hashtag} - ${this.url}`,
-      };
-    },
     visible() {
       return this.$store.state.composer.visible;
     },
@@ -75,7 +73,7 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     currentTime() {
-      return this.$store.getters.currentTime;
+      return `Tweeting at - ${_.round(this.$store.getters.currentTime)}`;
     },
   },
 };
@@ -89,84 +87,72 @@ export default {
 
   .message-composer
     background-color white
-    border-radius 6px
-    box-shadow 0px 0px 15px 0px alpha(black, 0.3)
     box-sizing border-box
 
-    position fixed
-    bottom -128px
-    left 50%
-    margin-left calc(-370px / 2)
-    overflow hidden
-    z-index 51
+    position absolute
+    bottom 0
+    right 0
 
-    height 178px
-    width 370px
-    max-width 100%
+    height 140px
+    left 224px
+    animate()
 
-    transition bottom 0.6s, margin-left 0.6s, margin-bottom 0.6s, width 0.6s
-
-    @media(max-width: 400px)
-      margin-left calc(-50% + 15px)
-      width calc(100% - 30px)
-
-    &:hover
-      cursor pointer
-      bottom -115px
-
-    .message-composer--header
-      height 50px
-
-      p
-        margin 0
-        padding 0 15px
-
-        line-height 50px
-
-        &.action-label
-          float left
-
-        &.position-label
-          float right
+    @media(max-width: 800px)
+      width 100%
+      left 0
+      right 0
+      margin 0
 
     .message-composer--body
-      background-color #f9f9f9
-      height 80px
+      background-color darken($color-purple, 20%) //#f9f9f9
+      pinned()
+      position absolute
 
       textarea
+        radius(4px)
         background-color #f9f9f9
+        color black
         border none
         font-size 1em
 
         box-sizing border-box
         padding 15px
-        height 70px
         resize none
-        width 100%
         outline 0
 
+        position absolute
+        top 10px
+        bottom 58px
+        right 0
+        left 10px
+        width calc(100% - 10px)
+        animate()
+        @media(max-width: 800px)
+          right 10px
+          width calc(100% - 20px)
+
     .message-composer--footer
-      background-color #f9f9f9
       height 38px
-      padding 5px
-
-  .message-composer.isactive, .message-composer.isactive:hover
-    bottom 50%
-    margin-bottom calc(-160px / 2)
-    margin-left calc(-370px / 2)
-    z-index 51
-    /*width 400px*/
-    @media(max-width: 400px)
-      radius(0px)
-      bottom 0px
-      top auto
-      /*left auto*/
-      margin-bottom 0
-      margin-left calc(-100% / 2)
-      width 100%
-
-  .message-composer.unactive, .message-composer.unactive:hover
-    bottom -160px
-    box-shadow none
-
+      padding 10px 0 10px 10px
+      position absolute
+      bottom 0
+      right 0
+      left 0
+      animate()
+      @media(max-width: 800px)
+        padding 10px
+      p.info-label
+        nomargin()
+        nopadding()
+        color white
+        line-height 38px
+        #url
+          display none
+        #time
+          display block
+        &:hover
+          #url
+            display block
+          #time
+            display none
 </style>

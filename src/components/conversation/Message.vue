@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .message.visible
+  .message.animated.fadeIn
 
     p {{ message.segment }}
 
@@ -56,8 +56,6 @@ export default {
 
   position relative
 
-  opacity 0
-
   transition opacity 1s
 
   img.profile-image
@@ -72,9 +70,6 @@ export default {
     nomargin()
     nopadding()
     color $color-text-dark-grey
-
-  &.visible
-    opacity 1
 
   ul.tweet-actions
     cleanlist()

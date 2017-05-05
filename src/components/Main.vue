@@ -91,7 +91,7 @@ export default {
           };
 
           this.$store.dispatch('getVisualisation', request).then(() => {
-            // this.$store.dispatch('getSubtitles');
+            this.$store.dispatch('getSubtitles');
           });
         }
         if (!this.canAutoScroll) {

@@ -1,11 +1,13 @@
 <template lang="pug">
 
-  .video-wrapper.animated.fadeInUp(v-if="videoIsActive && videoEnabled")
+  .video-wrapper.animated.fadeIn(v-if="videoIsActive && videoEnabled")
+
     .video-controls.hidden
       button.pure-button(@click="pause") Pause
       button.pure-button(@click="play") Play
       button.pure-button(@click="seek") Seek
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight")
+
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
 
@@ -52,24 +54,26 @@ export default {
     }, 500, { leading: false, trailing: true }),
     play() {
       this.player.playVideo();
+      this.$store.video.commit('playing', true);
     },
     stop() {
       this.player.stopVideo();
+      this.$store.video.commit('playing', false);
     },
     pause() {
       this.player.pauseVideo();
+      this.$store.video.commit('playing', true);
     },
     getWindowWidth(event) {
-      if (document.documentElement.clientWidth < 600)
-      {
-        this.pHeight = 112;
-        this.pWidth = 200;
+      if (document.documentElement.clientWidth < 800) {
+        const percentage = 0.8;
+        this.pHeight = (((document.documentElement.clientWidth / 2) * percentage) * 0.5625);
+        this.pWidth = ((document.documentElement.clientWidth / 2) * percentage);
+      } else {
+        this.pHeight = 120;
+        this.pWidth = (120 / 0.5625);
       }
-      else
-      {
-        this.pHeight = 169;
-        this.pWidth = 300;
-      }
+
     },
   },
   computed: {
@@ -79,6 +83,12 @@ export default {
     ...mapGetters([
       'videoIsActive', 'videoEnabled', 'currentTime',
     ]),
+    playerStyle() {
+      return {
+        height: `${this.pHeight}px`,
+        width: `${this.pWidth}px`,
+      };
+    },
   },
 };
 </script>
@@ -88,25 +98,26 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .video-wrapper
-  bottom 65px
-  right 20px
+  background-color darken($color-purple, 25%)
+  border-right $color-purple 1px solid
+  bottom 0
+  padding 10px
+  padding-left 0
+  left 50%
+  margin-left -400px
   position fixed
   z-index 52
-  width 300px
-  @media(max-width: 600px)
-    bottom auto
-    top 135px
-    right 15px
-    width 200px
+  animate()
+  @media(max-width: 800px)
+    bottom 150px
+    left 10px
+    margin-left 0
+    padding 0
   .video-container
-    background-color black
     box-sizing border-box
-    height 0
     overflow hidden
     padding 0
-    padding-bottom 56.25%
     position relative
-    width 100%
 
   iframe, object, embed, video
     position absolute !important
