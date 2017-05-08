@@ -34,14 +34,19 @@ const getters = {
     const segmentHeight = (158.0 * 0.2);
     const width = 200.0;
 
-    let points = _.map(visualisation, function(o, i){
-      return [(o * width), (i * segmentHeight)];
-    });
+    let points = _.reduce(visualisation, function(result, value, key) {
+      // return result + `L${value * width} ${key * segmentHeight} `;
+      // return result + `C ${value * width} ${key * segmentHeight + 15}, ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight} `;
+      return result + `S ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight + 15} `;
+      // return result + `M10                       10               C 20                       20,               40                       20,               50                       10`;
+      // return result + `M ${value * width} ${key * segmentHeight} `;
+      //
+    }, "M0 0 ");
 
-    points[0] = [0,0];
-    points.push([0,(points.length * segmentHeight)]);
+    points += `L 0 ${(_.size(visualisation) * segmentHeight)} Z`;
 
     return points;
+
   },
   videoIsActive() {
     return (globalState.getters.currentSection !== undefined);

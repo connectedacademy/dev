@@ -7,7 +7,8 @@
       .activity-visualisation
         svg(width="200" v-bind:height="(segments.length * 158.0)")
           g
-            polygon(v-bind:points="visualisationPoints")
+            //- polygon(v-bind:points="visualisationPoints")
+            path(v-bind:d="visualisationPoints")
 
       subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
@@ -128,10 +129,14 @@ export default {
 
   .activity-visualisation
     position absolute
-    top 158px
+    top 0
     left 0
     z-index 0
     svg
+      path
+        stroke $color-primary
+        fill $color-primary
+        /*stroke-width 2px*/
       polygon
         fill $color-purple
         opacity 0.2
