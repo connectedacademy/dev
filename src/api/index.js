@@ -5,6 +5,7 @@ import markdown from './markdown';
 import course from './course';
 import message from './message';
 import visualisation from './visualisation';
+import feedback from './feedback';
 
 export default {
   auth,
@@ -12,4 +13,5 @@ export default {
   course,
   message,
   visualisation,
+  feedback,
 };

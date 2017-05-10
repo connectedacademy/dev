@@ -10,6 +10,7 @@ import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
 
 import VueScroll from 'vue-scroll';
+import VueAutosize from 'vue-autosize';
 
 import { sync } from 'vuex-router-sync';
 
@@ -38,6 +39,7 @@ Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
 
 Vue.use(VueScroll);
+Vue.use(VueAutosize)
 
 // General config
 Vue.config.productionTip = false;

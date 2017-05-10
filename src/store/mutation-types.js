@@ -49,3 +49,7 @@ export const DISMISS_COMPOSER = 'DISMISS_COMPOSER';
 
 export const PEEK_COMPOSER = 'PEEK_COMPOSER';
 export const HIDE_COMPOSER = 'HIDE_COMPOSER';
+
+// Video
+export const PLAY_VIDEO = 'PLAY_VIDEO';
+export const PAUSE_VIDEO = 'PAUSE_VIDEO';

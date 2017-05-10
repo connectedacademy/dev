@@ -14,13 +14,13 @@ const state = {
 
 // getters
 const getters = {
-  playing() {
+  videoPlaying() {
     return state.playing;
   },
-  position() {
+  videoPosition() {
     return state.position;
   },
-  duration() {
+  videoDuration() {
     return state.duration;
   },
 };

@@ -97,7 +97,7 @@ export default {
 
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import './assets/stylus/shared/*'
 @import './assets/stylus/layout/page'
