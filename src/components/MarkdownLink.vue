@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  router-link.pure-button.pure-button-primary(:to="url") {{ $t('common.read_more') }}
+  router-link.pure-button.pure-button-primary(:to="url") {{ $t('common.explore_content') }}
 
 </template>
 

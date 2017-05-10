@@ -5,7 +5,10 @@ import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
 import Registration from '@/components/authentication/Registration';
 
 import Main from '@/components/Main';
-import MarkdownRenderer from '@/components/MarkdownRenderer';
+import Markdown from '@/components/Markdown';
+
+import Feedback from '@/components/feedback/Feedback';
+import FeedbackView from '@/components/feedback/FeedbackView';
 
 import About from '@/components/pages/About';
 import Schedule from '@/components/pages/Schedule';
@@ -39,6 +42,16 @@ export default new Router({
       component: Registration,
     },
     {
+      name: 'feedback',
+      path: '/feedback/browse/:classSlug/:contentSlug',
+      component: Feedback,
+    },
+    {
+      name: 'view_feedback',
+      path: '/feedback/:id',
+      component: FeedbackView,
+    },
+    {
       name: 'markdown',
       path: '/markdown/:url',
       redirect: (to) => {
@@ -49,7 +62,7 @@ export default new Router({
     {
       name: 'markdown',
       path: '/markdown',
-      component: MarkdownRenderer,
+      component: Markdown,
     },
     {
       name: 'schedule',

@@ -124,7 +124,7 @@ export default {
 
       var self = this;
 
-      if (self.isAutoScrolling || !self.canAutoScroll || !self.$store.getters.currentSection) { return; }
+      if (self.isAutoScrolling || !self.canAutoScroll || !self.currentSection || !self.videoPlaying) { return; }
 
       self.isAutoScrolling = true;
 
@@ -150,7 +150,7 @@ export default {
 
         self.$refs.main.scrollTop = position(start, end, elapsed, duration);
 
-        if ((elapsed <= duration) && self.canAutoScroll) {
+        if ((elapsed <= duration) && self.canAutoScroll && self.videoPlaying) {
           requestAnimationFrame(step);
         }
       }
@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'scrollPosition', 'currentTime', 'currentSection',
+      'course', 'currentClass', 'scrollPosition', 'currentTime', 'currentSection', 'videoPlaying',
     ]),
     currentSectionLabel() {
       return this.$store.getters.currentSection.label;

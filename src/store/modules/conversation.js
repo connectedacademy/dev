@@ -30,14 +30,31 @@ const getters = {
   visualisationPoints() {
     if (!globalState.getters.currentSection) { return []; }
 
-    const visualisation = state.visualisation[globalState.getters.currentSection.slug];
-    const segmentHeight = (158.0 * 0.2);
+    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
+    const segmentHeight = (158.0 * 1);
     const width = 200.0;
 
+    let newVis = [];
+    let calcVal = 0;
+    _.forEach(visualisation, function(value, key) {
+
+      calcVal += value;
+
+      if ((value % 5) === 0) {
+        calcVal = calcVal * 0.2;
+        newVis.push(calcVal)
+        calcVal = 0;
+      }
+    });
+
+    visualisation = newVis;
+
     let points = _.reduce(visualisation, function(result, value, key) {
+
+      return result + `S ${value * width} ${key * segmentHeight - 50}, ${value * width} ${key * segmentHeight + 50} `;
+
       // return result + `L${value * width} ${key * segmentHeight} `;
       // return result + `C ${value * width} ${key * segmentHeight + 15}, ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight} `;
-      return result + `S ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight + 15} `;
       // return result + `M10                       10               C 20                       20,               40                       20,               50                       10`;
       // return result + `M ${value * width} ${key * segmentHeight} `;
       //

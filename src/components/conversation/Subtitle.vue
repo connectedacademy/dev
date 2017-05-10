@@ -33,7 +33,7 @@ export default {
 @import '../../assets/stylus/shared/*'
 
 .subtitle
-  border-left $color-primary 3px solid
+  /*border-left $color-primary 3px solid*/
   left 0px
   position absolute
   max-width 300px

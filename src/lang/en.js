@@ -8,6 +8,7 @@ export default {
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
+    explore_content: 'Explore',
 
     age: 'Your age',
     current_language: 'Current language',

@@ -11,7 +11,7 @@ export const pageStyle = (state) => {
 };
 
 export const scrollPosition = (state) => {
-  const offset = 500.0;
+  const offset = 0.0;
   return (state.scrollPosition + offset);
 };
 

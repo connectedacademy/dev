@@ -2,12 +2,7 @@
 
   .video-wrapper.animated.fadeIn(v-if="videoIsActive && videoEnabled")
 
-    .video-controls.hidden
-      button.pure-button(@click="pause") Pause
-      button.pure-button(@click="play") Play
-      button.pure-button(@click="seek") Seek
-
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
 
@@ -15,6 +10,7 @@
 /* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
+import * as types from '../store/mutation-types';
 
 export default {
   name: 'video-container',
@@ -38,32 +34,33 @@ export default {
   },
   methods: {
     ready(player) {
+      console.log('READY');
       this.player = player;
       this.play();
     },
     playing(player) {
-      // The player is playing a video.
+      console.log('PLAYING');
+      this.$store.commit(types.PLAY_VIDEO);
     },
     change() {
-      // this.videoId = 'another video id';
+    },
+    ended() {
+      console.log('ENDED');
+      this.$store.commit(types.PAUSE_VIDEO);
+    },
+    buffering() {
+      console.log('BUFFERING');
+      this.$store.commit(types.PAUSE_VIDEO);
+    },
+    paused() {
+      console.log('PAUSE');
+      this.$store.commit(types.PAUSE_VIDEO);
     },
     seek: _.throttle(function(self, position) {
       if (!this.$store.state.autoPlaying && self.player) {
         self.player.seekTo(position);
       }
-    }, 500, { leading: false, trailing: true }),
-    play() {
-      this.player.playVideo();
-      this.$store.video.commit('playing', true);
-    },
-    stop() {
-      this.player.stopVideo();
-      this.$store.video.commit('playing', false);
-    },
-    pause() {
-      this.player.pauseVideo();
-      this.$store.video.commit('playing', true);
-    },
+    }, 500),
     getWindowWidth(event) {
       if (document.documentElement.clientWidth < 800) {
         const percentage = 0.8;
