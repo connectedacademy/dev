@@ -1,17 +1,16 @@
 <template lang="pug">
 
-  .video-wrapper.animated.fadeInUp(v-if="isActive")
-    .video-controls(hidden)
-      button.pure-button(@click="pause") Pause
-      button.pure-button(@click="play") Play
-      button.pure-button(@click="seek") Seek
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight")
+  .video-wrapper.animated.fadeIn(v-if="videoIsActive && videoEnabled")
+
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
 
 <script>
 /* eslint-disable */
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
+import * as types from '../store/mutation-types';
 
 export default {
   name: 'video-container',
@@ -29,60 +28,63 @@ export default {
     };
   },
   watch: {
-    currentVideoTime(oldTime, newTime) {
-      this.seek(this, this.currentVideoTime);
+    currentTime(oldTime, newTime) {
+      this.seek(this, this.currentTime);
     },
   },
   methods: {
     ready(player) {
+      console.log('READY');
       this.player = player;
       this.play();
     },
     playing(player) {
-      // The player is playing a video.
+      console.log('PLAYING');
+      this.$store.commit(types.PLAY_VIDEO);
     },
     change() {
-      // this.videoId = 'another video id';
+    },
+    ended() {
+      console.log('ENDED');
+      this.$store.commit(types.PAUSE_VIDEO);
+    },
+    buffering() {
+      console.log('BUFFERING');
+      this.$store.commit(types.PAUSE_VIDEO);
+    },
+    paused() {
+      console.log('PAUSE');
+      this.$store.commit(types.PAUSE_VIDEO);
     },
     seek: _.throttle(function(self, position) {
       if (!this.$store.state.autoPlaying && self.player) {
         self.player.seekTo(position);
       }
-    }, 500, { leading: false, trailing: true }),
-    play() {
-      this.player.playVideo();
-    },
-    stop() {
-      this.player.stopVideo();
-    },
-    pause() {
-      this.player.pauseVideo();
-    },
+    }, 500),
     getWindowWidth(event) {
-      if (document.documentElement.clientWidth < 600)
-      {
-        this.pHeight = 112;
-        this.pWidth = 200;
+      if (document.documentElement.clientWidth < 800) {
+        const percentage = 0.8;
+        this.pHeight = (((document.documentElement.clientWidth / 2) * percentage) * 0.5625);
+        this.pWidth = ((document.documentElement.clientWidth / 2) * percentage);
+      } else {
+        this.pHeight = 120;
+        this.pWidth = (120 / 0.5625);
       }
-      else
-      {
-        this.pHeight = 169;
-        this.pWidth = 300;
-      }
+
     },
   },
   computed: {
     src() {
       return this.$store.getters.currentSection.videoId;
     },
-    isActive() {
-      return this.$store.getters.videoIsActive;
-    },
-    currentVideoTime() {
-      return this.$store.getters.currentTime;
-    },
-    currentSectionSegment() {
-      return this.$store.getters.currentSectionSegment;
+    ...mapGetters([
+      'videoIsActive', 'videoEnabled', 'currentTime',
+    ]),
+    playerStyle() {
+      return {
+        height: `${this.pHeight}px`,
+        width: `${this.pWidth}px`,
+      };
     },
   },
 };
@@ -93,25 +95,26 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .video-wrapper
-  bottom 65px
-  right 20px
+  background-color darken($color-purple, 25%)
+  border-right $color-purple 1px solid
+  bottom 0
+  padding 10px
+  padding-left 0
+  left 50%
+  margin-left -400px
   position fixed
   z-index 52
-  width 300px
-  @media(max-width: 600px)
-    bottom auto
-    top 135px
-    right 15px
-    width 200px
+  animate()
+  @media(max-width: 800px)
+    bottom 150px
+    left 10px
+    margin-left 0
+    padding 0
   .video-container
-    background-color black
     box-sizing border-box
-    height 0
     overflow hidden
     padding 0
-    padding-bottom 56.25%
     position relative
-    width 100%
 
   iframe, object, embed, video
     position absolute !important

@@ -4,7 +4,7 @@ import * as config from './config';
 
 export default {
   getMessages(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}`).then((response) => {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
@@ -20,9 +20,9 @@ export default {
   sendMessage(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
     Vue.http.post(`${config.WATERCOOLER_API}/messages/create`, postData).then((response) => {
-      cb(response.body);
+      cb({slug: response.scope.content, response: response.body});
     }, (response) => {
-      errorCb(response);
+      errorCb({slug: response.scope.content, response: response.data});
     });
   },
 };

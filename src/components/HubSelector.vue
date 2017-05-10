@@ -9,21 +9,15 @@ ul.hub-selector
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 export default {
   name: 'hub-selector',
-  data() {
-    return {};
-  },
   computed: {
-    course() {
-      return this.$store.getters.course;
-    },
-    hubs() {
-      return this.$store.getters.hubs;
-    },
+    ...mapGetters([
+      'course', 'hubs',
+    ]),
   },
-  components: {},
-  methods: {},
 };
 </script>
 

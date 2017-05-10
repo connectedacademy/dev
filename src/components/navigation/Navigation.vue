@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .navigation.clearfix(v-bind:class="{ registered: registered, hidden: hidden }")
+  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden }")
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
 
@@ -8,13 +8,15 @@
       router-link.navigation-item.navigation-item-page(tag="li" to="/") {{ $t('nav.course') }}
       router-link.navigation-item.navigation-item-page(tag="li" to="/schedule") {{ $t('nav.schedule') }}
       router-link.navigation-item.navigation-item-page(tag="li" to="/about") {{ $t('nav.about') }}
-      li.navigation-item.navigation-item-page.pull-right(v-if="!registered" v-on:click="showAuth") {{ $t('auth.login') }}
+      li.navigation-item.navigation-item-page.pull-right(v-if="!isRegistered" v-on:click="showAuth") {{ $t('auth.login') }}
 
-    profile-icon(v-if="registered")
+    profile-icon(v-if="isRegistered")
 
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 import * as types from '../../store/mutation-types';
 import ProfileIcon from './ProfileIcon';
 
@@ -23,13 +25,10 @@ export default {
   components: {
     ProfileIcon,
   },
-  data() {
-    return {};
-  },
   computed: {
-    registered() {
-      return this.$store.getters.isRegistered;
-    },
+    ...mapGetters([
+      'isRegistered',
+    ]),
     hidden() {
       return !this.$store.state.navigation.visible;
     },

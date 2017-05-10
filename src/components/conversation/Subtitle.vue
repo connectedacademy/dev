@@ -15,8 +15,8 @@ export default {
   props: ['subtitle'],
   computed: {
     subtitleStyle() {
-      const duration = ((this.subtitle.end - this.subtitle.start) * (158.0 * 0.2));
-      const topVal = (this.subtitle.start * (158.0 * 0.2));
+      const duration = _.ceil((this.subtitle.end - this.subtitle.start) * (158.0 * 0.2));
+      const topVal = _.ceil(this.subtitle.start * (158.0 * 0.2));
       return { top: `${topVal}px`, height: `${duration}px` };
     },
   },
@@ -33,14 +33,13 @@ export default {
 @import '../../assets/stylus/shared/*'
 
 .subtitle
-  border-left $color-purple 3px solid
+  /*border-left $color-primary 3px solid*/
   left 0px
   position absolute
-  margin 0 10px
   max-width 300px
   padding 0 10px
   h1
-    font-size 1.2em
+    font-size 1em
   &:hover
     color $color-purple
     cursor pointer

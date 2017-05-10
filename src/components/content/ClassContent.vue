@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .course-content-wrapper(v-bind:class="{ 'active': isActive }")
+  .course-content-wrapper(v-bind:class="{ 'active': isActive }" v-if="content")
 
-    .course-content.class-content(v-for="content in courseClassContent" v-bind:class="{ optional: content.optional }")
+    .course-content.class-content(v-bind:class="{ optional: content.optional }")
 
       .course-content--header
         h1.content-title {{ content.title }}
@@ -13,10 +13,10 @@
         video-thumbnail(:video-src="content.video" v-if="content.video" )
 
       .course-content--footer
-        .pure-button.pure-button-primary.pull-right(v-if="!registered" @click="showAuth") {{ $t('auth.login_to_participate') }}
+        .pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login_to_participate') }}
         .clearfix
 
-      conversation-container(ref="conversationContainer" v-if="registered" v-bind:content-slug="content.slug")
+      conversation-container(v-if="isRegistered" v-bind:content="content")
 
 </template>
 
@@ -32,22 +32,16 @@ import ConversationContainer from '../ConversationContainer';
 
 export default {
   name: 'class-content',
-  mounted() {
-    this.setScrollPoints();
-  },
   computed: {
-    registered() {
-      return this.$store.getters.isRegistered;
-    },
-    currentSection() {
-      return this.$store.getters.currentSection;
-    },
+    ...mapGetters([
+      'courseClassContent', 'currentSection', 'isRegistered',
+    ]),
     isActive() {
       return (typeof this.currentSection != 'undefined' && this.currentSection.slug === this.slug);
     },
-    ...mapGetters([
-      'courseClassContent',
-    ]),
+    content() {
+      return this.courseClassContent;
+    },
   },
   data() {
     return {
@@ -56,20 +50,6 @@ export default {
     };
   },
   methods: {
-    setScrollPoints() {
-      const element = this.$refs.conversationContainer[0].$el;
-      for (const content of this.courseClassContent) {
-        this.slug = content.slug;
-        this.$store.commit('setScrollPoint', {
-          slug: content.slug,
-          top: (element.offsetParent.offsetTop + element.offsetTop),
-          bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
-          duration: 100,
-          videoId: content.video,
-          transcript: content.transcript,
-        });
-      }
-    },
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
     },

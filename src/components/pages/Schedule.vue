@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 import HubSelector from '../HubSelector';
 
 export default {
@@ -26,17 +28,13 @@ export default {
     };
   },
   computed: {
-    course() {
-      return this.$store.getters.course;
-    },
-    hubs() {
-      return this.$store.getters.hubs;
-    },
+    ...mapGetters([
+      'course', 'hubs',
+    ]),
   },
   components: {
     HubSelector,
   },
-  methods: {},
 };
 </script>
 

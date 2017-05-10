@@ -3,10 +3,12 @@ export default {
     enable_debug_mode: 'Enable Debug Mode',
     disable_debug_mode: 'Disable Debug Mode',
     toggle_column: 'Toggle Column',
+    toggle_video: 'Toggle Video',
     optional: 'Optional',
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
+    explore_content: 'Explore',
 
     age: 'Your age',
     current_language: 'Current language',

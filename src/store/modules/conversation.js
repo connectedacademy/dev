@@ -10,6 +10,7 @@ const state = {
   scrollPoints: {},
   messages: {},
   subtitles: {},
+  visualisation: {},
 };
 
 // getters
@@ -21,6 +22,48 @@ const getters = {
   subtitles() {
     if (!globalState.getters.currentSection) { return {}; }
     return state.subtitles[globalState.getters.currentSection.slug];
+  },
+  visualisation() {
+    if (!globalState.getters.currentSection) { return {}; }
+    return state.visualisation[globalState.getters.currentSection.slug];
+  },
+  visualisationPoints() {
+    if (!globalState.getters.currentSection) { return []; }
+
+    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
+    const segmentHeight = (158.0 * 1);
+    const width = 200.0;
+
+    let newVis = [];
+    let calcVal = 0;
+    _.forEach(visualisation, function(value, key) {
+
+      calcVal += value;
+
+      if ((value % 5) === 0) {
+        calcVal = calcVal * 0.2;
+        newVis.push(calcVal)
+        calcVal = 0;
+      }
+    });
+
+    visualisation = newVis;
+
+    let points = _.reduce(visualisation, function(result, value, key) {
+
+      return result + `S ${value * width} ${key * segmentHeight - 50}, ${value * width} ${key * segmentHeight + 50} `;
+
+      // return result + `L${value * width} ${key * segmentHeight} `;
+      // return result + `C ${value * width} ${key * segmentHeight + 15}, ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight} `;
+      // return result + `M10                       10               C 20                       20,               40                       20,               50                       10`;
+      // return result + `M ${value * width} ${key * segmentHeight} `;
+      //
+    }, "M0 0 ");
+
+    points += `L 0 ${(_.size(visualisation) * segmentHeight)} Z`;
+
+    return points;
+
   },
   videoIsActive() {
     return (globalState.getters.currentSection !== undefined);
@@ -46,9 +89,13 @@ const getters = {
     if (!globalState.getters.currentSection) { return 0; }
     return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
   },
-  currentSectionSegment() {
+  currentSegmentGroup() {
     if (!globalState.getters.currentSection) { return 0; }
-    return _.floor(globalState.getters.currentSectionScrollPosition / (158.0 * 1.0));
+    return _.ceil(globalState.getters.currentSectionScrollPosition / 158.0);
+  },
+  currentSegment() {
+    if (!globalState.getters.currentSection) { return 0; }
+    return _.ceil(globalState.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };
 
@@ -81,6 +128,19 @@ const actions = {
       }),
     );
   },
+  getVisualisation({
+    commit,
+  }, request) {
+    API.visualisation.getVisualisation(
+      request,
+      response => commit(types.GET_VISUALISATION_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_VISUALISATION_FAILURE, {
+        response,
+      }),
+    );
+  },
 };
 
 // mutations
@@ -102,18 +162,28 @@ const mutations = {
     state.subtitles[response.slug] = [];
     // error in response
   },
+  [types.GET_VISUALISATION_SUCCESS](initialState, {
+    response,
+  }) {
+    state.visualisation[response.scope.content] = response.data;
+  },
+  [types.GET_VISUALISATION_FAILURE](initialState, {
+    response,
+  }) {
+    state.visualisation[response.slug] = {};
+    // error in response
+  },
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
     state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
     for (const segment in response.data) {
-      state.messages[response.scope.content][segment] = response.data[segment];
+      state.messages[response.scope.content][_.ceil(segment * 0.2)] = response.data[segment];
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,
   }) {
-    state.messages[response.scope.content] = {};
     // error in response
   },
 };

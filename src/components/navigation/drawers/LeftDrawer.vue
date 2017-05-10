@@ -8,7 +8,7 @@
 
     ul.drawer-list
 
-      li.drawer-list-item(v-for="(theClass, index) in classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
+      li.drawer-list-item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
         h1.drawer-list-item--header {{ theClass.title }}
         h2.drawer-list-item--body {{ theClass.description }}
 
@@ -20,9 +20,13 @@
       li.drawer-list-item.visible
         h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
 
+      li.drawer-list-item.visible
+        h2.drawer-list-item--body(@click="toggleVideo") {{ $t('common.toggle_video') }}
+
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 import * as types from '../../../store/mutation-types';
 
 export default {
@@ -34,6 +38,9 @@ export default {
     toggleDebugMode() {
       this.$store.commit(types.TOGGLE_DEBUG_MODE);
     },
+    toggleVideo() {
+      this.$store.commit(types.TOGGLE_VIDEO);
+    },
     toggleColumnState() {
       this.$store.dispatch('toggleColumnState');
     },
@@ -43,9 +50,9 @@ export default {
     },
   },
   computed: {
-    classes() {
-      return this.$store.getters.course.classes;
-    },
+    ...mapGetters([
+      'course',
+    ]),
     state() {
       return this.$store.state.navigation.leftDrawer;
     },

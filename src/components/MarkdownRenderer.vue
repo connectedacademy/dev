@@ -1,20 +1,9 @@
 <template lang="pug">
 
-  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
-
-    .container
-
-      .markdown-nav
-        .pure-button.pure-button-primary(@click="back") Back
-        .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
-
-        a.pure-button.pure-button-primary.pull-right(:href="url" target="_blank") {{ loading ? 'Loading' : 'Open' }}
-        .pure-button.pure-button-primary.pull-right(@click="frontMatterVisible =!frontMatterVisible") FM
-
-      .content-block.white-block(v-if="frontMatterVisible")
-        pre {{ frontMatter }}
-
-      .rendered-markdown(v-html="result")
+.markdown-wrapper
+  .content-block.white-block(v-if="frontMatterVisible")
+    pre {{ frontMatter }}
+  .rendered-markdown(v-html="result")
 
 </template>
 
@@ -26,22 +15,18 @@ import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
 import MarkdownItFrontMatter from 'markdown-it-front-matter';
 
-import API from '../api';
+import API from '@/api';
 
 export default {
   name: 'markdown-renderer',
   created() {
-    this.$store.dispatch('setColumnState', 'narrow');
     this.loadMarkdown();
   },
   mounted() {
     this.$nextTick(() => { window.addEventListener('hashchange', this.loadMarkdown); });
   },
+  props: ['markdownUrl', 'frontMatterVisible'],
   methods: {
-    toggleColumnState() {
-      this.$store.dispatch('toggleColumnState');
-    },
-    back() { this.$router.go(-1); },
     loadMarkdown() {
       // Load markdown
       this.loading = true;
@@ -83,6 +68,9 @@ export default {
       return md.render(this.renderedMarkdown);
     },
     url() {
+      if (this.markdownUrl) {
+        return this.markdownUrl;
+      }
       const content = (this.$route.hash) ? this.$route.hash : this.$route.query.url;
       if (_.startsWith(content, 'http')) { return content; }
       if (_.startsWith(content, '#')) { return _.replace(content, '#', ''); }
@@ -94,7 +82,6 @@ export default {
       loading: true,
       renderedMarkdown: 'Loading...',
       frontMatter: {},
-      frontMatterVisible: false,
     };
   },
 };
@@ -105,21 +92,14 @@ export default {
 @import '../assets/stylus/shared/*'
 @import '../assets/stylus/layout/page'
 
-.markdown-nav
-  border-bottom $color-light-grey 1px solid
-  margin 0 -5px 20px -5px
-  padding-bottom 20px
-  .pure-button
-    margin 0 5px
-  a
-    color white
-
 .rendered-markdown
-  h1, h2, h3, h4, h5, p, a, li
+  h1
     nomargin()
     nopadding()
     color $color-text-dark-grey
     margin-bottom 5px
+  h1, h2, h3, h4, h5, p, a, li
+    color $color-text-dark-grey
   img
     max-width 100%
 

@@ -10,24 +10,21 @@
 
       router-view(transition transition-mode="out-in")
 
-      video-container
-
-    .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
-      p currentSection
-      pre {{ currentSection }}
-      p {{ `autoPlaying - ${$store.state.autoPlaying}` }}
-      p {{ `scrollPosition - ${$store.getters.scrollPosition}` }}
-      p {{ `currentTime - ${$store.getters.currentTime}` }}
-      p {{ `currentSectionScrollPosition - ${$store.getters.currentSectionScrollPosition}` }}
-      p {{ `currentSectionSegment - ${$store.getters.currentSectionSegment}` }}
+    debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
     burger-menu
 
     left-drawer
 
-    right-drawer(v-if="registered")
+    right-drawer(v-if="isRegistered")
 
-    message-composer
+    .action-panel.animated.fadeInUp(v-if="videoIsActive && videoEnabled")
+
+      playhead
+
+      video-container
+
+      message-composer
 
     authentication-flow
 
@@ -37,16 +34,22 @@
 
 <script>
 /* eslint-disable */
+import { mapGetters } from 'vuex';
+
+import store from './store/index';
+import * as types from './store/mutation-types';
+
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
+
 import Navigation from './components/navigation/Navigation';
 import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
+
+import DebugPanel from './components/DebugPanel';
 import MessageComposer from './components/MessageComposer';
 import VideoContainer from './components/VideoContainer';
-
-import store from './store/index';
-import * as types from './store/mutation-types';
+import Playhead from './components/Playhead';
 
 export default {
   name: 'app',
@@ -61,30 +64,26 @@ export default {
     };
   },
   computed: {
-    registered() {
-      return this.$store.getters.isRegistered;
-    },
-    pageStyle() {
-      return this.$store.getters.pageStyle;
-    },
+    ...mapGetters([
+      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled',
+    ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
       || this.$store.state.composer.visible;
     },
-    currentSection() {
-      return this.$store.getters.currentSection;
-    },
   },
   store,
   components: {
     AuthenticationFlow,
+    DebugPanel,
     Navigation,
     BurgerMenu,
     LeftDrawer,
     RightDrawer,
     MessageComposer,
     VideoContainer,
+    Playhead,
   },
   methods: {
     dismiss() {
@@ -98,19 +97,23 @@ export default {
 
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import './assets/stylus/shared/*'
 @import './assets/stylus/layout/page'
 
-.debug-panel
-  background-color red
-  color white
-  min-width 200px
-  padding 10px
-  position fixed
-  bottom 10px
-  left 10px
-  z-index 52
+.action-panel
+  background-color $color-purple
+  position absolute
+  bottom 0
+  left 50%
+  margin-left -400px
+  height 140px
+  width 800px
+  z-index 50
+  @media(max-width: 800px)
+    left 0
+    margin-left 0
+    width 100%
 
 </style>

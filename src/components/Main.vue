@@ -2,41 +2,30 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
 
-    .playhead
-
     .main-container
 
       .toolbar(v-if="currentClass")
         button.pure-button.pull-left(@click="classSelectorVisible = !classSelectorVisible")
-          //- icon(name="cog")
           | {{ `${currentClass.title}` }}
         button.pure-button.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
         .clearfix
 
-      class-selector(:class-selector-visible="classSelectorVisible")
+      class-selector(v-bind:is-visible="classSelectorVisible" v-on:setCurrentClass="hideClassSelector")
 
-      .stream(v-if="currentClass")
-        pre-content
-        class-content
-        post-class-content
-        webinar-content
-        post-webinar-content
+      content-wrapper(v-if="currentClass")
 
 </template>
 
 <script>
 /* eslint-disable */
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
 import VueScroll from 'vue-scroll';
 
 import * as types from '../store/mutation-types';
 import ClassSelector from './ClassSelector';
 
-import PreContent from './content/PreContent';
-import ClassContent from './content/ClassContent';
-import PostClassContent from './content/PostClassContent';
-import WebinarContent from './content/WebinarContent';
-import PostWebinarContent from './content/PostWebinarContent';
+import ContentWrapper from './ContentWrapper';
 
 export default {
   name: 'main',
@@ -84,11 +73,7 @@ export default {
   components: {
     VueScroll,
     ClassSelector,
-    PreContent,
-    ClassContent,
-    PostClassContent,
-    WebinarContent,
-    PostWebinarContent,
+    ContentWrapper,
   },
   watch: {
     'isAutoScrolling': {
@@ -100,7 +85,14 @@ export default {
     'currentSection': {
       handler: function(oV, nV) {
         if (oV !== nV) {
-          this.$store.dispatch('getSubtitles');
+          const request = {
+            theClass: this.$store.getters.currentClass.slug,
+            theContent: 'liveclass',// this.content.slug
+          };
+
+          this.$store.dispatch('getVisualisation', request).then(() => {
+            this.$store.dispatch('getSubtitles');
+          });
         }
         if (!this.canAutoScroll) {
           if ((oV !== nV) && (nV !== undefined)) {
@@ -132,7 +124,7 @@ export default {
 
       var self = this;
 
-      if (self.isAutoScrolling || !self.canAutoScroll || !self.$store.getters.currentSection) { return; }
+      if (self.isAutoScrolling || !self.canAutoScroll || !self.currentSection || !self.videoPlaying) { return; }
 
       self.isAutoScrolling = true;
 
@@ -158,7 +150,7 @@ export default {
 
         self.$refs.main.scrollTop = position(start, end, elapsed, duration);
 
-        if ((elapsed <= duration) && self.canAutoScroll) {
+        if ((elapsed <= duration) && self.canAutoScroll && self.videoPlaying) {
           requestAnimationFrame(step);
         }
       }
@@ -183,23 +175,14 @@ export default {
         console.log('No query passed');
       }
     },
+    hideClassSelector() {
+      this.classSelectorVisible = false
+    },
   },
   computed: {
-    course() {
-      return this.$store.getters.course;
-    },
-    currentClass() {
-      return this.$store.getters.currentClass;
-    },
-    scrollPosition() {
-      return this.$store.getters.scrollPosition;
-    },
-    currentTime() {
-      return this.$store.getters.currentTime;
-    },
-    currentSection() {
-      return this.$store.getters.currentSection;
-    },
+    ...mapGetters([
+      'course', 'currentClass', 'scrollPosition', 'currentTime', 'currentSection', 'videoPlaying',
+    ]),
     currentSectionLabel() {
       return this.$store.getters.currentSection.label;
     },
@@ -210,25 +193,6 @@ export default {
 <style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
-
-.playhead
-  &:before, &:after
-    content ''
-    border-width 20px 6px 20px 6px
-    border-style solid
-    position fixed
-    top 50%
-    margin-top -5px
-    height 0px
-    width 0px
-    z-index 50
-
-  &:before
-    left 0
-    border-color transparent transparent transparent white
-  &:after
-    right 0
-    border-color transparent white transparent transparent
 
 .toolbar
   background-color white
