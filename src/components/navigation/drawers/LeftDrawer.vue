@@ -17,17 +17,17 @@
           span(v-if="!this.$store.state.debug") {{ $t('common.enable_debug_mode') }}
           span(v-if="this.$store.state.debug") {{ $t('common.disable_debug_mode') }}
 
-      li.drawer-list-item.visible
+      li.drawer-list-item(v-bind:class="{ visible: state.visible }")
         h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
 
-      li.drawer-list-item.visible
+      li.drawer-list-item(v-bind:class="{ visible: state.visible }")
         h2.drawer-list-item--body(@click="toggleVideo") {{ $t('common.toggle_video') }}
 
 </template>
 
 <script>
 import {mapGetters} from 'vuex';
-import * as types from '../../../store/mutation-types';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'left-drawer',
@@ -46,7 +46,7 @@ export default {
     },
     setCurrentClass(newClass) {
       this.$store.commit(types.TOGGLE_LEFT_DRAWER);
-      this.$store.commit(types.SET_CURRENT_CLASS, newClass);
+      this.$store.dispatch('getSpec', newClass);
     },
   },
   computed: {
@@ -115,7 +115,7 @@ export default {
       position relative
       transition background-color 0.6s, left 0.6s, opacity 0.6s
 
-      for num in (1..5)
+      for num in (1..100)
         &:nth-child({num}n)
           left (num * -100px)
 

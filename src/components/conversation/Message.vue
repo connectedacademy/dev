@@ -2,7 +2,7 @@
 
   .message.animated.fadeIn
 
-    p {{ message.segment }}
+    p.hidden {{ message.segment }}
 
     img.profile-image(v-bind:src="message.author.profile")
 

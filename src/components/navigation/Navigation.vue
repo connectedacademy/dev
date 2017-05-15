@@ -3,6 +3,7 @@
   .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden }")
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
+    .navigation-item.pull-left(@click="toggleDebugMode") DEBUG
 
     ul.navigation-items
       router-link.navigation-item.navigation-item-page(tag="li" to="/") {{ $t('nav.course') }}
@@ -17,7 +18,7 @@
 <script>
 import {mapGetters} from 'vuex';
 
-import * as types from '../../store/mutation-types';
+import * as types from '@/store/mutation-types';
 import ProfileIcon from './ProfileIcon';
 
 export default {
@@ -39,6 +40,9 @@ export default {
   methods: {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
+    },
+    toggleDebugMode() {
+      this.$store.commit(types.TOGGLE_DEBUG_MODE);
     },
   },
 };

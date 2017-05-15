@@ -1,5 +1,5 @@
 import * as types from '../mutation-types';
-import API from '../../api';
+import API from '@/api';
 
 // initial state
 const state = {
@@ -18,12 +18,12 @@ const actions = {
   // getCourse({
   //   commit,
   // }) {
-  //   API.course.getSpec(
+  //   API.course.getSchedule(
   //     API.course,
-  //     response => commit(types.GET_COURSE_SPEC_SUCCESS, {
+  //     response => commit(types.GET_SCHEDULE_SUCCESS, {
   //       response,
   //     }),
-  //     response => commit(types.GET_COURSE_SPEC_FAILURE, {
+  //     response => commit(types.GET_SCHEDULE_FAILURE, {
   //       response,
   //     }),
   //   );
@@ -32,12 +32,12 @@ const actions = {
 
 // mutations
 const mutations = {
-  // [types.GET_COURSE_SPEC_SUCCESS](initialState, {
+  // [types.GET_SCHEDULE_SUCCESS](initialState, {
   //   response,
   // }) {
   //   state.course = response;
   // },
-  // [types.GET_COURSE_SPEC_FAILURE](initialState, {
+  // [types.GET_SCHEDULE_FAILURE](initialState, {
   //   response,
   // }) {
   //   state.course = {};

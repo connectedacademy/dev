@@ -54,14 +54,6 @@ export default new Router({
     {
       name: 'markdown',
       path: '/markdown/:url',
-      redirect: (to) => {
-        const { hash, params, query } = to;
-        return { path: '/markdown', query: { url: params.url } };
-      },
-    },
-    {
-      name: 'markdown',
-      path: '/markdown',
       component: Markdown,
     },
     {

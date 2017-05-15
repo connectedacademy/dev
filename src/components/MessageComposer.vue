@@ -20,8 +20,8 @@
 
 <script>
 import _ from 'lodash';
-import * as types from '../store/mutation-types';
-import API from '../api';
+import * as types from '@/store/mutation-types';
+import API from '@/api';
 
 export default {
   name: 'message-composer',

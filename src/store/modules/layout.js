@@ -30,6 +30,9 @@ const actions = {
 
 // mutations
 const mutations = {
+  // [types.SET_COLUMN_STATE](initialState) {
+  //   state.columns.main.state = colState;
+  // },
 };
 
 export default {

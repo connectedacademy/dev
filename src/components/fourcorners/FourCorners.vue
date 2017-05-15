@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import FourCorners from '../../fourcorners.js';
+import FourCorners from '@/fourcorners.js';
 
 export default {
   name: 'four-corners',

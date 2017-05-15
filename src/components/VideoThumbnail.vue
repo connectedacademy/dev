@@ -26,5 +26,7 @@ export default {
 
 a.thumbnail-link
   img
+    display block
     height 100px
+    margin-top 10px
 </style>

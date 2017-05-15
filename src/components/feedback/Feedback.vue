@@ -38,9 +38,10 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import VueScroll from 'vue-scroll';
 
-import API from '../../api';
-import * as types from '../../store/mutation-types';
+import API from '@/api';
+import * as types from '@/store/mutation-types';
 
+import PreviousButton from '../PreviousButton';
 import FeedbackTile from './FeedbackTile';
 import InfoDialogue from '../InfoDialogue';
 
@@ -119,6 +120,7 @@ export default {
     },
   },
   components: {
+    PreviousButton,
     InfoDialogue,
     FeedbackTile,
   },
