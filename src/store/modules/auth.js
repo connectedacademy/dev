@@ -83,7 +83,7 @@ const mutations = {
   },
   attemptAuth({ commit }, user) {
     state.user = user;
-    document.location = 'http://localhost:4000/v1/auth/login';
+    document.location = 'https://api.connectedacademy.io/v1/auth/login';
   },
 };
 
