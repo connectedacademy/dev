@@ -54,7 +54,7 @@ export default {
   },
   created() {
     // Check if user has registered
-    if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
+    if (this.isAuthenticated && !this.isRegistered) {
       this.$router.push('/registration');
     }
   },
@@ -105,7 +105,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([]),
+    ...mapGetters([
+      'isAuthenticated', 'isRegistered',
+    ]),
     classSlug() {
       return this.$route.params.classSlug;
     },

@@ -2,9 +2,10 @@
 
   .conversation-container(ref="conversationContainer" v-if="isRegistered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
-    .floating-text(v-bind:style="floatingTextStyles")
-      h5 Scroll down for the live class
-      icon(name="angle-double-down" scale="2")
+    .spacer(ref="spacer" v-bind:style="spacerStyles")
+      .floating-text
+        h5 {{ $t('common.scroll_down_for_live_class') }}
+        icon(name="angle-double-down" scale="2")
 
     .activity-visualisation(v-bind:style="activityVisualisationStyles")
       svg(width="200" v-bind:height="(segments.length * 158.0)")
@@ -34,22 +35,22 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
 
+import ScrollPoints from '@/mixins/ScrollPoints';
+
 import Subtitle from './conversation/Subtitle';
 import Message from './conversation/Message';
 
 export default {
   /* eslint-disable */
-
   name: 'conversation-container',
+  mixins: [
+    ScrollPoints,
+  ],
   mounted() {
-    const height = window.innerHeight;
-    this.spacerHeight = (height / 2.0);
-    // this.setScrollPoints();
+    this.windowResized();
+    const self = this;
     window.addEventListener('resize', () => {
-      console.log('Resized window');
-      const height = window.innerHeight;
-      this.spacerHeight = (height / 2.0);
-      // this.setScrollPoints();
+      this.windowResized(self);
     });
   },
   watch: {
@@ -65,6 +66,21 @@ export default {
     },
   },
   methods: {
+    windowResized(self) {
+      console.log('Window resized');
+
+      if (this.$refs.spacer) {
+        const windowHeight = window.innerHeight;
+        const parentOffset = this.$refs.spacer.parentElement.parentElement.offsetTop;
+        const childOffset = this.$refs.spacer.parentElement.offsetTop;
+
+        let height = (windowHeight - (parentOffset + childOffset));
+
+        this.spacerHeight = (height < 200) ? 200 : height;
+
+        this.setScrollPoints();
+      }
+    },
     getMessages(segment) {
       // console.log(`Segment - ${segment}`);
       const length = 5
@@ -86,12 +102,11 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'isRegistered', 'messages', 'subtitles',
+      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'isRegistered', 'messages', 'subtitles',
     ]),
     conversationContainerStyles() {
       return {
         height: `${this.segments.length * 158.0}px`,
-        'padding-top': `${this.spacerHeight}px`,
       };
     },
     activityVisualisationStyles() {
@@ -99,9 +114,9 @@ export default {
         top: `${this.spacerHeight}px`,
       };
     },
-    floatingTextStyles() {
+    spacerStyles() {
       return {
-        top: `${this.spacerHeight / 2.0}px`,
+        height: `${this.spacerHeight}px`,
       };
     },
     segments() {
@@ -135,15 +150,19 @@ export default {
   margin-top 10px
   padding 0
 
-  .floating-text
-    height 100px
-    position absolute
-    top 50%
-    margin-top -50px
-    text-align center
-    width 100%
-  .fa-icon
-    height 40px
+  .spacer
+    background-color white
+    border-top $color-light-grey 1px solid
+    position relative
+    .floating-text
+      height 100px
+      position absolute
+      top 50%
+      margin-top -50px
+      text-align center
+      width 100%
+    .fa-icon
+      height 40px
   h5
     nomargin()
     nopadding()

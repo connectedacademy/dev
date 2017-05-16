@@ -6,21 +6,21 @@
 
     .main-container
 
-      .container.background-white(v-if="infoVisible")
-        markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
+      .toolbar
 
-      .toolbar(v-if="currentClass")
-
-        button.pure-button.pull-left(@click="classSelectorVisible = !classSelectorVisible")
+        button.pure-button.pull-left(v-if="currentClass" @click="classSelectorVisible = !classSelectorVisible")
           | {{ `${currentClass.title}` }}
 
         button.pure-button.pull-right(v-on:click="infoVisible =! infoVisible")
           | {{ $t('course.course_info') }}
 
-        button.pure-button.pull-right(v-on:click="handleResize")
-          | Resize
+        button.pure-button.pull-right(v-on:click="setScrollPoints")
+          | Set Scroll Points
 
         .clearfix
+
+      .container.background-white(v-if="infoVisible")
+        markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       class-selector(v-bind:is-visible="classSelectorVisible" v-on:setCurrentClass="hideClassSelector")
 
@@ -34,6 +34,8 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import VueScroll from 'vue-scroll';
 
+import ScrollPoints from '@/mixins/ScrollPoints';
+
 import * as types from '@/store/mutation-types';
 import ClassSelector from './ClassSelector';
 
@@ -43,6 +45,9 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'main',
+  mixins: [
+    ScrollPoints,
+  ],
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.dispatch('checkAuth');
@@ -50,7 +55,7 @@ export default {
   },
   created() {
     // Check if user has registered
-    if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
+    if (this.isAuthenticated && !this.isRegistered) {
       this.$router.push('/registration');
     }
   },
@@ -59,11 +64,6 @@ export default {
     this.$store.dispatch('getCourse');
 
     var self = this;
-
-    // Update scroll points
-    // setInterval(function() {
-    //   self.setScrollPoints();
-    // }, 1000);
 
     // Listen for wheel events
     window.addEventListener('wheel', () => {
@@ -74,10 +74,6 @@ export default {
     // Listen for resize events
     window.addEventListener('resize', () => {
       console.log('Resized window');
-      // self.setScrollPosition(this.$refs.main, 800);
-      // self.$store.dispatch('setScrollPosition', position.scrollTop);
-      // document.getElementById('col-main').scrollTop = 1200;
-      // this.setScrollPosition(this, 1200);
     });
 
     // Attempt auto scroll every second
@@ -119,19 +115,25 @@ export default {
     },
     'currentSection': {
       handler: function(oV, nV) {
-        if (oV !== nV) {
-          const request = {
-            theClass: this.$store.getters.currentClass.slug,
-            theContent: 'liveclass',// this.content.slug
-          };
+        if (nV !== undefined) {
+          if (oV !== nV) {
+            if (nV.duration !== undefined) {
+              const request = {
+                theClass: this.$store.getters.currentClass.slug,
+                theContent: this.currentSection.slug,
+              };
 
-          this.$store.dispatch('getVisualisation', request).then(() => {
-            this.$store.dispatch('getSubtitles');
-          });
-        }
-        if (!this.canAutoScroll) {
-          if ((oV !== nV) && (nV !== undefined)) {
-            this.canAutoScroll = true;
+              this.$store.dispatch('getVisualisation', request).then(() => {
+                this.$store.dispatch('getSubtitles');
+              });
+            }
+          }
+          if (!this.canAutoScroll) {
+            if (oV !== nV) {
+              if (nV.duration !== undefined) {
+                this.canAutoScroll = true;
+              }
+            }
           }
         }
       },
@@ -139,43 +141,18 @@ export default {
     },
   },
   methods: {
-    handleResize() {
-      this.setScrollPoints();
-    },
-    setScrollPoints() {
-      for (var content of this.$store.getters.currentClass.content) {
-        if (content.slug) {
-
-          const element = document.getElementById('course-content-' + content.slug);
-
-          if (element) {
-
-            const parentOffset = element.parentElement.offsetTop;
-
-            console.log('element');
-            console.log(element);
-
-            console.log('element.offsetHeight');
-            console.log(element.offsetHeight);
-
-            this.$store.commit('setScrollPoint', {
-              slug: content.slug,
-              top: (parentOffset + element.offsetTop),
-              bottom: (parentOffset + element.offsetTop) + element.offsetHeight,
-              duration: content.duration,
-              videoId: content.video,
-              transcript: content.transcript,
-            });
-          }
-        }
-      }
-    },
     wheelMovement() {
       this.canAutoScroll = false;
       this.isAutoScrolling = false;
     },
     throttledWheelMovement: _.throttle(function(self) {
-      setTimeout(function() { self.canAutoScroll = true; }, 500);
+      setTimeout(function() {
+        if (self.currentSection !== undefined) {
+          if (self.currentSection.duration !== undefined) {
+            self.canAutoScroll = true;
+          }
+        }
+      }, 500);
     }, 500, { 'trailing': true }), // self.wheelMovementThrottle
     setScrollPosition: _.throttle(function(self, position) {
       self.$store.dispatch('setScrollPosition', position.scrollTop);
@@ -208,8 +185,8 @@ export default {
       window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
         function(fn) { window.setTimeout(fn, 15); };
 
-      var start = this.$store.getters.scrollPosition;
-      var end = this.$store.getters.currentSection.bottom;
+      var start = this.scrollPosition;
+      var end = this.currentSection.bottom;
       var duration = (((end - start) / (158.0 * 1.0)) * 5000);
 
       var step = function() {
@@ -248,13 +225,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition',
     ]),
     pastMidPoint() {
       return (this.currentSectionScrollPosition > (document.getElementById('col-main').offsetHeight / 2.0))
     },
     currentSectionLabel() {
-      return this.$store.getters.currentSection.label;
+      return this.currentSection.label;
     },
     scrollIndicatorStyle() {
       return {
@@ -280,7 +257,9 @@ export default {
 .toolbar
   background-color white
   border-bottom #e1e1e1 1px solid
-  padding 20px
+  padding 10px
+  .pure-button
+    margin 10px
 
 .stream
   padding-bottom 80px

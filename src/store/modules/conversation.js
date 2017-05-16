@@ -60,7 +60,10 @@ const getters = {
 
   },
   videoIsActive() {
-    return (globalState.getters.currentSection !== undefined);
+    if (globalState.getters.currentSection === undefined) {
+      return false;
+    }
+    return (globalState.getters.currentSection.duration !== undefined);
   },
   scrollPoints() {
     return state.scrollPoints;
