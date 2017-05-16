@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import * as types from '../store/mutation-types';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'class-selector',
   props: ['isVisible'],
   methods: {
     setCurrentClass(newClass) {
-      this.$store.commit(types.SET_CURRENT_CLASS, newClass);
+      this.$store.dispatch('getSpec', newClass);
     },
   },
   computed: {

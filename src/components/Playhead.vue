@@ -1,18 +1,22 @@
 <template lang="pug">
 
 .playhead-bobble()
-  icon(name="twitter" scale="2" class="playhead-icon")
+  icon(name="play" scale="2" class="playhead-icon" v-if="!videoPlaying")
+  icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
 
 </template>
 
 <script>
-import API from '../api';
+import API from '@/api';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'playhead',
   created() {},
   computed: {
+    ...mapGetters([
+      'videoPlaying',
+    ]),
   },
   methods: {
   },
@@ -32,6 +36,7 @@ export default {
   position absolute
   top -70px
   right -30px
+  text-align center
   z-index 53
   animate()
   @media(max-width: 860px)

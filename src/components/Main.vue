@@ -2,17 +2,29 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
 
+    .scroll-indicator(v-bind:style="scrollIndicatorStyle")
+
     .main-container
 
+      .container.background-white(v-if="infoVisible")
+        markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
+
       .toolbar(v-if="currentClass")
+
         button.pure-button.pull-left(@click="classSelectorVisible = !classSelectorVisible")
           | {{ `${currentClass.title}` }}
-        button.pure-button.pull-right(v-on:click="settingsVisible =! settingsVisible") Settings
+
+        button.pure-button.pull-right(v-on:click="infoVisible =! infoVisible")
+          | {{ $t('course.course_info') }}
+
+        button.pure-button.pull-right(v-on:click="handleResize")
+          | Resize
+
         .clearfix
 
       class-selector(v-bind:is-visible="classSelectorVisible" v-on:setCurrentClass="hideClassSelector")
 
-      content-wrapper(v-if="currentClass")
+      course-content(v-if="currentClass")
 
 </template>
 
@@ -22,10 +34,12 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import VueScroll from 'vue-scroll';
 
-import * as types from '../store/mutation-types';
+import * as types from '@/store/mutation-types';
 import ClassSelector from './ClassSelector';
 
-import ContentWrapper from './ContentWrapper';
+import CourseContent from '@/components/conversation/CourseContent';
+
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'main',
@@ -46,10 +60,24 @@ export default {
 
     var self = this;
 
+    // Update scroll points
+    // setInterval(function() {
+    //   self.setScrollPoints();
+    // }, 1000);
+
     // Listen for wheel events
     window.addEventListener('wheel', () => {
       self.throttledWheelMovement(self);
       self.wheelMovement(self);
+    });
+
+    // Listen for resize events
+    window.addEventListener('resize', () => {
+      console.log('Resized window');
+      // self.setScrollPosition(this.$refs.main, 800);
+      // self.$store.dispatch('setScrollPosition', position.scrollTop);
+      // document.getElementById('col-main').scrollTop = 1200;
+      // this.setScrollPosition(this, 1200);
     });
 
     // Attempt auto scroll every second
@@ -61,7 +89,7 @@ export default {
     return {
       navTitle: 'Connected Academy - Main',
       classSelectorVisible: true,
-      settingsVisible: false,
+      infoVisible: false,
       canAutoScroll: false,
       isAutoScrolling: false,
       reattemptAutoScroll: 500,
@@ -73,9 +101,16 @@ export default {
   components: {
     VueScroll,
     ClassSelector,
-    ContentWrapper,
+    CourseContent,
+    MarkdownRenderer,
   },
   watch: {
+    'videoReady': {
+      handler: function(oV, nV) {
+        this.attemptAutoScroll();
+      },
+      deep: true,
+    },
     'isAutoScrolling': {
       handler: function(oV, nV) {
         this.$store.commit('setAutoPlaying', nV);
@@ -104,27 +139,58 @@ export default {
     },
   },
   methods: {
+    handleResize() {
+      this.setScrollPoints();
+    },
+    setScrollPoints() {
+      for (var content of this.$store.getters.currentClass.content) {
+        if (content.slug) {
+
+          const element = document.getElementById('course-content-' + content.slug);
+
+          if (element) {
+
+            const parentOffset = element.parentElement.offsetTop;
+
+            console.log('element');
+            console.log(element);
+
+            console.log('element.offsetHeight');
+            console.log(element.offsetHeight);
+
+            this.$store.commit('setScrollPoint', {
+              slug: content.slug,
+              top: (parentOffset + element.offsetTop),
+              bottom: (parentOffset + element.offsetTop) + element.offsetHeight,
+              duration: content.duration,
+              videoId: content.video,
+              transcript: content.transcript,
+            });
+          }
+        }
+      }
+    },
     wheelMovement() {
       this.canAutoScroll = false;
       this.isAutoScrolling = false;
     },
     throttledWheelMovement: _.throttle(function(self) {
       setTimeout(function() { self.canAutoScroll = true; }, 500);
-    }, 500), // self.wheelMovementThrottle
+    }, 500, { 'trailing': true }), // self.wheelMovementThrottle
     setScrollPosition: _.throttle(function(self, position) {
       self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 500), // self.scrollPositionThrottle
+    }, 500, { 'trailing': true }), // self.scrollPositionThrottle
     onScroll(e, position) {
       this.setScrollPosition(this, position);
     },
     leaveClass() {
-      this.$store.commit(types.SET_CURRENT_CLASS, undefined);
+      this.$store.dispatch('getSpec', undefined);
     },
     attemptAutoScroll() {
 
       var self = this;
 
-      if (self.isAutoScrolling || !self.canAutoScroll || !self.currentSection || !self.videoPlaying) { return; }
+      if (self.isAutoScrolling || !self.canAutoScroll || !self.currentSection || !self.videoPlaying || !self.videoReady) { return; }
 
       self.isAutoScrolling = true;
 
@@ -133,6 +199,7 @@ export default {
       var position = function(start, end, elapsed, duration) {
   	    if (elapsed > duration) return end;
   	    // return start + (end - start) * easingFunction(elapsed / duration); // Easing
+
   	    return start + (end - start) * (elapsed / duration); // Linear
     	}
 
@@ -161,7 +228,7 @@ export default {
         console.log(`${query.class} - ${query.content} - ${query.segment}`);
 
         // Set the class
-        this.$store.commit(types.SET_CURRENT_CLASS, query.class);
+        this.$store.dispatch('getSpec', query.class);
 
         // Set the current section/scroll position
         var self = this;
@@ -181,10 +248,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'scrollPosition', 'currentTime', 'currentSection', 'videoPlaying',
+      'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition',
     ]),
+    pastMidPoint() {
+      return (this.currentSectionScrollPosition > (document.getElementById('col-main').offsetHeight / 2.0))
+    },
     currentSectionLabel() {
       return this.$store.getters.currentSection.label;
+    },
+    scrollIndicatorStyle() {
+      return {
+        top: `${this.offsetScrollPosition}px`,
+      };
     },
   },
 };
@@ -193,6 +268,14 @@ export default {
 <style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
+
+.scroll-indicator
+  background-color red
+  left 0
+  position absolute
+  height 2px
+  z-index 100
+  width 20px
 
 .toolbar
   background-color white

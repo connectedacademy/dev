@@ -3,13 +3,17 @@
 .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
   p currentSection
   pre {{ currentSection }}
+  p scrollPoints
+  pre {{ scrollPoints }}
   p {{ `videoEnabled - ${videoEnabled}` }}
   p {{ `autoPlaying - ${autoPlaying}` }}
   p {{ `scrollPosition - ${scrollPosition}` }}
+  p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
   p {{ `currentTime - ${currentTime}` }}
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
   p {{ `currentSegment - ${currentSegment}` }}
+  button.pure-button(@click="setPosition") Set Position
 
 </template>
 
@@ -27,14 +31,23 @@ export default {
       'videoEnabled',
       'autoPlaying',
       'scrollPosition',
+      'offsetScrollPosition',
       'currentTime',
       'currentSectionScrollPosition',
       'currentSegmentGroup',
       'currentSegment',
+      'scrollPoints',
     ]),
   },
   components: {},
-  methods: {},
+  methods: {
+    setPosition() {
+      const ele = document.getElementById('col-main');
+      alert(this.$store.getters.currentSection.top);
+      ele.scrollTop = `${this.$store.getters.currentSection.top}px`;
+
+    },
+  },
 };
 </script>
 
@@ -49,7 +62,9 @@ export default {
   padding 10px
   position fixed
   bottom 10px
+  top 100px
   left 10px
   z-index 52
+  overflow scroll
 
 </style>

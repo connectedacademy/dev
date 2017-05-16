@@ -1,5 +1,5 @@
 import * as types from '../mutation-types';
-import API from '../../api';
+import API from '@/api';
 
 // initial state
 const state = {
@@ -18,48 +18,41 @@ const getters = {
     return state.hubs;
   },
   currentClass() {
-    if (state.current_class === undefined) { return undefined; }
-    return _.find(state.course.classes, ['slug', state.current_class]);
+    return state.current_class;
   },
-  coursePreContent() {
+  courseContent() {
     if (state.current_class === undefined) { return undefined; }
-    let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.filter(result.content, item => (item.content_type === 'pre'));
-  },
-  courseClassContent() {
-    if (state.current_class === undefined) { return undefined; }
-    let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.head(_.filter(result.content, item => (item.content_type === 'class')));
-  },
-  coursePostClassContent() {
-    if (state.current_class === undefined) { return undefined; }
-    let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.filter(result.content, item => (item.content_type === 'postclass'));
-  },
-  courseWebinarContent() {
-    if (state.current_class === undefined) { return undefined; }
-    let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.head(_.filter(result.content, item => (item.content_type === 'webinar')));
-  },
-  coursePostWebinarContent() {
-    if (state.current_class === undefined) { return undefined; }
-    let result = _.find(state.course.classes, ['slug', state.current_class]);
-    return _.filter(result.content, item => (item.content_type === 'postwebinar'));
+    return _.filter(state.current_class.content, item => {
+      // Exclude titles from course content
+      return !_.includes(['title'], item.content_type);
+    });
   },
 };
 
-/* eslint-disable */
 // actions
 const actions = {
   getCourse({
     commit,
   }) {
-    API.course.getSpec(
+    API.course.getSchedule(
       API.course,
-      response => commit(types.GET_COURSE_SPEC_SUCCESS, {
+      response => commit(types.GET_SCHEDULE_SUCCESS, {
         response,
       }),
-      response => commit(types.GET_COURSE_SPEC_FAILURE, {
+      response => commit(types.GET_SCHEDULE_FAILURE, {
+        response,
+      }),
+    );
+  },
+  getSpec({
+    commit,
+  }, classSlug) {
+    API.course.getSpec(
+      classSlug,
+      response => commit(types.GET_SPEC_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_SPEC_FAILURE, {
         response,
       }),
     );
@@ -81,15 +74,26 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.GET_COURSE_SPEC_SUCCESS](initialState, {
+  [types.GET_SCHEDULE_SUCCESS](initialState, {
     response,
   }) {
     state.course = response;
   },
-  [types.GET_COURSE_SPEC_FAILURE](initialState, {
+  [types.GET_SCHEDULE_FAILURE](initialState, {
     response,
   }) {
     state.course = {};
+    // error in response
+  },
+  [types.GET_SPEC_SUCCESS](initialState, {
+    response,
+  }) {
+    state.current_class = response;
+  },
+  [types.GET_SPEC_FAILURE](initialState, {
+    response,
+  }) {
+    state.current_class = {};
     // error in response
   },
   [types.GET_HUBS_SUCCESS](initialState, {
@@ -102,9 +106,6 @@ const mutations = {
   }) {
     state.hubs = {};
     // error in response
-  },
-  [types.SET_CURRENT_CLASS](initialState, selectedClass) {
-    state.current_class = selectedClass;
   },
   [types.SET_COURSE_LANG](initialState, currentLang) {
     state.current_lang = currentLang;

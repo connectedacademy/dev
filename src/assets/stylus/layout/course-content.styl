@@ -1,9 +1,9 @@
 @require "../shared/*"
 
 .course-content
+  radius(6px)
   background-color white
-  border-bottom darken($color-purple, 20%) 6px solid
-  margin 0
+  margin 20px 0
   padding 0
   position relative
   &:before
@@ -42,7 +42,9 @@
     padding 10px 20px
   .course-content--footer
     background-color transparent
-    padding 10px 20px 20px 20px
+    border-top $color-light-grey 1px solid
+    margin-top 10px
+    padding 15px
 
 .course-content.pre-content:before
   background-color #FCC04E
@@ -58,11 +60,3 @@
 
 .course-content.postwebinar-content:before
   background-color #F97A66
-
-
-
-.course-content-wrapper
-  .conversation-container
-    // opacity 0.5
-  &.active .conversation-container
-    // opacity 1

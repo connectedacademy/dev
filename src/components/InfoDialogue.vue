@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import API from '../api';
+import API from '@/api';
 import { mapGetters } from 'vuex';
 
 export default {

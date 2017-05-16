@@ -89,7 +89,7 @@ import _ from 'lodash';
 import validator from 'validator';
 import vueSlider from 'vue-slider-component';
 
-import API from '../../api';
+import API from '@/api';
 
 export default {
   name: 'registration',

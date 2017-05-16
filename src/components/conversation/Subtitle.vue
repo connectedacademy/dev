@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .subtitle.active(v-bind:style="subtitleStyle" @click="quote")
+  .subtitle(v-bind:class="{ 'active': active }" v-bind:style="subtitleStyle" @click="quote")
+    p.subtitle-meta.hidden {{ start }} {{ end }}
     h1(v-html="subtitle.text")
-    p.hidden {{ subtitle.start }} {{ subtitle.end }}
 
 </template>
 
@@ -15,9 +15,18 @@ export default {
   props: ['subtitle'],
   computed: {
     subtitleStyle() {
-      const duration = _.ceil((this.subtitle.end - this.subtitle.start) * (158.0 * 0.2));
-      const topVal = _.ceil(this.subtitle.start * (158.0 * 0.2));
+      const duration = _.floor((this.subtitle.end - this.subtitle.start) * (158.0 * 0.2));
+      const topVal = _.floor((this.subtitle.start * (158.0 * 0.2)));
       return { top: `${topVal}px`, height: `${duration}px` };
+    },
+    start() {
+      return this.subtitle.start;
+    },
+    end() {
+      return this.subtitle.end;
+    },
+    active() {
+      return ((this.$store.getters.currentTime > this.start) && (this.$store.getters.currentTime < this.end));
     },
   },
   methods: {
@@ -33,15 +42,28 @@ export default {
 @import '../../assets/stylus/shared/*'
 
 .subtitle
-  /*border-left $color-primary 3px solid*/
   left 0px
   position absolute
-  max-width 300px
   padding 0 10px
   h1
+    nomargin()
+    nopadding()
+    color #999
     font-size 1em
+    animate()
+  p.subtitle-meta
+    font-size 0.6em
+    line-height 10px
+    position absolute
+    top -10px
   &:hover
     color $color-purple
     cursor pointer
+  &.active
+    h1
+      /*color $color-primary*/
+      color #111
+    p.subtitle-meta
+      color $color-text-grey
 
 </style>

@@ -2,13 +2,16 @@
 
   .conversation-container(ref="conversationContainer" v-if="isRegistered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
-    .subtitle-container
+    .floating-text(v-bind:style="floatingTextStyles")
+      h5 Scroll down for the live class
+      icon(name="angle-double-down" scale="2")
 
-      .activity-visualisation
-        svg(width="200" v-bind:height="(segments.length * 158.0)")
-          g
-            //- polygon(v-bind:points="visualisationPoints")
-            path(v-bind:d="visualisationPoints")
+    .activity-visualisation(v-bind:style="activityVisualisationStyles")
+      svg(width="200" v-bind:height="(segments.length * 158.0)")
+        g
+          path(v-bind:d="visualisationPoints")
+
+    .subtitle-container
 
       subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
@@ -29,7 +32,7 @@
 <script>
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-import * as types from '../store/mutation-types';
+import * as types from '@/store/mutation-types';
 
 import Subtitle from './conversation/Subtitle';
 import Message from './conversation/Message';
@@ -39,11 +42,14 @@ export default {
 
   name: 'conversation-container',
   mounted() {
-    this.setScrollPoints();
-  },
-  ready() {
-    this.$nextTick(() => {
-      this.getPosition();
+    const height = window.innerHeight;
+    this.spacerHeight = (height / 2.0);
+    // this.setScrollPoints();
+    window.addEventListener('resize', () => {
+      console.log('Resized window');
+      const height = window.innerHeight;
+      this.spacerHeight = (height / 2.0);
+      // this.setScrollPoints();
     });
   },
   watch: {
@@ -59,20 +65,8 @@ export default {
     },
   },
   methods: {
-    setScrollPoints() {
-      const element = this.$refs.conversationContainer;
-
-      this.$store.commit('setScrollPoint', {
-        slug: this.content.slug,
-        top: (element.offsetParent.offsetTop + element.offsetTop),
-        bottom: (element.offsetParent.offsetTop + element.offsetTop) + element.offsetHeight,
-        duration: this.content.duration,
-        videoId: this.content.video,
-        transcript: this.content.transcript,
-      });
-    },
     getMessages(segment) {
-      console.log(`Segment - ${segment}`);
+      // console.log(`Segment - ${segment}`);
       const length = 5
       const request = {
         theClass: this.$store.getters.currentClass.slug,
@@ -97,6 +91,17 @@ export default {
     conversationContainerStyles() {
       return {
         height: `${this.segments.length * 158.0}px`,
+        'padding-top': `${this.spacerHeight}px`,
+      };
+    },
+    activityVisualisationStyles() {
+      return {
+        top: `${this.spacerHeight}px`,
+      };
+    },
+    floatingTextStyles() {
+      return {
+        top: `${this.spacerHeight / 2.0}px`,
       };
     },
     segments() {
@@ -108,6 +113,7 @@ export default {
     return {
       navTitle: 'Connected Academy - Main',
       messagePriority: true,
+      spacerHeight: 0,
     };
   },
   components: {
@@ -123,9 +129,28 @@ export default {
 
 .conversation-container
   background-color #f2f2f2
-  min-height 500px
+  min-height 100px
   overflow hidden
+  position relative
+  margin-top 10px
   padding 0
+
+  .floating-text
+    height 100px
+    position absolute
+    top 50%
+    margin-top -50px
+    text-align center
+    width 100%
+  .fa-icon
+    height 40px
+  h5
+    nomargin()
+    nopadding()
+    color #444
+    height 60px
+    line-height 60px
+    width 100%
 
   .activity-visualisation
     position absolute
@@ -134,13 +159,10 @@ export default {
     z-index 0
     svg
       path
-        stroke $color-primary
-        fill $color-primary
+        stroke black // $color-primary
+        fill black // $color-primary
         /*stroke-width 2px*/
-      polygon
-        fill $color-purple
-        opacity 0.2
-
+        opacity 0.15
 
   .subtitle-container, .messages-container
     float left

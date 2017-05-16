@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import * as types from '../mutation-types';
-import API from '../../api';
+import API from '@/api';
 import globalState from '../index';
 
 // initial state
@@ -31,6 +31,7 @@ const getters = {
     if (!globalState.getters.currentSection) { return []; }
 
     let visualisation = state.visualisation[globalState.getters.currentSection.slug];
+
     const segmentHeight = (158.0 * 1);
     const width = 200.0;
 
@@ -47,17 +48,10 @@ const getters = {
       }
     });
 
-    visualisation = newVis;
+    // visualisation = newVis;
 
     let points = _.reduce(visualisation, function(result, value, key) {
-
       return result + `S ${value * width} ${key * segmentHeight - 50}, ${value * width} ${key * segmentHeight + 50} `;
-
-      // return result + `L${value * width} ${key * segmentHeight} `;
-      // return result + `C ${value * width} ${key * segmentHeight + 15}, ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight} `;
-      // return result + `M10                       10               C 20                       20,               40                       20,               50                       10`;
-      // return result + `M ${value * width} ${key * segmentHeight} `;
-      //
     }, "M0 0 ");
 
     points += `L 0 ${(_.size(visualisation) * segmentHeight)} Z`;
@@ -74,11 +68,11 @@ const getters = {
   currentSection() {
     if (state.scrollPoints.length === 0) { return undefined; }
 
-    const scrollPosition = globalState.getters.scrollPosition;
+    const offsetScrollPosition = globalState.getters.offsetScrollPosition;
 
     for (const key in state.scrollPoints ) {
       const scrollPoint = state.scrollPoints[key];
-      if ((scrollPosition > scrollPoint.top) && (scrollPosition < scrollPoint.bottom)) {
+      if ((offsetScrollPosition > scrollPoint.top) && (offsetScrollPosition < scrollPoint.bottom)) {
         return scrollPoint;
       }
     };
@@ -87,7 +81,7 @@ const getters = {
   },
   currentSectionScrollPosition() {
     if (!globalState.getters.currentSection) { return 0; }
-    return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
+    return globalState.getters.offsetScrollPosition - globalState.getters.currentSection.top;
   },
   currentSegmentGroup() {
     if (!globalState.getters.currentSection) { return 0; }

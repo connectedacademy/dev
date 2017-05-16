@@ -67,5 +67,10 @@ export default {
     load_course: 'Load Course',
     load_hubs: 'Load Hubs',
     current_course_language: 'Current course language',
+    course_info: 'Course Info',
+  },
+  submission: {
+    view_submissions: 'View Submissions',
+    make_a_submission: 'Make a Submission',
   },
 };

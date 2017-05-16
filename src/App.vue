@@ -12,17 +12,19 @@
 
     debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
+    section-navigator
+
     burger-menu
 
     left-drawer
 
     right-drawer(v-if="isRegistered")
 
-    .action-panel.animated.fadeInUp(v-if="videoIsActive && videoEnabled")
+    #action-panel(v-if="videoIsActive")
 
       playhead
 
-      video-container
+      video-container(v-if="videoEnabled")
 
       message-composer
 
@@ -42,6 +44,7 @@ import * as types from './store/mutation-types';
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
 
 import Navigation from './components/navigation/Navigation';
+import SectionNavigator from './components/navigation/SectionNavigator';
 import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
@@ -78,6 +81,7 @@ export default {
     AuthenticationFlow,
     DebugPanel,
     Navigation,
+    SectionNavigator,
     BurgerMenu,
     LeftDrawer,
     RightDrawer,
@@ -102,7 +106,7 @@ export default {
 @import './assets/stylus/shared/*'
 @import './assets/stylus/layout/page'
 
-.action-panel
+#action-panel
   background-color $color-purple
   position absolute
   bottom 0

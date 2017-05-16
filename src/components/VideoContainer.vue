@@ -7,10 +7,9 @@
 </template>
 
 <script>
-/* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-import * as types from '../store/mutation-types';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'video-container',
@@ -22,7 +21,6 @@ export default {
   },
   data() {
     return {
-      msg: 'Welcome to Connected Academy',
       pHeight: 90,
       pWidth: 160,
     };
@@ -31,36 +29,32 @@ export default {
     currentTime(oldTime, newTime) {
       this.seek(this, this.currentTime);
     },
+
   },
   methods: {
+    change() {},
     ready(player) {
-      console.log('READY');
       this.player = player;
-      this.play();
+      this.player.seekTo(this.currentTime);
+      this.$store.commit(types.VIDEO_READY);
     },
     playing(player) {
-      console.log('PLAYING');
       this.$store.commit(types.PLAY_VIDEO);
     },
-    change() {
-    },
     ended() {
-      console.log('ENDED');
       this.$store.commit(types.PAUSE_VIDEO);
     },
     buffering() {
-      console.log('BUFFERING');
       this.$store.commit(types.PAUSE_VIDEO);
     },
     paused() {
-      console.log('PAUSE');
       this.$store.commit(types.PAUSE_VIDEO);
     },
     seek: _.throttle(function(self, position) {
       if (!this.$store.state.autoPlaying && self.player) {
         self.player.seekTo(position);
       }
-    }, 500),
+    }, 100, { leading: false, trailing: true }),
     getWindowWidth(event) {
       if (document.documentElement.clientWidth < 800) {
         const percentage = 0.8;

@@ -1,7 +1,6 @@
 <template lang="pug">
 
-  .previous-button(@click="previous")
-    | Previous Page
+  .previous-button(@click="previous") {{ $t('common.previous_page') }}
 
 </template>
 
