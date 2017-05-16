@@ -114,9 +114,10 @@ export default {
       deep: true,
     },
     'currentSection': {
-      handler: function(oV, nV) {
+      handler: function(nV, oV) {
         if (nV !== undefined) {
           if (oV !== nV) {
+            this.setScrollPoints();
             if (nV.duration !== undefined) {
               const request = {
                 theClass: this.$store.getters.currentClass.slug,

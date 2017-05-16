@@ -2,6 +2,7 @@
 export default {
   methods: {
     setScrollPoints() {
+      console.log('Setting scroll points');
       for (var content of this.$store.getters.currentClass.content) {
         if (content.slug) {
 
