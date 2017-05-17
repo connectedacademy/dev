@@ -88,7 +88,7 @@ export default {
       navTitle: 'Connected Academy - Main',
       infoVisible: false,
       isAutoScrolling: false,
-      reattemptAutoScroll: 2000,
+      reattemptAutoScroll: 500,
     };
   },
   components: {

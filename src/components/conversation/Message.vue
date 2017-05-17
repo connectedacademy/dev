@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .message.animated.fadeIn
+  .message.animated.flipInX
 
     img.profile-image(v-bind:src="message.author.profile")
 

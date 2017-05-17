@@ -35,7 +35,7 @@ const getters = {
     const segmentHeight = 158.0;
     const handleOffset = (segmentHeight / 4.0);
     const width = 200.0;
-    const parentOffsetTop = (158.0 / 2.0);
+    const parentOffsetTop = (segmentHeight / 2.0);
 
     let chunkedVis = _.chunk(_.values(visualisation), 5);
 
@@ -62,7 +62,7 @@ const getters = {
     let visualisation = state.visualisation[globalState.getters.currentSection.slug];
 
     const segmentHeight = 158.0;
-    const offsetTop = (158.0 / 2.0);
+    const offsetTop = (segmentHeight / 2.0);
 
     let chunkedVis = _.chunk(_.values(visualisation), 5);
 

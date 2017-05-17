@@ -25,7 +25,7 @@
 
         .message-wrapper(v-if="messages && messages[segment]")
 
-          .message-count(v-bind:class="{ none: (messages[segment].info.count === 0), low: (messages[segment].info.count > 0), medium: (messages[segment].info.count > 2), high: (messages[segment].info.count > 4) }") {{ messages[segment].info.count }}
+          .message-count.animated.fadeIn(v-bind:class="{ none: (messages[segment].info.count === 0), low: (messages[segment].info.count > 0), medium: (messages[segment].info.count > 2), high: (messages[segment].info.count > 4) }") {{ messages[segment].info.count }}
 
           message(v-if="messages[segment].info.count > 0" v-bind:message="messages[segment].message")
 
@@ -59,7 +59,12 @@ export default {
   watch: {
     currentSegmentGroup(nV, oV) {
       if (oV !== nV) {
-        this.getMessagesSummary(nV);
+        const backFill = 10;
+        if (nV > backFill) {
+          for (var i = 0; i < backFill; i++) {
+            this.getMessagesSummary((nV - i));
+          }
+        }
       }
     },
   },
@@ -83,17 +88,22 @@ export default {
       }
     },
     getMessagesSummary(segmentGroup) {
-      const length = 5;
 
-      let startSegment = (segmentGroup * 5);
-      startSegment -= (startSegment % 5);
+      if (this.messages) {
+        // Cancel request if we alredy have messages for segment
+        if (this.messages[segmentGroup]) {
+          return;
+        }
 
-      startSegment -= 5;
+        // Cancel request if we are scrolling!
+        if (!this.canAutoScroll) {
+          return;
+        }
+      }
 
-      let endSegment = (startSegment) + (length - 1);
-      // startSegment = (startSegment > 20) ? (startSegment - 20) : 0;
-
-      console.log(`Segment - ${startSegment}`);
+      const segmentCount = (1.0 / 0.2);
+      const startSegment = (segmentGroup * segmentCount) - ((segmentGroup * segmentCount) % segmentCount);
+      const endSegment = (startSegment) + (segmentCount - 1);
 
       const request = {
         theClass: this.$store.getters.currentClass.slug,
@@ -103,7 +113,6 @@ export default {
       };
 
       if (((startSegment % length) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
-      // if (this.content.slug === this.$store.getters.currentSection.slug) {
         this.$store.dispatch('getMessagesSummary', request);
       }
     },
@@ -114,7 +123,7 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'visualisationLabels', 'isRegistered', 'messages', 'subtitles',
+      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'visualisationLabels', 'isRegistered', 'messages', 'subtitles', 'canAutoScroll',
     ]),
     conversationContainerStyles() {
       return {
