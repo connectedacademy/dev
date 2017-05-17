@@ -12,7 +12,8 @@
 
     debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
-    section-navigator
+    section-navigator(v-bind:scroll-points="scrollPoints")
+      | {{ scrollPoints }}
 
     burger-menu
 
@@ -57,7 +58,6 @@ import Playhead from './components/Playhead';
 export default {
   name: 'app',
   created() {
-    this.$store.dispatch('setColumnState', 'wide');
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');
   },
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled',
+      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled', 'scrollPoints',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible

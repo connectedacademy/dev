@@ -3,10 +3,10 @@
 .course-content
   radius(4px)
   background-color white
-  margin 20px 0
+  margin 40px 0 0 0
   padding 0
   position relative
-  &:before
+  .type-indicator
     radius(50%)
     content ''
     background-color $color-primary
@@ -15,6 +15,8 @@
     position absolute
     top 10px
     right 10px
+    &.active
+      background-color $color-success
   h1.content-title
     nomargin()
     nopadding()
@@ -45,18 +47,3 @@
     border-top $color-light-grey 1px solid
     margin-top 10px
     padding 15px
-
-.course-content.pre-content:before
-  background-color #FCC04E
-
-.course-content.class-content:before
-  background-color $color-primary
-
-.course-content.postclass-content:before
-  background-color $color-primary
-
-.course-content.webinar-content:before
-  background-color #F97A66
-
-.course-content.postwebinar-content:before
-  background-color #F97A66

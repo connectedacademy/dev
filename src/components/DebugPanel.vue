@@ -1,14 +1,17 @@
 <template lang="pug">
 
 .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+  p {{ `scrollPosition - ${scrollPosition}` }}
+  p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
   p currentSection
   pre {{ currentSection }}
+  p currentActiveSection
+  pre {{ currentActiveSection }}
   p scrollPoints
   pre {{ scrollPoints }}
   p {{ `videoEnabled - ${videoEnabled}` }}
   p {{ `autoPlaying - ${autoPlaying}` }}
-  p {{ `scrollPosition - ${scrollPosition}` }}
-  p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
+  p {{ `canAutoScroll - ${canAutoScroll}` }}
   p {{ `currentTime - ${currentTime}` }}
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
@@ -28,8 +31,10 @@ export default {
   computed: {
     ...mapGetters([
       'currentSection',
+      'currentActiveSection',
       'videoEnabled',
       'autoPlaying',
+      'canAutoScroll',
       'scrollPosition',
       'offsetScrollPosition',
       'currentTime',

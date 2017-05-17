@@ -48,7 +48,7 @@ const getters = {
       }
     });
 
-    // visualisation = newVis;
+    visualisation = newVis;
 
     let points = _.reduce(visualisation, function(result, value, key) {
       return result + `S ${value * width} ${key * segmentHeight - 50}, ${value * width} ${key * segmentHeight + 50} `;
@@ -68,6 +68,20 @@ const getters = {
   scrollPoints() {
     return state.scrollPoints;
   },
+  currentActiveSection() {
+    if (state.scrollPoints.length === 0) { return undefined; }
+
+    const offsetScrollPosition = globalState.getters.scrollPosition;
+
+    for (const key in state.scrollPoints ) {
+      const scrollPoint = state.scrollPoints[key];
+      if ((offsetScrollPosition > scrollPoint.sectionTop) && (offsetScrollPosition < scrollPoint.bottom)) {
+        return scrollPoint;
+      }
+    };
+
+    return undefined;
+  },
   currentSection() {
     if (state.scrollPoints.length === 0) { return undefined; }
 
@@ -76,7 +90,9 @@ const getters = {
     for (const key in state.scrollPoints ) {
       const scrollPoint = state.scrollPoints[key];
       if ((offsetScrollPosition > scrollPoint.top) && (offsetScrollPosition < scrollPoint.bottom)) {
-        return scrollPoint;
+        if (_.includes(['class', 'webinar'], scrollPoint.content_type)) {
+          return scrollPoint;
+        }
       }
     };
 
@@ -142,8 +158,13 @@ const actions = {
 
 // mutations
 const mutations = {
+  resetScrollPoints(initialState) {
+    state.scrollPoints = {};
+  },
   setScrollPoint(initialState, scrollPoint) {
     state.scrollPoints[scrollPoint.slug] = scrollPoint;
+    state.scrollPoints = initialState.scrollPoints;
+    console.log('Recalculating scroll points');
   },
   clearScrollPoints(initialState) {
     state.scrollPoints = [];

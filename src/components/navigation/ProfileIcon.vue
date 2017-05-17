@@ -1,7 +1,7 @@
 <template lang="pug">
 
-	.profile-icon.animated.bounceIn(v-on:click="showProfile")
-		.profile-image(v-bind:style="{ 'background-image': profile }")
+  .profile-icon.animated.bounceIn(v-on:click="showProfile")
+    .profile-image(v-bind:style="{ 'background-image': profile }")
 
 </template>
 

@@ -3,13 +3,8 @@
   .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden }")
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
-    .navigation-item.pull-left(@click="toggleDebugMode") DEBUG
-
-    ul.navigation-items
-      router-link.navigation-item.navigation-item-page(tag="li" to="/") {{ $t('nav.course') }}
-      router-link.navigation-item.navigation-item-page(tag="li" to="/schedule") {{ $t('nav.schedule') }}
-      router-link.navigation-item.navigation-item-page(tag="li" to="/about") {{ $t('nav.about') }}
-      li.navigation-item.navigation-item-page.pull-right(v-if="!isRegistered" v-on:click="showAuth") {{ $t('auth.login') }}
+    .navigation-item.pull-left(@click="toggleDebugMode")
+      icon(name="wrench" style="color: white; padding: 0 20px")
 
     profile-icon(v-if="isRegistered")
 
@@ -56,7 +51,7 @@ export default {
   animate()
   background-color $navigation-background-color
   box-sizing border-box
-  height 120px
+  height 60px
   padding 0
   position relative
   text-align center

@@ -28,27 +28,14 @@ export default {
   name: 'markdown-renderer',
   watch: {
     '$route': {
-      handler: function(oV, nV) {
+      handler: function(nV, oV) {
         this.loadMarkdown();
       },
       deep: true,
     },
   },
   mounted() {
-    console.log('Fetching course');
-    this.$store.dispatch('getCourse').then(() => {
-      API.course.getSchedule(
-        API.course,
-        response => {
-          console.log('Loading markdown');
-          this.loadMarkdown();
-        },
-        response => {
-          console.log('Failed to load course and therefore markdown');
-        },
-      );
-
-    });
+    this.loadMarkdown();
   },
   props: ['markdownUrl', 'frontMatterVisible'],
   methods: {
@@ -148,6 +135,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'course'
+    ]),
     rawMarkdown() {
       var iterator = require('markdown-it-for-inline');
 

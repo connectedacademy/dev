@@ -51,10 +51,10 @@ export default {
       this.$store.commit(types.PAUSE_VIDEO);
     },
     seek: _.throttle(function(self, position) {
-      if (!this.$store.state.autoPlaying && self.player) {
+      if (!this.canAutoScroll && self.player) {
         self.player.seekTo(position);
       }
-    }, 100, { leading: false, trailing: true }),
+    }, 500, { leading: false, trailing: true }),
     getWindowWidth(event) {
       if (document.documentElement.clientWidth < 800) {
         const percentage = 0.8;
@@ -72,7 +72,7 @@ export default {
       return this.$store.getters.currentSection.videoId;
     },
     ...mapGetters([
-      'videoIsActive', 'videoEnabled', 'currentTime',
+      'videoIsActive', 'videoEnabled', 'currentTime', 'canAutoScroll',
     ]),
     playerStyle() {
       return {

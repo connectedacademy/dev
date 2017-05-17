@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  router-link.pure-button.pure-button-primary(:to="url") {{ $t('common.explore_content') }}
+  router-link.pure-button(:to="url") {{ $t('common.explore_content') }}
 
 </template>
 
@@ -14,14 +14,8 @@ export default {
   computed: {
     url() {
       const encodedURI = encodeURIComponent(`${this.$store.getters.currentClass.dir}/${this.mdContent.url}`);
-      console.log('encodedURI');
-      console.log(encodedURI);
       return `/markdown/${encodedURI}`;
     },
   },
 };
 </script>
-
-<style lang="stylus" scoped>
-
-</style>

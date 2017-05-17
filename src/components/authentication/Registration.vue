@@ -251,7 +251,7 @@ ul.hub-selector
       nopadding()
 
     h1.hub-title
-    color white
+      color white
       font-size 1.2em
       line-height 30px
     h2.hub-timezone

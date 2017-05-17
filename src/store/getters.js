@@ -17,11 +17,7 @@ export const scrollPosition = (state) => {
 export const offsetScrollPosition = (state) => {
   if (!document.getElementById('col-main')) { return state.scrollPosition; }
   let offset = (document.getElementById('col-main')) ? document.getElementById('col-main').offsetHeight : 0;
-  offset -= 140; // action-panel height
-  // const val = (document.getElementById('col-main').offsetHeight / 2.0) + 100;
-  // if (state.scrollPosition < val) {
-  //   offset -= val;
-  // }
+  offset -= 140;
   return (state.scrollPosition + offset);
 };
 
@@ -34,3 +30,5 @@ export const currentTime = (state) => {
 };
 
 export const autoPlaying = state => state.autoPlaying;
+
+export const canAutoScroll = state => state.canAutoScroll;

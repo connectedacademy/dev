@@ -33,6 +33,7 @@ export default new Vuex.Store({
     debug: false,
     scrollPosition: 0.0,
     autoPlaying: false,
+    canAutoScroll: true,
   },
   getters,
   mutations,

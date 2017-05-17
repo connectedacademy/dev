@@ -2,16 +2,13 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
 
-    .scroll-indicator(v-bind:style="scrollIndicatorStyle")
+    .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
     .main-container
 
-      .toolbar
+      .toolbar.hidden
 
-        button.pure-button.pull-left(v-if="currentClass" @click="classSelectorVisible = !classSelectorVisible")
-          | {{ `${currentClass.title}` }}
-
-        button.pure-button.pull-right(v-on:click="infoVisible =! infoVisible")
+        button.pure-button.pull-left(v-on:click="infoVisible =! infoVisible")
           | {{ $t('course.course_info') }}
 
         button.pure-button.pull-right(v-on:click="setScrollPoints")
@@ -22,7 +19,7 @@
       .container.background-white(v-if="infoVisible")
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
-      class-selector(v-bind:is-visible="classSelectorVisible" v-on:setCurrentClass="hideClassSelector")
+      class-selector
 
       course-content(v-if="currentClass")
 
@@ -53,6 +50,11 @@ export default {
       vm.$store.dispatch('checkAuth');
     });
   },
+  beforeRouteLeave (to, from, next) {
+    // Reset state
+    this.$store.dispatch('resetState');
+    next();
+  },
   created() {
     // Check if user has registered
     if (this.isAuthenticated && !this.isRegistered) {
@@ -61,7 +63,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setColumnState', 'narrow');
-    this.$store.dispatch('getCourse');
+    // this.$store.dispatch('getCourse');
 
     var self = this;
 
@@ -84,14 +86,9 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      classSelectorVisible: true,
       infoVisible: false,
-      canAutoScroll: false,
       isAutoScrolling: false,
-      reattemptAutoScroll: 500,
-      restartAutoScroll: 500,
-      wheelMovementThrottle: 500,
-      scrollPositionThrottle: 500,
+      reattemptAutoScroll: 2000,
     };
   },
   components: {
@@ -102,13 +99,13 @@ export default {
   },
   watch: {
     'videoReady': {
-      handler: function(oV, nV) {
+      handler: function(nV, oV) {
         this.attemptAutoScroll();
       },
       deep: true,
     },
     'isAutoScrolling': {
-      handler: function(oV, nV) {
+      handler: function(nV, oV) {
         this.$store.commit('setAutoPlaying', nV);
       },
       deep: true,
@@ -117,7 +114,6 @@ export default {
       handler: function(nV, oV) {
         if (nV !== undefined) {
           if (oV !== nV) {
-            this.setScrollPoints();
             if (nV.duration !== undefined) {
               const request = {
                 theClass: this.$store.getters.currentClass.slug,
@@ -132,7 +128,7 @@ export default {
           if (!this.canAutoScroll) {
             if (oV !== nV) {
               if (nV.duration !== undefined) {
-                this.canAutoScroll = true;
+                this.$store.commit('setCanAutoScroll', true);
               }
             }
           }
@@ -143,21 +139,21 @@ export default {
   },
   methods: {
     wheelMovement() {
-      this.canAutoScroll = false;
       this.isAutoScrolling = false;
+      this.$store.commit('setCanAutoScroll', false);
     },
     throttledWheelMovement: _.throttle(function(self) {
       setTimeout(function() {
         if (self.currentSection !== undefined) {
           if (self.currentSection.duration !== undefined) {
-            self.canAutoScroll = true;
+            self.$store.commit('setCanAutoScroll', true);
           }
         }
       }, 500);
-    }, 500, { 'trailing': true }), // self.wheelMovementThrottle
+    }, 500, { 'leading': true, 'trailing': true }),
     setScrollPosition: _.throttle(function(self, position) {
       self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 500, { 'trailing': true }), // self.scrollPositionThrottle
+    }, 500, { 'trailing': true }),
     onScroll(e, position) {
       this.setScrollPosition(this, position);
     },
@@ -168,7 +164,7 @@ export default {
 
       var self = this;
 
-      if (self.isAutoScrolling || !self.canAutoScroll || !self.currentSection || !self.videoPlaying || !self.videoReady) { return; }
+      if (self.isAutoScrolling || !self.canAutoScroll || (self.currentSection === undefined) || !self.videoPlaying || !self.videoReady || (self.$refs.main === undefined)) { return; }
 
       self.isAutoScrolling = true;
 
@@ -195,7 +191,7 @@ export default {
 
         self.$refs.main.scrollTop = position(start, end, elapsed, duration);
 
-        if ((elapsed <= duration) && self.canAutoScroll && self.videoPlaying) {
+        if ((elapsed <= duration) && self.canAutoScroll && self.videoPlaying && (self.currentSection !== undefined)) {
           requestAnimationFrame(step);
         }
       }
@@ -220,19 +216,13 @@ export default {
         console.log('No query passed');
       }
     },
-    hideClassSelector() {
-      this.classSelectorVisible = false
-    },
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'canAutoScroll', 'currentSectionScrollPosition',
     ]),
     pastMidPoint() {
       return (this.currentSectionScrollPosition > (document.getElementById('col-main').offsetHeight / 2.0))
-    },
-    currentSectionLabel() {
-      return this.currentSection.label;
     },
     scrollIndicatorStyle() {
       return {
@@ -248,12 +238,14 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .scroll-indicator
-  background-color red
-  left 0
+  radius(50%)
+  animate()
+  background-color $color-primary
+  left 5px
   position absolute
-  height 2px
+  height 10px
   z-index 100
-  width 20px
+  width 10px
 
 .toolbar
   background-color white

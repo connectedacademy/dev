@@ -14,5 +14,9 @@ export const TOGGLE_VIDEO = (state) => {
 };
 
 export const setAutoPlaying = (state, isAutoPlaying) => {
-  state.autoPlaying = !isAutoPlaying;
+  state.autoPlaying = isAutoPlaying;
+};
+
+export const setCanAutoScroll = (state, canAutoScroll) => {
+  state.canAutoScroll = canAutoScroll;
 };

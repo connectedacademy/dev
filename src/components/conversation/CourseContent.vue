@@ -15,6 +15,8 @@
     //- CONTENT
     .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
 
+      .type-indicator(v-bind:title="content.slug" v-bind:class="{ active: (currentActiveSection !== undefined) && (content.slug === currentActiveSection.slug) }")
+
       like-indicator(v-bind:content="content")
 
       .course-content--header
@@ -23,7 +25,7 @@
       .course-content--body
         p.content-description(v-if="content.description") {{ content.description }}
 
-        video-thumbnail(v-if="content.video" v-bind:video-src="content.video")
+        video-thumbnail(v-if="content.video && ((content.content_type !== 'class') && (content.content_type !== 'webinar'))" v-bind:video-src="content.video")
 
         submission-grid(v-if="content.expectsubmission" v-bind:content="content")
 
@@ -32,7 +34,7 @@
         submission-button(v-bind:content="content")
         .clearfix
 
-      conversation-container(v-if="(content.content_type === 'class') && isRegistered" v-bind:content="content")
+      conversation-container(v-if="((content.content_type === 'class') || (content.content_type === 'webinar')) && isRegistered" v-bind:content="content")
 
 </template>
 
@@ -53,7 +55,7 @@ export default {
   name: 'course-content',
   computed: {
     ...mapGetters([
-      'courseContent', 'currentSection', 'isRegistered',
+      'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
     ]),
   },
   data() {

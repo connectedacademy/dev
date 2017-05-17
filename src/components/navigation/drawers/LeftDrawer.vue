@@ -8,7 +8,18 @@
 
     ul.drawer-list
 
-      li.drawer-list-item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
+      router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
+        h1.drawer-list-item--header {{ $t('nav.course') }}
+        //- h2.drawer-list-item--body {{ theClass.description }}
+      router-link.drawer-list-item(tag="li" to="/schedule" v-bind:class="{ visible: state.visible }")
+        h1.drawer-list-item--header {{ $t('nav.schedule') }}
+        //- h2.drawer-list-item--body {{ theClass.description }}
+      router-link.drawer-list-item(tag="li" to="/about" v-bind:class="{ visible: state.visible }")
+        h1.drawer-list-item--header {{ $t('nav.about') }}
+        //- h2.drawer-list-item--body {{ theClass.description }}
+      //- li.navigation-item.navigation-item-page.pull-right(v-if="!isRegistered" v-on:click="showAuth") {{ $t('auth.login') }}
+
+      li.drawer-list-item.hidden(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
         h1.drawer-list-item--header {{ theClass.title }}
         h2.drawer-list-item--body {{ theClass.description }}
 
@@ -111,7 +122,7 @@ export default {
       opacity 0
       list-style none
       margin 0
-      padding 25px 60px 25px 25px
+      padding 15px 40px 15px 25px
       position relative
       transition background-color 0.6s, left 0.6s, opacity 0.6s
 

@@ -3,6 +3,9 @@ export default {
   methods: {
     setScrollPoints() {
       console.log('Setting scroll points');
+      if (this.$store.getters.currentClass === undefined) {
+        return;
+      }
       for (var content of this.$store.getters.currentClass.content) {
         if (content.slug) {
 
@@ -19,14 +22,19 @@ export default {
               additionalOffset += conversationContainer.querySelector('.spacer').offsetHeight;
             }
 
-            this.$store.commit('setScrollPoint', {
-              slug: content.slug,
-              top: (additionalOffset + element.offsetTop),
-              bottom: (additionalOffset + element.offsetTop) + element.offsetHeight,
-              duration: content.duration,
-              videoId: content.video,
-              transcript: content.transcript,
-            });
+            // if (element.offsetTop !== this.$store.getters.scrollPoints[content.slug].sectionTop) {
+
+              this.$store.commit('setScrollPoint', {
+                slug: content.slug,
+                content_type: content.content_type,
+                sectionTop: element.offsetTop,
+                top: (additionalOffset + element.offsetTop),
+                bottom: element.offsetTop + element.offsetHeight,
+                duration: content.duration,
+                videoId: content.video,
+                transcript: content.transcript,
+              });
+            // }
           }
         }
       }

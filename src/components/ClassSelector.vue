@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .class-selector-wrapper(v-bind:class="{ 'hidden': !visible }")
+  .class-selector-wrapper
     ul.class-selector
       li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)")
         h1.class-selector--item--header {{ theClass.title }}
@@ -10,26 +10,20 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
 
 export default {
   name: 'class-selector',
-  props: ['isVisible'],
   methods: {
     setCurrentClass(newClass) {
       this.$store.dispatch('getSpec', newClass);
     },
   },
   computed: {
-    visible() {
-      return this.isVisible;
-    },
-    course() {
-      return this.$store.getters.course;
-    },
-    currentClass() {
-      return this.$store.getters.currentClass;
-    },
+    ...mapGetters([
+      'course', 'currentClass'
+    ]),
   },
 };
 </script>
@@ -39,26 +33,26 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .class-selector-wrapper
-  background-color $color-light-grey
-  height 160px
+  height 120px
+  margin-bottom 10px
   overflow-x scroll
   overflow-y hidden
   ul.class-selector
     cleanlist()
     border-bottom #e1e1e1 1px solid
-    height 160px
-    padding 10px
+    height 120px
     white-space nowrap
     width calc(200px * 2)
     li.class-selector--item
       cleanlist()
+      radius(4px)
       background-color white
       border white 4px solid
       box-sizing border-box
       display inline-block
       overflow hidden
-      margin 10px
-      padding 15px
+      margin-right 10px
+      padding 10px 15px
       text-align left
       height 120px
       width 180px
@@ -68,15 +62,26 @@ export default {
         nomargin()
         nopadding()
         color $color-text-dark-grey
-        font-size 1.05em
+        font-size 1em
+        line-height 25px
       h2.class-selector--item--body
         nomargin()
         nopadding()
         color $color-text-grey
         font-size 0.95em
         font-weight normal
+        line-height 20px
         margin-top 5px
       &:hover
-        border-color $color-primary
+        /*border-color $color-primary*/
+        background-color #f2f2f2
         cursor pointer
+      &.active
+        background-color $color-primary
+        border-color $color-primary
+        h1.class-selector--item--header
+          color white
+        h2.class-selector--item--body
+          color white
+
 </style>

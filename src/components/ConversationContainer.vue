@@ -54,14 +54,14 @@ export default {
     });
   },
   watch: {
-    currentSegmentGroup(oldVal, newVal) {
-      if (oldVal !== newVal) {
-        // this.getMessages((newVal * 5));
-      }
-    },
-    currentSegment(oldVal, newVal) {
-      if (oldVal !== newVal) {
-        this.getMessages(newVal);
+    // currentSegmentGroup(nV, oV) {
+    //   if (oV !== nV) {
+    //     this.getMessages((nV * 5));
+    //   }
+    // },
+    currentSegment(nV, oV) {
+      if (oV !== nV) {
+        this.getMessages(nV);
       }
     },
   },
@@ -71,14 +71,17 @@ export default {
 
       if (this.$refs.spacer) {
         const windowHeight = window.innerHeight;
-        const parentOffset = this.$refs.spacer.parentElement.parentElement.offsetTop;
         const childOffset = this.$refs.spacer.parentElement.offsetTop;
 
-        let height = (windowHeight - (parentOffset + childOffset));
+        let height = (windowHeight - childOffset);
 
         this.spacerHeight = (height < 200) ? 200 : height;
 
-        this.setScrollPoints();
+        var self = this;
+        
+        setTimeout(function() {
+          self.setScrollPoints();
+        }, 500);
       }
     },
     getMessages(segment) {
@@ -106,7 +109,7 @@ export default {
     ]),
     conversationContainerStyles() {
       return {
-        height: `${this.segments.length * 158.0}px`,
+        height: `${((this.segments.length * 158.0) + this.spacerHeight)}px`,
       };
     },
     activityVisualisationStyles() {
@@ -147,12 +150,10 @@ export default {
   min-height 100px
   overflow hidden
   position relative
-  margin-top 10px
   padding 0
 
   .spacer
     background-color white
-    border-top $color-light-grey 1px solid
     position relative
     .floating-text
       height 100px
@@ -185,13 +186,13 @@ export default {
 
   .subtitle-container, .messages-container
     float left
-    min-height (158.0 * 1.0)px
+    min-height 158px
     position relative
     width 50%
 
     .time-segment
       border-color transparent
-      height (158.0 * 1.0)px
+      height 158px
       position relative
       animate()
       .message-count
