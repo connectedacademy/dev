@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import * as types from '@/store/mutation-types';
+
 export default {
   name: 'profile-icon',
   data() {
@@ -20,7 +22,11 @@ export default {
   },
   methods: {
     showProfile() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER');
+      if (!this.isRegistered) {
+        this.$store.commit(types.SHOW_AUTH);
+      } else {
+        this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
+      }
     },
   },
 };

@@ -95,7 +95,7 @@ export default {
 
             sub = (_.startsWith(sub, 'localhost')) ? 'testclass' : sub;
 
-            const newUrl = 'https://' + sub + '.connectedacademy.io/#/course';
+            const newUrl = 'https://' + sub + '.connectedacademy.io/#/submission';
 
             return `${newUrl}/${currentClass.slug}/${currentContent.slug}`;
           },

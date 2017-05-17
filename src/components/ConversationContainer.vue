@@ -12,19 +12,22 @@
         g
           path(v-bind:d="visualisationPoints")
 
+      //- svg(width="200" v-bind:height="(segments.length * 158.0)")
+        g(v-html="visualisationLabels")
+
     .subtitle-container
 
       subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
 
     .messages-container
 
-      .time-segment(v-for="(segment, index) in segments" v-bind:class="{ active: (currentSegmentGroup === index) }")
+      .time-segment(v-for="(index, segment) in segments")
 
-        .message-count(v-if="messages && messages[index]")
-          | {{ messages[index].length }}
+        .message-wrapper(v-if="messages && messages[segment]")
 
-        span(v-if="messages && messages[index]")
-          message(v-for="message in messages[index]" v-bind:key="message.id" v-bind:message="message")
+          .message-count(v-bind:class="{ none: (messages[segment].info.count === 0), low: (messages[segment].info.count > 0), medium: (messages[segment].info.count > 2), high: (messages[segment].info.count > 4) }") {{ messages[segment].info.count }}
+
+          message(v-if="messages[segment].info.count > 0" v-bind:message="messages[segment].message")
 
     .clearfix
 
@@ -54,14 +57,9 @@ export default {
     });
   },
   watch: {
-    // currentSegmentGroup(nV, oV) {
-    //   if (oV !== nV) {
-    //     this.getMessages((nV * 5));
-    //   }
-    // },
-    currentSegment(nV, oV) {
+    currentSegmentGroup(nV, oV) {
       if (oV !== nV) {
-        this.getMessages(nV);
+        this.getMessagesSummary(nV);
       }
     },
   },
@@ -78,24 +76,35 @@ export default {
         this.spacerHeight = (height < 200) ? 200 : height;
 
         var self = this;
-        
+
         setTimeout(function() {
           self.setScrollPoints();
         }, 500);
       }
     },
-    getMessages(segment) {
-      // console.log(`Segment - ${segment}`);
-      const length = 5
+    getMessagesSummary(segmentGroup) {
+      const length = 5;
+
+      let startSegment = (segmentGroup * 5);
+      startSegment -= (startSegment % 5);
+
+      startSegment -= 5;
+
+      let endSegment = (startSegment) + (length - 1);
+      // startSegment = (startSegment > 20) ? (startSegment - 20) : 0;
+
+      console.log(`Segment - ${startSegment}`);
+
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.content.slug,
-        startSegment: `${segment}`,
-        endSegment: `${(segment) + length}`,
+        startSegment: `${startSegment}`,
+        endSegment: `${endSegment}`,
       };
 
-      if (((segment % length) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
-        this.$store.dispatch('getMessages', request);
+      if (((startSegment % length) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
+      // if (this.content.slug === this.$store.getters.currentSection.slug) {
+        this.$store.dispatch('getMessagesSummary', request);
       }
     },
     showComposer() {
@@ -105,7 +114,7 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'isRegistered', 'messages', 'subtitles',
+      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'visualisationLabels', 'isRegistered', 'messages', 'subtitles',
     ]),
     conversationContainerStyles() {
       return {
@@ -207,6 +216,14 @@ export default {
         text-align center
         top 5px
         right 5px
+        &.none
+          background-color #CCC
+        &.low
+          background-color $color-success
+        &.medium
+          background-color $color-warning
+        &.high
+          background-color $color-danger
       p.timestamp-label
         radius(20px)
         background-color $color-primary

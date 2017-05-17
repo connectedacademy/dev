@@ -6,7 +6,7 @@
     .navigation-item.pull-left(@click="toggleDebugMode")
       icon(name="wrench" style="color: white; padding: 0 20px")
 
-    profile-icon(v-if="isRegistered")
+    profile-icon
 
 </template>
 

@@ -3,6 +3,13 @@ import Vue from 'vue';
 import * as config from './config';
 
 export default {
+  getMessagesSummary(request, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
   getMessages(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {
       cb(response.body);

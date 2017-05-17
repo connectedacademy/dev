@@ -32,32 +32,53 @@ const getters = {
 
     let visualisation = state.visualisation[globalState.getters.currentSection.slug];
 
-    const segmentHeight = (158.0 * 1);
+    const segmentHeight = 158.0;
+    const handleOffset = (segmentHeight / 4.0);
     const width = 200.0;
+    const parentOffsetTop = (158.0 / 2.0);
 
-    let newVis = [];
-    let calcVal = 0;
-    _.forEach(visualisation, function(value, key) {
+    let chunkedVis = _.chunk(_.values(visualisation), 5);
 
-      calcVal += value;
+    function summit(val, key) {
+      return _.mean(val);
+    }
 
-      if ((value % 5) === 0) {
-        calcVal = calcVal * 0.2;
-        newVis.push(calcVal)
-        calcVal = 0;
-      }
+    chunkedVis = _.map(chunkedVis, summit);
+
+    let points = "M0 0 ";
+
+    _.forEach(chunkedVis, function(value, index) {
+      const offsetTop = (index * segmentHeight) + parentOffsetTop;
+      points += `S ${value * width} ${offsetTop - handleOffset}, ${value * width} ${offsetTop} `;
     });
 
-    visualisation = newVis;
-
-    let points = _.reduce(visualisation, function(result, value, key) {
-      return result + `S ${value * width} ${key * segmentHeight - 50}, ${value * width} ${key * segmentHeight + 50} `;
-    }, "M0 0 ");
-
-    points += `L 0 ${(_.size(visualisation) * segmentHeight)} Z`;
+    points += `L 0 ${(_.size(chunkedVis) * segmentHeight)} Z`;
 
     return points;
+  },
+  visualisationLabels() {
+    if (!globalState.getters.currentSection) { return []; }
 
+    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
+
+    const segmentHeight = 158.0;
+    const offsetTop = (158.0 / 2.0);
+
+    let chunkedVis = _.chunk(_.values(visualisation), 5);
+
+    function summit(val, key) {
+      return _.sum(val);
+    }
+
+    chunkedVis = _.map(chunkedVis, summit);
+
+    let labels = "";
+
+    _.forEach(chunkedVis, function(value, index) {
+        labels += `<text text-anchor="middle" alignment-baseline="central" x="100" y="${(index * segmentHeight) + offsetTop}" fill="black" font-size="16">${index} - ${_.round(value, 2)}</text>`;
+    });
+
+    return labels;
   },
   videoIsActive() {
     if (globalState.getters.currentSection === undefined) {
@@ -114,10 +135,10 @@ const getters = {
 
 // actions
 const actions = {
-  getMessages({
+  getMessagesSummary({
     commit,
   }, request) {
-    API.message.getMessages(
+    API.message.getMessagesSummary(
       request,
       response => commit(types.GET_MESSAGES_SUCCESS, {
         response,
@@ -195,8 +216,15 @@ const mutations = {
     response,
   }) {
     state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
-    for (const segment in response.data) {
-      state.messages[response.scope.content][_.ceil(segment * 0.2)] = response.data[segment];
+    if (response.data.message) {
+
+      state.messages[response.scope.content][response.scope.startsegment * 0.2] = {
+        message: response.data.message,
+        info: {
+          count: response.data.info.total,
+        },
+      };
+
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {

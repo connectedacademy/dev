@@ -54,7 +54,7 @@ export default {
       if (!this.canAutoScroll && self.player) {
         self.player.seekTo(position);
       }
-    }, 500, { leading: false, trailing: true }),
+    }, 1000),
     getWindowWidth(event) {
       if (document.documentElement.clientWidth < 800) {
         const percentage = 0.8;
