@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .video-wrapper.animated.fadeIn(v-if="videoIsActive && videoEnabled")
+  .video-wrapper(v-if="videoIsActive")
 
     youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
@@ -55,24 +55,25 @@ export default {
         self.player.seekTo(position);
       }
     }, 1000),
-    getWindowWidth(event) {
+    getWindowWidth: _.throttle(function(event) {
       if (document.documentElement.clientWidth < 800) {
         const percentage = 0.8;
         this.pHeight = (((document.documentElement.clientWidth / 2) * percentage) * 0.5625);
         this.pWidth = ((document.documentElement.clientWidth / 2) * percentage);
       } else {
-        this.pHeight = 120;
-        this.pWidth = (120 / 0.5625);
+        this.pHeight = 140;
+        this.pWidth = (140 / 0.5625);
       }
-
-    },
+      this.pHeight = (this.pHeight > 140) ? 140 : this.pHeight;
+      this.pWidth = (this.pWidth > (140 / 0.5625)) ? (140 / 0.5625) : this.pWidth;
+    }, 500),
   },
   computed: {
     src() {
-      return this.$store.getters.currentSection.videoId;
+      return this.currentSection.videoId;
     },
     ...mapGetters([
-      'videoIsActive', 'videoEnabled', 'currentTime', 'canAutoScroll',
+      'videoIsActive', 'videoEnabled', 'currentTime', 'canAutoScroll', 'currentSection',
     ]),
     playerStyle() {
       return {
@@ -92,7 +93,7 @@ export default {
   background-color darken($color-purple, 25%)
   border-right $color-purple 1px solid
   bottom 0
-  padding 10px
+  padding 0
   padding-left 0
   left 50%
   margin-left -400px
@@ -100,8 +101,8 @@ export default {
   z-index 52
   animate()
   @media(max-width: 800px)
-    bottom 150px
-    left 10px
+    bottom 140px
+    left 0
     margin-left 0
     padding 0
   .video-container

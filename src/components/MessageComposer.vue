@@ -5,7 +5,8 @@
     .message-composer(v-bind:class="{ isactive: visible, unactive: hidden }")
 
       .message-composer--body
-        textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
+        .textarea-wrapper
+          textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
 
       .message-composer--footer
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
@@ -30,6 +31,7 @@ export default {
       message: {
         text: '',
       },
+      windowWidth: 0,
     };
   },
   methods: {
@@ -87,6 +89,7 @@ export default {
 
   .message-composer
     background-color white
+    border-top $color-light-grey 1px solid
     box-sizing border-box
 
     position absolute
@@ -94,7 +97,7 @@ export default {
     right 0
 
     height 140px
-    left 224px
+    left calc(140px / 0.5625)
     animate()
 
     @media(max-width: 800px)
@@ -108,32 +111,42 @@ export default {
       pinned()
       position absolute
 
-      textarea
-        radius(4px)
-        background-color #f9f9f9
-        color black
-        border none
-        font-size 1em
-
-        box-sizing border-box
-        padding 15px
-        resize none
-        outline 0
-
+      .textarea-wrapper
+        /*radius(4px)*/
+        background-color white
+        overflow hidden
         position absolute
-        top 10px
-        bottom 58px
+        top 0
+        bottom 0
         right 0
-        left 10px
-        width calc(100% - 10px)
-        animate()
-        @media(max-width: 800px)
-          right 10px
-          width calc(100% - 20px)
+        left 0
+        textarea
+          background-color transparent
+          color black
+          border none
+          font-size 1em
+
+          box-sizing border-box
+          padding 15px
+          resize none
+          outline 0
+
+          position absolute
+          top 0
+          bottom 48px
+          right 0
+          left 0
+
+          width 100%
+          animate()
+          @media(max-width: 800px)
+            right 10px
+            width calc(100% - 20px)
 
     .message-composer--footer
+      border-top $color-light-grey 1px solid
       height 38px
-      padding 10px 0 10px 10px
+      padding 5px
       position absolute
       bottom 0
       right 0
@@ -142,10 +155,11 @@ export default {
       @media(max-width: 800px)
         padding 10px
       p.info-label
-        nomargin()
         nopadding()
-        color white
+        color $color-text-dark-grey
+        font-size 0.9em
         line-height 38px
+        margin 0 5px
         #url
           display none
         #time

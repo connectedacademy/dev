@@ -1,6 +1,7 @@
 <template lang="pug">
 
   .class-selector-wrapper
+    .skip-button.hidden
     ul.class-selector
       li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)")
         h1.class-selector--item--header {{ theClass.title }}
@@ -33,10 +34,20 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .class-selector-wrapper
+  radius(4px)
   height 120px
   margin-bottom 10px
   overflow-x scroll
   overflow-y hidden
+  .skip-button
+    background-color $color-primary
+    height 120px
+    width 40px
+    position absolute
+    top 0
+    right 0
+    border-top-right-radius 4px
+    border-bottom-right-radius 4px
   ul.class-selector
     cleanlist()
     border-bottom #e1e1e1 1px solid

@@ -21,7 +21,7 @@
 
     right-drawer(v-if="isRegistered")
 
-    #action-panel(v-if="videoIsActive")
+    #action-panel.animated.slideInUp(v-if="videoIsActive")
 
       playhead
 
@@ -107,7 +107,7 @@ export default {
 @import './assets/stylus/layout/page'
 
 #action-panel
-  background-color $color-purple
+  background-color white
   position absolute
   bottom 0
   left 50%

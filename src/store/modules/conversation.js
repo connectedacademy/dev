@@ -17,7 +17,24 @@ const state = {
 const getters = {
   messages() {
     if (!globalState.getters.currentSection) { return {}; }
-    return state.messages[globalState.getters.currentSection.slug];
+    // TODO: Viewport limited
+
+    let messages = state.messages[globalState.getters.currentSection.slug];
+
+    messages = _.filter(messages, function(value, key) {
+
+      console.log('key');
+      console.log(key);
+
+      console.log('(globalState.getters.currentSegmentGroup)');
+      console.log(globalState.getters.currentSegmentGroup);
+
+      // return true;
+      return ((parseInt(key) < globalState.getters.currentSegmentGroup) && (parseInt(key) > (globalState.getters.currentSegmentGroup - 4)))
+    });
+
+
+    return messages;
   },
   subtitles() {
     if (!globalState.getters.currentSection) { return {}; }
@@ -124,12 +141,12 @@ const getters = {
     return globalState.getters.offsetScrollPosition - globalState.getters.currentSection.top;
   },
   currentSegmentGroup() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return _.ceil(globalState.getters.currentSectionScrollPosition / 158.0);
+    if (!globalState.getters.currentSection) { return -1; }
+    return _.floor(globalState.getters.currentSectionScrollPosition / 158.0);
   },
   currentSegment() {
     if (!globalState.getters.currentSection) { return 0; }
-    return _.ceil(globalState.getters.currentSectionScrollPosition / (158.0 * 0.2));
+    return _.floor(globalState.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };
 
@@ -138,6 +155,12 @@ const actions = {
   getMessagesSummary({
     commit,
   }, request) {
+    state.messages[request.theContent] = (state.messages[request.theContent]) ? state.messages[request.theContent] : {};
+
+    state.messages[request.theContent][`${request.startSegment * 0.2}`] = {
+      loading: true,
+    };
+
     API.message.getMessagesSummary(
       request,
       response => commit(types.GET_MESSAGES_SUCCESS, {
@@ -215,8 +238,8 @@ const mutations = {
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-    state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
     if (response.data.message) {
+      state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
 
       state.messages[response.scope.content][response.scope.startsegment * 0.2] = {
         message: response.data.message,
@@ -224,7 +247,6 @@ const mutations = {
           count: response.data.info.total,
         },
       };
-
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {

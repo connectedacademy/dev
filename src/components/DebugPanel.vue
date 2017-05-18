@@ -3,12 +3,15 @@
 .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
   p {{ `scrollPosition - ${scrollPosition}` }}
   p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
-  p currentSection
-  pre {{ currentSection }}
-  p currentActiveSection
-  pre {{ currentActiveSection }}
-  p scrollPoints
-  pre {{ scrollPoints }}
+  span.hidden
+    p currentSection
+    pre {{ currentSection }}
+  span.hidden
+    p currentActiveSection
+    pre {{ currentActiveSection }}
+  span.hidden
+    p scrollPoints
+    pre {{ scrollPoints }}
   p {{ `videoEnabled - ${videoEnabled}` }}
   p {{ `autoPlaying - ${autoPlaying}` }}
   p {{ `canAutoScroll - ${canAutoScroll}` }}

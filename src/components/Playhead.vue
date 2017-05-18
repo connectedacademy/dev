@@ -1,8 +1,9 @@
 <template lang="pug">
 
 .playhead-bobble()
-  icon(name="play" scale="2" class="playhead-icon" v-if="!videoPlaying")
-  icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
+  icon(name="twitter" scale="2" class="playhead-icon")
+  //- icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
+  //- icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
 
 </template>
 

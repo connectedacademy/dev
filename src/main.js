@@ -39,7 +39,7 @@ Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
 
 Vue.use(VueScroll);
-Vue.use(VueAutosize)
+Vue.use(VueAutosize);
 
 // General config
 Vue.config.productionTip = false;

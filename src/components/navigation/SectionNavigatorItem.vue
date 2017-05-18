@@ -66,13 +66,15 @@ li.navigation-item
     width 12px
     animate()
   .content-label
+    radius(20px)
+    background-color alpha(black, 0.3)
     color white
     font-weight bold
     line-height 32px
-    margin-right 10px
     opacity 0
+    padding 0 50px 0 15px
     position absolute
-    right 40px
+    right 0
     text-transform uppercase
     animate()
   &:hover

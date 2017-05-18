@@ -7,7 +7,7 @@
         h5 {{ $t('common.scroll_down_for_live_class') }}
         icon(name="angle-double-down" scale="2")
 
-    .activity-visualisation(v-bind:style="activityVisualisationStyles")
+    .activity-visualisation(v-bind:style="activityVisualisationStyles" v-bind:class="{ active: !canAutoScroll }")
       svg(width="200" v-bind:height="(segments.length * 158.0)")
         g
           path(v-bind:d="visualisationPoints")
@@ -23,7 +23,17 @@
 
       .time-segment(v-for="(index, segment) in segments")
 
-        .message-wrapper(v-if="messages && messages[segment]")
+        .suggestion(v-if="messages[segment] && messages[segment].message && messages[segment].message.suggestion")
+            h3 {{ messages[segment].message.text }}
+
+        .mock-message(v-if="messages && messages[segment] && (messages[segment].loading || (messages[segment].info && (messages[segment].info.count === 0)))" v-bind:class="{ loading: messages[segment].loading }")
+          .mock-message--user
+          .mock-message--body
+            .mock-message--line
+            .mock-message--line
+            .mock-message--line
+
+        .message-wrapper(v-if="messages && messages[segment] && !messages[segment].loading")
 
           .message-count.animated.fadeIn(v-bind:class="{ none: (messages[segment].info.count === 0), low: (messages[segment].info.count > 0), medium: (messages[segment].info.count > 2), high: (messages[segment].info.count > 4) }") {{ messages[segment].info.count }}
 
@@ -59,10 +69,11 @@ export default {
   watch: {
     currentSegmentGroup(nV, oV) {
       if (oV !== nV) {
-        const backFill = 10;
-        if (nV > backFill) {
-          for (var i = 0; i < backFill; i++) {
-            this.getMessagesSummary((nV - i));
+        const backFill = 8;
+        for (var i = 0; i < backFill; i++) {
+          const segment = (nV - i);
+          if (segment >= 0) {
+            this.getMessagesSummary(segment);
           }
         }
       }
@@ -70,7 +81,6 @@ export default {
   },
   methods: {
     windowResized(self) {
-      console.log('Window resized');
 
       if (this.$refs.spacer) {
         const windowHeight = window.innerHeight;
@@ -91,14 +101,10 @@ export default {
 
       if (this.messages) {
         // Cancel request if we alredy have messages for segment
-        if (this.messages[segmentGroup]) {
-          return;
-        }
+        if (this.messages[segmentGroup]) { return; }
 
         // Cancel request if we are scrolling!
-        if (!this.canAutoScroll) {
-          return;
-        }
+        if (!this.canAutoScroll) { return; }
       }
 
       const segmentCount = (1.0 / 0.2);
@@ -112,7 +118,7 @@ export default {
         endSegment: `${endSegment}`,
       };
 
-      if (((startSegment % length) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
+      if (((startSegment % segmentCount) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
         this.$store.dispatch('getMessagesSummary', request);
       }
     },
@@ -197,10 +203,14 @@ export default {
     z-index 0
     svg
       path
-        stroke black // $color-primary
-        fill black // $color-primary
-        /*stroke-width 2px*/
+        fill black
         opacity 0.15
+        animate()
+    &.active
+      svg
+        path
+          fill black
+          opacity 0.3
 
   .subtitle-container, .messages-container
     float left
@@ -265,5 +275,35 @@ export default {
       .messages-container
         display block
         width 100%
+  .mock-message
+    height 120px
+    padding-left 60px
+    position absolute
+    top 0
+    left 0
+    right 0
+    opacity 0.05
+    animate()
+    &.loading
+      opacity 0.15
+    .mock-message--user
+      radius(50%)
+      background-color black
+      height 40px
+      width 40px
+      position absolute
+      top 20px
+      left 15px
+    .mock-message--body
+      radius(6px)
+      height 100px
+      padding 10px
+      .mock-message--line
+        radius(6px)
+        background-color black
+        height 20px
+        margin-top 15px
+        &:first-child
+          max-width 100px
 
-</style>
+  </style>
