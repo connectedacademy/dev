@@ -113,32 +113,6 @@ export default {
       },
       deep: true,
     },
-    'currentSection': {
-      handler: function(nV, oV) {
-        if (nV !== undefined) {
-          if (oV !== nV) {
-            if (nV.content_type === 'class') {
-
-              const request = {
-                theClass: this.$store.getters.currentClass.slug,
-                theContent: this.currentSection.slug,
-              };
-
-              this.$store.dispatch('getVisualisation', request);
-              this.$store.dispatch('getSubtitles');
-            }
-          }
-          if (!this.canAutoScroll) {
-            if (oV !== nV) {
-              if (nV.duration !== undefined) {
-                this.$store.commit('setCanAutoScroll', true);
-              }
-            }
-          }
-        }
-      },
-      deep: true,
-    },
   },
   methods: {
     wheelMovement() {
@@ -148,15 +122,15 @@ export default {
     throttledWheelMovement: _.throttle(function(self) {
       setTimeout(function() {
         if (self.currentSection !== undefined) {
-          if (self.currentSection.duration !== undefined) {
+          if (self.currentSection.content_type === 'class') {
             self.$store.commit('setCanAutoScroll', true);
           }
         }
-      }, 500);
-    }, 500),
+      }, 1000);
+    }, 1000),
     setScrollPosition: _.throttle(function(self, position) {
       self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 500, { 'leading': false }),
+    }, 1000, { 'leading': false }),
     onScroll(e, position) {
       this.setScrollPosition(this, position);
     },

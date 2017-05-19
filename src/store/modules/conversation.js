@@ -8,8 +8,8 @@ import globalState from '../index';
 // initial state
 const state = {
   messages: {},
-  subtitles: {},
-  visualisation: {},
+  subtitles: [],
+  visualisation: [],
 };
 
 // getters
@@ -44,12 +44,12 @@ const getters = {
     return chunkedMessages;
   },
   subtitles() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.subtitles[globalState.getters.currentSection.slug];
+    console.log('Subtitles from state');
+    return state.subtitles;
   },
   visualisation() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.visualisation[globalState.getters.currentSection.slug];
+    console.log('Visualisation from state');
+    return state.visualisation;
   },
   // visualisationPoints() {
   //
@@ -83,30 +83,30 @@ const getters = {
   //   points += `L 0 ${(_.size(chunkedVis) * segmentHeight)} Z`;
   //   return points;
   // },
-  visualisationLabels() {
-    if (!globalState.getters.currentSection) { return []; }
-
-    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
-
-    const segmentHeight = 158.0;
-    const offsetTop = (segmentHeight / 2.0);
-
-    let chunkedVis = _.chunk(_.values(visualisation), 5);
-
-    function summit(val, key) {
-      return _.sum(val);
-    }
-
-    chunkedVis = _.map(chunkedVis, summit);
-
-    let labels = "";
-
-    _.forEach(chunkedVis, function(value, index) {
-        labels += `<text text-anchor="middle" alignment-baseline="central" x="100" y="${(index * segmentHeight) + offsetTop}" fill="black" font-size="16">${index} - ${_.round(value, 2)}</text>`;
-    });
-
-    return labels;
-  },
+  // visualisationLabels() {
+  //   if (!globalState.getters.currentSection) { return []; }
+  //
+  //   let visualisation = state.visualisation[globalState.getters.currentSection.slug];
+  //
+  //   const segmentHeight = 158.0;
+  //   const offsetTop = (segmentHeight / 2.0);
+  //
+  //   let chunkedVis = _.chunk(_.values(visualisation), 5);
+  //
+  //   function summit(val, key) {
+  //     return _.sum(val);
+  //   }
+  //
+  //   chunkedVis = _.map(chunkedVis, summit);
+  //
+  //   let labels = "";
+  //
+  //   _.forEach(chunkedVis, function(value, index) {
+  //       labels += `<text text-anchor="middle" alignment-baseline="central" x="100" y="${(index * segmentHeight) + offsetTop}" fill="black" font-size="16">${index} - ${_.round(value, 2)}</text>`;
+  //   });
+  //
+  //   return labels;
+  // },
   videoIsActive() {
     if (globalState.getters.currentSection === undefined) {
       return false;
@@ -182,6 +182,8 @@ const actions = {
   getVisualisation({
     commit,
   }, request) {
+    console.log('request');
+    console.log(request);
     API.visualisation.getVisualisation(
       request,
       response => commit(types.GET_VISUALISATION_SUCCESS, {
@@ -199,23 +201,27 @@ const mutations = {
   [types.GET_SUBTITLES_SUCCESS](initialState, {
     response,
   }) {
-    state.subtitles[response.slug] = response.response;
+    state.subtitles = response.response;
   },
   [types.GET_SUBTITLES_FAILURE](initialState, {
     response,
   }) {
-    state.subtitles[response.slug] = [];
+    state.subtitles = [];
     // error in response
   },
   [types.GET_VISUALISATION_SUCCESS](initialState, {
     response,
   }) {
-    state.visualisation[response.scope.content] = response.data;
+    state.visualisation = response.data;
+      console.log('response.data');
+      console.log(response.data);
+      console.log('success');
   },
   [types.GET_VISUALISATION_FAILURE](initialState, {
     response,
   }) {
-    state.visualisation[response.slug] = {};
+    console.log('error');
+    state.visualisation = [];
     // error in response
   },
   [types.GET_MESSAGES_SUCCESS](initialState, {

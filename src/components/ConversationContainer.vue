@@ -17,7 +17,7 @@
 
     .subtitle-container
 
-      subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
+      subtitle(v-for="subtitle in subtitles" v-once v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
 
     .messages-container
 
@@ -55,6 +55,7 @@ import * as types from '@/store/mutation-types';
 
 import ScrollPoints from '@/mixins/ScrollPoints';
 import Visualisation from '@/mixins/Visualisation';
+import Subtitles from '@/mixins/Subtitles';
 
 import Subtitle from './conversation/Subtitle';
 import Message from './conversation/Message';
@@ -65,6 +66,7 @@ export default {
   mixins: [
     ScrollPoints,
     Visualisation,
+    Subtitles,
   ],
   mounted() {
     this.windowResized();
@@ -85,9 +87,31 @@ export default {
         }
       }
     },
+    visualisation(nV, oV) {
+      console.log('loadVisualisation');
+      this.loadVisualisation(this.visualisation);
+    },
     currentSection(nV, oV) {
       if (oV !== nV) {
-        this.loadVisualisation();
+
+        this.$store.dispatch('getSubtitles');
+
+        // const request = {
+        //   theClass: this.$store.getters.currentClass.slug,
+        //   theContent: this.currentSection.slug,
+        // };
+        //
+        // this.$store.dispatch('getVisualisation', request);
+        //
+        // if (!this.canAutoScroll) {
+        //   if (oV !== nV) {
+        //     if (nV.duration !== undefined) {
+        //       this.$store.commit('setCanAutoScroll', true);
+        //     }
+        //   }
+        // }
+
+
       }
     },
   },
@@ -141,7 +165,7 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationLabels', 'isRegistered', 'chunkedMessages', 'subtitles', 'canAutoScroll', 'currentSection',
+      'currentClass', 'currentSegmentGroup', 'currentSegment', 'isRegistered', 'chunkedMessages', 'canAutoScroll', 'currentSection', 'subtitles', 'visualisation',
     ]),
     containerHeight() {
       return ((this.content.duration * 0.2) * 158.0);
@@ -174,6 +198,7 @@ export default {
       messagePriority: true,
       spacerHeight: 0,
       points: '',
+      // subtitles: [],
     };
   },
   components: {

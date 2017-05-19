@@ -2,7 +2,7 @@
 
   .video-wrapper
 
-    //- youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
 
