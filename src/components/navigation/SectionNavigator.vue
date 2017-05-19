@@ -13,9 +13,11 @@ import SectionNavigatorItem from './SectionNavigatorItem';
 
 export default {
   name: 'section-navigator',
-  props: [
-    'scrollPoints',
-  ],
+  computed: {
+    ...mapGetters([
+      'scrollPoints',
+    ]),
+  },
   components: {
     SectionNavigatorItem,
   },

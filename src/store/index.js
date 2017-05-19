@@ -32,8 +32,11 @@ export default new Vuex.Store({
   state: {
     debug: false,
     scrollPosition: 0.0,
+    offsetScrollPosition: 0.0,
     autoPlaying: false,
     canAutoScroll: true,
+    scrollPoints: {},
+    currentSection: {},
   },
   getters,
   mutations,

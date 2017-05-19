@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .conversation-container(ref="conversationContainer" v-if="isRegistered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
+  .conversation-container(ref="conversationContainer" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
     .spacer(ref="spacer" v-bind:style="spacerStyles")
       .floating-text
@@ -8,36 +8,41 @@
         icon(name="angle-double-down" scale="2")
 
     .activity-visualisation(v-bind:style="activityVisualisationStyles" v-bind:class="{ active: !canAutoScroll }")
-      svg(width="200" v-bind:height="(segments.length * 158.0)")
+      svg(width="200" v-bind:height="svgHeight")
         g
           path(v-bind:d="visualisationPoints")
 
-      //- svg(width="200" v-bind:height="(segments.length * 158.0)")
+      //- svg(width="200" v-bind:height="svgHeight")
         g(v-html="visualisationLabels")
 
     .subtitle-container
 
-      subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
+      subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
 
     .messages-container
 
-      .time-segment(v-for="(index, segment) in segments")
+      .time-segment(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup" v-bind:style="{ top: (message.segmentGroup * 158.0) + 'px' }")
 
-        .suggestion(v-if="messages[segment] && messages[segment].message && messages[segment].message.suggestion")
-            h3 {{ messages[segment].message.text }}
+        //- pre {{ message }}
+        //- pre.hidden {{ ((message.segmentGroup / 5) * 158.0) }}
 
-        .mock-message(v-if="messages && messages[segment] && (messages[segment].loading || (messages[segment].info && (messages[segment].info.count === 0)))" v-bind:class="{ loading: messages[segment].loading }")
+        //- .message-wrapper
+        .message-count.animated.fadeIn(v-if="message && message.info" v-bind:class="{ none: (message.info.total === 0), low: (message.info.total > 0), medium: (message.info.total > 2), high: (message.info.total > 4) }")
+          span(v-if="message.info.total !== 0") {{ message.info.total }}
+          icon(name="twitter" v-if="message.info.total === 0")
+
+        message(v-once v-if="message.info && (message.info.total > 0)" v-bind:message="message.message")
+
+        .mock-message.animated.fadeIn(v-once v-if="message.loading || (message.info && (message.info.total === 0))" v-bind:class="{ loading: message.loading }")
           .mock-message--user
           .mock-message--body
             .mock-message--line
             .mock-message--line
             .mock-message--line
 
-        .message-wrapper(v-if="messages && messages[segment] && !messages[segment].loading")
+    //- .suggestion(v-if="chunkedMessages[segment] && chunkedMessages[segment].message && chunkedMessages[segment].message.suggestion")
+          h3 {{ chunkedMessages[segment].message.text }}
 
-          .message-count.animated.fadeIn(v-bind:class="{ none: (messages[segment].info.count === 0), low: (messages[segment].info.count > 0), medium: (messages[segment].info.count > 2), high: (messages[segment].info.count > 4) }") {{ messages[segment].info.count }}
-
-          message(v-if="messages[segment].info.count > 0" v-bind:message="messages[segment].message")
 
     .clearfix
 
@@ -49,6 +54,7 @@ import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
 
 import ScrollPoints from '@/mixins/ScrollPoints';
+import Visualisation from '@/mixins/Visualisation';
 
 import Subtitle from './conversation/Subtitle';
 import Message from './conversation/Message';
@@ -58,6 +64,7 @@ export default {
   name: 'conversation-container',
   mixins: [
     ScrollPoints,
+    Visualisation,
   ],
   mounted() {
     this.windowResized();
@@ -76,6 +83,11 @@ export default {
             this.getMessagesSummary(segment);
           }
         }
+      }
+    },
+    currentSection(nV, oV) {
+      if (oV !== nV) {
+        this.loadVisualisation();
       }
     },
   },
@@ -99,12 +111,12 @@ export default {
     },
     getMessagesSummary(segmentGroup) {
 
-      if (this.messages) {
-        // Cancel request if we alredy have messages for segment
-        if (this.messages[segmentGroup]) { return; }
+      if (this.chunkedMessages) {
+        // Cancel request if we alredy have chunkedMessages for segment
+        if (this.chunkedMessages[segmentGroup]) { return; }
 
         // Cancel request if we are scrolling!
-        if (!this.canAutoScroll) { return; }
+        // if (!this.canAutoScroll) { return; }
       }
 
       const segmentCount = (1.0 / 0.2);
@@ -129,11 +141,17 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'visualisationLabels', 'isRegistered', 'messages', 'subtitles', 'canAutoScroll',
+      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationLabels', 'isRegistered', 'chunkedMessages', 'subtitles', 'canAutoScroll', 'currentSection',
     ]),
+    containerHeight() {
+      return ((this.content.duration * 0.2) * 158.0);
+    },
+    svgHeight() {
+      return `${this.containerHeight}px`;
+    },
     conversationContainerStyles() {
       return {
-        height: `${((this.segments.length * 158.0) + this.spacerHeight)}px`,
+        height: `${(this.containerHeight + this.spacerHeight)}px`,
       };
     },
     activityVisualisationStyles() {
@@ -146,9 +164,8 @@ export default {
         height: `${this.spacerHeight}px`,
       };
     },
-    segments() {
-      // Calculate number of segments
-      return _.map(_.range(_.ceil(this.content.duration * 0.2)), function () { return undefined; });
+    visualisationPoints() {
+      return this.points;
     },
   },
   data() {
@@ -156,6 +173,7 @@ export default {
       navTitle: 'Connected Academy - Main',
       messagePriority: true,
       spacerHeight: 0,
+      points: '',
     };
   },
   components: {
@@ -171,7 +189,6 @@ export default {
 
 .conversation-container
   background-color #f2f2f2
-  min-height 100px
   overflow hidden
   position relative
   padding 0
@@ -203,26 +220,25 @@ export default {
     z-index 0
     svg
       path
-        fill black
-        opacity 0.15
+        fill #e1e1e1
         animate()
     &.active
       svg
         path
-          fill black
-          opacity 0.3
+          fill #ddd
 
   .subtitle-container, .messages-container
     float left
-    min-height 158px
+    min-height 100px
     position relative
     width 50%
 
     .time-segment
-      border-color transparent
       height 158px
-      position relative
-      animate()
+      position absolute
+      left 0
+      right 0
+      top 0
       .message-count
         radius(13px)
         background-color $color-primary
@@ -261,11 +277,7 @@ export default {
   .messages-container
     width 50%
     .time-segment
-      border-right transparent 3px solid
       overflow hidden
-      animate()
-      &.active
-        border-right-color $color-primary
 
   @media(max-width: 600px)
     &.message-priority
@@ -275,35 +287,36 @@ export default {
       .messages-container
         display block
         width 100%
-  .mock-message
-    height 120px
-    padding-left 60px
-    position absolute
-    top 0
-    left 0
-    right 0
-    opacity 0.05
-    animate()
-    &.loading
-      opacity 0.15
-    .mock-message--user
-      radius(50%)
-      background-color black
-      height 40px
-      width 40px
-      position absolute
-      top 20px
-      left 15px
-    .mock-message--body
-      radius(6px)
-      height 100px
-      padding 10px
-      .mock-message--line
-        radius(6px)
-        background-color black
-        height 20px
-        margin-top 15px
-        &:first-child
-          max-width 100px
 
-  </style>
+.mock-message
+  height 120px
+  padding-left 60px
+  position absolute
+  top 0
+  left 0
+  right 0
+  animate()
+  .mock-message--user
+    radius(50%)
+    height 40px
+    width 40px
+    position absolute
+    top 20px
+    left 15px
+  .mock-message--body
+    radius(6px)
+    height 100px
+    padding 10px
+    .mock-message--line
+      radius(6px)
+      height 20px
+      margin-top 15px
+      &:first-child
+        max-width 100px
+  .mock-message--user, .mock-message--line
+    background-color #e1e1e1
+  &.loading
+    .mock-message--user, .mock-message--line
+      background-color #d9d9d9
+
+</style>

@@ -12,8 +12,7 @@
 
     debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
-    section-navigator(v-bind:scroll-points="scrollPoints")
-      | {{ scrollPoints }}
+    section-navigator
 
     burger-menu
 
@@ -21,7 +20,7 @@
 
     right-drawer(v-if="isRegistered")
 
-    #action-panel.animated.slideInUp(v-if="videoIsActive")
+    #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive }")
 
       playhead
 
@@ -68,7 +67,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled', 'scrollPoints',
+      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible

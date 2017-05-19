@@ -8,7 +8,7 @@
       strong {{ message.author.account }}
 
     p.message-content
-      | {{ ' ' + message.text }}
+      | {{ message.text }}
 
     ul.tweet-actions
       li

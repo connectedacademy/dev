@@ -7,7 +7,6 @@ import globalState from '../index';
 
 // initial state
 const state = {
-  scrollPoints: {},
   messages: {},
   subtitles: {},
   visualisation: {},
@@ -16,25 +15,33 @@ const state = {
 // getters
 const getters = {
   messages() {
-    if (!globalState.getters.currentSection) { return {}; }
-    // TODO: Viewport limited
+    if (!globalState.getters.currentSection) { return []; }
 
     let messages = state.messages[globalState.getters.currentSection.slug];
 
-    messages = _.filter(messages, function(value, key) {
+    if (!messages) { return new Array(999); }
 
-      console.log('key');
-      console.log(key);
+    const offset = 10;
+    let startSegment = ((globalState.getters.currentSegmentGroup - offset) < 0) ? 0 : (globalState.getters.currentSegmentGroup - offset);
+    let endSegment = (startSegment + offset);
 
-      console.log('(globalState.getters.currentSegmentGroup)');
-      console.log(globalState.getters.currentSegmentGroup);
+    messages = _.fill(messages, undefined, 0, startSegment);
+    messages = _.fill(messages, undefined, (endSegment + offset), (messages.length - 1));
 
-      // return true;
-      return ((parseInt(key) < globalState.getters.currentSegmentGroup) && (parseInt(key) > (globalState.getters.currentSegmentGroup - 4)))
-    });
-
+    // console.log(`startSegment - ${startSegment} + endSegment - ${endSegment} + messages.length - ${messages.length}`);
 
     return messages;
+  },
+  chunkedMessages() {
+
+    let messages = _.compact(globalState.getters.messages);
+
+    const chunkedMessages = _.reduce(messages, function(obj, param) {
+      obj[param.segmentGroup] = param;
+      return obj;
+    }, {});
+
+    return chunkedMessages;
   },
   subtitles() {
     if (!globalState.getters.currentSection) { return {}; }
@@ -44,35 +51,38 @@ const getters = {
     if (!globalState.getters.currentSection) { return {}; }
     return state.visualisation[globalState.getters.currentSection.slug];
   },
-  visualisationPoints() {
-    if (!globalState.getters.currentSection) { return []; }
-
-    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
-
-    const segmentHeight = 158.0;
-    const handleOffset = (segmentHeight / 4.0);
-    const width = 200.0;
-    const parentOffsetTop = (segmentHeight / 2.0);
-
-    let chunkedVis = _.chunk(_.values(visualisation), 5);
-
-    function summit(val, key) {
-      return _.mean(val);
-    }
-
-    chunkedVis = _.map(chunkedVis, summit);
-
-    let points = "M0 0 ";
-
-    _.forEach(chunkedVis, function(value, index) {
-      const offsetTop = (index * segmentHeight) + parentOffsetTop;
-      points += `S ${value * width} ${offsetTop - handleOffset}, ${value * width} ${offsetTop} `;
-    });
-
-    points += `L 0 ${(_.size(chunkedVis) * segmentHeight)} Z`;
-
-    return points;
-  },
+  // visualisationPoints() {
+  //
+  //   let points = "M0 0 ";
+  //
+  //   if (!globalState.getters.currentSection) { return points; }
+  //
+  //   let visualisation = state.visualisation[globalState.getters.currentSection.slug];
+  //
+  //   console.log('loading vis');
+  //   // let visualisation = state.visualisation['liveclass'];
+  //
+  //   const segmentHeight = 158.0;
+  //   const handleOffset = (segmentHeight / 4.0);
+  //   const width = 200.0;
+  //   const parentOffsetTop = (segmentHeight / 2.0);
+  //
+  //   let chunkedVis = _.chunk(_.values(visualisation), 5);
+  //
+  //   function summit(val, key) {
+  //     return _.mean(val);
+  //   }
+  //
+  //   chunkedVis = _.map(chunkedVis, summit);
+  //
+  //   _.forEach(chunkedVis, function(value, index) {
+  //     const offsetTop = (index * segmentHeight) + parentOffsetTop;
+  //     points += `S ${value * width} ${offsetTop - handleOffset}, ${value * width} ${offsetTop} `;
+  //   });
+  //
+  //   points += `L 0 ${(_.size(chunkedVis) * segmentHeight)} Z`;
+  //   return points;
+  // },
   visualisationLabels() {
     if (!globalState.getters.currentSection) { return []; }
 
@@ -103,16 +113,13 @@ const getters = {
     }
     return (globalState.getters.currentSection.duration !== undefined);
   },
-  scrollPoints() {
-    return state.scrollPoints;
-  },
   currentActiveSection() {
-    if (state.scrollPoints.length === 0) { return undefined; }
+    if (globalState.state.scrollPoints.length === 0) { return undefined; }
 
-    const offsetScrollPosition = globalState.getters.scrollPosition;
+    const offsetScrollPosition = globalState.state.scrollPosition;
 
-    for (const key in state.scrollPoints ) {
-      const scrollPoint = state.scrollPoints[key];
+    for (const key in globalState.state.scrollPoints ) {
+      const scrollPoint = globalState.state.scrollPoints[key];
       if ((offsetScrollPosition > scrollPoint.sectionTop) && (offsetScrollPosition < scrollPoint.bottom)) {
         return scrollPoint;
       }
@@ -120,25 +127,9 @@ const getters = {
 
     return undefined;
   },
-  currentSection() {
-    if (state.scrollPoints.length === 0) { return undefined; }
-
-    const offsetScrollPosition = globalState.getters.offsetScrollPosition;
-
-    for (const key in state.scrollPoints ) {
-      const scrollPoint = state.scrollPoints[key];
-      if ((offsetScrollPosition > scrollPoint.top) && (offsetScrollPosition < scrollPoint.bottom)) {
-        if (_.includes(['class', 'webinar'], scrollPoint.content_type)) {
-          return scrollPoint;
-        }
-      }
-    };
-
-    return undefined;
-  },
   currentSectionScrollPosition() {
     if (!globalState.getters.currentSection) { return 0; }
-    return globalState.getters.offsetScrollPosition - globalState.getters.currentSection.top;
+    return globalState.state.offsetScrollPosition - globalState.getters.currentSection.top;
   },
   currentSegmentGroup() {
     if (!globalState.getters.currentSection) { return -1; }
@@ -155,10 +146,13 @@ const actions = {
   getMessagesSummary({
     commit,
   }, request) {
-    state.messages[request.theContent] = (state.messages[request.theContent]) ? state.messages[request.theContent] : {};
+    state.messages[request.theContent] = (state.messages[request.theContent]) ? state.messages[request.theContent] : new Array(999);
 
-    state.messages[request.theContent][`${request.startSegment * 0.2}`] = {
+    const segmentGroup = parseInt(parseInt(request.startSegment) * 0.2);
+
+    state.messages[request.theContent][segmentGroup] = {
       loading: true,
+      segmentGroup: segmentGroup,
     };
 
     API.message.getMessagesSummary(
@@ -202,17 +196,6 @@ const actions = {
 
 // mutations
 const mutations = {
-  resetScrollPoints(initialState) {
-    state.scrollPoints = {};
-  },
-  setScrollPoint(initialState, scrollPoint) {
-    state.scrollPoints[scrollPoint.slug] = scrollPoint;
-    state.scrollPoints = initialState.scrollPoints;
-    console.log('Recalculating scroll points');
-  },
-  clearScrollPoints(initialState) {
-    state.scrollPoints = [];
-  },
   [types.GET_SUBTITLES_SUCCESS](initialState, {
     response,
   }) {
@@ -238,16 +221,8 @@ const mutations = {
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-    if (response.data.message) {
-      state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
-
-      state.messages[response.scope.content][response.scope.startsegment * 0.2] = {
-        message: response.data.message,
-        info: {
-          count: response.data.info.total,
-        },
-      };
-    }
+    state.messages[response.scope.content][parseInt(parseInt(response.scope.startsegment) * 0.2)] = response.data;
+    state.messages[response.scope.content][parseInt(parseInt(response.scope.startsegment) * 0.2)].segmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,

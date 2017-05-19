@@ -4,6 +4,8 @@
 
     .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
+    .fps-indicator {{ fps }}
+
     .main-container
 
       .toolbar.hidden
@@ -89,6 +91,7 @@ export default {
       infoVisible: false,
       isAutoScrolling: false,
       reattemptAutoScroll: 500,
+      fps: 0,
     };
   },
   components: {
@@ -114,15 +117,15 @@ export default {
       handler: function(nV, oV) {
         if (nV !== undefined) {
           if (oV !== nV) {
-            if (nV.duration !== undefined) {
+            if (nV.content_type === 'class') {
+
               const request = {
                 theClass: this.$store.getters.currentClass.slug,
                 theContent: this.currentSection.slug,
               };
 
-              this.$store.dispatch('getVisualisation', request).then(() => {
-                this.$store.dispatch('getSubtitles');
-              });
+              this.$store.dispatch('getVisualisation', request);
+              this.$store.dispatch('getSubtitles');
             }
           }
           if (!this.canAutoScroll) {
@@ -150,10 +153,10 @@ export default {
           }
         }
       }, 500);
-    }, 500, { 'leading': true, 'trailing': true }),
+    }, 500),
     setScrollPosition: _.throttle(function(self, position) {
       self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 500, { 'trailing': true }),
+    }, 500, { 'leading': false }),
     onScroll(e, position) {
       this.setScrollPosition(this, position);
     },
@@ -186,7 +189,30 @@ export default {
       var end = this.currentSection.bottom;
       var duration = (((end - start) / (158.0 * 1.0)) * 5000);
 
+      var lastCalledTime;
+      var frameCount;
+      var fps;
+
       var step = function() {
+
+        if(!lastCalledTime) {
+           lastCalledTime = Date.now();
+           fps = 0;
+           frameCount = 0;
+        }
+
+        frameCount += 1;
+
+        const delta = (Date.now() - lastCalledTime)/1000;
+        lastCalledTime = Date.now();
+
+        if ((frameCount % 30) === 0) {
+          frameCount = 0;
+          fps = 1/delta;
+          fps   = _.round((100 / 60) * fps);
+          self.fps = (fps > 60) ? '60+' : fps;
+        }
+
         var elapsed = Date.now() - clock;
 
         self.$refs.main.scrollTop = position(start, end, elapsed, duration);
@@ -207,7 +233,7 @@ export default {
         // Set the current section/scroll position
         var self = this;
         setTimeout(function() {
-          const scrollPoint = self.$store.getters.scrollPoints[query.content];
+          const scrollPoint = self.$store.state.scrollPoints[query.content];
           self.$refs.main.scrollTop = scrollPoint.top + (query.segment * (158.0 * 0.2));
         }, 1000);
 
@@ -236,6 +262,20 @@ export default {
 <style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
+
+.fps-indicator
+  radius(50%)
+  background-color red
+  color white
+  position fixed
+  top 100px
+  left 10px
+  height 40px
+  line-height 40px
+  padding 0
+  width 40px
+  z-index 999
+  text-align center
 
 .scroll-indicator
   radius(50%)

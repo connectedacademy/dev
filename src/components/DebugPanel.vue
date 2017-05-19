@@ -3,13 +3,13 @@
 .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
   p {{ `scrollPosition - ${scrollPosition}` }}
   p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
-  span.hidden
+  span
     p currentSection
     pre {{ currentSection }}
   span.hidden
     p currentActiveSection
     pre {{ currentActiveSection }}
-  span.hidden
+  span
     p scrollPoints
     pre {{ scrollPoints }}
   p {{ `videoEnabled - ${videoEnabled}` }}
@@ -45,6 +45,7 @@ export default {
       'currentSegmentGroup',
       'currentSegment',
       'scrollPoints',
+      'chunkedMessages',
     ]),
   },
   components: {},
