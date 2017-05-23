@@ -80,9 +80,6 @@ export default {
       },
       deep: true,
     },
-    canAutoScroll() {
-      this.checkIfCanLoadNextFrame();
-    },
     videoPlaying() {
       this.checkIfCanLoadNextFrame();
     },
@@ -92,7 +89,7 @@ export default {
   },
   methods: {
     checkIfCanLoadNextFrame() {
-      this.canLoadNextFrame = (this.canAutoScroll && this.videoPlaying && (this.currentSection !== undefined));
+      this.canLoadNextFrame = (this.videoPlaying && (this.currentSection !== undefined));
     },
     leaveClass() {
       this.$store.dispatch('getSpec', undefined);
@@ -117,7 +114,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'canAutoScroll', 'currentSectionScrollPosition',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'currentSectionScrollPosition',
     ]),
     scrollIndicatorStyle() {
       return {

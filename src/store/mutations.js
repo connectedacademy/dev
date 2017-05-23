@@ -25,10 +25,6 @@ export const setAutoPlaying = (state, isAutoPlaying) => {
   state.autoPlaying = isAutoPlaying;
 };
 
-export const setCanAutoScroll = (state, canAutoScroll) => {
-  state.canAutoScroll = canAutoScroll;
-};
-
 // Scroll points
 export const resetScrollPoints = (state) => {
   state.scrollPoints = {};

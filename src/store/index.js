@@ -34,7 +34,6 @@ export default new Vuex.Store({
     scrollPosition: 0.0,
     offsetScrollPosition: 0.0,
     autoPlaying: false,
-    canAutoScroll: true,
     scrollPoints: {},
     currentSection: undefined,
   },

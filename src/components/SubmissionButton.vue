@@ -17,7 +17,8 @@ export default {
       this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`);
     },
     makeSubmission() {
-      this.$router.push(this.content.url);
+      const encodedURI = encodeURIComponent(`${this.$store.getters.currentClass.dir}/${this.content.url}`);
+      this.$router.push(`/markdown/${encodedURI}`);
     },
   },
 };

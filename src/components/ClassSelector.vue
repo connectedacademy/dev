@@ -2,13 +2,13 @@
 
   .class-selector-wrapper
     transition(name="fade")
-      .skip-button.skip-button--left(@click="scrollLeft" v-if="leftArrowVisible")
+      .skip-button.skip-button--left(@click="scrollLeft" v-if="offset > 0")
         icon(name="angle-left")
     transition(name="fade")
-      .skip-button.skip-button--right(@click="scrollRight" v-if="rightArrowVisible")
+      .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
         icon(name="angle-right")
-    .class-selector-container(ref="classselector")
-      ul.class-selector
+    .class-selector-container(ref="classselector" v-scroll="onScroll")
+      ul.class-selector(v-bind:style="{ left: `${leftPos}px` }")
         li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
           h1.class-selector--item--header {{ theClass.title }}
           h2.class-selector--item--body {{ theClass.description }}
@@ -20,17 +20,11 @@
 <script>
 import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
+import VueScroll from 'vue-scroll';
 
 export default {
   name: 'class-selector',
   watch: {
-    leftOffset() {
-      const offset = (this.leftOffset < 100) ? 0 : this.leftOffset;
-      this.leftArrowVisible = (offset > 100);
-      this.rightArrowVisible = (offset < (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth));
-
-      this.$refs.classselector.scrollLeft = offset;
-    },
     currentClass() {
       this.activeClass = this.currentClass.slug;
     },
@@ -38,21 +32,25 @@ export default {
   data() {
     return {
       activeClass: undefined,
-      leftOffset: 0,
-      leftArrowVisible: false,
-      rightArrowVisible: true,
+      offset: 0,
+      remainingOffset: 1,
+      leftPos: 0,
     };
   },
   methods: {
+    onScroll(e, position) {
+      this.offset = position.scrollLeft;
+      this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - position.scrollLeft);
+    },
     setCurrentClass(newClass) {
       this.activeClass = newClass;
       this.$store.dispatch('getSpec', newClass);
     },
     scrollLeft() {
-      this.leftOffset = this.$refs.classselector.scrollLeft -= 80;
+      this.$refs.classselector.scrollLeft -= 80;
     },
     scrollRight() {
-      this.leftOffset = this.$refs.classselector.scrollLeft += 80;
+      this.$refs.classselector.scrollLeft += 80;
     },
   },
   computed: {
@@ -70,29 +68,31 @@ export default {
 .class-selector-wrapper
   radius(4px)
   height 120px
-  margin-bottom 10px
+  margin 10px 0
   overflow hidden
   position relative
   .skip-button
-    background-color #f2f2f2
-    height 100%
+    radius(50%)
+    background-color $color-primary
+    height 40px
     width 40px
     position absolute
-    top 0
+    top 50%
+    margin-top -20px
     bottom 0
     z-index 1
     &:hover
       cursor pointer
     &.skip-button--left
-      border-top-left-radius 4px
-      border-bottom-left-radius 4px
-      left 0
+      border-top-left-radius 0
+      border-bottom-left-radius 0
+      left -5px
     &.skip-button--right
-      border-top-right-radius 4px
-      border-bottom-right-radius 4px
-      right 0
+      border-top-right-radius 0
+      border-bottom-right-radius 0
+      right -5px
     .fa-icon
-      color $color-text-dark-grey
+      color white //$color-text-dark-grey
       height 100%
       width 10px
       margin 0 15px

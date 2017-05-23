@@ -89,7 +89,7 @@ export default {
       return (this.currentSection) ? this.currentSection.videoId : '';
     },
     ...mapGetters([
-      'videoIsActive', 'videoEnabled', 'currentTime', 'canAutoScroll', 'currentSection', 'videoPlaying',
+      'videoIsActive', 'videoEnabled', 'currentTime', 'currentSection', 'videoPlaying',
     ]),
     playerStyle() {
       return {

@@ -42,7 +42,6 @@
 <script>
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-import VueScroll from 'vue-scroll';
 
 import API from '@/api';
 import * as types from '@/store/mutation-types';

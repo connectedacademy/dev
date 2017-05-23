@@ -14,7 +14,6 @@
     pre {{ scrollPoints }}
   p {{ `videoEnabled - ${videoEnabled}` }}
   p {{ `autoPlaying - ${autoPlaying}` }}
-  p {{ `canAutoScroll - ${canAutoScroll}` }}
   p {{ `currentTime - ${currentTime}` }}
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
@@ -36,7 +35,6 @@ export default {
       'currentActiveSection',
       'videoEnabled',
       'autoPlaying',
-      'canAutoScroll',
       'scrollPosition',
       'offsetScrollPosition',
       'currentTime',

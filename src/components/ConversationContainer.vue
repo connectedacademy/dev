@@ -8,7 +8,7 @@
         icon(name="angle-double-down" scale="2")
 
     //- Efficent
-    .activity-visualisation(v-bind:style="activityVisualisationStyles" v-bind:class="{ active: !canAutoScroll }")
+    .activity-visualisation(v-bind:style="activityVisualisationStyles")
       svg(width="200" v-bind:height="svgHeight")
         g
           path(v-bind:d="visualisationPoints")
@@ -61,6 +61,7 @@ export default {
       this.updateChunkedMessages(this.currentSegmentGroup);
     },
     currentSegmentGroup(nV, oV) {
+      if (nV === undefined) { return; }
       if (oV !== nV) {
         this.$log.log(`Getting messages for segment ${nV}`);
 
@@ -71,6 +72,7 @@ export default {
       this.loadVisualisation(this.visualisation);
     },
     currentSection(nV, oV) {
+      if (nV === undefined) { return; }
       if (oV !== nV) {
         var self = this;
 
@@ -110,9 +112,12 @@ export default {
     },
     getMessagesSummary(segmentGroup) {
 
-      this.$log.log(`Getting message summary for - ${segmentGroup}`);
+      if (this.content === undefined) { return; }
+      if (this.currentClass === undefined) { return; }
+      if (this.currentSection === undefined) { return; }
+      if (this.content.slug !== this.currentSection.slug) { return; }
 
-      if (!this.canAutoScroll) { return; }
+      this.$log.log(`Getting message summary for - ${segmentGroup}`);
 
       let segmentViewport = _.floor(window.innerHeight / 158.0);
       // segmentViewport += 2; // Think behind
@@ -125,15 +130,13 @@ export default {
       currentSegment += (1.0 / 0.2);
 
       const request = {
-        theClass: this.$store.getters.currentClass.slug,
+        theClass: this.currentClass.slug,
         theContent: this.content.slug,
         startSegment: `${startSegment}`,
         endSegment: `${currentSegment}`,
       };
 
-      if (this.content.slug === this.currentSection.slug) {
-        this.$store.dispatch('getMessagesSummary', request);
-      }
+      this.$store.dispatch('getMessagesSummary', request);
     },
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
@@ -171,7 +174,7 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegment', 'currentSegmentGroup', 'isRegistered', 'messages', 'canAutoScroll', 'currentSection', 'visualisation',
+      'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'messages', 'visualisation',
     ]),
     containerHeight() {
       return ((this.content.duration * 0.2) * 158.0);
@@ -263,11 +266,6 @@ export default {
     svg
       path
         fill #e1e1e1
-        animate()
-    &.active
-      svg
-        path
-          fill #ddd
 
   .subtitle-container, .messages-container
     min-height 100px

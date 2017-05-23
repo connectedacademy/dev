@@ -35,5 +35,3 @@ export const currentSection = (state) => {
 };
 
 export const autoPlaying = state => state.autoPlaying;
-
-export const canAutoScroll = state => state.canAutoScroll;
