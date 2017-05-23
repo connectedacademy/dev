@@ -8,14 +8,13 @@
 
 <script>
 import {mapGetters} from 'vuex';
-import * as types from '@/store/mutation-types';
 import SectionNavigatorItem from './SectionNavigatorItem';
 
 export default {
   name: 'section-navigator',
-  props: [
-    'scrollPoints',
-  ],
+  computed: {
+    ...mapGetters(['scrollPoints']),
+  },
   components: {
     SectionNavigatorItem,
   },

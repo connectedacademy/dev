@@ -12,34 +12,21 @@ import {mapGetters} from 'vuex';
 
 export default {
   name: 'section-navigator-item',
-  components: {},
   props: ['scrollPoint'],
   computed: {
     ...mapGetters([
-      'currentActiveSection', 'canAutoScroll', 'autoPlaying',
+      'currentActiveSection',
     ]),
     isActive() {
-      if (this.currentActiveSection === undefined) {
-        return false;
-      }
-      if (this.scrollPoint === undefined) {
-        return false;
-      }
-      return (this.currentActiveSection.slug === this.scrollPoint.slug);
+      const currentActiveSection = this.currentActiveSection;
+
+      if (!(currentActiveSection && this.scrollPoint)) { return false; }
+      return (currentActiveSection.slug === this.scrollPoint.slug);
     },
   },
   methods: {
     jumpToContent() {
-      // Cancel animation
-      const tempAutoPlaying = this.autoPlaying;
-      this.$store.commit('setAutoPlaying', false);
-      this.$store.commit('setCanAutoScroll', false);
-      var self = this;
-      setTimeout(function() {
-        document.getElementById('col-main').scrollTop = self.scrollPoint.sectionTop + 1;
-        console.log('Navigation to a new section..');
-        console.log(this.scrollPoint);
-      }, 100);
+      window.scroll(0, this.scrollPoint.sectionTop + 1);
     }
   },
 };

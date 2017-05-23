@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .message.animated.fadeIn
+  .message
 
     img.profile-image(v-bind:src="message.author.profile")
 
@@ -8,7 +8,7 @@
       strong {{ message.author.account }}
 
     p.message-content
-      | {{ ' ' + message.text }}
+      | {{ message.text }}
 
     ul.tweet-actions
       li
@@ -53,8 +53,6 @@ export default {
   padding-left 50px
 
   position relative
-
-  transition opacity 1s
 
   img.profile-image
     radius(50%)

@@ -14,11 +14,12 @@ export const scrollPosition = (state) => {
   return state.scrollPosition;
 };
 
+export const scrollPoints = (state) => {
+  return state.scrollPoints;
+};
+
 export const offsetScrollPosition = (state) => {
-  if (!document.getElementById('col-main')) { return state.scrollPosition; }
-  let offset = (document.getElementById('col-main')) ? document.getElementById('col-main').offsetHeight : 0;
-  offset -= 140;
-  return (state.scrollPosition + offset);
+  return state.offsetScrollPosition;
 };
 
 export const currentTime = (state) => {
@@ -27,6 +28,10 @@ export const currentTime = (state) => {
   }
   let time = globalState.getters.currentSectionScrollPosition / (158.0 * 0.2); // _.ceil()
   return (time < 0) ? 0 : time;
+};
+
+export const currentSection = (state) => {
+  return state.currentSection;
 };
 
 export const autoPlaying = state => state.autoPlaying;

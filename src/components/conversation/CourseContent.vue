@@ -34,7 +34,7 @@
         submission-button(v-bind:content="content")
         .clearfix
 
-      conversation-container(v-if="((content.content_type === 'class') || (content.content_type === 'webinar')) && isRegistered" v-bind:content="content")
+      conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
 
 </template>
 

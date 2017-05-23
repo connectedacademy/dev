@@ -57,3 +57,5 @@ export const HIDE_COMPOSER = 'HIDE_COMPOSER';
 export const VIDEO_READY = 'VIDEO_READY';
 export const PLAY_VIDEO = 'PLAY_VIDEO';
 export const PAUSE_VIDEO = 'PAUSE_VIDEO';
+
+export const SET_ACTIVE_SEGMENT_GROUP = 'SET_ACTIVE_SEGMENT_GROUP';

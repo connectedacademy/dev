@@ -7,95 +7,41 @@ import globalState from '../index';
 
 // initial state
 const state = {
-  scrollPoints: {},
-  messages: {},
-  subtitles: {},
-  visualisation: {},
+  messages: new Array(999),
+  visualisation: [],
+  activeSegmentGroup: undefined,
 };
 
 // getters
 const getters = {
+  activeSegmentGroup() {
+    return state.activeSegmentGroup;
+  },
   messages() {
-    if (!globalState.getters.currentSection) { return {}; }
-    // TODO: Viewport limited
+    if (!globalState.getters.currentSection) { return []; }
 
-    let messages = state.messages[globalState.getters.currentSection.slug];
+    let messages = state.messages;
 
-    messages = _.filter(messages, function(value, key) {
+    // const offset = 3;
+    // let startSegment = ((globalState.getters.currentSegmentGroup - offset) < 0) ? 0 : (globalState.getters.currentSegmentGroup - offset);
+    // let endSegment = (startSegment + offset);
 
-      console.log('key');
-      console.log(key);
+    // messages = _.fill(messages, undefined, 0, startSegment);
+    // messages = _.fill(messages, undefined, (endSegment + offset), (messages.length - 1));
 
-      console.log('(globalState.getters.currentSegmentGroup)');
-      console.log(globalState.getters.currentSegmentGroup);
+    // console.log(`startSegment - ${startSegment} + endSegment - ${endSegment} + messages.length - ${messages.length}`);
 
-      // return true;
-      return ((parseInt(key) < globalState.getters.currentSegmentGroup) && (parseInt(key) > (globalState.getters.currentSegmentGroup - 4)))
-    });
-
+    // const chunkedMessages = messages.slice(startSegment, endSegment);
 
     return messages;
   },
   subtitles() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.subtitles[globalState.getters.currentSection.slug];
+    console.log('Subtitles from state');
+    return state.subtitles;
   },
   visualisation() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.visualisation[globalState.getters.currentSection.slug];
-  },
-  visualisationPoints() {
-    if (!globalState.getters.currentSection) { return []; }
-
-    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
-
-    const segmentHeight = 158.0;
-    const handleOffset = (segmentHeight / 4.0);
-    const width = 200.0;
-    const parentOffsetTop = (segmentHeight / 2.0);
-
-    let chunkedVis = _.chunk(_.values(visualisation), 5);
-
-    function summit(val, key) {
-      return _.mean(val);
-    }
-
-    chunkedVis = _.map(chunkedVis, summit);
-
-    let points = "M0 0 ";
-
-    _.forEach(chunkedVis, function(value, index) {
-      const offsetTop = (index * segmentHeight) + parentOffsetTop;
-      points += `S ${value * width} ${offsetTop - handleOffset}, ${value * width} ${offsetTop} `;
-    });
-
-    points += `L 0 ${(_.size(chunkedVis) * segmentHeight)} Z`;
-
-    return points;
-  },
-  visualisationLabels() {
-    if (!globalState.getters.currentSection) { return []; }
-
-    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
-
-    const segmentHeight = 158.0;
-    const offsetTop = (segmentHeight / 2.0);
-
-    let chunkedVis = _.chunk(_.values(visualisation), 5);
-
-    function summit(val, key) {
-      return _.sum(val);
-    }
-
-    chunkedVis = _.map(chunkedVis, summit);
-
-    let labels = "";
-
-    _.forEach(chunkedVis, function(value, index) {
-        labels += `<text text-anchor="middle" alignment-baseline="central" x="100" y="${(index * segmentHeight) + offsetTop}" fill="black" font-size="16">${index} - ${_.round(value, 2)}</text>`;
-    });
-
-    return labels;
+    console.log('Visualisation from state');
+    return state.visualisation;
   },
   videoIsActive() {
     if (globalState.getters.currentSection === undefined) {
@@ -103,16 +49,13 @@ const getters = {
     }
     return (globalState.getters.currentSection.duration !== undefined);
   },
-  scrollPoints() {
-    return state.scrollPoints;
-  },
   currentActiveSection() {
-    if (state.scrollPoints.length === 0) { return undefined; }
+    if (globalState.state.scrollPoints.length === 0) { return undefined; }
 
-    const offsetScrollPosition = globalState.getters.scrollPosition;
+    const offsetScrollPosition = globalState.state.scrollPosition;
 
-    for (const key in state.scrollPoints ) {
-      const scrollPoint = state.scrollPoints[key];
+    for (const key in globalState.state.scrollPoints ) {
+      const scrollPoint = globalState.state.scrollPoints[key];
       if ((offsetScrollPosition > scrollPoint.sectionTop) && (offsetScrollPosition < scrollPoint.bottom)) {
         return scrollPoint;
       }
@@ -120,25 +63,9 @@ const getters = {
 
     return undefined;
   },
-  currentSection() {
-    if (state.scrollPoints.length === 0) { return undefined; }
-
-    const offsetScrollPosition = globalState.getters.offsetScrollPosition;
-
-    for (const key in state.scrollPoints ) {
-      const scrollPoint = state.scrollPoints[key];
-      if ((offsetScrollPosition > scrollPoint.top) && (offsetScrollPosition < scrollPoint.bottom)) {
-        if (_.includes(['class', 'webinar'], scrollPoint.content_type)) {
-          return scrollPoint;
-        }
-      }
-    };
-
-    return undefined;
-  },
   currentSectionScrollPosition() {
     if (!globalState.getters.currentSection) { return 0; }
-    return globalState.getters.offsetScrollPosition - globalState.getters.currentSection.top;
+    return globalState.state.offsetScrollPosition - globalState.getters.currentSection.top;
   },
   currentSegmentGroup() {
     if (!globalState.getters.currentSection) { return -1; }
@@ -155,13 +82,28 @@ const actions = {
   getMessagesSummary({
     commit,
   }, request) {
-    state.messages[request.theContent] = (state.messages[request.theContent]) ? state.messages[request.theContent] : {};
 
-    state.messages[request.theContent][`${request.startSegment * 0.2}`] = {
-      loading: true,
-    };
+    const startSegmentGroup = parseInt(parseInt(request.startSegment) * 0.2);
+    const endSegmentGroup = parseInt(parseInt(request.endSegment) * 0.2);
 
-    API.message.getMessagesSummary(
+    // console.log(`** API request ${startSegmentGroup} - ${endSegmentGroup}`);
+    // console.log(request);
+
+    let segmentCount = (endSegmentGroup - startSegmentGroup);
+    let segmentIterator = 0;
+
+    while (segmentIterator < segmentCount) {
+      const currentSegmentGroup = startSegmentGroup + segmentIterator;
+      const loading = {
+        loading: true,
+        segmentGroup: currentSegmentGroup,
+      };
+
+      Vue.set(state.messages, `${currentSegmentGroup}`, loading);
+      segmentIterator += 1;
+    }
+
+    API.message.getMessagesSummaryBatch(
       request,
       response => commit(types.GET_MESSAGES_SUCCESS, {
         response,
@@ -202,57 +144,54 @@ const actions = {
 
 // mutations
 const mutations = {
-  resetScrollPoints(initialState) {
-    state.scrollPoints = {};
-  },
-  setScrollPoint(initialState, scrollPoint) {
-    state.scrollPoints[scrollPoint.slug] = scrollPoint;
-    state.scrollPoints = initialState.scrollPoints;
-    console.log('Recalculating scroll points');
-  },
-  clearScrollPoints(initialState) {
-    state.scrollPoints = [];
-  },
   [types.GET_SUBTITLES_SUCCESS](initialState, {
     response,
   }) {
-    state.subtitles[response.slug] = response.response;
+    state.subtitles = response.response;
   },
   [types.GET_SUBTITLES_FAILURE](initialState, {
     response,
   }) {
-    state.subtitles[response.slug] = [];
+    state.subtitles = [];
     // error in response
   },
   [types.GET_VISUALISATION_SUCCESS](initialState, {
     response,
   }) {
-    state.visualisation[response.scope.content] = response.data;
+    state.visualisation = response.data;
   },
   [types.GET_VISUALISATION_FAILURE](initialState, {
     response,
   }) {
-    state.visualisation[response.slug] = {};
+    console.log('error');
+    state.visualisation = [];
     // error in response
   },
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-    if (response.data.message) {
-      state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
 
-      state.messages[response.scope.content][response.scope.startsegment * 0.2] = {
-        message: response.data.message,
-        info: {
-          count: response.data.info.total,
-        },
-      };
+    const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
+    const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2);
+
+    // console.log(`** API response ${startSegmentGroup} - ${endSegmentGroup}`);
+    // console.log(response.scope);
+
+    for (var group in response.data) {
+
+      const segmentGroup = parseInt(parseInt(group) * 0.2);
+      let newMessage = response.data[group];
+      newMessage.segmentGroup = segmentGroup;
+      Vue.set(state.messages, segmentGroup, newMessage);
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,
   }) {
     // error in response
+  },
+  [types.SET_ACTIVE_SEGMENT_GROUP](initialState, activeSegmentGroup) {
+    state.activeSegmentGroup = activeSegmentGroup;
   },
 };
 

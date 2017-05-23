@@ -2,73 +2,80 @@
 
 <template lang="pug">
 
-  #app(v-bind:class="pageStyle")
+#app
 
-    .main-page
+  debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
-      navigation(v-bind:nav-title="navTitle")
+  authentication-flow
 
-      router-view(transition transition-mode="out-in")
+  section-navigator
 
-    debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+  burger-menu
 
-    section-navigator(v-bind:scroll-points="scrollPoints")
-      | {{ scrollPoints }}
+  left-drawer
 
-    burger-menu
+  right-drawer(v-if="isRegistered")
 
-    left-drawer
+  .main-page
+    navigation(v-bind:nav-title="navTitle")
+    router-view(transition transition-mode="out-in")
 
-    right-drawer(v-if="isRegistered")
+  #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive }")
+    playhead
+    video-container(v-if="videoEnabled")
+    message-composer
 
-    #action-panel.animated.slideInUp(v-if="videoIsActive")
-
-      playhead
-
-      video-container(v-if="videoEnabled")
-
-      message-composer
-
-    authentication-flow
-
-    .content-overlay(v-on:click="dismiss" v-bind:class="{ 'visible': overlayVisible }")
+  #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
 
 </template>
 
 <script>
-/* eslint-disable */
 import { mapGetters } from 'vuex';
 
 import store from './store/index';
 import * as types from './store/mutation-types';
 
-import AuthenticationFlow from './components/authentication/AuthenticationFlow';
+// Mixins
+import ScrollPoints from '@/mixins/ScrollPoints';
+import AutoScroll from '@/mixins/AutoScroll';
 
+// Components
+import AuthenticationFlow from './components/authentication/AuthenticationFlow';
 import Navigation from './components/navigation/Navigation';
 import SectionNavigator from './components/navigation/SectionNavigator';
 import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
-
 import DebugPanel from './components/DebugPanel';
 import MessageComposer from './components/MessageComposer';
 import VideoContainer from './components/VideoContainer';
 import Playhead from './components/Playhead';
+import Message from './components/conversation/Message';
 
 export default {
   name: 'app',
+  mixins: [
+    ScrollPoints,
+    AutoScroll,
+  ],
   created() {
+    // Fetch course and then hubs
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');
+
+    // Periodically update document height variable
+    window.setInterval(this.updateDocumentHeight, 200);
   },
   data() {
     return {
       navTitle: 'Connected Academy',
+      fps: 0.0,
+      scrollPosition: 0.0,
     };
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled', 'scrollPoints',
+      'isRegistered', 'videoIsActive', 'videoEnabled',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
@@ -88,13 +95,22 @@ export default {
     MessageComposer,
     VideoContainer,
     Playhead,
+    Message,
   },
   methods: {
-    dismiss() {
+    dismissOverlay() {
       this.$store.commit(types.DISMISS_AUTH);
       this.$store.commit(types.DISMISS_COMPOSER);
       this.$store.commit(types.DISMISS_LEFT_DRAWER);
       this.$store.commit(types.DISMISS_RIGHT_DRAWER);
+    },
+    updateDocumentHeight() {
+      // Check if document height has changed
+      if (this.documentHeight !== document.documentElement.scrollHeight) {
+        console.log('Document height changed');
+        this.documentHeight = document.documentElement.scrollHeight;
+        this.setScrollPoints();
+      }
     },
   },
 };
@@ -108,7 +124,7 @@ export default {
 
 #action-panel
   background-color white
-  position absolute
+  position fixed
   bottom 0
   left 50%
   margin-left -400px

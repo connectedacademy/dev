@@ -1,63 +1,53 @@
 <template lang="pug">
 
-  .conversation-container(ref="conversationContainer" v-if="isRegistered" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
+  .conversation-container(ref="conversationContainer" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
     .spacer(ref="spacer" v-bind:style="spacerStyles")
       .floating-text
         h5 {{ $t('common.scroll_down_for_live_class') }}
         icon(name="angle-double-down" scale="2")
 
+    //- Efficent
     .activity-visualisation(v-bind:style="activityVisualisationStyles" v-bind:class="{ active: !canAutoScroll }")
-      svg(width="200" v-bind:height="(segments.length * 158.0)")
+      svg(width="200" v-bind:height="svgHeight")
         g
           path(v-bind:d="visualisationPoints")
 
-      //- svg(width="200" v-bind:height="(segments.length * 158.0)")
+      //- svg(width="200" v-bind:height="svgHeight")
         g(v-html="visualisationLabels")
 
-    .subtitle-container
+    .subtitle-container(v-bind:style="subtitlesContainerStyles")
 
-      subtitle(v-for="subtitle in subtitles" v-bind:key="subtitle.id" v-bind:subtitle="subtitle")
+      subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
 
-    .messages-container
+    .messages-container(v-bind:style="messagesContainerStyles")
 
-      .time-segment(v-for="(index, segment) in segments")
-
-        .suggestion(v-if="messages[segment] && messages[segment].message && messages[segment].message.suggestion")
-            h3 {{ messages[segment].message.text }}
-
-        .mock-message(v-if="messages && messages[segment] && (messages[segment].loading || (messages[segment].info && (messages[segment].info.count === 0)))" v-bind:class="{ loading: messages[segment].loading }")
-          .mock-message--user
-          .mock-message--body
-            .mock-message--line
-            .mock-message--line
-            .mock-message--line
-
-        .message-wrapper(v-if="messages && messages[segment] && !messages[segment].loading")
-
-          .message-count.animated.fadeIn(v-bind:class="{ none: (messages[segment].info.count === 0), low: (messages[segment].info.count > 0), medium: (messages[segment].info.count > 2), high: (messages[segment].info.count > 4) }") {{ messages[segment].info.count }}
-
-          message(v-if="messages[segment].info.count > 0" v-bind:message="messages[segment].message")
+      span(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup")
+        time-segment(v-bind:message="message")
 
     .clearfix
 
 </template>
 
 <script>
+import Vue from 'vue';
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
+import API from '@/api';
 import * as types from '@/store/mutation-types';
 
-import ScrollPoints from '@/mixins/ScrollPoints';
+import Visualisation from '@/mixins/Visualisation';
+import Subtitles from '@/mixins/Subtitles';
 
-import Subtitle from './conversation/Subtitle';
-import Message from './conversation/Message';
+import TimeSegment from '@/components/conversation/TimeSegment';
+import Subtitle from '@/components/conversation/Subtitle';
 
 export default {
   /* eslint-disable */
   name: 'conversation-container',
   mixins: [
-    ScrollPoints,
+    Visualisation,
+    Subtitles,
   ],
   mounted() {
     this.windowResized();
@@ -67,15 +57,43 @@ export default {
     });
   },
   watch: {
+    messages() {
+      this.updateChunkedMessages(this.currentSegmentGroup);
+    },
     currentSegmentGroup(nV, oV) {
       if (oV !== nV) {
-        const backFill = 8;
-        for (var i = 0; i < backFill; i++) {
-          const segment = (nV - i);
-          if (segment >= 0) {
-            this.getMessagesSummary(segment);
-          }
-        }
+        console.log(`Getting messages for segment ${nV}`);
+
+        this.getMessagesSummary(nV);
+      }
+    },
+    visualisation(nV, oV) {
+      console.log('loadVisualisation');
+      this.loadVisualisation(this.visualisation);
+    },
+    currentSection(nV, oV) {
+      if (oV !== nV) {
+        var self = this;
+
+        API.message.getSubtitles(
+          `${this.currentSection.slug}`,
+          `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${this.currentSection.transcript}`,
+          function(response) {
+            self.subtitles = response.response;
+            // this.loadSubtitles();
+          },
+          function(response) {
+            self.subtitles = response.response;
+            // this.loadSubtitles();
+          },
+        );
+
+        const request = {
+          theClass: this.$store.getters.currentClass.slug,
+          theContent: this.currentSection.slug,
+        };
+
+        this.$store.dispatch('getVisualisation', request);
       }
     },
   },
@@ -89,51 +107,92 @@ export default {
         let height = (windowHeight - childOffset);
 
         this.spacerHeight = (height < 200) ? 200 : height;
-
-        var self = this;
-
-        setTimeout(function() {
-          self.setScrollPoints();
-        }, 500);
       }
     },
     getMessagesSummary(segmentGroup) {
 
-      if (this.messages) {
-        // Cancel request if we alredy have messages for segment
-        if (this.messages[segmentGroup]) { return; }
+      console.log(`Getting message summary for - ${segmentGroup}`);
 
-        // Cancel request if we are scrolling!
-        if (!this.canAutoScroll) { return; }
-      }
+      if (!this.canAutoScroll) { return; }
 
-      const segmentCount = (1.0 / 0.2);
-      const startSegment = (segmentGroup * segmentCount) - ((segmentGroup * segmentCount) % segmentCount);
-      const endSegment = (startSegment) + (segmentCount - 1);
+      let segmentViewport = _.floor(window.innerHeight / 158.0);
+      // segmentViewport += 2; // Think behind
+
+      let currentSegment = (segmentGroup / 0.2);
+      let startSegment = currentSegment - (segmentViewport / 0.2);
+      startSegment = (startSegment < 0) ? 0 : startSegment;
+
+      // Think ahead..
+      currentSegment += (1.0 / 0.2);
 
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.content.slug,
         startSegment: `${startSegment}`,
-        endSegment: `${endSegment}`,
+        endSegment: `${currentSegment}`,
       };
 
-      if (((startSegment % segmentCount) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
+      if (this.content.slug === this.currentSection.slug) {
         this.$store.dispatch('getMessagesSummary', request);
       }
     },
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
     },
+    updateChunkedMessages(currentSegment) {
+
+      let segmentViewport = _.floor(window.innerHeight / 158.0);
+
+      currentSegment += 1; // Think ahead
+      segmentViewport += 2; // Think behind
+
+      let startSegment = currentSegment - segmentViewport;
+      startSegment = (startSegment < 5) ? 0 : startSegment;
+
+      // console.log(`** Updating chunked - ${startSegment} - ${currentSegment}`);
+
+      let result = _.compact(this.messages.slice(startSegment, currentSegment));
+
+      for (var i = 0; i < result.length; i += 1) {
+        if (result[i].segmentGroup >= startSegment && result[i].segmentGroup <= currentSegment) {
+          if (!(this.chunkedMessages[`${result[i].segmentGroup}`] && this.chunkedMessages[`${result[i].segmentGroup}`].message)) {
+            Vue.set(this.chunkedMessages, `${result[i].segmentGroup}`, result[i]);
+          }
+        }
+      }
+
+      for (var i = 0; i < this.chunkedMessages.length; i += 1) {
+
+        if (!(this.chunkedMessages[i].segmentGroup >= startSegment && this.chunkedMessages[i].segmentGroup <= currentSegment)) {
+          this.chunkedMessages[i] = null;
+        }
+      }
+    },
   },
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'visualisationPoints', 'visualisationLabels', 'isRegistered', 'messages', 'subtitles', 'canAutoScroll',
+      'currentClass', 'currentSegment', 'currentSegmentGroup', 'isRegistered', 'messages', 'canAutoScroll', 'currentSection', 'visualisation',
     ]),
+    containerHeight() {
+      return ((this.content.duration * 0.2) * 158.0);
+    },
+    svgHeight() {
+      return `${this.containerHeight}px`;
+    },
     conversationContainerStyles() {
       return {
-        height: `${((this.segments.length * 158.0) + this.spacerHeight)}px`,
+        height: `${(this.containerHeight + this.spacerHeight)}px`,
+      };
+    },
+    messagesContainerStyles() {
+      return {
+        top: `${this.spacerHeight}px`,
+      };
+    },
+    subtitlesContainerStyles() {
+      return {
+        top: `${this.spacerHeight}px`,
       };
     },
     activityVisualisationStyles() {
@@ -146,9 +205,8 @@ export default {
         height: `${this.spacerHeight}px`,
       };
     },
-    segments() {
-      // Calculate number of segments
-      return _.map(_.range(_.ceil(this.content.duration * 0.2)), function () { return undefined; });
+    visualisationPoints() {
+      return this.points;
     },
   },
   data() {
@@ -156,11 +214,14 @@ export default {
       navTitle: 'Connected Academy - Main',
       messagePriority: true,
       spacerHeight: 0,
+      points: '',
+      subtitles: [],
+      chunkedMessages: {},
     };
   },
   components: {
     Subtitle,
-    Message,
+    TimeSegment,
   },
 };
 </script>
@@ -171,7 +232,6 @@ export default {
 
 .conversation-container
   background-color #f2f2f2
-  min-height 100px
   overflow hidden
   position relative
   padding 0
@@ -203,107 +263,34 @@ export default {
     z-index 0
     svg
       path
-        fill black
-        opacity 0.15
+        fill #e1e1e1
         animate()
     &.active
       svg
         path
-          fill black
-          opacity 0.3
+          fill #ddd
 
   .subtitle-container, .messages-container
-    float left
-    min-height 158px
-    position relative
+    min-height 100px
+    position absolute
     width 50%
-
-    .time-segment
-      border-color transparent
-      height 158px
-      position relative
-      animate()
-      .message-count
-        radius(13px)
-        background-color $color-primary
-        color white
-        font-size 0.8em
-        line-height 14px
-        min-width 14px
-        padding 6px
-        position absolute
-        text-align center
-        top 5px
-        right 5px
-        &.none
-          background-color #CCC
-        &.low
-          background-color $color-success
-        &.medium
-          background-color $color-warning
-        &.high
-          background-color $color-danger
-      p.timestamp-label
-        radius(20px)
-        background-color $color-primary
-        color white
-        display inline-block
-        line-height 40px
-        min-width 20px
-        margin 5px
-        padding 0 10px
-        text-align center
+    left 0
+    top 0
+    bottom 0
 
   .subtitle-container
     .time-segment
       background-color #f2f2f2
 
   .messages-container
-    width 50%
-    .time-segment
-      border-right transparent 3px solid
-      overflow hidden
-      animate()
-      &.active
-        border-right-color $color-primary
+    left 50%
 
   @media(max-width: 600px)
     &.message-priority
       .subtitle-container
         display none
-        width 50px
       .messages-container
         display block
         width 100%
-  .mock-message
-    height 120px
-    padding-left 60px
-    position absolute
-    top 0
-    left 0
-    right 0
-    opacity 0.05
-    animate()
-    &.loading
-      opacity 0.15
-    .mock-message--user
-      radius(50%)
-      background-color black
-      height 40px
-      width 40px
-      position absolute
-      top 20px
-      left 15px
-    .mock-message--body
-      radius(6px)
-      height 100px
-      padding 10px
-      .mock-message--line
-        radius(6px)
-        background-color black
-        height 20px
-        margin-top 15px
-        &:first-child
-          max-width 100px
 
-  </style>
+</style>

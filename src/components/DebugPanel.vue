@@ -3,13 +3,13 @@
 .debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
   p {{ `scrollPosition - ${scrollPosition}` }}
   p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
-  span.hidden
+  span
     p currentSection
     pre {{ currentSection }}
-  span.hidden
+  span
     p currentActiveSection
     pre {{ currentActiveSection }}
-  span.hidden
+  span
     p scrollPoints
     pre {{ scrollPoints }}
   p {{ `videoEnabled - ${videoEnabled}` }}
@@ -19,7 +19,6 @@
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
   p {{ `currentSegment - ${currentSegment}` }}
-  button.pure-button(@click="setPosition") Set Position
 
 </template>
 
@@ -45,17 +44,11 @@ export default {
       'currentSegmentGroup',
       'currentSegment',
       'scrollPoints',
+      'chunkedMessages',
     ]),
   },
   components: {},
-  methods: {
-    setPosition() {
-      const ele = document.getElementById('col-main');
-      alert(this.$store.getters.currentSection.top);
-      ele.scrollTop = `${this.$store.getters.currentSection.top}px`;
-
-    },
-  },
+  methods: {},
 };
 </script>
 

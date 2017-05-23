@@ -1,12 +1,14 @@
 <template lang="pug">
 
-  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
+  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
     .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
+    //- .fps-indicator {{ fps }}
+
     .main-container
 
-      .toolbar.hidden
+      //- .toolbar
 
         button.pure-button.pull-left(v-on:click="infoVisible =! infoVisible")
           | {{ $t('course.course_info') }}
@@ -29,9 +31,6 @@
 /* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-import VueScroll from 'vue-scroll';
-
-import ScrollPoints from '@/mixins/ScrollPoints';
 
 import * as types from '@/store/mutation-types';
 import ClassSelector from './ClassSelector';
@@ -42,9 +41,6 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'main',
-  mixins: [
-    ScrollPoints,
-  ],
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.dispatch('checkAuth');
@@ -62,152 +58,54 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setColumnState', 'narrow');
-    // this.$store.dispatch('getCourse');
-
-    var self = this;
-
-    // Listen for wheel events
-    window.addEventListener('wheel', () => {
-      self.throttledWheelMovement(self);
-      self.wheelMovement(self);
-    });
-
-    // Listen for resize events
-    window.addEventListener('resize', () => {
-      console.log('Resized window');
-    });
-
-    // Attempt auto scroll every second
-    setInterval(function() { self.attemptAutoScroll(); }, self.reattemptAutoScroll);
-
     this.toMessage(this.$route.query);
   },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
       infoVisible: false,
-      isAutoScrolling: false,
-      reattemptAutoScroll: 500,
+      fps: 0,
+      canLoadNextFrame: false,
     };
   },
   components: {
-    VueScroll,
     ClassSelector,
     CourseContent,
     MarkdownRenderer,
   },
   watch: {
-    'videoReady': {
-      handler: function(nV, oV) {
-        this.attemptAutoScroll();
-      },
-      deep: true,
-    },
     'isAutoScrolling': {
       handler: function(nV, oV) {
         this.$store.commit('setAutoPlaying', nV);
       },
       deep: true,
     },
-    'currentSection': {
-      handler: function(nV, oV) {
-        if (nV !== undefined) {
-          if (oV !== nV) {
-            if (nV.duration !== undefined) {
-              const request = {
-                theClass: this.$store.getters.currentClass.slug,
-                theContent: this.currentSection.slug,
-              };
-
-              this.$store.dispatch('getVisualisation', request).then(() => {
-                this.$store.dispatch('getSubtitles');
-              });
-            }
-          }
-          if (!this.canAutoScroll) {
-            if (oV !== nV) {
-              if (nV.duration !== undefined) {
-                this.$store.commit('setCanAutoScroll', true);
-              }
-            }
-          }
-        }
-      },
-      deep: true,
+    canAutoScroll() {
+      this.checkIfCanLoadNextFrame();
+    },
+    videoPlaying() {
+      this.checkIfCanLoadNextFrame();
+    },
+    currentSection() {
+      this.checkIfCanLoadNextFrame();
     },
   },
   methods: {
-    wheelMovement() {
-      this.isAutoScrolling = false;
-      this.$store.commit('setCanAutoScroll', false);
-    },
-    throttledWheelMovement: _.throttle(function(self) {
-      setTimeout(function() {
-        if (self.currentSection !== undefined) {
-          if (self.currentSection.duration !== undefined) {
-            self.$store.commit('setCanAutoScroll', true);
-          }
-        }
-      }, 500);
-    }, 500, { 'leading': true, 'trailing': true }),
-    setScrollPosition: _.throttle(function(self, position) {
-      self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 500, { 'trailing': true }),
-    onScroll(e, position) {
-      this.setScrollPosition(this, position);
+    checkIfCanLoadNextFrame() {
+      this.canLoadNextFrame = (this.canAutoScroll && this.videoPlaying && (this.currentSection !== undefined));
     },
     leaveClass() {
       this.$store.dispatch('getSpec', undefined);
     },
-    attemptAutoScroll() {
-
-      var self = this;
-
-      if (self.isAutoScrolling || !self.canAutoScroll || (self.currentSection === undefined) || !self.videoPlaying || !self.videoReady || (self.$refs.main === undefined)) { return; }
-
-      self.isAutoScrolling = true;
-
-      var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
-
-      var position = function(start, end, elapsed, duration) {
-  	    if (elapsed > duration) return end;
-  	    // return start + (end - start) * easingFunction(elapsed / duration); // Easing
-
-  	    return start + (end - start) * (elapsed / duration); // Linear
-    	}
-
-      var clock = Date.now();
-      var requestAnimationFrame = window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-        function(fn) { window.setTimeout(fn, 15); };
-
-      var start = this.scrollPosition;
-      var end = this.currentSection.bottom;
-      var duration = (((end - start) / (158.0 * 1.0)) * 5000);
-
-      var step = function() {
-        var elapsed = Date.now() - clock;
-
-        self.$refs.main.scrollTop = position(start, end, elapsed, duration);
-
-        if ((elapsed <= duration) && self.canAutoScroll && self.videoPlaying && (self.currentSection !== undefined)) {
-          requestAnimationFrame(step);
-        }
-      }
-      step();
-    },
     toMessage(query) {
       if (query.class && query.content) {
-        console.log(`${query.class} - ${query.content} - ${query.segment}`);
-
         // Set the class
         this.$store.dispatch('getSpec', query.class);
 
         // Set the current section/scroll position
         var self = this;
         setTimeout(function() {
-          const scrollPoint = self.$store.getters.scrollPoints[query.content];
+          const scrollPoint = self.$store.state.scrollPoints[query.content];
           self.$refs.main.scrollTop = scrollPoint.top + (query.segment * (158.0 * 0.2));
         }, 1000);
 
@@ -219,11 +117,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'canAutoScroll', 'currentSectionScrollPosition',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'canAutoScroll', 'currentSectionScrollPosition',
     ]),
-    pastMidPoint() {
-      return (this.currentSectionScrollPosition > (document.getElementById('col-main').offsetHeight / 2.0))
-    },
     scrollIndicatorStyle() {
       return {
         top: `${this.offsetScrollPosition}px`,
@@ -236,6 +131,20 @@ export default {
 <style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
+
+.fps-indicator
+  radius(50%)
+  background-color red
+  color white
+  position fixed
+  top 100px
+  left 10px
+  height 40px
+  line-height 40px
+  padding 0
+  width 40px
+  z-index 999
+  text-align center
 
 .scroll-indicator
   radius(50%)
