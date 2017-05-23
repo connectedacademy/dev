@@ -8,7 +8,7 @@
       .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
         icon(name="angle-right")
     .class-selector-container(ref="classselector" v-scroll="onScroll")
-      ul.class-selector(v-bind:style="{ left: `${leftPos}px` }")
+      ul.class-selector(v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
         li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
           h1.class-selector--item--header {{ theClass.title }}
           h2.class-selector--item--body {{ theClass.description }}
@@ -57,6 +57,9 @@ export default {
     ...mapGetters([
       'course', 'currentClass'
     ]),
+    theWidth() {
+      return (this.course && this.course.classes) ? ((this.course.classes.length * 190.0) - 10) : 0;
+    },
   },
 };
 </script>
@@ -105,13 +108,12 @@ export default {
       border-bottom #e1e1e1 1px solid
       height 120px
       white-space nowrap
-      width calc(200px * 2)
       li.class-selector--item
         cleanlist()
         radius(4px)
         background-color white
         box-sizing border-box
-        display inline-block
+        float left
         overflow hidden
         margin-left 10px
         padding 10px 15px

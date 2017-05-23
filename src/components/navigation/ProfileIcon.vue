@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
 
 export default {
@@ -16,6 +17,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isRegistered',
+    ]),
     profile() {
       return `url('${this.$store.state.auth.user.profile}')`;
     },

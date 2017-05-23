@@ -23,7 +23,7 @@
     .messages-container(v-bind:style="messagesContainerStyles")
 
       span(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup")
-        time-segment(v-bind:message="message")
+        time-segment(v-bind:message="message" v-bind:subtitles="subtitles")
 
     .clearfix
 
@@ -124,10 +124,12 @@ export default {
 
       let currentSegment = (segmentGroup / 0.2);
       let startSegment = currentSegment - (segmentViewport / 0.2);
-      startSegment = (startSegment < 0) ? 0 : startSegment;
 
       // Think ahead..
       currentSegment += (1.0 / 0.2);
+
+      startSegment = (startSegment < 0) ? 0 : startSegment;
+      currentSegment = (currentSegment < 5) ? 5 : currentSegment;
 
       const request = {
         theClass: this.currentClass.slug,

@@ -7,7 +7,9 @@
     #debug-button(@click="toggleDebugMode")
       icon(name="wrench")
 
-    profile-icon
+    profile-icon(v-if="isRegistered")
+
+    .login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") Login
 
 </template>
 
@@ -33,9 +35,6 @@ export default {
       return (this.$store.getters.currentClass && this.$store.getters.scrollPosition > 100) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
     },
   },
-  // props: {
-  //   navTitle: String,
-  // },
   methods: {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
@@ -67,6 +66,12 @@ export default {
     height 20px
     width 20px
     margin 10px
+
+.login-button
+  position fixed
+  top 0
+  right 0
+  margin 10px
 
 .navigation
   animate()

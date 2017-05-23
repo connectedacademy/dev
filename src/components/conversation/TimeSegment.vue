@@ -5,6 +5,10 @@
     .close-button.animated.tada(v-if="activeSegment" @click="exploreSegment(undefined)")
       p close
 
+    transition(name="fade")
+      .quote-container(v-if="activeSegmentVisible && activeSegment.quote")
+        h1 {{ activeSegment.quote }}
+
     .message-wrapper(@click="exploreSegment(message)")
 
       .message-count.animated.fadeIn(v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:class="{ hide: activeSegment, low: (message.info.total > 0), medium: (message.info.total > 2), high: (message.info.total > 4) }")
@@ -20,14 +24,13 @@
       transition(name="fade")
         message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
-    .meta-container
+    .meta-container(v-if="activeSegmentVisible")
 
-      span(v-if="activeSegment")
+      .full-width-loading(v-if="!segmentMessages")
+        icon(name="refresh" scale="2" spin)
 
-        .full-width-loading(v-if="segmentMessages.length === 0")
-          icon(name="refresh" scale="2" spin)
-
-        .meta-container--messages(v-for="asMessage in segmentMessages")
+      transition(name="fade")
+        .meta-container--messages(v-if="segmentMessages" v-for="asMessage in segmentMessages")
           message(v-bind:message="asMessage")
 
 </template>
@@ -43,7 +46,7 @@ import Icon from 'vue-awesome/components/Icon';
 
 export default {
   name: 'time-segment',
-  props: ['message'],
+  props: ['message', 'subtitles'],
   components: {
     Message,
     MockMessage,
@@ -53,6 +56,15 @@ export default {
       var self = this;
       setTimeout(function() {
         self.loadSegmentMessages();
+        self.loadSegmentQuote();
+        self.activeSegmentStyles = {
+          transition: 'none',
+          position: `fixed`,
+          top: `${60}px`,
+          left: 'calc(50% - 390px)',
+          right: 'calc(50% - 390px)',
+          height: self.activeSegmentStyles.height,
+        };
       }, 500);
     },
   },
@@ -60,7 +72,7 @@ export default {
     return {
       activeSegment: undefined,
       activeSegmentVisible: false,
-      segmentMessages: [],
+      segmentMessages: undefined,
     };
   },
   methods: {
@@ -68,15 +80,15 @@ export default {
 
       if (segment === undefined) {
         this.$log.log('Closing segment explorer');
-        this.$store.commit(types.PLAY_VIDEO);
         this.activeSegment = undefined;
         this.activeSegmentVisible = false;
+        this.$store.commit(types.PLAY_VIDEO);
       } else {
         this.$log.log(`Exploring segment - ${segment.segmentGroup}`);
         this.$store.commit(types.PAUSE_VIDEO);
 
         this.activeSegment = segment;
-        this.activeSegmentVisible = true;;
+        this.activeSegmentVisible = true;
 
         const offsetHeight = window.innerHeight;
         const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
@@ -111,6 +123,18 @@ export default {
         },
       );
     },
+    loadSegmentQuote() {
+
+      // Get quote for active segment
+      const time = (this.activeSegment.segmentGroup / 0.2);
+
+      const quote = _.find(this.subtitles, function(o) {
+        return o.start > time;
+      });
+
+      this.activeSegment.quote = `"${quote.text}"`;
+
+    },
   },
 };
 </script>
@@ -123,14 +147,13 @@ export default {
   padding 20px
 
 .time-segment
-  border transparent 1px solid
+  /*border transparent 1px solid*/
   height 158px
   position absolute
   left 0
   right 0
   top 0
-  overflow scroll
-  animate()
+  overflow hidden
   .message-count
     radius(13px)
     background-color $color-primary
@@ -162,19 +185,33 @@ export default {
     margin 5px
     padding 0 10px
     text-align center
+
   &.active
-    border-color $color-light-grey
+    animate()
     background white
     z-index 50
+    overflow scroll
     .message-wrapper
       border-bottom $color-light-grey 1px solid
-      min-height 140px
+      .message-count
+        display none
+      .mock-message
+        display none
+        position relative
     .meta-container
       background-color #f9f9f9
       border-bottom $color-light-grey 1px solid
       padding 5px
       .pure-button
         margin 10px
+    .quote-container
+      background-color $color-primary
+      text-align center
+      h1
+        nomargin()
+        color white
+        line-height 120px
+        padding 0 20px
 
 .full-width-loading
   padding 20px
@@ -184,7 +221,8 @@ export default {
 
 .close-button
   radius(15px)
-  background-color red
+  background-color $color-primary
+  border white 1px solid
   position absolute
   top 5px
   right 5px

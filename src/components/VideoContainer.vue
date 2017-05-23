@@ -28,15 +28,16 @@ export default {
     };
   },
   watch: {
-    currentTime(oldTime, newTime) {
-      this.seek(this, this.currentTime);
+    currentTime(nV, oV) {
+      this.seek(this, nV);
     },
-    videoPlaying() {
-      if (!this.player) { return; }
-      if (this.videoPlaying === false) {
-        this.player.pauseVideo();
-      } else {
-        this.player.playVideo();
+    videoPlaying(nv, oV) {
+      if (this.player) {
+        if (nv) {
+           this.player.playVideo();
+        } else {
+          this.player.pauseVideo();
+        }
       }
     },
   },

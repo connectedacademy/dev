@@ -7,8 +7,7 @@
     p.author-label
       strong {{ message.author.account }}
 
-    p.message-content
-      | {{ message.text }}
+    p.message-content(v-html="html")
 
     ul.tweet-actions
       li
@@ -25,11 +24,15 @@
 
 <script>
 import _ from 'lodash';
+import TweetPatch from 'tweet-patch';
 
 export default {
   name: 'message',
   props: ['message'],
   computed: {
+    html() {
+      return TweetPatch(`#TestHashtag @edjenkins91 ${this.message.text}`, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+    },
     replyLink() {
       return `https://twitter.com/intent/tweet?in_reply_to=${this.message.message_id}`;
     },
@@ -66,6 +69,8 @@ export default {
     nomargin()
     nopadding()
     color $color-text-dark-grey
+    a
+      color $color-text-dark-grey
 
   ul.tweet-actions
     cleanlist()
