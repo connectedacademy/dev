@@ -26,8 +26,6 @@ export default {
 @import "../../assets/stylus/shared/*";
 
 .section-navigator
-  radius(30px)
-  background-color $color-purple
   min-height 40px
   min-width 40px
   position fixed
@@ -35,5 +33,8 @@ export default {
   right 10px
   ul.navigation-items
     cleanlist()
+    radius(30px)
+  @media(max-width: 900px)
+    display none
 
 </style>

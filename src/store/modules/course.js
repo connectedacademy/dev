@@ -47,6 +47,7 @@ const actions = {
   getSpec({
     commit,
   }, classSlug) {
+    state.current_class = undefined;
     API.course.getSpec(
       classSlug,
       response => commit(types.GET_SPEC_SUCCESS, {

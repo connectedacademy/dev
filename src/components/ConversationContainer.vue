@@ -285,12 +285,15 @@ export default {
   .messages-container
     left 50%
 
-  @media(max-width: 600px)
+  @media(max-width: 800px)
+    .subtitle-container, .messages-container
+      left 0
+      width 100%
     &.message-priority
       .subtitle-container
         display none
-      .messages-container
-        display block
-        width 100%
+    &.subtitle-priority
+      .message-container
+        display none
 
 </style>

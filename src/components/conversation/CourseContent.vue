@@ -2,7 +2,7 @@
 
 .course-content-wrapper
 
-  .course-content-group(v-for="content in courseContent" v-bind:class="{ optional: content.optional }")
+  .course-content-group.course-content-group--released(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- QUESTION
     .course-content(v-if="content.content_type === 'question'")
@@ -36,6 +36,11 @@
 
       conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
 
+  .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-if="index === 0")
+
+    //- FUTURE CONTENT
+    future-content(v-bind:content="content")
+
 </template>
 
 <script>
@@ -50,6 +55,7 @@ import ConversationContainer from '../ConversationContainer';
 import LikeIndicator from '../LikeIndicator';
 import SubmissionGrid from '../SubmissionGrid';
 import SubmissionButton from '../SubmissionButton';
+import FutureContent from './FutureContent';
 
 export default {
   name: 'course-content',
@@ -57,6 +63,12 @@ export default {
     ...mapGetters([
       'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
     ]),
+    releasedContent() {
+      return _.filter(this.courseContent, { status: 'RELEASED' });
+    },
+    futureContent() {
+      return _.filter(this.courseContent, { status: 'FUTURE' });
+    },
   },
   data() {
     return {};
@@ -73,6 +85,7 @@ export default {
     LikeIndicator,
     SubmissionGrid,
     SubmissionButton,
+    FutureContent,
   },
 };
 </script>

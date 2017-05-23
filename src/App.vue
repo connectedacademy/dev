@@ -17,7 +17,7 @@
   right-drawer(v-if="isRegistered")
 
   .main-page
-    navigation(v-bind:nav-title="navTitle")
+    navigation
     router-view(transition transition-mode="out-in")
 
   #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive }")
