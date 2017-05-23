@@ -53,7 +53,8 @@ export default {
   box-sizing border-box
   height 60px
   padding 0
-  position relative
+  position fixed
+  top 0
   text-align center
   z-index 2
   width 100%

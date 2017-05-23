@@ -37,7 +37,7 @@ rotate_transform(args)
   height 60px
   width 60px
 
-  position absolute
+  position fixed
   top 0
   left 0
   z-index 50
@@ -81,5 +81,5 @@ rotate_transform(args)
 #app.authenticating
   .burger-menu
     display none
-    
+
 </style>

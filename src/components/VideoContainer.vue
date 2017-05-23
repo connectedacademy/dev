@@ -2,11 +2,13 @@
 
   .video-wrapper
 
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 1, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" @playing="playing" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
+    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 2, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
 
 <script>
+const SYNC_THRESHOLD = 1.0;
+
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
@@ -29,7 +31,13 @@ export default {
     currentTime(oldTime, newTime) {
       this.seek(this, this.currentTime);
     },
-
+    videoPlaying() {
+      if (this.videoPlaying === false) {
+        this.player.pauseVideo();
+      } else {
+        this.player.playVideo();
+      }
+    },
   },
   methods: {
     change() {},
@@ -51,10 +59,14 @@ export default {
       this.$store.commit(types.PAUSE_VIDEO);
     },
     seek: _.throttle(function(self, position) {
-      if (!this.canAutoScroll && self.player) {
+      const playerTime = this.player.getCurrentTime();
+      const outOfSync = ((this.currentTime < (playerTime - SYNC_THRESHOLD)) || (this.currentTime > (playerTime + SYNC_THRESHOLD)))
+
+      if (self.player && outOfSync) {
+        console.log('Video out of sync - seeking');
         self.player.seekTo(position);
       }
-    }, 1000),
+    }, 200),
     getWindowWidth: _.throttle(function(event) {
       if (document.documentElement.clientWidth < 800) {
         const percentage = 0.8;
@@ -70,10 +82,11 @@ export default {
   },
   computed: {
     src() {
+      console.log('src changed');
       return (this.currentSection) ? this.currentSection.videoId : '';
     },
     ...mapGetters([
-      'videoIsActive', 'videoEnabled', 'currentTime', 'canAutoScroll', 'currentSection',
+      'videoIsActive', 'videoEnabled', 'currentTime', 'canAutoScroll', 'currentSection', 'videoPlaying',
     ]),
     playerStyle() {
       return {

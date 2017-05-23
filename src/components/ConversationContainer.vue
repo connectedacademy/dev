@@ -7,6 +7,7 @@
         h5 {{ $t('common.scroll_down_for_live_class') }}
         icon(name="angle-double-down" scale="2")
 
+    //- Efficent
     .activity-visualisation(v-bind:style="activityVisualisationStyles" v-bind:class="{ active: !canAutoScroll }")
       svg(width="200" v-bind:height="svgHeight")
         g
@@ -15,56 +16,36 @@
       //- svg(width="200" v-bind:height="svgHeight")
         g(v-html="visualisationLabels")
 
-    .subtitle-container
+    .subtitle-container(v-bind:style="subtitlesContainerStyles")
 
-      subtitle(v-for="subtitle in subtitles" v-once v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
+      subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
 
-    .messages-container
+    .messages-container(v-bind:style="messagesContainerStyles")
 
-      .time-segment(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup" v-bind:style="{ top: (message.segmentGroup * 158.0) + 'px' }")
-
-        //- pre {{ message }}
-        //- pre.hidden {{ ((message.segmentGroup / 5) * 158.0) }}
-
-        //- .message-wrapper
-        .message-count.animated.fadeIn(v-if="message && message.info" v-bind:class="{ none: (message.info.total === 0), low: (message.info.total > 0), medium: (message.info.total > 2), high: (message.info.total > 4) }")
-          span(v-if="message.info.total !== 0") {{ message.info.total }}
-          icon(name="twitter" v-if="message.info.total === 0")
-
-        message(v-once v-if="message.info && (message.info.total > 0)" v-bind:message="message.message")
-
-        .mock-message.animated.fadeIn(v-once v-if="message.loading || (message.info && (message.info.total === 0))" v-bind:class="{ loading: message.loading }")
-          .mock-message--user
-          .mock-message--body
-            .mock-message--line
-            .mock-message--line
-            .mock-message--line
-
-    //- .suggestion(v-if="chunkedMessages[segment] && chunkedMessages[segment].message && chunkedMessages[segment].message.suggestion")
-          h3 {{ chunkedMessages[segment].message.text }}
-
+      span(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup")
+        time-segment(v-bind:message="message")
 
     .clearfix
 
 </template>
 
 <script>
+import Vue from 'vue';
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
+import API from '@/api';
 import * as types from '@/store/mutation-types';
 
-import ScrollPoints from '@/mixins/ScrollPoints';
 import Visualisation from '@/mixins/Visualisation';
 import Subtitles from '@/mixins/Subtitles';
 
-import Subtitle from './conversation/Subtitle';
-import Message from './conversation/Message';
+import TimeSegment from '@/components/conversation/TimeSegment';
+import Subtitle from '@/components/conversation/Subtitle';
 
 export default {
   /* eslint-disable */
   name: 'conversation-container',
   mixins: [
-    ScrollPoints,
     Visualisation,
     Subtitles,
   ],
@@ -76,15 +57,14 @@ export default {
     });
   },
   watch: {
+    messages() {
+      this.updateChunkedMessages(this.currentSegmentGroup);
+    },
     currentSegmentGroup(nV, oV) {
       if (oV !== nV) {
-        const backFill = 8;
-        for (var i = 0; i < backFill; i++) {
-          const segment = (nV - i);
-          if (segment >= 0) {
-            this.getMessagesSummary(segment);
-          }
-        }
+        console.log(`Getting messages for segment ${nV}`);
+
+        this.getMessagesSummary(nV);
       }
     },
     visualisation(nV, oV) {
@@ -93,25 +73,27 @@ export default {
     },
     currentSection(nV, oV) {
       if (oV !== nV) {
+        var self = this;
 
-        this.$store.dispatch('getSubtitles');
+        API.message.getSubtitles(
+          `${this.currentSection.slug}`,
+          `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${this.currentSection.transcript}`,
+          function(response) {
+            self.subtitles = response.response;
+            // this.loadSubtitles();
+          },
+          function(response) {
+            self.subtitles = response.response;
+            // this.loadSubtitles();
+          },
+        );
 
-        // const request = {
-        //   theClass: this.$store.getters.currentClass.slug,
-        //   theContent: this.currentSection.slug,
-        // };
-        //
-        // this.$store.dispatch('getVisualisation', request);
-        //
-        // if (!this.canAutoScroll) {
-        //   if (oV !== nV) {
-        //     if (nV.duration !== undefined) {
-        //       this.$store.commit('setCanAutoScroll', true);
-        //     }
-        //   }
-        // }
+        const request = {
+          theClass: this.$store.getters.currentClass.slug,
+          theContent: this.currentSection.slug,
+        };
 
-
+        this.$store.dispatch('getVisualisation', request);
       }
     },
   },
@@ -125,47 +107,72 @@ export default {
         let height = (windowHeight - childOffset);
 
         this.spacerHeight = (height < 200) ? 200 : height;
-
-        var self = this;
-
-        setTimeout(function() {
-          self.setScrollPoints();
-        }, 500);
       }
     },
     getMessagesSummary(segmentGroup) {
 
-      if (this.chunkedMessages) {
-        // Cancel request if we alredy have chunkedMessages for segment
-        if (this.chunkedMessages[segmentGroup]) { return; }
+      console.log(`Getting message summary for - ${segmentGroup}`);
 
-        // Cancel request if we are scrolling!
-        // if (!this.canAutoScroll) { return; }
-      }
+      if (!this.canAutoScroll) { return; }
 
-      const segmentCount = (1.0 / 0.2);
-      const startSegment = (segmentGroup * segmentCount) - ((segmentGroup * segmentCount) % segmentCount);
-      const endSegment = (startSegment) + (segmentCount - 1);
+      let segmentViewport = _.floor(window.innerHeight / 158.0);
+      // segmentViewport += 2; // Think behind
+
+      let currentSegment = (segmentGroup / 0.2);
+      let startSegment = currentSegment - (segmentViewport / 0.2);
+      startSegment = (startSegment < 0) ? 0 : startSegment;
+
+      // Think ahead..
+      currentSegment += (1.0 / 0.2);
 
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.content.slug,
         startSegment: `${startSegment}`,
-        endSegment: `${endSegment}`,
+        endSegment: `${currentSegment}`,
       };
 
-      if (((startSegment % segmentCount) === 0) && (this.content.slug === this.$store.getters.currentSection.slug)) {
+      if (this.content.slug === this.currentSection.slug) {
         this.$store.dispatch('getMessagesSummary', request);
       }
     },
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
     },
+    updateChunkedMessages(currentSegment) {
+
+      let segmentViewport = _.floor(window.innerHeight / 158.0);
+
+      currentSegment += 1; // Think ahead
+      segmentViewport += 2; // Think behind
+
+      let startSegment = currentSegment - segmentViewport;
+      startSegment = (startSegment < 5) ? 0 : startSegment;
+
+      // console.log(`** Updating chunked - ${startSegment} - ${currentSegment}`);
+
+      let result = _.compact(this.messages.slice(startSegment, currentSegment));
+
+      for (var i = 0; i < result.length; i += 1) {
+        if (result[i].segmentGroup >= startSegment && result[i].segmentGroup <= currentSegment) {
+          if (!(this.chunkedMessages[`${result[i].segmentGroup}`] && this.chunkedMessages[`${result[i].segmentGroup}`].message)) {
+            Vue.set(this.chunkedMessages, `${result[i].segmentGroup}`, result[i]);
+          }
+        }
+      }
+
+      for (var i = 0; i < this.chunkedMessages.length; i += 1) {
+
+        if (!(this.chunkedMessages[i].segmentGroup >= startSegment && this.chunkedMessages[i].segmentGroup <= currentSegment)) {
+          this.chunkedMessages[i] = null;
+        }
+      }
+    },
   },
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'isRegistered', 'chunkedMessages', 'canAutoScroll', 'currentSection', 'subtitles', 'visualisation',
+      'currentClass', 'currentSegment', 'currentSegmentGroup', 'isRegistered', 'messages', 'canAutoScroll', 'currentSection', 'visualisation',
     ]),
     containerHeight() {
       return ((this.content.duration * 0.2) * 158.0);
@@ -176,6 +183,16 @@ export default {
     conversationContainerStyles() {
       return {
         height: `${(this.containerHeight + this.spacerHeight)}px`,
+      };
+    },
+    messagesContainerStyles() {
+      return {
+        top: `${this.spacerHeight}px`,
+      };
+    },
+    subtitlesContainerStyles() {
+      return {
+        top: `${this.spacerHeight}px`,
       };
     },
     activityVisualisationStyles() {
@@ -198,12 +215,13 @@ export default {
       messagePriority: true,
       spacerHeight: 0,
       points: '',
-      // subtitles: [],
+      subtitles: [],
+      chunkedMessages: {},
     };
   },
   components: {
     Subtitle,
-    Message,
+    TimeSegment,
   },
 };
 </script>
@@ -253,95 +271,26 @@ export default {
           fill #ddd
 
   .subtitle-container, .messages-container
-    float left
     min-height 100px
-    position relative
+    position absolute
     width 50%
-
-    .time-segment
-      height 158px
-      position absolute
-      left 0
-      right 0
-      top 0
-      .message-count
-        radius(13px)
-        background-color $color-primary
-        color white
-        font-size 0.8em
-        line-height 14px
-        min-width 14px
-        padding 6px
-        position absolute
-        text-align center
-        top 5px
-        right 5px
-        &.none
-          background-color #CCC
-        &.low
-          background-color $color-success
-        &.medium
-          background-color $color-warning
-        &.high
-          background-color $color-danger
-      p.timestamp-label
-        radius(20px)
-        background-color $color-primary
-        color white
-        display inline-block
-        line-height 40px
-        min-width 20px
-        margin 5px
-        padding 0 10px
-        text-align center
+    left 0
+    top 0
+    bottom 0
 
   .subtitle-container
     .time-segment
       background-color #f2f2f2
 
   .messages-container
-    width 50%
-    .time-segment
-      overflow hidden
+    left 50%
 
   @media(max-width: 600px)
     &.message-priority
       .subtitle-container
         display none
-        width 50px
       .messages-container
         display block
         width 100%
-
-.mock-message
-  height 120px
-  padding-left 60px
-  position absolute
-  top 0
-  left 0
-  right 0
-  animate()
-  .mock-message--user
-    radius(50%)
-    height 40px
-    width 40px
-    position absolute
-    top 20px
-    left 15px
-  .mock-message--body
-    radius(6px)
-    height 100px
-    padding 10px
-    .mock-message--line
-      radius(6px)
-      height 20px
-      margin-top 15px
-      &:first-child
-        max-width 100px
-  .mock-message--user, .mock-message--line
-    background-color #e1e1e1
-  &.loading
-    .mock-message--user, .mock-message--line
-      background-color #d9d9d9
 
 </style>

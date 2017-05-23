@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .message.animated.fadeIn
+  .message
 
     img.profile-image(v-bind:src="message.author.profile")
 
@@ -53,8 +53,6 @@ export default {
   padding-left 50px
 
   position relative
-
-  transition opacity 1s
 
   img.profile-image
     radius(50%)

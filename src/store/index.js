@@ -36,7 +36,7 @@ export default new Vuex.Store({
     autoPlaying: false,
     canAutoScroll: true,
     scrollPoints: {},
-    currentSection: {},
+    currentSection: undefined,
   },
   getters,
   mutations,

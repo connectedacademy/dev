@@ -1,14 +1,14 @@
 <template lang="pug">
 
-  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state" v-scroll="onScroll")
+  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
     .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
-    .fps-indicator {{ fps }}
+    //- .fps-indicator {{ fps }}
 
     .main-container
 
-      .toolbar.hidden
+      //- .toolbar
 
         button.pure-button.pull-left(v-on:click="infoVisible =! infoVisible")
           | {{ $t('course.course_info') }}
@@ -31,9 +31,6 @@
 /* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-import VueScroll from 'vue-scroll';
-
-import ScrollPoints from '@/mixins/ScrollPoints';
 
 import * as types from '@/store/mutation-types';
 import ClassSelector from './ClassSelector';
@@ -44,9 +41,6 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'main',
-  mixins: [
-    ScrollPoints,
-  ],
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.dispatch('checkAuth');
@@ -64,143 +58,47 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setColumnState', 'narrow');
-    // this.$store.dispatch('getCourse');
-
-    var self = this;
-
-    // Listen for wheel events
-    window.addEventListener('wheel', () => {
-      self.throttledWheelMovement(self);
-      self.wheelMovement(self);
-    });
-
-    // Listen for resize events
-    window.addEventListener('resize', () => {
-      console.log('Resized window');
-    });
-
-    // Attempt auto scroll every second
-    setInterval(function() { self.attemptAutoScroll(); }, self.reattemptAutoScroll);
-
     this.toMessage(this.$route.query);
   },
   data() {
     return {
       navTitle: 'Connected Academy - Main',
       infoVisible: false,
-      isAutoScrolling: false,
-      reattemptAutoScroll: 500,
       fps: 0,
+      canLoadNextFrame: false,
     };
   },
   components: {
-    VueScroll,
     ClassSelector,
     CourseContent,
     MarkdownRenderer,
   },
   watch: {
-    'videoReady': {
-      handler: function(nV, oV) {
-        this.attemptAutoScroll();
-      },
-      deep: true,
-    },
     'isAutoScrolling': {
       handler: function(nV, oV) {
         this.$store.commit('setAutoPlaying', nV);
       },
       deep: true,
     },
+    canAutoScroll() {
+      this.checkIfCanLoadNextFrame();
+    },
+    videoPlaying() {
+      this.checkIfCanLoadNextFrame();
+    },
+    currentSection() {
+      this.checkIfCanLoadNextFrame();
+    },
   },
   methods: {
-    wheelMovement() {
-      this.isAutoScrolling = false;
-      this.$store.commit('setCanAutoScroll', false);
-    },
-    throttledWheelMovement: _.throttle(function(self) {
-      setTimeout(function() {
-        if (self.currentSection !== undefined) {
-          if (self.currentSection.content_type === 'class') {
-            self.$store.commit('setCanAutoScroll', true);
-          }
-        }
-      }, 1000);
-    }, 1000),
-    setScrollPosition: _.throttle(function(self, position) {
-      self.$store.dispatch('setScrollPosition', position.scrollTop);
-    }, 1000, { 'leading': false }),
-    onScroll(e, position) {
-      this.setScrollPosition(this, position);
+    checkIfCanLoadNextFrame() {
+      this.canLoadNextFrame = (this.canAutoScroll && this.videoPlaying && (this.currentSection !== undefined));
     },
     leaveClass() {
       this.$store.dispatch('getSpec', undefined);
     },
-    attemptAutoScroll() {
-
-      var self = this;
-
-      if (self.isAutoScrolling || !self.canAutoScroll || (self.currentSection === undefined) || !self.videoPlaying || !self.videoReady || (self.$refs.main === undefined)) { return; }
-
-      self.isAutoScrolling = true;
-
-      var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
-
-      var position = function(start, end, elapsed, duration) {
-  	    if (elapsed > duration) return end;
-  	    // return start + (end - start) * easingFunction(elapsed / duration); // Easing
-
-  	    return start + (end - start) * (elapsed / duration); // Linear
-    	}
-
-      var clock = Date.now();
-      var requestAnimationFrame = window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-        function(fn) { window.setTimeout(fn, 15); };
-
-      var start = this.scrollPosition;
-      var end = this.currentSection.bottom;
-      var duration = (((end - start) / (158.0 * 1.0)) * 5000);
-
-      var lastCalledTime;
-      var frameCount;
-      var fps;
-
-      var step = function() {
-
-        if(!lastCalledTime) {
-           lastCalledTime = Date.now();
-           fps = 0;
-           frameCount = 0;
-        }
-
-        frameCount += 1;
-
-        const delta = (Date.now() - lastCalledTime)/1000;
-        lastCalledTime = Date.now();
-
-        if ((frameCount % 30) === 0) {
-          frameCount = 0;
-          fps = 1/delta;
-          fps   = _.round((100 / 60) * fps);
-          self.fps = (fps > 60) ? '60+' : fps;
-        }
-
-        var elapsed = Date.now() - clock;
-
-        self.$refs.main.scrollTop = position(start, end, elapsed, duration);
-
-        if ((elapsed <= duration) && self.canAutoScroll && self.videoPlaying && (self.currentSection !== undefined)) {
-          requestAnimationFrame(step);
-        }
-      }
-      step();
-    },
     toMessage(query) {
       if (query.class && query.content) {
-        console.log(`${query.class} - ${query.content} - ${query.segment}`);
-
         // Set the class
         this.$store.dispatch('getSpec', query.class);
 
@@ -219,11 +117,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'videoReady', 'canAutoScroll', 'currentSectionScrollPosition',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'canAutoScroll', 'currentSectionScrollPosition',
     ]),
-    pastMidPoint() {
-      return (this.currentSectionScrollPosition > (document.getElementById('col-main').offsetHeight / 2.0))
-    },
     scrollIndicatorStyle() {
       return {
         top: `${this.offsetScrollPosition}px`,

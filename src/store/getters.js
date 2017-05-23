@@ -31,19 +31,7 @@ export const currentTime = (state) => {
 };
 
 export const currentSection = (state) => {
-  // Set current section
-  if (state.scrollPoints.length === 0) { return undefined; }
-
-  const offsetScrollPosition = state.offsetScrollPosition;
-
-  for (const key in state.scrollPoints ) {
-    const scrollPoint = state.scrollPoints[key];
-    if ((offsetScrollPosition > scrollPoint.top) && (offsetScrollPosition < scrollPoint.bottom)) {
-      if (scrollPoint.content_type === 'class') {
-        return scrollPoint;
-      }
-    }
-  };
+  return state.currentSection;
 };
 
 export const autoPlaying = state => state.autoPlaying;

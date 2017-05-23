@@ -1,20 +1,14 @@
 @require "../shared/*"
-
-.main-page
-  pinned()
+html
   background-color $color-main-page
-  position fixed
-  z-index -1
+.main-page
+  padding-top 60px
 
   .col
     background-color $color-col
     box-sizing border-box
     padding 0
-    position fixed
     top 60px
-    bottom 0
-    left 0
-    right 0
 
     .container
       padding 20px
@@ -26,31 +20,13 @@
 
   .col#col-main
     background-color $color-col-main
-    margin 0 10px
-    overflow auto
-    transition all 0.2s ease-in-out
     border-top-left-radius 4px
     border-top-right-radius 4px
-
-    &.background-white
-      background-color white
-
-    @media (min-width: 800px)
-      &.narrow
-        left calc(50% + 5px)
-        margin-left -400px
-        width calc(800px - (5px * 2))
-      &.wide
-        left 0
-        margin-left 0
-        width 100%
-
-    @media (min-width: 1240px)
-      &.wide
-        left 50%
-        margin-left -600px
-        width 1200px
-
+    margin 0 auto
+    max-width 780px
+    @media(max-width: 800px)
+      max-width 100%
+      margin 0 10px
 
 .content-block
   border-radius 2px

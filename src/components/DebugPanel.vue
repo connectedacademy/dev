@@ -6,7 +6,7 @@
   span
     p currentSection
     pre {{ currentSection }}
-  span.hidden
+  span
     p currentActiveSection
     pre {{ currentActiveSection }}
   span
@@ -19,7 +19,6 @@
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
   p {{ `currentSegment - ${currentSegment}` }}
-  button.pure-button(@click="setPosition") Set Position
 
 </template>
 
@@ -49,14 +48,7 @@ export default {
     ]),
   },
   components: {},
-  methods: {
-    setPosition() {
-      const ele = document.getElementById('col-main');
-      alert(this.$store.getters.currentSection.top);
-      ele.scrollTop = `${this.$store.getters.currentSection.top}px`;
-
-    },
-  },
+  methods: {},
 };
 </script>
 

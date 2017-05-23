@@ -6,8 +6,8 @@ import * as config from './config';
 import socketIOClient from 'socket.io-client';
 import sailsIOClient from 'sails.io.js';
 const io = sailsIOClient(socketIOClient);
-io.sails.url = 'http://localhost:4000';
-// io.sails.url = 'https://api.connectedacademy.io:4000';
+// io.sails.url = 'http://localhost:4000';
+io.sails.url = 'https://api.connectedacademy.io';
 import vueSails from 'vue-sails';
 
 
@@ -24,6 +24,16 @@ export default {
     // }, (response) => {
     //   errorCb(response);
     // });
+  },
+  getMessagesSummaryBatch(request, cb, errorCb) {
+    // io.socket.get(`/v1/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, function (resData, jwres){
+    //   cb(resData);
+    // });
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
   },
   getMessages(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {

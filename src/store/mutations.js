@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Vue from 'vue';
 import * as types from './mutation-types';
 
 export const setScrollPosition = (state, scrollPosition) => {
@@ -7,13 +8,9 @@ export const setScrollPosition = (state, scrollPosition) => {
   state.scrollPosition = scrollPosition;
 
   // Set offset scroll position
-  if (!document.getElementById('col-main')) {
-    state.offsetScrollPosition = state.scrollPosition;
-  } else {
-    let offset = (document.getElementById('col-main')) ? document.getElementById('col-main').offsetHeight : 0;
-    offset -= 140;
-    state.offsetScrollPosition = (state.scrollPosition + offset);
-  }
+  let offset = window.innerHeight;
+  offset -= 140;
+  state.offsetScrollPosition = (state.scrollPosition + offset);
 };
 
 export const TOGGLE_DEBUG_MODE = (state) => {
@@ -37,5 +34,8 @@ export const resetScrollPoints = (state) => {
   state.scrollPoints = {};
 };
 export const setScrollPoint = (state, scrollPoint) => {
-  state.scrollPoints[scrollPoint.slug] = scrollPoint;
+  Vue.set(state.scrollPoints, scrollPoint.slug, scrollPoint);
+};
+export const setCurrentSection = (state, scrollPoint) => {
+  state.currentSection = scrollPoint;
 };
