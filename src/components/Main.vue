@@ -111,7 +111,7 @@ export default {
 
       }
       else {
-        console.log('No query passed');
+        this.$log.log('No query passed');
       }
     },
   },

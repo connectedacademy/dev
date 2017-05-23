@@ -1,8 +1,10 @@
 /* eslint-disable */
+import Vue from 'vue';
+
 export default {
   methods: {
     setScrollPoints() {
-      console.log('Updating scroll points');
+      Vue.log.log('Updating scroll points');
 
       const currentClass = this.$store.getters.currentClass;
 

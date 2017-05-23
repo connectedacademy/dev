@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import globalState from './index';
+import store from '@/store';
 
 export const pageStyle = (state) => {
   // Return classes
@@ -23,10 +23,10 @@ export const offsetScrollPosition = (state) => {
 };
 
 export const currentTime = (state) => {
-  if (!globalState.getters.currentSectionScrollPosition) {
+  if (!store.getters.currentSectionScrollPosition) {
     return 0;
   }
-  let time = globalState.getters.currentSectionScrollPosition / (158.0 * 0.2); // _.ceil()
+  let time = store.getters.currentSectionScrollPosition / (158.0 * 0.2); // _.ceil()
   return (time < 0) ? 0 : time;
 };
 

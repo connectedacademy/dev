@@ -67,12 +67,12 @@ export default {
     exploreSegment(segment) {
 
       if (segment === undefined) {
-        console.log('Closing segment explorer');
+        this.$log.log('Closing segment explorer');
         this.$store.commit(types.PLAY_VIDEO);
         this.activeSegment = undefined;
         this.activeSegmentVisible = false;
       } else {
-        console.log(`Exploring segment - ${segment.segmentGroup}`);
+        this.$log.log(`Exploring segment - ${segment.segmentGroup}`);
         this.$store.commit(types.PAUSE_VIDEO);
 
         this.activeSegment = segment;

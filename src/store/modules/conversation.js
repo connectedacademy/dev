@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Vue from 'vue';
 import _ from 'lodash';
-import * as types from '../mutation-types';
+import * as types from '@/store/mutation-types';
 import API from '@/api';
-import globalState from '../index';
+import store from '@/store';;
 
 // initial state
 const state = {
@@ -18,44 +18,44 @@ const getters = {
     return state.activeSegmentGroup;
   },
   messages() {
-    if (!globalState.getters.currentSection) { return []; }
+    if (!store.getters.currentSection) { return []; }
 
     let messages = state.messages;
 
     // const offset = 3;
-    // let startSegment = ((globalState.getters.currentSegmentGroup - offset) < 0) ? 0 : (globalState.getters.currentSegmentGroup - offset);
+    // let startSegment = ((store.getters.currentSegmentGroup - offset) < 0) ? 0 : (store.getters.currentSegmentGroup - offset);
     // let endSegment = (startSegment + offset);
 
     // messages = _.fill(messages, undefined, 0, startSegment);
     // messages = _.fill(messages, undefined, (endSegment + offset), (messages.length - 1));
 
-    // console.log(`startSegment - ${startSegment} + endSegment - ${endSegment} + messages.length - ${messages.length}`);
+    // Vue.log.log(`startSegment - ${startSegment} + endSegment - ${endSegment} + messages.length - ${messages.length}`);
 
     // const chunkedMessages = messages.slice(startSegment, endSegment);
 
     return messages;
   },
   subtitles() {
-    console.log('Subtitles from state');
+    Vue.log.log('Subtitles from state');
     return state.subtitles;
   },
   visualisation() {
-    console.log('Visualisation from state');
+    Vue.log.log('Visualisation from state');
     return state.visualisation;
   },
   videoIsActive() {
-    if (globalState.getters.currentSection === undefined) {
+    if (store.getters.currentSection === undefined) {
       return false;
     }
-    return (globalState.getters.currentSection.duration !== undefined);
+    return (store.getters.currentSection.duration !== undefined);
   },
   currentActiveSection() {
-    if (globalState.state.scrollPoints.length === 0) { return undefined; }
+    if (store.state.scrollPoints.length === 0) { return undefined; }
 
-    const offsetScrollPosition = globalState.state.scrollPosition;
+    const offsetScrollPosition = store.state.scrollPosition;
 
-    for (const key in globalState.state.scrollPoints ) {
-      const scrollPoint = globalState.state.scrollPoints[key];
+    for (const key in store.state.scrollPoints ) {
+      const scrollPoint = store.state.scrollPoints[key];
       if ((offsetScrollPosition > scrollPoint.sectionTop) && (offsetScrollPosition < scrollPoint.bottom)) {
         return scrollPoint;
       }
@@ -64,16 +64,16 @@ const getters = {
     return undefined;
   },
   currentSectionScrollPosition() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return globalState.state.offsetScrollPosition - globalState.getters.currentSection.top;
+    if (!store.getters.currentSection) { return 0; }
+    return store.state.offsetScrollPosition - store.getters.currentSection.top;
   },
   currentSegmentGroup() {
-    if (!globalState.getters.currentSection) { return -1; }
-    return _.floor(globalState.getters.currentSectionScrollPosition / 158.0);
+    if (!store.getters.currentSection) { return -1; }
+    return _.floor(store.getters.currentSectionScrollPosition / 158.0);
   },
   currentSegment() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return _.floor(globalState.getters.currentSectionScrollPosition / (158.0 * 0.2));
+    if (!store.getters.currentSection) { return 0; }
+    return _.floor(store.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };
 
@@ -86,8 +86,8 @@ const actions = {
     const startSegmentGroup = parseInt(parseInt(request.startSegment) * 0.2);
     const endSegmentGroup = parseInt(parseInt(request.endSegment) * 0.2);
 
-    // console.log(`** API request ${startSegmentGroup} - ${endSegmentGroup}`);
-    // console.log(request);
+    // Vue.log.log(`** API request ${startSegmentGroup} - ${endSegmentGroup}`);
+    // Vue.log.log(request);
 
     let segmentCount = (endSegmentGroup - startSegmentGroup);
     let segmentIterator = 0;
@@ -117,8 +117,8 @@ const actions = {
     commit,
   }) {
     API.message.getSubtitles(
-      `${globalState.getters.currentSection.slug}`,
-      `${globalState.getters.course.baseUri}${globalState.getters.currentClass.dir}/${globalState.getters.currentSection.transcript}`,
+      `${store.getters.currentSection.slug}`,
+      `${store.getters.course.baseUri}${store.getters.currentClass.dir}/${store.getters.currentSection.transcript}`,
       response => commit(types.GET_SUBTITLES_SUCCESS, {
         response,
       }),
@@ -163,7 +163,7 @@ const mutations = {
   [types.GET_VISUALISATION_FAILURE](initialState, {
     response,
   }) {
-    console.log('error');
+    Vue.log.log('error');
     state.visualisation = [];
     // error in response
   },
@@ -174,8 +174,8 @@ const mutations = {
     const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
     const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2);
 
-    // console.log(`** API response ${startSegmentGroup} - ${endSegmentGroup}`);
-    // console.log(response.scope);
+    // Vue.log.log(`** API response ${startSegmentGroup} - ${endSegmentGroup}`);
+    // Vue.log.log(response.scope);
 
     for (var group in response.data) {
 

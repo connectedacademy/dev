@@ -1,17 +1,18 @@
-import globalState from './index';
+import Vue from 'vue';
+import store from '@/store';
 
 export const setScrollPosition = ({ commit }, scrollPosition) => {
 
-  console.log('Setting scroll position from action');
+  Vue.log.log('Setting scroll position from action');
 
   // Set current section
   let currentSection = undefined;
 
-  if (globalState.state.scrollPoints.length !== 0) {
-    const offsetScrollPosition = globalState.state.offsetScrollPosition;
+  if (store.state.scrollPoints.length !== 0) {
+    const offsetScrollPosition = store.state.offsetScrollPosition;
 
-    for (const key in globalState.state.scrollPoints ) {
-      const scrollPoint = globalState.state.scrollPoints[key];
+    for (const key in store.state.scrollPoints ) {
+      const scrollPoint = store.state.scrollPoints[key];
       if ((offsetScrollPosition > scrollPoint.top) && (offsetScrollPosition < scrollPoint.bottom)) {
         if (scrollPoint.content_type === 'class') {
           currentSection = scrollPoint;
@@ -26,7 +27,7 @@ export const setScrollPosition = ({ commit }, scrollPosition) => {
 };
 
 export const resetState = ({ commit }) => {
-  console.log('Reseting globalState.state...');
+  Vue.log.log('Reseting store.state...');
   commit('resetScrollPoints');
   commit('setScrollPosition', 0);
 };

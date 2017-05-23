@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue';
-import * as types from './mutation-types';
+import * as types from '@/store/mutation-types';
 
 export const setScrollPosition = (state, scrollPosition) => {
 
