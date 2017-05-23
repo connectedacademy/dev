@@ -1,52 +1,63 @@
 @require "../shared/*"
 
 .course-content-wrapper
-  &:last-child
-    margin-bottom 120px
-  .course-content
-    radius(4px)
-    background-color white
-    margin 40px 0 0 0
-    padding 0
-    position relative
-    .type-indicator
-      radius(50%)
-      content ''
-      background-color $color-primary
-      height 16px
-      width 16px
-      position absolute
-      top 10px
-      right 10px
-      &.active
-        background-color $color-success
-    h1.content-title
-      nomargin()
-      nopadding()
-      color $color-text-dark-grey
-      font-size 1.3em
-    h5.content-subheader
-      nomargin()
-      nopadding()
-      color $color-text-dark-grey
-    p.content-description
-      nomargin()
-      nopadding()
-      color $color-text-grey
-      font-size 1em
-    a
-      text-decoration none
-
-    .course-content--header
-      background-color transparent
-      padding 20px 20px 10px 20px
+  .course-content-group
+    &:last-child
+      margin-bottom 240px
+    .course-content
+      radius(4px)
+      background-color white
+      margin 40px 0 0 0
+      padding 0
+      position relative
+      @media(max-width: 900px)
+        margin 10px 0 0 0
+      .type-indicator
+        radius(50%)
+        content ''
+        background-color $color-primary
+        height 16px
+        width 16px
+        position absolute
+        top 10px
+        right 10px
+        &.active
+          background-color $color-success
       h1.content-title
-        color $color-text-dark-grey !important
-    .course-content--body
-      overflow hidden
-      padding 10px 20px
-    .course-content--footer
-      background-color transparent
-      border-top $color-light-grey 1px solid
-      margin-top 10px
+        nomargin()
+        nopadding()
+        color $color-text-dark-grey
+        font-size 1.3em
+      h5.content-subheader
+        nomargin()
+        nopadding()
+        color $color-text-dark-grey
+      p.content-description
+        nomargin()
+        nopadding()
+        color $color-text-grey
+        font-size 1em
+      a
+        text-decoration none
+
+      .course-content--header
+        background-color transparent
+        padding 20px 20px 10px 20px
+        h1.content-title
+          color $color-text-dark-grey !important
+      .course-content--body
+        overflow hidden
+        padding 10px 20px
+      .course-content--footer
+        background-color transparent
+        border-top $color-light-grey 1px solid
+        margin-top 10px
+        padding 15px
+
+    &.course-content-group--future
+      radius(6px)
+      background-color alpha(white, 0.15)
       padding 15px
+      margin-top 40px
+      .course-content
+        margin 0

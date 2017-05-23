@@ -67,12 +67,12 @@ export default {
     exploreSegment(segment) {
 
       if (segment === undefined) {
-        console.log('Closing segment explorer');
+        this.$log.log('Closing segment explorer');
         this.$store.commit(types.PLAY_VIDEO);
         this.activeSegment = undefined;
         this.activeSegmentVisible = false;
       } else {
-        console.log(`Exploring segment - ${segment.segmentGroup}`);
+        this.$log.log(`Exploring segment - ${segment.segmentGroup}`);
         this.$store.commit(types.PAUSE_VIDEO);
 
         this.activeSegment = segment;
@@ -129,6 +129,7 @@ export default {
   left 0
   right 0
   top 0
+  overflow scroll
   animate()
   .message-count
     radius(13px)
@@ -198,15 +199,5 @@ export default {
     color white
     line-height 30px
     padding 0 10px
-
-
-.fade-enter-active, .fade-leave-active
-  transition opacity .5s
-
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
-  opacity 0
-
-.fade-enter-to, .fade-leave
-  opacity 1
 
 </style>

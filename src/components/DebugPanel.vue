@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+.debug-panel(v-if="this.$store.state.debug")
   p {{ `scrollPosition - ${scrollPosition}` }}
   p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
   span
@@ -57,13 +57,13 @@ export default {
 @import '../assets/stylus/shared/*'
 
 .debug-panel
-  background-color red
+  background-color alpha(red, 0.8)
   color white
   min-width 200px
   padding 10px
   position fixed
-  bottom 10px
-  top 100px
+  bottom 60px
+  top 60px
   left 10px
   z-index 52
   overflow scroll

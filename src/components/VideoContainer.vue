@@ -2,7 +2,7 @@
 
   .video-wrapper
 
-    youtube.video-container(v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 2, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
+    youtube.video-container(v-if="src" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 2, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
 
@@ -32,6 +32,7 @@ export default {
       this.seek(this, this.currentTime);
     },
     videoPlaying() {
+      if (!this.player) { return; }
       if (this.videoPlaying === false) {
         this.player.pauseVideo();
       } else {
@@ -59,11 +60,13 @@ export default {
       this.$store.commit(types.PAUSE_VIDEO);
     },
     seek: _.throttle(function(self, position) {
-      const playerTime = this.player.getCurrentTime();
+      if (!self.player) { return; }
+
+      const playerTime = self.player.getCurrentTime();
       const outOfSync = ((this.currentTime < (playerTime - SYNC_THRESHOLD)) || (this.currentTime > (playerTime + SYNC_THRESHOLD)))
 
-      if (self.player && outOfSync) {
-        console.log('Video out of sync - seeking');
+      if (outOfSync) {
+        this.$log.log('Video out of sync - seeking');
         self.player.seekTo(position);
       }
     }, 200),
@@ -82,7 +85,7 @@ export default {
   },
   computed: {
     src() {
-      console.log('src changed');
+      this.$log.log('src changed');
       return (this.currentSection) ? this.currentSection.videoId : '';
     },
     ...mapGetters([

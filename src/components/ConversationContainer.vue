@@ -62,13 +62,12 @@ export default {
     },
     currentSegmentGroup(nV, oV) {
       if (oV !== nV) {
-        console.log(`Getting messages for segment ${nV}`);
+        this.$log.log(`Getting messages for segment ${nV}`);
 
         this.getMessagesSummary(nV);
       }
     },
     visualisation(nV, oV) {
-      console.log('loadVisualisation');
       this.loadVisualisation(this.visualisation);
     },
     currentSection(nV, oV) {
@@ -111,7 +110,7 @@ export default {
     },
     getMessagesSummary(segmentGroup) {
 
-      console.log(`Getting message summary for - ${segmentGroup}`);
+      this.$log.log(`Getting message summary for - ${segmentGroup}`);
 
       if (!this.canAutoScroll) { return; }
 
@@ -149,7 +148,7 @@ export default {
       let startSegment = currentSegment - segmentViewport;
       startSegment = (startSegment < 5) ? 0 : startSegment;
 
-      // console.log(`** Updating chunked - ${startSegment} - ${currentSegment}`);
+      // this.$log.log(`** Updating chunked - ${startSegment} - ${currentSegment}`);
 
       let result = _.compact(this.messages.slice(startSegment, currentSegment));
 
@@ -285,12 +284,15 @@ export default {
   .messages-container
     left 50%
 
-  @media(max-width: 600px)
+  @media(max-width: 800px)
+    .subtitle-container, .messages-container
+      left 0
+      width 100%
     &.message-priority
       .subtitle-container
         display none
-      .messages-container
-        display block
-        width 100%
+    &.subtitle-priority
+      .message-container
+        display none
 
 </style>

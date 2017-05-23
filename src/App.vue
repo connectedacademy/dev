@@ -17,7 +17,7 @@
   right-drawer(v-if="isRegistered")
 
   .main-page
-    navigation(v-bind:nav-title="navTitle")
+    navigation
     router-view(transition transition-mode="out-in")
 
   #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive }")
@@ -32,8 +32,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import store from './store/index';
-import * as types from './store/mutation-types';
+import store from '@/store';
+import * as types from '@/store/mutation-types';
 
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
@@ -107,7 +107,7 @@ export default {
     updateDocumentHeight() {
       // Check if document height has changed
       if (this.documentHeight !== document.documentElement.scrollHeight) {
-        console.log('Document height changed');
+        this.$log.log('Document height changed');
         this.documentHeight = document.documentElement.scrollHeight;
         this.setScrollPoints();
       }

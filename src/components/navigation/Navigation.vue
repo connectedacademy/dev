@@ -3,8 +3,9 @@
   .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden }")
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
-    .navigation-item.pull-left(@click="toggleDebugMode")
-      icon(name="wrench" style="color: white; padding: 0 20px")
+
+    #debug-button(@click="toggleDebugMode")
+      icon(name="wrench")
 
     profile-icon
 
@@ -28,10 +29,13 @@ export default {
     hidden() {
       return !this.$store.state.navigation.visible;
     },
+    navTitle() {
+      return (this.$store.getters.currentClass && this.$store.getters.scrollPosition > 100) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
+    },
   },
-  props: {
-    navTitle: String,
-  },
+  // props: {
+  //   navTitle: String,
+  // },
   methods: {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
@@ -46,6 +50,23 @@ export default {
 <style lang="stylus" scoped>
 
 @import "../../assets/stylus/shared/*";
+
+#debug-button
+  radius(50%)
+  background-color red
+  height 40px
+  width 40px
+  position fixed
+  bottom 10px
+  left 10px
+  z-index 100
+  .fa-icon
+    nomargin()
+    nopadding()
+    color white
+    height 20px
+    width 20px
+    margin 10px
 
 .navigation
   animate()

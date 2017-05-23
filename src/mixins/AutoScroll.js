@@ -4,6 +4,7 @@ const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 500; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 200; // Interval at which scroll position should be updated
 
+import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
@@ -19,7 +20,7 @@ export default {
     window.addEventListener('scroll', this.onScroll);
 
     // Listen for wheel events
-    window.addEventListener('wheel', this.onWheel);
+    window.addEventListener('wheel', this.onWheel, { passive: true }); // Passive to improve mobile performance
   },
   destroyed () {
     // Remove event listeners
@@ -50,12 +51,12 @@ export default {
     },
     attemptAutoScroll() {
 
-      console.log('Attempting auto scroll');
+      Vue.log.log('Attempting auto scroll');
 
       var self = this;
 
-      if (self.isAutoScrolling) { console.log('Already auto scrolling'); return; }
-      if (!self.canAutoScroll) { console.log('Cannot auto scroll'); self.isAutoScrolling = false; return; }
+      if (self.isAutoScrolling) { Vue.log.log('Already auto scrolling'); return; }
+      if (!self.canAutoScroll) { Vue.log.log('Cannot auto scroll'); self.isAutoScrolling = false; return; }
 
       self.isAutoScrolling = true;
 
@@ -113,7 +114,7 @@ export default {
 
         const yPos = position(start, end, elapsed, duration);
 
-        // console.log(`step ${start} ${end} ${elapsed} ${duration} ${yPos}`);
+        // Vue.log.log(`step ${start} ${end} ${elapsed} ${duration} ${yPos}`);
         if (!self.preventScroll) {
           window.scroll(0, yPos);
         }

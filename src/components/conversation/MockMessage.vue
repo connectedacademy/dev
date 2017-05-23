@@ -45,10 +45,10 @@ export default {
       &:first-child
         max-width 100px
   .mock-message--user, .mock-message--line
-    background-color darken(#e9e9e9, 5%)
+    background-color darken(#eaeaea, 5%)
     animate()
   &.loading
     .mock-message--user, .mock-message--line
-      background-color #e9e9e9
+      background-color #eaeaea
 
 </style>
