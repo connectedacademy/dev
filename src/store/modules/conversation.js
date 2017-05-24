@@ -9,13 +9,17 @@ import store from '@/store';;
 const state = {
   messages: new Array(999),
   visualisation: [],
-  activeSegmentGroup: undefined,
+  activeSegment: undefined,
+  activeSegmentVisible: false,
 };
 
 // getters
 const getters = {
-  activeSegmentGroup() {
-    return state.activeSegmentGroup;
+  activeSegment() {
+    return state.activeSegment;
+  },
+  activeSegmentVisible() {
+    return state.activeSegmentVisible;
   },
   messages() {
     if (!store.getters.currentSection) { return []; }
@@ -190,8 +194,9 @@ const mutations = {
   }) {
     // error in response
   },
-  [types.SET_ACTIVE_SEGMENT_GROUP](initialState, activeSegmentGroup) {
-    state.activeSegmentGroup = activeSegmentGroup;
+  [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
+    state.activeSegment = activeSegment;
+    state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
   },
 };
 

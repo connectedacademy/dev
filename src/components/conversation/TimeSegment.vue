@@ -1,13 +1,13 @@
 <template lang="pug">
 
-  .time-segment(v-bind:class="{ active: activeSegmentVisible }" v-bind:style="activeSegmentVisible ? activeSegmentStyles : { top: (message.segmentGroup * 158.0) + 'px' }")
+  .time-segment(v-bind:class="{ active: segmentVisible }" v-bind:style="segmentVisible ? activeSegmentStyles : { top: (message.segmentGroup * 158.0) + 'px' }")
 
-    .close-button.animated.tada(v-if="activeSegment" @click="exploreSegment(undefined)")
+    .close-button.animated.tada(v-if="segmentVisible" @click="exploreSegment(undefined)")
       p close
 
     transition(name="fade")
-      .quote-container(v-if="activeSegmentVisible && activeSegment.quote")
-        h1 {{ activeSegment.quote }}
+      .quote-container(v-if="segmentVisible && quote")
+        h1 {{ quote }}
 
     .message-wrapper(@click="exploreSegment(message)")
 
@@ -24,7 +24,7 @@
       transition(name="fade")
         message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
-    .meta-container(v-if="activeSegmentVisible")
+    .meta-container(v-if="segmentVisible")
 
       .full-width-loading(v-if="!segmentMessages")
         icon(name="refresh" scale="2" spin)
@@ -37,6 +37,7 @@
 
 <script>
 import _ from 'lodash';
+import {mapGetters} from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
@@ -65,30 +66,40 @@ export default {
           right: 'calc(50% - 390px)',
           height: self.activeSegmentStyles.height,
         };
-      }, 500);
+      }, 1500);
     },
   },
   data() {
     return {
-      activeSegment: undefined,
-      activeSegmentVisible: false,
       segmentMessages: undefined,
+      quote: undefined,
     };
+  },
+  computed: {
+    ...mapGetters([
+      'activeSegment',
+      'activeSegmentVisible',
+    ]),
+    segmentVisible() {
+      return (this.activeSegmentVisible && this.activeSegment.segmentGroup === this.message.segmentGroup);
+    },
   },
   methods: {
     exploreSegment(segment) {
 
       if (segment === undefined) {
         this.$log.log('Closing segment explorer');
-        this.activeSegment = undefined;
-        this.activeSegmentVisible = false;
+
+        this.segmentMessages = [];
+        this.quote = undefined;
+
+        this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
         this.$store.commit(types.PLAY_VIDEO);
       } else {
         this.$log.log(`Exploring segment - ${segment.segmentGroup}`);
-        this.$store.commit(types.PAUSE_VIDEO);
 
-        this.activeSegment = segment;
-        this.activeSegmentVisible = true;
+        this.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
+        this.$store.commit(types.PAUSE_VIDEO);
 
         const offsetHeight = window.innerHeight;
         const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
@@ -100,7 +111,8 @@ export default {
           top: `${topPosition + offsetTop + offsetPadding}px`,
           left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
           right: `${offsetPadding}px`,
-          height: `${(offsetHeight - offsetTop - 140 - (offsetPadding * 2))}px`,
+          // height: `${(offsetHeight - offsetTop - 140 - (offsetPadding * 2))}px`,
+          height: `${(offsetHeight - offsetTop - 60 - (offsetPadding * 2))}px`,
         };
       }
     },
@@ -132,7 +144,7 @@ export default {
         return o.start > time;
       });
 
-      this.activeSegment.quote = `"${quote.text}"`;
+      this.quote = `"${quote.text}"`;
 
     },
   },
@@ -187,9 +199,10 @@ export default {
     text-align center
 
   &.active
+    radius(6px)
     animate()
     background white
-    z-index 50
+    z-index 51
     overflow scroll
     .message-wrapper
       border-bottom $color-light-grey 1px solid

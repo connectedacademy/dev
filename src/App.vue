@@ -80,6 +80,7 @@ export default {
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
+      || this.$store.state.conversation.activeSegmentVisible
       || this.$store.state.composer.visible;
     },
   },
