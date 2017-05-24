@@ -104,6 +104,7 @@ export default {
       this.$store.commit(types.DISMISS_COMPOSER);
       this.$store.commit(types.DISMISS_LEFT_DRAWER);
       this.$store.commit(types.DISMISS_RIGHT_DRAWER);
+      this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
     },
     updateDocumentHeight() {
       // Check if document height has changed

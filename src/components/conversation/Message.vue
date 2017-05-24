@@ -46,7 +46,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '../../assets/stylus/shared/*'
 
@@ -69,8 +69,10 @@ export default {
     nomargin()
     nopadding()
     color $color-text-dark-grey
-    a
-      color $color-text-dark-grey
+    a, a:active
+      color $color-purple
+      font-weight bold
+      text-decoration none
 
   ul.tweet-actions
     cleanlist()

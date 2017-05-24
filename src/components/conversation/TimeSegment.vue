@@ -5,11 +5,14 @@
     .close-button.animated.tada(v-if="segmentVisible" @click="exploreSegment(undefined)")
       p close
 
-    transition(name="fade")
+    .explore-segment-button(@click="exploreSegment(message)" v-if="!message.loading && (message.info && (message.info.total > 0 && !message.message.suggestion))")
+      icon(name="angle-right")
+
+    transition(name="slide-fade")
       .quote-container(v-if="segmentVisible && quote")
         h1 {{ quote }}
 
-    .message-wrapper(@click="exploreSegment(message)")
+    .message-wrapper
 
       .message-count.animated.fadeIn(v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:class="{ hide: activeSegment, low: (message.info.total > 0), medium: (message.info.total > 2), high: (message.info.total > 4) }")
         span(v-if="message.info.total !== 0") {{ message.info.total }}
@@ -24,14 +27,12 @@
       transition(name="fade")
         message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
-    .meta-container(v-if="segmentVisible")
+    .full-width-loading(v-if="segmentVisible && !segmentMessages")
+      icon(name="refresh" scale="2" spin)
 
-      .full-width-loading(v-if="!segmentMessages")
-        icon(name="refresh" scale="2" spin)
-
-      transition(name="fade")
-        .meta-container--messages(v-if="segmentMessages" v-for="asMessage in segmentMessages")
-          message(v-bind:message="asMessage")
+    //- transition(name="fade")
+    .meta-container--messages(v-if="segmentMessages" v-for="asMessage in segmentMessages")
+        message(v-bind:message="asMessage")
 
 </template>
 
@@ -55,18 +56,24 @@ export default {
   watch: {
     activeSegmentVisible() {
       var self = this;
-      setTimeout(function() {
-        self.loadSegmentMessages();
-        self.loadSegmentQuote();
-        self.activeSegmentStyles = {
-          transition: 'none',
-          position: `fixed`,
-          top: `${60}px`,
-          left: 'calc(50% - 390px)',
-          right: 'calc(50% - 390px)',
-          height: self.activeSegmentStyles.height,
-        };
-      }, 1500);
+      if (this.activeSegmentVisible) {
+        setTimeout(function() {
+          if (self.activeSegment) {
+            self.activeSegmentStyles = {
+              transition: 'none',
+              position: 'fixed',
+              top: `${60}px`,
+              left: 'calc(50% - 390px)',
+              right: 'calc(50% - 390px)',
+              height: (self.activeSegmentStyles) ? self.activeSegmentStyles.height : `auto`,
+            };
+          }
+          setTimeout(function() {
+            self.loadSegmentMessages();
+            self.loadSegmentQuote();
+          }, 600);
+        }, 600);
+      }
     },
   },
   data() {
@@ -81,17 +88,17 @@ export default {
       'activeSegmentVisible',
     ]),
     segmentVisible() {
-      return (this.activeSegmentVisible && this.activeSegment.segmentGroup === this.message.segmentGroup);
+      return (this.activeSegmentVisible && this.activeSegment && (this.activeSegment.segmentGroup === this.message.segmentGroup));
     },
   },
   methods: {
     exploreSegment(segment) {
 
+      this.segmentMessages = [];
+      this.quote = undefined;
+
       if (segment === undefined) {
         this.$log.log('Closing segment explorer');
-
-        this.segmentMessages = [];
-        this.quote = undefined;
 
         this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
         this.$store.commit(types.PLAY_VIDEO);
@@ -117,6 +124,11 @@ export default {
       }
     },
     loadSegmentMessages() {
+      if (!(this.message.message && this.message.message.content)) {
+        this.segmentMessages = [];
+        return;
+      }
+
       const request = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: this.message.message.content,
@@ -159,13 +171,27 @@ export default {
   padding 20px
 
 .time-segment
-  /*border transparent 1px solid*/
+  background #f2f2f2
+  transition-duration 0.1s
   height 158px
+  padding-right 25px
   position absolute
   left 0
   right 0
   top 0
   overflow hidden
+  .explore-segment-button
+    position absolute
+    top 0
+    bottom 0
+    right 0
+    width 40px
+    z-index 1
+    .fa-icon
+      color $color-dark-grey
+      height 100%
+      margin 0 15px
+      width 10px
   .message-count
     radius(13px)
     background-color $color-primary
@@ -200,16 +226,18 @@ export default {
 
   &.active
     radius(6px)
-    animate()
+    transition-duration 0.6s
     background white
     z-index 51
+    padding-right 0
     overflow scroll
+    .explore-segment-button
+      display none
     .message-wrapper
       border-bottom $color-light-grey 1px solid
       .message-count
         display none
       .mock-message
-        display none
         position relative
     .meta-container
       background-color #f9f9f9
@@ -219,12 +247,16 @@ export default {
         margin 10px
     .quote-container
       background-color $color-primary
+      padding 30px 0
       text-align center
       h1
         nomargin()
         color white
-        line-height 120px
+        line-height 50px
         padding 0 20px
+    @media(max-width: 800px)
+      left 10px !important
+      right 10px !important
 
 .full-width-loading
   padding 20px
@@ -250,5 +282,17 @@ export default {
     color white
     line-height 30px
     padding 0 10px
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active
+  transition all 1s ease-out
+
+.slide-fade-leave-active
+  transition all 0.1s linear
+
+.slide-fade-enter, .slide-fade-leave-to
+  opacity 0
+  height 0
 
 </style>
