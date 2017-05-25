@@ -22,22 +22,7 @@ const getters = {
     return state.activeSegmentVisible;
   },
   messages() {
-    if (!store.getters.currentSection) { return []; }
-
-    let messages = state.messages;
-
-    // const offset = 3;
-    // let startSegment = ((store.getters.currentSegmentGroup - offset) < 0) ? 0 : (store.getters.currentSegmentGroup - offset);
-    // let endSegment = (startSegment + offset);
-
-    // messages = _.fill(messages, undefined, 0, startSegment);
-    // messages = _.fill(messages, undefined, (endSegment + offset), (messages.length - 1));
-
-    // Vue.log.log(`startSegment - ${startSegment} + endSegment - ${endSegment} + messages.length - ${messages.length}`);
-
-    // const chunkedMessages = messages.slice(startSegment, endSegment);
-
-    return messages;
+    return state.messages;
   },
   subtitles() {
     Vue.log.log('Subtitles from state');
@@ -97,13 +82,15 @@ const actions = {
     let segmentIterator = 0;
 
     while (segmentIterator < segmentCount) {
-      const currentSegmentGroup = startSegmentGroup + segmentIterator;
+      const segmentGroup = startSegmentGroup + segmentIterator;
       const loading = {
         loading: true,
-        segmentGroup: currentSegmentGroup,
+        segmentGroup: segmentGroup,
       };
 
-      Vue.set(state.messages, `${currentSegmentGroup}`, loading);
+      if (state.messages[segmentGroup] === undefined) {
+        Vue.set(state.messages, segmentGroup, loading);
+      }
       segmentIterator += 1;
     }
 
@@ -143,6 +130,28 @@ const actions = {
         response,
       }),
     );
+  },
+  pushMessage({
+    commit,
+  }, request) {
+
+    const currentSegmentGroup = _.floor(request.postData.currentSegment * 0.2);
+
+    let newMessage = {
+      message: request.response.body,
+      info: {
+        total: 1,
+      },
+      segmentGroup: currentSegmentGroup,
+      faux: true,
+    };
+
+    newMessage.message.author = newMessage.message.user;
+
+    // Vue.set(state.messages, currentSegmentGroup, newMessage);
+    state.messages[currentSegmentGroup] = newMessage;
+    console.log('state.messages[currentSegmentGroup]');
+    console.log(state.messages[currentSegmentGroup]);
   },
 };
 
@@ -186,13 +195,20 @@ const mutations = {
       const segmentGroup = parseInt(parseInt(group) * 0.2);
       let newMessage = response.data[group];
       newMessage.segmentGroup = segmentGroup;
-      Vue.set(state.messages, segmentGroup, newMessage);
+
+      if (((state.messages[segmentGroup] === undefined) || state.messages[segmentGroup].loading) && !state.messages[segmentGroup].faux) {
+        Vue.set(state.messages, segmentGroup, newMessage);
+      }
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,
   }) {
     // error in response
+  },
+  [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
+    state.activeSegment = activeSegment;
+    state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
   },
   [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
     state.activeSegment = activeSegment;

@@ -20,9 +20,9 @@
     navigation
     router-view(transition transition-mode="out-in")
 
-  #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive }")
+  #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive, 'segment-view': activeSegmentVisible }")
     playhead
-    video-container(v-if="videoEnabled")
+    video-container
     message-composer
 
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'videoEnabled',
+      'isRegistered', 'videoIsActive', 'activeSegmentVisible',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
@@ -133,6 +133,8 @@ export default {
   height 140px
   width 800px
   z-index 50
+  &.segment-view
+    z-index 52
   @media(max-width: 800px)
     left 0
     margin-left 0

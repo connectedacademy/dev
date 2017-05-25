@@ -44,14 +44,18 @@ export default {
     sendMessage() {
       const postData = {
         text: `${this.message.text} ${this.$store.getters.course.hashtag} ${this.url}`,
+        currentClass: this.$store.getters.currentClass.slug,
+        currentSection: this.$store.getters.currentSection.slug,
+        currentSegment: this.$store.getters.currentSegment,
       };
 
       API.message.sendMessage(
         postData,
-        (response) => {
-          this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response })
+        (response, postData) => {
+          this.$store.dispatch('pushMessage', { response, postData });
+          this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response, postData })
         },
-        (response) => {
+        (response, postData) => {
           this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
         },
       );
@@ -60,7 +64,7 @@ export default {
   computed: {
     url() {
       if (this.$store.getters.currentSection === undefined) { return ''; }
-      return `http://localhost:8080/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSegment}`;
+      return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSegment}`;
     },
     visible() {
       return this.$store.state.composer.visible;

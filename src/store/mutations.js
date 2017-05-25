@@ -17,10 +17,6 @@ export const TOGGLE_DEBUG_MODE = (state) => {
   state.debug = !state.debug;
 };
 
-export const TOGGLE_VIDEO = (state) => {
-  state.videoEnabled = !state.videoEnabled;
-};
-
 export const setAutoPlaying = (state, isAutoPlaying) => {
   state.autoPlaying = isAutoPlaying;
 };

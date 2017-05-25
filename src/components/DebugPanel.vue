@@ -12,7 +12,6 @@
   span
     p scrollPoints
     pre {{ scrollPoints }}
-  p {{ `videoEnabled - ${videoEnabled}` }}
   p {{ `autoPlaying - ${autoPlaying}` }}
   p {{ `currentTime - ${currentTime}` }}
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
@@ -33,7 +32,6 @@ export default {
     ...mapGetters([
       'currentSection',
       'currentActiveSection',
-      'videoEnabled',
       'autoPlaying',
       'scrollPosition',
       'offsetScrollPosition',

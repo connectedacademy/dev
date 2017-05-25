@@ -6,7 +6,6 @@ const BURGER_CLOSE = 'close';
 // initial state
 const state = {
   overlayVisible: false,
-  videoEnabled: true,
   visible: true,
   burger: {
     state: BURGER_DEFAULT,
@@ -21,9 +20,6 @@ const state = {
 
 // getters
 const getters = {
-  videoEnabled() {
-    return state.videoEnabled;
-  },
 };
 
 // actions
@@ -32,9 +28,6 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.TOGGLE_VIDEO](initialState) {
-    state.videoEnabled = !state.videoEnabled;
-  },
   [types.TOGGLE_DEBUG_MODE](initialState) {
     state.debug = !state.debug;
   },

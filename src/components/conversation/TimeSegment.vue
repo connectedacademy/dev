@@ -2,7 +2,7 @@
 
   .time-segment(v-bind:class="{ active: segmentVisible }" v-bind:style="segmentVisible ? activeSegmentStyles : { top: (message.segmentGroup * 158.0) + 'px' }")
 
-    .close-button.animated.tada(v-if="segmentVisible" @click="exploreSegment(undefined)")
+    .close-button(v-if="segmentVisible" @click="exploreSegment(undefined)")
       p close
 
     .explore-segment-button(@click="exploreSegment(message)" v-if="!message.loading && (message.info && (message.info.total > 0 && !message.message.suggestion))")
@@ -17,21 +17,21 @@
       .message-count.animated.fadeIn(v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:class="{ hide: activeSegment, low: (message.info.total > 0), medium: (message.info.total > 2), high: (message.info.total > 4) }")
         span(v-if="message.info.total !== 0") {{ message.info.total }}
 
-      transition(name="fade")
+      transition(appear name="fade")
         .suggestion(v-if="message.message && message.message.suggestion")
           h3 "{{ message.message.text }}"
 
-      transition(name="fade")
+      transition(appear name="fade")
         mock-message(v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))" v-bind:message="message")
 
-      transition(name="fade")
+      transition(appear name="fade")
         message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
     .full-width-loading(v-if="segmentVisible && !segmentMessages")
       icon(name="refresh" scale="2" spin)
 
     //- transition(name="fade")
-    .meta-container--messages(v-if="segmentMessages" v-for="asMessage in segmentMessages")
+    .meta-container--messages(v-if="segmentVisible && segmentMessages" v-for="asMessage in segmentMessages")
         message(v-bind:message="asMessage")
 
 </template>
@@ -69,8 +69,10 @@ export default {
             };
           }
           setTimeout(function() {
-            self.loadSegmentMessages();
-            self.loadSegmentQuote();
+            if (self.activeSegment) {
+              self.loadSegmentMessages();
+              self.loadSegmentQuote();
+            }
           }, 600);
         }, 600);
       }
@@ -192,6 +194,8 @@ export default {
       height 100%
       margin 0 15px
       width 10px
+    &:hover
+      cursor pointer
   .message-count
     radius(13px)
     background-color $color-primary
@@ -274,14 +278,17 @@ export default {
   height 30px
   min-width 30px
   z-index 53
-  &:hover
-    cursor pointer
   p
     nomargin()
     nopadding()
     color white
     line-height 30px
     padding 0 10px
+  &:hover
+    cursor pointer
+    background-color white
+    p
+      color $color-primary
 
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */

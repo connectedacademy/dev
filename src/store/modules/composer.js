@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 
@@ -39,8 +40,8 @@ const mutations = {
   },
   [types.SEND_MESSAGE_SUCCESS](initialState, {
     response,
+    postData,
   }) {
-    alert('Message sent');
   },
   [types.SEND_MESSAGE_FAILURE](initialState, {
     response,
