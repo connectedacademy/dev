@@ -75,7 +75,7 @@
             fieldset.pure-group
 
               .vue-slider-wrapper(v-if="question.response_type === 'scale'")
-                <vue-slider :min="0" :max="10" :tooltip-style="{ 'background-color': '#0078E7', 'border-top-color': '#0078E7' }" :bg-style="{ 'background-color': '#e1e1e1' }" :process-style="{ 'background-color': '#0078E7' }" ref="slider" v-model="response.registration_info.answers[question.id]"></vue-slider>
+                <vue-slider :min="0" :max="5" :tooltip-style="{ 'background-color': '#0078E7', 'border-top-color': '#0078E7' }" :bg-style="{ 'background-color': '#d9d9d9' }" :process-style="{ 'background-color': '#d9d9d9' }" ref="slider" v-model="response.registration_info.answers[question.id]"></vue-slider>
 
               input.full-width(v-model="response.registration_info.answers[question.id]" v-if="question.response_type === 'text'" type="text")
 
@@ -215,7 +215,7 @@ export default {
       );
     },
     getCountryName(lang) {
-      return lang.toUpperCase();
+      return lang;
     },
   },
 };
