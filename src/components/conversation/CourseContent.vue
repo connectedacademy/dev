@@ -2,7 +2,13 @@
 
 .course-content-wrapper
 
-  .content-loading(v-if="currentClass.loading")
+  .course-content-group(v-if="currentClass.status === 'RELEASED'")
+    .course-content
+      .padded-container
+        h2 This is not the current class
+        .pure-button.pure-button-primary(@click="viewCurrentClass") $t('course.view_current_class') }}
+
+  .padded-container(v-if="currentClass.loading")
     icon(name="refresh" scale="2" spin)
 
   .course-content-group(v-if="isIntroduction")
@@ -16,8 +22,8 @@
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       .course-content--footer
-        .login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") Login
-        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") View Current Class
+        .login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
+        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
@@ -106,7 +112,7 @@ export default {
       'course', 'currentClass', 'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
     ]),
     isIntroduction() {
-      return (this.currentClass && (this.currentClass.slug === 'course_intro'));
+      return (this.currentClass && (this.currentClass.slug === 'intro'));
     },
     releasedContent() {
       return _.filter(this.courseContent, { status: 'RELEASED' });
@@ -135,10 +141,12 @@ export default {
 
 @import "../../assets/stylus/layout/course-content"
 
-.content-loading
+.padded-container
   padding 40px 0
   text-align center
   width 100%
+  h2
+    color $color-text-dark-grey
   .fa-icon
     color white
 </style>

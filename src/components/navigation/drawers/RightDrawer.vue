@@ -9,21 +9,25 @@
     .settings-container
       form.pure-form.pure-form-stacked
         fieldset(v-if="user.registration")
-          label {{ $t('common.age') }}
-          label {{ `- ${user.registration.age}` }}
+          label
+            strong {{ $t('common.age') }}
+          label {{ `${user.registration.age}` }}
         fieldset(v-if="user.registration")
-          label {{ $t('common.current_language') }}
-          label {{ `- ${user.registration.lang}` }}
+          label
+            strong {{ $t('common.current_language') }}
+          label {{ `${user.registration.lang}` }}
         fieldset
-          label {{ $t('common.current_service') }}
-          label {{ `- ${user.service}` }}
+          label
+            strong {{ $t('common.current_service') }}
+          label {{ `${user.service}` }}
         fieldset(v-if="user.registration")
-          label {{ $t('common.current_hub') }}
-          label {{ `- ${user.registration.hub_id}` }}
+          label
+            strong {{ $t('common.current_hub') }}
+          label {{ `${user.registration.hub_id}` }}
 
         fieldset
           .pure-button.pure-button-primary.full-width(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
-          router-link.pure-button.pure-button-primary.full-width(to="/registration" @click="toggleRightDrawer") Register
+          router-link.pure-button.pure-button-primary.full-width.hidden(to="/registration" @click="toggleRightDrawer") {{ $t('auth.register') }}
 
       pre.hidden {{ user }}
 

@@ -27,7 +27,7 @@ import CourseContent from '@/components/conversation/CourseContent';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
-  name: 'main',
+  name: 'course',
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.dispatch('checkAuth');

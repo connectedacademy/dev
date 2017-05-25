@@ -29,7 +29,7 @@ export default {
     terms: 'Terms',
   },
   auth: {
-    login: 'Login',
+    login: 'Participate',
     logout: 'Logout',
 
     login_with_twitter: 'Login with Twitter',
@@ -69,6 +69,7 @@ export default {
     load_hubs: 'Load Hubs',
     current_course_language: 'Current course language',
     course_info: 'Course Info',
+    view_current_class: 'View current class',
   },
   submission: {
     view_submissions: 'View Submissions',

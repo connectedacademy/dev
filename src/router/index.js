@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
 import Registration from '@/components/authentication/Registration';
 
-import Main from '@/components/Main';
+import Course from '@/components/Course';
 import Markdown from '@/components/Markdown';
 
 import Feedback from '@/components/feedback/Feedback';
@@ -32,9 +32,14 @@ export default new Router({
       },
     },
     {
-      name: 'main',
+      name: 'course',
       path: '/',
-      component: Main,
+      component: Course,
+    },
+    {
+      name: 'class',
+      path: '/course/:classSlug',
+      component: Course,
     },
     {
       name: 'registration',

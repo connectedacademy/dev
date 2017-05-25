@@ -93,9 +93,14 @@ import vueSlider from 'vue-slider-component';
 export default {
   name: 'registration',
   created() {
-    // Push user to home if not authenticated
-    // if (!this.$store.state.auth.isAuthenticated) { this.$router.push('/'); }
-    if (this.isRegistered) { this.$router.push('/'); }
+    API.auth.checkAuth(
+      response => {
+        if (response.user.registration) {
+          this.$router.replace('/');
+        }
+      },
+      response => {},
+    );
 
     API.auth.fetchQuestions(
       (response) => {
