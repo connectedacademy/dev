@@ -8,8 +8,9 @@ export default {
 
       const currentClass = this.$store.getters.currentClass;
 
-      if (currentClass === undefined) { return; }
-      if (currentClass.content === undefined) { return; }
+      if ((currentClass === undefined) || (currentClass.content === undefined)) {
+        return;
+      }
 
       for (var content of currentClass.content) {
         if (content.slug) {

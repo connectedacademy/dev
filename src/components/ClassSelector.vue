@@ -46,6 +46,7 @@ export default {
       this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - position.scrollLeft);
     },
     setCurrentClass(newClass) {
+      this.$store.dispatch('resetState');
       this.activeClass = newClass;
       if (newClass.slug === 'course_intro') {
         this.$store.commit(types.SET_CURRENT_CLASS, newClass);
