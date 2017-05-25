@@ -18,9 +18,13 @@ import {mapGetters} from 'vuex';
 
 import * as types from '@/store/mutation-types';
 import ProfileIcon from './ProfileIcon';
+import Auth from '@/mixins/Auth';
 
 export default {
   name: 'navigation',
+  mixins: [
+    Auth,
+  ],
   components: {
     ProfileIcon,
   },
@@ -36,9 +40,6 @@ export default {
     },
   },
   methods: {
-    showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
-    },
     toggleDebugMode() {
       this.$store.commit(types.TOGGLE_DEBUG_MODE);
     },

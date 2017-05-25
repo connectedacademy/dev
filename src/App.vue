@@ -38,6 +38,7 @@ import * as types from '@/store/mutation-types';
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
 import AutoScroll from '@/mixins/AutoScroll';
+import Overlay from '@/mixins/Overlay';
 
 // Components
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
@@ -57,6 +58,7 @@ export default {
   mixins: [
     ScrollPoints,
     AutoScroll,
+    Overlay,
   ],
   created() {
     // Fetch course and then hubs
@@ -99,13 +101,6 @@ export default {
     Message,
   },
   methods: {
-    dismissOverlay() {
-      this.$store.commit(types.DISMISS_AUTH);
-      this.$store.commit(types.DISMISS_COMPOSER);
-      this.$store.commit(types.DISMISS_LEFT_DRAWER);
-      this.$store.commit(types.DISMISS_RIGHT_DRAWER);
-      this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
-    },
     updateDocumentHeight() {
       // Check if document height has changed
       if (this.documentHeight !== document.documentElement.scrollHeight) {

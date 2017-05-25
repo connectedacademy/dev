@@ -12,13 +12,6 @@
 
         .content-block.white-block
 
-          fieldset
-            label Select your hub
-            ul.hub-selector
-              li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
-                h1.hub-title {{ hub.name }}
-                h2.hub-timezone {{ hub.timezone }}
-
           fieldset.validate(v-bind:class="{ valid: validatedResponse.email }")
             label {{ $t('auth.enter_your_email') }}
             input(type="text" v-model="response.email")
@@ -32,6 +25,13 @@
             select(v-model="response.lang")
               option(value="") {{ $t('common.choose_one') }}
               option(v-for="lang in course.langs") {{ lang }}
+
+          fieldset
+            label Select your hub
+            ul.hub-selector
+              li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
+                h1.hub-title {{ hub.name }}
+                h2.hub-timezone {{ hub.timezone }}
 
           router-link.pure-button(to="/") {{ $t('common.cancel') }}
           .pure-button.pure-button-primary.pull-right(v-bind:disabled="!formIsValid" @click="nextPage") {{ $t('common.continue') }}
@@ -83,20 +83,19 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-
 import _ from 'lodash';
+import {mapGetters} from 'vuex';
+import API from '@/api';
+
 import validator from 'validator';
 import vueSlider from 'vue-slider-component';
-
-import API from '@/api';
 
 export default {
   name: 'registration',
   created() {
     // Push user to home if not authenticated
     // if (!this.$store.state.auth.isAuthenticated) { this.$router.push('/'); }
-    if (this.$store.state.auth.isRegistered) { this.$router.push('/'); }
+    if (this.isRegistered) { this.$router.push('/'); }
 
     API.auth.fetchQuestions(
       (response) => {
@@ -129,7 +128,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'hubs', 'user',
+      'course', 'hubs', 'user', 'isRegistered',
     ]),
     sanitizedResponse() {
       return {
@@ -234,8 +233,8 @@ ul.hub-selector
   margin 0 -10px
   li.hub-selector--tile
     cleanlist()
-    background-color $color-primary
-    color white
+    animate()
+    background-color #e1e1e1
     display inline-block
     overflow hidden
     text-align center
@@ -245,24 +244,29 @@ ul.hub-selector
 
     width 120px
 
-    h1, h2
-      color white
+    h1.hub-title
+      animate()
       nomargin()
       nopadding()
-
-    h1.hub-title
-      color white
+      color #444
       font-size 1.2em
       line-height 30px
     h2.hub-timezone
-      color white
+      animate()
+      nomargin()
+      nopadding()
+      color #444
       font-size 1em
       line-height 30px
 
     &:hover
       cursor pointer
       background-color darken($color-primary, 10%)
+      h1.hub-title, h2.hub-timezone
+        color white
 
     &.selected
       background-color $color-success
+      h1.hub-title, h2.hub-timezone
+        color white
 </style>

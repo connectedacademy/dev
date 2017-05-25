@@ -37,8 +37,21 @@
 import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
 
+import Overlay from '@/mixins/Overlay';
+
 export default {
   name: 'left-drawer',
+  mixins: [
+    Overlay,
+  ],
+  watch: {
+    '$route': {
+      handler: function(nV, oV) {
+        this.dismissOverlay();
+      },
+      deep: true,
+    },
+  },
   methods: {
     toggleLeftDrawer() {
       this.$store.commit(types.TOGGLE_LEFT_DRAWER);

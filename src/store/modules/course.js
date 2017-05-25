@@ -47,7 +47,10 @@ const actions = {
   getSpec({
     commit,
   }, classSlug) {
-    state.current_class = undefined;
+    state.current_class = {
+      slug: classSlug,
+      loading: true,
+    };
     API.course.getSpec(
       classSlug,
       response => commit(types.GET_SPEC_SUCCESS, {
@@ -107,6 +110,9 @@ const mutations = {
   }) {
     state.hubs = {};
     // error in response
+  },
+  [types.SET_CURRENT_CLASS](initialState, currentClass) {
+    state.current_class = currentClass;
   },
   [types.SET_COURSE_LANG](initialState, currentLang) {
     state.current_lang = currentLang;

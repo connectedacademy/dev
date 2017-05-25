@@ -2,7 +2,25 @@
 
 .course-content-wrapper
 
-  .course-content-group.course-content-group--released(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .content-loading(v-if="currentClass.loading")
+    icon(name="refresh" scale="2" spin)
+
+  .course-content-group(v-if="isIntroduction")
+
+    //- ABOUT
+    .course-content
+      .course-content--header
+        h1.content-title About the course
+
+      .course-content--body
+        markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
+
+      .course-content--footer
+        .login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") Login
+        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") View Current Class
+        .clearfix
+
+  .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- QUESTION
     .course-content(v-if="content.content_type === 'question'")
@@ -47,37 +65,23 @@
 /* eslint-disable */
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-
 import * as types from '@/store/mutation-types';
-import MarkdownLink from '../MarkdownLink';
-import VideoThumbnail from '../VideoThumbnail';
-import ConversationContainer from '../ConversationContainer';
-import LikeIndicator from '../LikeIndicator';
-import SubmissionGrid from '../SubmissionGrid';
-import SubmissionButton from '../SubmissionButton';
+import Auth from '@/mixins/Auth';
+
+import MarkdownRenderer from '@/components/MarkdownRenderer';
+import MarkdownLink from '@/components/MarkdownLink';
+import VideoThumbnail from '@/components/VideoThumbnail';
+import ConversationContainer from '@/components/ConversationContainer';
+import LikeIndicator from '@/components/LikeIndicator';
+import SubmissionGrid from '@/components/SubmissionGrid';
+import SubmissionButton from '@/components/SubmissionButton';
 import FutureContent from './FutureContent';
 
 export default {
   name: 'course-content',
-  computed: {
-    ...mapGetters([
-      'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
-    ]),
-    releasedContent() {
-      return _.filter(this.courseContent, { status: 'RELEASED' });
-    },
-    futureContent() {
-      return _.filter(this.courseContent, { status: 'FUTURE' });
-    },
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
-    },
-  },
+  mixins: [
+    Auth,
+  ],
   components: {
     ConversationContainer,
     MarkdownLink,
@@ -86,6 +90,43 @@ export default {
     SubmissionGrid,
     SubmissionButton,
     FutureContent,
+    MarkdownRenderer,
+  },
+  watch: {
+    course(nV, oV) {
+      if (this.isRegistered) {
+        this.viewCurrentClass();
+      }
+    }
+  },
+  // mounted() {
+  // },
+  computed: {
+    ...mapGetters([
+      'course', 'currentClass', 'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
+    ]),
+    isIntroduction() {
+      return (this.currentClass && (this.currentClass.slug === 'course_intro'));
+    },
+    releasedContent() {
+      return _.filter(this.courseContent, { status: 'RELEASED' });
+    },
+    futureContent() {
+      return _.filter(this.courseContent, { status: 'FUTURE' });
+    },
+  },
+  methods: {
+    showAuth() {
+      this.$store.commit(types.SHOW_AUTH);
+    },
+    viewCurrentClass() {
+      for (const theClass of this.course.classes) {
+        if (theClass.status === 'CURRENT') {
+          window.scroll(0, 0);
+          this.$store.dispatch('getSpec', theClass.slug);
+        }
+      }
+    },
   },
 };
 </script>
@@ -94,4 +135,10 @@ export default {
 
 @import "../../assets/stylus/layout/course-content"
 
+.content-loading
+  padding 40px 0
+  text-align center
+  width 100%
+  .fa-icon
+    color white
 </style>

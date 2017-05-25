@@ -8,19 +8,6 @@
 
     .main-container
 
-      //- .toolbar
-
-        button.pure-button.pull-left(v-on:click="infoVisible =! infoVisible")
-          | {{ $t('course.course_info') }}
-
-        button.pure-button.pull-right(v-on:click="setScrollPoints")
-          | Set Scroll Points
-
-        .clearfix
-
-      .container.background-white(v-if="infoVisible")
-        markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
-
       class-selector
 
       course-content(v-if="currentClass")
@@ -128,6 +115,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '../assets/stylus/shared/*'
+@import "../assets/stylus/layout/course-content"
 
 .fps-indicator
   radius(50%)
@@ -152,15 +140,5 @@ export default {
   height 10px
   z-index 100
   width 10px
-
-.toolbar
-  background-color white
-  border-bottom #e1e1e1 1px solid
-  padding 10px
-  .pure-button
-    margin 10px
-
-.stream
-  padding-bottom 80px
 
 </style>
