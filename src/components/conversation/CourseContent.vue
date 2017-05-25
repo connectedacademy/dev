@@ -6,7 +6,8 @@
     .course-content
       .padded-container
         h2 This is not the current class
-        .pure-button.pure-button-primary(@click="viewCurrentClass") $t('course.view_current_class') }}
+        h5.hidden {{ currentClass.status }}
+        .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
 
   .padded-container(v-if="currentClass.loading")
     icon(name="refresh" scale="2" spin)
@@ -148,5 +149,5 @@ export default {
   h2
     color $color-text-dark-grey
   .fa-icon
-    color white
+    color alpha(white, 0.2)
 </style>

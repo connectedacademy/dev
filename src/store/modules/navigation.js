@@ -20,6 +20,9 @@ const state = {
 
 // getters
 const getters = {
+  navigationVisible() {
+    return state.visible;
+  },
 };
 
 // actions
@@ -28,6 +31,9 @@ const actions = {
 
 // mutations
 const mutations = {
+  [types.SET_NAV_STATE](initialState, visible) {
+    state.visible = visible;
+  },
   [types.TOGGLE_DEBUG_MODE](initialState) {
     state.debug = !state.debug;
   },

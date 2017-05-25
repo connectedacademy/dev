@@ -13,9 +13,9 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'info-dialogue',
+  props: ['dismissable'],
   data() {
     return {
-      dismissable: true,
       dismissed: false,
     };
   },

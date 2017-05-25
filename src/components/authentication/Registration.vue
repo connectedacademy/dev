@@ -12,6 +12,9 @@
 
         .content-block.white-block
 
+          info-dialogue
+            p Please fill in the fields below to register for Connected Academy, don't forget to select your hub.
+
           fieldset.validate(v-bind:class="{ valid: validatedResponse.email }")
             label {{ $t('auth.enter_your_email') }}
             input(type="text" v-model="response.email")
@@ -24,10 +27,10 @@
             label {{ $t('auth.select_your_language') }}
             select(v-model="response.lang")
               option(value="") {{ $t('common.choose_one') }}
-              option(v-for="lang in course.langs") {{ lang }}
+              option(v-for="lang in course.langs") {{ getCountryName(lang) }}
 
           fieldset
-            label Select your hub
+            label Pick the hub closest to your timezone to receive notifications when class content is released.
             ul.hub-selector
               li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
                 h1.hub-title {{ hub.name }}
@@ -41,8 +44,10 @@
 
         .content-block.white-block
 
-          h5 {{ $t('auth.read_the_following') }}
-          p {{ release }}
+          info-dialogue
+            p {{ $t('auth.read_the_following') }}
+
+          #terms-markdown(v-html="termsMarkdown")
 
           fieldset
             label.pure-checkbox(for="consent-cb")
@@ -58,7 +63,9 @@
       .registration-page(v-if="currentPage === 3")
 
         .content-block.white-block
-          h5 {{ $t('auth.answer_the_following') }}
+
+          info-dialogue
+            p {{ $t('auth.answer_the_following') }}
 
           .question-wrapper(v-for="(question, index) in questions")
 
@@ -85,21 +92,41 @@
 <script>
 import _ from 'lodash';
 import {mapGetters} from 'vuex';
+import * as types from '@/store/mutation-types';
 import API from '@/api';
 
-import validator from 'validator';
-import vueSlider from 'vue-slider-component';
+
+import MarkdownIt from 'markdown-it';
+
+import MarkdownRenderer from '@/components/MarkdownRenderer';
+import InfoDialogue from '../InfoDialogue';
+import Validator from 'validator';
+import VueSlider from 'vue-slider-component';
 
 export default {
   name: 'registration',
+  components: {
+    MarkdownRenderer,
+    InfoDialogue,
+    VueSlider,
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit(types.SET_NAV_STATE, false);
+    });
+  },
+  beforeRouteLeave (to, from, next) {
+    // Reset state
+    this.$store.commit(types.SET_NAV_STATE, true);
+    next();
+  },
   created() {
     API.auth.checkAuth(
       response => {
         if (response.user.registration) {
-          this.$router.replace('/');
+          // this.$router.replace('/');
         }
       },
-      response => {},
     );
 
     API.auth.fetchQuestions(
@@ -139,8 +166,8 @@ export default {
       return {
         consent: this.response.consent,
         hub_id: this.response.hub_id,
-        email: validator.normalizeEmail(this.response.email),
-        age: validator.toInt(this.response.age),
+        email: Validator.normalizeEmail(this.response.email),
+        age: Validator.toInt(this.response.age),
         lang: this.response.lang,
         registration_info: {
           answers: this.response.registration_info.answers,
@@ -149,18 +176,24 @@ export default {
     },
     validatedResponse() {
       return {
-        hub_id: !validator.isEmpty(this.response.hub_id),
-        email: validator.isEmail(this.response.email),
-        age: validator.isInt(this.response.age, { min: 1, max: 150 }),
-        lang: !validator.isEmpty(this.response.lang),
+        hub_id: !Validator.isEmpty(this.response.hub_id),
+        email: Validator.isEmail(this.response.email),
+        age: Validator.isInt(this.response.age, { min: 1, max: 150 }),
+        lang: !Validator.isEmpty(this.response.lang),
       };
     },
     formIsValid() {
       return _.every(_.values(this.validatedResponse), v => v);
     },
-  },
-  components: {
-    vueSlider,
+    termsMarkdown() {
+
+      const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+      });
+
+      return `<div>${md.render(this.release)}</div>`;
+    },
   },
   methods: {
     nextPage() {
@@ -180,6 +213,9 @@ export default {
           this.$router.push({ path: '/' });
         },
       );
+    },
+    getCountryName(lang) {
+      return lang.toUpperCase();
     },
   },
 };
@@ -274,4 +310,12 @@ ul.hub-selector
       background-color $color-success
       h1.hub-title, h2.hub-timezone
         color white
+
+#terms-markdown
+  radius(4px)
+  background-color $color-light-grey
+  border $color-light-grey 1px solid
+  max-height 340px
+  padding 5px 15px
+  overflow scroll
 </style>

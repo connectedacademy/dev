@@ -16,7 +16,7 @@
 
   right-drawer(v-if="isRegistered")
 
-  .main-page
+  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '60px' : '0px' }")
     navigation
     router-view(transition transition-mode="out-in")
 

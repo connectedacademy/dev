@@ -18,7 +18,7 @@ export default {
   getSpec(classSlug, cb, errorCb) {
 
     let currentTime = Moment();
-    currentTime = currentTime.subtract(40, 'days').format();
+    currentTime = currentTime.subtract(46, 'days').format();
     currentTime = currentTime.replace('+', encodeURIComponent('+'));
 
     Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${currentTime}`).then((response) => {
