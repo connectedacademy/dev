@@ -1,7 +1,11 @@
 <template lang="pug">
 
 li.navigation-item(@click="jumpToContent" v-bind:class="{ active: isActive }")
-  icon(name="circle")
+  icon(v-if="scrollPoint.content_type === 'class'" name="play")
+  icon(v-else-if="scrollPoint.content_type === 'webinar'" name="play")
+  icon(v-else-if="scrollPoint.content_type === 'pre'" name="info-circle")
+  icon(v-else name="circle")
+
   .content-label {{ scrollPoint.slug }}
   .clearfix
 
@@ -54,7 +58,7 @@ li.navigation-item
     animate()
   .content-label
     radius(20px)
-    background-color alpha(black, 0.3)
+    background-color alpha(black, 0.5)
     color white
     font-weight bold
     line-height 32px
@@ -63,6 +67,7 @@ li.navigation-item
     position absolute
     right 0
     text-transform uppercase
+    z-index -1
     animate()
   &:hover
     background-color white
