@@ -148,10 +148,7 @@ const actions = {
 
     newMessage.message.author = newMessage.message.user;
 
-    // Vue.set(state.messages, currentSegmentGroup, newMessage);
-    state.messages[currentSegmentGroup] = newMessage;
-    console.log('state.messages[currentSegmentGroup]');
-    console.log(state.messages[currentSegmentGroup]);
+    Vue.set(state.messages, currentSegmentGroup, newMessage);
   },
 };
 
@@ -199,6 +196,7 @@ const mutations = {
       if (((state.messages[segmentGroup] === undefined) || state.messages[segmentGroup].loading) && !state.messages[segmentGroup].faux) {
         Vue.set(state.messages, segmentGroup, newMessage);
       }
+      Vue.set(state.messages, segmentGroup, newMessage);
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {

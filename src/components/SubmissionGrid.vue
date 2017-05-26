@@ -1,7 +1,8 @@
 <template lang="pug">
 
-  .submission-grid-wrapper(v-if="content.expectsubmission")
-
+  .submission-grid-wrapper(v-if="content.expectsubmission && (content.submissions.length > 0)")
+    p.content-description
+      | Below are your submission(s):
     ul.submission-grid
       li.submission-grid--tile(v-for="submission in content.submissions")
         img( v-bind:src="submission.thumbnail")
@@ -25,19 +26,23 @@ export default {
 
 @import "../assets/stylus/shared/*"
 
-ul.submission-grid
-  cleanlist()
-  background-color $color-grey
-  border $color-grey 1px solid
-  margin-top 15px
-  li.submission-grid--tile
+.submission-grid-wrapper
+  p.content-description
+    color $color-text-dark-grey
+  ul.submission-grid
     cleanlist()
-    float left
-    margin-right 15px
-    img
-      radius(6px)
-      background-color $color-light-grey
-      display block
-      height 80px
+    background-color $color-light-grey
+    border $color-grey 1px solid
+    margin-top 15px
+    padding 5px
+    li.submission-grid--tile
+      cleanlist()
+      float left
+      padding 5px
+      img
+        radius(6px)
+        background-color white
+        display block
+        height 80px
 
 </style>

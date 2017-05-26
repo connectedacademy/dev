@@ -1,22 +1,22 @@
 <template lang="pug">
 
-  a.thumbnail-link(:href="src" target="_blank")
+.video-wrapper(v-if="videoSrc")
+
+  a.thumbnail-link(v-bind:href="href" target="_blank")
     img(v-bind:src="thumbnail")
 
 </template>
 
 <script>
-import _ from 'lodash';
-
 export default {
   name: 'video-thumbnail',
-  props: ['videoSrc'],
+  props: ['contentType', 'videoSrc'],
   computed: {
-    thumbnail() {
-      return `http://img.youtube.com/vi/${this.videoSrc}/hqdefault.jpg`;
+    href() {
+      return `http://youtube.com/watch?v=${this.videoSrc}`;
     },
     src() {
-      return `http://youtube.com/watch?v=${this.videoSrc}`;
+      return `http://img.youtube.com/vi/${this.videoSrc}/hqdefault.jpg`;
     },
   },
 };
@@ -24,9 +24,11 @@ export default {
 
 <style lang="stylus" scoped>
 
-a.thumbnail-link
-  img
-    display block
-    height 100px
-    margin-top 10px
+.video-wrapper
+  a.thumbnail-link
+    img
+      display block
+      height 100px
+      margin-top 10px
+
 </style>

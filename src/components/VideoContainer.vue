@@ -32,7 +32,7 @@ export default {
       this.seek(this, nV);
     },
     videoPlaying(nv, oV) {
-      if (this.player) {
+      if (this.player && this.src) {
         if (nv) {
            this.player.playVideo();
         } else {

@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     quote() {
-      alert(`Quote - ${this.subtitle.text}`);
+      // alert(`Quote - ${this.subtitle.text}`);
     },
   },
 };

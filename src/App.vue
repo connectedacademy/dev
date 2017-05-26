@@ -31,6 +31,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import API from '@/api';
 
 import store from '@/store';
 import * as types from '@/store/mutation-types';

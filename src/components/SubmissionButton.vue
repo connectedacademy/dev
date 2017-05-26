@@ -3,7 +3,7 @@
   .submission-button
     .pure-button.pure-button-primary.pull-left(v-if="content.expectsubmission && content.submissions.length" @click="viewSubmissions")
       | {{ $t('submission.view_submissions') }}
-    .pure-button.pure-button-primary.pull-left(v-if="content.expectsubmission && !content.submissions.length" @click="makeSubmission")
+    .pure-button.pure-button-primary.pull-left(v-if="content.expectsubmission && content.url && !content.submissions.length" @click="makeSubmission")
       | {{ $t('submission.make_a_submission') }}
 
 </template>
