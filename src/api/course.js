@@ -6,10 +6,13 @@ export default {
   getSchedule(passedCourse, cb, errorCb) {
 
     let currentTime = Moment();
-    currentTime = currentTime.subtract(46, 'days').format();
+    currentTime = currentTime.subtract(40, 'days');
+    currentTime = currentTime.format();
     currentTime = currentTime.replace('+', encodeURIComponent('+'));
 
     Vue.http.get(`${config.WATERCOOLER_API}/course/schedule?time=${currentTime}`).then((response) => {
+      console.log('response');
+      console.log(response);
       cb(response.body);
     }, (response) => {
       errorCb(response);
@@ -18,7 +21,8 @@ export default {
   getSpec(classSlug, cb, errorCb) {
 
     let currentTime = Moment();
-    currentTime = currentTime.subtract(46, 'days').format();
+    currentTime = currentTime.subtract(40, 'days');
+    currentTime = currentTime.format();
     currentTime = currentTime.replace('+', encodeURIComponent('+'));
 
     Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${currentTime}`).then((response) => {

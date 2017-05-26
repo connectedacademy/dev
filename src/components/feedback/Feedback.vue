@@ -7,7 +7,7 @@
     .container
 
       info-dialogue(:dismissable="true")
-        p You are currently viewing submissions for the '{{ contentSlug }}' section of the {{ classSlug }} class
+        p Here you can share feedback with others and gain feedback on your own submissions.
 
       .feedback-section(v-if="feedbackItems.length > 0")
 
@@ -112,12 +112,6 @@ export default {
     },
     contentSlug() {
       return this.$route.params.contentSlug;
-    },
-    feedbackItems() {
-      return this.feedbackItems;
-    },
-    availableFeedbackItems() {
-      return this.availableFeedbackItems;
     },
   },
   components: {

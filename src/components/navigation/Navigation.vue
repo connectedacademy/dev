@@ -36,7 +36,7 @@ export default {
       return !this.$store.state.navigation.visible;
     },
     navTitle() {
-      return (this.$store.getters.currentClass && this.$store.getters.scrollPosition > 100) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
+      return (this.$store.getters.currentClass && this.$store.getters.currentClass.title && this.$store.getters.scrollPosition > 100) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
     },
   },
   methods: {

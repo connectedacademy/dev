@@ -2,16 +2,6 @@
 
 .course-content-wrapper
 
-  .course-content-group(v-if="currentClass.status === 'RELEASED'")
-    .course-content
-      .padded-container
-        h2 This is not the current class
-        h5.hidden {{ currentClass.status }}
-        .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
-
-  .padded-container(v-if="currentClass.loading")
-    icon(name="refresh" scale="2" spin)
-
   .course-content-group(v-if="isIntroduction")
 
     //- ABOUT
@@ -30,12 +20,7 @@
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- QUESTION
-    .course-content(v-if="content.content_type === 'question'")
-      .course-content--header
-        h1.content-title Injected Question
-
-      .course-content--body
-        p.content-description Question lives here...
+    injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
 
     //- CONTENT
     .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
@@ -48,9 +33,10 @@
         h1.content-title(v-if="content.title") {{ content.title }}
 
       .course-content--body
-        p.content-description(v-if="content.description") {{ content.description }}
+        p.content-description(v-if="content.description")
+          markdown-content(v-bind:markdown="content.description")
 
-        video-thumbnail(v-if="content.video && ((content.content_type !== 'class') && (content.content_type !== 'webinar'))" v-bind:video-src="content.video")
+        video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
 
         submission-grid(v-if="content.expectsubmission" v-bind:content="content")
 
@@ -76,13 +62,15 @@ import * as types from '@/store/mutation-types';
 import Auth from '@/mixins/Auth';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import MarkdownContent from '@/components/MarkdownContent';
 import MarkdownLink from '@/components/MarkdownLink';
-import VideoThumbnail from '@/components/VideoThumbnail';
+import VideoEmbed from '@/components/VideoEmbed';
 import ConversationContainer from '@/components/ConversationContainer';
 import LikeIndicator from '@/components/LikeIndicator';
 import SubmissionGrid from '@/components/SubmissionGrid';
 import SubmissionButton from '@/components/SubmissionButton';
-import FutureContent from './FutureContent';
+import FutureContent from '@/components/conversation/FutureContent';
+import InjectedQuestion from '@/components/conversation/InjectedQuestion';
 
 export default {
   name: 'course-content',
@@ -91,13 +79,15 @@ export default {
   ],
   components: {
     ConversationContainer,
+    MarkdownContent,
     MarkdownLink,
-    VideoThumbnail,
+    VideoEmbed,
     LikeIndicator,
     SubmissionGrid,
     SubmissionButton,
     FutureContent,
     MarkdownRenderer,
+    InjectedQuestion,
   },
   watch: {
     course(nV, oV) {
@@ -106,8 +96,6 @@ export default {
       }
     }
   },
-  // mounted() {
-  // },
   computed: {
     ...mapGetters([
       'course', 'currentClass', 'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
@@ -142,12 +130,4 @@ export default {
 
 @import "../../assets/stylus/layout/course-content"
 
-.padded-container
-  padding 40px 0
-  text-align center
-  width 100%
-  h2
-    color $color-text-dark-grey
-  .fa-icon
-    color alpha(white, 0.2)
 </style>

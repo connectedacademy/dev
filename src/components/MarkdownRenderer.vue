@@ -33,19 +33,38 @@ export default {
       },
       deep: true,
     },
+    course() {
+      this.loadMarkdown();
+    },
   },
   mounted() {
     this.loadMarkdown();
   },
   props: ['markdownUrl', 'frontMatterVisible'],
+  data() {
+    return {
+      loading: true,
+      renderedMarkdown: 'Loading...',
+      frontMatter: {},
+      theClass: 'empty',
+      theContent: 'empty',
+    };
+  },
   methods: {
     getUrl() {
       if (this.markdownUrl) {
         return this.markdownUrl;
       }
       let url = this.$route.params.url;
-      url = _.startsWith(url, 'http') ? url : `${this.$store.getters.course.baseUri}${url}`;
-      return url;
+      if (_.startsWith(url, 'http')) {
+        return url;
+      } else {
+        if (!this.$store.getters.course) {
+          return '';
+        } else {
+          return `${this.$store.getters.course.baseUri}${url}`
+        }
+      }
     },
     loadMarkdown() {
       this.loading = true;
@@ -65,12 +84,15 @@ export default {
       // Render markdown
       var res = Vue.compile(this.rawMarkdown);
 
+      var parent = this;
       var RenderedMarkdown = new Vue({
         name: 'rendered-markdown',
         parent: this,
         data() {
           return {
             fourcornersLink: '',
+            // theClass: 'empty-vue',
+            // theContent: 'empty-vue',
           };
         },
         computed: {
@@ -78,28 +100,14 @@ export default {
             'isRegistered',
           ]),
           contentUrl() {
-            const url = 'test';
-            const course = this.$store.getters.course;
-
-            const currentClass = _.find(course.classes, function(o) {
-              return o.dir === 'class1';
-            });
-
-            const currentContent = _.find(currentClass.content, function(o) {
-              return o.url === 'intro.md';
-            });
-
-            const full = window.location.host;
-            const parts = full.split('.');
-            let sub = parts[0];
-
+            let sub = window.location.host.split('.')[0];
             sub = (_.startsWith(sub, 'localhost')) ? 'testclass' : sub;
 
-            const newUrl = 'https://' + sub + '.connectedacademy.io/#/submission';
-
-            return `${newUrl}/${currentClass.slug}/${currentContent.slug}`;
+            return `https://${sub}.connectedacademy.io/#/submission/${parent.theClass}/${parent.theContent}`;
           },
-          tweet() { return `${this.fourcornersLink} ${this.contentUrl} ${this.$parent.$store.getters.course.hashtag}`; },
+          tweet() {
+            return `${this.fourcornersLink} ${this.contentUrl} ${this.$parent.$store.getters.course.hashtag}`;
+          },
         },
         methods: {
           showAuth() {
@@ -139,7 +147,8 @@ export default {
       'course'
     ]),
     rawMarkdown() {
-      var iterator = require('markdown-it-for-inline');
+
+      var parent = this;
 
       const md = new MarkdownIt({
         html: true,
@@ -152,7 +161,12 @@ export default {
             const currentUrl = url.substring(0, url.lastIndexOf('/') + 1);
             return `/#/markdown/${encodeURIComponent(link)}`;
           }
-          return `${this.$store.getters.course.baseUri}${link}`;
+
+          if (!this.$store.getters.course) {
+            return '';
+          } else {
+            return `${this.$store.getters.course.baseUri}${link}`
+          }
         },
       })
       .use(MarkdownItReplaceLink)
@@ -165,7 +179,14 @@ export default {
       })
       .use(MarkdownItCustomBlock, {
         submission(arg) {
-          if (arg === 'fourcorners') {
+          console.log('Plain arg');
+          console.log(arg);
+          arg = JSON.parse(arg);
+          console.log('JSON arg');
+          console.log(arg);
+          if (arg.type === 'fourcorners') {
+            parent.theClass = arg.class;
+            parent.theContent = arg.content;
             return `
             <div class="fourcorners-submission" v-if="isRegistered">
               <label>Submit URL</label>
@@ -185,13 +206,6 @@ export default {
 
       return `<div>${md.render(this.renderedMarkdown)}</div>`;
     },
-  },
-  data() {
-    return {
-      loading: true,
-      renderedMarkdown: 'Loading...',
-      frontMatter: {},
-    };
   },
 };
 </script>

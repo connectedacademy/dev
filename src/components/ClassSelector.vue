@@ -1,5 +1,6 @@
 <template lang="pug">
 
+.class-selector
   .class-selector-wrapper(v-show="activeClass")
     transition(name="fade")
       .skip-button.skip-button--left(@click="scrollLeft" v-if="offset > 0")
@@ -11,10 +12,21 @@
       ul.class-selector(v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
         li.class-selector--item.released(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
           h1.class-selector--item--header Introduction
-        li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
+        li.class-selector--item(v-if="course && course.classes" v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
           h1.class-selector--item--header {{ theClass.title }}
           icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
+          icon.status-indicator(name="clock-o" v-if="theClass.status === 'FUTURE'")
         .clearfix
+
+  .padded-container(v-if="currentClass && currentClass.loading")
+    icon(name="refresh" scale="2" spin)
+
+  .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
+    h2 This course has finished
+
+  .padded-container(v-if="currentClass && currentClass.status === 'RELEASED' && currentExists")
+    h2 This is not the current class
+    .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
 
 </template>
 
@@ -77,6 +89,9 @@ export default {
       this.$store.commit(types.SET_CURRENT_CLASS, this.introClass);
     },
     viewCurrentClass() {
+      if (!this.currentExists) {
+        this.viewIntroClass();
+      }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           this.$store.dispatch('getSpec', theClass.slug);
@@ -108,6 +123,15 @@ export default {
     theWidth() {
       return (this.course && this.course.classes) ? ((this.course.classes.length * 190.0) - 10) : 0;
     },
+    currentExists() {
+      for (const theClass of this.course.classes) {
+        if (theClass.status === 'CURRENT') {
+          return true;
+        }
+      }
+
+      return false;
+    },
   },
 };
 </script>
@@ -135,8 +159,10 @@ export default {
       cursor pointer
     &.skip-button--left
       left 0px
+      border-right darken($color-primary, 10%) 3px solid
     &.skip-button--right
       right 0px
+      border-left darken($color-primary, 10%) 3px solid
     .fa-icon
       color white
       height 100%
@@ -169,9 +195,9 @@ export default {
         &:first-child
           margin-left 0
         .status-indicator
-          color $color-success
+          color $color-primary
           position absolute
-          right 5px
+          left 5px
           top 5px
         h1.class-selector--item--header
           nomargin()
@@ -193,8 +219,8 @@ export default {
         &.future
           opacity 0.8
           pointer-events none
-          /*h1.class-selector--item--header
-            color $color-text-grey*/
+          .status-indicator
+            color $color-light-grey
 
         &:hover
           background-color darken(white, 20%)
@@ -204,5 +230,22 @@ export default {
           background-color $color-primary
           h1.class-selector--item--header, .status-indicator
             color white
+
+.padded-container
+  radius(4px)
+  background-color white
+  padding 30px 0
+  text-align center
+  width 100%
+  h2
+    nomargin()
+    nopadding()
+    color $color-text-dark-grey
+    line-height 40px
+  .fa-icon
+    color $color-purple
+    height 40px
+  .pure-button
+    margin-top 20px
 
 </style>
