@@ -1,0 +1,65 @@
+Landing
++ Progress indicator
++ About course
+  / Link to MD
++ Current course
++ Register/Login
+
+Register
++ Explain what a hub is
++ Hide navbar
++ MD rendering on terms & scrollable
+! Map lang
+
+Register queries
++ Hide blue bar
++ Start in middle position
+
+Logged in Landing
++ Set current class
++ Three liner in introduction description
++ Injected questions
+ + Format differently
+
+Submission (Home)
++ Add some text
++ These are your submission(s) - click to add feedback
++ Improve styling for submission box
+
+Time-release
+- Big countdown
+- Actual release time and date
+- Change notify button to jump forward
+ - Set time to current time
+
+Submission
++ Submission for different content pages (COPY MARKUP TO ALL MD FILES)
+- Feedback after submitting
+- Hide submission box if submitted (check spec if submission required)
+- Modal when clicking 'message hidden' - call new endpoint and link to other user's submission
+
+Liveclass Interaction
+- Pause when composer focus
+
+Segment Deepdive
+- Reply button
+- New tweet at top
+- Subscribe to segment
+- Prevent scroll
+
+Webinar
++ iFrame full width
+- Tweet box
+
+Unauthed state
+- Hide submission stuff
+- Hide tweet composer
+- Hide 'explore' buttons
+
+Mobile
+- Fix auto scroll issue (touchstart)
+
+Generic
+- Timestamp on tweets
+- Fourcornerize MD docs
+- Links posted to twitter should route correctly
