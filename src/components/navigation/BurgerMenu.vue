@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
+  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), hidden: minimized }")
     transition(name="rotate")
       ul.stack
         li.bar
@@ -9,9 +9,15 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'burger-menu',
+  computed: {
+    ...mapGetters([
+      'navigation',
+    ]),
+  },
   methods: {
     toggleLeftDrawer() {
       this.$store.commit('TOGGLE_LEFT_DRAWER');
@@ -21,12 +27,17 @@ export default {
     state() {
       return this.$store.state.navigation.burger.state;
     },
+    minimized() {
+      return (this.navigation && this.navigation.minimized);
+    },
   },
 };
 
 </script>
 
 <style lang="stylus" scoped>
+
+@import "../../assets/stylus/shared/*";
 
 rotate_transform(args)
   -ms-transform args
@@ -50,7 +61,7 @@ rotate_transform(args)
   ul.stack
     list-style none
     margin 0
-    padding	12px 15px
+    padding	13px 15px
     li.bar
       list-style none
       margin 10px 0
@@ -65,6 +76,7 @@ rotate_transform(args)
 
   /* Active styles */
   &.active
+    background-color transparent
     left calc(100% - 120px)
     z-index 52
     @media(min-width: 400px)

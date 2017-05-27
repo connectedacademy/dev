@@ -172,7 +172,11 @@ export default {
     setScrollPosition: _.throttle(function(self) {
       this.scrollPosition = window.scrollY;
       self.$store.dispatch('setScrollPosition', this.scrollPosition).then(function() {
-
+        if (self.scrollPosition > 100) {
+          self.$store.commit(types.SET_NAV_STATE, { minimized: true });
+        } else {
+          self.$store.commit(types.SET_NAV_STATE, { minimized: false });
+        }
       });
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onScroll() {

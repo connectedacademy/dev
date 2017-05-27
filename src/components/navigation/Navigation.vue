@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden }")
+  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }" @click="scrollTop")
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
 
@@ -28,20 +28,28 @@ export default {
   components: {
     ProfileIcon,
   },
+  data() {
+    return {
+      isMinimized: false,
+    };
+  },
   computed: {
     ...mapGetters([
-      'isRegistered',
+      'isRegistered', 'navigation',
     ]),
     hidden() {
       return !this.$store.state.navigation.visible;
     },
     navTitle() {
-      return (this.$store.getters.currentClass && this.$store.getters.currentClass.title && this.$store.getters.scrollPosition > 100) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
+      return (this.$store.getters.currentClass && this.$store.getters.currentClass.title && this.navigation.minimized) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
     },
   },
   methods: {
     toggleDebugMode() {
       this.$store.commit(types.TOGGLE_DEBUG_MODE);
+    },
+    scrollTop() {
+      window.scroll(0, 0);
     },
   },
 };
@@ -89,11 +97,13 @@ export default {
     display none
 
   .navigation-item-brand
+    animate()
     display block
     color white
     font-weight bold
     font-size 1.1em
     line-height 60px
+    min-height 30px
     margin 0 auto
     padding 0 15px
     text-decoration none
@@ -120,12 +130,19 @@ export default {
         cursor pointer
         &.navigation-item-page
           border-bottom white 2px solid
+
 @media(max-width: 768px)
   ul.navigation-items
     text-align center
     li.navigation-item.navigation-item-brand
       display none
 
+  &.minimized
+    height 30px
+    /*top -60px*/
+    .navigation-item-brand
+      font-size 0.9em
+      line-height 30px
 /* App states */
 
 #app.authenticating

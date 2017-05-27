@@ -112,12 +112,12 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, false);
+      vm.$store.commit(types.SET_NAV_STATE, { visible: false });
     });
   },
   beforeRouteLeave (to, from, next) {
     // Reset state
-    this.$store.commit(types.SET_NAV_STATE, true);
+    this.$store.commit(types.SET_NAV_STATE, { visible: true });
     next();
   },
   created() {

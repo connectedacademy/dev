@@ -7,6 +7,7 @@ const BURGER_CLOSE = 'close';
 const state = {
   overlayVisible: false,
   visible: true,
+  minimized: false,
   burger: {
     state: BURGER_DEFAULT,
   },
@@ -20,6 +21,9 @@ const state = {
 
 // getters
 const getters = {
+  navigation() {
+    return state;
+  },
   navigationVisible() {
     return state.visible;
   },
@@ -31,8 +35,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.SET_NAV_STATE](initialState, visible) {
-    state.visible = visible;
+  [types.SET_NAV_STATE](initialState, newState) {
+    _.forEach(newState, function(value, key) {
+      state[key] = value;
+    });
   },
   [types.TOGGLE_DEBUG_MODE](initialState) {
     state.debug = !state.debug;
