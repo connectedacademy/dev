@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import store from '@/store';
 
+export const fauxTime = (state) => {
+  return state.fauxTime;
+};
+
 export const pageStyle = (state) => {
   // Return classes
   const activeClasses = {

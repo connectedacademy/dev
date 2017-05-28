@@ -1,5 +1,6 @@
 import * as types from '@/store/mutation-types';
 import API from '@/api';
+import store from '@/store';
 
 // initial state
 const state = {
@@ -34,8 +35,9 @@ const actions = {
   getCourse({
     commit,
   }) {
+    const fauxTime = store.getters.fauxTime.replace('+', encodeURIComponent('+'));
     API.course.getSchedule(
-      API.course,
+      fauxTime,
       response => commit(types.GET_SCHEDULE_SUCCESS, {
         response,
       }),
@@ -47,11 +49,13 @@ const actions = {
   getSpec({
     commit,
   }, classSlug) {
+    const fauxTime = store.getters.fauxTime.replace('+', encodeURIComponent('+'));
     state.current_class = {
       slug: classSlug,
       loading: true,
     };
     API.course.getSpec(
+      fauxTime,
       classSlug,
       response => commit(types.GET_SPEC_SUCCESS, {
         response,

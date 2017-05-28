@@ -23,13 +23,9 @@
         h1.drawer-list-item--header {{ theClass.title }}
         h2.drawer-list-item--body {{ theClass.description }}
 
-      li.drawer-list-item(v-on:click="toggleDebugMode" v-bind:class="{ visible: state.visible }")
-        h2.drawer-list-item--body
-          span(v-if="!this.$store.state.debug") {{ $t('common.enable_debug_mode') }}
-          span(v-if="this.$store.state.debug") {{ $t('common.disable_debug_mode') }}
-
-      li.drawer-list-item(v-bind:class="{ visible: state.visible }")
-        h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
+      //-
+        li.drawer-list-item(v-bind:class="{ visible: state.visible }")
+          h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
 
 </template>
 
@@ -55,9 +51,6 @@ export default {
   methods: {
     toggleLeftDrawer() {
       this.$store.commit(types.TOGGLE_LEFT_DRAWER);
-    },
-    toggleDebugMode() {
-      this.$store.commit(types.TOGGLE_DEBUG_MODE);
     },
     toggleColumnState() {
       this.$store.dispatch('toggleColumnState');

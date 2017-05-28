@@ -28,11 +28,11 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'course',
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.$store.dispatch('checkAuth');
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     vm.$store.dispatch('checkAuth');
+  //   });
+  // },
   beforeRouteLeave (to, from, next) {
     // Reset state
     this.$store.dispatch('resetState');

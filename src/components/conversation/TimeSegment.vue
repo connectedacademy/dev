@@ -234,7 +234,8 @@ export default {
     background white
     z-index 51
     padding-right 0
-    overflow scroll
+    overflow-y scroll
+    overflow-x none
     .explore-segment-button
       display none
     .message-wrapper

@@ -28,7 +28,7 @@ export default {
           return `https://www.youtube.com/embed/${this.videoSrc}`;
           break;
         case 'live':
-          return this.videoSrc;
+          return (_.startsWith(this.videoSrc, 'http')) ? this.videoSrc : `https://www.youtube.com/embed/${this.videoSrc}`;
           break;
         default:
           return this.videoSrc;

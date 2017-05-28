@@ -13,8 +13,9 @@
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       .course-content--footer
-        .login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
-        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
+        .pure-button(@click="resetTime") {{ fauxTime }}
+        .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
+        .login-button.pure-button.pure-button-primary.pull-right(v-else @click="showAuth") {{ $t('auth.login') }}
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
@@ -59,6 +60,7 @@
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
+import Moment from 'moment';
 import Auth from '@/mixins/Auth';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
@@ -98,7 +100,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection',
+      'course', 'currentClass', 'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection', 'fauxTime'
     ]),
     isIntroduction() {
       return (this.currentClass && (this.currentClass.slug === 'intro'));
@@ -113,6 +115,10 @@ export default {
   methods: {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
+    },
+    resetTime() {
+      const now = Moment().format();
+      this.$store.commit('setFauxTime', now);
     },
     viewCurrentClass() {
       for (const theClass of this.course.classes) {

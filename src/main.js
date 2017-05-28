@@ -34,7 +34,7 @@ require('animate.css');
 Vue.use(VueResource);
 Vue.use(Vuex);
 Vue.use(VueConfig, Vue.config);
-Vue.use(vueLogger, { prefix: new Date(), dev: true });
+Vue.use(vueLogger, { prefix: new Date(), dev: false });
 Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
 
@@ -49,9 +49,8 @@ Vue.http.options = { credentials: true, responseType: 'json' };
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
     if (response.status === 403) {
-      // eslint-disable-next-line
       this.$log.log('Session invalid');
-      // store.dispatch('logout');
+      store.dispatch('logout');
     }
   });
 });

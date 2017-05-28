@@ -317,5 +317,6 @@ ul.hub-selector
   border $color-light-grey 1px solid
   max-height 340px
   padding 5px 15px
-  overflow scroll
+  overflow-y scroll
+  overflow-x none
 </style>

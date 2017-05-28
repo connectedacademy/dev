@@ -62,6 +62,9 @@ export default {
     Overlay,
   ],
   created() {
+
+    this.$store.dispatch('checkAuth');
+
     // Fetch course and then hubs
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');

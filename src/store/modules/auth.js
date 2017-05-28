@@ -24,6 +24,7 @@ const actions = {
   checkAuth({
     commit,
   }) {
+    console.log('Checking auth...');
     API.auth.checkAuth(
       response => commit(types.CHECK_AUTH_SUCCESS, {
         response,
@@ -54,6 +55,7 @@ const mutations = {
   [types.CHECK_AUTH_SUCCESS](initialState, {
     response,
   }) {
+    console.log('Auth success');
     state.isAuthenticated = true;
     // Save user in session
     state.user = response.user;
@@ -61,6 +63,7 @@ const mutations = {
   [types.CHECK_AUTH_FAILURE](initialState, {
     response,
   }) {
+    console.log('Auth failure');
     state.isAuthenticated = false;
     // error in response
   },
@@ -84,7 +87,8 @@ const mutations = {
   },
   attemptAuth({ commit }, user) {
     state.user = user;
-    document.location = 'https://api.connectedacademy.io/v1/auth/login';
+    // document.location = 'https://api.connectedacademy.io/v1/auth/login';
+    document.location = 'http://localhost:4000/v1/auth/login';
   },
 };
 

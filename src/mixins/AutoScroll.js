@@ -2,7 +2,7 @@ const CALCULATE_FPS = false; // Calculate the scrolling FPS
 const AUTOSCROLL_CHECK = 500; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 500; // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 200; // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
 
 import Vue from 'vue';
 import * as types from '@/store/mutation-types';

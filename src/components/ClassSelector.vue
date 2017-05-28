@@ -9,10 +9,10 @@
       .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
         icon(name="angle-right")
     .class-selector-container(ref="classselector" v-scroll="onScroll")
-      ul.class-selector(v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
+      ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
         li.class-selector--item.released(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
           h1.class-selector--item--header Introduction
-        li.class-selector--item(v-if="course && course.classes" v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
+        li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
           h1.class-selector--item--header {{ theClass.title }}
           icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
           icon.status-indicator(name="clock-o" v-if="theClass.status === 'FUTURE'")
@@ -92,6 +92,9 @@ export default {
       if (!this.currentExists) {
         this.viewIntroClass();
       }
+      if (!(this.course && this.course.classes)) {
+        return false;
+      }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           this.$store.dispatch('getSpec', theClass.slug);
@@ -124,6 +127,9 @@ export default {
       return (this.course && this.course.classes) ? ((this.course.classes.length * 190.0) - 10) : 0;
     },
     currentExists() {
+      if (!(this.course && this.course.classes)) {
+        return false;
+      }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           return true;
@@ -169,6 +175,7 @@ export default {
       width 10px
       margin 0 15px
   .class-selector-container
+    radius(6px)
     height 140px
     overflow-x scroll
     overflow-y hidden

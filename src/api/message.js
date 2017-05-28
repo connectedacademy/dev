@@ -6,8 +6,8 @@ import * as config from './config';
 import socketIOClient from 'socket.io-client';
 import sailsIOClient from 'sails.io.js';
 const io = sailsIOClient(socketIOClient);
-// io.sails.url = 'http://localhost:4000';
-io.sails.url = 'https://api.connectedacademy.io';
+io.sails.url = 'http://localhost:4000'; // TODO: Enabled for local server
+// io.sails.url = 'https://api.connectedacademy.io'; // TODO: Enabled for live server
 import vueSails from 'vue-sails';
 
 

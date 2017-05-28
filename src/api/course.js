@@ -1,31 +1,18 @@
 import Vue from 'vue';
 import * as config from './config';
-import Moment from 'moment';
 
 export default {
-  getSchedule(passedCourse, cb, errorCb) {
-
-    let currentTime = Moment();
-    currentTime = currentTime.subtract(40, 'days');
-    currentTime = currentTime.format();
-    currentTime = currentTime.replace('+', encodeURIComponent('+'));
-
-    Vue.http.get(`${config.WATERCOOLER_API}/course/schedule?time=${currentTime}`).then((response) => {
-      console.log('response');
-      console.log(response);
+  getSchedule(fauxTime, cb, errorCb) {
+    console.log(`getSchedule - ${fauxTime}`);
+    Vue.http.get(`${config.WATERCOOLER_API}/course/schedule?time=${fauxTime}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
-  getSpec(classSlug, cb, errorCb) {
-
-    let currentTime = Moment();
-    currentTime = currentTime.subtract(40, 'days');
-    currentTime = currentTime.format();
-    currentTime = currentTime.replace('+', encodeURIComponent('+'));
-
-    Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${currentTime}`).then((response) => {
+  getSpec(fauxTime, classSlug, cb, errorCb) {
+    console.log(`getSpec - ${fauxTime}`);
+    Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${fauxTime}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);

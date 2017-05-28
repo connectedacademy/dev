@@ -46,8 +46,6 @@ export default {
       loading: true,
       renderedMarkdown: 'Loading...',
       frontMatter: {},
-      theClass: 'empty',
-      theContent: 'empty',
     };
   },
   methods: {
@@ -88,11 +86,28 @@ export default {
       var RenderedMarkdown = new Vue({
         name: 'rendered-markdown',
         parent: this,
+        mounted() {
+          this.checkingSubmissions = true;
+
+          const request = { class: parent.theClass, content: parent.theContent };
+
+          API.feedback.getFeedbackItems(request,
+            (response) =>{
+              console.log('Submission check response');
+              console.log(response);
+              this.checkingSubmissions = false;
+              this.submitted = (response.data.length === 0) ? false : true;
+            },
+            (response) =>{
+              this.checkingSubmissions = false;
+            });
+        },
         data() {
           return {
             fourcornersLink: '',
-            // theClass: 'empty-vue',
-            // theContent: 'empty-vue',
+            checkingSubmissions: true,
+            submitting: false,
+            submitted: false,
           };
         },
         computed: {
@@ -117,8 +132,10 @@ export default {
             this.$router.push(href.replace('/#/markdown','/markdown'));
           },
           postTweet() {
-            // Post tweet
-            alert('Posting tweet');
+
+            // Submit
+            this.submitting = true;
+            this.submitted = false;
 
             const postData = {
               text: this.tweet,
@@ -127,9 +144,14 @@ export default {
             API.message.sendMessage(
               postData,
               (response) => {
+                this.submitting = false;
+                this.submitted = true;
                 this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response })
               },
               (response) => {
+                alert('Submissing failed, please try again.');
+                this.submitting = false;
+                this.submitted = false;
                 this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
               },
             );
@@ -188,7 +210,19 @@ export default {
             parent.theClass = arg.class;
             parent.theContent = arg.content;
             return `
-            <div class="fourcorners-submission" v-if="isRegistered">
+            <div class="fourcorners-submission fourcorners-submission-checking" v-if="checkingSubmissions">
+              <h2>Checking submissions...</h2>
+            </div>
+
+            <div class="fourcorners-submission fourcorners-submission-submitting" v-if="submitting">
+              <h2>Submitting...</h2>
+            </div>
+
+            <div class="fourcorners-submission fourcorners-submission-submitted" v-if="submitted">
+              <h2>Thank you for your submission!</h2>
+            </div>
+
+            <div class="fourcorners-submission fourcorners-submission-submit" v-if="isRegistered && !checkingSubmissions && !submitting && !submitted">
               <label>Submit URL</label>
               <textarea name="text" placeholder="Paste a link to your FourCorners image here*" v-model="fourcornersLink"></textarea>
               <p>*this will send a tweet on your behalf!</p>
@@ -225,31 +259,44 @@ export default {
     color $color-text-dark-grey
   img
     max-width 100%
+
 .fourcorners-submission
   radius(6px)
   background-color $color-primary
   box-sizing border-box
   padding 15px
   width 100%
-  label
-    color white
-  p
-    nomargin()
-    nopadding()
-    color white
-  textarea
-    radius(6px)
-    border none
-    box-shadow none
-    box-sizing border-box
-    line-height 40px
-    margin 10px 0
-    padding 0 10px
-    outline 0
-    resize none
-    width 100%
-  button
-    margin-top 10px
-
+  &.fourcorners-submission-submit
+    label
+      color white
+    p
+      nomargin()
+      nopadding()
+      color white
+    textarea
+      radius(6px)
+      border none
+      box-shadow none
+      box-sizing border-box
+      line-height 40px
+      margin 10px 0
+      padding 0 10px
+      outline 0
+      resize none
+      width 100%
+    button
+      margin-top 10px
+  &.fourcorners-submission-submitted, &.fourcorners-submission-submitting, &.fourcorners-submission-checking
+    text-align center
+    h2
+      nomargin()
+      color white !important
+      padding 40px
+  &.fourcorners-submission-submitting, &.fourcorners-submission-checking
+    background-color $color-light-grey
+    h2
+      color $color-text-dark-grey !important
+  &.fourcorners-submission-submitted
+    background-color $color-success
 
 </style>

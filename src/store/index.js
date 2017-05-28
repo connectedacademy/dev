@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import Moment from 'moment';
 import _ from 'lodash';
 
 import * as actions from './actions';
@@ -17,6 +18,11 @@ import video from './modules/video';
 
 Vue.use(Vuex);
 
+
+let fauxTime = Moment();
+fauxTime = fauxTime.subtract(50, 'days');
+fauxTime = fauxTime.format();
+
 export default new Vuex.Store({
   actions,
   modules: {
@@ -30,6 +36,7 @@ export default new Vuex.Store({
     video,
   },
   state: {
+    fauxTime: fauxTime,
     debug: false,
     scrollPosition: 0.0,
     offsetScrollPosition: 0.0,

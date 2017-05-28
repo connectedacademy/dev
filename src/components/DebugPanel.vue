@@ -62,6 +62,7 @@ export default {
   top 60px
   left 10px
   z-index 52
-  overflow scroll
+  overflow-y scroll
+  overflow-x none
 
 </style>

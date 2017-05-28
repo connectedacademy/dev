@@ -3,7 +3,7 @@ import Vue from 'vue';
 import _ from 'lodash';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
-import store from '@/store';;
+import store from '@/store';
 
 // initial state
 const state = {
