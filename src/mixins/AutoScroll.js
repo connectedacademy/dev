@@ -55,8 +55,8 @@ export default {
 
       var self = this;
 
-      if (self.isAutoScrolling) { Vue.log.log('Already auto scrolling'); return; }
       if (!self.canAutoScroll) { Vue.log.log('Cannot auto scroll'); self.isAutoScrolling = false; return; }
+      if (self.isAutoScrolling) { Vue.log.log('Already auto scrolling'); return; }
 
       self.isAutoScrolling = true;
 

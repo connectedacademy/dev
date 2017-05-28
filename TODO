@@ -38,8 +38,8 @@ Submission (45 min) - (60 min)
 + Hide submission box if submitted (check spec if submission required)
 ! Modal when clicking 'message hidden' - call new endpoint and link to other user's submission
 
-Liveclass Interaction (10 min)
-- Pause when composer focus
+Liveclass Interaction (10 min) - (15 min)
++ Pause when composer focus
 
 Segment Deepdive (120 min)
 - Reply button

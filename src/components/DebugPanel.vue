@@ -1,8 +1,6 @@
 <template lang="pug">
 
 .debug-panel(v-if="this.$store.state.debug")
-  p {{ `scrollPosition - ${scrollPosition}` }}
-  p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
   span
     p currentSection
     pre {{ currentSection }}
@@ -12,11 +10,18 @@
   span
     p scrollPoints
     pre {{ scrollPoints }}
+
+  p {{ `scrollPosition - ${scrollPosition}` }}
+  p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
+
   p {{ `autoPlaying - ${autoPlaying}` }}
   p {{ `currentTime - ${currentTime}` }}
   p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
   p {{ `currentSegment - ${currentSegment}` }}
+
+  p {{ `videoPlaying - ${videoPlaying}` }}
+  p {{ `videoReady - ${videoReady}` }}
 
 </template>
 
@@ -32,15 +37,19 @@ export default {
     ...mapGetters([
       'currentSection',
       'currentActiveSection',
-      'autoPlaying',
+      'scrollPoints',
+
       'scrollPosition',
       'offsetScrollPosition',
+
+      'autoPlaying',
       'currentTime',
       'currentSectionScrollPosition',
       'currentSegmentGroup',
       'currentSegment',
-      'scrollPoints',
-      'chunkedMessages',
+      
+      'videoPlaying',
+      'videoReady',
     ]),
   },
   components: {},

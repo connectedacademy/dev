@@ -6,7 +6,7 @@
 
       .message-composer--body
         .textarea-wrapper
-          textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
+          textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
 
       .message-composer--footer
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
@@ -35,6 +35,20 @@ export default {
     };
   },
   methods: {
+    composerFocus() {
+      this.$log.log('Composer gained focus');
+
+      this.$log.log('Pausing video');
+      this.$store.commit(types.PAUSE_VIDEO);
+
+    },
+    composerBlur() {
+      this.$log.log('Composer lost focus');
+
+      this.$log.log('Playing video');
+      this.$store.commit(types.PLAY_VIDEO);
+
+    },
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
     },
