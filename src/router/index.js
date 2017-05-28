@@ -28,6 +28,9 @@ export default new Router({
       path: '/course/:classSlug/:contentSlug/:segmentId',
       redirect: (to) => {
         const { hash, params, query } = to;
+        if ((params.classSlug === 'undefined') || (params.contentSlug === 'undefined') || (params.segmentId === 'undefined')) {
+          return { path: '/' };
+        }
         return { path: '/', query: { class: params.classSlug, content: params.contentSlug, segment: params.segmentId } };
       },
     },

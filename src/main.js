@@ -34,7 +34,7 @@ require('animate.css');
 Vue.use(VueResource);
 Vue.use(Vuex);
 Vue.use(VueConfig, Vue.config);
-Vue.use(vueLogger, { prefix: new Date(), dev: true });
+Vue.use(vueLogger, { prefix: new Date(), dev: false });
 Vue.use(VueCookie);
 Vue.use(VueYouTubeEmbed);
 

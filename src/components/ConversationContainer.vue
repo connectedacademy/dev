@@ -35,6 +35,8 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
+import axios from 'axios';
+import Moment from 'moment';
 
 import Visualisation from '@/mixins/Visualisation';
 import Subtitles from '@/mixins/Subtitles';
@@ -126,7 +128,7 @@ export default {
       let startSegment = currentSegment - (segmentViewport / 0.2);
 
       // Think ahead..
-      currentSegment += (1.0 / 0.2);
+      currentSegment += (5 * (1.0 / 0.2));
 
       startSegment = (startSegment < 0) ? 0 : startSegment;
       currentSegment = (currentSegment < 5) ? 5 : currentSegment;
@@ -138,8 +140,7 @@ export default {
         endSegment: `${currentSegment}`,
       };
 
-      this.$store.dispatch('getMessagesSummary', request);
-
+      this.$store.dispatch('getMessagesSummary', { request: request });
     },
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);
@@ -222,6 +223,8 @@ export default {
       points: '',
       subtitles: [],
       chunkedMessages: {},
+      cancelSources: [],
+      cancel: undefined,
     };
   },
   components: {

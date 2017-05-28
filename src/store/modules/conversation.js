@@ -70,7 +70,9 @@ const getters = {
 const actions = {
   getMessagesSummary({
     commit,
-  }, request) {
+  }, params) {
+
+    const request = params.request;
 
     const startSegmentGroup = parseInt(parseInt(request.startSegment) * 0.2);
     const endSegmentGroup = parseInt(parseInt(request.endSegment) * 0.2);

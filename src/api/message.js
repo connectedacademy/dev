@@ -2,6 +2,11 @@
 import Vue from 'vue';
 import * as config from './config';
 
+import axios from 'axios';
+
+var CancelToken = axios.CancelToken;
+var cancel;
+
 // Include and set up Sails client
 import socketIOClient from 'socket.io-client';
 import sailsIOClient from 'sails.io.js';
@@ -16,23 +21,49 @@ Vue.use(vueSails, io);
 
 export default {
   getMessagesSummary(request, cb, errorCb) {
+
     io.socket.get(`/v1/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres){
       cb(resData);
     });
+
     // Vue.http.get(`${config.WATERCOOLER_API}/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {
     //   cb(response.body);
     // }, (response) => {
     //   errorCb(response);
     // });
+
+  },
+  cancelBatchRequests() {
+    cancel();
   },
   getMessagesSummaryBatch(request, cb, errorCb) {
-    // io.socket.get(`/v1/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, function (resData, jwres){
+
+    // io.socket.get(`/v1/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, function (resData, jwres){
     //   cb(resData);
     // });
-    Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`).then((response) => {
-      cb(response.body);
-    }, (response) => {
-      errorCb(response);
+
+
+    // Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`).then((response) => {
+    //   cb(response.body);
+    // }, (response) => {
+    //   errorCb(response);
+    // });
+
+    axios.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, {
+      cancelToken: new CancelToken(function executor(c) {
+        // An executor function receives a cancel function as a parameter
+        cancel = c;
+      })
+    }).then(function (response) {
+      console.log(response);
+      cb(response.data);
+    }).catch(function(thrown) {
+      if (axios.isCancel(thrown)) {
+        console.log('Request canceled', thrown.message);
+      } else {
+        // handle error
+        console.log('There was an error fetching request');
+      }
     });
   },
   getMessages(request, cb, errorCb) {

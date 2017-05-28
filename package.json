@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
+    "axios": "^0.16.1",
     "defaultcss": "^1.1.1",
     "flatui": "^1.0.0",
     "fs": "0.0.1-security",
