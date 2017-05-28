@@ -47,7 +47,7 @@ export default {
       'currentSectionScrollPosition',
       'currentSegmentGroup',
       'currentSegment',
-      
+
       'videoPlaying',
       'videoReady',
     ]),
@@ -71,7 +71,7 @@ export default {
   top 60px
   left 10px
   z-index 52
-  overflow-y scroll
+  overflow-y auto
   overflow-x none
 
 </style>

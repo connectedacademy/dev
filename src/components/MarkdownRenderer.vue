@@ -15,6 +15,8 @@ import _ from 'lodash';
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 
+import FourCorners from '@/mixins/FourCorners';
+
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
@@ -26,6 +28,9 @@ import * as types from '@/store/mutation-types';
 
 export default {
   name: 'markdown-renderer',
+  mixins: [
+    FourCorners,
+  ],
   watch: {
     '$route': {
       handler: function(nV, oV) {
@@ -149,7 +154,7 @@ export default {
                 this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response })
               },
               (response) => {
-                alert('Submissing failed, please try again.');
+                alert('Submission failed, please try again.');
                 this.submitting = false;
                 this.submitted = false;
                 this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })

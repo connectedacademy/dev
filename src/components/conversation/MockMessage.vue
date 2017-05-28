@@ -21,12 +21,13 @@ export default {
 @import '../../assets/stylus/shared/*'
 
 .mock-message
+  animate()
   height 140px
   padding-left 60px
   position absolute
   top 0
   left 0
-  right 0
+  right 30px
   .mock-message--user
     radius(50%)
     height 40px

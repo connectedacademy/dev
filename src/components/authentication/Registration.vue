@@ -275,10 +275,12 @@ ul.hub-selector
   li.hub-selector--tile
     cleanlist()
     animate()
-    background-color #e1e1e1
+    background-color white
+    border $color-border 1px solid
     display inline-block
     overflow hidden
     text-align center
+    position relative
 
     margin 10px
     padding 10px 20px
@@ -289,25 +291,38 @@ ul.hub-selector
       animate()
       nomargin()
       nopadding()
-      color #444
+      color $color-text-dark-grey
       font-size 1.2em
       line-height 30px
+      padding 15px 0
     h2.hub-timezone
       animate()
       nomargin()
       nopadding()
-      color #444
+      color $color-text-light-grey
       font-size 1em
-      line-height 30px
+      line-height 20px
+      opacity 0
+      position absolute
+      left 0
+      right 0
+      bottom 0
 
     &:hover
       cursor pointer
+      border-color $color-primary
       background-color darken($color-primary, 10%)
       h1.hub-title, h2.hub-timezone
         color white
+      h1.hub-title
+        padding 5px 0 25px 0
+      h2.hub-timezone
+        bottom 15px
+        opacity 1
 
     &.selected
       background-color $color-success
+      border-color $color-success
       h1.hub-title, h2.hub-timezone
         color white
 
@@ -317,6 +332,6 @@ ul.hub-selector
   border $color-light-grey 1px solid
   max-height 340px
   padding 5px 15px
-  overflow-y scroll
+  overflow-y auto
   overflow-x none
 </style>

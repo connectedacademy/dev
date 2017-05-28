@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.course-content(v-if="!hidden && question && !question.alreadyanswered")
+.course-content(v-if="isRegistered && !hidden && question && !question.alreadyanswered")
 
   .course-content--header
     h1.content-title Question
@@ -16,8 +16,8 @@
     input.full-width(v-model="answer" v-if="question.response_type === 'boolean'" type="checkbox")
 
   .course-content--footer
-    .pure-button(@click="hidden = true") Dismiss
-    .pure-button.pure-button-primary.pull-right(@click="postAnswer") Submit
+    .pure-button(@click="hidden = true") Maybe later
+    .pure-button.pure-button-primary.pull-right(@click="postAnswer") Answer
 
 </template>
 
@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentClass'
+      'currentClass', 'isRegistered',
     ]),
   },
   mounted() {

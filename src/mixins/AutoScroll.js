@@ -42,12 +42,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition',
+      'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition', 'activeSegmentVisible',
     ]),
   },
   methods: {
     checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.preventScroll && this.videoReady && this.videoPlaying && (this.currentSection !== undefined));
+      this.canAutoScroll = (!this.activeSegmentVisible && !this.preventScroll && this.videoReady && this.videoPlaying && (this.currentSection !== undefined));
     },
     attemptAutoScroll() {
 
@@ -180,7 +180,15 @@ export default {
       });
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onScroll() {
-      this.setScrollPosition(this);
+      this.scrollPosition = window.scrollY;
+      if (window.scrollY < 300) {
+        this.preventScroll = true;
+        this.$store.dispatch('setScrollPosition', this.scrollPosition).then(function() {
+          this.preventScroll = false;
+        });
+      } else {
+        this.setScrollPosition(this);
+      }
     },
     onWheel() {
       this.wheelMovement(this);

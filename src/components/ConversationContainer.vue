@@ -139,6 +139,7 @@ export default {
       };
 
       this.$store.dispatch('getMessagesSummary', request);
+
     },
     showComposer() {
       this.$store.commit(types.SHOW_COMPOSER);

@@ -5,12 +5,8 @@
     .close-button(v-if="segmentVisible" @click="exploreSegment(undefined)")
       p close
 
-    .explore-segment-button(@click="exploreSegment(message)" v-if="!message.loading && (message.info && (message.info.total > 0 && !message.message.suggestion))")
+    .explore-segment-button(@click="exploreSegment(message)")
       icon(name="angle-right")
-
-    transition(name="slide-fade")
-      .quote-container(v-if="segmentVisible && quote")
-        h1 {{ quote }}
 
     .message-wrapper
 
@@ -30,8 +26,10 @@
     .full-width-loading(v-if="segmentVisible && !segmentMessages")
       icon(name="refresh" scale="2" spin)
 
-    //- transition(name="fade")
-    .meta-container--messages(v-if="segmentVisible && segmentMessages" v-for="asMessage in segmentMessages")
+    .quote-container(v-if="segmentVisible && quote")
+      h1 {{ quote }}
+
+    .meta-container-messages(v-if="segmentVisible && segmentMessages" v-for="asMessage in segmentMessages")
         message(v-bind:message="asMessage")
 
 </template>
@@ -57,23 +55,21 @@ export default {
     activeSegmentVisible() {
       var self = this;
       if (this.activeSegmentVisible) {
+        this.loadSegmentQuote();
         setTimeout(function() {
           if (self.activeSegment) {
             self.activeSegmentStyles = {
+              'overflow-y': 'auto',
               transition: 'none',
               position: 'fixed',
-              top: `${60}px`,
-              left: 'calc(50% - 390px)',
-              right: 'calc(50% - 390px)',
+              top: `${80}px`,
+              left: 'calc(50% - 370px)',
+              right: 'calc(50% - 370px)',
               height: (self.activeSegmentStyles) ? self.activeSegmentStyles.height : `auto`,
             };
+
+            self.loadSegmentMessages();
           }
-          setTimeout(function() {
-            if (self.activeSegment) {
-              self.loadSegmentMessages();
-              self.loadSegmentQuote();
-            }
-          }, 600);
         }, 600);
       }
     },
@@ -107,22 +103,29 @@ export default {
       } else {
         this.$log.log(`Exploring segment - ${segment.segmentGroup}`);
 
-        this.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
         this.$store.commit(types.PAUSE_VIDEO);
 
-        const offsetHeight = window.innerHeight;
-        const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
-        const offsetWidth = document.getElementById('col-main').offsetWidth;
-        const offsetPadding = 0.0;
-        const offsetTop = 60.0;
+        var self = this;
 
-        this.activeSegmentStyles = {
-          top: `${topPosition + offsetTop + offsetPadding}px`,
-          left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
-          right: `${offsetPadding}px`,
-          // height: `${(offsetHeight - offsetTop - 140 - (offsetPadding * 2))}px`,
-          height: `${(offsetHeight - offsetTop - 60 - (offsetPadding * 2))}px`,
-        };
+        setTimeout(function() {
+
+          self.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
+
+          const offsetHeight = window.innerHeight;
+          const topPosition = self.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
+          const offsetWidth = document.getElementById('col-main').offsetWidth;
+          const offsetPadding = 20.0;
+          const offsetTop = 80.0;
+          const offsetBottom = 160.0;
+
+          self.activeSegmentStyles = {
+            top: `${topPosition + offsetTop}px`,
+            left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
+            right: `${offsetPadding}px`,
+            height: `${(offsetHeight - offsetTop - offsetBottom)}px`,
+          };
+
+        }, 500)
       }
     },
     loadSegmentMessages() {
@@ -152,13 +155,18 @@ export default {
     loadSegmentQuote() {
 
       // Get quote for active segment
-      const time = (this.activeSegment.segmentGroup / 0.2);
+      const segmentStart = (this.activeSegment.segmentGroup / 0.2);
+      const segmentEnd = segmentStart + (1.0 / 0.2);
 
-      const quote = _.find(this.subtitles, function(o) {
-        return o.start > time;
+      let quotes = _.filter(this.subtitles, function(o) {
+        return (o.start > segmentStart) && (o.end < segmentEnd);
       });
 
-      this.quote = `"${quote.text}"`;
+      quotes = _.map(quotes, function(o) {
+        return quote.text;
+      });
+
+      return _.join(quotes, ' ');
 
     },
   },
@@ -173,7 +181,7 @@ export default {
   padding 20px
 
 .time-segment
-  background #f2f2f2
+  background-color #f2f2f2
   transition-duration 0.1s
   height 158px
   padding-right 25px
@@ -182,6 +190,12 @@ export default {
   right 0
   top 0
   overflow hidden
+  .message-wrapper
+    background-color transparent
+    transition('background-color' 0.3s linear)
+    .message
+      max-height 98px
+      margin 15px 15px 0 15px
   .explore-segment-button
     position absolute
     top 0
@@ -217,47 +231,43 @@ export default {
       background-color $color-danger
     &.hide
       opacity 0
-  p.timestamp-label
-    radius(20px)
-    background-color $color-primary
-    color white
-    display inline-block
-    line-height 40px
-    min-width 20px
-    margin 5px
-    padding 0 10px
-    text-align center
 
   &.active
-    radius(6px)
+    border-top-left-radius 6px
+    border-top-right-radius 6px
     transition-duration 0.6s
-    background white
+    background-color #f2f2f2
     z-index 51
     padding-right 0
-    overflow-y scroll
-    overflow-x none
     .explore-segment-button
       display none
     .message-wrapper
+      background-color white
       border-bottom $color-light-grey 1px solid
+      padding 1px
       .message-count
         display none
       .mock-message
         position relative
-    .meta-container
-      background-color #f9f9f9
-      border-bottom $color-light-grey 1px solid
-      padding 5px
-      .pure-button
-        margin 10px
+      .suggestion
+        text-align center
+    .meta-container-messages
+      .message
+        margin 15px 15px 0 15px
     .quote-container
-      background-color $color-primary
-      padding 30px 0
+      background-color transparent
+      height 80px
+      overflow hidden
+      position fixed
+      top 0
+      left 0
+      right 0
       text-align center
       h1
         nomargin()
         color white
-        line-height 50px
+        font-size 20px
+        line-height 80px
         padding 0 20px
     @media(max-width: 800px)
       left 10px !important

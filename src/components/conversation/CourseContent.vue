@@ -39,11 +39,13 @@
 
         video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
 
-        submission-grid(v-if="content.expectsubmission" v-bind:content="content")
+        submission-grid(v-if="isRegistered && content.expectsubmission" v-bind:content="content")
 
-      .course-content--footer(v-if="!isRegistered || content.expectsubmission || content.url")
+        message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
+
+      .course-content--footer(v-if="isRegistered && (content.expectsubmission || content.url)")
         markdown-link.pull-right(v-bind:md-content="content" v-if="content.url")
-        submission-button(v-bind:content="content")
+        submission-button(v-if="isRegistered" v-bind:content="content")
         .clearfix
 
       conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
@@ -74,11 +76,14 @@ import SubmissionButton from '@/components/SubmissionButton';
 import FutureContent from '@/components/conversation/FutureContent';
 import InjectedQuestion from '@/components/conversation/InjectedQuestion';
 
+import MessageComposer from '@/components/MessageComposer';
+
 export default {
   name: 'course-content',
   mixins: [
     Auth,
   ],
+  props: ['courseContent'],
   components: {
     ConversationContainer,
     MarkdownContent,
@@ -90,6 +95,7 @@ export default {
     FutureContent,
     MarkdownRenderer,
     InjectedQuestion,
+    MessageComposer,
   },
   watch: {
     course(nV, oV) {
@@ -100,7 +106,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'courseContent', 'currentSection', 'isRegistered', 'currentActiveSection', 'fauxTime'
+      'course', 'currentClass', 'currentSection', 'isRegistered', 'currentActiveSection', 'fauxTime'
     ]),
     isIntroduction() {
       return (this.currentClass && (this.currentClass.slug === 'intro'));
@@ -121,6 +127,7 @@ export default {
       this.$store.commit('setFauxTime', now);
     },
     viewCurrentClass() {
+      if (!course) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           window.scroll(0, 0);

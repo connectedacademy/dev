@@ -2,15 +2,15 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
-    .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
-
-    //- .fps-indicator {{ fps }}
+    .scroll-indicator.hidden(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
     .main-container
 
       class-selector
 
-      course-content(v-if="currentClass")
+      transition(name="fade" mode="out-in")
+
+        course-content(v-if="currentClass" v-bind:course-content="courseContent")
 
 </template>
 
@@ -28,11 +28,6 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'course',
-  // beforeRouteEnter(to, from, next) {
-  //   next((vm) => {
-  //     vm.$store.dispatch('checkAuth');
-  //   });
-  // },
   beforeRouteLeave (to, from, next) {
     // Reset state
     this.$store.dispatch('resetState');
@@ -51,8 +46,6 @@ export default {
     return {
       navTitle: 'Connected Academy - Main',
       infoVisible: false,
-      fps: 0,
-      canLoadNextFrame: false,
     };
   },
   components: {
@@ -75,9 +68,6 @@ export default {
     },
   },
   methods: {
-    checkIfCanLoadNextFrame() {
-      this.canLoadNextFrame = (this.videoPlaying && (this.currentSection !== undefined));
-    },
     leaveClass() {
       this.$store.dispatch('getSpec', undefined);
     },
@@ -101,7 +91,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'currentSectionScrollPosition',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'currentSectionScrollPosition', 'courseContent',
     ]),
     scrollIndicatorStyle() {
       return {
@@ -117,25 +107,12 @@ export default {
 @import '../assets/stylus/shared/*'
 @import "../assets/stylus/layout/course-content"
 
-.fps-indicator
-  radius(50%)
-  background-color red
-  color white
-  position fixed
-  top 100px
-  left 10px
-  height 40px
-  line-height 40px
-  padding 0
-  width 40px
-  z-index 999
-  text-align center
-
 .scroll-indicator
-  radius(50%)
   animate()
+  radius(50%)
   background-color $color-primary
-  left 5px
+  left 50%
+  margin-left 380px
   position absolute
   height 10px
   z-index 100

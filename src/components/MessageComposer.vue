@@ -1,19 +1,20 @@
 <template lang="pug">
 
-  .message-composer-wrapper
+  .message-composer-wrapper(v-bind:class="{ static: section }")
 
     .message-composer(v-bind:class="{ isactive: visible, unactive: hidden }")
 
       .message-composer--body
-        .textarea-wrapper
+        .textarea-wrapper(v-if="isRegistered" )
           textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
+        .login-warning(v-else @click="showAuth")
+          h3 Please login to send messages
+          .pure-button.pure-button-primary {{ $t('auth.login') }}
 
-      .message-composer--footer
-        button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
-          | Send Tweet
-        p.info-label
-          span#time {{ $t('composer.duration', { currentTime: currentTime }) }}
-          span#url {{ url }}
+      .message-composer--footer(v-if="isRegistered")
+        button.pure-button.pure-button-primary.pull-right(@click="sendMessage") {{ submitText }}
+        p.info-label(v-if="!section") {{ $t('composer.duration', { currentTime: currentTime }) }}
+        p.info-label(v-if="section") {{ `Current section - ${section}` }}
         .clearfix
 
 
@@ -23,9 +24,11 @@
 import _ from 'lodash';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'message-composer',
+  props: ['section'],
   data() {
     return {
       message: {
@@ -35,6 +38,9 @@ export default {
     };
   },
   methods: {
+    showAuth() {
+      this.$store.commit(types.SHOW_AUTH);
+    },
     composerFocus() {
       this.$log.log('Composer gained focus');
 
@@ -56,12 +62,26 @@ export default {
       this.$store.commit(types.DISMISS_COMPOSER);
     },
     sendMessage() {
-      const postData = {
-        text: `${this.message.text} ${this.$store.getters.course.hashtag} ${this.url}`,
-        currentClass: this.$store.getters.currentClass.slug,
-        currentSection: this.$store.getters.currentSection.slug,
-        currentSegment: this.$store.getters.currentSegment,
-      };
+      let postData = {};
+
+      if (this.section) {
+        const url = `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.section}`;
+
+        postData = {
+          text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
+          currentClass: this.$store.getters.currentClass.slug,
+          currentSection: this.section,
+        };
+      } else {
+        const url = this.url;
+
+        postData = {
+          text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
+          currentClass: this.$store.getters.currentClass.slug,
+          currentSection: this.$store.getters.currentSection.slug,
+          currentSegment: this.$store.getters.currentSegment,
+        };
+      }
 
       API.message.sendMessage(
         postData,
@@ -76,6 +96,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(['isRegistered']),
     url() {
       if (this.$store.getters.currentSection === undefined) { return ''; }
       return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSegment}`;
@@ -95,6 +116,9 @@ export default {
     currentTime() {
       return `Tweeting at - ${_.round(this.$store.getters.currentTime)}`;
     },
+    submitText() {
+      return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Send Message';
+    }
   },
 };
 </script>
@@ -125,12 +149,23 @@ export default {
       margin 0
 
     .message-composer--body
-      background-color darken($color-purple, 20%) //#f9f9f9
       pinned()
+      background-color white
       position absolute
 
+      .login-warning
+        pinned()
+        background-color white
+        z-index 2
+        padding 0 20px
+        position absolute
+        text-align center
+        h2
+          nomargin()
+          nopadding()
+          line-height 45px !important
+
       .textarea-wrapper
-        /*radius(4px)*/
         background-color white
         overflow hidden
         position absolute
@@ -178,13 +213,20 @@ export default {
         font-size 0.9em
         line-height 38px
         margin 0 5px
-        #url
-          display none
-        #time
-          display block
-        &:hover
-          #url
-            display block
-          #time
-            display none
+
+  &.static
+
+    .message-composer
+      radius(4px)
+      border $color-border 1px solid
+      margin-bottom 20px
+      overflow hidden
+      position relative
+      bottom auto
+      top auto
+      left auto
+      right auto
+      .message-composer--footer
+        background-color #f9f9f9
+
 </style>

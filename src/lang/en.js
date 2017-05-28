@@ -23,13 +23,18 @@ export default {
   },
   nav: {
     home: 'Home',
+    home_description: 'Just go back to the home page.',
     course: 'Course',
+    course_description: 'Take part in the course, experience the \'Live class\' and join the conversation as it unfolds.',
     schedule: 'Schedule',
+    schedule_description: 'View the schedule for upcoming content and when it will be relased by your hub.',
     about: 'About',
+    about_description: 'Learn more about the Connected Academy platform and how we are changing how education is delivered.',
     terms: 'Terms',
+    terms_description: 'Read the terms an conditions of using the Connected Academy platform.',
   },
   auth: {
-    login: 'Participate',
+    login: 'Login',
     logout: 'Logout',
 
     login_with_twitter: 'Login with Twitter',

@@ -1,5 +1,14 @@
+transition()
+  -webkit-transition: arguments;
+  -moz-transition: arguments;
+  -o-transition: arguments;
+  transition: arguments;
+
 animate()
-  transition all 0.3s linear
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
 
 pinned()
   top 0
@@ -18,5 +27,5 @@ cleanlist()
   nopadding()
   list-style none
 
-radius(args)
-  border-radius args
+radius()
+  border-radius arguments

@@ -2,21 +2,14 @@
 
 .course-content
 
-  .course-content--header
-
-    h1.content-title
+  .course-content--body
+    h1
       span(v-if="content.content_type === 'class'") {{ `Live class ` }}
       span(v-else) {{ `New content ` }}
       | coming soon
-
-  .course-content--body
-    .countdown-wrapper
-      h1 {{ releaseIn }}
-      h5 {{ releaseAt }}
-
-  .course-content--footer
-    .pure-button.pull-right(@click="jumpForwardInTime") Jump forward in time
-    .clearfix
+    h2 {{ releaseIn }}
+    h5 {{ releaseAt }}
+    .pure-button(name="circle" @click="jumpForwardInTime") Time Travel
 
 </template>
 
@@ -58,25 +51,31 @@ export default {
 @import "../../assets/stylus/layout/course-content"
 
 .course-content
+  background-color transparent !important
+  background-color rgba(255,255,255,0.05) !important
+  /*border white 2px dashed*/
+  position relative
 
   .course-content--header
     text-align center
+    h1.content-title
+      color white
 
   .course-content--body
+    background-color transparent
+    padding 20px 40px !important
     text-align center
-    .countdown-wrapper
-      radius(6px)
-      display inline-block
-      background-color $color-primary
-      margin 10px auto
-      padding 10px 30px 20px 30px
-      h1, h5
-        color white
-      h1
-        nomargin()
-        nopadding()
-        margin-bottom 10px
-      h5
-        nomargin()
-        nopadding()
+    h1, h2, h5
+      nomargin()
+      color white
+      padding 5px
+    h5
+      opacity 0.5
+
+  .pure-button
+    background-color transparent
+    border white 1px solid
+    color white
+    margin 10px auto 5px auto
+
 </style>

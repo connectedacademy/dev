@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.playhead-bobble()
+.playhead-bobble(@click="toggleVideoState")
   icon(name="twitter" scale="2" class="playhead-icon")
   //- icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
   //- icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
@@ -10,6 +10,7 @@
 <script>
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'playhead',
@@ -20,6 +21,13 @@ export default {
     ]),
   },
   methods: {
+    toggleVideoState() {
+      if (this.videoPlaying) {
+        this.$store.commit(types.PAUSE_VIDEO);
+      } else {
+        this.$store.commit(types.PLAY_VIDEO);
+      }
+    },
   },
 };
 </script>
@@ -35,7 +43,7 @@ export default {
   height 60px
   width 60px
   position absolute
-  top -70px
+  top -30px
   right -30px
   text-align center
   z-index 53

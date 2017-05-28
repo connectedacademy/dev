@@ -42,27 +42,31 @@ Liveclass Interaction (10 min) - (15 min)
 + Pause when composer focus
 
 Segment Deepdive (120 min)
-- Reply button
-- New tweet at top
-- Subscribe to segment
-- Prevent scroll
++ Reply button
++ Prevent scroll
+! New tweet at top
+! Subscribe to segment
 
 Webinar (40 min)
 + iFrame full width
-- Tweet box
++ Tweet box
 
 Unauthed state (40 min)
-- Hide submission stuff
-- Hide tweet composer
-- Hide 'explore' buttons
++ Hide submission stuff
++ Hide 'explore' buttons
++ Hide tweet composer
+
+Generic (30 min)
++ Timestamp on tweets
++ Fourcornerize MD docs
+- Links posted to twitter should route correctly
 
 Mobile (20 min)
 - Fix auto scroll issue (touchstart)
 
-Generic (30 min)
-- Timestamp on tweets
-- Fourcornerize MD docs
-- Links posted to twitter should route correctly
+Nice to have
+- Latest tweets against webinar
+- Switch to Axios (cancel old requests)
 
 
 ~ 335 minutes

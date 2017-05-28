@@ -10,14 +10,13 @@
 
       router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
         h1.drawer-list-item--header {{ $t('nav.course') }}
-        //- h2.drawer-list-item--body {{ theClass.description }}
+        h2.drawer-list-item--body {{ $t('nav.course_description') }}
       router-link.drawer-list-item(tag="li" to="/schedule" v-bind:class="{ visible: state.visible }")
         h1.drawer-list-item--header {{ $t('nav.schedule') }}
-        //- h2.drawer-list-item--body {{ theClass.description }}
+        h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
       router-link.drawer-list-item(tag="li" to="/about" v-bind:class="{ visible: state.visible }")
         h1.drawer-list-item--header {{ $t('nav.about') }}
-        //- h2.drawer-list-item--body {{ theClass.description }}
-      //- li.navigation-item.navigation-item-page.pull-right(v-if="!isRegistered" v-on:click="showAuth") {{ $t('auth.login') }}
+        h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
       li.drawer-list-item.hidden(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
         h1.drawer-list-item--header {{ theClass.title }}

@@ -9,7 +9,7 @@
 
     profile-icon(v-if="isRegistered")
 
-    .login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
+    #login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
 
 </template>
 
@@ -76,11 +76,19 @@ export default {
     width 20px
     margin 10px
 
-.login-button
+#login-button
+  animate()
+  background-color transparent
+  border transparent 1px solid
+  color white
   position fixed
   top 0
   right 0
   margin 10px
+  &:hover
+    //background-color white
+    //color $color-purple
+    border-color white
 
 .navigation
   animate()

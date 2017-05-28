@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .section-navigator
-  ul.navigation-items
+  transition-group(name="fade" mode="in-out" tag="ul" class="navigation-items")
     section-navigator-item(v-for="scrollPoint in scrollPoints" v-bind:key="scrollPoint.slug" v-bind:scroll-point="scrollPoint")
 
 </template>

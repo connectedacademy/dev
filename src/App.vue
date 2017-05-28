@@ -61,6 +61,16 @@ export default {
     AutoScroll,
     Overlay,
   ],
+  watch: {
+    activeSegmentVisible(nV, oV) {
+      if (nV) {
+        // Segment visible, disable scroll on window
+        document.body.className = "disable-scroll";
+      } else {
+        document.body.className = "allow-scroll";
+      }
+    },
+  },
   created() {
 
     this.$store.dispatch('checkAuth');
@@ -124,6 +134,7 @@ export default {
 @import './assets/stylus/layout/page'
 
 #action-panel
+  animate()
   background-color white
   position fixed
   bottom 0
@@ -132,11 +143,24 @@ export default {
   height 140px
   width 800px
   z-index 50
-  &.segment-view
-    z-index 52
+
   @media(max-width: 800px)
     left 0
     margin-left 0
     width 100%
+
+  &.segment-view
+    bottom 20px
+    border-bottom-left-radius 6px
+    border-bottom-right-radius 6px
+    margin-left -370px
+    width 740px
+    z-index 52
+    .video-wrapper
+      margin-left -370px
+    @media(max-width: 800px)
+      left 0
+      margin-left 10px
+      width calc(100% - 20px)
 
 </style>

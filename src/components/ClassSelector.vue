@@ -10,16 +10,20 @@
         icon(name="angle-right")
     .class-selector-container(ref="classselector" v-scroll="onScroll")
       ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
+
         li.class-selector--item.released(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
           h1.class-selector--item--header Introduction
+
         li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
           h1.class-selector--item--header {{ theClass.title }}
           icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
           icon.status-indicator(name="clock-o" v-if="theClass.status === 'FUTURE'")
+
         .clearfix
 
-  .padded-container(v-if="currentClass && currentClass.loading")
-    icon(name="refresh" scale="2" spin)
+    //-
+      .loading-wrapper.hidden(v-if="currentClass && currentClass.loading" v-for="n in 5")
+        .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
 
   .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
     h2 This course has finished
@@ -86,6 +90,7 @@ export default {
       }
     },
     viewIntroClass() {
+      this.$store.dispatch('resetState');
       this.$store.commit(types.SET_CURRENT_CLASS, this.introClass);
     },
     viewCurrentClass() {
@@ -254,5 +259,10 @@ export default {
     height 40px
   .pure-button
     margin-top 20px
+
+.padded-container.mock-container
+  background-color rgba(255,255,255, 0.1)
+  margin-bottom 10px
+
 
 </style>

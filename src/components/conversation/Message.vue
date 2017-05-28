@@ -9,22 +9,30 @@
 
     p.message-content(v-html="html")
 
-    ul.tweet-actions
-      li
-        a(v-bind:href="replyLink" target="_blank")
-          icon(name="reply")
-      li
-        a(v-bind:href="retweetLink" target="_blank")
-          icon(name="retweet")
-      li
-        a(v-bind:href="likeLink" target="_blank")
-          icon(name="heart")
+    .message--footer
+
+      ul.tweet-actions
+        li
+          a(v-bind:href="likeLink" target="_blank")
+            icon(name="heart")
+        li
+          a(v-bind:href="replyLink" target="_blank")
+            icon(name="reply")
+        li
+          a(v-bind:href="retweetLink" target="_blank")
+            icon(name="retweet")
+        li.message-timestamp
+          a(v-bind:href="tweetLink" target="_blank")
+            | {{ timeStamp }}
+
+        .clearfix
 
 </template>
 
 <script>
 import _ from 'lodash';
 import TweetPatch from 'tweet-patch';
+import Moment from 'moment';
 
 export default {
   name: 'message',
@@ -32,6 +40,9 @@ export default {
   computed: {
     html() {
       return TweetPatch(`#TestHashtag @edjenkins91 ${this.message.text}`, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+    },
+    tweetLink() {
+      return `https://twitter.com/statuses/${this.message.message_id}`;
     },
     replyLink() {
       return `https://twitter.com/intent/tweet?in_reply_to=${this.message.message_id}`;
@@ -42,6 +53,9 @@ export default {
     likeLink() {
       return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}`;
     },
+    timeStamp() {
+      return Moment().format('LTS - dd mm YYYY');
+    },
   },
 };
 </script>
@@ -51,8 +65,9 @@ export default {
 @import '../../assets/stylus/shared/*'
 
 .message
-  margin 15px
-  padding 5px 10px
+  max-height 98px
+  margin 0 15px 0 15px
+  padding 0 10px 50px 10px
   padding-left 50px
 
   position relative
@@ -74,17 +89,35 @@ export default {
       font-weight bold
       text-decoration none
 
-  ul.tweet-actions
-    cleanlist()
-    li
+  .message--footer
+    pinned()
+    border-top $color-border 1px solid
+    height 40px
+    left 40px
+    top auto
+    overflow hidden
+    position absolute
+
+    ul.tweet-actions
       cleanlist()
-      display inline-block
-      font-s ize 0.9em
-      margin 5px 10px
-      a
-        color #CCC
-        text-decoration none
-        &:hover
-          color $color-primary
+      li
+        cleanlist()
+        box-sizing border-box
+        float left
+        font-size 1em
+        line-height 40px
+        margin 0 10px
+        max-width 15%
+        a
+          color #CCC
+          text-decoration none
+          &:hover
+            color $color-primary
+
+        &.message-timestamp
+          max-width 55%
+          a
+            font-size 0.8 !important
+
 
 </style>
