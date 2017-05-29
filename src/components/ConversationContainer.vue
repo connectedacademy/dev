@@ -274,16 +274,13 @@ export default {
         fill #e1e1e1
 
   .subtitle-container, .messages-container
+    background-color white
     min-height 100px
     position absolute
     width 50%
     left 0
     top 0
     bottom 0
-
-  .subtitle-container
-    .time-segment
-      background-color #f2f2f2
 
   .messages-container
     left 50%

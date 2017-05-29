@@ -39,6 +39,12 @@ export default {
     videoReady() {
       this.attemptAutoScroll();
     },
+    videoPlaying() {
+      this.attemptAutoScroll();
+    },
+    currentSection() {
+      this.attemptAutoScroll();
+    },
   },
   computed: {
     ...mapGetters([
@@ -180,18 +186,21 @@ export default {
       });
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onScroll() {
+      var self = this;
       this.scrollPosition = window.scrollY;
       if (window.scrollY < 300) {
         this.preventScroll = true;
         this.$store.dispatch('setScrollPosition', this.scrollPosition).then(function() {
-          this.preventScroll = false;
+          self.preventScroll = false;
         });
       } else {
         this.setScrollPosition(this);
       }
     },
     onWheel() {
-      this.wheelMovement(this);
+      if (!this.activeSegmentVisible) {
+        this.wheelMovement(this);
+      }
     },
   },
 }

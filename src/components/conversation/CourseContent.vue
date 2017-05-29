@@ -127,7 +127,7 @@ export default {
       this.$store.commit('setFauxTime', now);
     },
     viewCurrentClass() {
-      if (!course) { return; }
+      if (!this.course) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           window.scroll(0, 0);

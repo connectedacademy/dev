@@ -2,7 +2,7 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
-    .scroll-indicator.hidden(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
+    .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
     .main-container
 
@@ -60,12 +60,6 @@ export default {
       },
       deep: true,
     },
-    videoPlaying() {
-      this.checkIfCanLoadNextFrame();
-    },
-    currentSection() {
-      this.checkIfCanLoadNextFrame();
-    },
   },
   methods: {
     leaveClass() {
@@ -91,7 +85,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'scrollPosition', 'offsetScrollPosition', 'currentTime', 'currentSection', 'videoPlaying', 'currentSectionScrollPosition', 'courseContent',
+      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'offsetScrollPosition', 'courseContent',
     ]),
     scrollIndicatorStyle() {
       return {

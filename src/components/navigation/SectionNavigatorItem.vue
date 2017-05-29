@@ -68,10 +68,12 @@ li.navigation-item
     right 0
     text-transform uppercase
     z-index -1
+    pointer-events none
     animate()
   &:hover
     background-color white
     cursor pointer
+    pointer-events all
     .fa-icon
       color $color-primary
     .content-label

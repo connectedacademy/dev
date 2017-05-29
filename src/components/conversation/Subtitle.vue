@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .subtitle(v-bind:style="subtitleStyle" @click="quote" v-once)
+  .subtitle(v-bind:style="subtitleStyle" v-bind:class="{ active: active }" )
     p.subtitle-meta.hidden {{ start }} {{ end }}
     h1(v-html="subtitle.text")
 

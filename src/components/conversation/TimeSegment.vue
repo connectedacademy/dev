@@ -29,8 +29,14 @@
     .quote-container(v-if="segmentVisible && quote")
       h1 {{ quote }}
 
-    .meta-container-messages(v-if="segmentVisible && segmentMessages" v-for="asMessage in segmentMessages")
+    .meta-container(v-if="segmentVisible")
+
+      .meta-container--messages(v-if="segmentMessages && (segmentMessages.length > 0)" v-for="asMessage in segmentMessages")
         message(v-bind:message="asMessage")
+
+      .meta-container--no-content
+        h1 No messages
+        .pure-button.pure-button-primary(@click="loadSegmentMessages") Load messages
 
 </template>
 
@@ -54,8 +60,11 @@ export default {
   watch: {
     activeSegmentVisible() {
       var self = this;
-      if (this.activeSegmentVisible) {
-        this.loadSegmentQuote();
+      if (this.activeSegmentVisible && (this.activeSegment.segmentGroup === this.message.segmentGroup)) {
+
+        console.log('this.activeSegment.segmentGroup');
+        console.log(this.activeSegment.segmentGroup);
+
         setTimeout(function() {
           if (self.activeSegment) {
             self.activeSegmentStyles = {
@@ -68,6 +77,7 @@ export default {
               height: (self.activeSegmentStyles) ? self.activeSegmentStyles.height : `auto`,
             };
 
+            self.loadSegmentQuote();
             self.loadSegmentMessages();
           }
         }, 600);
@@ -76,8 +86,8 @@ export default {
   },
   data() {
     return {
-      segmentMessages: undefined,
-      quote: undefined,
+      segmentMessages: [],
+      quote: '',
     };
   },
   computed: {
@@ -129,6 +139,9 @@ export default {
       }
     },
     loadSegmentMessages() {
+
+      console.log('Loading segment messages');
+
       if (!(this.message.message && this.message.message.content)) {
         this.segmentMessages = [];
         return;
@@ -151,23 +164,42 @@ export default {
           this.segmentMessages = [];
         },
       );
+
+      // API.message.subscribe(
+      //   request,
+      //   response => {
+      //     this.segmentMessages = response.data;
+      //   },
+      //   response => {
+      //     alert('There was an error');
+      //     this.segmentMessages = [];
+      //   },
+      // );
+
     },
     loadSegmentQuote() {
 
       // Get quote for active segment
-      const segmentStart = (this.activeSegment.segmentGroup / 0.2);
-      const segmentEnd = segmentStart + (1.0 / 0.2);
+      const segmentStart = (this.activeSegment.segmentGroup * 5);
+      const segmentEnd = segmentStart + 5;
 
       let quotes = _.filter(this.subtitles, function(o) {
-        return (o.start > segmentStart) && (o.end < segmentEnd);
+        return (parseInt(o.start) > segmentStart);
       });
 
-      quotes = _.map(quotes, function(o) {
-        return quote.text;
-      });
+      let quote = _.first(quotes);
 
-      return _.join(quotes, ' ');
+      this.quote = quote.text;
 
+      // let quotes = _.filter(this.subtitles, function(o) {
+      //   return ((o.start > segmentStart) && (o.end < segmentEnd));
+      // });
+
+      // quotes = _.map(quotes, function(o) {
+      //   return o.text;
+      // });
+      //
+      // this.quote = _.join(quotes, ' ');
     },
   },
 };
@@ -181,7 +213,7 @@ export default {
   padding 20px
 
 .time-segment
-  background-color #f2f2f2
+  background-color transparent
   transition-duration 0.1s
   height 158px
   padding-right 25px
@@ -233,12 +265,16 @@ export default {
       opacity 0
 
   &.active
+    background-color #f2f2f2
     border-top-left-radius 6px
     border-top-right-radius 6px
     transition-duration 0.6s
-    background-color #f2f2f2
     z-index 51
     padding-right 0
+    .message-wrapper
+      .message
+        .message--footer
+          background-color #f2f2f2
     .explore-segment-button
       display none
     .message-wrapper
@@ -251,9 +287,16 @@ export default {
         position relative
       .suggestion
         text-align center
-    .meta-container-messages
-      .message
-        margin 15px 15px 0 15px
+    .meta-container
+      min-height 100px
+      .meta-container--no-content
+        padding 40px
+        text-align center
+        h1
+          color $color-text-light-grey
+      .meta-container--messages
+        .message
+          margin 15px 15px 0 15px
     .quote-container
       background-color transparent
       height 80px

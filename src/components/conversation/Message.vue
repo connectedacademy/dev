@@ -4,8 +4,7 @@
 
     img.profile-image(v-bind:src="message.author.profile")
 
-    p.author-label
-      strong {{ message.author.account }}
+    a.author-label(v-bind:href="authorLink" target="_blank") {{ message.author.account }}
 
     p.message-content(v-html="html")
 
@@ -40,6 +39,9 @@ export default {
   computed: {
     html() {
       return TweetPatch(`#TestHashtag @edjenkins91 ${this.message.text}`, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+    },
+    authorLink() {
+      return `https://twitter.com/${this.message.author.account}`;
     },
     tweetLink() {
       return `https://twitter.com/statuses/${this.message.message_id}`;
@@ -80,19 +82,23 @@ export default {
     top 5px
     left 0
 
-  p.author-label, p.message-content
+  p.message-content
     nomargin()
     nopadding()
     color $color-text-dark-grey
     a, a:active
-      color $color-purple
-      font-weight bold
-      text-decoration none
+      color $color-text-dark-grey
+
+  a.author-label
+    color $color-purple
+    font-weight bold
+    text-decoration none
+    font-size 0.9em
 
   .message--footer
     pinned()
-    border-top $color-border 1px solid
-    height 40px
+    background-color white
+    height 36px
     left 40px
     top auto
     overflow hidden
@@ -105,7 +111,7 @@ export default {
         box-sizing border-box
         float left
         font-size 1em
-        line-height 40px
+        line-height 36px
         margin 0 10px
         max-width 15%
         a
