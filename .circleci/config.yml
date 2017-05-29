@@ -5,7 +5,7 @@ general:
      - master
 jobs:
   build:
-    docker: 
+    docker:
       - image: node:7.4.0
     working_directory: ~/connectedacademy
     steps:
@@ -17,7 +17,7 @@ jobs:
       - run: git config --global user.email "info@connectedacademy.io"
       # - run: git checkout -b staging
       - run: git add docs
-      - run: git commit -am"[skip CI] AUTOBUILD"
+      # - run: git commit -am"[skip CI] AUTOBUILD"
       # - run: git checkout -b gh-pages
       # - run: git rebase -Xtheirs staging
       - run: git push -u -f origin master
