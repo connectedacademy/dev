@@ -124,7 +124,7 @@ export default {
     API.auth.checkAuth(
       response => {
         if (response.user.registration) {
-          // this.$router.replace('/');
+          this.$router.replace('/');
         }
       },
     );
