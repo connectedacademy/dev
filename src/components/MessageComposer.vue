@@ -13,8 +13,7 @@
 
       .message-composer--footer(v-if="isRegistered")
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage") {{ submitText }}
-        p.info-label(v-if="!section") {{ $t('composer.duration', { currentTime: currentTime }) }}
-        p.info-label(v-if="section") {{ `Current section - ${section}` }}
+        p.info-label.animated.fadeInUp(v-if="infoLabel") {{ infoLabel }}
         .clearfix
 
 
@@ -31,10 +30,12 @@ export default {
   props: ['section'],
   data() {
     return {
+      infoLabel: '',
       message: {
         text: '',
       },
       windowWidth: 0,
+      sending: false,
     };
   },
   methods: {
@@ -47,6 +48,7 @@ export default {
       this.$log.log('Pausing video');
       this.$store.commit(types.PAUSE_VIDEO);
 
+      this.infoLabel = "";
     },
     composerBlur() {
       this.$log.log('Composer lost focus');
@@ -62,6 +64,9 @@ export default {
       this.$store.commit(types.DISMISS_COMPOSER);
     },
     sendMessage() {
+
+      this.sending = true;
+
       let postData = {};
 
       if (this.section) {
@@ -79,7 +84,7 @@ export default {
           text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
           currentClass: this.$store.getters.currentClass.slug,
           currentSection: this.$store.getters.currentSection.slug,
-          currentSegment: this.$store.getters.currentSegment,
+          currentSegment: this.messageSegment,
         };
       }
 
@@ -88,18 +93,27 @@ export default {
         (response, postData) => {
           this.$store.dispatch('pushMessage', { response, postData });
           this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response, postData })
+          this.message.text = '';
+          this.sending = false;
+          this.infoLabel = 'Message sent successfully';
         },
         (response, postData) => {
           this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
+          alert('Failed to send message');
+          this.sending = false;
+          this.infoLabel = 'Failed to send message!';
         },
       );
     },
   },
   computed: {
     ...mapGetters(['isRegistered']),
+    messageSegment() {
+      return this.$store.getters.activeSegmentVisible ? (this.$store.getters.activeSegment.segmentGroup / 0.2) : this.$store.getters.currentSegment;
+    },
     url() {
       if (this.$store.getters.currentSection === undefined) { return ''; }
-      return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.$store.getters.currentSegment}`;
+      return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.messageSegment}`;
     },
     visible() {
       return this.$store.state.composer.visible;
@@ -117,7 +131,11 @@ export default {
       return `Tweeting at - ${_.round(this.$store.getters.currentTime)}`;
     },
     submitText() {
-      return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Send Message';
+      if (this.sending) {
+        return 'Sending';
+      } else {
+        return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Send Message';
+      }
     }
   },
 };
@@ -209,10 +227,14 @@ export default {
         padding 10px
       p.info-label
         nopadding()
-        color $color-text-dark-grey
+        radius(5px)
+        display inline-block
+        background-color $color-success
+        color white
         font-size 0.9em
-        line-height 38px
-        margin 0 5px
+        line-height 28px
+        margin 5px
+        padding 0 15px
 
   &.static
 

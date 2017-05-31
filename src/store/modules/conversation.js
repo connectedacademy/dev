@@ -11,10 +11,14 @@ const state = {
   visualisation: [],
   activeSegment: undefined,
   activeSegmentVisible: false,
+  lastMessage: undefined,
 };
 
 // getters
 const getters = {
+  lastMessage() {
+    return state.lastMessage;
+  },
   activeSegment() {
     return state.activeSegment;
   },
@@ -136,8 +140,7 @@ const actions = {
   pushMessage({
     commit,
   }, request) {
-
-    const currentSegmentGroup = _.floor(request.postData.currentSegment * 0.2);
+    const currentSegmentGroup = _.multiply(_.floor(_.divide(request.postData.currentSegment, 10)), 10) * 0.2
 
     let newMessage = {
       message: request.response.body,
@@ -150,7 +153,9 @@ const actions = {
 
     newMessage.message.author = newMessage.message.user;
 
-    Vue.set(state.messages, currentSegmentGroup, newMessage);
+    // Vue.set(state.messages, currentSegmentGroup, newMessage);
+
+    store.commit('updateLastMessage', newMessage);
   },
 };
 
@@ -195,9 +200,10 @@ const mutations = {
       let newMessage = response.data[group];
       newMessage.segmentGroup = segmentGroup;
 
-      if (((state.messages[segmentGroup] === undefined) || state.messages[segmentGroup].loading) && !state.messages[segmentGroup].faux) {
-        Vue.set(state.messages, segmentGroup, newMessage);
-      }
+      // if (((state.messages[segmentGroup] === undefined) || state.messages[segmentGroup].loading) && !state.messages[segmentGroup].faux) {
+      //   Vue.set(state.messages, segmentGroup, newMessage);
+      // }
+
       Vue.set(state.messages, segmentGroup, newMessage);
     }
   },
@@ -213,6 +219,9 @@ const mutations = {
   [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
     state.activeSegment = activeSegment;
     state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
+  },
+  updateLastMessage({ commit }, newMessage) {
+    state.lastMessage = newMessage;
   },
 };
 

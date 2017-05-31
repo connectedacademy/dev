@@ -56,7 +56,7 @@ export default {
       return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}`;
     },
     timeStamp() {
-      return Moment().format('LTS - dd mm YYYY');
+      return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
     },
   },
 };

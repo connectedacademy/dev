@@ -32,11 +32,7 @@
     .meta-container(v-if="segmentVisible")
 
       .meta-container--messages(v-if="segmentMessages && (segmentMessages.length > 0)" v-for="asMessage in segmentMessages")
-        message(v-bind:message="asMessage")
-
-      .meta-container--no-content(v-else)
-        h1 No messages
-        .pure-button.pure-button-primary(@click="loadSegmentMessages") Load messages
+        message.animated.fadeIn(v-bind:message="asMessage")
 
 </template>
 
@@ -58,14 +54,21 @@ export default {
     MockMessage,
   },
   watch: {
+    'lastMessage': {
+      handler: function(nV, oV) {
+        var self = this;
+        setTimeout(function() {
+          self.loadSegmentMessages();
+        }, 500);
+      },
+      deep: true,
+    },
     activeSegmentVisible() {
       var self = this;
       if (this.activeSegmentVisible && (this.activeSegment.segmentGroup === this.message.segmentGroup)) {
 
-        console.log('this.activeSegment.segmentGroup');
-        console.log(this.activeSegment.segmentGroup);
-
         setTimeout(function() {
+          console.log('Interval called');
           if (self.activeSegment) {
             self.activeSegmentStyles = {
               'overflow-y': 'auto',
@@ -94,6 +97,7 @@ export default {
     ...mapGetters([
       'activeSegment',
       'activeSegmentVisible',
+      'lastMessage',
     ]),
     segmentVisible() {
       return (this.activeSegmentVisible && this.activeSegment && (this.activeSegment.segmentGroup === this.message.segmentGroup));
@@ -142,22 +146,26 @@ export default {
 
       console.log('Loading segment messages');
 
-      if (!(this.message.message && this.message.message.content)) {
-        this.segmentMessages = [];
-        return;
+      let theContent = '';
+
+      if (this.message.message && this.message.message.content) {
+        theContent = this.message.message.content;
+      } else {
+        theContent = this.$store.getters.currentSection.slug;
       }
 
       const request = {
         theClass: this.$store.getters.currentClass.slug,
-        theContent: this.message.message.content,
-        startSegment: `${(parseInt(this.message.segmentGroup) / 0.2)}`,
-        endSegment: `${(parseInt(this.message.segmentGroup) / 0.2) + 5}`,
+        theContent: theContent,
+        startSegment: `${_.floor(parseInt(this.message.segmentGroup) / 0.2, 5)}`,
+        endSegment: `${_.floor(parseInt(this.message.segmentGroup) / 0.2, 5) + 5}`,
       };
 
       API.message.getMessages(
         request,
         response => {
-          this.segmentMessages = response.data;
+          console.log(response.data);
+          this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['desc']);
         },
         response => {
           alert('There was an error');
@@ -168,7 +176,8 @@ export default {
       // API.message.subscribe(
       //   request,
       //   response => {
-      //     this.segmentMessages = response.data;
+      //     console.log(response.data);
+      //     this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['asc']);
       //   },
       //   response => {
       //     alert('There was an error');

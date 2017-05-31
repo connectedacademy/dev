@@ -57,10 +57,29 @@ export default {
     window.addEventListener('resize', () => {
       this.windowResized(self);
     });
+
+    setInterval(function() {
+
+      self.updateChunkedMessages(self.currentSegmentGroup);
+
+    }, 3000);
   },
   watch: {
-    messages() {
-      this.updateChunkedMessages(this.currentSegmentGroup);
+    'messages': {
+      handler: function(nV, oV) {
+        this.updateChunkedMessages(this.currentSegmentGroup);
+      },
+      deep: true,
+    },
+    'lastMessage': {
+      handler: function(nV, oV) {
+        var self = this;
+        setTimeout(function() {
+          console.log('UPDATING');
+          self.updateChunkedMessages(self.currentSegmentGroup);
+        }, 500);
+      },
+      deep: true,
     },
     currentSegmentGroup(nV, oV) {
       if (nV === undefined) { return; }
@@ -147,6 +166,8 @@ export default {
     },
     updateChunkedMessages(currentSegment) {
 
+      console.log('Updating chunked messages...');
+
       let segmentViewport = _.floor(window.innerHeight / 158.0);
 
       currentSegment += 1; // Think ahead
@@ -161,9 +182,9 @@ export default {
 
       for (var i = 0; i < result.length; i += 1) {
         if (result[i].segmentGroup >= startSegment && result[i].segmentGroup <= currentSegment) {
-          if (!(this.chunkedMessages[`${result[i].segmentGroup}`] && this.chunkedMessages[`${result[i].segmentGroup}`].message)) {
+          // if (!(this.chunkedMessages[`${result[i].segmentGroup}`] && this.chunkedMessages[`${result[i].segmentGroup}`].message)) {
             Vue.set(this.chunkedMessages, `${result[i].segmentGroup}`, result[i]);
-          }
+          // }
         }
       }
 
@@ -178,7 +199,7 @@ export default {
   props: ['content'],
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'messages', 'visualisation',
+      'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'messages', 'visualisation', 'lastMessage',
     ]),
     containerHeight() {
       return ((this.content.duration * 0.2) * 158.0);
