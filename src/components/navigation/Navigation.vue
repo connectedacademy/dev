@@ -4,8 +4,9 @@
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
 
-    #debug-button(@click="toggleDebugMode")
-      icon(name="wrench")
+    //-
+      #debug-button(@click="toggleDebugMode")
+        icon(name="wrench")
 
     profile-icon(v-if="isRegistered")
 

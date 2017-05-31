@@ -2,7 +2,7 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
-    .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
+    //- .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
 
     .main-container
 
