@@ -38,7 +38,7 @@ export default {
   props: ['message'],
   computed: {
     html() {
-      return TweetPatch(`#TestHashtag @edjenkins91 ${this.message.text}`, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+      return TweetPatch(this.message.text, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
     authorLink() {
       return `https://twitter.com/${this.message.author.account}`;
@@ -97,7 +97,6 @@ export default {
 
   .message--footer
     pinned()
-    background-color white
     height 36px
     left 40px
     top auto

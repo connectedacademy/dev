@@ -34,7 +34,7 @@
       .meta-container--messages(v-if="segmentMessages && (segmentMessages.length > 0)" v-for="asMessage in segmentMessages")
         message(v-bind:message="asMessage")
 
-      .meta-container--no-content
+      .meta-container--no-content(v-else)
         h1 No messages
         .pure-button.pure-button-primary(@click="loadSegmentMessages") Load messages
 
@@ -271,10 +271,6 @@ export default {
     transition-duration 0.6s
     z-index 51
     padding-right 0
-    .message-wrapper
-      .message
-        .message--footer
-          background-color #f2f2f2
     .explore-segment-button
       display none
     .message-wrapper
