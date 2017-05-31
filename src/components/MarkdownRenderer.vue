@@ -213,17 +213,15 @@ export default {
       .use(MarkdownItCustomBlock, {
         submission(arg) {
 
-          console.log('Plain arg');
-          console.log(arg);
+          const parts = arg.split(',');
 
-          // arg = JSON.parse(arg);
+          const type = parts[0].trim();
 
-          console.log('JSON arg');
-          console.log(arg);
+          if (type === 'fourcorners') {
 
-          if (arg.type === 'fourcorners') {
-            parent.theClass = arg.class;
-            parent.theContent = arg.content;
+            parent.theClass = parts[1].trim();
+            parent.theContent = parts[2].trim();
+
             return `
             <div class="fourcorners-submission fourcorners-submission-checking" v-if="checkingSubmissions">
               <h2>Checking submissions...</h2>
