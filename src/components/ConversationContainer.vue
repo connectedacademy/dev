@@ -274,7 +274,6 @@ export default {
         fill #e1e1e1
 
   .subtitle-container, .messages-container
-    background-color white
     min-height 100px
     position absolute
     width 50%
