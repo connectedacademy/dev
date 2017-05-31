@@ -41,6 +41,9 @@ export default {
     course() {
       this.loadMarkdown();
     },
+    rawMarkdown() {
+      this.loadFourCornersScript();
+    },
   },
   mounted() {
     this.loadMarkdown();
@@ -62,7 +65,7 @@ export default {
       if (_.startsWith(url, 'http')) {
         return url;
       } else {
-        if (!this.$store.getters.course) {
+        if (!(this.$store.getters.course && this.$store.getters.course.baseUri)) {
           return '';
         } else {
           return `${this.$store.getters.course.baseUri}${url}`
@@ -84,6 +87,9 @@ export default {
       );
     },
     renderMarkdown() {
+
+      console.log('Rendering markdown');
+
       // Render markdown
       var res = Vue.compile(this.rawMarkdown);
 
@@ -206,11 +212,15 @@ export default {
       })
       .use(MarkdownItCustomBlock, {
         submission(arg) {
+
           console.log('Plain arg');
           console.log(arg);
-          arg = JSON.parse(arg);
+
+          // arg = JSON.parse(arg);
+
           console.log('JSON arg');
           console.log(arg);
+
           if (arg.type === 'fourcorners') {
             parent.theClass = arg.class;
             parent.theContent = arg.content;
