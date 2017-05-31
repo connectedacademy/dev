@@ -211,9 +211,14 @@ export default {
         this.frontMatter = fm;
       })
       .use(MarkdownItCustomBlock, {
+
         submission(arg) {
 
+          if (!arg) { return 'loading...'; }
+
           const parts = arg.split(',');
+
+          if (parts.length < 2) { return 'Issue with markdown'; }
 
           const type = parts[0].trim();
 
