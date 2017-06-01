@@ -1,5 +1,5 @@
 <meta id="token" name="token" value="{{ csrf_token() }}"></meta>
-<meta name = "viewport" content = "initial-scale = 1.0, user-scalable = no">
+<meta name = "viewport" content = "initial-scale = 1.0, user-scalable = no"></meta>
 
 <template lang="pug">
 
