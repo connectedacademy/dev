@@ -20,7 +20,7 @@ Vue.use(Vuex);
 
 
 let fauxTime = Moment();
-fauxTime = fauxTime.subtract(57, 'days');
+fauxTime = fauxTime.subtract(58, 'days');
 fauxTime = fauxTime.format();
 
 export default new Vuex.Store({
