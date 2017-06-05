@@ -1,5 +1,5 @@
 const CALCULATE_FPS = false; // Calculate the scrolling FPS
-const AUTOSCROLL_CHECK = 500; // Periodically check if scroll is possible
+const AUTOSCROLL_CHECK = 100; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 500; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
@@ -21,11 +21,21 @@ export default {
 
     // Listen for wheel events
     window.addEventListener('wheel', this.onWheel, { passive: true }); // Passive to improve mobile performance
+
+    // Listen for mousedown events
+    window.addEventListener('mousedown', this.onMousedown, { passive: true }); // Passive to improve mobile performance
+    window.addEventListener('touchstart', this.onMousedown, { passive: true }); // Passive to improve mobile performance
+
+    // Listen for mouseup events
+    window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
+    window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
   },
   destroyed () {
     // Remove event listeners
     window.removeEventListener('scroll', this.onScroll);
     window.removeEventListener('wheel', this.onWheel);
+    window.removeEventListener('mousedown', this.onMousedown);
+    window.removeEventListener('mouseup', this.onMouseup);
   },
   data() {
     return {
@@ -201,6 +211,18 @@ export default {
       if (!this.activeSegmentVisible) {
         this.wheelMovement(this);
       }
+    },
+    onMousedown() {
+      console.log('MOUSEDOWN');
+      // this.$store.commit(types.PAUSE_VIDEO);
+      this.preventScroll = true;
+      this.isAutoScrolling = false;
+    },
+    onMouseup() {
+      console.log('MOUSEUP');
+      // this.$store.commit(types.PLAY_VIDEO);
+      this.preventScroll = false;
+      this.isAutoScrolling = false;
     },
   },
 }

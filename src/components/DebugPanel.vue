@@ -64,6 +64,7 @@ export default {
 .debug-panel
   background-color alpha(red, 0.8)
   color white
+  max-width 300px
   min-width 200px
   padding 10px
   position fixed

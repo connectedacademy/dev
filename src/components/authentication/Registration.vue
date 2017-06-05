@@ -2,7 +2,7 @@
 
 .col#col-main.narrow
 
-  .container.registration-container
+  .container.registration-container(v-if="!checkingRegistration")
     .registration-container--header
       h1 {{ $t('auth.register') }}
 
@@ -67,7 +67,7 @@
           info-dialogue
             p {{ $t('auth.answer_the_following') }}
 
-          .question-wrapper(v-for="(question, index) in questions")
+          .question-wrapper(v-if="!loadingQuestions" v-for="(question, index) in questions")
 
             fieldset
               label {{ question.text }}
@@ -122,10 +122,15 @@ export default {
   },
   created() {
     API.auth.checkAuth(
-      response => {
+      (response) => {
+        this.checkingRegistration = false;
         if (response.user.registration) {
           this.$router.replace('/');
         }
+      },
+      (response) => {
+        // TODO: Better handle failed request
+        this.checkingRegistration = false;
       },
     );
 
@@ -133,17 +138,19 @@ export default {
       (response) => {
         this.release = response.release;
         this.questions = response.questions;
-        this.loading = false;
+        this.loadingQuestions = false;
       },
       (response) => {
-        // TODO: Handle failed request
+        // TODO: Better handle failed request
+        this.loadingQuestions = false;
       },
     );
   },
   data() {
     return {
       currentPage: 1,
-      loading: true,
+      loadingQuestions: true,
+      checkingRegistration: true,
       release: '',
       questions: [],
       response: {

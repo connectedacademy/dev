@@ -23,10 +23,6 @@
         h1.drawer-list-item--header {{ theClass.title }}
         h2.drawer-list-item--body {{ theClass.description }}
 
-      //-
-        li.drawer-list-item(v-bind:class="{ visible: state.visible }")
-          h2.drawer-list-item--body(@click="toggleColumnState") {{ $t('common.toggle_column') }}
-
 </template>
 
 <script>
@@ -51,9 +47,6 @@ export default {
   methods: {
     toggleLeftDrawer() {
       this.$store.commit(types.TOGGLE_LEFT_DRAWER);
-    },
-    toggleColumnState() {
-      this.$store.dispatch('toggleColumnState');
     },
     setCurrentClass(newClass) {
       this.$store.commit(types.TOGGLE_LEFT_DRAWER);

@@ -2,7 +2,14 @@
 
   .video-wrapper
 
-    youtube.video-container(v-if="src" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 2, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
+    youtube.video-container(v-if="src" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
+
+    .video-controls-overlay
+      ul.video-controls
+        li.video-control(@click="toggleVideoPlaying")
+          icon(name="pause" v-if="videoPlaying")
+          icon(name="play" v-else)
+        .clearfix
 
 </template>
 
@@ -34,14 +41,23 @@ export default {
     videoPlaying(nv, oV) {
       if (this.player && this.src) {
         if (nv) {
-           this.player.playVideo();
+          console.log('playVideo');
+          this.player.playVideo();
         } else {
+          console.log('pauseVideo');
           this.player.pauseVideo();
         }
       }
     },
   },
   methods: {
+    toggleVideoPlaying() {
+      if (this.videoPlaying) {
+        this.$store.commit(types.PAUSE_VIDEO);
+      } else {
+        this.$store.commit(types.PLAY_VIDEO);
+      }
+    },
     change() {},
     ready(player) {
       this.player = player;
@@ -135,4 +151,28 @@ export default {
     left 0 !important
     right 0 !important
 
+  /* Video controls */
+  .video-controls-overlay
+    pinned()
+    top auto
+    position absolute
+    ul.video-controls
+      cleanlist()
+      padding 5px
+      li.video-control
+        cleanlist()
+        radius(50%)
+        background-color alpha($color-primary, 1)
+        float left
+        height 20px
+        padding 10px
+        text-align center
+        width 20px
+        .fa-icon
+          color alpha(white, 0.9)
+          height 20px
+        &:hover
+          cursor pointer
+          .fa-icon
+            color white
 </style>
