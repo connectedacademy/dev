@@ -147,11 +147,12 @@ export default {
       display none
 
   &.minimized
-    height 30px
+    background-color alpha($navigation-background-color, 90%)
+    /*height 30px*/
     /*top -60px*/
     .navigation-item-brand
-      font-size 0.9em
-      line-height 30px
+      /*font-size 0.9em*/
+      /*line-height 30px*/
 /* App states */
 
 #app.authenticating
