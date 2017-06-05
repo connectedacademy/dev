@@ -40,6 +40,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('checkAuth');
+
     this.toMessage(this.$route.query);
   },
   data() {
