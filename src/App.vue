@@ -21,7 +21,7 @@
     navigation
     router-view(transition transition-mode="out-in")
 
-  action-panel(v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
+  action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
 
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
 
@@ -95,13 +95,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'activeSegmentVisible',
+      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
-      || this.$store.state.conversation.activeSegmentVisible
-      || this.$store.state.composer.visible;
+      || this.$store.state.conversation.activeSegmentVisible;
     },
   },
   store,
@@ -174,7 +173,7 @@ body.disable-scroll
     max-width 780px
     @media(max-width: 800px)
       max-width 100%
-      margin 0 10px
+      margin 0 0px
 
 /* App states */
 

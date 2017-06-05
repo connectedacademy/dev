@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.playhead-bobble(@click="toggleVideoState")
+.playhead-bobble(@click="toggleComposer")
   icon(name="twitter" scale="2" class="playhead-icon")
   //- icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
   //- icon(name="pause" scale="2" class="playhead-icon" v-if="videoPlaying")
@@ -17,15 +17,15 @@ export default {
   created() {},
   computed: {
     ...mapGetters([
-      'videoPlaying',
+      'composerHidden',
     ]),
   },
   methods: {
-    toggleVideoState() {
-      if (this.videoPlaying) {
-        this.$store.commit(types.PAUSE_VIDEO);
+    toggleComposer() {
+      if (this.$store.getters.composerHidden) {
+        this.$store.commit(types.SHOW_COMPOSER);
       } else {
-        this.$store.commit(types.PLAY_VIDEO);
+        this.$store.commit(types.HIDE_COMPOSER);
       }
     },
   },
@@ -51,6 +51,7 @@ export default {
   @media(max-width: 860px)
     margin-right 0
     right 10px
+    top -70px
   &:hover
     cursor pointer
     background-color darken($color-primary, 10%)

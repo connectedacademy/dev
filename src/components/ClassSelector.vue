@@ -147,9 +147,11 @@ export default {
 .class-selector-wrapper
   radius(4px)
   height 44px
-  margin 0 0 10px 0
+  margin 0 0 20px 0
   overflow hidden
   position relative
+  @media(max-width: 800px)
+    margin 0 10px 20px 10px
   .skip-button
     background-color $color-primary
     height 44px

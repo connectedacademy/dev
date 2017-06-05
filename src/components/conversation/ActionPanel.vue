@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive, 'segment-view': activeSegmentVisible }")
+  #action-panel.animated.slideInUp(v-bind:class="{ hide: composerHidden, hidden: !videoIsActive, 'segment-view': activeSegmentVisible }")
     playhead
     video-container
     message-composer
@@ -14,7 +14,7 @@ import Playhead from '@/components/Playhead';
 
 export default {
   name: 'action-panel',
-  props: ['videoIsActive', 'activeSegmentVisible'],
+  props: ['composerHidden', 'videoIsActive', 'activeSegmentVisible'],
   components: {
     MessageComposer,
     VideoContainer,
@@ -42,6 +42,11 @@ export default {
     left 0
     margin-left 0
     width 100%
+  &.hide
+    bottom -140px
+    .playhead-bobble
+      top -70px
+      /*right 20px*/
 
   &.segment-view
     bottom 20px
@@ -56,5 +61,7 @@ export default {
       left 0
       margin-left 10px
       width calc(100% - 20px)
+      .playhead-bobble
+        display none
 
 </style>

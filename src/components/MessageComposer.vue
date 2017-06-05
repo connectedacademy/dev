@@ -2,7 +2,8 @@
 
   .message-composer-wrapper(v-bind:class="{ static: section }")
 
-    .message-composer(v-bind:class="{ isactive: visible, unactive: hidden }")
+    .message-composer(v-bind:class="{ unactive: hidden }")
+    .message-composer(v-bind:class="{ unactive: hidden }")
 
       .message-composer--body
         .textarea-wrapper(v-if="isRegistered" )
@@ -58,7 +59,7 @@ export default {
 
     },
     showComposer() {
-      this.$store.commit(types.SHOW_COMPOSER);
+      this.$store.commit(types.PEEK_COMPOSER);
     },
     dismissComposer() {
       this.$store.commit(types.DISMISS_COMPOSER);
@@ -114,9 +115,6 @@ export default {
     url() {
       if (this.$store.getters.currentSection === undefined) { return ''; }
       return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.messageSegment}`;
-    },
-    visible() {
-      return this.$store.state.composer.visible;
     },
     hidden() {
       return (this.$store.getters.currentSection === undefined) ||

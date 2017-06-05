@@ -10,6 +10,9 @@ const state = {
 
 // getters
 const getters = {
+  composerHidden() {
+    return state.hidden;
+  },
 };
 
 // actions
