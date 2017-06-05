@@ -123,8 +123,8 @@ export default {
 @import '~stylus/shared'
 
 .video-wrapper
-  background-color darken($color-purple, 25%)
-  border-right $color-purple 1px solid
+  /*background-color darken($color-purple, 25%)*/
+  /*border-right $color-purple 1px solid*/
   bottom 0
   padding 0
   padding-left 0
@@ -134,8 +134,8 @@ export default {
   z-index 52
   animate()
   @media(max-width: 800px)
-    bottom 140px
-    left 0
+    bottom 150px
+    left 10px
     margin-left 0
     padding 0
   .video-container
