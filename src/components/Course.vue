@@ -100,7 +100,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 @import "../assets/stylus/layout/course-content"
 
 .scroll-indicator

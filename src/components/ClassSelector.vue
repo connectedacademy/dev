@@ -16,6 +16,7 @@
 
         li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }")
           h1.class-selector--item--header {{ theClass.title }}
+          pre.hidden {{ theClass.release_at }}
           icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
           icon.status-indicator(name="clock-o" v-if="theClass.status === 'FUTURE'")
 
@@ -24,10 +25,9 @@
     //-
       .loading-wrapper.hidden(v-if="currentClass && currentClass.loading" v-for="n in 5")
         .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
-
+//-
   .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
     h2 This course has finished
-
   .padded-container(v-if="currentClass && currentClass.status === 'RELEASED' && currentExists")
     h2 This is not the current class
     .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
@@ -139,7 +139,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 
 .class-selector-wrapper
   radius(4px)

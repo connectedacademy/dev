@@ -64,7 +64,7 @@ export default {
 
 <style lang="stylus">
 
-@import '../../assets/stylus/shared/*'
+@import '../../assets/stylus/shared'
 
 .message
   max-height 98px

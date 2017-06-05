@@ -1,6 +1,7 @@
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 import store from '@/store';
+import Moment from 'moment';
 
 // initial state
 const state = {
@@ -35,7 +36,7 @@ const actions = {
   getCourse({
     commit,
   }) {
-    const fauxTime = store.getters.fauxTime.replace('+', encodeURIComponent('+'));
+    const fauxTime = store.state.fauxTime.replace('+', encodeURIComponent('+'));
     API.course.getSchedule(
       fauxTime,
       response => commit(types.GET_SCHEDULE_SUCCESS, {
@@ -85,6 +86,17 @@ const mutations = {
   [types.GET_SCHEDULE_SUCCESS](initialState, {
     response,
   }) {
+    // Get start of first class
+    const classStart = response.classes[0].release_at;
+    console.log('response.classes[0]');
+    console.log(response.classes[0]);
+
+    if (classStart) {
+      // Set faux time
+      const fauxTime = Moment(classStart).add(1, 'minute').format();
+      store.commit('setFauxTime', fauxTime);
+    }
+
     state.course = response;
   },
   [types.GET_SCHEDULE_FAILURE](initialState, {

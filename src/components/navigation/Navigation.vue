@@ -60,7 +60,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/shared/*";
+@import "../../assets/stylus/shared";
 
 #debug-button
   radius(50%)

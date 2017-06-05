@@ -61,9 +61,15 @@ body.disable-scroll
 
 // Buttons
 
-.pure-button.full-width
-  display block
-  margin-bottom 10px
+.pure-button
+  animate()
+  &.full-width
+    display block
+    margin-bottom 10px
+
+  &.pure-button-success
+    background-color $color-success
+    color white
 
 // Transitions
 

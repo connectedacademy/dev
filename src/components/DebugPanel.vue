@@ -11,6 +11,7 @@
     p scrollPoints
     pre {{ scrollPoints }}
 
+  p {{ `fauxTime - ${fauxTime}` }}
   p {{ `scrollPosition - ${scrollPosition}` }}
   p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
 
@@ -39,6 +40,7 @@ export default {
       'currentActiveSection',
       'scrollPoints',
 
+      'fauxTime',
       'scrollPosition',
       'offsetScrollPosition',
 
@@ -59,7 +61,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 
 .debug-panel
   background-color alpha(red, 0.8)

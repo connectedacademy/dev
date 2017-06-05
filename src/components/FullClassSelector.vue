@@ -66,7 +66,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 
 .class-selector-wrapper
   radius(4px)

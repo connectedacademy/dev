@@ -47,7 +47,7 @@ export default {
     answer_the_following: 'Please answer the following',
 
     enter_your_email: 'Enter your email',
-    enter_your_age: 'Enter your age (optional)',
+    enter_your_age: 'Enter your age',
     select_your_language: 'Select your language',
 
     authenticate: 'Authenticate',

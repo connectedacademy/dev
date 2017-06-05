@@ -36,6 +36,7 @@ import API from '@/api';
 
 import store from '@/store';
 import * as types from '@/store/mutation-types';
+import Moment from 'moment';
 
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
@@ -76,7 +77,10 @@ export default {
 
     this.$store.dispatch('checkAuth');
 
-    // Fetch course and then hubs
+    // Fetch course and then hubs// Set faux time
+    const fauxTime = Moment().format();
+    this.$store.commit('setFauxTime', fauxTime);
+
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');
 
@@ -86,8 +90,6 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy',
-      fps: 0.0,
-      scrollPosition: 0.0,
     };
   },
   computed: {
@@ -131,7 +133,7 @@ export default {
 
 <style lang="stylus">
 
-@import './assets/stylus/shared/*'
+@import './assets/stylus/shared'
 @import './assets/stylus/layout/page'
 
 #action-panel
@@ -165,3 +167,7 @@ export default {
       width calc(100% - 20px)
 
 </style>
+
+
+<!-- liveclass - release_at:"2017-04-05T10:57:37+01:00" -->
+<!-- liveclass - release_at:"2017-04-05T10:57:37+01:00" -->

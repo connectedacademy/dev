@@ -24,7 +24,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../assets/stylus/shared/*"
+@import "../assets/stylus/shared"
 
 .submission-grid-wrapper
   p.content-description

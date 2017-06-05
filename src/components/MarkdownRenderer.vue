@@ -264,7 +264,7 @@ export default {
 
 <style lang="stylus">
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 @import '../assets/stylus/layout/page'
 
 .rendered-markdown

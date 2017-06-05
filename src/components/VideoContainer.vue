@@ -120,7 +120,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 
 .video-wrapper
   background-color darken($color-purple, 25%)

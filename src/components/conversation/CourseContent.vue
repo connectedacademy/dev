@@ -13,9 +13,9 @@
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       .course-content--footer
-        .pure-button(@click="resetTime") {{ fauxTime }}
-        .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
-        .login-button.pure-button.pure-button-primary.pull-right(v-else @click="showAuth") {{ $t('auth.login') }}
+        .pure-button.pure-button-success.pull-right(v-if="isRegistered" @click="reloadCourse") Start Demo
+        .login-button.pure-button-primary.pure-button-primary(v-else @click="showAuth") {{ $t('auth.login') }}
+        //- .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
@@ -122,9 +122,8 @@ export default {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
     },
-    resetTime() {
-      const now = Moment().format();
-      this.$store.commit('setFauxTime', now);
+    reloadCourse() {
+      this.$store.dispatch('getCourse');
     },
     viewCurrentClass() {
       if (!this.course) { return; }

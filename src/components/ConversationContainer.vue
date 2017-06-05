@@ -257,7 +257,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '../assets/stylus/shared'
 
 .conversation-container
   background-color #f2f2f2
