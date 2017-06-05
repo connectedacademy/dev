@@ -80,6 +80,6 @@ Nice to have
 + Scroll out of section
   + Click/touch events for scrollbar based navigation
 + Section navigation
++ Restart and sync autoscroll if video is playing
 - Dynamically fake time-based release
-- Restart and sync autoscroll if video is playing
 - Hide video when jumping between sections

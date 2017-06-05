@@ -4,9 +4,8 @@
 
     router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
 
-    //-
-      #debug-button(@click="toggleDebugMode")
-        icon(name="wrench")
+    #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
+      icon(name="wrench")
 
     profile-icon(v-if="isRegistered")
 
@@ -43,6 +42,9 @@ export default {
     },
     navTitle() {
       return (this.$store.getters.currentClass && this.$store.getters.currentClass.title && this.navigation.minimized) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
+    },
+    showDebugToggle() {
+      return this.$route.query.debug;
     },
   },
   methods: {

@@ -5,7 +5,7 @@
 
 #app
 
-  //- debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+  debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
   authentication-flow
 

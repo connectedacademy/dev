@@ -41,8 +41,10 @@ export default {
     videoPlaying(nv, oV) {
       if (this.player && this.src) {
         if (nv) {
-           this.player.playVideo();
+          console.log('playVideo');
+          this.player.playVideo();
         } else {
+          console.log('pauseVideo');
           this.player.pauseVideo();
         }
       }
