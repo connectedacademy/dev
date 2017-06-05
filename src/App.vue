@@ -72,7 +72,9 @@ export default {
     this.$store.dispatch('checkAuth').then(function() {
       // Check if user has registered
       if (self.isAuthenticated && !self.isRegistered) {
-        this.$router.push('/registration');
+        self.$router.push('/registration');
+      } else {
+        self.$ga.set('userId', self.$store.state.auth.user.account);
       }
     });
 

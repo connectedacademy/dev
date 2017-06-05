@@ -17,6 +17,7 @@ const getters = {
     const isRegistered = (initialState.user);
     return (isRegistered) ? initialState.user.registration : false;
   },
+  user: (initialState) => initialState.user,
 };
 
 // actions

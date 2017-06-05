@@ -40,7 +40,10 @@ Vue.use(VueCookie);
 
 Vue.use(VueAnalytics, {
   id: 'UA-44963053-16',
-  router
+  router,
+  autoTracking: {
+    exception: true,
+  },
 });
 
 Vue.use(VueYouTubeEmbed);

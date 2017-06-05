@@ -5,7 +5,6 @@ import * as types from '@/store/mutation-types';
 // Faux time
 
 export const setFauxTime = (state, fauxTime) => {
-  console.log(`XXSetting faux time to - ${fauxTime}`);
   state.fauxTime = fauxTime;
 };
 

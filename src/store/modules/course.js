@@ -86,15 +86,15 @@ const mutations = {
   [types.GET_SCHEDULE_SUCCESS](initialState, {
     response,
   }) {
-    // Get start of first class
-    const classStart = response.classes[0].release_at;
-    console.log('response.classes[0]');
-    console.log(response.classes[0]);
+    if (response.classes && (response.classes.length > 0) && response.classes[0].release_at) {
+      // Get start of first class
+      const classStart = response.classes[0].release_at;
 
-    if (classStart) {
-      // Set faux time
-      const fauxTime = Moment(classStart).add(1, 'minute').format();
-      store.commit('setFauxTime', fauxTime);
+      if (classStart) {
+        // Set faux time
+        const fauxTime = Moment(classStart).add(1, 'minute').format();
+        store.commit('setFauxTime', fauxTime);
+      }
     }
 
     state.course = response;
