@@ -30,7 +30,13 @@ export default {
   },
   methods: {
     jumpToContent() {
-      window.scroll(0, this.scrollPoint.sectionTop + 1);
+      const segmentPosition = this.scrollPoint.sectionTop + 1;
+
+      this.$store.commit('setScrollPosition', segmentPosition);
+
+      this.$nextTick(function() {
+        window.scroll(0, segmentPosition);
+      });
     }
   },
 };
