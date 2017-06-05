@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 
@@ -25,7 +26,7 @@ const actions = {
   checkAuth({
     commit,
   }) {
-    console.log('Checking auth...');
+    Vue.log.log('Checking auth...');
     API.auth.checkAuth(
       response => commit(types.CHECK_AUTH_SUCCESS, {
         response,
@@ -56,7 +57,7 @@ const mutations = {
   [types.CHECK_AUTH_SUCCESS](initialState, {
     response,
   }) {
-    console.log('Auth success');
+    Vue.log.log('Auth success');
     state.isAuthenticated = true;
     // Save user in session
     state.user = response.user;
@@ -64,7 +65,7 @@ const mutations = {
   [types.CHECK_AUTH_FAILURE](initialState, {
     response,
   }) {
-    console.log('Auth failure');
+    Vue.log.log('Auth failure');
     state.isAuthenticated = false;
     // error in response
   },

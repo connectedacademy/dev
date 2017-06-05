@@ -75,7 +75,7 @@ export default {
       handler: function(nV, oV) {
         var self = this;
         setTimeout(function() {
-          console.log('UPDATING');
+          this.$log.log('UPDATING');
           self.updateChunkedMessages(self.currentSegmentGroup);
         }, 500);
       },
@@ -166,8 +166,6 @@ export default {
     },
     updateChunkedMessages(currentSegment) {
 
-      console.log('Updating chunked messages...');
-
       let segmentViewport = _.floor(window.innerHeight / 158.0);
 
       currentSegment += 1; // Think ahead
@@ -176,7 +174,7 @@ export default {
       let startSegment = currentSegment - segmentViewport;
       startSegment = (startSegment < 5) ? 0 : startSegment;
 
-      // this.$log.log(`** Updating chunked - ${startSegment} - ${currentSegment}`);
+      this.$log.log(`** Updating chunked - ${startSegment} - ${currentSegment}`);
 
       let result = _.compact(this.messages.slice(startSegment, currentSegment));
 

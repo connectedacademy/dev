@@ -55,14 +55,14 @@ export default {
         cancel = c;
       })
     }).then(function (response) {
-      console.log(response);
+      Vue.log.log(response);
       cb(response.data);
     }).catch(function(thrown) {
       if (axios.isCancel(thrown)) {
-        console.log('Request canceled', thrown.message);
+        Vue.log.log('Request canceled', thrown.message);
       } else {
         // handle error
-        console.log('There was an error fetching request');
+        Vue.log.log('There was an error fetching request');
       }
     });
   },

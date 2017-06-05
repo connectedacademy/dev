@@ -68,7 +68,7 @@ export default {
       if (this.activeSegmentVisible && (this.activeSegment.segmentGroup === this.message.segmentGroup)) {
 
         setTimeout(function() {
-          console.log('Interval called');
+          self.$log.log('Interval called');
           if (self.activeSegment) {
             self.activeSegmentStyles = {
               'overflow-y': 'auto',
@@ -144,7 +144,7 @@ export default {
     },
     loadSegmentMessages() {
 
-      console.log('Loading segment messages');
+      this.$log.log('Loading segment messages');
 
       let theContent = '';
 
@@ -164,7 +164,7 @@ export default {
       API.message.getMessages(
         request,
         response => {
-          console.log(response.data);
+          this.$log.log(response.data);
           this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['desc']);
         },
         response => {
@@ -176,7 +176,7 @@ export default {
       // API.message.subscribe(
       //   request,
       //   response => {
-      //     console.log(response.data);
+      //     this.$log.log(response.data);
       //     this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['asc']);
       //   },
       //   response => {

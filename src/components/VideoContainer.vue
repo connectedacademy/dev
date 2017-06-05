@@ -41,10 +41,10 @@ export default {
     videoPlaying(nv, oV) {
       if (this.player && this.src) {
         if (nv) {
-          console.log('playVideo');
+          this.$log.log('playVideo');
           this.player.playVideo();
         } else {
-          console.log('pauseVideo');
+          this.$log.log('pauseVideo');
           this.player.pauseVideo();
         }
       }

@@ -88,7 +88,7 @@ export default {
     },
     renderMarkdown() {
 
-      console.log('Rendering markdown');
+      this.$log.log('Rendering markdown');
 
       // Render markdown
       var res = Vue.compile(this.rawMarkdown);
@@ -104,8 +104,8 @@ export default {
 
           API.feedback.getFeedbackItems(request,
             (response) =>{
-              console.log('Submission check response');
-              console.log(response);
+              this.$log.log('Submission check response');
+              this.$log.log(response);
               this.checkingSubmissions = false;
               this.submitted = (response.data.length === 0) ? false : true;
             },

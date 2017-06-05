@@ -213,13 +213,13 @@ export default {
       }
     },
     onMousedown() {
-      console.log('MOUSEDOWN');
+      this.$log.log('MOUSEDOWN');
       // this.$store.commit(types.PAUSE_VIDEO);
       this.preventScroll = true;
       this.isAutoScrolling = false;
     },
     onMouseup() {
-      console.log('MOUSEUP');
+      this.$log.log('MOUSEUP');
       // this.$store.commit(types.PLAY_VIDEO);
       this.preventScroll = false;
       this.isAutoScrolling = false;

@@ -24,7 +24,7 @@ export default new Router({
       redirect: '/registration',
     },
     {
-      name: 'course',
+      name: 'course-redirect',
       path: '/course/:classSlug/:contentSlug/:segmentId',
       redirect: (to) => {
         const { hash, params, query } = to;

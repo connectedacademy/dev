@@ -36,8 +36,8 @@ export default {
   },
   methods: {
     jumpForwardInTime() {
-      console.log('this.content');
-      console.log(this.content);
+      this.$log.log('this.content');
+      this.$log.log(this.content);
       let jumpTime = Moment(this.content.release_at);
       jumpTime = jumpTime.add(1, 'minutes').format();
       this.$store.commit('setFauxTime', jumpTime);

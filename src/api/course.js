@@ -3,7 +3,6 @@ import * as config from './config';
 
 export default {
   getSchedule(fauxTime, cb, errorCb) {
-    console.log(`getSchedule - ${fauxTime}`);
     Vue.http.get(`${config.WATERCOOLER_API}/course/schedule?time=${fauxTime}`).then((response) => {
       cb(response.body);
     }, (response) => {
@@ -11,7 +10,6 @@ export default {
     });
   },
   getSpec(fauxTime, classSlug, cb, errorCb) {
-    console.log(`getSpec - ${fauxTime}`);
     Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${fauxTime}`).then((response) => {
       cb(response.body);
     }, (response) => {
