@@ -9,6 +9,8 @@ import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
 import VueAnalytics from 'vue-analytics'
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
 
 import VueScroll from 'vue-scroll';
 import VueAutosize from 'vue-autosize';
@@ -45,6 +47,8 @@ Vue.use(VueAnalytics, {
     exception: true,
   },
 });
+
+Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
 
 Vue.use(VueYouTubeEmbed);
 Vue.use(VueScroll);

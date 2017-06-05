@@ -23,6 +23,12 @@
         h1.drawer-list-item--header {{ theClass.title }}
         h2.drawer-list-item--body {{ theClass.description }}
 
+    .drawer-footer
+      a.credits(href="https://openlab.ncl.ac.uk/" target="_blank")
+        | Built with
+        icon.icon-margin(name="coffee")
+        | at Open Lab
+
 </template>
 
 <script>
@@ -132,5 +138,22 @@ ul.drawer-list
     &:hover
       cursor pointer
       background-color alpha(white, 0.025)
+
+/* Footer */
+.drawer-footer
+  pinned()
+  padding 10px
+  top auto
+  background-color darken($color-darkest-purple, 10%)
+  position absolute
+  z-index 1
+  text-align center
+  a.credits
+    reset()
+    color alpha(white, 0.2)
+    text-decoration none
+    &:hover
+      animate()
+      color alpha(white, 0.5)
 
 </style>

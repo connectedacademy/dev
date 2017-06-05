@@ -31,16 +31,12 @@ export default {
     color $color-text-dark-grey
   ul.submission-grid
     cleanlist()
-    background-color $color-light-grey
-    border $color-grey 1px solid
-    margin-top 15px
-    padding 5px
+    margin -10px
     li.submission-grid--tile
       cleanlist()
       float left
-      padding 5px
+      margin 10px
       img
-        radius(6px)
         background-color white
         display block
         height 80px
