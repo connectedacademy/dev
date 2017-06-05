@@ -47,18 +47,8 @@ export default {
       this.activeClass = this.currentClass.slug;
       return;
     }
-    API.auth.checkAuth(
-      response => {
-        if (response.user) {
-          this.viewCurrentClass();
-        } else {
-          this.viewIntroClass();
-        }
-      },
-      response => {
-        this.viewIntroClass();
-      },
-    );
+    this.viewIntroClass();
+
   },
   watch: {
     currentClass(nV, oV) {
