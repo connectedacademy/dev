@@ -64,7 +64,7 @@ export default {
 
 <style lang="stylus">
 
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .message
   max-height 98px
@@ -83,8 +83,7 @@ export default {
     left 0
 
   p.message-content
-    nomargin()
-    nopadding()
+    reset()
     color $color-text-dark-grey
     a, a:active
       color $color-text-dark-grey

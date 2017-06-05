@@ -21,10 +21,7 @@
     navigation
     router-view(transition transition-mode="out-in")
 
-  #action-panel.animated.slideInUp(v-bind:class="{ hidden: !videoIsActive, 'segment-view': activeSegmentVisible }")
-    playhead
-    video-container
-    message-composer
+  action-panel(v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
 
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
 
@@ -51,10 +48,7 @@ import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
 import DebugPanel from './components/DebugPanel';
-import MessageComposer from './components/MessageComposer';
-import VideoContainer from './components/VideoContainer';
-import Playhead from './components/Playhead';
-import Message from './components/conversation/Message';
+import ActionPanel from './components/conversation/ActionPanel';
 
 export default {
   name: 'app',
@@ -75,7 +69,12 @@ export default {
   },
   created() {
 
-    this.$store.dispatch('checkAuth');
+    this.$store.dispatch('checkAuth').then(function() {
+      // Check if user has registered
+      if (this.isAuthenticated && !this.isRegistered) {
+        this.$router.push('/registration');
+      }
+    });
 
     // Fetch course and then hubs// Set faux time
     const fauxTime = Moment().format();
@@ -112,10 +111,7 @@ export default {
     BurgerMenu,
     LeftDrawer,
     RightDrawer,
-    MessageComposer,
-    VideoContainer,
-    Playhead,
-    Message,
+    ActionPanel,
   },
   methods: {
     updateDocumentHeight() {
@@ -133,41 +129,67 @@ export default {
 
 <style lang="stylus">
 
-@import './assets/stylus/shared'
-@import './assets/stylus/layout/page'
+@import '~stylus/shared'
 
-#action-panel
-  animate()
-  background-color white
-  position fixed
+html, body
+  background-color $color-main-page
+  margin 0
+  padding 0
+
+body.disable-scroll
+  overflow hidden
+  min-height 100%
+  max-height 100vh
+  padding-bottom 1px
+  top 0
+  left 0
+  right 0
   bottom 0
-  left 50%
-  margin-left -400px
-  height 140px
-  width 800px
-  z-index 50
 
-  @media(max-width: 800px)
-    left 0
-    margin-left 0
-    width 100%
+#app
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
 
-  &.segment-view
-    bottom 20px
-    border-bottom-left-radius 6px
-    border-bottom-right-radius 6px
-    margin-left -370px
-    width 740px
-    z-index 52
-    .video-wrapper
-      margin-left -370px
+.main-page
+  padding-top 60px
+
+  .col
+    box-sizing border-box
+    padding 0
+    top 60px
+
+    .container
+      padding 20px
+      h1
+        reset()
+        color $color-text-dark-grey
+        margin-bottom 5px
+
+  .col#col-main
+    radius(4px)
+    margin 0 auto 200px auto
+    max-width 780px
     @media(max-width: 800px)
-      left 0
-      margin-left 10px
-      width calc(100% - 20px)
+      max-width 100%
+      margin 0 10px
+
+/* App states */
+
+#app.authenticating
+  .main-page
+    .col
+      top 0
+
+#content-overlay
+  pinned()
+  background-color alpha(black, 0)
+  pointer-events none
+  position fixed
+  transition background-color 0.6s
+  z-index 50
+  &.visible
+    background-color alpha(black, 0.85)
+    pointer-events all
 
 </style>
-
-
-<!-- liveclass - release_at:"2017-04-05T10:57:37+01:00" -->
-<!-- liveclass - release_at:"2017-04-05T10:57:37+01:00" -->

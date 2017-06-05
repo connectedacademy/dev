@@ -66,7 +66,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 .class-selector-wrapper
   radius(4px)
@@ -126,14 +126,12 @@ export default {
         &:first-child
           margin-left 0
         h1.class-selector--item--header
-          nomargin()
-          nopadding()
+          reset()
           color $color-text-dark-grey
           font-size 1em
           line-height 25px
         h2.class-selector--item--body
-          nomargin()
-          nopadding()
+          reset()
           color $color-text-grey
           font-size 0.95em
           font-weight normal

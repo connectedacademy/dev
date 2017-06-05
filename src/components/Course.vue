@@ -2,8 +2,6 @@
 
   .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
-    //- .scroll-indicator(v-bind:style="scrollIndicatorStyle" v-if="this.offsetScrollPosition > 0")
-
     .main-container
 
       class-selector
@@ -32,12 +30,6 @@ export default {
     // Reset state
     this.$store.dispatch('resetState');
     next();
-  },
-  created() {
-    // Check if user has registered
-    if (this.isAuthenticated && !this.isRegistered) {
-      this.$router.push('/registration');
-    }
   },
   mounted() {
     this.$store.dispatch('checkAuth');
@@ -87,31 +79,10 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'course', 'currentClass', 'offsetScrollPosition', 'courseContent',
+      'currentClass', 'courseContent',
     ]),
-    scrollIndicatorStyle() {
-      return {
-        top: `${this.offsetScrollPosition}px`,
-      };
-    },
   },
 };
 </script>
 
-<style lang="stylus" scoped>
-
-@import '../assets/stylus/shared'
-@import "../assets/stylus/layout/course-content"
-
-.scroll-indicator
-  animate()
-  radius(50%)
-  background-color $color-primary
-  left 50%
-  margin-left 380px
-  position absolute
-  height 10px
-  z-index 100
-  width 10px
-
-</style>
+<style lang="stylus" scoped></style>

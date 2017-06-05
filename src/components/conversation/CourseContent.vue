@@ -14,7 +14,7 @@
 
       .course-content--footer
         .pure-button.pure-button-success.pull-right(v-if="isRegistered" @click="reloadCourse") Start Demo
-        .login-button.pure-button-primary.pure-button-primary(v-else @click="showAuth") {{ $t('auth.login') }}
+        .login-button.pure-button.pure-button-primary.pull-right(v-else @click="showAuth") {{ $t('auth.login') }}
         //- .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
         .clearfix
 
@@ -140,6 +140,6 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/layout/course-content"
+@import '~stylus/layout/course-content'
 
 </style>

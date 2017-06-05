@@ -44,7 +44,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/shared";
+@import '~stylus/shared'
 
 li.navigation-item
   cleanlist()

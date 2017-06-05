@@ -230,16 +230,14 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/layout/page'
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .col#col-main
   .registration-container
     .registration-container--header
       text-align center
       h1, h2
-        nomargin()
-        nopadding()
+        reset()
         color white
         padding 20px 0px 20px 0px
 
@@ -296,16 +294,14 @@ ul.hub-selector
 
     h1.hub-title
       animate()
-      nomargin()
-      nopadding()
+      reset()
       color $color-text-dark-grey
       font-size 1.2em
       line-height 30px
       padding 15px 0
     h2.hub-timezone
       animate()
-      nomargin()
-      nopadding()
+      reset()
       color $color-text-light-grey
       font-size 1em
       line-height 20px

@@ -216,7 +216,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .suggestion
   padding 20px
@@ -312,7 +312,7 @@ export default {
       right 0
       text-align center
       h1
-        nomargin()
+        reset()
         color white
         font-size 20px
         line-height 80px
@@ -338,8 +338,7 @@ export default {
   min-width 30px
   z-index 53
   p
-    nomargin()
-    nopadding()
+    reset()
     color white
     line-height 30px
     padding 0 10px

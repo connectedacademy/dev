@@ -36,7 +36,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .feedback-tile
   cleanlist()
@@ -89,7 +89,7 @@ export default {
       left 5px
 
     h5.user-profile-name
-      nomargin()
+      reset()
       height 32px
       line-height 32px
       padding 0 10px

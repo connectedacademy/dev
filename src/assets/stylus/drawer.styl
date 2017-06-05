@@ -1,0 +1,23 @@
+.drawer
+  background-color $color-darkest-purple
+  max-width 320px
+  overflow-y auto
+  overflow-x none
+  padding-bottom 60px
+  position fixed
+  top 0
+  bottom 0
+  width calc(100% - 60px)
+  z-index 51
+
+  &.drawer-right
+    right -320px
+    transition right 0.4s
+    &.visible
+      right 0px
+
+  &.drawer-left
+    left -320px
+    transition left 0.4s
+    &.visible
+      left 0px

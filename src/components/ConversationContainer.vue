@@ -257,7 +257,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 .conversation-container
   background-color #f2f2f2
@@ -278,8 +278,7 @@ export default {
     .fa-icon
       height 40px
   h5
-    nomargin()
-    nopadding()
+    reset()
     color #444
     height 60px
     line-height 60px

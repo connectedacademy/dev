@@ -38,9 +38,4 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-
-@import '../../assets/stylus/shared';
-@import '../../assets/stylus/layout/page';
-
-</style>
+<style lang="stylus" scoped></style>

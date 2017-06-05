@@ -143,7 +143,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../assets/stylus/shared";
+@import '~stylus/shared'
 
 .message-composer-wrapper
 
@@ -179,8 +179,7 @@ export default {
         position absolute
         text-align center
         h2
-          nomargin()
-          nopadding()
+          reset()
           line-height 45px !important
 
       .textarea-wrapper
@@ -226,7 +225,7 @@ export default {
       @media(max-width: 800px)
         padding 10px
       p.info-label
-        nopadding()
+        reset()
         radius(5px)
         display inline-block
         background-color $color-success

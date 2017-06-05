@@ -34,7 +34,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 .info-dialogue
   background-color $color-light-grey
@@ -68,7 +68,6 @@ export default {
       .fa-icon
         opacity 1
   p
-    nomargin()
-    nopadding()
+    reset()
 
 </style>

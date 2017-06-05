@@ -34,7 +34,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 .playhead-bobble
   radius(50%)

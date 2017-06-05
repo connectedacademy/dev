@@ -42,15 +42,15 @@ export default {
       jumpTime = jumpTime.add(1, 'minutes').format();
       this.$store.commit('setFauxTime', jumpTime);
       // this.$store.dispatch('getCourse');
-      // this.$store.dispatch('getSpec', this.currentClass.slug);
+      this.$store.dispatch('getSpec', this.currentClass.slug);
     },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-@import "../../assets/stylus/shared/common"
-@import "../../assets/stylus/layout/course-content"
+@import '~stylus/shared'
+@import '~stylus/layout/course-content'
 
 .course-content
   background-color transparent !important
@@ -68,7 +68,7 @@ export default {
     padding 20px 40px !important
     text-align center
     h1, h2, h5
-      nomargin()
+      reset()
       color white
       padding 5px
     h5

@@ -37,7 +37,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/shared";
+@import '~stylus/shared'
 
 rotate_transform(args)
   -ms-transform args

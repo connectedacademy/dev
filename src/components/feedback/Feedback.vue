@@ -124,17 +124,15 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .feedback-section
   margin-bottom 30px
   h1.feedback-section-title
-    nomargin()
-    nopadding()
+    reset()
     padding 0 10px
   h5.feedback-section-subtitle
-    nomargin()
-    nopadding()
+    reset()
     color $color-text-grey
     padding 0 10px
     margin-bottom 10px

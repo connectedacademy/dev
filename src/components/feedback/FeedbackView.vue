@@ -158,17 +158,15 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .feedback-section
   margin-bottom 30px
   h1.feedback-section-title
-    nomargin()
-    nopadding()
+    reset()
     padding 0 10px
   h5.feedback-section-subtitle
-    nomargin()
-    nopadding()
+    reset()
     color $color-text-grey
     padding 0 10px
     margin-bottom 10px
@@ -190,7 +188,7 @@ export default {
         left 5px
 
       h5.user-profile-name
-        nomargin()
+        reset()
         height 60px
         line-height 60px
         padding 0 10px
@@ -207,14 +205,12 @@ export default {
       background-color $color-primary
       padding 6px 12px
       p
-        nomargin()
-        nopadding()
+        reset()
         color white
     .feedback-message--author
       text-align right
       p
-        nomargin()
-        nopadding()
+        reset()
         padding 4px 0
         color $color-text-grey
         font-size 0.7em

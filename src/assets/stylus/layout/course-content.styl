@@ -1,4 +1,4 @@
-@require "../shared"
+@import '~stylus/shared'
 
 .course-content-wrapper
   margin-bottom 10px
@@ -23,17 +23,14 @@
         &.active
           background-color $color-success
       h1.content-title
-        nomargin()
-        nopadding()
+        reset()
         color $color-text-dark-grey
         font-size 1.3em
       h5.content-subheader
-        nomargin()
-        nopadding()
+        reset()
         color $color-text-dark-grey
       p.content-description
-        nomargin()
-        nopadding()
+        reset()
         color $color-text-grey
         font-size 1em
       a

@@ -38,6 +38,8 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '~stylus/shared'
+
 .profile-icon
   position absolute
   top 0
@@ -45,11 +47,9 @@ export default {
   padding 10px
   transition right 0.6s
   .profile-image
+    radius(50%)
+    background-image()
     background-color white
-    background-size cover
-    background-repeat no-repeat
-    background-position center
-    border-radius 50%
     height 40px
     width 40px
 

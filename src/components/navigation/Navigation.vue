@@ -60,7 +60,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/shared";
+@import '~stylus/shared'
 
 #debug-button
   radius(50%)
@@ -72,8 +72,7 @@ export default {
   left 10px
   z-index 100
   .fa-icon
-    nomargin()
-    nopadding()
+    reset()
     color white
     height 20px
     width 20px

@@ -18,7 +18,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 .previous-button
   background-color $color-light-grey

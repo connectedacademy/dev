@@ -61,7 +61,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 .debug-panel
   background-color alpha(red, 0.8)

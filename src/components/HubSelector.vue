@@ -23,7 +23,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared'
+@import '~stylus/shared'
 
 ul.hub-selector
   cleanlist()
@@ -41,13 +41,11 @@ ul.hub-selector
       background-color red
       width calc((100% / 2) - 60px)
     h1.hub-name
-      nomargin()
-      nopadding()
+      reset()
       color white
       font-size 1.3em
     h2.hub-timezone
-      nomargin()
-      nopadding()
+      reset()
       color white
       font-size 1.1em
 

@@ -88,8 +88,8 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared'
-@import '../../assets/stylus/layout/course-content'
+@import '~stylus/shared'
+@import '~stylus/layout/course-content'
 
 .course-content
    margin 10px

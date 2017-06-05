@@ -39,15 +39,14 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared'
+@import '~stylus/shared'
 
 .subtitle
   left 0px
   position absolute
   padding 0 10px
   h1
-    nomargin()
-    nopadding()
+    reset()
     color #999
     font-size 1em
     animate()

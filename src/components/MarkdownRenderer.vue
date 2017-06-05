@@ -264,13 +264,11 @@ export default {
 
 <style lang="stylus">
 
-@import '../assets/stylus/shared'
-@import '../assets/stylus/layout/page'
+@import '~stylus/shared'
 
 .rendered-markdown
   h1
-    nomargin()
-    nopadding()
+    reset()
     color $color-text-dark-grey
     margin-bottom 5px
   h1, h2, h3, h4, h5, p, a, li
@@ -288,8 +286,7 @@ export default {
     label
       color white
     p
-      nomargin()
-      nopadding()
+      reset()
       color white
     textarea
       radius(6px)
@@ -307,7 +304,7 @@ export default {
   &.fourcorners-submission-submitted, &.fourcorners-submission-submitting, &.fourcorners-submission-checking
     text-align center
     h2
-      nomargin()
+      reset()
       color white !important
       padding 40px
   &.fourcorners-submission-submitting, &.fourcorners-submission-checking
