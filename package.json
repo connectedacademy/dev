@@ -31,6 +31,7 @@
     "uikit": "^3.0.0-beta.18",
     "validator": "^7.0.0",
     "vue": "^2.2.6",
+    "vue-analytics": "^4.1.2",
     "vue-autosize": "^1.0.0",
     "vue-awesome": "^2.2.3",
     "vue-config": "^1.0.0",

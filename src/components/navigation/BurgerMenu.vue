@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     toggleLeftDrawer() {
+      this.$ga.event('burger-menu', 'click', 'left-drawer-toggled', true);
       this.$store.commit('TOGGLE_LEFT_DRAWER');
     },
   },

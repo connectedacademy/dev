@@ -13,7 +13,7 @@
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       .course-content--footer
-        .pure-button.pure-button-success.pull-right(v-if="isRegistered" @click="reloadCourse") Start Demo
+        .pure-button.pure-button-success.pull-right(v-if="isRegistered" @click="startDemo") Start Demo
         .login-button.pure-button.pure-button-primary.pull-right(v-else @click="showAuth") {{ $t('auth.login') }}
         //- .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
         .clearfix
@@ -122,7 +122,8 @@ export default {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
     },
-    reloadCourse() {
+    startDemo() {
+      this.$ga.event('demo-button', 'click', 'started-demo', true);
       this.$store.dispatch('getCourse');
     },
     viewCurrentClass() {

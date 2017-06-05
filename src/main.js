@@ -8,6 +8,7 @@ import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
+import VueAnalytics from 'vue-analytics'
 
 import VueScroll from 'vue-scroll';
 import VueAutosize from 'vue-autosize';
@@ -36,8 +37,13 @@ Vue.use(Vuex);
 Vue.use(VueConfig, Vue.config);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(VueCookie);
-Vue.use(VueYouTubeEmbed);
 
+Vue.use(VueAnalytics, {
+  id: 'UA-44963053-16',
+  router
+});
+
+Vue.use(VueYouTubeEmbed);
 Vue.use(VueScroll);
 Vue.use(VueAutosize);
 

@@ -27,8 +27,10 @@ export default {
   methods: {
     showProfile() {
       if (!this.isRegistered) {
+        this.$ga.event('login-button', 'click', 'login-button-clicked', true);
         this.$store.commit(types.SHOW_AUTH);
       } else {
+        this.$ga.event('profile-button', 'click', 'profile-viewed', true);
         this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
       }
     },

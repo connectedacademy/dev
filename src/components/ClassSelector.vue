@@ -80,6 +80,7 @@ export default {
       }
     },
     viewIntroClass() {
+      this.$ga.event('class-selector', 'click', 'class-switched', 'class-intro');
       this.$store.dispatch('resetState');
       this.$store.commit(types.SET_CURRENT_CLASS, this.introClass);
     },
@@ -97,6 +98,8 @@ export default {
       }
     },
     setCurrentClass(newClass) {
+      this.$ga.event('class-selector', 'click', 'class-switched', newClass);
+
       let self = this;
       this.$store.dispatch('resetState').then(function() {
         if (newClass === undefined) {

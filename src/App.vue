@@ -68,10 +68,10 @@ export default {
     },
   },
   created() {
-
+    var self = this;
     this.$store.dispatch('checkAuth').then(function() {
       // Check if user has registered
-      if (this.isAuthenticated && !this.isRegistered) {
+      if (self.isAuthenticated && !self.isRegistered) {
         this.$router.push('/registration');
       }
     });
