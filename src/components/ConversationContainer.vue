@@ -264,7 +264,6 @@ export default {
   padding 0
 
   .spacer
-    background-color white
     position relative
     .floating-text
       height 100px
