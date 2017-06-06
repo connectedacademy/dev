@@ -72,6 +72,7 @@ export default {
             self.activeSegmentStyles = {
               'overflow-y': 'auto',
               position: 'fixed',
+              transition: 'none',
               top: '80px',
               left: 'calc(50% - 370px)',
               right: 'calc(50% - 370px)',
@@ -119,23 +120,20 @@ export default {
 
         this.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
 
-        this.setTransition();
-      }
-    },
-    setTransition() {
-      const offsetHeight = window.innerHeight;
-      const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
-      const offsetWidth = document.getElementById('col-main').offsetWidth;
-      const offsetPadding = 20.0;
-      const offsetTop = 80.0;
-      const offsetBottom = 160.0;
+        const offsetHeight = window.innerHeight;
+        const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
+        const offsetWidth = document.getElementById('col-main').offsetWidth;
+        const offsetPadding = 20.0;
+        const offsetTop = 80.0;
+        const offsetBottom = 160.0;
 
-      this.activeSegmentStyles = {
-        top: `${topPosition + offsetTop}px`,
-        left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
-        right: `${offsetPadding}px`,
-        height: `${(offsetHeight - offsetTop - offsetBottom)}px`,
-      };
+        this.activeSegmentStyles = {
+          top: `${topPosition + offsetTop}px`,
+          left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
+          right: `${offsetPadding}px`,
+          height: `${(offsetHeight - offsetTop - offsetBottom)}px`,
+        };
+      }
     },
     loadSegmentMessages() {
 
