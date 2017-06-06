@@ -155,7 +155,7 @@ export default {
         // Wheeling stopped - fire events
         self.scrollPosition = window.scrollY;
 
-        if (self.currentSectionScrollPosition > 300) {
+        // if (self.currentSectionScrollPosition > 300) {
 
           self.$store.dispatch('setScrollPosition', self.scrollPosition).then(function() {
 
@@ -165,23 +165,23 @@ export default {
             self.$store.commit(types.PLAY_VIDEO);
           });
 
-        } else {
-
-          // Jump to 0
-          self.$store.commit(types.PAUSE_VIDEO);
-          const yPos = (self.scrollPosition - self.currentSectionScrollPosition) + 1;
-
-          self.$store.dispatch('setScrollPosition', yPos).then(function() {
-
-            window.scroll(0, yPos);
-
-            self.wheeling = undefined;
-            self.preventScroll = false;
-
-            self.$store.commit(types.PLAY_VIDEO);
-          });
-
-        }
+        // } else {
+        //
+        //   // Jump to 0
+        //   self.$store.commit(types.PAUSE_VIDEO);
+        //   const yPos = (self.scrollPosition - self.currentSectionScrollPosition) + 1;
+        //
+        //   self.$store.dispatch('setScrollPosition', yPos).then(function() {
+        //
+        //     window.scroll(0, yPos);
+        //
+        //     self.wheeling = undefined;
+        //     self.preventScroll = false;
+        //
+        //     self.$store.commit(types.PLAY_VIDEO);
+        //   });
+        //
+        // }
 
       }, WHEEL_TIMEOUT);
     },

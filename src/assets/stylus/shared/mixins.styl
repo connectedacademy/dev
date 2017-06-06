@@ -4,6 +4,12 @@ transition()
   -o-transition: arguments;
   transition: arguments;
 
+segment-transition()
+  -webkit-transition: top 1s, left 1s, height 1s ease;
+  -moz-transition: top 1s, left 1s, height 1s ease;
+  -o-transition: top 1s, left 1s, height 1s ease;
+  transition: top 1s, left 1s, height 1s ease;
+
 animate()
   -webkit-transition: all 0.3s linear;
   -moz-transition: all 0.3s linear;

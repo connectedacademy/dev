@@ -68,13 +68,11 @@ export default {
       if (this.activeSegmentVisible && (this.activeSegment.segmentGroup === this.message.segmentGroup)) {
 
         setTimeout(function() {
-          self.$log.log('Interval called');
           if (self.activeSegment) {
             self.activeSegmentStyles = {
               'overflow-y': 'auto',
-              transition: 'none',
               position: 'fixed',
-              top: `${80}px`,
+              top: '80px',
               left: 'calc(50% - 370px)',
               right: 'calc(50% - 370px)',
               height: (self.activeSegmentStyles) ? self.activeSegmentStyles.height : `auto`,
@@ -83,7 +81,7 @@ export default {
             self.loadSegmentQuote();
             self.loadSegmentMessages();
           }
-        }, 600);
+        }, 1000);
       }
     },
   },
@@ -119,28 +117,25 @@ export default {
 
         this.$store.commit(types.PAUSE_VIDEO);
 
-        var self = this;
+        this.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
 
-        setTimeout(function() {
-
-          self.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
-
-          const offsetHeight = window.innerHeight;
-          const topPosition = self.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
-          const offsetWidth = document.getElementById('col-main').offsetWidth;
-          const offsetPadding = 20.0;
-          const offsetTop = 80.0;
-          const offsetBottom = 160.0;
-
-          self.activeSegmentStyles = {
-            top: `${topPosition + offsetTop}px`,
-            left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
-            right: `${offsetPadding}px`,
-            height: `${(offsetHeight - offsetTop - offsetBottom)}px`,
-          };
-
-        }, 500)
+        this.setTransition();
       }
+    },
+    setTransition() {
+      const offsetHeight = window.innerHeight;
+      const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
+      const offsetWidth = document.getElementById('col-main').offsetWidth;
+      const offsetPadding = 20.0;
+      const offsetTop = 80.0;
+      const offsetBottom = 160.0;
+
+      this.activeSegmentStyles = {
+        top: `${topPosition + offsetTop}px`,
+        left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
+        right: `${offsetPadding}px`,
+        height: `${(offsetHeight - offsetTop - offsetBottom)}px`,
+      };
     },
     loadSegmentMessages() {
 
@@ -214,7 +209,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '~stylus/shared'
 
@@ -222,8 +217,7 @@ export default {
   padding 20px
 
 .time-segment
-  background-color transparent
-  transition-duration 0.1s
+  segment-transition()
   height 158px
   padding-right 25px
   position absolute
@@ -274,10 +268,10 @@ export default {
       opacity 0
 
   &.active
+    segment-transition()
     background-color #f2f2f2
     border-top-left-radius 6px
     border-top-right-radius 6px
-    transition-duration 0.6s
     z-index 51
     padding-right 0
     .explore-segment-button
@@ -348,8 +342,7 @@ export default {
     p
       color $color-primary
 
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
+
 .slide-fade-enter-active
   transition all 1s ease-out
 

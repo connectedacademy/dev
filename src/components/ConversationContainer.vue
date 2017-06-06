@@ -62,7 +62,7 @@ export default {
 
       self.updateChunkedMessages(self.currentSegmentGroup);
 
-    }, 3000);
+    }, 2000);
   },
   watch: {
     'messages': {
@@ -126,7 +126,7 @@ export default {
         const windowHeight = window.innerHeight;
         const childOffset = this.$refs.spacer.parentElement.offsetTop;
 
-        let height = (windowHeight - childOffset);
+        let height = (windowHeight / 2);
 
         this.spacerHeight = (height < 200) ? 200 : height;
       }

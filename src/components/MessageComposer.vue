@@ -7,7 +7,7 @@
 
       .message-composer--body
         .textarea-wrapper(v-if="isRegistered" )
-          textarea(name="name" rows="3" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
+          textarea(name="name" rows="3" v-on:keyup.enter="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
         .login-warning(v-else @click="showAuth")
           h3 Please login to send messages
           .pure-button.pure-button-primary {{ $t('auth.login') }}
@@ -147,7 +147,7 @@ export default {
 
   .message-composer
     background-color white
-    border-top $color-light-grey 1px solid
+    border-left $color-light-grey 1px solid
     box-sizing border-box
 
     position absolute
@@ -155,7 +155,7 @@ export default {
     right 0
 
     height 140px
-    left calc(140px / 0.5625)
+    left calc(140px / 0.5625 + 1px)
     animate()
 
     @media(max-width: 800px)
@@ -212,7 +212,6 @@ export default {
             width calc(100% - 20px)
 
     .message-composer--footer
-      border-top $color-light-grey 1px solid
       height 38px
       padding 5px
       position absolute

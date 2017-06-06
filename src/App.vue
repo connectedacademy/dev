@@ -169,7 +169,7 @@ body.disable-scroll
 
   .col#col-main
     radius(4px)
-    margin 0 auto 200px auto
+    margin 0 auto 60px auto
     max-width 780px
     @media(max-width: 800px)
       max-width 100%

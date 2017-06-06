@@ -1,7 +1,6 @@
 <template lang="pug">
 
-  .subtitle(v-bind:style="subtitleStyle" v-bind:class="{ active: active }" )
-    p.subtitle-meta.hidden {{ start }} {{ end }}
+  .subtitle(v-bind:style="subtitleStyle")
     h1(v-html="subtitle.text")
 
 </template>
@@ -12,12 +11,11 @@ import _ from 'lodash';
 
 export default {
   name: 'subtitle',
-  props: ['subtitle'],
+  props: ['subtitle', 'currentSegmentGroup'],
   computed: {
     subtitleStyle() {
-      const duration = _.floor((this.subtitle.end - this.subtitle.start) * (158.0 * 0.2));
       const topVal = _.floor((this.subtitle.start * (158.0 * 0.2)));
-      return { top: `${topVal}px`, height: `${duration}px` };
+      return { top: `${topVal}px` };
     },
     start() {
       return this.subtitle.start;
@@ -26,7 +24,7 @@ export default {
       return this.subtitle.end;
     },
     active() {
-      return ((this.$store.getters.currentTime > this.start) && (this.$store.getters.currentTime < this.end));
+      return ((this.currentSegmentGroup > this.start) && (this.currentSegmentGroup < this.end));
     },
   },
   methods: {
@@ -47,7 +45,7 @@ export default {
   padding 0 10px
   h1
     reset()
-    color #999
+    color $color-darkest-grey
     font-size 1em
     animate()
   p.subtitle-meta
