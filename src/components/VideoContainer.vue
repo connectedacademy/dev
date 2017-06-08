@@ -129,7 +129,7 @@ export default {
   padding 0
   padding-left 0
   left 50%
-  margin-left -400px
+  margin-left -390px
   position fixed
   z-index 52
   animate()

@@ -9,9 +9,12 @@
 
     //- Efficent
     .activity-visualisation(v-bind:style="activityVisualisationStyles")
-      svg(width="200" v-bind:height="svgHeight")
+      svg(width="400" v-bind:height="svgHeight")
+
         g
-          path(v-bind:d="visualisationPoints")
+          //- line(x1="100" y1="0" x2="100" v-bind:y2="svgHeight")
+          //- path(v-bind:d="visualisationPoints" transform="translate(102,0)")
+          path(v-bind:d="visualisationPoints" transform="translate(100,0) scale(-1, 1)")
 
       //- svg(width="200" v-bind:height="svgHeight")
         g(v-html="visualisationLabels")
@@ -213,11 +216,13 @@ export default {
     messagesContainerStyles() {
       return {
         top: `${this.spacerHeight}px`,
+        height: `${(this.containerHeight + this.spacerHeight)}px`,
       };
     },
     subtitlesContainerStyles() {
       return {
         top: `${this.spacerHeight}px`,
+        height: `${(this.containerHeight + this.spacerHeight)}px`,
       };
     },
     activityVisualisationStyles() {
@@ -258,10 +263,8 @@ export default {
 @import '~stylus/shared'
 
 .conversation-container
-  background-color #f2f2f2
-  overflow hidden
+  background-color white
   position relative
-  padding 0
 
   .spacer
     position relative
@@ -284,11 +287,17 @@ export default {
   .activity-visualisation
     position absolute
     top 0
-    left 0
+    /*left 50%*/
+    margin-left -100px
     z-index 0
     svg
+      overflow visible
+      line
+        stroke alpha($color-primary, 1)
+        stroke-width 4
       path
-        fill #e1e1e1
+        fill alpha($color-primary, 1)
+        /*fill alpha(white, 1)*/
 
   .subtitle-container, .messages-container
     min-height 100px

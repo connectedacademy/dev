@@ -2,9 +2,10 @@
 
   .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), hidden: minimized }")
     transition(name="rotate")
-      ul.stack
-        li.bar
-        li.bar
+      svg(v-bind:class="{cross:(state === 'close')}" viewBox="0 0 800 600")
+        g
+          path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="top")
+          path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="bottom" transform="translate(480, 300) scale(1, -1) translate(-480, -300)")
 
 </template>
 
@@ -40,17 +41,16 @@ export default {
 
 @import '~stylus/shared'
 
-rotate_transform(args)
-  -ms-transform args
-  -webkit-transform args
-  transform args
-
 .burger-menu
-  height 60px
+  animate()
+  background-color $color-primary
+  border-top-right-radius 6px
+  border-bottom-right-radius 6px
+  height 50px
   width 60px
 
   position fixed
-  top 0
+  top 5px
   left 0
   z-index 50
 
@@ -58,22 +58,7 @@ rotate_transform(args)
 
   &:hover
     cursor pointer
-
-  ul.stack
-    list-style none
-    margin 0
-    padding	13px 15px
-    li.bar
-      list-style none
-      margin 10px 0
-      padding 0
-
-      background-color white
-      height 2px
-      position relative
-      top 0
-
-      transition transform 0.6s, top 0.6s
+    background-color darken($color-primary, 5%)
 
   /* Active styles */
   &.active
@@ -82,17 +67,31 @@ rotate_transform(args)
     z-index 52
     @media(min-width: 400px)
       left 260px
-    ul.stack li.bar:first-child
-      top 6px
-      rotate_transform(rotate(45deg))
-    ul.stack li.bar:last-child
-      top -6px
-      rotate_transform(rotate(-45deg))
 
-/* App states */
+easeInOutSine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
+easeOutBack   = cubic-bezier(0.250,-0.250, 0.750, 1.250)
+easing = easeInOutSine
+duration = 0.6s
 
-#app.authenticating
-  .burger-menu
-    display none
+dash-offset-cross = 0px
+cross-length = 800px
 
+svg
+  width 60px
+  height 50px
+  cursor pointer
+  transform translate3d(0,0,0)
+
+path
+  fill none
+  transition stroke-dashoffset duration easing, stroke-dasharray duration easing
+  stroke-width 25px
+  stroke-linecap round
+  stroke white
+  stroke-dashoffset 0px
+  stroke-dasharray 330px cross-length
+
+.cross
+  path
+    stroke-dashoffset -740px
 </style>

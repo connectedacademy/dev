@@ -1,14 +1,14 @@
 <template lang="pug">
 
-  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
+  .course-page
 
-    .main-container
+    .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
-      class-selector
+      .main-container
 
-      transition(name="fade" mode="out-in")
+        class-selector
 
-        course-content(v-if="currentClass" v-bind:course-content="courseContent")
+        course-content(v-bind:course-content="courseContent")
 
 </template>
 
@@ -18,7 +18,9 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
 import * as types from '@/store/mutation-types';
-import ClassSelector from './ClassSelector';
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+import ClassSelector from '@/components/ClassSelector';
 
 import CourseContent from '@/components/conversation/CourseContent';
 
@@ -40,9 +42,11 @@ export default {
     return {
       navTitle: 'Connected Academy - Main',
       infoVisible: false,
+      loaded: false,
     };
   },
   components: {
+    AnimatedLogo,
     ClassSelector,
     CourseContent,
     MarkdownRenderer,
@@ -85,4 +89,8 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+
+@import '~stylus/shared'
+
+</style>

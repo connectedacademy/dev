@@ -2,7 +2,9 @@
 
   .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }" @click="scrollTop")
 
-    router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
+    animated-logo
+
+    router-link.hidden.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
 
     #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
       icon(name="wrench")
@@ -17,6 +19,7 @@
 import {mapGetters} from 'vuex';
 
 import * as types from '@/store/mutation-types';
+import AnimatedLogo from '@/components/AnimatedLogo';
 import ProfileIcon from './ProfileIcon';
 import Auth from '@/mixins/Auth';
 
@@ -26,12 +29,8 @@ export default {
     Auth,
   ],
   components: {
+    AnimatedLogo,
     ProfileIcon,
-  },
-  data() {
-    return {
-      isMinimized: false,
-    };
   },
   computed: {
     ...mapGetters([
@@ -105,18 +104,12 @@ export default {
   width 100%
   &.hidden
     display none
-
-  .navigation-item-brand
+  #logo
     animate()
-    display block
-    color white
-    font-weight bold
-    font-size 1.1em
-    line-height 60px
-    min-height 30px
-    margin 0 auto
-    padding 0 15px
-    text-decoration none
+    opacity 1
+  &.minimized
+    #logo
+      opacity 0
 
   ul.navigation-items
     cleanlist()
@@ -141,19 +134,6 @@ export default {
         &.navigation-item-page
           border-bottom white 2px solid
 
-@media(max-width: 768px)
-  ul.navigation-items
-    text-align center
-    li.navigation-item.navigation-item-brand
-      display none
-
-  &.minimized
-    background-color alpha($navigation-background-color, 90%)
-    /*height 30px*/
-    /*top -60px*/
-    .navigation-item-brand
-      /*font-size 0.9em*/
-      /*line-height 30px*/
 /* App states */
 
 #app.authenticating

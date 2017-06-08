@@ -45,7 +45,8 @@ module.exports = {
       {
         test: /\.styl$/,
         loader: 'style-loader!css-loader!stylus-loader',
-        include: [resolve('src')],
+        include: [resolve('src'),require('nib')()],
+        // import: ['~nib/lib/nib/index.styl'],
       },
       {
         test: /\.js$/,

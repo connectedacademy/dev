@@ -42,10 +42,10 @@ export default {
 .subtitle
   left 0px
   position absolute
-  padding 0 10px
+  padding 0 20px
   h1
     reset()
-    color $color-darkest-grey
+    color $color-darker-grey
     font-size 1em
     animate()
   p.subtitle-meta

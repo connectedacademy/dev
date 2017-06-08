@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .class-selector
-  .class-selector-wrapper(v-show="activeClass")
+  .class-selector-wrapper(v-show="activeClass && course && course.classes")
     transition(name="fade")
       .skip-button.skip-button--left(@click="scrollLeft" v-if="offset > 0")
         icon(name="angle-left")
@@ -22,9 +22,9 @@
 
         .clearfix
 
-    //-
-      .loading-wrapper.hidden(v-if="currentClass && currentClass.loading" v-for="n in 5")
-        .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
+
+    .loading-wrapper(v-for="n in 5")
+      .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
 //-
   .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
     h2 This course has finished
@@ -144,98 +144,113 @@ export default {
 
 @import '~stylus/shared'
 
+$selector-height = 44px
+
 .class-selector-wrapper
   radius(4px)
-  height 44px
+  height $selector-height
   margin 0 0 20px 0
   overflow hidden
   position relative
+  z-index 50
   @media(max-width: 800px)
     margin 0 10px 20px 10px
   .skip-button
-    background-color $color-primary
-    height 44px
-    width 44px
+    background-color white
+    height $selector-height
+    width $selector-height
     position absolute
     top 50%
-    margin-top -22px
+    margin-top -($selector-height / 2)
     bottom 0
     z-index 1
     &:hover
       cursor pointer
     &.skip-button--left
       left 0px
-      border-right darken($color-primary, 10%) 3px solid
+      border-right $color-primary 1px solid
     &.skip-button--right
       right 0px
-      border-left darken($color-primary, 10%) 3px solid
+      border-left $color-primary 1px solid
     .fa-icon
-      color white
+      color $color-primary
       height 100%
       width 10px
       margin 0 15px
   .class-selector-container
-    radius(6px)
+    radius(4px)
     height 140px
     overflow-x scroll
     overflow-y hidden
     ul.class-selector
       cleanlist()
       border-bottom #e1e1e1 1px solid
-      height 44px
+      height $selector-height
       white-space nowrap
       li.class-selector--item
         cleanlist()
+        animate()
         radius(4px)
+        /*animate()*/
         background-color white
         box-sizing border-box
         float left
         overflow hidden
         margin-left 10px
-        padding 10px 15px
+        padding 0 15px
         position relative
         text-align center
-        height 44px
-        width 180px
+        height $selector-height
+        width 185px
         white-space normal
-        animate()
         &:first-child
           margin-left 0
         .status-indicator
           color $color-primary
           position absolute
-          left 5px
+          right 5px
           top 5px
         h1.class-selector--item--header
           reset()
-          color $color-text-dark-grey
+          color $color-primary
           font-size 1em
-          line-height 26px
+          line-height $selector-height
           text-align center
 
         /* Released styles */
         &.released
-          background-color white
+          background-color $color-primary
+          border white 1px solid
+          h1.class-selector--item--header, .status-indicator
+            color white
 
         /* Current styles */
         &.current
-          background-color white
+          background-color $color-primary
+          border white 1px solid
+          h1.class-selector--item--header, .status-indicator
+            color white
 
         /* Future styles */
         &.future
-          opacity 0.8
+          background-color lighten($color-primary, 50%)
           pointer-events none
           .status-indicator
-            color $color-light-grey
+            color $color-primary
+          h1.class-selector--item--header
+            $color-primary
+
 
         &:hover
-          background-color darken(white, 20%)
+          background-color darken($color-primary, 10%)
           cursor pointer
 
         &.active
-          background-color $color-primary
+          background-color white
+          border white 1px solid
+          transition none
           h1.class-selector--item--header, .status-indicator
-            color white
+            color $color-primary
 
 .padded-container
   radius(4px)

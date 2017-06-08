@@ -1,0 +1,40 @@
+// Buttons
+
+.pure-button
+  animate()
+  radius(4px)
+  background none
+  background-color transparent
+  border $color-primary 1px solid
+  color $color-primary
+  &:hover
+    background none
+    background-color $color-primary
+    color white
+
+  &.full-width
+    display block
+    margin-bottom 10px
+
+  &.pure-button-primary
+    background-color $color-primary
+    color white
+    &:hover
+      background-color darken($color-primary, 10%)
+
+  &.pure-button-success
+    background-color $color-success
+    color white
+    &:hover
+      background-color darken($color-success, 10%)
+
+  &.pure-button-subtle
+    background-color transparent
+    border-color $color-grey
+    color $color-text-grey
+    &:hover
+      background-color $color-light-grey
+      color $color-text-dark-grey
+
+  &.pure-button-text
+    border-color transparent

@@ -49,7 +49,7 @@ export default {
 li.navigation-item
   cleanlist()
   radius(20px)
-  background-color $color-primary
+  background-color alpha(black, 0.1)
   width calc(40px - 8px)
   position relative
   margin 4px
@@ -64,8 +64,9 @@ li.navigation-item
     animate()
   .content-label
     radius(20px)
-    background-color alpha(black, 0.5)
-    color white
+    background-color white//alpha(black, 0.5)
+    box-shadow 0 0 10px 5px alpha(black, 0.1)
+    color $color-primary
     font-weight bold
     line-height 32px
     opacity 0
@@ -85,10 +86,10 @@ li.navigation-item
     .content-label
       opacity 1
   &.active
-    background-color $color-success
+    background-color $color-primary
     width auto
     &:hover
-      background-color darken($color-success, 10%)
+      background-color darken($color-primary, 10%)
       .fa-icon
         color white
 </style>

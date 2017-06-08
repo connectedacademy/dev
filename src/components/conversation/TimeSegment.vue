@@ -125,7 +125,7 @@ export default {
         const offsetWidth = document.getElementById('col-main').offsetWidth;
         const offsetPadding = 20.0;
         const offsetTop = 80.0;
-        const offsetBottom = 160.0;
+        const offsetBottom = 140.0;
 
         this.activeSegmentStyles = {
           top: `${topPosition + offsetTop}px`,
@@ -267,7 +267,7 @@ export default {
 
   &.active
     segment-transition()
-    background-color #f2f2f2
+    background-color $color-lightest-grey
     border-top-left-radius 6px
     border-top-right-radius 6px
     z-index 51

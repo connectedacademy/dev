@@ -53,8 +53,7 @@ export default {
 @import '~stylus/layout/course-content'
 
 .course-content
-  background-color transparent !important
-  background-color rgba(255,255,255,0.05) !important
+  background-color $color-warning !important
   /*border white 2px dashed*/
   position relative
 
@@ -79,5 +78,8 @@ export default {
     border white 1px solid
     color white
     margin 10px auto 5px auto
+    &:hover
+      background-color white
+      color $color-warning
 
 </style>

@@ -112,12 +112,12 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { visible: false });
+      document.documentElement.className = 'colourful';
     });
   },
   beforeRouteLeave (to, from, next) {
     // Reset state
-    this.$store.commit(types.SET_NAV_STATE, { visible: true });
+    document.documentElement.className = '';
     next();
   },
   created() {

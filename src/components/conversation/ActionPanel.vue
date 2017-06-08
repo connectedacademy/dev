@@ -30,12 +30,13 @@ export default {
 #action-panel
   animate()
   background-color white
+  border-top $color-border 1px solid
   position fixed
   bottom 0
   left 50%
-  margin-left -400px
+  margin-left -390px
   height 140px
-  width 800px
+  width 780px
   z-index 50
 
   @media(max-width: 800px)
@@ -49,9 +50,6 @@ export default {
       /*right 20px*/
 
   &.segment-view
-    bottom 20px
-    border-bottom-left-radius 6px
-    border-bottom-right-radius 6px
     margin-left -370px
     width 740px
     z-index 52

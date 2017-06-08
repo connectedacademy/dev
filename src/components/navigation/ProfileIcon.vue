@@ -46,14 +46,14 @@ export default {
   position absolute
   top 0
   right 0
-  padding 10px
+  padding 7px
   transition right 0.6s
   .profile-image
     radius(50%)
     background-image()
     background-color white
-    height 40px
-    width 40px
+    height 46px
+    width 46px
 
     &:hover
       cursor pointer

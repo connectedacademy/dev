@@ -1,5 +1,5 @@
 .drawer
-  background-color $color-darkest-purple
+  background-color $color-drawer-background
   max-width 320px
   overflow-y auto
   overflow-x none
@@ -21,3 +21,61 @@
     transition left 0.4s
     &.visible
       left 0px
+
+
+  /* Drawer List */
+  ul.drawer-list
+    list-style none
+    margin 0
+    padding 0
+    li.drawer-list-item
+      background-color alpha(white, 0)
+      opacity 0
+      list-style none
+      margin 0
+      padding 15px 40px 15px 25px
+      position relative
+      transition background-color 0.6s, left 0.6s, opacity 0.6s
+
+      for num in (1..100)
+        &:nth-child({num}n)
+          left (num * -100px)
+
+      h1
+        color white
+        margin 0
+        padding 0
+        font-size 1.6em
+
+      h2
+        color alpha(white, 0.6)
+        margin 0
+        padding 0
+        font-size 1em
+        font-weight normal
+
+      &.visible
+        left 0
+        opacity 1
+
+      &:hover
+        cursor pointer
+        background-color alpha(black, 0.05)
+
+/* Footer */
+.drawer-footer
+  pinned()
+  background-color alpha(white, 0.1)
+  padding 15px
+  position absolute
+  text-align center
+  top auto
+  z-index 1
+  a.link
+    reset()
+    animate()
+    color white
+    text-decoration none
+    &:hover
+      animate()
+      color white

@@ -25,13 +25,8 @@
             strong {{ $t('common.current_hub') }}
           label {{ `${user.registration.hub_id}` }}
 
-        fieldset
-          .pure-button.pure-button-primary.full-width(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
-          router-link.pure-button.pure-button-primary.full-width.hidden(to="/registration" @click="toggleRightDrawer") {{ $t('auth.register') }}
-
-      pre.hidden {{ user }}
-
-
+    .drawer-footer
+      a.link(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
 
 </template>
 

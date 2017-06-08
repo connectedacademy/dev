@@ -24,7 +24,7 @@ export default {
   background-color $color-light-grey
   border-top-right-radius 6px
   border-bottom-right-radius 6px
-  color $color-text-dark-grey
+  color $color-text-grey
   display inline-block
   text-align center
   margin-top 20px

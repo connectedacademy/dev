@@ -17,6 +17,7 @@ const state = {
   rightDrawer: {
     visible: false,
   },
+  pageStyles: '',
 };
 
 // getters
@@ -27,6 +28,9 @@ const getters = {
   navigationVisible() {
     return state.visible;
   },
+  pageStyles() {
+    return state.pageStyles;
+  },
 };
 
 // actions
@@ -35,6 +39,9 @@ const actions = {
 
 // mutations
 const mutations = {
+  [types.SET_PAGE_STYLE](initialState, newState) {
+    state.pageStyles = newState;
+  },
   [types.SET_NAV_STATE](initialState, newState) {
     _.forEach(newState, function(value, key) {
       state[key] = value;

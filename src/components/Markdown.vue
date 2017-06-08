@@ -1,16 +1,22 @@
 <template lang="pug">
 
-  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
+.markdown-page
 
-    previous-button
+  .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
 
-    .container
+    .main-container.background-white
+      previous-button
 
-      markdown-renderer(v-bind:front-matter-visible="frontMatterVisible")
+      .container
+
+        markdown-renderer(v-bind:front-matter-visible="frontMatterVisible")
 
 </template>
 
 <script>
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import PreviousButton from '@/components/PreviousButton';
 
@@ -26,6 +32,7 @@ export default {
     back() { this.$router.go(-1); },
   },
   components: {
+    AnimatedLogo,
     MarkdownRenderer,
     PreviousButton,
   },
@@ -38,4 +45,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
+@import '~stylus/shared'
+
 </style>

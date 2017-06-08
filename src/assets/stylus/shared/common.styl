@@ -18,29 +18,21 @@
 .text-white
   color white
 
-// Buttons
-
-.pure-button
-  &.full-width
-    display block
-    margin-bottom 10px
-
-  &.pure-button-success
-    background-color $color-success
-    color white
-
 // Transitions
-
-.fade-enter-active, .fade-leave-active
-  transition opacity .5s
-
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
-  opacity 0
-
-.fade-enter-to, .fade-leave
-  opacity 1
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
+.fade-enter-to, .fade-leave /* .fade-leave-active in <2.1.8 */ {
+  opacity: 1
+}
 
 // Content block
+
+.main-container
+  radius(4px)
 
 .content-block
   radius(4px)

@@ -59,3 +59,5 @@ export const PLAY_VIDEO = 'PLAY_VIDEO';
 export const PAUSE_VIDEO = 'PAUSE_VIDEO';
 
 export const SET_ACTIVE_SEGMENT = 'SET_ACTIVE_SEGMENT';
+
+export const SET_PAGE_STYLE = 'SET_PAGE_STYLE';

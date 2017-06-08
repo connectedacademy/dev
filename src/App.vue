@@ -17,9 +17,11 @@
 
   right-drawer(v-if="isRegistered")
 
-  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '60px' : '0px' }")
+  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '0' : '0px' }")
     navigation
-    router-view(transition transition-mode="out-in")
+    .page-header
+    transition(name="fade" appear mode="out-in")
+      router-view
 
   action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
 
@@ -64,6 +66,15 @@ export default {
         document.body.className = "disable-scroll";
       } else {
         document.body.className = "allow-scroll";
+      }
+    },
+    videoIsActive(nV, oV) {
+      console.log(nV);
+      if (nV) {
+        // Segment visible, disable scroll on window
+        document.documentElement.className = "dark-mode";
+      } else {
+        document.documentElement.className = "light-mode";
       }
     },
   },
@@ -132,8 +143,15 @@ export default {
 
 @import '~stylus/shared'
 
-html, body
+html
   background-color $color-main-page
+  transition background-color 0.6s
+  &.colourful
+    background-color $color-primary
+  &.dark-mode
+    background-color #242424
+
+html, body
   margin 0
   padding 0
 
@@ -153,12 +171,12 @@ body.disable-scroll
   -moz-osx-font-smoothing grayscale
 
 .main-page
-  padding-top 60px
+  /*padding-top 60px*/
 
   .col
     box-sizing border-box
     padding 0
-    top 60px
+    /*top 60px*/
 
     .container
       padding 20px
@@ -171,6 +189,7 @@ body.disable-scroll
     radius(4px)
     margin 0 auto 60px auto
     max-width 780px
+    padding-top 80px
     @media(max-width: 800px)
       max-width 100%
       margin 0 0px
