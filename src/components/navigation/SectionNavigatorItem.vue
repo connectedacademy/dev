@@ -3,7 +3,6 @@
 li.navigation-item(@click="jumpToContent" v-bind:class="{ active: isActive }")
   icon(v-if="scrollPoint.content_type === 'class'" name="play")
   icon(v-else-if="scrollPoint.content_type === 'webinar'" name="play")
-  icon(v-else-if="scrollPoint.content_type === 'pre'" name="info-circle")
   icon(v-else name="circle")
 
   .content-label {{ scrollPoint.slug }}
@@ -65,18 +64,21 @@ li.navigation-item
   .content-label
     radius(20px)
     background-color white//alpha(black, 0.5)
-    box-shadow 0 0 10px 5px alpha(black, 0.1)
+    box-shadow 0 0 5px 5px alpha(black, 0.05)
     color $color-primary
     font-weight bold
     line-height 32px
     opacity 0
-    padding 0 50px 0 15px
+    padding 0 40px 0 15px
     position absolute
     right 0
     text-transform uppercase
     z-index -1
     pointer-events none
     animate()
+  &.active
+    background-color $color-primary
+    width auto
   &:hover
     background-color white
     cursor pointer
@@ -85,11 +87,4 @@ li.navigation-item
       color $color-primary
     .content-label
       opacity 1
-  &.active
-    background-color $color-primary
-    width auto
-    &:hover
-      background-color darken($color-primary, 10%)
-      .fa-icon
-        color white
 </style>

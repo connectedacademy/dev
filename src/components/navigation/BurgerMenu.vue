@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), hidden: minimized }")
+  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), minimized: minimized }")
     transition(name="rotate")
       svg(v-bind:class="{cross:(state === 'close')}" viewBox="0 0 800 600")
         g
@@ -30,7 +30,7 @@ export default {
       return this.$store.state.navigation.burger.state;
     },
     minimized() {
-      return (this.navigation && this.navigation.minimized);
+      return (this.$store.state.navigation && this.$store.state.navigation.minimized);
     },
   },
 };
@@ -42,8 +42,8 @@ export default {
 @import '~stylus/shared'
 
 .burger-menu
-  animate()
-  background-color $color-primary
+  transition(all 0.4s)
+  background-color transparent
   border-top-right-radius 6px
   border-bottom-right-radius 6px
   height 50px
@@ -54,11 +54,12 @@ export default {
   left 0
   z-index 50
 
-  transition left 0.4s
-
   &:hover
     cursor pointer
     background-color darken($color-primary, 5%)
+
+  &.minimized
+    background-color $color-primary
 
   /* Active styles */
   &.active
