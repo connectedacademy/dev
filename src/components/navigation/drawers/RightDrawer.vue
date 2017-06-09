@@ -1,14 +1,14 @@
 <template lang="pug">
 
   .drawer#drawer-right(v-bind:class="{ visible: state.visible }")
-    .card#profile-container
+    .card#profile-container(v-bind:class="{ visible: state.visible }")
       img.user-profile(:src="user.profile")
       h1.user-name {{ user.name }}
       h2.user-account {{ `@${user.account}` }}
 
       a.pure-button.pure-button-action(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
 
-    .card#settings-container
+    .card#settings-container(v-bind:class="{ visible: state.visible }")
       form.pure-form.pure-form-stacked
         fieldset(v-if="user.registration")
           label
@@ -66,14 +66,8 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/drawer'
 
-.drawer
-  background-color transparent
 // Profile container
 .card
-  background-color darken($color-drawer-background, 0%)
-  border-top-left-radius 6px
-  border-bottom-left-radius 6px
-  margin-bottom 10px
 
   .pure-button.pure-button-action
     background-color alpha(black, 0.1)

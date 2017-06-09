@@ -31,7 +31,7 @@ export default {
   position fixed
   top 60px
   right 10px
-  z-index 50
+  z-index 51
   ul.navigation-items
     cleanlist()
     radius(30px)

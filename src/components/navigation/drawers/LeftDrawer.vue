@@ -2,30 +2,25 @@
 
   .drawer#drawer-left(v-bind:class="{ visible: state.visible }")
 
-    router-link.brand-logo(to="/")
-      p connected
-      p academy
+    .card
 
-    ul.drawer-list
+      ul.drawer-list
 
-      router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-        h1.drawer-list-item--header {{ $t('nav.course') }}
-        h2.drawer-list-item--body {{ $t('nav.course_description') }}
-      //-
+        router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
+          h1.drawer-list-item--header {{ $t('nav.course') }}
+          h2.drawer-list-item--body {{ $t('nav.course_description') }}
+
         router-link.drawer-list-item(tag="li" to="/schedule" v-bind:class="{ visible: state.visible }")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
           h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
-      router-link.drawer-list-item(tag="li" to="/about" v-bind:class="{ visible: state.visible }")
-        h1.drawer-list-item--header {{ $t('nav.about') }}
-        h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
-      li.drawer-list-item.hidden(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
-        h1.drawer-list-item--header {{ theClass.title }}
-        h2.drawer-list-item--body {{ theClass.description }}
+        router-link.drawer-list-item(tag="li" to="/about" v-bind:class="{ visible: state.visible }")
+          h1.drawer-list-item--header {{ $t('nav.about') }}
+          h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
-    .drawer-footer
-      a.link(href="https://openlab.ncl.ac.uk/" target="_blank")
-        | Open Lab
+        li.drawer-list-item.hidden(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ visible: state.visible }" @click="setCurrentClass(theClass.slug)")
+          h1.drawer-list-item--header {{ theClass.title }}
+          h2.drawer-list-item--body {{ theClass.description }}
 
 </template>
 

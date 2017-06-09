@@ -42,8 +42,8 @@ export default {
 @import '~stylus/shared'
 
 .burger-menu
-  transition(all 0.4s)
   radius(50%)
+  transition(all 0.4s)
   background-color transparent
   height 50px
   width 52px
@@ -51,7 +51,7 @@ export default {
   position fixed
   top 5px
   left 5px
-  z-index 50
+  z-index 52
 
   &:hover
     cursor pointer
@@ -63,10 +63,10 @@ export default {
   /* Active styles */
   &.active
     background-color transparent
-    left calc(100% - 65px)
+    left calc(100% - 60px)
     z-index 52
-    @media(min-width: 380px)
-      left 310px
+    @media(min-width: 360px)
+      left 300px
 
 easeInOutSine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
 easeOutBack   = cubic-bezier(0.250,-0.250, 0.750, 1.250)

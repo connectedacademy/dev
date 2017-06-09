@@ -48,6 +48,8 @@ export default {
   right 0
   padding 7px
   transition right 0.6s
+  z-index 52
+
   .profile-image
     radius(50%)
     background-image()
