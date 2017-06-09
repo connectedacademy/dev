@@ -45,3 +45,26 @@
 
 .icon-margin
   margin 0 5px
+
+// Page header
+
+.page-header
+  // background-color $color-primary
+  background linear-gradient(bottom, darken($color-primary, 10%), $color-primary)
+
+  position absolute
+  left 0
+  right 0
+  text-align center
+  height 300px
+  z-index -1
+  &:after
+    // content ''
+    background-color $color-primary
+    height 100px
+    position absolute
+    left 0
+    right 0
+    bottom -50px
+    transform rotate(0.5deg)
+    z-index 0
