@@ -2,21 +2,25 @@
   background-color $color-drawer-background
   max-width 320px
   overflow-y auto
-  overflow-x none
+  overflow-x hidden
   padding-bottom 60px
   position fixed
-  top 0
-  bottom 0
+  top 10px
+  bottom 10px
   width calc(100% - 60px)
   z-index 51
 
-  &.drawer-right
+  &#drawer-right
+    border-top-left-radius 6px
+    border-bottom-left-radius 6px
     right -320px
     transition right 0.4s
     &.visible
       right 0px
 
-  &.drawer-left
+  &#drawer-left
+    border-top-right-radius 6px
+    border-bottom-right-radius 6px
     left -320px
     transition left 0.4s
     &.visible
@@ -65,8 +69,7 @@
 /* Footer */
 .drawer-footer
   pinned()
-  background-color alpha(white, 0.1)
-  padding 15px
+  background-color darken($color-drawer-background, 10%)
   position absolute
   text-align center
   top auto
@@ -75,7 +78,11 @@
     reset()
     animate()
     color white
+    display block
+    padding 15px
     text-decoration none
     &:hover
       animate()
+      background-color darken($color-drawer-background, 15%)
       color white
+      cursor pointer

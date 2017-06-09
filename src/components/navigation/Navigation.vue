@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }" @click="scrollTop")
+  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
 
-    animated-logo
+    animated-logo( @click="scrollTop")
 
     router-link.hidden.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
 

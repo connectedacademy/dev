@@ -43,15 +43,14 @@ export default {
 
 .burger-menu
   transition(all 0.4s)
+  radius(50%)
   background-color transparent
-  border-top-right-radius 6px
-  border-bottom-right-radius 6px
   height 50px
-  width 60px
+  width 52px
 
   position fixed
   top 5px
-  left 0
+  left 5px
   z-index 50
 
   &:hover
@@ -64,15 +63,15 @@ export default {
   /* Active styles */
   &.active
     background-color transparent
-    left calc(100% - 120px)
+    left calc(100% - 65px)
     z-index 52
-    @media(min-width: 400px)
-      left 260px
+    @media(min-width: 380px)
+      left 310px
 
 easeInOutSine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
 easeOutBack   = cubic-bezier(0.250,-0.250, 0.750, 1.250)
 easing = easeInOutSine
-duration = 0.6s
+duration = 0.8s
 
 dash-offset-cross = 0px
 cross-length = 800px
@@ -90,9 +89,9 @@ path
   stroke-linecap round
   stroke white
   stroke-dashoffset 0px
-  stroke-dasharray 330px cross-length
+  stroke-dasharray 320px cross-length
 
 .cross
   path
-    stroke-dashoffset -740px
+    stroke-dashoffset -745px
 </style>

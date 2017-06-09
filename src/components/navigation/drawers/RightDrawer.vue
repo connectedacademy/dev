@@ -1,12 +1,14 @@
 <template lang="pug">
 
-  .drawer.drawer-right(v-bind:class="{ visible: state.visible }")
-    .profile-container
+  .drawer#drawer-right(v-bind:class="{ visible: state.visible }")
+    .card#profile-container
       img.user-profile(:src="user.profile")
       h1.user-name {{ user.name }}
       h2.user-account {{ `@${user.account}` }}
 
-    .settings-container
+      a.pure-button.pure-button-action(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
+
+    .card#settings-container
       form.pure-form.pure-form-stacked
         fieldset(v-if="user.registration")
           label
@@ -25,8 +27,7 @@
             strong {{ $t('common.current_hub') }}
           label {{ `${user.registration.hub_id}` }}
 
-    .drawer-footer
-      a.link(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
+      a.pure-button.pure-button-action(v-if="user") Edit Profile
 
 </template>
 
@@ -65,32 +66,51 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/drawer'
 
+.drawer
+  background-color transparent
 // Profile container
-.profile-container
-  padding 20px
-  text-align center
-  img.user-profile
-    radius(50%)
-    height 60px
-    width 60px
-  h1.user-name
-    reset()
-    color white
-    font-size 1.3em
-    font-weight normal
-  h2.user-account
-    reset()
-    color white
-    font-size 1em
-    font-weight normal
+.card
+  background-color darken($color-drawer-background, 0%)
+  border-top-left-radius 6px
+  border-bottom-left-radius 6px
+  margin-bottom 10px
 
-// Settings container
-.settings-container
-  padding 20px
-  fieldset
-    label
+  .pure-button.pure-button-action
+    background-color alpha(black, 0.1)
+    border-color transparent
+    color white
+    display block
+    margin-top 10px
+    &:hover
+      background-color alpha(black, 0.2)
+
+  // Profile container
+  &#profile-container
+    padding 15px
+    text-align center
+    img.user-profile
+      radius(50%)
+      height 60px
+      width 60px
+    h1.user-name
+      reset()
       color white
-      margin-bottom 5px
-    select
-      width 100%
+      font-size 1.3em
+      font-weight normal
+    h2.user-account
+      reset()
+      color alpha(white, 0.8)
+      font-size 1em
+      font-weight normal
+
+  // Settings container
+  &#settings-container
+    padding 15px
+    fieldset
+      padding 5px
+      label
+        color white
+        margin-bottom 5px
+      select
+        width 100%
 </style>

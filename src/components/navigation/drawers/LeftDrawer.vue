@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .drawer.drawer-left(v-bind:class="{ visible: state.visible }")
+  .drawer#drawer-left(v-bind:class="{ visible: state.visible }")
 
     router-link.brand-logo(to="/")
       p connected
