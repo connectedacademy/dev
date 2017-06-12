@@ -7,6 +7,7 @@ import message from './message';
 import visualisation from './visualisation';
 import feedback from './feedback';
 import question from './question';
+import classroom from './classroom';
 
 export default {
   auth,
@@ -16,4 +17,5 @@ export default {
   visualisation,
   feedback,
   question,
+  classroom,
 };
