@@ -51,7 +51,7 @@ export default {
   position fixed
   top 5px
   left 5px
-  z-index 52
+  z-index 50
 
   &:hover
     cursor pointer

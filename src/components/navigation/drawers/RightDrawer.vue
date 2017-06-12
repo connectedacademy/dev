@@ -45,7 +45,9 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
+import API from '@/api';
 
 export default {
   name: 'right-drawer',
@@ -59,21 +61,54 @@ export default {
     },
     toggleRole() {
       this.role = (this.currentRole === 'teacher') ? 'Student' : 'Teacher';
-      this.classroomCode = '';
 
       switch (this.currentRole) {
         case 'teacher':
-          this.classroomCode = 'ABCD';
+
+          this.classroomCode = 'loading';
+
+          const request = { theClass: this.currentClass.slug, slug: 'undefined' };
+
+          API.classroom.getTeacherCode(
+            request,
+            (response) => {
+              this.$log.log(response);
+              this.classroomCode = response.code;
+            },
+            (response) => {
+              // TODO: Handle failed request
+              this.$log.log('Failed to retrieve teacher code');
+            },
+          );
+
           break;
         case 'student':
 
+          this.classroomCode = '';
+
           break;
         default:
-
       }
     },
+    registerAttendance() {
+
+      const postData = { theClass: this.currentClass.slug, slug: 'undefined', code: this.classroomCode };
+
+      API.classroom.registerAttendance(
+        postData,
+        (response) => {
+          this.$log.log(response);
+          this.currentClassroom = true;
+        },
+        (response) => {
+          // TODO: Handle failed request
+          this.$log.log('Failed to register attendance');
+          alert(`Failed to register attendance - ${response.body.data}`);
+        },
+      );
+    },
     joinClassroom() {
-      this.currentClassroom = true;
+      this.registerAttendance();
     },
     leaveClassroom() {
       this.currentClassroom = false;
@@ -88,6 +123,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['currentClass']),
     currentRole() {
       return this.role.toLowerCase();
     },
@@ -185,7 +221,7 @@ export default {
       text-align center
       width 100%
       outline 0
-      text-transform uppercase
+      /*text-transform uppercase*/
       &.disabled
         background-color transparent
         border-color transparent
