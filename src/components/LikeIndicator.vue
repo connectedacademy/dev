@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import API from '../api';
+import API from '@/api';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -32,13 +32,15 @@ export default {
       API.course.getLikeCount(
         request,
         (response) => {
-          console.log(`Response from like count request - '${this.content.slug}'`);
-          console.log(response);
-          this.count = (response.hasOwnProperty('total')) ? response.total : 0;
+          this.$log.log(`Response from like count request - '${this.content.slug}'`);
+          this.$log.log(response);
+          this.count = _.reduce(response, function(sum, o) {
+            return o;
+          });
         },
         (response) => {
           // TODO: Handle failed request
-          console.log(`Failed to retrieve like count for '${this.content.slug}'`);
+          this.$log.log(`Failed to retrieve like count for '${this.content.slug}'`);
           this.count = '-';
         },
       );
@@ -49,7 +51,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '~stylus/shared'
 
 .like-indicator
   radius(6px)

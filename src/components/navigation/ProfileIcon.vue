@@ -1,11 +1,14 @@
 <template lang="pug">
 
-	.profile-icon.animated.bounceIn(v-on:click="showProfile")
-		.profile-image(v-bind:style="{ 'background-image': profile }")
+  .profile-icon.animated.bounceIn(v-on:click="showProfile")
+    .profile-image(v-bind:style="{ 'background-image': profile }")
 
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+import * as types from '@/store/mutation-types';
+
 export default {
   name: 'profile-icon',
   data() {
@@ -14,13 +17,22 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isRegistered',
+    ]),
     profile() {
       return `url('${this.$store.state.auth.user.profile}')`;
     },
   },
   methods: {
     showProfile() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER');
+      if (!this.isRegistered) {
+        this.$ga.event('login-button', 'click', 'login-button-clicked', true);
+        this.$store.commit(types.SHOW_AUTH);
+      } else {
+        this.$ga.event('profile-button', 'click', 'profile-viewed', true);
+        this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
+      }
     },
   },
 };
@@ -28,20 +40,21 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '~stylus/shared'
+
 .profile-icon
   position absolute
-  top 0
-  right 0
-  padding 10px
+  top 17px
+  right 7px
   transition right 0.6s
+  z-index 52
+
   .profile-image
+    radius(50%)
+    background-image()
     background-color white
-    background-size cover
-    background-repeat no-repeat
-    background-position center
-    border-radius 50%
-    height 40px
-    width 40px
+    height 46px
+    width 46px
 
     &:hover
       cursor pointer

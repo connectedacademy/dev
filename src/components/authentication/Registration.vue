@@ -2,7 +2,7 @@
 
 .col#col-main.narrow
 
-  .container.registration-container
+  .container.registration-container(v-if="!checkingRegistration")
     .registration-container--header
       h1 {{ $t('auth.register') }}
 
@@ -12,12 +12,8 @@
 
         .content-block.white-block
 
-          fieldset
-            label Select your hub
-            ul.hub-selector
-              li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
-                h1.hub-title {{ hub.name }}
-                h2.hub-timezone {{ hub.timezone }}
+          info-dialogue
+            p Please fill in the fields below to register for Connected Academy, don't forget to select your hub.
 
           fieldset.validate(v-bind:class="{ valid: validatedResponse.email }")
             label {{ $t('auth.enter_your_email') }}
@@ -31,7 +27,14 @@
             label {{ $t('auth.select_your_language') }}
             select(v-model="response.lang")
               option(value="") {{ $t('common.choose_one') }}
-              option(v-for="lang in course.langs") {{ lang }}
+              option(v-for="lang in course.langs") {{ getCountryName(lang) }}
+
+          fieldset
+            label Pick the hub closest to your timezone to receive notifications when class content is released.
+            ul.hub-selector
+              li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
+                h1.hub-title {{ hub.name }}
+                h2.hub-timezone {{ hub.timezone }}
 
           router-link.pure-button(to="/") {{ $t('common.cancel') }}
           .pure-button.pure-button-primary.pull-right(v-bind:disabled="!formIsValid" @click="nextPage") {{ $t('common.continue') }}
@@ -41,8 +44,10 @@
 
         .content-block.white-block
 
-          h5 {{ $t('auth.read_the_following') }}
-          p {{ release }}
+          info-dialogue
+            p {{ $t('auth.read_the_following') }}
+
+          #terms-markdown(v-html="termsMarkdown")
 
           fieldset
             label.pure-checkbox(for="consent-cb")
@@ -58,9 +63,11 @@
       .registration-page(v-if="currentPage === 3")
 
         .content-block.white-block
-          h5 {{ $t('auth.answer_the_following') }}
 
-          .question-wrapper(v-for="(question, index) in questions")
+          info-dialogue
+            p {{ $t('auth.answer_the_following') }}
+
+          .question-wrapper(v-if="!loadingQuestions" v-for="(question, index) in questions")
 
             fieldset
               label {{ question.text }}
@@ -68,7 +75,7 @@
             fieldset.pure-group
 
               .vue-slider-wrapper(v-if="question.response_type === 'scale'")
-                <vue-slider :min="0" :max="10" :tooltip-style="{ 'background-color': '#0078E7', 'border-top-color': '#0078E7' }" :bg-style="{ 'background-color': '#e1e1e1' }" :process-style="{ 'background-color': '#0078E7' }" ref="slider" v-model="response.registration_info.answers[question.id]"></vue-slider>
+                vue-slider(v-bind:min="0" v-bind:max="5" v-bind:tooltip-style="{ 'background-color': '#0078E7', 'border-top-color': '#0078E7' }" v-bind:bg-style="{ 'background-color': '#d9d9d9' }" v-bind:process-style="{ 'background-color': '#d9d9d9' }" ref="slider" v-model="response.registration_info.answers[question.id]")
 
               input.full-width(v-model="response.registration_info.answers[question.id]" v-if="question.response_type === 'text'" type="text")
 
@@ -83,36 +90,67 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-
 import _ from 'lodash';
-import validator from 'validator';
-import vueSlider from 'vue-slider-component';
+import {mapGetters} from 'vuex';
+import * as types from '@/store/mutation-types';
+import API from '@/api';
 
-import API from '../../api';
+
+import MarkdownIt from 'markdown-it';
+
+import MarkdownRenderer from '@/components/MarkdownRenderer';
+import InfoDialogue from '../InfoDialogue';
+import Validator from 'validator';
+import VueSlider from 'vue-slider-component';
 
 export default {
   name: 'registration',
+  components: {
+    MarkdownRenderer,
+    InfoDialogue,
+    VueSlider,
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      document.documentElement.className = 'colourful';
+    });
+  },
+  beforeRouteLeave (to, from, next) {
+    // Reset state
+    document.documentElement.className = '';
+    next();
+  },
   created() {
-    // Push user to home if not authenticated
-    // if (!this.$store.state.auth.isAuthenticated) { this.$router.push('/'); }
-    if (this.$store.state.auth.isRegistered) { this.$router.push('/'); }
+    API.auth.checkAuth(
+      (response) => {
+        this.checkingRegistration = false;
+        if (response.user.registration) {
+          this.$router.replace('/');
+        }
+      },
+      (response) => {
+        // TODO: Better handle failed request
+        this.checkingRegistration = false;
+      },
+    );
 
     API.auth.fetchQuestions(
       (response) => {
         this.release = response.release;
         this.questions = response.questions;
-        this.loading = false;
+        this.loadingQuestions = false;
       },
       (response) => {
-        // TODO: Handle failed request
+        // TODO: Better handle failed request
+        this.loadingQuestions = false;
       },
     );
   },
   data() {
     return {
       currentPage: 1,
-      loading: true,
+      loadingQuestions: true,
+      checkingRegistration: true,
       release: '',
       questions: [],
       response: {
@@ -129,14 +167,14 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'hubs', 'user',
+      'course', 'hubs', 'user', 'isRegistered',
     ]),
     sanitizedResponse() {
       return {
         consent: this.response.consent,
         hub_id: this.response.hub_id,
-        email: validator.normalizeEmail(this.response.email),
-        age: validator.toInt(this.response.age),
+        email: Validator.normalizeEmail(this.response.email),
+        age: Validator.toInt(this.response.age),
         lang: this.response.lang,
         registration_info: {
           answers: this.response.registration_info.answers,
@@ -145,18 +183,24 @@ export default {
     },
     validatedResponse() {
       return {
-        hub_id: !validator.isEmpty(this.response.hub_id),
-        email: validator.isEmail(this.response.email),
-        age: validator.isInt(this.response.age, { min: 1, max: 150 }),
-        lang: !validator.isEmpty(this.response.lang),
+        hub_id: !Validator.isEmpty(this.response.hub_id),
+        email: Validator.isEmail(this.response.email),
+        age: Validator.isInt(this.response.age, { min: 1, max: 150 }),
+        lang: !Validator.isEmpty(this.response.lang),
       };
     },
     formIsValid() {
       return _.every(_.values(this.validatedResponse), v => v);
     },
-  },
-  components: {
-    vueSlider,
+    termsMarkdown() {
+
+      const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+      });
+
+      return `<div>${md.render(this.release)}</div>`;
+    },
   },
   methods: {
     nextPage() {
@@ -177,22 +221,23 @@ export default {
         },
       );
     },
+    getCountryName(lang) {
+      return lang;
+    },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/layout/page'
-@import '../../assets/stylus/shared/*'
+@import '~stylus/shared'
 
 .col#col-main
   .registration-container
     .registration-container--header
       text-align center
       h1, h2
-        nomargin()
-        nopadding()
+        reset()
         color white
         padding 20px 0px 20px 0px
 
@@ -234,35 +279,62 @@ ul.hub-selector
   margin 0 -10px
   li.hub-selector--tile
     cleanlist()
-    background-color $color-primary
-    color white
+    animate()
+    background-color white
+    border $color-border 1px solid
     display inline-block
     overflow hidden
     text-align center
+    position relative
 
     margin 10px
     padding 10px 20px
 
     width 120px
 
-    h1, h2
-      color white
-      nomargin()
-      nopadding()
-
     h1.hub-title
-    color white
+      animate()
+      reset()
+      color $color-text-dark-grey
       font-size 1.2em
       line-height 30px
+      padding 15px 0
     h2.hub-timezone
-      color white
+      animate()
+      reset()
+      color $color-text-light-grey
       font-size 1em
-      line-height 30px
+      line-height 20px
+      opacity 0
+      position absolute
+      left 0
+      right 0
+      bottom 0
 
     &:hover
       cursor pointer
+      border-color $color-primary
       background-color darken($color-primary, 10%)
+      h1.hub-title, h2.hub-timezone
+        color white
+      h1.hub-title
+        padding 5px 0 25px 0
+      h2.hub-timezone
+        bottom 15px
+        opacity 1
 
     &.selected
       background-color $color-success
+      border-color $color-success
+      h1.hub-title, h2.hub-timezone
+        color white
+
+#terms-markdown
+  radius(4px)
+  background-color $color-light-grey
+  border $color-light-grey 1px solid
+  max-height 340px
+  padding 5px 15px
+  overflow-y auto
+  overflow-x none
 </style>

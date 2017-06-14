@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import AdminMain from '@/components/admin/AdminMain';
+
 import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
 import Registration from '@/components/authentication/Registration';
 
-import Main from '@/components/Main';
+import Course from '@/components/Course';
 import Markdown from '@/components/Markdown';
 
 import Feedback from '@/components/feedback/Feedback';
@@ -24,17 +26,25 @@ export default new Router({
       redirect: '/registration',
     },
     {
-      name: 'course',
+      name: 'course-redirect',
       path: '/course/:classSlug/:contentSlug/:segmentId',
       redirect: (to) => {
         const { hash, params, query } = to;
+        if ((params.classSlug === 'undefined') || (params.contentSlug === 'undefined') || (params.segmentId === 'undefined')) {
+          return { path: '/' };
+        }
         return { path: '/', query: { class: params.classSlug, content: params.contentSlug, segment: params.segmentId } };
       },
     },
     {
-      name: 'main',
+      name: 'course',
       path: '/',
-      component: Main,
+      component: Course,
+    },
+    {
+      name: 'class',
+      path: '/course/:classSlug',
+      component: Course,
     },
     {
       name: 'registration',
@@ -54,14 +64,6 @@ export default new Router({
     {
       name: 'markdown',
       path: '/markdown/:url',
-      redirect: (to) => {
-        const { hash, params, query } = to;
-        return { path: '/markdown', query: { url: params.url } };
-      },
-    },
-    {
-      name: 'markdown',
-      path: '/markdown',
       component: Markdown,
     },
     {
@@ -73,6 +75,15 @@ export default new Router({
       name: 'about',
       path: '/about',
       component: About,
+    },
+    {
+      name: 'admin',
+      path: '/admin',
+      component: AdminMain,
+    },
+    {
+      path: '*',
+      redirect: '/',
     },
   ],
 });

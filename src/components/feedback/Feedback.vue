@@ -7,7 +7,7 @@
     .container
 
       info-dialogue(:dismissable="true")
-        p You are currently viewing submissions for the '{{ contentSlug }}' section of the {{ classSlug }} class
+        p Here you can share feedback with others and gain feedback on your own submissions.
 
       .feedback-section(v-if="feedbackItems.length > 0")
 
@@ -36,11 +36,11 @@
 <script>
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
-import VueScroll from 'vue-scroll';
 
-import API from '../../api';
-import * as types from '../../store/mutation-types';
+import API from '@/api';
+import * as types from '@/store/mutation-types';
 
+import PreviousButton from '../PreviousButton';
 import FeedbackTile from './FeedbackTile';
 import InfoDialogue from '../InfoDialogue';
 
@@ -53,7 +53,7 @@ export default {
   },
   created() {
     // Check if user has registered
-    if (this.$store.state.auth.isAuthenticated && !this.$store.getters.isRegistered) {
+    if (this.isAuthenticated && !this.isRegistered) {
       this.$router.push('/registration');
     }
   },
@@ -77,13 +77,13 @@ export default {
       API.feedback.getFeedbackItems(
         request,
         (response) => {
-          console.log('Response from feedback request');
-          console.log(response);
+          this.$log.log('Response from feedback request');
+          this.$log.log(response);
           this.feedbackItems = response.data;
         },
         (response) => {
           // TODO: Handle failed request
-          console.log('Failed to retrieve feedback');
+          this.$log.log('Failed to retrieve feedback');
         },
       );
     },
@@ -92,33 +92,30 @@ export default {
       API.feedback.getAvailableFeedbackItems(
         request,
         (response) => {
-          console.log('Response from feedback request');
-          console.log(response);
+          this.$log.log('Response from feedback request');
+          this.$log.log(response);
           this.availableFeedbackItems = response.data;
         },
         (response) => {
           // TODO: Handle failed request
-          console.log('Failed to retrieve feedback');
+          this.$log.log('Failed to retrieve feedback');
         },
       );
     },
   },
   computed: {
-    ...mapGetters([]),
+    ...mapGetters([
+      'isAuthenticated', 'isRegistered',
+    ]),
     classSlug() {
       return this.$route.params.classSlug;
     },
     contentSlug() {
       return this.$route.params.contentSlug;
     },
-    feedbackItems() {
-      return this.feedbackItems;
-    },
-    availableFeedbackItems() {
-      return this.availableFeedbackItems;
-    },
   },
   components: {
+    PreviousButton,
     InfoDialogue,
     FeedbackTile,
   },
@@ -127,17 +124,15 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../../assets/stylus/shared/*'
+@import '~stylus/shared'
 
 .feedback-section
   margin-bottom 30px
   h1.feedback-section-title
-    nomargin()
-    nopadding()
+    reset()
     padding 0 10px
   h5.feedback-section-subtitle
-    nomargin()
-    nopadding()
+    reset()
     color $color-text-grey
     padding 0 10px
     margin-bottom 10px

@@ -1,0 +1,100 @@
+Landing
++ Progress indicator
++ About course
+  / Link to MD
++ Current course
++ Register/Login
+
+Register
++ Explain what a hub is
++ Hide navbar
++ MD rendering on terms & scrollable
+! Map lang
+
+Register queries
++ Hide blue bar
++ Start in middle position
+
+Logged in Landing
++ Set current class
++ Three liner in introduction description
++ Injected questions
+ + Format differently
+
+Submission (Home)
++ Add some text
++ These are your submission(s) - click to add feedback
++ Improve styling for submission box
+
+Time-release (30 min) - (90 min)
++ Big countdown
++ Actual release time and date
++ Change notify button to jump forward
+ + Set time to current time
+
+Submission (45 min) - (60 min)
++ Submission for different content pages (COPY MARKUP TO ALL MD FILES)
++ Feedback after submitting
++ Hide submission box if submitted (check spec if submission required)
+! Modal when clicking 'message hidden' - call new endpoint and link to other user's submission
+
+Liveclass Interaction (10 min) - (15 min)
++ Pause when composer focus
+
+Segment Deepdive (120 min)
++ Reply button
++ Prevent scroll
+! New tweet at top
+! Subscribe to segment
+
+Webinar (40 min)
++ iFrame full width
++ Tweet box
+
+Unauthed state (40 min)
++ Hide submission stuff
++ Hide 'explore' buttons
++ Hide tweet composer
+
+Generic (30 min)
++ Timestamp on tweets
++ Fourcornerize MD docs
+- Links posted to twitter should route correctly
+
+Mobile (20 min)
++ Fix auto scroll issue (touchstart)
+
+Nice to have
+- Latest tweets against webinar
++ Switch to Axios (cancel old requests)
+
+
+
+
+# Fixes (5/6/17)
++ Load content when unauthenticated
++ Registration loop
++ Replace iframe controls with custom controls
+  + Play/pause
+  - Scrub
++ Scroll out of section
+  + Click/touch events for scrollbar based navigation
++ Section navigation
++ Restart and sync autoscroll if video is playing
++ Dynamically fake time-based release
++ Hide video when jumping between sections
+
+
+# Amin Panel (12/6/17)
+Admin Panel
+
+Admin Requirements
+- Question responses
+- Link to prose content editor
+- List submissions
+- List registered users for course
+- Registration question responses (needs endpoint)
+
+Teacher Requirements
+- List student in classroom
+- List submissions

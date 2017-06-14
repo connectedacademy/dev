@@ -1,62 +1,106 @@
 <meta id="token" name="token" value="{{ csrf_token() }}"></meta>
+<meta name = "viewport" content = "initial-scale = 1.0, user-scalable = no"></meta>
 
 <template lang="pug">
 
-  #app(v-bind:class="pageStyle")
+#app
 
-    .main-page
+  debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
-      navigation(v-bind:nav-title="navTitle")
+  authentication-flow
 
-      router-view(transition transition-mode="out-in")
+  section-navigator
 
-    debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+  burger-menu
 
-    burger-menu
+  left-drawer
 
-    left-drawer
+  right-drawer(v-if="isRegistered")
 
-    right-drawer(v-if="isRegistered")
+  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '0' : '0px' }")
 
-    .action-panel.animated.fadeInUp(v-if="videoIsActive && videoEnabled")
+    navigation
 
-      playhead
+    .page-header(v-bind:class="{ minimal: minimalHeader }")
 
-      video-container
+    transition(name="fade" appear mode="out-in")
 
-      message-composer
+      router-view
 
-    authentication-flow
+  action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
 
-    .content-overlay(v-on:click="dismiss" v-bind:class="{ 'visible': overlayVisible }")
+  #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
 
 </template>
 
 <script>
-/* eslint-disable */
 import { mapGetters } from 'vuex';
+import API from '@/api';
 
-import store from './store/index';
-import * as types from './store/mutation-types';
+import store from '@/store';
+import * as types from '@/store/mutation-types';
+import Moment from 'moment';
 
+// Mixins
+import ScrollPoints from '@/mixins/ScrollPoints';
+import AutoScroll from '@/mixins/AutoScroll';
+import Overlay from '@/mixins/Overlay';
+
+// Components
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
-
 import Navigation from './components/navigation/Navigation';
+import SectionNavigator from './components/navigation/SectionNavigator';
 import BurgerMenu from './components/navigation/BurgerMenu';
 import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
-
 import DebugPanel from './components/DebugPanel';
-import MessageComposer from './components/MessageComposer';
-import VideoContainer from './components/VideoContainer';
-import Playhead from './components/Playhead';
+import ActionPanel from './components/conversation/ActionPanel';
 
 export default {
   name: 'app',
+  mixins: [
+    ScrollPoints,
+    AutoScroll,
+    Overlay,
+  ],
+  watch: {
+    activeSegmentVisible(nV, oV) {
+      if (nV) {
+        // Segment visible, disable scroll on window
+        document.body.className = "disable-scroll";
+      } else {
+        document.body.className = "allow-scroll";
+      }
+    },
+    videoIsActive(nV, oV) {
+      if (nV) {
+        // Segment visible, disable scroll on window
+        document.documentElement.className = "dark-mode";
+      } else {
+        document.documentElement.className = "light-mode";
+      }
+    },
+  },
   created() {
-    this.$store.dispatch('setColumnState', 'wide');
+    var self = this;
+    this.$store.dispatch('checkAuth').then(function() {
+      // Check if user has registered
+      if (self.isAuthenticated && !self.isRegistered) {
+        self.$router.push('/registration');
+      } else {
+        self.$ga.set('userId', self.$store.state.auth.user.account);
+      }
+    });
+
+    // Fetch course and then hubs// Set faux time
+    const fauxTime = Moment().format();
+    this.$store.commit('setFauxTime', fauxTime);
+
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');
+
+    // Periodically update document height variable
+    window.setInterval(this.updateDocumentHeight, 200);
   },
   data() {
     return {
@@ -65,12 +109,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'pageStyle', 'currentSection', 'videoIsActive', 'videoEnabled',
+      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'minimalHeader',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
-      || this.$store.state.composer.visible;
+      || this.$store.state.conversation.activeSegmentVisible;
     },
   },
   store,
@@ -78,19 +122,20 @@ export default {
     AuthenticationFlow,
     DebugPanel,
     Navigation,
+    SectionNavigator,
     BurgerMenu,
     LeftDrawer,
     RightDrawer,
-    MessageComposer,
-    VideoContainer,
-    Playhead,
+    ActionPanel,
   },
   methods: {
-    dismiss() {
-      this.$store.commit(types.DISMISS_AUTH);
-      this.$store.commit(types.DISMISS_COMPOSER);
-      this.$store.commit(types.DISMISS_LEFT_DRAWER);
-      this.$store.commit(types.DISMISS_RIGHT_DRAWER);
+    updateDocumentHeight() {
+      // Check if document height has changed
+      if (this.documentHeight !== document.documentElement.scrollHeight) {
+        this.$log.log('Document height changed');
+        this.documentHeight = document.documentElement.scrollHeight;
+        this.setScrollPoints();
+      }
     },
   },
 };
@@ -99,21 +144,75 @@ export default {
 
 <style lang="stylus">
 
-@import './assets/stylus/shared/*'
-@import './assets/stylus/layout/page'
+@import '~stylus/shared'
 
-.action-panel
-  background-color $color-purple
-  position absolute
+html
+  background-color $color-main-page
+  transition background-color 0.6s
+  &.colourful
+    background-color $color-primary
+  &.dark-mode
+    background-color #242424
+
+html, body
+  margin 0
+  padding 0
+
+body.disable-scroll
+  overflow hidden
+  min-height 100%
+  max-height 100vh
+  padding-bottom 1px
+  top 0
+  left 0
+  right 0
   bottom 0
-  left 50%
-  margin-left -400px
-  height 140px
-  width 800px
+
+#app
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+
+.main-page
+  /*padding-top 60px*/
+
+  .col
+    box-sizing border-box
+    padding 0
+    /*top 60px*/
+
+    .container
+      padding 20px
+      h1
+        reset()
+        color $color-text-dark-grey
+        margin-bottom 5px
+
+  .col#col-main
+    radius(4px)
+    margin 0 auto 60px auto
+    max-width 780px
+    padding-top 80px
+    @media(max-width: 800px)
+      max-width 100%
+      margin 0 0px
+
+/* App states */
+
+#app.authenticating
+  .main-page
+    .col
+      top 0
+
+#content-overlay
+  pinned()
+  background-color alpha(black, 0)
+  pointer-events none
+  position fixed
+  transition background-color 0.6s
   z-index 50
-  @media(max-width: 800px)
-    left 0
-    margin-left 0
-    width 100%
+  &.visible
+    background-color alpha(black, 0.85)
+    pointer-events all
 
 </style>

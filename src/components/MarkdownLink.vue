@@ -1,6 +1,8 @@
 <template lang="pug">
 
-  router-link.pure-button.pure-button-primary(:to="url") {{ $t('common.explore_content') }}
+  router-link.pure-button(v-if="isRegistered" v-bind:to="url")
+    | {{ $t('common.explore_content') }}
+    icon.angle-icon(name="angle-right")
 
 </template>
 
@@ -12,13 +14,24 @@ export default {
   name: 'markdown-link',
   props: ['mdContent'],
   computed: {
+    ...mapGetters([
+      'isRegistered',
+    ]),
     url() {
-      return `/markdown/?url=${this.mdContent.url}`;
+      const encodedURI = encodeURIComponent(`${this.$store.getters.currentClass.dir}/${this.mdContent.url}`);
+      return `/markdown/${encodedURI}`;
     },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
+
+@import '~stylus/shared'
+
+.angle-icon
+  top 3px
+  position relative
+  margin-left 7px
 
 </style>

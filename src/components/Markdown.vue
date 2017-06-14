@@ -1,22 +1,24 @@
 <template lang="pug">
 
-  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
+.markdown-page
 
-    .container
+  .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
 
-      .markdown-nav
-        .pure-button.pure-button-primary(@click="back") Back
-        .pure-button.pure-button-primary(@click="toggleColumnState") Toggle
+    .main-container.background-white
+      previous-button
 
-        .pure-button.pure-button-primary.pull-right(@click="frontMatterVisible =!frontMatterVisible") FM
+      .container
 
-      markdown-renderer(v-bind:front-matter-visible="frontMatterVisible")
+        markdown-renderer(v-bind:front-matter-visible="frontMatterVisible")
 
 </template>
 
 <script>
-// import _ from 'lodash';
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import PreviousButton from '@/components/PreviousButton';
 
 export default {
   name: 'markdown',
@@ -30,7 +32,9 @@ export default {
     back() { this.$router.go(-1); },
   },
   components: {
+    AnimatedLogo,
     MarkdownRenderer,
+    PreviousButton,
   },
   data() {
     return {
@@ -42,16 +46,6 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
-@import '../assets/stylus/layout/page'
-
-.markdown-nav
-  border-bottom $color-light-grey 1px solid
-  margin 0 -5px 20px -5px
-  padding-bottom 20px
-  .pure-button
-    margin 0 5px
-  a
-    color white
+@import '~stylus/shared'
 
 </style>

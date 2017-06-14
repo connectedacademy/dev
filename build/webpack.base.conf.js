@@ -23,6 +23,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'stylus': resolve('src/assets/stylus'),
     }
   },
   module: {
@@ -44,21 +45,9 @@ module.exports = {
       {
         test: /\.styl$/,
         loader: 'style-loader!css-loader!stylus-loader',
-        include: [resolve('src')],
+        include: [resolve('src'),require('nib')()],
+        // import: ['~nib/lib/nib/index.styl'],
       },
-      // {
-      //   test: /\.styl$/,
-      //   use: [
-      //     'style-loader',
-      //     'css-loader',
-      //     {
-      //       loader: 'stylus-loader',
-      //       options: {
-      //         // use: [stylus_plugin()],
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -82,7 +71,4 @@ module.exports = {
       }
     ]
   },
-	// stylus: {
-	// 	use: [poststylus(['autoprefixer', 'postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
-	// },
 }

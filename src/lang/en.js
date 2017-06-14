@@ -3,7 +3,6 @@ export default {
     enable_debug_mode: 'Enable Debug Mode',
     disable_debug_mode: 'Disable Debug Mode',
     toggle_column: 'Toggle Column',
-    toggle_video: 'Toggle Video',
     optional: 'Optional',
     loading: 'Loading',
     cancel: 'Cancel',
@@ -19,13 +18,20 @@ export default {
     next_page: 'Next Page',
     previous_page: 'Previous Page',
     choose_one: 'Choose one',
+
+    scroll_down_for_live_class: 'Scroll down for the live class',
   },
   nav: {
     home: 'Home',
+    home_description: 'Just go back to the home page.',
     course: 'Course',
+    course_description: 'Take part in the course, experience the \'Live class\' and join the conversation as it unfolds.',
     schedule: 'Schedule',
+    schedule_description: 'View the schedule for upcoming content and when it will be relased by your hub.',
     about: 'About',
+    about_description: 'Learn more about the Connected Academy platform and how we are changing how education is delivered.',
     terms: 'Terms',
+    terms_description: 'Read the terms an conditions of using the Connected Academy platform.',
   },
   auth: {
     login: 'Login',
@@ -41,7 +47,7 @@ export default {
     answer_the_following: 'Please answer the following',
 
     enter_your_email: 'Enter your email',
-    enter_your_age: 'Enter your age (optional)',
+    enter_your_age: 'Enter your age',
     select_your_language: 'Select your language',
 
     authenticate: 'Authenticate',
@@ -67,5 +73,11 @@ export default {
     load_course: 'Load Course',
     load_hubs: 'Load Hubs',
     current_course_language: 'Current course language',
+    course_info: 'Course Info',
+    view_current_class: 'View current class',
+  },
+  submission: {
+    view_submissions: 'View Submissions',
+    make_a_submission: 'Make a Submission',
   },
 };

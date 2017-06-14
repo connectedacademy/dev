@@ -8,6 +8,9 @@ import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import vueLogger from 'vue-logger';
 import VueCookie from 'vue-cookie';
+import VueAnalytics from 'vue-analytics'
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
 
 import VueScroll from 'vue-scroll';
 import VueAutosize from 'vue-autosize';
@@ -22,7 +25,7 @@ import Icon from 'vue-awesome/components/Icon';
 import App from './App';
 import Lang from './Lang';
 
-import store from './store';
+import store from '@/store';;
 import router from './router';
 
 sync(store, router);
@@ -36,10 +39,20 @@ Vue.use(Vuex);
 Vue.use(VueConfig, Vue.config);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(VueCookie);
-Vue.use(VueYouTubeEmbed);
 
+Vue.use(VueAnalytics, {
+  id: 'UA-44963053-16',
+  router,
+  autoTracking: {
+    exception: true,
+  },
+});
+
+Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
+
+Vue.use(VueYouTubeEmbed);
 Vue.use(VueScroll);
-Vue.use(VueAutosize)
+Vue.use(VueAutosize);
 
 // General config
 Vue.config.productionTip = false;
@@ -49,9 +62,8 @@ Vue.http.options = { credentials: true, responseType: 'json' };
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
     if (response.status === 403) {
-      // eslint-disable-next-line
-      console.log('Session invalid');
-      // store.dispatch('logout');
+      this.$log.log('Session invalid');
+      store.dispatch('logout');
     }
   });
 });

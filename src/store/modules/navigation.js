@@ -1,4 +1,4 @@
-import * as types from '../mutation-types';
+import * as types from '@/store/mutation-types';
 
 const BURGER_DEFAULT = 'default';
 const BURGER_CLOSE = 'close';
@@ -6,8 +6,8 @@ const BURGER_CLOSE = 'close';
 // initial state
 const state = {
   overlayVisible: false,
-  videoEnabled: true,
   visible: true,
+  minimized: false,
   burger: {
     state: BURGER_DEFAULT,
   },
@@ -17,23 +17,42 @@ const state = {
   rightDrawer: {
     visible: false,
   },
+  pageStyles: '',
+  minimalHeader: false,
 };
 
 // getters
 const getters = {
-  videoEnabled() {
-    return state.videoEnabled;
+  navigation() {
+    return state;
   },
+  navigationVisible() {
+    return state.visible;
+  },
+  pageStyles() {
+    return state.pageStyles;
+  },
+  minimalHeader() {
+    return state.minimalHeader;
+  }
 };
 
 // actions
 const actions = {
+  setHeaderHeight() {
+    commit();
+  }
 };
 
 // mutations
 const mutations = {
-  [types.TOGGLE_VIDEO](initialState) {
-    state.videoEnabled = !state.videoEnabled;
+  [types.SET_PAGE_STYLE](initialState, newState) {
+    state.pageStyles = newState;
+  },
+  [types.SET_NAV_STATE](initialState, newState) {
+    _.forEach(newState, function(value, key) {
+      state[key] = value;
+    });
   },
   [types.TOGGLE_DEBUG_MODE](initialState) {
     state.debug = !state.debug;

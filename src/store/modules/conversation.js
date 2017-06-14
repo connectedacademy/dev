@@ -1,84 +1,55 @@
 /* eslint-disable */
 import Vue from 'vue';
 import _ from 'lodash';
-import * as types from '../mutation-types';
-import API from '../../api';
-import globalState from '../index';
+import * as types from '@/store/mutation-types';
+import API from '@/api';
+import store from '@/store';
 
 // initial state
 const state = {
-  scrollPoints: {},
-  messages: {},
-  subtitles: {},
-  visualisation: {},
+  messages: new Array(999),
+  visualisation: [],
+  activeSegment: undefined,
+  activeSegmentVisible: false,
+  lastMessage: undefined,
 };
 
 // getters
 const getters = {
+  lastMessage() {
+    return state.lastMessage;
+  },
+  activeSegment() {
+    return state.activeSegment;
+  },
+  activeSegmentVisible() {
+    return state.activeSegmentVisible;
+  },
   messages() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.messages[globalState.getters.currentSection.slug];
+    return state.messages;
   },
   subtitles() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.subtitles[globalState.getters.currentSection.slug];
+    Vue.log.log('Subtitles from state');
+    return state.subtitles;
   },
   visualisation() {
-    if (!globalState.getters.currentSection) { return {}; }
-    return state.visualisation[globalState.getters.currentSection.slug];
-  },
-  visualisationPoints() {
-    if (!globalState.getters.currentSection) { return []; }
-
-    let visualisation = state.visualisation[globalState.getters.currentSection.slug];
-    const segmentHeight = (158.0 * 1);
-    const width = 200.0;
-
-    let newVis = [];
-    let calcVal = 0;
-    _.forEach(visualisation, function(value, key) {
-
-      calcVal += value;
-
-      if ((value % 5) === 0) {
-        calcVal = calcVal * 0.2;
-        newVis.push(calcVal)
-        calcVal = 0;
-      }
-    });
-
-    visualisation = newVis;
-
-    let points = _.reduce(visualisation, function(result, value, key) {
-
-      return result + `S ${value * width} ${key * segmentHeight - 50}, ${value * width} ${key * segmentHeight + 50} `;
-
-      // return result + `L${value * width} ${key * segmentHeight} `;
-      // return result + `C ${value * width} ${key * segmentHeight + 15}, ${value * width} ${key * segmentHeight - 15}, ${value * width} ${key * segmentHeight} `;
-      // return result + `M10                       10               C 20                       20,               40                       20,               50                       10`;
-      // return result + `M ${value * width} ${key * segmentHeight} `;
-      //
-    }, "M0 0 ");
-
-    points += `L 0 ${(_.size(visualisation) * segmentHeight)} Z`;
-
-    return points;
-
+    Vue.log.log('Visualisation from state');
+    return state.visualisation;
   },
   videoIsActive() {
-    return (globalState.getters.currentSection !== undefined);
+    if (store.getters.currentSection === undefined) {
+      return false;
+    }
+    return (store.getters.currentSection.duration !== undefined);
   },
-  scrollPoints() {
-    return state.scrollPoints;
-  },
-  currentSection() {
-    if (state.scrollPoints.length === 0) { return undefined; }
+  currentActiveSection() {
+    if (store.state.scrollPoints.length === 0) { return undefined; }
 
-    const scrollPosition = globalState.getters.scrollPosition;
+    const offsetScrollPosition = store.state.scrollPosition;
 
-    for (const key in state.scrollPoints ) {
-      const scrollPoint = state.scrollPoints[key];
-      if ((scrollPosition > scrollPoint.top) && (scrollPosition < scrollPoint.bottom)) {
+    for (const key in store.state.scrollPoints ) {
+      const scrollPoint = store.state.scrollPoints[key];
+      if ((offsetScrollPosition > scrollPoint.sectionTop) && (offsetScrollPosition < scrollPoint.bottom)) {
         return scrollPoint;
       }
     };
@@ -86,25 +57,50 @@ const getters = {
     return undefined;
   },
   currentSectionScrollPosition() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return globalState.getters.scrollPosition - globalState.getters.currentSection.top;
+    if (!store.getters.currentSection) { return 0; }
+    return store.state.offsetScrollPosition - store.getters.currentSection.top;
   },
   currentSegmentGroup() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return _.ceil(globalState.getters.currentSectionScrollPosition / 158.0);
+    if (!store.getters.currentSection) { return -1; }
+    return _.floor(store.getters.currentSectionScrollPosition / 158.0);
   },
   currentSegment() {
-    if (!globalState.getters.currentSection) { return 0; }
-    return _.ceil(globalState.getters.currentSectionScrollPosition / (158.0 * 0.2));
+    if (!store.getters.currentSection) { return 0; }
+    return _.floor(store.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };
 
 // actions
 const actions = {
-  getMessages({
+  getMessagesSummary({
     commit,
-  }, request) {
-    API.message.getMessages(
+  }, params) {
+
+    const request = params.request;
+
+    const startSegmentGroup = parseInt(parseInt(request.startSegment) * 0.2);
+    const endSegmentGroup = parseInt(parseInt(request.endSegment) * 0.2);
+
+    // Vue.log.log(`** API request ${startSegmentGroup} - ${endSegmentGroup}`);
+    // Vue.log.log(request);
+
+    let segmentCount = (endSegmentGroup - startSegmentGroup);
+    let segmentIterator = 0;
+
+    while (segmentIterator < segmentCount) {
+      const segmentGroup = startSegmentGroup + segmentIterator;
+      const loading = {
+        loading: true,
+        segmentGroup: segmentGroup,
+      };
+
+      if (state.messages[segmentGroup] === undefined) {
+        Vue.set(state.messages, segmentGroup, loading);
+      }
+      segmentIterator += 1;
+    }
+
+    API.message.getMessagesSummaryBatch(
       request,
       response => commit(types.GET_MESSAGES_SUCCESS, {
         response,
@@ -118,8 +114,8 @@ const actions = {
     commit,
   }) {
     API.message.getSubtitles(
-      `${globalState.getters.currentSection.slug}`,
-      `${globalState.getters.course.baseUri}${globalState.getters.currentClass.dir}/${globalState.getters.currentSection.transcript}`,
+      `${store.getters.currentSection.slug}`,
+      `${store.getters.course.baseUri}${store.getters.currentClass.dir}/${store.getters.currentSection.transcript}`,
       response => commit(types.GET_SUBTITLES_SUCCESS, {
         response,
       }),
@@ -141,50 +137,91 @@ const actions = {
       }),
     );
   },
+  pushMessage({
+    commit,
+  }, request) {
+    const currentSegmentGroup = _.multiply(_.floor(_.divide(request.postData.currentSegment, 10)), 10) * 0.2
+
+    let newMessage = {
+      message: request.response.body,
+      info: {
+        total: 1,
+      },
+      segmentGroup: currentSegmentGroup,
+      faux: true,
+    };
+
+    newMessage.message.author = newMessage.message.user;
+
+    // Vue.set(state.messages, currentSegmentGroup, newMessage);
+
+    store.commit('updateLastMessage', newMessage);
+  },
 };
 
 // mutations
 const mutations = {
-  setScrollPoint(initialState, scrollPoint) {
-    state.scrollPoints[scrollPoint.slug] = scrollPoint;
-  },
-  clearScrollPoints(initialState) {
-    state.scrollPoints = [];
-  },
   [types.GET_SUBTITLES_SUCCESS](initialState, {
     response,
   }) {
-    state.subtitles[response.slug] = response.response;
+    state.subtitles = response.response;
   },
   [types.GET_SUBTITLES_FAILURE](initialState, {
     response,
   }) {
-    state.subtitles[response.slug] = [];
+    state.subtitles = [];
     // error in response
   },
   [types.GET_VISUALISATION_SUCCESS](initialState, {
     response,
   }) {
-    state.visualisation[response.scope.content] = response.data;
+    state.visualisation = response.data;
   },
   [types.GET_VISUALISATION_FAILURE](initialState, {
     response,
   }) {
-    state.visualisation[response.slug] = {};
+    Vue.log.log('error');
+    state.visualisation = [];
     // error in response
   },
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-    state.messages[response.scope.content] = (state.messages[response.scope.content]) ? state.messages[response.scope.content] : {};
-    for (const segment in response.data) {
-      state.messages[response.scope.content][_.ceil(segment * 0.2)] = response.data[segment];
+
+    const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
+    const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2);
+
+    // Vue.log.log(`** API response ${startSegmentGroup} - ${endSegmentGroup}`);
+    // Vue.log.log(response.scope);
+
+    for (var group in response.data) {
+
+      const segmentGroup = parseInt(parseInt(group) * 0.2);
+      let newMessage = response.data[group];
+      newMessage.segmentGroup = segmentGroup;
+
+      // if (((state.messages[segmentGroup] === undefined) || state.messages[segmentGroup].loading) && !state.messages[segmentGroup].faux) {
+      //   Vue.set(state.messages, segmentGroup, newMessage);
+      // }
+
+      Vue.set(state.messages, segmentGroup, newMessage);
     }
   },
   [types.GET_MESSAGES_FAILURE](initialState, {
     response,
   }) {
     // error in response
+  },
+  [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
+    state.activeSegment = activeSegment;
+    state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
+  },
+  [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
+    state.activeSegment = activeSegment;
+    state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
+  },
+  updateLastMessage({ commit }, newMessage) {
+    state.lastMessage = newMessage;
   },
 };
 

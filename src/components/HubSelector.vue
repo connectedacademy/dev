@@ -1,7 +1,7 @@
 <template lang="pug">
 
 ul.hub-selector
-  li.hub(v-for="hub in hubs")
+  li.hub(v-for="hub in hubs" v-bind:class="{active: (hub.id === 'ams')}")
     h1.hub-name {{ hub.name }}
     h2.hub-timezone {{ hub.timezone }}
   .clearfix
@@ -23,14 +23,16 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '~stylus/shared'
 
 ul.hub-selector
   cleanlist()
-  margin 10px -10px
+  margin 10px
   li.hub
     cleanlist()
-    background-color $color-primary
+    radius(6px)
+    transition(background-color 0.3s linear)
+    background-color alpha(white, 0.6)
     float left
     text-align center
     margin 10px
@@ -38,17 +40,19 @@ ul.hub-selector
     @media(max-width: 1600px)
       width calc((100% / 3) - 60px)
     @media(max-width: 768px)
-      background-color red
-      width calc((100% / 2) - 60px)
+      width calc(100% - 60px)
     h1.hub-name
-      nomargin()
-      nopadding()
-      color white
+      reset()
+      color $color-primary
       font-size 1.3em
     h2.hub-timezone
-      nomargin()
-      nopadding()
-      color white
+      reset()
+      color $color-primary
       font-size 1.1em
+      &:hover
+        cursor pointer
+    &:hover, &.active
+      background-color alpha(white, 1.0)
+      cursor pointer
 
 </style>

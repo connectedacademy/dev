@@ -29,7 +29,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/shared/*";
+@import '~stylus/shared'
 
 .auth-modal
   animate()
@@ -51,8 +51,7 @@ export default {
     line-height 40px
     text-align center
     h1
-      nomargin()
-      nopadding()
+      reset()
       color white
       font-size 1.2em
   .auth-modal--container

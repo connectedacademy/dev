@@ -1,49 +1,17 @@
-import * as types from '../mutation-types';
-import API from '../../api';
+import * as types from '@/store/mutation-types';
+import API from '@/api';
 
 // initial state
-const state = {
-  // course: {},
-};
+const state = {};
 
 // getters
-const getters = {
-  // course() {
-  //   return state.course;
-  // },
-};
+const getters = {};
 
 // actions
-const actions = {
-  // getCourse({
-  //   commit,
-  // }) {
-  //   API.course.getSpec(
-  //     API.course,
-  //     response => commit(types.GET_COURSE_SPEC_SUCCESS, {
-  //       response,
-  //     }),
-  //     response => commit(types.GET_COURSE_SPEC_FAILURE, {
-  //       response,
-  //     }),
-  //   );
-  // },
-};
+const actions = {};
 
 // mutations
-const mutations = {
-  // [types.GET_COURSE_SPEC_SUCCESS](initialState, {
-  //   response,
-  // }) {
-  //   state.course = response;
-  // },
-  // [types.GET_COURSE_SPEC_FAILURE](initialState, {
-  //   response,
-  // }) {
-  //   state.course = {};
-  //   // error in response
-  // },
-};
+const mutations = {};
 
 export default {
   state,

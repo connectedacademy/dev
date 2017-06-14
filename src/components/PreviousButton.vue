@@ -1,7 +1,6 @@
 <template lang="pug">
 
-  .previous-button(@click="previous")
-    | Previous Page
+  .previous-button(@click="previous") {{ $t('common.previous_page') }}
 
 </template>
 
@@ -19,13 +18,13 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '../assets/stylus/shared/*'
+@import '~stylus/shared'
 
 .previous-button
   background-color $color-light-grey
   border-top-right-radius 6px
   border-bottom-right-radius 6px
-  color $color-text-dark-grey
+  color $color-text-grey
   display inline-block
   text-align center
   margin-top 20px

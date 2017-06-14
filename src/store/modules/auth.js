@@ -1,5 +1,6 @@
-import * as types from '../mutation-types';
-import API from '../../api';
+import Vue from 'vue';
+import * as types from '@/store/mutation-types';
+import API from '@/api';
 
 // initial state
 const state = {
@@ -12,10 +13,12 @@ const state = {
 
 // getters
 const getters = {
+  isAuthenticated: (initialState) => initialState.isAuthenticated,
   isRegistered: (initialState) => {
     const isRegistered = (initialState.user);
     return (isRegistered) ? initialState.user.registration : false;
   },
+  user: (initialState) => initialState.user,
 };
 
 // actions
@@ -23,6 +26,7 @@ const actions = {
   checkAuth({
     commit,
   }) {
+    Vue.log.log('Checking auth...');
     API.auth.checkAuth(
       response => commit(types.CHECK_AUTH_SUCCESS, {
         response,
@@ -53,6 +57,7 @@ const mutations = {
   [types.CHECK_AUTH_SUCCESS](initialState, {
     response,
   }) {
+    Vue.log.log('Auth success');
     state.isAuthenticated = true;
     // Save user in session
     state.user = response.user;
@@ -60,6 +65,7 @@ const mutations = {
   [types.CHECK_AUTH_FAILURE](initialState, {
     response,
   }) {
+    Vue.log.log('Auth failure');
     state.isAuthenticated = false;
     // error in response
   },
@@ -83,7 +89,8 @@ const mutations = {
   },
   attemptAuth({ commit }, user) {
     state.user = user;
-    document.location = 'http://localhost:4000/v1/auth/login';
+    document.location = 'https://api.connectedacademy.io/v1/auth/login';
+    // document.location = 'http://localhost:4000/v1/auth/login';
   },
 };
 

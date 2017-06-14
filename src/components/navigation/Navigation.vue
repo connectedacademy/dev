@@ -1,44 +1,57 @@
 <template lang="pug">
 
-  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden }")
+  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
 
-    router-link.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
+    animated-logo( @click="scrollTop")
 
-    ul.navigation-items
-      router-link.navigation-item.navigation-item-page(tag="li" to="/") {{ $t('nav.course') }}
-      router-link.navigation-item.navigation-item-page(tag="li" to="/schedule") {{ $t('nav.schedule') }}
-      router-link.navigation-item.navigation-item-page(tag="li" to="/about") {{ $t('nav.about') }}
-      li.navigation-item.navigation-item-page.pull-right(v-if="!isRegistered" v-on:click="showAuth") {{ $t('auth.login') }}
+    router-link.hidden.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
+
+    #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
+      icon(name="wrench")
 
     profile-icon(v-if="isRegistered")
+
+    #login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
 
 </template>
 
 <script>
 import {mapGetters} from 'vuex';
 
-import * as types from '../../store/mutation-types';
+import * as types from '@/store/mutation-types';
+import AnimatedLogo from '@/components/AnimatedLogo';
 import ProfileIcon from './ProfileIcon';
+import Auth from '@/mixins/Auth';
 
 export default {
   name: 'navigation',
+  mixins: [
+    Auth,
+  ],
   components: {
+    AnimatedLogo,
     ProfileIcon,
   },
   computed: {
     ...mapGetters([
-      'isRegistered',
+      'isRegistered', 'navigation',
     ]),
     hidden() {
       return !this.$store.state.navigation.visible;
     },
-  },
-  props: {
-    navTitle: String,
+    navTitle() {
+      return (this.$store.getters.currentClass && this.$store.getters.currentClass.title && this.navigation.minimized) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
+    },
+    showDebugToggle() {
+      return this.$route.query.debug;
+    },
   },
   methods: {
-    showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
+    toggleDebugMode() {
+      this.$store.commit(types.TOGGLE_DEBUG_MODE);
+    },
+    scrollTop() {
+      window.scroll(0, 0);
     },
   },
 };
@@ -46,30 +59,57 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../../assets/stylus/shared/*";
+@import '~stylus/shared'
+
+#debug-button
+  radius(50%)
+  background-color red
+  height 40px
+  width 40px
+  position fixed
+  bottom 10px
+  left 10px
+  z-index 100
+  .fa-icon
+    reset()
+    color white
+    height 20px
+    width 20px
+    margin 10px
+
+#login-button
+  animate()
+  background-color transparent
+  border transparent 1px solid
+  color white
+  position fixed
+  top 0
+  right 0
+  margin 20px 10px
+  &:hover
+    //background-color white
+    //color $color-purple
+    border-color white
 
 .navigation
   animate()
   background-color $navigation-background-color
   box-sizing border-box
-  height 120px
+  height 60px
   padding 0
-  position relative
+  position fixed
+  top 0
   text-align center
   z-index 2
   width 100%
   &.hidden
     display none
-
-  .navigation-item-brand
-    display block
-    color white
-    font-weight bold
-    font-size 1.1em
-    line-height 60px
-    margin 0 auto
-    padding 0 15px
-    text-decoration none
+  #logo
+    animate()
+    opacity 1
+  &.minimized
+    #logo
+      opacity 0
 
   ul.navigation-items
     cleanlist()
@@ -93,11 +133,6 @@ export default {
         cursor pointer
         &.navigation-item-page
           border-bottom white 2px solid
-@media(max-width: 768px)
-  ul.navigation-items
-    text-align center
-    li.navigation-item.navigation-item-brand
-      display none
 
 /* App states */
 

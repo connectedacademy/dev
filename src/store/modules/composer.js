@@ -1,5 +1,6 @@
-import * as types from '../mutation-types';
-import API from '../../api';
+import Vue from 'vue';
+import * as types from '@/store/mutation-types';
+import API from '@/api';
 
 // initial state
 const state = {
@@ -9,6 +10,9 @@ const state = {
 
 // getters
 const getters = {
+  composerHidden() {
+    return state.hidden;
+  },
 };
 
 // actions
@@ -39,8 +43,8 @@ const mutations = {
   },
   [types.SEND_MESSAGE_SUCCESS](initialState, {
     response,
+    postData,
   }) {
-    alert('Message sent');
   },
   [types.SEND_MESSAGE_FAILURE](initialState, {
     response,

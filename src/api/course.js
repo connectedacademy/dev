@@ -2,8 +2,15 @@ import Vue from 'vue';
 import * as config from './config';
 
 export default {
-  getSpec(passedCourse, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/course/spec`).then((response) => {
+  getSchedule(fauxTime, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/course/schedule?time=${fauxTime}`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
+  getSpec(fauxTime, classSlug, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${fauxTime}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);

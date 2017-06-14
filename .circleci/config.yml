@@ -5,7 +5,7 @@ general:
      - master
 jobs:
   build:
-    docker: 
+    docker:
       - image: node:7.4.0
     working_directory: ~/connectedacademy
     steps:

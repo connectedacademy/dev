@@ -1,5 +1,9 @@
 import _ from 'lodash';
-import globalState from './index';
+import store from '@/store';
+
+export const fauxTime = (state) => {
+  return state.fauxTime;
+};
 
 export const pageStyle = (state) => {
   // Return classes
@@ -11,17 +15,27 @@ export const pageStyle = (state) => {
 };
 
 export const scrollPosition = (state) => {
-  const offset = 0.0;
-  return (state.scrollPosition + offset);
+  return state.scrollPosition;
+};
+
+export const scrollPoints = (state) => {
+  return state.scrollPoints;
+};
+
+export const offsetScrollPosition = (state) => {
+  return state.offsetScrollPosition;
 };
 
 export const currentTime = (state) => {
-  if (!globalState.getters.currentSectionScrollPosition) {
+  if (!store.getters.currentSectionScrollPosition) {
     return 0;
   }
-  let time = globalState.getters.currentSectionScrollPosition / (158.0 * 0.2);
-  time = (time < 0) ? 0 : time;
-  return _.round(time, 2);
+  let time = store.getters.currentSectionScrollPosition / (158.0 * 0.2); // _.ceil()
+  return (time < 0) ? 0 : time;
+};
+
+export const currentSection = (state) => {
+  return state.currentSection;
 };
 
 export const autoPlaying = state => state.autoPlaying;
