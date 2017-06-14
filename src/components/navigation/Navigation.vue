@@ -85,7 +85,7 @@ export default {
   position fixed
   top 0
   right 0
-  margin 10px
+  margin 20px 10px
   &:hover
     //background-color white
     //color $color-purple

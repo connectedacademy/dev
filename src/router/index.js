@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import AdminMain from '@/components/admin/AdminMain';
+
 import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
 import Registration from '@/components/authentication/Registration';
 
@@ -73,6 +75,11 @@ export default new Router({
       name: 'about',
       path: '/about',
       component: About,
+    },
+    {
+      name: 'admin',
+      path: '/admin',
+      component: AdminMain,
     },
     {
       path: '*',

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.course-content#wrapper(ref="question" v-if="isRegistered && !hidden")
+.course-content#wrapper.hidden(ref="question" v-if="isRegistered && !hidden")
 
   .course-content--header
     h1.content-title Question

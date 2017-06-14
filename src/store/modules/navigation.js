@@ -18,6 +18,7 @@ const state = {
     visible: false,
   },
   pageStyles: '',
+  minimalHeader: false,
 };
 
 // getters
@@ -31,10 +32,16 @@ const getters = {
   pageStyles() {
     return state.pageStyles;
   },
+  minimalHeader() {
+    return state.minimalHeader;
+  }
 };
 
 // actions
 const actions = {
+  setHeaderHeight() {
+    commit();
+  }
 };
 
 // mutations

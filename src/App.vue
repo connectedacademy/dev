@@ -18,9 +18,13 @@
   right-drawer(v-if="isRegistered")
 
   .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '0' : '0px' }")
+
     navigation
-    .page-header
+
+    .page-header(v-bind:class="{ minimal: minimalHeader }")
+
     transition(name="fade" appear mode="out-in")
+
       router-view
 
   action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
@@ -69,7 +73,6 @@ export default {
       }
     },
     videoIsActive(nV, oV) {
-      console.log(nV);
       if (nV) {
         // Segment visible, disable scroll on window
         document.documentElement.className = "dark-mode";
@@ -106,7 +109,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden',
+      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'minimalHeader',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible

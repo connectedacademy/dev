@@ -49,7 +49,7 @@ export default {
   width 52px
 
   position fixed
-  top 5px
+  top 15px
   left 5px
   z-index 50
 

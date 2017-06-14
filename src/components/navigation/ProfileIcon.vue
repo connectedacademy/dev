@@ -44,9 +44,8 @@ export default {
 
 .profile-icon
   position absolute
-  top 0
-  right 0
-  padding 7px
+  top 17px
+  right 7px
   transition right 0.6s
   z-index 52
 

@@ -83,3 +83,18 @@ Nice to have
 + Restart and sync autoscroll if video is playing
 + Dynamically fake time-based release
 + Hide video when jumping between sections
+
+
+# Amin Panel (12/6/17)
+Admin Panel
+
+Admin Requirements
+- Question responses
+- Link to prose content editor
+- List submissions
+- List registered users for course
+- Registration question responses (needs endpoint)
+
+Teacher Requirements
+- List student in classroom
+- List submissions
