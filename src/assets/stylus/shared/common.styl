@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Arimo')
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro')
+
+html, body
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+
 .pull-left
   float left
 
@@ -39,6 +47,7 @@
 
 .main-container
   radius(4px)
+  position relative
   &.main-container-padded
     padding 20px
 
@@ -53,27 +62,3 @@
 
 .icon-margin
   margin 0 5px
-
-// Page header
-
-.page-header
-  transition(height 0.2s ease)
-  background linear-gradient(bottom, darken($color-primary, 15%), lighten($color-primary, 5%))
-  position absolute
-  left 0
-  right 0
-  text-align center
-  height 320px
-  z-index -1
-  &:after
-    animate()
-    pinned()
-    content ''
-    background-color $color-darkest-grey
-    position absolute
-    opacity 0
-  &.minimal
-    // background linear-gradient(bottom, darken(#222, 10%), lighten(#222, 5%))
-    height 80px
-    &:after
-      opacity 1

@@ -7,6 +7,7 @@
       .main-container
 
         class-selector
+        //- full-class-selector
 
         course-content(v-bind:course-content="courseContent")
 
@@ -21,6 +22,7 @@ import * as types from '@/store/mutation-types';
 
 import AnimatedLogo from '@/components/AnimatedLogo';
 import ClassSelector from '@/components/ClassSelector';
+import FullClassSelector from '@/components/FullClassSelector';
 
 import CourseContent from '@/components/conversation/CourseContent';
 
@@ -49,6 +51,7 @@ export default {
     AnimatedLogo,
     ClassSelector,
     CourseContent,
+    FullClassSelector,
     MarkdownRenderer,
   },
   watch: {

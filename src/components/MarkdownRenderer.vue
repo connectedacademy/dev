@@ -271,8 +271,17 @@ export default {
     reset()
     color $color-text-dark-grey
     margin-bottom 5px
-  h1, h2, h3, h4, h5, p, a, li
+  h1, h2, h3, h4, h5, p, a
     color $color-text-dark-grey
+    &:first-child
+      margin-top 0
+    &:last-child
+      margin-bottom 0
+  h1, h2, h3, h4, h5
+    font-weight 300
+  a
+    color $color-primary
+    text-decoration underline
   img
     max-width 100%
 

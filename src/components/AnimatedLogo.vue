@@ -44,8 +44,9 @@ dash-offset-cross = 0px
 cross-length = 320px
 
 .animated-logo
-
+  animate()
   height 80px
+  opacity 1
 
   svg#logo
     path, line
@@ -69,4 +70,7 @@ cross-length = 320px
     &:hover
       cursor pointer
 
+.navigation.minimized
+  .animated-logo
+    opacity 0
 </style>

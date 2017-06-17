@@ -100,7 +100,7 @@ export default {
     this.$store.dispatch('getHubs');
 
     // Periodically update document height variable
-    window.setInterval(this.updateDocumentHeight, 200);
+    window.setInterval(this.updateDocumentHeight, 500);
   },
   data() {
     return {
@@ -129,6 +129,9 @@ export default {
     ActionPanel,
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     updateDocumentHeight() {
       // Check if document height has changed
       if (this.documentHeight !== document.documentElement.scrollHeight) {
@@ -168,13 +171,7 @@ body.disable-scroll
   right 0
   bottom 0
 
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-
 .main-page
-  /*padding-top 60px*/
 
   .col
     box-sizing border-box
@@ -193,6 +190,7 @@ body.disable-scroll
     margin 0 auto 60px auto
     max-width 780px
     padding-top 80px
+    position relative
     @media(max-width: 800px)
       max-width 100%
       margin 0 0px
@@ -214,5 +212,33 @@ body.disable-scroll
   &.visible
     background-color alpha(black, 0.85)
     pointer-events all
+
+// Page header
+
+.page-header
+  transition(height 0.2s ease)
+  background linear-gradient(bottom, darken($color-primary, 15%), lighten($color-primary, 5%))
+  height 240px
+  position absolute
+  left 0
+  right 0
+  text-align center
+  z-index -1
+
+  // height auto
+  // top 0
+  // bottom 0
+  // position fixed
+  &:after
+    animate()
+    pinned()
+    content ''
+    background-color $color-darkest-grey
+    position absolute
+    opacity 0
+  &.minimal
+    height 80px
+    &:after
+      opacity 1
 
 </style>

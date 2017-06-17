@@ -1,6 +1,8 @@
 <template lang="pug">
 
-.rendered-markdown(v-html="renderedMarkdown")
+div
+  //- pre {{ markdown }}
+  .rendered-markdown(v-html="renderedMarkdown")
 
 </template>
 
@@ -13,6 +15,7 @@ import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
 import MarkdownItFrontMatter from 'markdown-it-front-matter';
+import MarkdownItCustomBlock from 'markdown-it-custom-block';
 
 import API from '@/api';
 import * as types from '@/store/mutation-types';
@@ -26,30 +29,9 @@ export default {
     ]),
     renderedMarkdown() {
 
-      const md = new MarkdownIt({
-        html: true,
-        linkify: true,
-        replaceLink: (link, env) => {
+      const md = new MarkdownIt();
 
-          if (_.startsWith(link, 'http')) { return link; }
-          if (_.endsWith(link, '.md')) {
-            const url = this.getUrl();
-            const currentUrl = url.substring(0, url.lastIndexOf('/') + 1);
-            return `/#/markdown/${encodeURIComponent(link)}`;
-          }
-          return `${this.$store.getters.course.baseUri}${link}`;
-        },
-      })
-      .use(MarkdownItReplaceLink)
-      .use(MarkdownItVideo, {
-        youtube: { width: 640, height: 390 },
-        vimeo: { width: 500, height: 281 },
-      })
-      .use(MarkdownItFrontMatter, (fm) => {
-        this.frontMatter = fm;
-      });
-
-      return `<div>${md.render(this.markdown)}</div>`;
+      return md.render(this.markdown);
     },
   },
 };
@@ -68,6 +50,7 @@ export default {
     color $color-text-dark-grey
   img
     max-width 100%
+
 .fourcorners-submission
   radius(6px)
   background-color $color-primary

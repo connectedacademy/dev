@@ -7,7 +7,7 @@ export default {
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
-    explore_content: 'Explore',
+    explore_content: 'Continue reading',
 
     age: 'Your age',
     current_language: 'Current language',

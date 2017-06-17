@@ -7,7 +7,7 @@
   .course-content-group
     .course-content
       radius(4px)
-      box-shadow 0 0 10px 5px alpha(black, 0.01)
+      box-shadow 0 0 10px 5px alpha(black, 0.02)
 
       background-color white
       margin 20px 0 0 0
@@ -20,7 +20,7 @@
       .type-indicator
         radius(50%)
         content ''
-        background-color $color-primary
+        background-color $color-light-grey
         height 16px
         width 16px
         position absolute
@@ -28,13 +28,11 @@
         right 10px
         &.active
           background-color $color-success
-      h1.content-title
-        reset()
-        color $color-text-dark-grey
-        font-size 1.3em
+
       h5.content-subheader
         reset()
         color $color-text-dark-grey
+        font-weight 300
       p.content-description
         reset()
         color $color-text-grey
@@ -44,12 +42,17 @@
 
       .course-content--header
         background-color transparent
-        padding 20px 20px 0px 20px
+        padding 20px 20px 10px 20px
         h1.content-title
-          color $color-text-dark-grey !important
+          reset()
+          color $color-text-dark-grey
+          font-size 1.3em
+          font-weight 300
       .course-content--body
         overflow hidden
         padding 0px 20px 10px 20px
+        h1, h2, h3, h4, h5
+          font-weight 300
       .course-content--footer
         padding 10px 10px 10px 10px
 

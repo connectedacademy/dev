@@ -4,8 +4,9 @@
 
   .col#col-main(v-bind:class="this.$store.state.layout.columns.main.state")
 
+    previous-button
+
     .main-container.background-white
-      previous-button
 
       .container
 
