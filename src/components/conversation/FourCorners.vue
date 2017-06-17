@@ -83,23 +83,29 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/layout/course-content'
 
+$corner-size = 50px
 $corner-offset = 15px
+$corner-width = 8px
 
 #fourcorners-banner
   radius(6px)
   background-color $color-darkest-grey
   background url('https://images.pexels.com/photos/24486/pexels-photo-24486.jpg?w=940&h=650&auto=compress&cs=tinysrgb')
-  background url('https://images.pexels.com/photos/67504/pexels-photo-67504.jpeg?w=940&h=650&auto=compress&cs=tinysrgb')
+  /*background url('https://images.pexels.com/photos/67504/pexels-photo-67504.jpeg?w=940&h=650&auto=compress&cs=tinysrgb')*/
   background-image()
   background-position bottom right
-
 
   margin-top 20px
   overflow hidden
   position relative
-
   text-align center
+
+  @media(max-width: 800px)
+    radius(0)
+    margin 20px 0 0 0
+
   &:after
+    animate()
     pinned()
     background-color alpha(black, 0.5)
     content ''
@@ -112,7 +118,7 @@ $corner-offset = 15px
     transition-duration 1s
     height 100px
     overflow visible
-    padding 50px 40px
+    padding 50px 30px
     position relative
     z-index 1
     h1, h2, h3, h4, h5, p
@@ -158,28 +164,28 @@ $corner-offset = 15px
         cursor pointer
         opacity 0
         position absolute
-        height 30px
-        width 30px
+        height $corner-size
+        width $corner-size
         &:hover
           opacity 1
         &#corner-top-left
-          border-top white 6px solid
-          border-left white 6px solid
+          border-top white $corner-width solid
+          border-left white $corner-width solid
           left $corner-offset
           top $corner-offset
         &#corner-top-right
-          border-top white 6px solid
-          border-right white 6px solid
+          border-top white $corner-width solid
+          border-right white $corner-width solid
           right $corner-offset
           top $corner-offset
         &#corner-bottom-left
-          border-bottom white 6px solid
-          border-left white 6px solid
+          border-bottom white $corner-width solid
+          border-left white $corner-width solid
           left $corner-offset
           bottom $corner-offset
         &#corner-bottom-right
-          border-bottom white 6px solid
-          border-right white 6px solid
+          border-bottom white $corner-width solid
+          border-right white $corner-width solid
           right $corner-offset
           bottom $corner-offset
           opacity 0.3
@@ -201,6 +207,9 @@ $corner-offset = 15px
 
 
   &.expanded
+    &:after
+      pinned()
+      background-color alpha(black, 0.8)
     #tile-wrapper
       padding 90px 40px 120px 40px
       #corners
