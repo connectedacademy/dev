@@ -3,18 +3,18 @@
 #fourcorners-banner(v-bind:class="{ expanded: expanded }")
   #tile-wrapper
 
-    .tile#info-tile(@click="currentCorner = noCorner")
-      //- icon(v-if="expanded && !(currentCorner === noCorner)" v-bind:name="currentCorner.icon")
-      h1 {{ currentCorner.title }}
-      p {{ infoTile }}
-      .buttons(v-if="expanded && (currentCorner === noCorner)" @click="currentCorner = undefined; expanded = false")
-        .pure-button.pure-button-subtle Cancel
+    .tile#info-tile
+      //- icon(v-if="expanded && !(currentCorner === default)" v-bind:name="currentCorner.icon")
+      h1 {{ corners[currentCorner].title }}
+      p {{ (expanded) ? corners[currentCorner].text : bannerText }}
+      .buttons(v-if="expanded && (currentCorner === 'default')" @click="currentCorner = 'default'; expanded = false")
+        .pure-button.pure-button-subtle Minimize
 
     #corners
-      .corner#corner-top-left(@click="toggleCorner('topLeft')")
-      .corner#corner-top-right(@click="toggleCorner('topRight')")
-      .corner#corner-bottom-left(@click="toggleCorner('bottomLeft')")
-      .corner#corner-bottom-right(@click="toggleCorner('bottomRight')")
+      .corner#corner-top-left(v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")
+      .corner#corner-top-right(v-bind:class="{ active: currentCorner === 'topRight' }" @click="toggleCorner('topRight')")
+      .corner#corner-bottom-left(v-bind:class="{ active: currentCorner === 'bottomLeft' }" @click="toggleCorner('bottomLeft')")
+      .corner#corner-bottom-right(v-bind:class="{ active: currentCorner === 'bottomRight' }" @click="toggleCorner('bottomRight')")
 
 </template>
 
@@ -27,19 +27,17 @@ import Moment from 'moment';
 export default {
   name: 'four-corners',
   props: ['content'],
-  mounted() {
-    this.currentCorner = this.noCorner;
-  },
   data() {
     return {
       expanded: false,
       tease: false,
-      noCorner: {
-        icon: 'picture-o',
-        title: 'Four Corners',
-        text: 'Explore each corner to learn the types of contextual information that can be linked in a Four Corners image'
-      },
+      bannerText: 'Tap the bottom right corner to learn how Four Corners offers a new way of enriching photographs with rich metadata',
       corners: {
+        default: {
+          icon: 'picture-o',
+          title: 'Four Corners',
+          text: 'Explore each corner to learn the types of contextual information that can be linked in a Four Corners image'
+        },
         topLeft: {
           icon: 'history',
           title: 'Image Context',
@@ -61,24 +59,19 @@ export default {
           text: 'Here you can specify how you want to protect the copyright of your image, asserting a copyright for yourself or another entity. Alternatively you could add a Creative Commons license.',
         },
       },
-      currentCorner: undefined,
+      currentCorner: 'default',
     };
-  },
-  computed: {
-    infoTile() {
-      if (this.expanded) {
-        return (this.currentCorner) ? this.currentCorner.text : 'Explore each corner to learn the types of contextual information that can be linked in a Four Corners image';
-      } else {
-        return 'Tap the bottom right corner to learn how Four Corners offers a new way of enriching photographs with rich metadata';
-      }
-    }
   },
   methods: {
     toggleCorner(corner) {
       if (this.expanded) {
-        this.currentCorner = this.corners[corner];
+        if (corner === this.currentCorner) {
+          this.currentCorner = 'default';
+        } else {
+          this.currentCorner = corner;
+        }
       } else {
-        this.currentCorner = this.noCorner;
+        this.currentCorner = 'default';
         this.expanded = true;
       }
     },
@@ -140,8 +133,8 @@ $corner-offset = 15px
       overflow-y auto
 
     .pure-button
-      background-color transparent
-      border white 1px solid
+      background-color alpha(white, 0.1)
+      border-color transparent
       color white
       margin 10px auto 5px auto
       &:hover
@@ -201,6 +194,10 @@ $corner-offset = 15px
 
         &#corner-bottom-left
           transition-delay 0.5s
+
+        &.active
+          border-color #0cf !important
+          opacity 1 !important
 
 
   &.expanded
