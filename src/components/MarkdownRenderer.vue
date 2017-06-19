@@ -107,7 +107,7 @@ export default {
               this.$log.log('Submission check response');
               this.$log.log(response);
               this.checkingSubmissions = false;
-              this.submitted = (response.data.length === 0) ? false : true;
+              this.submitted = false;// (response.data.length === 0) ? false : true;
             },
             (response) =>{
               this.checkingSubmissions = false;
@@ -241,13 +241,13 @@ export default {
             </div>
 
             <div class="fourcorners-submission fourcorners-submission-submit" v-if="isRegistered && !checkingSubmissions && !submitting && !submitted">
-              <label>Submit URL</label>
-              <textarea name="text" placeholder="Paste a link to your FourCorners image here*" v-model="fourcornersLink"></textarea>
+              <label>Submit a link</label>
+              <input type="text" name="text" placeholder="Paste link to a page with your FourCorners image on*" v-model="fourcornersLink" />
               <p>*this will send a tweet on your behalf!</p>
-              <p>{{ this.tweet }}</p>
-              <button class="pure-button" v-on:click="postTweet">Submit</button>
+              <p hidden>{{ this.tweet }}</p>
+              <button class="pure-button pure-button-primary" v-on:click="postTweet">Submit Homework</button>
             </div>
-            <button v-if="!isRegistered" class="pure-button pure-button-primary" v-on:click="showAuth">Please authenticate</button>`;
+            <button v-if="!isRegistered" class="pure-button" v-on:click="showAuth">Please authenticate</button>`;
           }
         }
       });
@@ -280,14 +280,17 @@ export default {
   h1, h2, h3, h4, h5
     font-weight 300
   a
-    color $color-primary
+    color $color-primary !important
     text-decoration underline
+    &:hover
+      color $color-primary
+      cursor pointer
   img
     max-width 100%
 
 .fourcorners-submission
   radius(6px)
-  background-color $color-primary
+  background-color #FD3C51
   box-sizing border-box
   padding 15px
   width 100%
@@ -297,7 +300,7 @@ export default {
     p
       reset()
       color white
-    textarea
+    input[type="text"]
       radius(6px)
       border none
       box-shadow none
@@ -308,8 +311,15 @@ export default {
       outline 0
       resize none
       width 100%
-    button
+    .pure-button
+      background-color transparent
+      border white 1px solid
+      color white
       margin-top 10px
+      &:hover
+        background-color white
+        border-color white
+        color #FD3C51
   &.fourcorners-submission-submitted, &.fourcorners-submission-submitting, &.fourcorners-submission-checking
     text-align center
     h2

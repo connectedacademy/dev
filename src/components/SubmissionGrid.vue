@@ -1,11 +1,12 @@
 <template lang="pug">
 
-  .submission-grid-wrapper(v-if="content.expectsubmission && (content.submissions.length > 0)")
-    p.content-description
-      | Below are your submission(s):
+  .submission-grid-wrapper(v-if="content.submissions.length > 0")
+    pre.hidden {{ content}}
     ul.submission-grid
-      li.submission-grid--tile(v-for="submission in content.submissions")
-        img( v-bind:src="submission.thumbnail")
+      li.submission-grid--tile(v-for="submission in content.submissions" @click="viewSubmissions")
+        img(v-bind:src="submission.thumbnail")
+      li.submission-grid--tile.placeholder
+      li.submission-grid--tile.placeholder
       .clearfix
 
 </template>
@@ -16,7 +17,7 @@ export default {
   props: ['content'],
   methods: {
     viewSubmissions() {
-      this.$router.push('/feedback/browse/evidence/intro')
+      this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`);
     },
   },
 };
@@ -27,18 +28,22 @@ export default {
 @import "../assets/stylus/shared"
 
 .submission-grid-wrapper
+  background-color white
   p.content-description
     color $color-text-dark-grey
   ul.submission-grid
     cleanlist()
-    margin -10px
+    padding 10px
     li.submission-grid--tile
       cleanlist()
       float left
       margin 10px
+      &:hover
+        cursor pointer
       img
         background-color white
         display block
-        height 80px
+        height 120px
+        max-width 300px
 
 </style>

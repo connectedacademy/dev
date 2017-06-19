@@ -1,9 +1,7 @@
 <template lang="pug">
 
   .like-indicator(@click="getLikeCount")
-    //- icon.hidden(name="heart")
     icon(name="ca-heart")
-    //- | {{ likeCount }}
 
 </template>
 

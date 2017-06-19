@@ -24,7 +24,7 @@
     injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
 
     //- HOMEWORK
-    homework(v-else-if="content.expectsubmission" v-bind:content="content")
+    homework(v-else-if="content.expectsubmission && isRegistered" v-bind:content="content")
 
     //- FOURCORNERS
     four-corners(v-else-if="content.fourcornersintro")
@@ -52,13 +52,10 @@
 
         video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
 
-        submission-grid(v-if="isRegistered && content.expectsubmission" v-bind:content="content")
-
         message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
 
       .course-content--footer(v-if="isRegistered && (content.expectsubmission || (content.url && !content.thumbnails))")
         markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
-        submission-button(v-if="isRegistered" v-bind:content="content")
         .clearfix
 
       conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
@@ -84,8 +81,6 @@ import MarkdownLink from '@/components/MarkdownLink';
 import VideoEmbed from '@/components/VideoEmbed';
 import ConversationContainer from '@/components/ConversationContainer';
 import LikeIndicator from '@/components/LikeIndicator';
-import SubmissionGrid from '@/components/SubmissionGrid';
-import SubmissionButton from '@/components/SubmissionButton';
 
 import Homework from '@/components/conversation/Homework';
 import FourCorners from '@/components/conversation/FourCorners';
@@ -106,8 +101,6 @@ export default {
     MarkdownLink,
     VideoEmbed,
     LikeIndicator,
-    SubmissionGrid,
-    SubmissionButton,
     Homework,
     FourCorners,
     FutureContent,

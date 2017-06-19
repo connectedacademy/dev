@@ -17,7 +17,9 @@
 
   .course-content--body
     p {{ content.description }}
-    .pure-button Submit Homework
+    submission-button(v-bind:content="content")
+
+  submission-grid(v-bind:content="content")
 
 </template>
 
@@ -27,12 +29,15 @@ import * as config from '@/api/config';
 import {mapGetters} from 'vuex';
 import Moment from 'moment';
 
+import SubmissionGrid from '@/components/SubmissionGrid';
+import SubmissionButton from '@/components/SubmissionButton';
+
 export default {
   name: 'homework',
   props: ['content'],
-  computed: {
-  },
-  methods: {
+  components: {
+    SubmissionGrid,
+    SubmissionButton,
   },
 };
 </script>
@@ -55,22 +60,10 @@ $color-homework = #FD3C51
 
   .course-content--body
     radius(6px)
-    /*background-color white !important*/
-    /*margin 0 20px 20px 20px*/
-    /*padding 10px !important*/
     text-align center
     h1, h2, h5, p
       reset()
       color white
       padding 5px
-
-  .pure-button
-    background-color transparent
-    border white 1px solid
-    color white
-    margin 10px auto 5px auto
-    &:hover
-      background-color white
-      color $color-homework
 
 </style>

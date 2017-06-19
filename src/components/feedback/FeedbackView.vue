@@ -1,41 +1,43 @@
 <template lang="pug">
 
-  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
+  .feedback-page
 
-    previous-button
+    .col#col-main
 
-    .container
+      previous-button
 
-      info-dialogue(:dismissable="true")
-        p Welcome to the feedback screen, here you can give feedback on the image below
+      .main-container.main-container-padded.background-white
 
-      .feedback-section
+        info-dialogue(:dismissable="true")
+          p Welcome to the feedback screen, here you can give feedback on the image below
 
-        h1.feedback-section-title Give Feedback
-        h5.feedback-section-subtitle Please provide feedback on the following image
+        .feedback-section
 
-        .feedback-tile(v-if="feedbackItem")
+          h1.feedback-section-title Give Feedback
+          h5.feedback-section-subtitle Please provide feedback on the following image
 
-          four-corners(v-bind:html="feedbackItem.html")
+          .feedback-tile(v-if="feedbackItem")
 
-          .user-strip
-            img.user-profile-image(v-bind:src="feedbackItem.user.profile")
-            h5.user-profile-name {{ feedbackItem.user.name }}
+            four-corners(v-bind:html="feedbackItem.html")
 
-      .feedback-conversation
-        .feedback-message-wrapper(v-for="message in feedbackMessages")
-          .feedback-message.animated.fadeInUp(v-bind:class="{ reply: (message.fromuser.name !== 'Edward Jenkins') }")
-            .feedback-message--bubble
-              p(v-if="!message.canview") Message hidden
-              p(v-if="message.canview") {{ message.message }}
-            .feedback-message--author
-              p by {{ message.fromuser.name }}
-          .clearfix
+            .user-strip
+              img.user-profile-image(v-bind:src="feedbackItem.user.profile")
+              h5.user-profile-name {{ feedbackItem.user.name }}
 
-        .feedback-submission
-          textarea(v-autosize="comment" placeholder="Write comment..." v-model="comment"  @keyup.enter="postFeedbackComment")
-          .pure-button.pure-button-primary(@click="postFeedbackComment") Comment
-          .clearfix
+        .feedback-conversation
+          .feedback-message-wrapper(v-for="message in feedbackMessages")
+            .feedback-message.animated.fadeInUp(v-bind:class="{ reply: (message.fromuser.name !== 'Edward Jenkins') }")
+              .feedback-message--bubble
+                p(v-if="!message.canview") Message hidden
+                p(v-if="message.canview") {{ message.message }}
+              .feedback-message--author
+                p by {{ message.fromuser.name }}
+            .clearfix
+
+          .feedback-submission
+            textarea(v-autosize="comment" placeholder="Write comment..." v-model="comment"  @keyup.enter="postFeedbackComment")
+            .pure-button.pure-button-primary(@click="postFeedbackComment") Comment
+            .clearfix
 
 </template>
 

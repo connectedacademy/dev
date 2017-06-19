@@ -1,35 +1,37 @@
 <template lang="pug">
 
-  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
+  .feedback-page
 
-    previous-button
+    .col#col-main
 
-    .container
+      previous-button
 
-      info-dialogue(:dismissable="true")
-        p Here you can share feedback with others and gain feedback on your own submissions.
+      .main-container.main-container-padded.background-white
 
-      .feedback-section(v-if="feedbackItems.length > 0")
+        info-dialogue(:dismissable="true")
+          p Here you can share feedback with others and gain feedback on your own submissions.
 
-        h1.feedback-section-title Your Peer Feedback
-        h5.feedback-section-subtitle Please provide feedback on the following images
+        .feedback-section(v-if="feedbackItems.length > 0")
 
-        .pure-g
+          h1.feedback-section-title Your Peer Feedback
+          h5.feedback-section-subtitle Please provide feedback on the following images
 
-          .pure-u-1-3(v-for="feedbackItem in feedbackItems")
+          .pure-g
 
-            feedback-tile(v-bind:content="feedbackItem")
+            .pure-u-1-3(v-for="feedbackItem in feedbackItems")
 
-      .feedback-section(v-if="availableFeedbackItems.length > 0")
+              feedback-tile(v-bind:content="feedbackItem")
 
-        h1.feedback-section-title Provide Feedback
-        h5.feedback-section-subtitle Select any of the following images to add it to your list
+        .feedback-section(v-if="availableFeedbackItems.length > 0")
 
-        .pure-g
+          h1.feedback-section-title Provide Feedback
+          h5.feedback-section-subtitle Select any of the following images to add it to your list
 
-          .pure-u-1-3(v-for="feedbackItem in availableFeedbackItems")
+          .pure-g
 
-            feedback-tile(v-bind:content="feedbackItem")
+            .pure-u-1-3(v-for="feedbackItem in availableFeedbackItems")
+
+              feedback-tile(v-bind:content="feedbackItem")
 
 </template>
 

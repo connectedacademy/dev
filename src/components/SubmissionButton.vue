@@ -1,9 +1,9 @@
 <template lang="pug">
 
-  .submission-button
-    .pure-button.pull-left(v-if="content.expectsubmission && content.submissions.length" @click="viewSubmissions")
+  .submission-button-wrapper
+    .pure-button(v-if="content.expectsubmission && content.submissions.length" @click="viewSubmissions")
       | {{ $t('submission.view_submissions') }}
-    .pure-button.pull-left(v-if="content.expectsubmission && content.url && !content.submissions.length" @click="makeSubmission")
+    .pure-button(v-if="content.expectsubmission && content.url && !content.submissions.length" @click="makeSubmission")
       | {{ $t('submission.make_a_submission') }}
 
 </template>
@@ -27,5 +27,16 @@ export default {
 <style lang="stylus" scoped>
 
 @import "../assets/stylus/shared"
+
+.submission-button-wrapper
+  text-align center
+  .pure-button
+    background-color transparent
+    border white 1px solid
+    color white
+    margin 10px auto 5px auto
+    &:hover
+      background-color white
+      color $color-homework
 
 </style>

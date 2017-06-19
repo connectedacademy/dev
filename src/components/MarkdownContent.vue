@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 @import '~stylus/shared'
 
@@ -50,31 +50,5 @@ export default {
     color $color-text-dark-grey
   img
     max-width 100%
-
-.fourcorners-submission
-  radius(6px)
-  background-color $color-primary
-  box-sizing border-box
-  padding 15px
-  width 100%
-  label
-    color white
-  p
-    reset()
-    color white
-  textarea
-    radius(6px)
-    border none
-    box-shadow none
-    box-sizing border-box
-    line-height 40px
-    margin 10px 0
-    padding 0 10px
-    outline 0
-    resize none
-    width 100%
-  button
-    margin-top 10px
-
 
 </style>
