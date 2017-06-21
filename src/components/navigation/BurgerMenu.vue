@@ -51,20 +51,20 @@ export default {
   position fixed
   top 15px
   left 5px
-  z-index 50
+  z-index 55
+
+  @media(max-width 900px)
+    background-color alpha(black, 0.2)
 
   &:hover
     cursor pointer
-    background-color darken($color-primary, 5%)
-
-  &.minimized
-    background-color $color-primary
+    background-color alpha(black, 0.1)
 
   /* Active styles */
   &.active
     background-color transparent
     left calc(100% - 60px)
-    z-index 52
+    z-index 56
     @media(min-width: 360px)
       left 300px
 

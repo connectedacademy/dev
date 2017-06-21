@@ -23,14 +23,11 @@ import PreviousButton from '@/components/PreviousButton';
 
 export default {
   name: 'markdown',
-  created() {
-    this.$store.dispatch('setColumnState', 'narrow');
-  },
   methods: {
-    toggleColumnState() {
-      this.$store.dispatch('toggleColumnState');
-    },
     back() { this.$router.go(-1); },
+  },
+  mounted() {
+    window.scroll(0, 0);
   },
   components: {
     AnimatedLogo,

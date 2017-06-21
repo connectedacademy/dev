@@ -3,7 +3,7 @@
 
 <template lang="pug">
 
-#app
+#app(v-bind:class="pageStyles")
 
   debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
@@ -21,11 +21,14 @@
 
     navigation
 
-    .page-header(v-bind:class="{ minimal: minimalHeader }")
+    .page-header(v-bind:class="{ minimal: minimalHeader, minimized: navigation.minimized }")
 
     transition(name="fade" appear mode="out-in")
+      keep-alive
+        router-view
 
-      router-view
+  //- #media-panel(v-if="videoIsActive")
+    video-container
 
   action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
 
@@ -55,6 +58,7 @@ import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
 import DebugPanel from './components/DebugPanel';
 import ActionPanel from './components/conversation/ActionPanel';
+import VideoContainer from './components/VideoContainer';
 
 export default {
   name: 'app',
@@ -75,9 +79,9 @@ export default {
     videoIsActive(nV, oV) {
       if (nV) {
         // Segment visible, disable scroll on window
-        document.documentElement.className = "dark-mode";
+        // document.documentElement.className = "dark-mode";
       } else {
-        document.documentElement.className = "light-mode";
+        // document.documentElement.className = "light-mode";
       }
     },
   },
@@ -88,11 +92,13 @@ export default {
       if (self.isAuthenticated && !self.isRegistered) {
         self.$router.push('/registration');
       } else {
-        self.$ga.set('userId', self.$store.state.auth.user.account);
+        if (self.user && self.user.account) {
+          self.$ga.set('userId', self.user.account);
+        }
       }
     });
 
-    // Fetch course and then hubs// Set faux time
+    // Fetch course and then hubs
     const fauxTime = Moment().format();
     this.$store.commit('setFauxTime', fauxTime);
 
@@ -109,7 +115,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'minimalHeader',
+      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'minimalHeader', 'pageStyles', 'user', 'navigation',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
@@ -127,6 +133,7 @@ export default {
     LeftDrawer,
     RightDrawer,
     ActionPanel,
+    VideoContainer,
   },
   methods: {
     goBack() {
@@ -208,7 +215,7 @@ body.disable-scroll
   pointer-events none
   position fixed
   transition background-color 0.6s
-  z-index 50
+  z-index 55
   &.visible
     background-color alpha(black, 0.85)
     pointer-events all
@@ -217,18 +224,14 @@ body.disable-scroll
 
 .page-header
   transition(height 0.2s ease)
-  background linear-gradient(bottom, darken($color-primary, 15%), lighten($color-primary, 5%))
+  background linear-gradient(bottom, darken($color-primary, 10%), lighten($color-primary, 5%))
   height 240px
-  position absolute
+  position fixed
   left 0
   right 0
   text-align center
   z-index -1
 
-  // height auto
-  // top 0
-  // bottom 0
-  // position fixed
   &:after
     animate()
     pinned()
@@ -236,9 +239,35 @@ body.disable-scroll
     background-color $color-darkest-grey
     position absolute
     opacity 0
+  &.minimized
+    background linear-gradient(bottom, $color-primary, lighten($color-primary, 5%))
+    height 80px
   &.minimal
     height 80px
     &:after
       opacity 1
 
+#app.chat .page-header.minimal:after
+  background-color $color-homework
+
+// Hide page header on colourful pages
+html.colourful
+  .page-header
+    display none
+
+#media-panel
+  pinned()
+  position fixed
+  top 0
+  bottom auto
+  background-color $color-darkest-grey
+  background-color white
+  border-bottom $color-border 1px solid
+  box-shadow 0 0 5px 5px alpha(black, 0.1)
+  /*height 140px*/
+  width 780px
+  left 50%
+  margin-left calc(-780px / 2)
+  z-index 50
+  text-align center
 </style>

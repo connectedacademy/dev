@@ -1,0 +1,57 @@
+@import '~stylus/shared'
+
+.feedback-page
+  pinned()
+  top 80px
+  overflow-x none
+  overflow-y scroll
+  position fixed
+  .admin-panels
+    padding 10px
+    .admin-panel
+      animate()
+      pinned()
+      background-color white
+      border-right $color-light-grey 1px solid
+      /*box-shadow 0 0 5px 5px alpha(black, 0.025)*/
+      box-sizing border-box
+      float left
+      overflow-y scroll
+      padding-top 60px
+      position absolute
+      right auto
+      z-index 1
+      &.active
+        z-index 0
+      .admin-panel--header
+        background-color white
+        border-bottom $color-border 1px solid
+        height 60px
+        padding-right 40px
+        position absolute
+        top 0
+        left 0
+        right 0
+        .reload-button
+          animate()
+          color $color-grey
+          height 60px
+          width 40px
+          position absolute
+          right 0px
+          top 0px
+          text-align center
+          .fa-icon
+            height 60px
+            width 15px
+          &:hover
+            color darken($color-grey, 20%)
+            cursor pointer
+        h1
+          reset()
+          color $color-text-grey
+          font-size 1.2em
+          line-height 60px
+          padding 0 20px
+      .admin-panel--content
+        padding 20px

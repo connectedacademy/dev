@@ -5,13 +5,13 @@
     .close-button(v-if="segmentVisible" @click="exploreSegment(undefined)")
       p close
 
-    .explore-segment-button(@click="exploreSegment(message)")
-      icon(name="angle-right")
-
     .message-wrapper
 
-      .message-count.animated.fadeIn(v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:class="{ hide: activeSegment, low: (message.info.total > 0), medium: (message.info.total > 2), high: (message.info.total > 4) }")
-        span(v-if="message.info.total !== 0") {{ message.info.total }}
+      .message-count.animated.fadeIn(v-if="message.info" v-bind:class="{ hide: activeSegment, plus: (message.info.total === 0) }" @click="exploreSegment(message)")
+        span(v-if="message.info.total > 0")
+          | {{ message.info.total }}
+        span(v-if="message.info.total === 0")
+          icon(name="plus")
 
       transition(appear name="fade")
         .suggestion(v-if="message.message && message.message.suggestion")
@@ -121,11 +121,11 @@ export default {
         this.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
 
         const offsetHeight = window.innerHeight;
-        const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 140;
+        const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 219;
         const offsetWidth = document.getElementById('col-main').offsetWidth;
         const offsetPadding = 20.0;
         const offsetTop = 80.0;
-        const offsetBottom = 140.0;
+        const offsetBottom = 219.0;
 
         this.activeSegmentStyles = {
           top: `${topPosition + offsetTop}px`,
@@ -216,6 +216,7 @@ export default {
 
 .time-segment
   segment-transition()
+  background-color $color-lightest-grey
   height 158px
   padding-right 25px
   position absolute
@@ -223,45 +224,48 @@ export default {
   right 0
   top 0
   overflow hidden
+  &:nth-child(1n)
+    background-color white
   .message-wrapper
     background-color transparent
     transition('background-color' 0.3s linear)
     .message
       max-height 98px
       margin 15px 15px 0 15px
-  .explore-segment-button
+  .message-count
+    animate()
+    padding 10px
     position absolute
+    text-align center
     top 0
     bottom 0
     right 0
-    width 40px
-    z-index 1
-    .fa-icon
-      color $color-dark-grey
-      height 100%
-      margin 0 15px
-      width 10px
+    span
+      radius(50%)
+      background-color $color-primary
+      color white
+      display block
+      font-size 0.8em
+      font-weight bold
+      height 20px
+      line-height 20px
+      width 20px
+      padding 4px
     &:hover
       cursor pointer
-  .message-count
-    radius(13px)
-    background-color $color-primary
-    color white
-    font-size 0.8em
-    line-height 14px
-    min-width 14px
-    padding 6px
-    position absolute
-    text-align center
-    top 5px
-    right 5px
-    animate()
-    &.low
-      background-color $color-success
-    &.medium
-      background-color $color-warning
-    &.high
-      background-color $color-danger
+      span
+        background-color darken($color-primary, 15%)
+
+    &.plus
+      span
+        background-color $color-grey
+        line-height 26px
+      &:hover
+        span
+          background-color darken($color-grey, 15%)
+      .fa-icon
+        margin-top 1px
+
     &.hide
       opacity 0
 
@@ -270,7 +274,7 @@ export default {
     background-color $color-lightest-grey
     border-top-left-radius 6px
     border-top-right-radius 6px
-    z-index 51
+    z-index 56
     padding-right 0
     .explore-segment-button
       display none
@@ -328,7 +332,7 @@ export default {
   right 5px
   height 30px
   min-width 30px
-  z-index 53
+  z-index 57
   p
     reset()
     color white

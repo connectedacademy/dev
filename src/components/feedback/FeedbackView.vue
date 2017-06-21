@@ -1,43 +1,34 @@
 <template lang="pug">
 
-  .feedback-page
+  .feedback-view(v-if="currentFeedbackId")
 
-    .col#col-main
+    .feedback-header
+      p {{ feedbackItem.user.name }}
 
-      previous-button
+    .feedback-section
 
-      .main-container.main-container-padded.background-white
+      .feedback-tile(v-if="feedbackItem")
 
-        info-dialogue(:dismissable="true")
-          p Welcome to the feedback screen, here you can give feedback on the image below
+        four-corners(v-bind:html="feedbackItem.html")
 
-        .feedback-section
+    .feedback-conversation(v-if="!loading")
+      .feedback-message-wrapper(v-for="message in feedbackMessages")
+        //- pre {{ message.fromuser }}
+        .feedback-message.animated.fadeInUp(v-bind:class="{ reply: (message.fromuser.id !== currentUser.id) }")
+          .feedback-message--bubble
+            p(v-if="!message.canview") Message hidden
+            p(v-if="message.canview") {{ message.message }}
+          .feedback-message--author
+            p by {{ message.fromuser.name }}
+        .clearfix
 
-          h1.feedback-section-title Give Feedback
-          h5.feedback-section-subtitle Please provide feedback on the following image
+      .feedback-submission
+        textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment"  @keyup.enter="postFeedbackComment")
+        .pure-button(@click="postFeedbackComment") Send
+        .clearfix
+      .clearfix
 
-          .feedback-tile(v-if="feedbackItem")
-
-            four-corners(v-bind:html="feedbackItem.html")
-
-            .user-strip
-              img.user-profile-image(v-bind:src="feedbackItem.user.profile")
-              h5.user-profile-name {{ feedbackItem.user.name }}
-
-        .feedback-conversation
-          .feedback-message-wrapper(v-for="message in feedbackMessages")
-            .feedback-message.animated.fadeInUp(v-bind:class="{ reply: (message.fromuser.name !== 'Edward Jenkins') }")
-              .feedback-message--bubble
-                p(v-if="!message.canview") Message hidden
-                p(v-if="message.canview") {{ message.message }}
-              .feedback-message--author
-                p by {{ message.fromuser.name }}
-            .clearfix
-
-          .feedback-submission
-            textarea(v-autosize="comment" placeholder="Write comment..." v-model="comment"  @keyup.enter="postFeedbackComment")
-            .pure-button.pure-button-primary(@click="postFeedbackComment") Comment
-            .clearfix
+    .clearfix
 
 </template>
 
@@ -48,6 +39,7 @@ import { mapGetters } from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
+import FourCornersMixin from '@/mixins/FourCorners';
 import FourCorners from '../fourcorners/FourCorners';
 
 import PreviousButton from '../PreviousButton';
@@ -55,27 +47,30 @@ import InfoDialogue from '../InfoDialogue';
 
 export default {
   name: 'feedback-view',
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.$store.dispatch('checkAuth');
-    });
-  },
-  created() {
-    // Check if user has registered
-    if (this.isAuthenticated && !this.isRegistered) {
-      this.$router.push('/registration');
+  props: ['currentFeedbackId'],
+  mixins: [
+    FourCornersMixin,
+  ],
+  watch: {
+    currentFeedbackId() {
+      // Fetch feedback item
+      this.getFeedbackItem();
+    },
+    feedbackItem() {
+      // Set loading state
+      this.loading = true;
+      // Clear discussion
+      this.discussion = [];
+      // Fetch discussion
+      this.getDiscussion();
+      // Load four corners
+      this.loadFourCornersScript();
     }
-  },
-  mounted() {
-    this.$store.dispatch('setColumnState', 'narrow');
-
-    // Fetch feedback item
-    this.getFeedbackItem();
-    this.getDiscussion();
   },
   data() {
     return {
       navTitle: 'Connected Academy - View Feedback',
+      loading: true,
       feedbackItem: undefined,
       discussion: [],
       comment: '',
@@ -114,10 +109,14 @@ export default {
           this.$log.log('Response from feedback request');
           this.$log.log(response);
           this.discussion = response;
+          // Set loading state
+          this.loading = false;
         },
         (response) => {
           // TODO: Handle failed request
           this.$log.log('Failed to retrieve feedback');
+          // Set loading state
+          this.loading = false;
         },
       );
     },
@@ -147,7 +146,10 @@ export default {
       return _.orderBy(this.discussion, ['createdAt'], ['asc']);
     },
     encodedContentId() {
-      return this.$route.params.id.replace('#','%23');
+      return this.currentFeedbackId.replace('#','%23');
+    },
+    currentUser() {
+      return this.$store.getters.user;
     },
   },
   components: {
@@ -162,8 +164,23 @@ export default {
 
 @import '~stylus/shared'
 
+.feedback-view
+  padding-top 50px
+
+  .feedback-header
+    pinned()
+    background-color white
+    border-bottom $color-border 1px solid
+    height 50px
+    position absolute
+    text-align center
+    bottom auto
+    p
+      reset()
+      font-size 0.9em
+      line-height 54px
+
 .feedback-section
-  margin-bottom 30px
   h1.feedback-section-title
     reset()
     padding 0 10px
@@ -175,7 +192,6 @@ export default {
 
   .feedback-tile
     cleanlist()
-    margin 10px
 
     .user-strip
       padding-left 60px
@@ -196,46 +212,66 @@ export default {
         padding 0 10px
 
 .feedback-conversation
-  padding 10px
+  padding-top 20px
+  padding-bottom 120px + 10px
 
-  .feedback-message
-    display inline-block
-    float right
-    margin-bottom 10px
-    .feedback-message--bubble
-      radius(6px)
-      background-color $color-primary
-      padding 6px 12px
-      p
-        reset()
-        color white
-    .feedback-message--author
-      text-align right
-      p
-        reset()
-        padding 4px 0
-        color $color-text-grey
-        font-size 0.7em
-    &.reply
-      float left
+  .feedback-message-wrapper
+    .feedback-message
+      display inline-block
+      float right
+      margin-bottom 10px
       .feedback-message--bubble
         radius(6px)
-        background-color $color-light-grey
+        background-color $color-homework
+        padding 6px 12px
         p
-          color $color-text-dark-grey
+          reset()
+          color white
+      .feedback-message--author
+        text-align right
+        p
+          reset()
+          padding 4px 0
+          color $color-text-grey
+          font-size 0.7em
+      &.reply
+        float left
+        .feedback-message--bubble
+          radius(6px)
+          background-color $color-light-grey
+          p
+            color $color-text-dark-grey
+        .feedback-message--author
+          text-align left
 
   .feedback-submission
-    radius(6px)
+    background-color $color-lightest-grey
+    /*border-top $color-light-grey 1px solid
+    border-bottom $color-light-grey 1px solid*/
     border $color-light-grey 1px solid
+    height 100px
     padding 10px
+    position absolute
+    bottom 20px
+    left 20px
+    right 20px
     textarea
+      background-color transparent
       border none
       display block
       outline 0
       resize none
-      height 20px
-      line-height 20px
+      line-height 22px
+      min-height 60px
       width 100%
     .pure-button
+      background-color $color-homework
+      border-color $color-homework
+      color white
       float right
+      position absolute
+      bottom 10px
+      right 10px
+      &:hover
+        background-color darken($color-homework, 10%)
 </style>

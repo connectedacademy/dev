@@ -29,7 +29,7 @@ export default {
   min-height 40px
   min-width 40px
   position fixed
-  top 70px
+  top 90px
   right 10px
   z-index 51
   ul.navigation-items

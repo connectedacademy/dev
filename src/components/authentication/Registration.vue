@@ -125,7 +125,7 @@ export default {
       (response) => {
         this.checkingRegistration = false;
         if (response.user.registration) {
-          this.$router.replace('/');
+          // this.$router.replace('/');
         }
       },
       (response) => {

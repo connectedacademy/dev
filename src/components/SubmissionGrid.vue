@@ -5,8 +5,6 @@
     ul.submission-grid
       li.submission-grid--tile(v-for="submission in content.submissions" @click="viewSubmissions")
         img(v-bind:src="submission.thumbnail")
-      li.submission-grid--tile.placeholder
-      li.submission-grid--tile.placeholder
       .clearfix
 
 </template>
@@ -25,25 +23,33 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import "../assets/stylus/shared"
+@import "~stylus/shared"
 
 .submission-grid-wrapper
-  background-color white
+  background-color $color-homework
+  border-top alpha(white, 0.2) 1px solid
+  margin 0 10px
+  overflow hidden
   p.content-description
     color $color-text-dark-grey
   ul.submission-grid
     cleanlist()
-    padding 10px
+    height 100px
+    overflow-x auto
+    overflow-y hidden
+    padding 10px 0
+    text-align center
     li.submission-grid--tile
       cleanlist()
-      float left
+      display inline-block
       margin 10px
       &:hover
         cursor pointer
       img
         background-color white
+        /*border white 1px solid*/
         display block
-        height 120px
+        height 80px
         max-width 300px
 
 </style>

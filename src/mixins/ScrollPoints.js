@@ -24,9 +24,10 @@ export default {
 
             let additionalOffset = (conversationContainer) ? conversationContainer.offsetTop : 0;
 
-            if (conversationContainer) {
-              additionalOffset += conversationContainer.querySelector('.spacer').offsetHeight;
-            }
+            // if (conversationContainer) {
+            //   additionalOffset += conversationContainer.querySelector('.spacer').offsetHeight;
+            // }
+            additionalOffset += 80;
 
             this.$store.commit('setScrollPoint', {
               slug: content.slug,

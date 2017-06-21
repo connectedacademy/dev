@@ -2,7 +2,7 @@
 
 .animated-logo(@click="goHome")
   //- img.logo(src="../assets/logos/main-white.svg")
-  svg(id="logo" v-bind:class="{loaded: loaded}" width="140" height="77" viewBox="0 0 140 77" transform="scale(.5,.5)")
+  svg(id="logo" v-bind:class="{loaded: loaded}" width="140" height="77" viewBox="0 0 140 77")
     path#main(d="M1069.34,221.6l-34.53-61.74L1004,212.25l-2.14,3.45a37.58,37.58,0,1,1-7.5-47" transform="translate(-930.95 -158.24)")
     line#bar(x1="98" y1="50" x2="110" y2="50")
 
@@ -49,6 +49,7 @@ cross-length = 320px
   opacity 1
 
   svg#logo
+    transform(scale(.5,.5))
     path, line
       fill none
       transition stroke-dashoffset duration easing, stroke-dasharray duration easing

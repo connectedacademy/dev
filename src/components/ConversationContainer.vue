@@ -2,10 +2,7 @@
 
   .conversation-container(ref="conversationContainer" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
 
-    .spacer(ref="spacer" v-bind:style="spacerStyles")
-      .floating-text
-        h5 {{ $t('common.scroll_down_for_live_class') }}
-        icon(name="angle-double-down" scale="2")
+    //- #fade-out
 
     //- Efficent
     .activity-visualisation(v-bind:style="activityVisualisationStyles")
@@ -55,8 +52,9 @@ export default {
     Subtitles,
   ],
   mounted() {
-    this.windowResized();
     const self = this;
+
+    this.windowResized();
     window.addEventListener('resize', () => {
       this.windowResized(self);
     });
@@ -210,24 +208,27 @@ export default {
     },
     conversationContainerStyles() {
       return {
-        height: `${(this.containerHeight + this.spacerHeight)}px`,
+        // height: `${(this.containerHeight + this.spacerHeight)}px`,
+        height: `${this.containerHeight}px`,
       };
     },
     messagesContainerStyles() {
       return {
-        top: `${this.spacerHeight}px`,
-        height: `${(this.containerHeight + this.spacerHeight)}px`,
+        // top: `${this.spacerHeight}px`,
+        // height: `${(this.containerHeight + this.spacerHeight)}px`,
+        height: `${this.containerHeight}px`,
       };
     },
     subtitlesContainerStyles() {
       return {
-        top: `${this.spacerHeight}px`,
-        height: `${(this.containerHeight + this.spacerHeight)}px`,
+        // top: `${this.spacerHeight}px`,
+        // height: `${(this.containerHeight + this.spacerHeight)}px`,
+        height: `${this.containerHeight}px`,
       };
     },
     activityVisualisationStyles() {
       return {
-        top: `${this.spacerHeight}px`,
+        // top: `${this.spacerHeight}px`,
       };
     },
     spacerStyles() {
@@ -264,6 +265,8 @@ export default {
 
 .conversation-container
   background-color white
+  overflow-x visible
+  overflow-y hidden
   position relative
 
   .spacer
@@ -320,5 +323,16 @@ export default {
     &.subtitle-priority
       .message-container
         display none
+
+#fade-out
+  pinned()
+  position fixed
+  background-color alpha(white, 0.8)
+  background linear-gradient(bottom, alpha(white, 0.0), alpha(white, 1.0))
+  z-index 50
+  left 50%
+  bottom 219px
+  margin-left calc(-780px / 2)
+  width 780px
 
 </style>

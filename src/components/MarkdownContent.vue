@@ -29,9 +29,52 @@ export default {
     ]),
     renderedMarkdown() {
 
-      const md = new MarkdownIt();
+      const md = new MarkdownIt()
+        .use(MarkdownItCustomBlock, {
 
-      return md.render(this.markdown);
+          testexample(arg) {
+            return `<h1>${arg}</h1>`
+          },
+
+          bio(arg) {
+            console.log('arg arg arg arg');
+            console.log(arg);
+            if (!arg) { return 'loading...'; }
+
+            const parts = arg.split('|');
+
+            const caption = parts[0].trim();
+            const image = parts[1].trim();
+
+            if (parts.length > 2) { // if (bio !=== '') {
+              const bio = parts[2].trim();
+              const link = parts[3].trim();
+
+              return `
+              <div class="md-bio md-bio--with-bio">
+                <img class="md-bio--image" src="${image}" />
+                <div class="md-bio--content">
+                  <h5 class="md-bio--caption">${caption}</h5>
+                  <p class="md-bio--bio">${bio}</p>
+                  <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
+                </div>
+              </div>
+              `;
+
+            } else {
+
+              return `
+              <div class="md-bio">
+                <img class="md-bio--image" src="${image}" />
+                <h5 class="md-bio--caption">${caption}</h5>
+              </div>
+              `;
+
+            }
+          },
+      });
+
+      return md.render(this.markdown.replace("@","\n\n@"));
     },
   },
 };
@@ -48,7 +91,5 @@ export default {
     margin-bottom 5px
   h1, h2, h3, h4, h5, p, a, li
     color $color-text-dark-grey
-  img
-    max-width 100%
 
 </style>

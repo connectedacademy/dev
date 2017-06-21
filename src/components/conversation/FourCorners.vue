@@ -7,8 +7,9 @@
       //- icon(v-if="expanded && !(currentCorner === default)" v-bind:name="currentCorner.icon")
       h1 {{ corners[currentCorner].title }}
       p {{ (expanded) ? corners[currentCorner].text : bannerText }}
-      .buttons(v-if="expanded && (currentCorner === 'default')" @click="currentCorner = 'default'; expanded = false")
-        .pure-button.pure-button-subtle Minimize
+      .buttons(v-if="expanded")
+        .pure-button.pure-button-subtle(v-if="currentCorner === 'default'" @click="currentCorner = 'default'; expanded = false") Minimize
+        router-link.pure-button.pure-button-subtle(v-if="currentCorner !== 'default'" to="/markdown/fourcorners.md") Learn More
 
     #corners
       .corner#corner-top-left(v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")

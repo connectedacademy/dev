@@ -46,7 +46,7 @@
           markdown-content(v-bind:markdown="content.description")
 
         .md-thumbnail-row(v-if="content.thumbnails")
-          router-link(v-for="thumbnail in content.thumbnails" v-bind:to="thumbnail.link")
+          router-link(v-for="thumbnail in content.thumbnails" v-bind:to="thumbnail.link" v-bind:key="thumbnail.link")
             .md-thumbnail(v-bind:style="{ 'background-image': `url('${thumbnail.image}')` }")
           .clearfix
 
@@ -108,14 +108,8 @@ export default {
     InjectedQuestion,
     MessageComposer,
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      // vm.$store.commit(types.SET_NAV_STATE, { minimalHeader: true });
-    });
-  },
   mounted() {
-    setTimeout(this.startDemo, 500).bind(this);
-    // this.startDemo();
+    // setTimeout(this.startDemo, 500).bind(this);
   },
   computed: {
     ...mapGetters([
@@ -158,19 +152,26 @@ export default {
 
 @import '~stylus/layout/course-content'
 .md-thumbnail-row
-  margin 10px 0
+  height 120px
+  margin 15px 0
+  overflow-x scroll
+  overflow-y hidden
   position relative
+  white-space nowrap
+  &::-webkit-scrollbar
+    display none
   .md-thumbnail
     animate()
     background-image()
     box-sizing border-box
-    float left
+    display inline-block
     height 0
     margin 10px
     padding 5px
     padding-bottom 100px
     position relative
-    width calc(100% / 4 - 20px)
+    white-space nowrap
+    width 160px
     &:hover
       cursor pointer
       transform scale(1.1)

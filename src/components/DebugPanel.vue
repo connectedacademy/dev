@@ -73,7 +73,7 @@ export default {
   bottom 60px
   top 60px
   left 10px
-  z-index 52
+  z-index 57
   overflow-y auto
   overflow-x none
 

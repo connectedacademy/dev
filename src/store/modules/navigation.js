@@ -17,7 +17,7 @@ const state = {
   rightDrawer: {
     visible: false,
   },
-  pageStyles: '',
+  pageStyles: undefined,
   minimalHeader: false,
 };
 
@@ -34,7 +34,7 @@ const getters = {
   },
   minimalHeader() {
     return state.minimalHeader;
-  }
+  },
 };
 
 // actions

@@ -39,7 +39,7 @@ export default {
     return {
       selectorVisible: false,
       classSlugs: ['evidence', 'interpretation', 'fiction', 'fact', 'narrative'],
-      contentSlugs: ['intro', 'liveclass', 'webinar', 'evidence'],
+      contentSlugs: ['intro', 'liveclass', 'webinar', 'evidence', 'homework'],
       classSlug: 'evidence',
       contentSlug: 'intro',
     };

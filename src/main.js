@@ -3,6 +3,8 @@
 
 import Vue from 'vue';
 import VueResource from 'vue-resource';
+import VueKeepScrollPosition from 'vue-keep-scroll-position';
+import VueScrollBehavior from 'vue-scroll-behavior';
 import Vuex from 'vuex';
 import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
@@ -50,6 +52,13 @@ require('animate.css');
 
 Vue.use(VueResource);
 Vue.use(Vuex);
+Vue.use(VueKeepScrollPosition);
+Vue.use(VueScrollBehavior, {
+  router: router,
+  // maxLength: 100,
+  // ignore: [], // [/\/boo/, /\/zoo/]
+})
+
 Vue.use(VueConfig, Vue.config);
 Vue.use(vueLogger, { prefix: new Date(), dev: true });
 Vue.use(VueCookie);

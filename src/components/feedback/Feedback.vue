@@ -1,37 +1,52 @@
 <template lang="pug">
 
-  .feedback-page
+.feedback-page.animated.fadeIn
 
-    .col#col-main
+  .chat-panel#chat-list-container
+    .navigation-button#previous-button(@click="previous")
+      icon(name="angle-left")
+      p Return to class
+    .navigation-button#info-button(@click="currentFeedbackId = undefined")
+      icon(name="question")
+    .clearfix
 
-      previous-button
+    ul
+      li.list-header My submissions
+      li(v-for="feedbackItem in myFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
+        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
 
-      .main-container.main-container-padded.background-white
+    ul
+      li.list-header Current conversations
+      li(v-for="feedbackItem in feedbackItems" @click="currentFeedbackId = feedbackItem.id")
+        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
+    ul
+      li.list-header Suggested conversations
+      li(v-for="feedbackItem in availableFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
+        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
 
-        info-dialogue(:dismissable="true")
-          p Here you can share feedback with others and gain feedback on your own submissions.
+    //- ul
+      li#random-row
+        h1 Want more feedback?
+        .pure-button.pure-button-homework Add another student
 
-        .feedback-section(v-if="feedbackItems.length > 0")
+  .chat-panel#conversation-container
 
-          h1.feedback-section-title Your Peer Feedback
-          h5.feedback-section-subtitle Please provide feedback on the following images
+    .main-container.main-container-padded.background-white
 
-          .pure-g
+      .homework-details(v-if="!currentFeedbackId")
+        .homework-banner
+          h2 Homework
+          p Welcome to the homework area. Think of this as a chat application where each conversation is with another student and conversations are driven by images submitted as homework. Select another student from the list to start a conversation.
 
-            .pure-u-1-3(v-for="feedbackItem in feedbackItems")
+        .markdown-wrapper
+          markdown-renderer(v-bind:markdown-url="markdownUrl")
 
-              feedback-tile(v-bind:content="feedbackItem")
+        four-corners-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug")
 
-        .feedback-section(v-if="availableFeedbackItems.length > 0")
+      transition(name="fade" type="in out")
+        feedback-view(v-bind:current-feedback-id="currentFeedbackId")
 
-          h1.feedback-section-title Provide Feedback
-          h5.feedback-section-subtitle Select any of the following images to add it to your list
-
-          .pure-g
-
-            .pure-u-1-3(v-for="feedbackItem in availableFeedbackItems")
-
-              feedback-tile(v-bind:content="feedbackItem")
+  .clearfix
 
 </template>
 
@@ -42,16 +57,36 @@ import { mapGetters } from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
+import MarkdownRenderer from '@/components/MarkdownRenderer';
+import FourCornersSubmission from '@/components/fourcorners/FourCornersSubmission';
 import PreviousButton from '../PreviousButton';
 import FeedbackTile from './FeedbackTile';
+import FeedbackRow from './FeedbackRow';
+import FeedbackView from './FeedbackView';
 import InfoDialogue from '../InfoDialogue';
 
 export default {
   name: 'feedback',
+  components: {
+    MarkdownRenderer,
+    FourCornersSubmission,
+    PreviousButton,
+    InfoDialogue,
+    FeedbackTile,
+    FeedbackRow,
+    FeedbackView,
+  },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.dispatch('checkAuth');
+      vm.$store.commit(types.SET_PAGE_STYLE, 'chat');
+      vm.$store.commit(types.SET_NAV_STATE, { minimalHeader: true });
     });
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    this.$store.commit(types.SET_NAV_STATE, { minimalHeader: false });
+    next();
   },
   created() {
     // Check if user has registered
@@ -69,11 +104,16 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy - Feedback',
+      myFeedbackItems: [],
       feedbackItems: [],
       availableFeedbackItems: [],
+      currentFeedbackId: '',
     };
   },
   methods: {
+    previous() {
+      return this.$router.go(-1);
+    },
     getFeedbackItems() {
       const request = { class: this.classSlug, content: this.contentSlug };
       API.feedback.getFeedbackItems(
@@ -81,7 +121,13 @@ export default {
         (response) => {
           this.$log.log('Response from feedback request');
           this.$log.log(response);
-          this.feedbackItems = response.data;
+          var self = this;
+          this.myFeedbackItems = _.filter(response.data, function(item) {
+            return item.user.account_number === self.user.account_number;
+          });
+          this.feedbackItems = _.filter(response.data, function(item) {
+            return item.user.account_number !== self.user.account_number;
+          });
         },
         (response) => {
           // TODO: Handle failed request
@@ -94,7 +140,7 @@ export default {
       API.feedback.getAvailableFeedbackItems(
         request,
         (response) => {
-          this.$log.log('Response from feedback request');
+          this.$log.log('Response from feedback request (available)');
           this.$log.log(response);
           this.availableFeedbackItems = response.data;
         },
@@ -107,7 +153,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered',
+      'isAuthenticated', 'isRegistered', 'user',
     ]),
     classSlug() {
       return this.$route.params.classSlug;
@@ -115,18 +161,112 @@ export default {
     contentSlug() {
       return this.$route.params.contentSlug;
     },
-  },
-  components: {
-    PreviousButton,
-    InfoDialogue,
-    FeedbackTile,
+    markdownUrl() {
+      return 'https://testclass.connectedacademy.io/course/content/en/class1/homework.md';
+    },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
+@import '~stylus/feedback'
+
+$chat-list-width = 320px
+
+.feedback-page
+  background-color $color-lightest-grey
+
+.chat-panel
+  float left
+  min-height 100%
+  overflow-x none
+  overflow-y auto
+
+#chat-list-container
+  pinned()
+  background-color $color-lightest-grey
+  border-right $color-lighter-grey 1px solid
+  box-sizing border-box
+  overflow scroll
+  position absolute
+  right auto
+  width $chat-list-width
+  @media(max-width: 600px)
+    width 75px
+
+  .navigation-button
+    animate()
+    background-color white
+    box-sizing border-box
+    float left
+    height 50px
+    &:hover
+      background-color $color-lightest-grey
+      cursor pointer
+
+    p
+      reset()
+      font-size 0.9em
+      line-height 54px
+
+    .fa-icon
+      color $color-text-dark-grey
+      height 50px
+      position absolute
+      margin 0 20px
+      width 10px
+
+    &#info-button
+      border-left $color-light-grey 1px solid
+      width 50px
+    &#previous-button
+      padding-left 50px
+      width calc(100% - 50px)
+      .fa-icon
+        left 0
+
+    @media(max-width: 600px)
+      max-width 50% !important
+      width 50% !important
+      padding 0 !important
+      .fa-icon
+        margin 0 12px 
+      p
+        display none
+
+
+  ul
+    cleanlist()
+    &:last-child
+      border-bottom $color-lighter-grey 1px solid
+    li
+      cleanlist()
+      border-top $color-lighter-grey 1px solid
+      &.list-header
+        color $color-text-grey
+        font-size 0.9em
+        padding 20px 10px 5px 10px
+        @media(max-width: 600px)
+          display none
+      &#random-row
+        /*background-color white*/
+        border-top $color-lighter-grey 1px solid
+        padding 10px 20px
+        text-align center
+        h1
+          color $color-text-dark-grey
+          font-size 1em
+
+#conversation-container
+  pinned()
+  background-color white
+  border-right $color-lighter-grey 1px solid
+  left $chat-list-width
+  position absolute
+  max-width 640px
+  @media(max-width: 600px)
+    left 75px
 
 .feedback-section
   margin-bottom 30px
@@ -138,5 +278,22 @@ export default {
     color $color-text-grey
     padding 0 10px
     margin-bottom 10px
+
+.homework-details
+
+  .homework-banner
+    radius(6px)
+    background-color $color-homework
+    margin-bottom 15px
+    padding 20px
+    h2
+      reset()
+      color white
+    p
+      reset()
+      color white
+
+  .markdown-wrapper
+    padding 5px
 
 </style>

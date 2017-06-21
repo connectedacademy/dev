@@ -1,7 +1,6 @@
 <template lang="pug">
 
 .markdown-wrapper
-
   .content-block.white-block(v-if="frontMatterVisible")
     pre {{ frontMatter }}
 
@@ -98,6 +97,7 @@ export default {
         name: 'rendered-markdown',
         parent: this,
         mounted() {
+
           this.checkingSubmissions = true;
 
           const request = { class: parent.theClass, content: parent.theContent };
@@ -212,44 +212,37 @@ export default {
       })
       .use(MarkdownItCustomBlock, {
 
-        submission(arg) {
-
+        bio(arg) {
           if (!arg) { return 'loading...'; }
 
-          const parts = arg.split(',');
+          const parts = arg.split('|');
 
-          if (parts.length < 2) { return 'Issue with markdown'; }
+          const caption = parts[0].trim();
+          const image = parts[1].trim();
 
-          const type = parts[0].trim();
-
-          if (type === 'fourcorners') {
-
-            parent.theClass = parts[1].trim();
-            parent.theContent = parts[2].trim();
+          if (parts.length > 2) { // if (bio !=== '') {
+            const bio = parts[2].trim();
+            const link = parts[3].trim();
 
             return `
-            <div class="fourcorners-submission fourcorners-submission-checking" v-if="checkingSubmissions">
-              <h2>Checking submissions...</h2>
+            <div class="md-bio md-bio--with-bio">
+              <img class="md-bio--image" src="${image}" />
+              <div class="md-bio--content">
+                <h5 class="md-bio--caption">${caption}</h5>
+                <p class="md-bio--bio">${bio}</p>
+                <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
+              </div>
             </div>
-
-            <div class="fourcorners-submission fourcorners-submission-submitting" v-if="submitting">
-              <h2>Submitting...</h2>
+            `;
+          } else {
+            return `
+            <div class="md-bio">
+              <img class="md-bio--image" src="${image}" />
+              <h5 class="md-bio--caption">${caption}</h5>
             </div>
-
-            <div class="fourcorners-submission fourcorners-submission-submitted" v-if="submitted">
-              <h2>Thank you for your submission!</h2>
-            </div>
-
-            <div class="fourcorners-submission fourcorners-submission-submit" v-if="isRegistered && !checkingSubmissions && !submitting && !submitted">
-              <label>Submit a link</label>
-              <input type="text" name="text" placeholder="Paste link to a page with your FourCorners image on*" v-model="fourcornersLink" />
-              <p>*this will send a tweet on your behalf!</p>
-              <p hidden>{{ this.tweet }}</p>
-              <button class="pure-button pure-button-primary" v-on:click="postTweet">Submit Homework</button>
-            </div>
-            <button v-if="!isRegistered" class="pure-button" v-on:click="showAuth">Please authenticate</button>`;
+            `;
           }
-        }
+        },
       });
 
       md.renderer.rules.link_open = (tokens, idx) => {
@@ -271,66 +264,88 @@ export default {
     reset()
     color $color-text-dark-grey
     margin-bottom 5px
-  h1, h2, h3, h4, h5, p, a
+  h1, h2, h3, h4, h5, p, a, li
     color $color-text-dark-grey
     &:first-child
       margin-top 0
-    &:last-child
-      margin-bottom 0
   h1, h2, h3, h4, h5
     font-weight 300
+  p
+    margin 10px 0
   a
     color $color-primary !important
     text-decoration underline
     &:hover
       color $color-primary
       cursor pointer
+  blockquote
+    border-left $color-primary 3px solid
+    color $color-text-light-grey
+    margin 30px 20px 30px 0px
+    padding-left 20px
+    font-style italic
   img
-    max-width 100%
+    display inline-block
+    margin 10px
+    width 100%
+    max-width 160px
 
-.fourcorners-submission
-  radius(6px)
-  background-color #FD3C51
-  box-sizing border-box
-  padding 15px
-  width 100%
-  &.fourcorners-submission-submit
-    label
-      color white
-    p
+  img[data-4c], .fc-image img
+    display block
+    margin 0
+    max-width 100%
+    padding 0
+    width 100%
+
+  .md-bio
+    display inline-block
+    min-height 100px
+    overflow hidden
+    padding 10px
+    position relative
+    width 160px
+    img.md-bio--image
+      radius(50%)
       reset()
-      color white
-    input[type="text"]
+      margin 0 20px
+      height 120px
+      width 120px
+    .md-bio--content
+      border-left $color-border 1px solid
+      padding 10px
+    h5.md-bio--caption
+      reset()
+      font-size 1em
+      font-weight bold
+      height 20px
+      line-height 20px
+      margin 5px 0
+      max-width 160px
+      overflow hidden
+      text-align center
+    &.md-bio--with-bio
       radius(6px)
-      border none
-      box-shadow none
       box-sizing border-box
-      line-height 40px
-      margin 10px 0
-      padding 0 10px
-      outline 0
-      resize none
+      padding 10px
+      padding-left 100px
+      max-width 100%
       width 100%
-    .pure-button
-      background-color transparent
-      border white 1px solid
-      color white
-      margin-top 10px
-      &:hover
-        background-color white
-        border-color white
-        color #FD3C51
-  &.fourcorners-submission-submitted, &.fourcorners-submission-submitting, &.fourcorners-submission-checking
-    text-align center
-    h2
-      reset()
-      color white !important
-      padding 40px
-  &.fourcorners-submission-submitting, &.fourcorners-submission-checking
-    background-color $color-light-grey
-    h2
-      color $color-text-dark-grey !important
-  &.fourcorners-submission-submitted
-    background-color $color-success
+      img.md-bio--image
+        reset()
+        position absolute
+        top 10px
+        left 10px
+        height 80px
+        width 80px
+      h5.md-bio--caption
+        reset()
+        height 20px
+        max-width 100%
+        text-align left
+        width 100%
+      p.md-bio--bio
+        reset()
+        color $color-text-grey
+        text-align left
 
 </style>

@@ -17,7 +17,7 @@ export const setScrollPosition = (state, scrollPosition) => {
 
   // Set offset scroll position
   let offset = window.innerHeight;
-  offset -= 140;
+  offset -= 180;
   state.offsetScrollPosition = (state.scrollPosition + offset);
 };
 

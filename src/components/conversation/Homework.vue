@@ -17,7 +17,9 @@
 
   .course-content--body
     p {{ content.description }}
-    submission-button(v-bind:content="content")
+    .submission-button-wrapper
+      .pure-button(v-if="content.url" @click="viewSubmissions")
+        | {{ $t('common.participate') }}
 
   submission-grid(v-bind:content="content")
 
@@ -30,14 +32,17 @@ import {mapGetters} from 'vuex';
 import Moment from 'moment';
 
 import SubmissionGrid from '@/components/SubmissionGrid';
-import SubmissionButton from '@/components/SubmissionButton';
 
 export default {
   name: 'homework',
   props: ['content'],
   components: {
     SubmissionGrid,
-    SubmissionButton,
+  },
+  methods: {
+    viewSubmissions() {
+      this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`);
+    },
   },
 };
 </script>
@@ -45,8 +50,6 @@ export default {
 <style lang="stylus" scoped>
 @import '~stylus/shared'
 @import '~stylus/layout/course-content'
-
-$color-homework = #FD3C51
 
 .course-content
   background-color $color-homework !important
@@ -66,4 +69,16 @@ $color-homework = #FD3C51
       color white
       padding 5px
 
+    .submission-button-wrapper
+      margin 10px auto 5px auto
+      text-align center
+      .pure-button
+        background-color transparent
+        border white 1px solid
+        color white
+        display inline-block
+        margin 5px
+        &:hover
+          background-color white
+          color $color-homework
 </style>

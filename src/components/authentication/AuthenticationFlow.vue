@@ -36,7 +36,7 @@ export default {
   display block
   max-width 320px
   position fixed
-  z-index 53
+  z-index 56
   top 120px
   left 50%
   margin-left -160px

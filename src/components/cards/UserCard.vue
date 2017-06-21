@@ -1,12 +1,13 @@
 <template lang="pug">
 
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
-  img.user-profile(:src="user.profile")
+  img.user-profile(:src="user.profile" @click="showUser = !showUser")
+  pre(v-if="showUser") {{ user }}
   h1.user-name {{ user.name }}
   h2.user-account {{ `@${user.account}` }}
 
-  router-link.pure-button.pure-button-action(to="/admin") Admin Panel
-  a.pure-button.pure-button-action(href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
+  router-link.pure-button.pure-button-action(v-if="user.admin" to="/admin") Admin Panel
+  a.pure-button.pure-button-action(v-if="!user.admin" href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
 
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 
@@ -15,10 +16,16 @@
 <script>
 import _ from 'lodash';
 import * as types from '@/store/mutation-types';
+import {mapGetters} from 'vuex';
 
 export default {
   name: 'user-card',
   props: ['visible'],
+  data() {
+    return {
+      showUser: false,
+    };
+  },
   methods: {
     logout() {
       this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
@@ -26,9 +33,7 @@ export default {
     },
   },
   computed: {
-    user() {
-      return this.$store.state.auth.user;
-    },
+    ...mapGetters(['user', 'admin']),
     authenticatedAsAdmin() {
       return false;
     },

@@ -8,11 +8,10 @@
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  content-filter(v-bind:classSlug.sync="classSlug" v-bind:contentSlug.sync="contentSlug" )
+  pre {{ responses }}
 
   .admin-panel--content
-
-    ul
+    //- ul
       li(v-for="response in responses")
         pre {{ response }}
 
@@ -23,12 +22,9 @@ import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 
-import ContentFilter from '@/components/admin/ContentFilter';
-
 export default {
   name: 'question-responses',
   components: {
-    ContentFilter,
   },
   mounted() {
     this.loadData();
@@ -48,10 +44,6 @@ export default {
   data() {
     return {
       responses: [],
-      classSlugs: ['evidence', 'something'],
-      contentSlugs: ['undefined', 'liveclass', 'webinar', 'intro'],
-      classSlug: undefined,
-      contentSlug: undefined,
     };
   },
   methods: {
@@ -59,7 +51,7 @@ export default {
 
       this.responses = [];
 
-      const request = { theClass: this.classSlug, slug: this.contentSlug };
+      const request = {};
 
       API.analytics.getQuestionResponses(
         request,

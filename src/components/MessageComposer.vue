@@ -132,7 +132,7 @@ export default {
       if (this.sending) {
         return 'Sending';
       } else {
-        return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Send Message';
+        return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Save Note';
       }
     }
   },
@@ -144,19 +144,25 @@ export default {
 @import '~stylus/shared'
 
 .message-composer-wrapper
+  /*background-color $color-lightest-grey*/
+  border-left $color-border 1px solid
+  position absolute
+  bottom 0
+  right 0
+  left 50%
+
+  height 219px
+  left calc(219px / 0.5625 + 1px)
 
   .message-composer
+    animate()
+    pinned()
+    top 60px
     background-color white
-    border-left $color-light-grey 1px solid
+    border-top $color-border 1px solid
     box-sizing border-box
 
     position absolute
-    bottom 0
-    right 0
-
-    height 140px
-    left calc(140px / 0.5625 + 1px)
-    animate()
 
     @media(max-width: 800px)
       width 100%

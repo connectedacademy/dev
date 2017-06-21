@@ -19,7 +19,7 @@
           strong {{ $t('common.current_hub') }}
         label {{ `${user.registration.hub_id}` }}
 
-    a.pure-button.pure-button-action(v-if="user" @click="toggleProfileEditor") Edit Profile
+    a.pure-button.pure-button-action(v-if="user" @click="toggleProfileEditor") {{ editorVisible ? 'Hide Profile' : 'Show Profile' }}
 
 </template>
 

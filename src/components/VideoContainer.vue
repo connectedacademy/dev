@@ -4,13 +4,6 @@
 
     youtube.video-container(v-if="src" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
-    .video-controls-overlay
-      ul.video-controls
-        li.video-control(@click="toggleVideoPlaying")
-          icon(name="pause" v-if="videoPlaying")
-          icon(name="play" v-else)
-        .clearfix
-
 </template>
 
 <script>
@@ -51,13 +44,6 @@ export default {
     },
   },
   methods: {
-    toggleVideoPlaying() {
-      if (this.videoPlaying) {
-        this.$store.commit(types.PAUSE_VIDEO);
-      } else {
-        this.$store.commit(types.PLAY_VIDEO);
-      }
-    },
     change() {},
     ready(player) {
       this.player = player;
@@ -93,11 +79,15 @@ export default {
         this.pHeight = (((document.documentElement.clientWidth / 2) * percentage) * 0.5625);
         this.pWidth = ((document.documentElement.clientWidth / 2) * percentage);
       } else {
-        this.pHeight = 140;
-        this.pWidth = (140 / 0.5625);
+        this.pHeight = 219;
+        this.pWidth = (219 / 0.5625);
+
+        // const percentage = 0.8;
+        // this.pHeight = (((document.documentElement.clientHeight / 2) * percentage) * 0.5625);
+        // this.pWidth = ((document.documentElement.clientHeight / 2) * percentage);
       }
-      this.pHeight = (this.pHeight > 140) ? 140 : this.pHeight;
-      this.pWidth = (this.pWidth > (140 / 0.5625)) ? (140 / 0.5625) : this.pWidth;
+      // this.pHeight = (this.pHeight > 219) ? 219 : this.pHeight;
+      // this.pWidth = (this.pWidth > (219 / 0.5625)) ? (219 / 0.5625) : this.pWidth;
     }, 500),
   },
   computed: {
@@ -125,12 +115,12 @@ export default {
 .video-wrapper
   /*background-color darken($color-purple, 25%)*/
   /*border-right $color-purple 1px solid*/
-  bottom 0
+  /*bottom 0*/
   padding 0
-  padding-left 0
-  left 50%
-  margin-left -390px
-  position fixed
+  /*padding-left 0*/
+  /*left 50%
+  margin-left -100px*/
+  /*position absolute*/
   z-index 52
   animate()
   @media(max-width: 800px)

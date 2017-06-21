@@ -38,7 +38,8 @@ export default {
   props: ['message'],
   computed: {
     html() {
-      return TweetPatch(this.message.text, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+      let html = this.message.text.replace('#wpca17 http://a.short.link', '');
+      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
     authorLink() {
       return `https://twitter.com/${this.message.author.account}`;
@@ -56,6 +57,7 @@ export default {
       return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}`;
     },
     timeStamp() {
+      return Moment(this.message.createdAt).fromNow(); 
       return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
     },
   },

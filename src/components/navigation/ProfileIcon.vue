@@ -47,7 +47,7 @@ export default {
   top 17px
   right 7px
   transition right 0.6s
-  z-index 52
+  z-index 53
 
   .profile-image
     radius(50%)

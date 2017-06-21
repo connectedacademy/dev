@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .mock-message(v-bind:class="{ loading: message.loading }")
+  .mock-message(v-bind:class="{ loading: message.loading }" hidden)
     .mock-message--user
     .mock-message--body
       .mock-message--line

@@ -1,11 +1,6 @@
 import FourCorners from '@/fourcorners.js';
 
 export default {
-  mounted() {
-    var self = this;
-
-
-  },
   methods: {
     loadFourCornersScript() {
       (function(d, script) {
