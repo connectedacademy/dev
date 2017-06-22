@@ -4,8 +4,6 @@
 
     animated-logo( @click="scrollTop")
 
-    router-link.hidden.navigation-item.navigation-item-brand(to="/") {{ navTitle }}
-
     #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
       icon(name="wrench")
 
@@ -86,6 +84,7 @@ export default {
   top 0
   right 0
   margin 10px
+  z-index 56
   &:hover
     //background-color white
     //color $color-purple
@@ -104,35 +103,6 @@ export default {
   width 100%
   &.hidden
     display none
-  #logo
-    animate()
-    opacity 1
-  &.minimized
-    #logo
-      opacity 0
-
-  ul.navigation-items
-    cleanlist()
-    background-color darken($navigation-background-color, 10%)
-    display block
-    margin 0 auto
-    padding 0 15px
-    max-width calc(800px - 30px)
-    text-align left
-    li.navigation-item
-      cleanlist()
-      border-bottom transparent 2px solid
-      color $navigation-text-color
-      display inline-block
-      font-size 0.9em
-      line-height 58px
-      padding 0 15px
-      list-style none
-      transition all 0.2s 0.05s linear
-      &:hover
-        cursor pointer
-        &.navigation-item-page
-          border-bottom white 2px solid
 
 /* App states */
 

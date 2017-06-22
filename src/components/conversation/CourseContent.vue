@@ -29,6 +29,9 @@
     //- FOURCORNERS
     four-corners(v-else-if="content.fourcornersintro")
 
+    //- LIVECLASS
+    live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+
     //- CONTENT
     .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
 
@@ -58,8 +61,6 @@
         markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
         .clearfix
 
-      conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
-
   .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-if="index === 0")
 
     //- FUTURE CONTENT
@@ -79,9 +80,9 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 import MarkdownContent from '@/components/MarkdownContent';
 import MarkdownLink from '@/components/MarkdownLink';
 import VideoEmbed from '@/components/VideoEmbed';
-import ConversationContainer from '@/components/ConversationContainer';
 import LikeIndicator from '@/components/LikeIndicator';
 
+import LiveClass from '@/components/conversation/LiveClass';
 import Homework from '@/components/conversation/Homework';
 import FourCorners from '@/components/conversation/FourCorners';
 import FutureContent from '@/components/conversation/FutureContent';
@@ -96,7 +97,7 @@ export default {
   ],
   props: ['courseContent'],
   components: {
-    ConversationContainer,
+    LiveClass,
     MarkdownContent,
     MarkdownLink,
     VideoEmbed,

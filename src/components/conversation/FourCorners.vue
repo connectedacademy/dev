@@ -136,8 +136,7 @@ $corner-width = 8px
       margin-bottom 10px
       min-height 40px
       max-height 60px
-      overflow-x hidden
-      overflow-y auto
+      overflow hidden
 
     .pure-button
       background-color alpha(white, 0.1)

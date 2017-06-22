@@ -3,16 +3,16 @@
 .content-filter(v-bind:class="{active: selectorVisible}")
 
     ul.content-filter--tags(@click="selectorVisible = !selectorVisible")
-      li.content-filter--tag {{ classSlug }}
-      li.content-filter--tag {{ contentSlug }}
+      li.content-filter--tag(v-if="filterClass") {{ classSlug }}
+      li.content-filter--tag(v-if="filterContent") {{ contentSlug }}
       .clearfix
 
     .content-filter--selector(v-if="selectorVisible")
-      select.full-width(v-model="classSlug")
+      select.full-width(v-model="classSlug" v-if="filterClass")
         option(disabled) Select class
         option(v-for="slug in classSlugs") {{ slug }}
 
-      select.full-width(v-model="contentSlug")
+      select.full-width(v-model="contentSlug" v-if="filterContent")
         option(disabled) Select content
         option(v-for="slug in contentSlugs") {{ slug }}
 
@@ -23,6 +23,7 @@
 <script>
 export default {
   name: 'content-filter',
+  props: ['filterClass', 'filterContent'],
   watch: {
     classSlug(nV, oV) {
       if (nV !== oV) {

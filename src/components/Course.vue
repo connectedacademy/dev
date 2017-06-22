@@ -30,8 +30,13 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'course',
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
+      this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    });
+  },
   beforeRouteLeave (to, from, next) {
-    // Reset state
     this.$store.dispatch('resetState');
     next();
   },

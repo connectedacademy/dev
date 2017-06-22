@@ -2,6 +2,8 @@
 
   .video-wrapper
 
+    #media-overlay(v-bind:style="{ 'background-image': currentMedia }")
+
     youtube.video-container(v-if="src" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
 </template>
@@ -104,6 +106,10 @@ export default {
         width: `${this.pWidth}px`,
       };
     },
+    currentMedia() {
+      const media = 'https://images.pexels.com/photos/24486/pexels-photo-24486.jpg?w=940&h=650&auto=compress&cs=tinysrgb';
+      return `url('${media}')`;
+    }
   },
 };
 </script>
@@ -123,11 +129,19 @@ export default {
   /*position absolute*/
   z-index 52
   animate()
+  #media-overlay
+    pinned()
+    background-image()
+    /*border $color-darkest-grey 15px solid*/
+    position absolute
+    z-index 2
+    right 50%
   @media(max-width: 800px)
-    bottom 150px
+    top 100px
     left 10px
     margin-left 0
     padding 0
+    position fixed
   .video-container
     box-sizing border-box
     overflow hidden

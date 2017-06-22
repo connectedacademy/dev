@@ -8,12 +8,21 @@
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  pre {{ responses }}
-
   .admin-panel--content
-    //- ul
-      li(v-for="response in responses")
-        pre {{ response }}
+    ul
+      li(v-for="response in responses.during")
+        h3 {{ response.question.text }}
+        div(v-if="response.question.response_type === 'text'")
+          p(v-for="answer in response.answers")
+            | {{ answer }}
+        div(v-else-if="response.question.response_type === 'boolean'")
+          p True : {{ response.totals.true ? response.totals.true : 0 }}
+          p False : {{ response.totals.false ? response.totals.false : 0 }}
+        div(v-else-if="response.question.response_type === 'scale'")
+          p Average : {{ response.mean ? response.mean : 'N/A' }}
+        div(v-else)
+          pre {{ response }}
+
 
 </template>
 
@@ -79,7 +88,19 @@ export default {
 
   .admin-panel--content
     ul
+      cleanlist()
       li
-        color $color-text-light-grey
+        cleanlist()
+        border-bottom $color-border 1px solid
+        padding 10px 0
+        h3
+          reset()
+          color $color-text-dark-grey
+          font-size 1em
+          margin-bottom 10px
+        p
+          reset()
+          color $color-text-dark-grey
+          font-size 1em
 
 </style>

@@ -21,7 +21,7 @@
 
     navigation
 
-    .page-header(v-bind:class="{ minimal: minimalHeader, minimized: navigation.minimized }")
+    .page-header(v-bind:class="{ minimized: navigation.minimized }")
 
     transition(name="fade" appear mode="out-in")
       keep-alive
@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'minimalHeader', 'pageStyles', 'user', 'navigation',
+      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'pageStyles', 'user', 'navigation',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
@@ -223,32 +223,28 @@ body.disable-scroll
 // Page header
 
 .page-header
-  transition(height 0.2s ease)
-  background linear-gradient(bottom, darken($color-primary, 10%), lighten($color-primary, 5%))
+  transition(all 0.2s ease)
+  background-color $color-primary
   height 240px
-  position fixed
+  position absolute
   left 0
   right 0
+  top $navigation-height
+  top 0
   text-align center
   z-index -1
 
-  &:after
-    animate()
-    pinned()
-    content ''
-    background-color $color-darkest-grey
-    position absolute
-    opacity 0
   &.minimized
-    background linear-gradient(bottom, $color-primary, lighten($color-primary, 5%))
     height 80px
-  &.minimal
-    height 80px
-    &:after
-      opacity 1
 
-#app.chat .page-header.minimal:after
-  background-color $color-homework
+#app
+  &.chat
+    .page-header
+      background-color $color-homework
+
+  &.admin
+    .page-header
+      background-color $color-darkest-grey
 
 // Hide page header on colourful pages
 html.colourful

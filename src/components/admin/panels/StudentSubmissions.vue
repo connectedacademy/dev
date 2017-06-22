@@ -8,7 +8,7 @@
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  content-filter(v-bind:classSlug.sync="classSlug" v-bind:contentSlug.sync="contentSlug" )
+  content-filter(v-bind:classSlug.sync="classSlug" v-bind:contentSlug.sync="contentSlug" v-bind:filter-class="true" v-bind:filter-content="true")
 
   .admin-panel--content
 
@@ -16,6 +16,7 @@
       li(v-for="submission in submissions")
         a(v-bind:href="submission.original" target="_blank")
           img(v-bind:src="submission.thumbnail")
+        p {{ timeStamp(submission.createdAt) }}
 
     pre.hidden {{ submissions }}
 
@@ -25,6 +26,8 @@
 import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
 import API from '@/api';
+
+import Moment from 'moment';
 
 import ContentFilter from '@/components/admin/ContentFilter';
 
@@ -56,6 +59,10 @@ export default {
     };
   },
   methods: {
+    timeStamp(timestamp) {
+      return Moment(timestamp).format('LTS - ddd M YYYY');
+      return Moment(timestamp).fromNow();
+    },
     loadData() {
 
       this.submissions = [];
@@ -99,6 +106,11 @@ export default {
         &:last-child
           border-bottom none
           padding-bottom 0
+        p
+          reset()
+          color $color-text-dark-grey
+          font-size .9em
+          margin-top 10px
         a
           display block
           text-decoration none

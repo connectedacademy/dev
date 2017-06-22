@@ -80,6 +80,13 @@ export default {
       errorCb({slug: slug, response: response});
     });
   },
+  getMedia(slug, url, cb, errorCb) {
+    Vue.http.get(url, { credentials: false, responseType: 'json' }).then((response) => {
+      cb({slug: slug, response: response.body});
+    }, (response) => {
+      errorCb({slug: slug, response: response});
+    });
+  },
   sendMessage(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
     Vue.http.post(`${config.WATERCOOLER_API}/messages/create`, postData).then((response) => {

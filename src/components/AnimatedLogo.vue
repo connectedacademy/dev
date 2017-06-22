@@ -44,10 +44,13 @@ dash-offset-cross = 0px
 cross-length = 320px
 
 .animated-logo
-  animate()
+  pinned()
+  transition(all 0.2s ease)
+  background-color $color-primary
+  bottom auto
   height 80px
-  opacity 1
-
+  position absolute
+  z-index 50
   svg#logo
     transform(scale(.5,.5))
     path, line
@@ -71,7 +74,13 @@ cross-length = 320px
     &:hover
       cursor pointer
 
-.navigation.minimized
-  .animated-logo
-    opacity 0
+#app
+  &.chat
+    .animated-logo
+      background-color transparent
+
+  &.admin
+    .animated-logo
+      background-color transparent
+
 </style>

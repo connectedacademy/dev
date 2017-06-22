@@ -32958,7 +32958,7 @@ $export.P = 8;   // proto
 $export.B = 16;  // bind
 $export.W = 32;  // wrap
 $export.U = 64;  // safe
-$export.R = 128; // real proto method for `library` 
+$export.R = 128; // real proto method for `library`
 module.exports = $export;
 
 /***/ }),
@@ -36545,7 +36545,7 @@ function tryParse(p, str) {
   } catch(e){
     return error();
   }
-  return p; 
+  return p;
 };
 
 /**
@@ -36744,7 +36744,7 @@ module.exports = exports['default'];
 
 "use strict";
 /*!
- * vue-i18n v5.0.3 
+ * vue-i18n v5.0.3
  * (c) 2017 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -38899,9 +38899,9 @@ module.exports = function (md) {
                             } else if (type === 'image') {
                                 replaceAttr(token, 'src', replace, state.env);
                             }
-                        }); 
+                        });
                     }
-                }); 
+                });
             }
             return false;
         }
@@ -41069,7 +41069,8 @@ return ca;
 
 ;(function (global, factory) {
     true ? factory(__webpack_require__(1)) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   typeof define === 'function' && define.amd ? define(['../src
+ ], factory) :
    factory(global.moment)
 }(this, (function (moment) { 'use strict';
 
@@ -73342,7 +73343,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;////////////////
         // Also, in this case (and in dev mode only) log a helpful message.
         self._raw.io.engine.transport.on('error', function(err){
           if (!self._isConnecting) { return; }
-          
+
           self._isConnecting = false;
 
           // Development-only message:
@@ -75613,7 +75614,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
     // Node/CommonJS module
     module.exports = factory();
   } else {
-    // Browser globals 
+    // Browser globals
     root.Cookie = factory();
   }
 
@@ -90831,8 +90832,8 @@ if (inBrowser && window.Vue) {
         console.warn('Vue is not loaded yet. Please make sure it is loaded before installing vue-scroll.');
     }
 
-    var scrollPlugin = { 
-        
+    var scrollPlugin = {
+
         install: function(Vue, options){
 
             var EVENT_SCROLL = 'scroll';
@@ -90844,7 +90845,7 @@ if (inBrowser && window.Vue) {
                 var addListener = function(element, eventType, funcs){
                   var EVENT_SCROLL = 'scroll';
                   var scrollData = {};
-                    
+
                   // https://github.com/wangpin34/vue-scroll/issues/1
                   if((element === document.body || element === document || element === window) && eventType === SCROLL){
                     document.onscroll = function(e){
@@ -90866,7 +90867,7 @@ if (inBrowser && window.Vue) {
                         (typeof func !== 'undefined') && func(e, scrollData);
                       })
                     }
-                  
+
                     if(element.addEventListener){
                       element.addEventListener(eventType, listener);
                     }else{
@@ -90875,12 +90876,12 @@ if (inBrowser && window.Vue) {
 
                   }
                 }
-                  
+
                 if(typeof Q._initialized == 'undefined'){
-                    
+
                   Q.prototype.bind = (function(element, eventType, func){
                     var funcs;
-                    
+
                     if(elements.indexOf(element) < 0){
                       elements.push(element);
                       listeners.push({});
@@ -90903,7 +90904,7 @@ if (inBrowser && window.Vue) {
 
                   Q.prototype.unbind = (function(element, eventType, func){
                     var funcs;
-                    
+
                     if(elements.indexOf(element) < 0){
                       console.warn('There are no listener could be removed.');
                       return 1;
@@ -90925,7 +90926,7 @@ if (inBrowser && window.Vue) {
               }
 
             var q = new Q();
-            
+
             Vue.directive('scroll', {
                 bind: function(el, binding, vnode){
                     if(!binding.value || typeof binding.value !== 'function'){

@@ -18,7 +18,6 @@ const state = {
     visible: false,
   },
   pageStyles: undefined,
-  minimalHeader: false,
 };
 
 // getters
@@ -31,9 +30,6 @@ const getters = {
   },
   pageStyles() {
     return state.pageStyles;
-  },
-  minimalHeader() {
-    return state.minimalHeader;
   },
 };
 

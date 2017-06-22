@@ -124,7 +124,7 @@ export default {
         const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 219;
         const offsetWidth = document.getElementById('col-main').offsetWidth;
         const offsetPadding = 20.0;
-        const offsetTop = 80.0;
+        const offsetTop = 40.0;
         const offsetBottom = 219.0;
 
         this.activeSegmentStyles = {
@@ -211,9 +211,6 @@ export default {
 
 @import '~stylus/shared'
 
-.suggestion
-  padding 20px
-
 .time-segment
   segment-transition()
   background-color $color-lightest-grey
@@ -226,6 +223,12 @@ export default {
   overflow hidden
   &:nth-child(1n)
     background-color white
+  .suggestion
+    padding 20px
+    text-align center
+    h3
+      reset()
+      font-weight normal
   .message-wrapper
     background-color transparent
     transition('background-color' 0.3s linear)
@@ -286,8 +289,6 @@ export default {
         display none
       .mock-message
         position relative
-      .suggestion
-        text-align center
     .meta-container
       min-height 100px
       .meta-container--no-content

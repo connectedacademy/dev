@@ -32,6 +32,10 @@ const getters = {
     Vue.log.log('Subtitles from state');
     return state.subtitles;
   },
+  media() {
+    Vue.log.log('Media from state');
+    return state.media;
+  },
   visualisation() {
     Vue.log.log('Visualisation from state');
     return state.visualisation;

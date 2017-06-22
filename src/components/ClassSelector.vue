@@ -154,7 +154,6 @@ $selector-height = 44px
   margin 0 0 20px 0
   overflow hidden
   position relative
-  z-index 50
   @media(max-width: 800px)
     margin 0 10px 20px 10px
   .skip-button

@@ -23,6 +23,12 @@ import PreviousButton from '@/components/PreviousButton';
 
 export default {
   name: 'markdown',
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
+      this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    });
+  },
   methods: {
     back() { this.$router.go(-1); },
   },

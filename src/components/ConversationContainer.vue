@@ -5,7 +5,7 @@
     //- #fade-out
 
     //- Efficent
-    .activity-visualisation(v-bind:style="activityVisualisationStyles")
+    .activity-visualisation
       svg(width="400" v-bind:height="svgHeight")
 
         g
@@ -16,16 +16,17 @@
       //- svg(width="200" v-bind:height="svgHeight")
         g(v-html="visualisationLabels")
 
-    .subtitle-container(v-bind:style="subtitlesContainerStyles")
+    .inner-wrapper(v-bind:style="innerWrapperContainerStyles")
+      .subtitle-container(v-bind:style="subtitlesContainerStyles")
 
-      subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start")
+        subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start" v-bind:current-segment="currentSegment")
 
-    .messages-container(v-bind:style="messagesContainerStyles")
+      .messages-container(v-bind:style="messagesContainerStyles")
 
-      span(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup")
-        time-segment(v-bind:message="message" v-bind:subtitles="subtitles")
+        span(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup")
+          time-segment(v-bind:message="message" v-bind:subtitles="subtitles")
 
-    .clearfix
+      .clearfix
 
 </template>
 
@@ -51,6 +52,23 @@ export default {
     Visualisation,
     Subtitles,
   ],
+  props: ['content'],
+  data() {
+    return {
+      navTitle: 'Connected Academy - Main',
+      messagePriority: true,
+      spacerHeight: 0,
+      points: '',
+      subtitles: [],
+      chunkedMessages: {},
+      cancelSources: [],
+      cancel: undefined,
+    };
+  },
+  components: {
+    Subtitle,
+    TimeSegment,
+  },
   mounted() {
     const self = this;
 
@@ -107,6 +125,19 @@ export default {
           },
           function(response) {
             self.subtitles = response.response;
+            // this.loadSubtitles();
+          },
+        );
+
+        API.message.getMedia(
+          `${this.currentSection.slug}`,
+          `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${this.currentSection.images}`,
+          function(response) {
+            self.media = response.response;
+            // this.loadSubtitles();
+          },
+          function(response) {
+            self.media = response.response;
             // this.loadSubtitles();
           },
         );
@@ -195,7 +226,6 @@ export default {
       }
     },
   },
-  props: ['content'],
   computed: {
     ...mapGetters([
       'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'messages', 'visualisation', 'lastMessage',
@@ -206,29 +236,24 @@ export default {
     svgHeight() {
       return `${this.containerHeight}px`;
     },
+    innerWrapperContainerStyles() {
+      return {
+        height: `${this.containerHeight}px`,
+      };
+    },
     conversationContainerStyles() {
       return {
-        // height: `${(this.containerHeight + this.spacerHeight)}px`,
         height: `${this.containerHeight}px`,
       };
     },
     messagesContainerStyles() {
       return {
-        // top: `${this.spacerHeight}px`,
-        // height: `${(this.containerHeight + this.spacerHeight)}px`,
         height: `${this.containerHeight}px`,
       };
     },
     subtitlesContainerStyles() {
       return {
-        // top: `${this.spacerHeight}px`,
-        // height: `${(this.containerHeight + this.spacerHeight)}px`,
         height: `${this.containerHeight}px`,
-      };
-    },
-    activityVisualisationStyles() {
-      return {
-        // top: `${this.spacerHeight}px`,
       };
     },
     spacerStyles() {
@@ -240,22 +265,6 @@ export default {
       return this.points;
     },
   },
-  data() {
-    return {
-      navTitle: 'Connected Academy - Main',
-      messagePriority: true,
-      spacerHeight: 0,
-      points: '',
-      subtitles: [],
-      chunkedMessages: {},
-      cancelSources: [],
-      cancel: undefined,
-    };
-  },
-  components: {
-    Subtitle,
-    TimeSegment,
-  },
 };
 </script>
 
@@ -265,9 +274,11 @@ export default {
 
 .conversation-container
   background-color white
-  overflow-x visible
-  overflow-y hidden
   position relative
+
+  &.collapsed
+    max-height 600px
+    overflow hidden
 
   .spacer
     position relative
@@ -301,7 +312,10 @@ export default {
       path
         fill alpha($color-primary, 1)
         /*fill alpha(white, 1)*/
-
+  .inner-wrapper
+    overflow hidden
+    position relative
+    width 100%
   .subtitle-container, .messages-container
     min-height 100px
     position absolute

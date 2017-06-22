@@ -16,23 +16,23 @@
             | Students on course
             .toggle(v-bind:class="{active: visiblePanels[1]}")
           li.panel-selector--item(v-bind:class="{'active': visiblePanels[2]}" @click="togglePanel(2)")
-            | Students in class
+            | Student submissions
             .toggle(v-bind:class="{active: visiblePanels[2]}")
           li.panel-selector--item(v-bind:class="{'active': visiblePanels[3]}" @click="togglePanel(3)")
-            | Student submissions
+            | Question responses
             .toggle(v-bind:class="{active: visiblePanels[3]}")
           li.panel-selector--item(v-bind:class="{'active': visiblePanels[4]}" @click="togglePanel(4)")
-            | Question responses
+            | Students in class
             .toggle(v-bind:class="{active: visiblePanels[4]}")
 
     transition(name="fade-out" mode="out-in")
       course-students(v-if="visiblePanels[1]" v-bind:style="panelStyles[1]")
     transition(name="fade-out" mode="out-in")
-      class-students(v-if="visiblePanels[2]" v-bind:style="panelStyles[2]")
+      student-submissions(v-if="visiblePanels[2]" v-bind:style="panelStyles[2]")
     transition(name="fade-out" mode="out-in")
-      student-submissions(v-if="visiblePanels[3]" v-bind:style="panelStyles[3]")
+      question-responses(v-if="visiblePanels[3]" v-bind:style="panelStyles[3]")
     transition(name="fade-out" mode="out-in")
-      question-responses(v-if="visiblePanels[4]" v-bind:style="panelStyles[4]")
+      class-students(v-if="visiblePanels[4]" v-bind:style="panelStyles[4]")
 
 </template>
 
@@ -48,11 +48,13 @@ export default {
   name: 'admin-main',
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { minimalHeader: true });
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: true });
+      vm.$store.commit(types.SET_PAGE_STYLE, 'admin');
     });
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.commit(types.SET_NAV_STATE, { minimalHeader: false });
+    this.$store.commit(types.SET_NAV_STATE, { minimized: false });
+    this.$store.commit(types.SET_PAGE_STYLE, undefined);
     next();
   },
   mounted() {

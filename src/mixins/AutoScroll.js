@@ -198,11 +198,11 @@ export default {
         this.$store.dispatch('setScrollPosition', this.scrollPosition).then(function() {
           self.preventScroll = false;
         });
-        if (this.scrollPosition > 10) {
-          this.$store.commit(types.SET_NAV_STATE, { minimized: true });
-        } else {
-          this.$store.commit(types.SET_NAV_STATE, { minimized: false });
-        }
+        // if (this.scrollPosition > 100) {
+        //   this.$store.commit(types.SET_NAV_STATE, { minimized: true });
+        // } else {
+        //   this.$store.commit(types.SET_NAV_STATE, { minimized: false });
+        // }
       } else {
         this.setScrollPosition(this);
       }

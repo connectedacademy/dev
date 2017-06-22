@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.feedback-page.animated.fadeIn
+.feedback-page
 
   .chat-panel#chat-list-container
     .navigation-button#previous-button(@click="previous")
@@ -79,13 +79,13 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.dispatch('checkAuth');
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: true });
       vm.$store.commit(types.SET_PAGE_STYLE, 'chat');
-      vm.$store.commit(types.SET_NAV_STATE, { minimalHeader: true });
     });
   },
   beforeRouteLeave (to, from, next) {
+    this.$store.commit(types.SET_NAV_STATE, { minimized: false });
     this.$store.commit(types.SET_PAGE_STYLE, undefined);
-    this.$store.commit(types.SET_NAV_STATE, { minimalHeader: false });
     next();
   },
   created() {
@@ -95,11 +95,16 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setColumnState', 'narrow');
-
     // Fetch feedback items
     this.getFeedbackItems();
     this.getAvailableFeedbackItems();
+
+    var self = this;
+    window.setInterval(function() {
+      // Fetch feedback items
+      self.getFeedbackItems();
+      self.getAvailableFeedbackItems();
+    }, 2000);
   },
   data() {
     return {
@@ -153,7 +158,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'user',
+      'isAuthenticated', 'isRegistered', 'user', 'currentClass',
     ]),
     classSlug() {
       return this.$route.params.classSlug;
@@ -162,7 +167,7 @@ export default {
       return this.$route.params.contentSlug;
     },
     markdownUrl() {
-      return 'https://testclass.connectedacademy.io/course/content/en/class1/homework.md';
+      return `https://testclass.connectedacademy.io/course/content/en/class1/${this.contentSlug}.md`;
     },
   },
 };
@@ -231,7 +236,7 @@ $chat-list-width = 320px
       width 50% !important
       padding 0 !important
       .fa-icon
-        margin 0 12px 
+        margin 0 12px
       p
         display none
 

@@ -2,8 +2,8 @@
 
 .course-content
 
-  .course-content--header
-    svg(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
+  .course-content--header.block
+    //- svg(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
 
       polyline(points="160 30 0 0 0 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
@@ -14,14 +14,13 @@
       path(d="M160,180 l0,80Z" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
     h1.content-title Homework
+    p.content-description {{ content.description }}
 
-  .course-content--body
-    p {{ content.description }}
     .submission-button-wrapper
       .pure-button(v-if="content.url" @click="viewSubmissions")
         | {{ $t('common.participate') }}
 
-  submission-grid(v-bind:content="content")
+  //- submission-grid(v-bind:content="content")
 
 </template>
 
@@ -57,20 +56,13 @@ export default {
   position relative
 
   .course-content--header
-    text-align center
+    background-color $color-homework !important
+    /*text-align center*/
     h1.content-title
       color white !important
 
-  .course-content--body
-    radius(6px)
-    text-align center
-    h1, h2, h5, p
-      reset()
-      color white
-      padding 5px
-
     .submission-button-wrapper
-      margin 10px auto 5px auto
+      margin 10px auto 0 auto
       text-align center
       .pure-button
         background-color transparent

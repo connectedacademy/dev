@@ -8,7 +8,7 @@
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  content-filter(v-bind:classSlug.sync="classSlug" v-bind:contentSlug.sync="contentSlug" )
+  content-filter(v-bind:classSlug.sync="classSlug" v-bind:filter-class="true" v-bind:filter-content="false")
 
   .admin-panel--content.no-padding
     ul
@@ -40,11 +40,6 @@ export default {
         this.loadData();
       }
     },
-    contentSlug(nV, oV) {
-      if (nV !== oV) {
-        this.loadData();
-      }
-    },
   },
   data() {
     return {
@@ -52,7 +47,6 @@ export default {
       classSlugs: ['intro', 'evidence', 'something'],
       contentSlugs: ['undefined', 'liveclass', 'webinar'],
       classSlug: 'intro',
-      contentSlug: 'undefined',
     };
   },
   computed: {
@@ -63,7 +57,7 @@ export default {
 
       this.students = [];
 
-      const request = { theClass: this.classSlug, slug: this.contentSlug };
+      const request = { theClass: this.classSlug };
 
       API.classroom.getClassroomUsers(
         request,
