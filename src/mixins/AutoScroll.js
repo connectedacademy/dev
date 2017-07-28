@@ -1,8 +1,9 @@
 const CALCULATE_FPS = false; // Calculate the scrolling FPS
 const AUTOSCROLL_CHECK = 200; // Periodically check if scroll is possible
-const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
+const AUTOSCROLL_ATTEMPT = 100; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 500; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
+const SEGMENT_HEIGHT = 158.0; // Height of each segment
 
 import Vue from 'vue';
 import * as types from '@/store/mutation-types';
@@ -58,12 +59,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition', 'activeSegmentVisible',
+      'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition', 'activeSegment', 'peekSegment',
     ]),
   },
   methods: {
     checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.activeSegmentVisible && !this.preventScroll && this.videoReady && this.videoPlaying && (this.currentSection !== undefined));
+      this.canAutoScroll = (!this.activeSegment && !this.peekSegment && !this.preventScroll && this.videoReady && this.videoPlaying && (this.currentSection !== undefined));
     },
     attemptAutoScroll() {
 
@@ -79,11 +80,11 @@ export default {
       var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
 
       var position = function(start, end, elapsed, duration) {
-  	    if (elapsed > duration) return end;
-  	    // return start + (end - start) * easingFunction(elapsed / duration); // Easing
+        if (elapsed > duration) return end;
 
-  	    return start + (end - start) * (elapsed / duration); // Linear
-    	}
+        // return start + (end - start) * easingFunction(elapsed / duration); // Easing
+        return start + (end - start) * (elapsed / duration); // Linear
+      }
 
       var clock = Date.now();
       var requestAnimationFrame = window.requestAnimationFrame ||
@@ -91,17 +92,24 @@ export default {
         function(fn) { window.setTimeout(fn, 15); };
 
       var start = this.scrollPosition;
-      var end = this.currentSection.bottom;
+      // var end = this.currentSection.bottom;
+      // alert(this.$store.state.pendingScrollPosition);
+      let durationRate = 5000;
+      let end = this.currentSection.bottom;
 
-      var duration = (((end - start) / (158.0 * 1.0)) * 5000);
+      if (this.$store.state.pendingScrollPosition !== 0) {
+        this.$store.commit(types.PLAY_VIDEO);
+        end = this.$store.state.pendingScrollPosition;
+        durationRate = 500;
+      }
+
+      var duration = (((end - start) / (SEGMENT_HEIGHT * 1.0)) * durationRate);
 
       var lastCalledTime;
       var frameCount;
       var fps;
 
       var calculateFPS = function() {
-
-        if (!CALCULATE_FPS) { return; }
 
         if(!lastCalledTime) {
            lastCalledTime = Date.now();
@@ -122,9 +130,11 @@ export default {
         }
       };
 
+      var self = this;
+
       var step = function() {
 
-        calculateFPS();
+        if (CALCULATE_FPS) { calculateFPS(); }
 
         var elapsed = Date.now() - clock;
 
@@ -138,10 +148,19 @@ export default {
         if ((elapsed <= duration) && self.canAutoScroll) {
           requestAnimationFrame(step);
         }
+        if (elapsed > duration) {
+          self.$store.commit('setPendingScrollPosition', 0);
+          self.$store.commit(types.PAUSE_VIDEO);
+          self.attemptAutoScroll();
+        }
       }
       step();
     },
     wheelMovement() {
+
+      if (this.activeSegment || this.peekSegment || this.preventScroll) {
+        return;
+      }
       var self = this;
 
       this.$store.commit(types.PAUSE_VIDEO);
@@ -155,33 +174,13 @@ export default {
         // Wheeling stopped - fire events
         self.scrollPosition = window.scrollY;
 
-        // if (self.currentSectionScrollPosition > 300) {
+        self.$store.dispatch('setScrollPosition', self.scrollPosition).then(function() {
 
-          self.$store.dispatch('setScrollPosition', self.scrollPosition).then(function() {
+          self.wheeling = undefined;
+          self.preventScroll = false;
 
-            self.wheeling = undefined;
-            self.preventScroll = false;
-
-            self.$store.commit(types.PLAY_VIDEO);
-          });
-
-        // } else {
-        //
-        //   // Jump to 0
-        //   self.$store.commit(types.PAUSE_VIDEO);
-        //   const yPos = (self.scrollPosition - self.currentSectionScrollPosition) + 1;
-        //
-        //   self.$store.dispatch('setScrollPosition', yPos).then(function() {
-        //
-        //     window.scroll(0, yPos);
-        //
-        //     self.wheeling = undefined;
-        //     self.preventScroll = false;
-        //
-        //     self.$store.commit(types.PLAY_VIDEO);
-        //   });
-        //
-        // }
+          self.$store.commit(types.PLAY_VIDEO);
+        });
 
       }, WHEEL_TIMEOUT);
     },
@@ -198,17 +197,12 @@ export default {
         this.$store.dispatch('setScrollPosition', this.scrollPosition).then(function() {
           self.preventScroll = false;
         });
-        // if (this.scrollPosition > 100) {
-        //   this.$store.commit(types.SET_NAV_STATE, { minimized: true });
-        // } else {
-        //   this.$store.commit(types.SET_NAV_STATE, { minimized: false });
-        // }
       } else {
         this.setScrollPosition(this);
       }
     },
     onWheel() {
-      if (!this.activeSegmentVisible) {
+      if (!this.activeSegment) {
         this.wheelMovement(this);
       }
     },

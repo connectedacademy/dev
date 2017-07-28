@@ -37,8 +37,6 @@ export default {
           },
 
           bio(arg) {
-            console.log('arg arg arg arg');
-            console.log(arg);
             if (!arg) { return 'loading...'; }
 
             const parts = arg.split('|');
@@ -46,7 +44,7 @@ export default {
             const caption = parts[0].trim();
             const image = parts[1].trim();
 
-            if (parts.length > 2) { // if (bio !=== '') {
+            if (parts.length > 2) {
               const bio = parts[2].trim();
               const link = parts[3].trim();
 

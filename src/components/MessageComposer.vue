@@ -1,16 +1,14 @@
 <template lang="pug">
 
-  .message-composer-wrapper(v-bind:class="{ static: section }")
+  .message-composer-wrapper(v-bind:class="{ static: section, 'segment-view': activeSegment }")
 
-    .message-composer(v-bind:class="{ unactive: hidden }")
     .message-composer(v-bind:class="{ unactive: hidden }")
 
       .message-composer--body
         .textarea-wrapper(v-if="isRegistered" )
-          textarea(name="name" rows="3" v-on:keyup.enter="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
-        .login-warning(v-else @click="showAuth")
-          h3 Please login to send messages
-          .pure-button.pure-button-primary {{ $t('auth.login') }}
+          textarea(name="name" autofocus rows="3" v-on:keyup.prevent.enter="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
+        .login-warning(v-else)
+          h4 Please login to send messages
 
       .message-composer--footer(v-if="isRegistered")
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage") {{ submitText }}
@@ -31,6 +29,7 @@ export default {
   props: ['section'],
   data() {
     return {
+      focussed: false,
       infoLabel: '',
       message: {
         text: '',
@@ -43,20 +42,33 @@ export default {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
     },
+    // snapScroll() {
+    //   return;
+    //
+    //   let oldPos = this.currentSection.top + (_.ceil(_.divide(this.currentSectionScrollPosition, 158)) * 158);
+    //   oldPos = oldPos - (window.innerHeight - 410);
+    //
+    //   if (oldPos !== this.scrollPosition) {
+    //
+    //     this.$store.commit('setPendingScrollPosition', oldPos);
+    //   }
+    // },
     composerFocus() {
       this.$log.log('Composer gained focus');
+      this.focussed = true;
+      // this.$store.commit(types.PAUSE_VIDEO);
 
-      this.$log.log('Pausing video');
-      this.$store.commit(types.PAUSE_VIDEO);
-
-      this.infoLabel = "";
+      // if (!this.activeSegment) {
+      //   this.$store.commit(types.SET_ACTIVE_SEGMENT, this.$store.getters.currentSegmentGroup);
+      // }
     },
     composerBlur() {
       this.$log.log('Composer lost focus');
-
-      this.$log.log('Playing video');
-      this.$store.commit(types.PLAY_VIDEO);
-
+      this.focussed = false;
+      // var self = this;
+      // setTimeout(function() {
+      //   self.$store.commit(types.PLAY_VIDEO);
+      // }, 300);
     },
     showComposer() {
       this.$store.commit(types.PEEK_COMPOSER);
@@ -71,20 +83,20 @@ export default {
       let postData = {};
 
       if (this.section) {
-        const url = `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.section}`;
+        const url = `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.section}`;
 
         postData = {
-          text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
-          currentClass: this.$store.getters.currentClass.slug,
+          text: `${this.message.text} ${this.course.hashtag} ${url}`,
+          currentClass: this.currentClass.slug,
           currentSection: this.section,
         };
       } else {
         const url = this.url;
 
         postData = {
-          text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
-          currentClass: this.$store.getters.currentClass.slug,
-          currentSection: this.$store.getters.currentSection.slug,
+          text: `${this.message.text} ${this.course.hashtag} ${url}`,
+          currentClass: this.currentClass.slug,
+          currentSection: this.currentSection.slug,
           currentSegment: this.messageSegment,
         };
       }
@@ -94,31 +106,34 @@ export default {
         (response, postData) => {
           this.$store.dispatch('pushMessage', { response, postData });
           this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response, postData })
+          // this.$store.commit(types.PLAY_VIDEO);
           this.message.text = '';
           this.sending = false;
           this.infoLabel = 'Message sent successfully';
+          var self = this; setTimeout(function() {self.infoLabel = ""}, 2000);
         },
         (response, postData) => {
           this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
           alert('Failed to send message');
           this.sending = false;
           this.infoLabel = 'Failed to send message!';
+          var self = this; setTimeout(function() {self.infoLabel = ""}, 2000);
         },
       );
     },
   },
   computed: {
-    ...mapGetters(['isRegistered']),
+    ...mapGetters(['isRegistered', 'activeSegment', 'currentSegment', 'isRegistered', 'course', 'currentClass', 'currentSection', 'currentActiveSection', 'currentSectionScrollPosition', 'scrollPosition']),
     messageSegment() {
-      return this.$store.getters.activeSegmentVisible ? (this.$store.getters.activeSegment.segmentGroup / 0.2) : this.$store.getters.currentSegment;
+      return this.activeSegment ? (this.activeSegment / 0.2) : this.currentSegment;
     },
     url() {
-      if (this.$store.getters.currentSection === undefined) { return ''; }
-      return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.messageSegment}`;
+      if (this.currentSection === undefined) { return ''; }
+      return `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
     },
     hidden() {
-      return (this.$store.getters.currentSection === undefined) ||
-        !this.$store.getters.isRegistered ||
+      return (this.currentSection === undefined) ||
+        !this.isRegistered ||
         this.$store.state.composer.hidden ||
         this.$store.state.auth.visible ||
         this.$store.state.navigation.leftDrawer.visible ||
@@ -126,13 +141,13 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     currentTime() {
-      return `Tweeting at - ${_.round(this.$store.getters.currentTime)}`;
+      return `Tweeting at - ${_.round(this.currentTime)}`;
     },
     submitText() {
       if (this.sending) {
         return 'Sending';
       } else {
-        return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Save Note';
+        return (this.activeSegment) ? 'Post' : 'Post';
       }
     }
   },
@@ -144,35 +159,34 @@ export default {
 @import '~stylus/shared'
 
 .message-composer-wrapper
-  /*background-color $color-lightest-grey*/
-  border-left $color-border 1px solid
+  pinned()
   position absolute
-  bottom 0
-  right 0
   left 50%
+  position relative
+  top auto
+  bottom auto
+  left auto
+  right auto
+  height 50px
+  // border-top $color-border 1px solid
 
-  height 219px
-  left calc(219px / 0.5625 + 1px)
+  @media(max-width: 800px)
+    width 100%
+    left 0
+    right 0
+    margin 0
 
   .message-composer
     animate()
     pinned()
-    top 60px
-    background-color white
-    border-top $color-border 1px solid
+    top 0
     box-sizing border-box
 
     position absolute
-
-    @media(max-width: 800px)
-      width 100%
-      left 0
-      right 0
-      margin 0
+    z-index 2
 
     .message-composer--body
       pinned()
-      background-color white
       position absolute
 
       .login-warning
@@ -182,12 +196,12 @@ export default {
         padding 0 20px
         position absolute
         text-align center
-        h2
+        h4
           reset()
-          line-height 45px !important
+          color $color-text-dark-grey
+          line-height 50px !important
 
       .textarea-wrapper
-        background-color white
         overflow hidden
         position absolute
         top 0
@@ -195,8 +209,6 @@ export default {
         right 0
         left 0
         textarea
-          background-color transparent
-          color black
           border none
           font-size 1em
 
@@ -207,8 +219,8 @@ export default {
 
           position absolute
           top 0
-          bottom 48px
-          right 0
+          bottom 0
+          right 100px
           left 0
 
           width 100%
@@ -218,13 +230,15 @@ export default {
             width calc(100% - 20px)
 
     .message-composer--footer
-      height 38px
-      padding 5px
+      height 30px
+      padding 10px
       position absolute
       bottom 0
       right 0
-      left 0
+      left auto
       animate()
+      button.pure-button.pure-button-primary
+        padding 3px 20px
       @media(max-width: 800px)
         padding 10px
       p.info-label
@@ -235,22 +249,27 @@ export default {
         color white
         font-size 0.9em
         line-height 28px
-        margin 5px
+        margin 0px
         padding 0 15px
 
   &.static
 
+    radius(4px)
+    border $color-border 1px solid
+    margin-bottom 20px
+    overflow hidden
+    position relative !important
+    bottom auto
+    top auto
+    left auto
+    right auto
     .message-composer
-      radius(4px)
-      border $color-border 1px solid
-      margin-bottom 20px
-      overflow hidden
-      position relative
-      bottom auto
-      top auto
-      left auto
-      right auto
-      .message-composer--footer
-        background-color #f9f9f9
+      border-top none
+      top 0
+    .message-composer--footer
+      border-top $color-border 1px solid
 
+  &.segment-view
+    .message-composer--footer
+      left 0
 </style>

@@ -9,7 +9,7 @@
       | coming soon
     h2.content-subtitle {{ releaseIn }}
     p.content-description {{ releaseAt }}
-    .pure-button(name="circle" @click="jumpForwardInTime") Time Travel
+    .pure-button(name="circle" @click="jumpForwardInTime") Release Future Content
 
 </template>
 

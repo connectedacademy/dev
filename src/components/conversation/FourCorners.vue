@@ -91,7 +91,7 @@ $corner-width = 8px
 #fourcorners-banner
   radius(6px)
   background-color $color-darkest-grey
-  background url('https://images.pexels.com/photos/24486/pexels-photo-24486.jpg?w=940&h=650&auto=compress&cs=tinysrgb')
+  background url('https://images.pexels.com/photos/491623/pexels-photo-491623.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb')
   /*background url('https://images.pexels.com/photos/67504/pexels-photo-67504.jpeg?w=940&h=650&auto=compress&cs=tinysrgb')*/
   background-image()
   background-position bottom right

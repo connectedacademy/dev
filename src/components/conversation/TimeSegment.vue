@@ -1,38 +1,35 @@
 <template lang="pug">
 
-  .time-segment(v-bind:class="{ active: segmentVisible }" v-bind:style="segmentVisible ? activeSegmentStyles : { top: (message.segmentGroup * 158.0) + 'px' }")
+  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, current: isCurrent, opened: segmentOpened }" v-bind:style="[{ top: `${158.0 * this.message.segmentGroup}px` }, segmentStyle]")
 
-    .close-button(v-if="segmentVisible" @click="exploreSegment(undefined)")
-      p close
+    .primary-wrapper(@click="peek()")
 
-    .message-wrapper
+      .subtitle-wrapper
+        subtitle(v-bind:subtitle="subtitle")
 
-      .message-count.animated.fadeIn(v-if="message.info" v-bind:class="{ hide: activeSegment, plus: (message.info.total === 0) }" @click="exploreSegment(message)")
-        span(v-if="message.info.total > 0")
-          | {{ message.info.total }}
-        span(v-if="message.info.total === 0")
-          icon(name="plus")
+      .message-wrapper
 
-      transition(appear name="fade")
+        message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
+
         .suggestion(v-if="message.message && message.message.suggestion")
           h3 "{{ message.message.text }}"
 
-      transition(appear name="fade")
         mock-message(v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))" v-bind:message="message")
 
-      transition(appear name="fade")
-        message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
+      .clearfix
 
-    .full-width-loading(v-if="segmentVisible && !segmentMessages")
-      icon(name="refresh" scale="2" spin)
+    .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
+      span(v-if="message.info && message.info.total && (message.info.total > 1)") {{ `Read ${message.info.total} other notes` }}
+      span(v-else) Be the first to make a note
 
-    .quote-container(v-if="segmentVisible && quote")
-      h1 {{ quote }}
+    .meta-container(v-bind:class="{ active: segmentOpened }")
 
-    .meta-container(v-if="segmentVisible")
+      .message-wrapper.animated.fadeIn(v-for="segmentMessage in segmentMessages")
+        message(v-bind:message="segmentMessage")
 
-      .meta-container--messages(v-if="segmentMessages && (segmentMessages.length > 0)" v-for="asMessage in segmentMessages")
-        message.animated.fadeIn(v-bind:message="asMessage")
+    .quick-note(v-if="segmentPeeking || segmentOpened")
+      message-composer
+    .clearfix
 
 </template>
 
@@ -42,98 +39,160 @@ import {mapGetters} from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
+import MessageComposer from '@/components/MessageComposer';
+import Subtitle from '@/components/conversation/Subtitle';
 import Message from '@/components/conversation/Message';
 import MockMessage from '@/components/conversation/MockMessage';
 import Icon from 'vue-awesome/components/Icon';
 
 export default {
   name: 'time-segment',
-  props: ['message', 'subtitles'],
+  props: ['message'],
   components: {
+    MessageComposer,
     Message,
     MockMessage,
+    Subtitle,
   },
   watch: {
     'lastMessage': {
       handler: function(nV, oV) {
-        var self = this;
-        setTimeout(function() {
-          self.loadSegmentMessages();
-        }, 500);
+        this.loadSegmentMessages();
       },
       deep: true,
     },
-    activeSegmentVisible() {
-      var self = this;
-      if (this.activeSegmentVisible && (this.activeSegment.segmentGroup === this.message.segmentGroup)) {
+    'activeSegment': {
+      handler: function(nV, oV) {
+        if (oV === this.message.segmentGroup) {
+          this.closeSegment();
+        }
+      },
+      deep: true,
+    },
+    'peekSegment': {
+      handler: function(nV, oV) {
+        if (nV === this.message.segmentGroup) {
+          if (!this.segmentPeeking) { this.segmentPeeking = true; }
+        } else if (oV === this.message.segmentGroup) {
 
-        setTimeout(function() {
-          if (self.activeSegment) {
-            self.activeSegmentStyles = {
-              'overflow-y': 'auto',
-              position: 'fixed',
-              transition: 'none',
-              top: '80px',
-              left: 'calc(50% - 370px)',
-              right: 'calc(50% - 370px)',
-              height: (self.activeSegmentStyles) ? self.activeSegmentStyles.height : `auto`,
-            };
+          this.segmentStyle = {
+            transition: 'all .3s ease',
+            position: 'absolute',
+            height: '157px',
+            'z-index': 56,
+          };
 
-            self.loadSegmentQuote();
-            self.loadSegmentMessages();
-          }
-        }, 1000);
-      }
+          setTimeout(() => {
+            this.unpeek();
+          }, 50);
+        }
+      },
+      deep: true,
     },
   },
   data() {
     return {
       segmentMessages: [],
-      quote: '',
+      segmentExpanded: false,
+      segmentOpened: false,
+      segmentPeeking: false,
+      segmentStyle: {},
+      calculatedOffset: 0,
+      calculatedOffsetBottom: 0
     };
   },
   computed: {
     ...mapGetters([
       'activeSegment',
-      'activeSegmentVisible',
+      'peekSegment',
       'lastMessage',
+      'currentSectionScrollPosition',
+      'subtitles',
+      'currentSegmentGroup',
     ]),
-    segmentVisible() {
-      return (this.activeSegmentVisible && this.activeSegment && (this.activeSegment.segmentGroup === this.message.segmentGroup));
+    isCurrent() {
+      return this.currentSegmentGroup === this.message.segmentGroup;
+    },
+    subtitle() {
+      return this.subtitles[(parseInt(this.message.segmentGroup) * 5)];
     },
   },
   methods: {
-    exploreSegment(segment) {
+    peek() {
 
-      this.segmentMessages = [];
-      this.quote = undefined;
+      if (!this.segmentOpened) {
 
-      if (segment === undefined) {
-        this.$log.log('Closing segment explorer');
-
-        this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
-        this.$store.commit(types.PLAY_VIDEO);
-      } else {
-        this.$log.log(`Exploring segment - ${segment.segmentGroup}`);
+        this.segmentStyle = {
+          transition: 'height .3s ease'
+        };
 
         this.$store.commit(types.PAUSE_VIDEO);
-
-        this.$store.commit(types.SET_ACTIVE_SEGMENT, segment);
-
-        const offsetHeight = window.innerHeight;
-        const topPosition = this.$store.getters.currentSectionScrollPosition - offsetHeight + 219;
-        const offsetWidth = document.getElementById('col-main').offsetWidth;
-        const offsetPadding = 20.0;
-        const offsetTop = 40.0;
-        const offsetBottom = 219.0;
-
-        this.activeSegmentStyles = {
-          top: `${topPosition + offsetTop}px`,
-          left: `-${((offsetWidth - (offsetPadding * 2)) / 2)}px`,
-          right: `${offsetPadding}px`,
-          height: `${(offsetHeight - offsetTop - offsetBottom)}px`,
-        };
+        this.$store.commit(types.SET_PEEK_SEGMENT, this.message.segmentGroup);
       }
+    },
+    unpeek() {
+
+      this.$store.commit(types.PLAY_VIDEO);
+
+      this.segmentStyle = {
+        position: 'absolute',
+        height: '157px',
+        'z-index': 56,
+      };
+
+      setTimeout(() => {
+
+        this.segmentStyle = {};
+        this.segmentOpened = this.segmentPeeking = false;
+        this.$store.commit(types.SET_PEEK_SEGMENT, undefined);
+
+      }, 300); // Timeout equal to time for overlay to fade
+    },
+    openSegment() {
+
+      if (this.segmentOpened) { return; }
+
+      this.$store.commit(types.SET_ACTIVE_SEGMENT, this.message.segmentGroup)
+
+      let calculatedOffset = document.getElementsByClassName('peek')[0].getBoundingClientRect().top;
+      let calculatedOffsetBottom = window.innerHeight - document.getElementsByClassName('peek')[0].getBoundingClientRect().bottom;
+
+      this.calculatedOffset = calculatedOffset;
+      this.calculatedOffsetBottom = calculatedOffsetBottom;
+
+      this.segmentStyle = {
+        top: `${calculatedOffset}px`,
+        bottom: `${calculatedOffsetBottom}px`,
+        position: 'fixed',
+      };
+
+      setTimeout(() => {
+        // DOM updated
+        this.segmentOpened = true;
+        this.segmentStyle = {
+          transition: 'all .3s ease',
+          top: '60px',
+          bottom: '10px',
+          position: 'fixed',
+        };
+
+        setTimeout(() => { this.loadSegmentMessages() }, 300);
+
+      }, 50);
+    },
+    closeSegment() {
+
+      if (this.opened) { return }
+
+      this.segmentStyle = {
+        transition: 'all .3s ease',
+        top: `${this.calculatedOffset}px`,
+        bottom: `${this.calculatedOffsetBottom + 90}px`,
+        position: 'fixed',
+      };
+
+      setTimeout(() => { this.unpeek() }, 300);
+
     },
     loadSegmentMessages() {
 
@@ -157,8 +216,15 @@ export default {
       API.message.getMessages(
         request,
         response => {
-          this.$log.log(response.data);
-          this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['desc']);
+
+          // Filter out highlighted message
+          var self = this;
+          let filteredMessages = response.data;
+          filteredMessages = _.orderBy(filteredMessages, ['createdAt'], ['asc']);
+          filteredMessages = _.filter(filteredMessages, function(obj) {
+            return obj.id !== self.message.message.id;
+          });
+          this.segmentMessages = filteredMessages;
         },
         response => {
           alert('There was an error');
@@ -179,30 +245,6 @@ export default {
       // );
 
     },
-    loadSegmentQuote() {
-
-      // Get quote for active segment
-      const segmentStart = (this.activeSegment.segmentGroup * 5);
-      const segmentEnd = segmentStart + 5;
-
-      let quotes = _.filter(this.subtitles, function(o) {
-        return (parseInt(o.start) > segmentStart);
-      });
-
-      let quote = _.first(quotes);
-
-      this.quote = quote.text;
-
-      // let quotes = _.filter(this.subtitles, function(o) {
-      //   return ((o.start > segmentStart) && (o.end < segmentEnd));
-      // });
-
-      // quotes = _.map(quotes, function(o) {
-      //   return o.text;
-      // });
-      //
-      // this.quote = _.join(quotes, ' ');
-    },
   },
 };
 </script>
@@ -212,148 +254,114 @@ export default {
 @import '~stylus/shared'
 
 .time-segment
-  segment-transition()
-  background-color $color-lightest-grey
-  height 158px
-  padding-right 25px
-  position absolute
-  left 0
-  right 0
-  top 0
+  background-color white
+  height 157px
+  min-height 157px
   overflow hidden
-  &:nth-child(1n)
+  position absolute
+  left 50%
+  margin-left -390px
+  z-index 0
+  width 780px
+
+  @media(max-width: 800px)
+    left 10px
+    margin-left 0
+    width calc(100% - 20px)
+
+  .primary-wrapper
     background-color white
-  .suggestion
-    padding 20px
-    text-align center
-    h3
-      reset()
-      font-weight normal
-  .message-wrapper
-    background-color transparent
-    transition('background-color' 0.3s linear)
-    .message
-      max-height 98px
-      margin 15px 15px 0 15px
-  .message-count
-    animate()
-    padding 10px
-    position absolute
-    text-align center
-    top 0
-    bottom 0
-    right 0
-    span
-      radius(50%)
-      background-color $color-primary
-      color white
-      display block
-      font-size 0.8em
-      font-weight bold
-      height 20px
-      line-height 20px
-      width 20px
-      padding 4px
+    border-bottom $color-border 1px solid
+    height 156px
+    min-height 156px
+    position relative
+    z-index 2
+
+    .suggestion
+      padding 20px
+      text-align center
+      h3
+        reset()
+        color $color-text-dark-grey
+
+    .message-wrapper
+      animate()
+      position absolute
+      top 50%
+
+    .subtitle-wrapper
+      animate()
+      position absolute
+      top 50%
+
     &:hover
       cursor pointer
-      span
-        background-color darken($color-primary, 15%)
 
-    &.plus
-      span
-        background-color $color-grey
-        line-height 26px
-      &:hover
-        span
-          background-color darken($color-grey, 15%)
-      .fa-icon
-        margin-top 1px
+  &.current
+    .primary-wrapper
+      &:after
+        radius(50%)
+        background-color $color-primary
+        content ''
+        position absolute
+        top 10px
+        left 10px
+        height 12px
+        width 12px
 
-    &.hide
-      opacity 0
-
-  &.active
-    segment-transition()
-    background-color $color-lightest-grey
-    border-top-left-radius 6px
-    border-top-right-radius 6px
+  &.peek, &.active
+    radius(4px)
     z-index 56
-    padding-right 0
-    .explore-segment-button
-      display none
+    border none
+
+  &.peek
+    height 240px
+
+  &.opened
+    height auto
+    .segment-expansion-bar
+      opacity 0
+      pointer-events none
+
+  .meta-container
+    animate()
+    background-color $color-lightest-grey
+    box-sizing border-box
+    opacity 0
+    padding 10px
+    position absolute
+    top 157px
+    bottom 50px
+    right 0
+    left 0
+    overflow scroll
     .message-wrapper
-      background-color white
-      border-bottom $color-light-grey 1px solid
-      padding 1px
-      .message-count
-        display none
-      .mock-message
-        position relative
-    .meta-container
-      min-height 100px
-      .meta-container--no-content
-        padding 40px
-        text-align center
-        h1
-          color $color-text-light-grey
-      .meta-container--messages
-        .message
-          margin 15px 15px 0 15px
-    .quote-container
-      background-color transparent
-      height 80px
-      overflow hidden
-      position fixed
-      top 0
-      left 0
-      right 0
-      text-align center
-      h1
-        reset()
-        color white
-        font-size 20px
-        line-height 80px
-        padding 0 20px
-    @media(max-width: 800px)
-      left 10px !important
-      right 10px !important
+      transform translate(0, 0) !important
+      width 100%
+    &.active
+      opacity 1
 
-.full-width-loading
-  padding 20px
-  text-align center
-  .fa-icon
-    color $color-light-grey
-
-.close-button
-  radius(15px)
-  background-color $color-primary
-  border white 1px solid
+.quick-note
+  border-top $color-border 1px solid
+  box-sizing border-box
   position absolute
-  top 5px
-  right 5px
-  height 30px
-  min-width 30px
-  z-index 57
-  p
-    reset()
-    color white
-    line-height 30px
-    padding 0 10px
+  bottom 0
+  left 0
+  right 0
+  z-index 0
+
+.segment-expansion-bar
+  animate()
+  background-color white
+  color #999
+  cursor pointer
+  padding 5px 20px
+  position absolute
+  bottom 51px
+  left 0
+  right 0
+  z-index 1
+  text-align center
   &:hover
-    cursor pointer
-    background-color white
-    p
-      color $color-primary
-
-
-.slide-fade-enter-active
-  transition all 1s ease-out
-
-.slide-fade-leave-active
-  transition all 0.1s linear
-
-.slide-fade-enter, .slide-fade-leave-to
-  opacity 0
-  height 0
-
+    background-color $color-lightest-grey
 </style>

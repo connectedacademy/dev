@@ -8,9 +8,11 @@ import store from '@/store';
 // initial state
 const state = {
   messages: new Array(999),
+  subtitles: new Array(999),
   visualisation: [],
+  media: [],
   activeSegment: undefined,
-  activeSegmentVisible: false,
+  peekSegment: undefined,
   lastMessage: undefined,
 };
 
@@ -22,8 +24,8 @@ const getters = {
   activeSegment() {
     return state.activeSegment;
   },
-  activeSegmentVisible() {
-    return state.activeSegmentVisible;
+  peekSegment() {
+    return state.peekSegment;
   },
   messages() {
     return state.messages;
@@ -141,6 +143,20 @@ const actions = {
       }),
     );
   },
+  getMedia({
+    commit,
+  }, request) {
+    API.message.getMedia(
+      request.slug,
+      request.path,
+      response => commit(types.GET_MEDIA_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_MEDIA_FAILURE, {
+        response,
+      }),
+    );
+  },
   pushMessage({
     commit,
   }, request) {
@@ -168,7 +184,30 @@ const mutations = {
   [types.GET_SUBTITLES_SUCCESS](initialState, {
     response,
   }) {
-    state.subtitles = response.response;
+
+    // TODO: bucket subtitles
+
+    state.subtitles = [];
+
+    for (var subtitle of response.response) {
+
+      let group = _.divide(_.floor(_.multiply(subtitle.start, 2), -1), 2);
+
+      const segmentGroup = parseInt(group);
+
+      let newSubtitle = subtitle;
+
+      newSubtitle.segmentGroup = segmentGroup;
+
+      // Vue.set(state.subtitles, segmentGroup, newSubtitle);
+      if (state.subtitles[segmentGroup]) {
+        Vue.set(state.subtitles, segmentGroup, state.subtitles[segmentGroup] + ' ' + newSubtitle.text);
+      } else {
+        Vue.set(state.subtitles, segmentGroup, newSubtitle.text);
+      }
+    }
+
+    // state.subtitles = response.response;
   },
   [types.GET_SUBTITLES_FAILURE](initialState, {
     response,
@@ -188,6 +227,18 @@ const mutations = {
     state.visualisation = [];
     // error in response
   },
+  [types.GET_MEDIA_SUCCESS](initialState, {
+    response,
+  }) {
+    state.media = response.response;
+  },
+  [types.GET_MEDIA_FAILURE](initialState, {
+    response,
+  }) {
+    Vue.log.log('error');
+    state.media = [];
+    // error in response
+  },
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
@@ -195,18 +246,11 @@ const mutations = {
     const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
     const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2);
 
-    // Vue.log.log(`** API response ${startSegmentGroup} - ${endSegmentGroup}`);
-    // Vue.log.log(response.scope);
-
     for (var group in response.data) {
 
       const segmentGroup = parseInt(parseInt(group) * 0.2);
       let newMessage = response.data[group];
       newMessage.segmentGroup = segmentGroup;
-
-      // if (((state.messages[segmentGroup] === undefined) || state.messages[segmentGroup].loading) && !state.messages[segmentGroup].faux) {
-      //   Vue.set(state.messages, segmentGroup, newMessage);
-      // }
 
       Vue.set(state.messages, segmentGroup, newMessage);
     }
@@ -218,11 +262,9 @@ const mutations = {
   },
   [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
     state.activeSegment = activeSegment;
-    state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
   },
-  [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
-    state.activeSegment = activeSegment;
-    state.activeSegmentVisible = (activeSegment === undefined) ? false : true;
+  [types.SET_PEEK_SEGMENT](initialState, peekSegment) {
+    state.peekSegment = peekSegment;
   },
   updateLastMessage({ commit }, newMessage) {
     state.lastMessage = newMessage;

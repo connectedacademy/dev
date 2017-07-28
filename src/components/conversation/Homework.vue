@@ -3,7 +3,7 @@
 .course-content
 
   .course-content--header.block
-    //- svg(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
+    svg.hidden(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
 
       polyline(points="160 30 0 0 0 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
@@ -20,7 +20,7 @@
       .pure-button(v-if="content.url" @click="viewSubmissions")
         | {{ $t('common.participate') }}
 
-  //- submission-grid(v-bind:content="content")
+  submission-grid(v-bind:content="content")
 
 </template>
 

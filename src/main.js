@@ -24,14 +24,24 @@ import VueYouTubeEmbed from 'vue-youtube-embed';
 import 'vue-awesome/icons';
 import Icon from 'vue-awesome/components/Icon';
 
-import App from './App';
-import Lang from './Lang';
+import App from '@/App';
+import Lang from '@/Lang';
 
 import store from '@/store';;
-import router from './router';
+import router from '@/router';
 
 sync(store, router);
 
+
+
+import socketIOClient from 'socket.io-client';
+import sailsIOClient from 'sails.io.js';
+import vueSails from 'vue-sails';
+// Setup socket connection
+const io = sailsIOClient(socketIOClient);
+io.sails.url = 'https://api.connectedacademy.io';
+Vue.io = io;
+Vue.use(vueSails, io);
 
 Icon.register({
   'ca-heart': {
@@ -71,14 +81,15 @@ Vue.use(VueAnalytics, {
   },
 });
 
-Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
+// TODO: Enabled for production
+// Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
 
 Vue.use(VueYouTubeEmbed);
 Vue.use(VueScroll);
 Vue.use(VueAutosize);
 
 // General config
-Vue.config.productionTip = false;
+// Vue.config.productionTip = false;
 
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json' };

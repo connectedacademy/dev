@@ -14,7 +14,8 @@ import _ from 'lodash';
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 
-import FourCorners from '@/mixins/FourCorners';
+import FourCornersMixin from '@/mixins/FourCorners';
+import FourCorners from './fourcorners/FourCorners';
 
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
@@ -28,8 +29,11 @@ import * as types from '@/store/mutation-types';
 export default {
   name: 'markdown-renderer',
   mixins: [
-    FourCorners,
+    FourCornersMixin,
   ],
+  components: {
+    FourCorners,
+  },
   watch: {
     '$route': {
       handler: function(nV, oV) {
@@ -39,9 +43,6 @@ export default {
     },
     course() {
       this.loadMarkdown();
-    },
-    rawMarkdown() {
-      this.loadFourCornersScript();
     },
   },
   mounted() {
@@ -173,6 +174,12 @@ export default {
       }).$mount();
 
       this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
+
+      // Load four corners
+      var self = this;
+      setTimeout(function() {
+        self.loadFourCornersScript();
+      }, 500);
     },
   },
   computed: {

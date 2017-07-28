@@ -9,10 +9,13 @@
 
   .course-content--container(v-bind:class="{ collapsed: collapsed }")
     #fade-out(v-if="collapsed")
+
+    action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment="activeSegment")
+
     conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
 
   .course-content--footer
-    .pure-button.pure-button-primary(@click="collapsed = !collapsed") Continue Listening
+    .pure-button.pure-button-primary(v-if="collapsed" @click="collapsed = false") Continue Listening
 
 </template>
 
@@ -21,18 +24,25 @@ import _ from 'lodash';
 import * as config from '@/api/config';
 import {mapGetters} from 'vuex';
 
+import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
+import VideoContainer from '@/components/VideoContainer';
 
 export default {
   name: 'live-class',
   props: ['content'],
   components: {
+    ActionPanel,
     ConversationContainer,
+    VideoContainer,
   },
   data() {
     return {
       collapsed: true,
     };
+  },
+  computed: {
+    ...mapGetters(['composerHidden', 'activeSegment', 'videoIsActive']),
   },
 };
 </script>
@@ -43,11 +53,12 @@ export default {
 
 .course-content#course-content-liveclass
   background-color $color-darkest-grey !important
-  overflow hidden
   position relative
 
   .course-content--header.block
     background-color $color-darkest-grey
+    border-top-left-radius 6px
+    border-top-right-radius 6px
 
     .pure-button
       background-color transparent
@@ -60,7 +71,6 @@ export default {
 
   .course-content--container
     background-color white
-    padding-top 20px
     position relative
 
     &.collapsed
@@ -79,8 +89,5 @@ export default {
   z-index 1
   height 300px
   top auto
-  /*left 50%*/
-  /*bottom 219px*/
-  /*margin-left calc(-780px / 2)*/
-  /*width 780px*/
+  pointer-events none
 </style>

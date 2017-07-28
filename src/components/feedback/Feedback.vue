@@ -44,7 +44,7 @@
         four-corners-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug")
 
       transition(name="fade" type="in out")
-        feedback-view(v-bind:current-feedback-id="currentFeedbackId")
+        feedback-view(v-bind:current-feedback-id="currentFeedbackId" v-bind:currentFeedbackId.sync="currentFeedbackId")
 
   .clearfix
 
@@ -100,11 +100,20 @@ export default {
     this.getAvailableFeedbackItems();
 
     var self = this;
-    window.setInterval(function() {
-      // Fetch feedback items
-      self.getFeedbackItems();
-      self.getAvailableFeedbackItems();
-    }, 2000);
+
+    this.$io.socket.on('user', function(obj) {
+      console.log('Submission message received');
+      console.log(obj);
+      switch (obj.data.msgtype) {
+        case 'submission':
+
+          self.getFeedbackItems();
+          self.getAvailableFeedbackItems();
+
+          break;
+        default:
+      }
+    });
   },
   data() {
     return {

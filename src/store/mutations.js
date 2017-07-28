@@ -17,8 +17,14 @@ export const setScrollPosition = (state, scrollPosition) => {
 
   // Set offset scroll position
   let offset = window.innerHeight;
-  offset -= 400;
+  offset -= (157 + 80 + 150 + 100);
   state.offsetScrollPosition = (state.scrollPosition + offset);
+};
+
+export const setPendingScrollPosition = (state, scrollPosition) => {
+
+  // Set pending scroll position
+  state.pendingScrollPosition = scrollPosition;
 };
 
 export const TOGGLE_DEBUG_MODE = (state) => {

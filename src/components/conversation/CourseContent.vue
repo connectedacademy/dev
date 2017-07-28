@@ -51,6 +51,7 @@
         .md-thumbnail-row(v-if="content.thumbnails")
           router-link(v-for="thumbnail in content.thumbnails" v-bind:to="thumbnail.link" v-bind:key="thumbnail.link")
             .md-thumbnail(v-bind:style="{ 'background-image': `url('${thumbnail.image}')` }")
+              .md-thumbnail-caption {{ thumbnail.caption }}
           .clearfix
 
         video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
@@ -63,8 +64,18 @@
 
   .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-if="index === 0")
 
-    //- FUTURE CONTENT
-    future-content(v-bind:content="content")
+    div(v-if="content.content_type === 'nextclass'")
+
+      .course-content
+        .course-content--header.block
+          h1.content-title(v-if="content.title")
+            | Coming Soon
+          p.content-description
+            | The next class of the course will be made available soon, please check back later.
+
+    div(v-else)
+      //- FUTURE CONTENT
+      future-content(v-bind:content="content")
 
 </template>
 
@@ -110,7 +121,7 @@ export default {
     MessageComposer,
   },
   mounted() {
-    // setTimeout(this.startDemo, 500).bind(this);
+    setTimeout(this.startDemo, 500).bind(this);
   },
   computed: {
     ...mapGetters([
@@ -168,13 +179,26 @@ export default {
     display inline-block
     height 0
     margin 10px
+    overflow hidden
     padding 5px
     padding-bottom 100px
     position relative
     white-space nowrap
     width 160px
+    .md-thumbnail-caption
+      animate()
+      pinned()
+      background-color alpha(black, 0.1)
+      color white
+      font-weight bold
+      line-height 110px
+      position absolute
+      text-align center
     &:hover
       cursor pointer
       transform scale(1.1)
+      .md-thumbnail-caption
+        background-color alpha(black, 0.5)
+        transform scale(1.3)
 
 </style>

@@ -27,11 +27,6 @@
       keep-alive
         router-view
 
-  //- #media-panel(v-if="videoIsActive")
-    video-container
-
-  action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
-
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
 
 </template>
@@ -68,20 +63,12 @@ export default {
     Overlay,
   ],
   watch: {
-    activeSegmentVisible(nV, oV) {
+    activeSegment(nV, oV) {
       if (nV) {
         // Segment visible, disable scroll on window
         document.body.className = "disable-scroll";
       } else {
         document.body.className = "allow-scroll";
-      }
-    },
-    videoIsActive(nV, oV) {
-      if (nV) {
-        // Segment visible, disable scroll on window
-        // document.documentElement.className = "dark-mode";
-      } else {
-        // document.documentElement.className = "light-mode";
       }
     },
   },
@@ -108,6 +95,10 @@ export default {
     // Periodically update document height variable
     window.setInterval(this.updateDocumentHeight, 500);
   },
+  mounted() {
+    // Subscribe to socket
+    API.message.subscribeToSocket();
+  },
   data() {
     return {
       navTitle: 'Connected Academy',
@@ -115,12 +106,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden', 'pageStyles', 'user', 'navigation',
+      'isRegistered', 'activeSegment', 'peekSegment', 'pageStyles', 'user', 'navigation',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
-      || this.$store.state.conversation.activeSegmentVisible;
+      || this.$store.state.conversation.activeSegment
+      || this.$store.state.conversation.peekSegment;
     },
   },
   store,
@@ -159,6 +151,8 @@ export default {
 html
   background-color $color-main-page
   transition background-color 0.6s
+  &::-webkit-scrollbar
+    display none
   &.colourful
     background-color $color-primary
   &.dark-mode
@@ -214,10 +208,10 @@ body.disable-scroll
   background-color alpha(black, 0)
   pointer-events none
   position fixed
-  transition background-color 0.6s
+  transition background-color 0.3s
   z-index 55
   &.visible
-    background-color alpha(black, 0.85)
+    background-color alpha(black, 0.8)
     pointer-events all
 
 // Page header
@@ -251,19 +245,4 @@ html.colourful
   .page-header
     display none
 
-#media-panel
-  pinned()
-  position fixed
-  top 0
-  bottom auto
-  background-color $color-darkest-grey
-  background-color white
-  border-bottom $color-border 1px solid
-  box-shadow 0 0 5px 5px alpha(black, 0.1)
-  /*height 140px*/
-  width 780px
-  left 50%
-  margin-left calc(-780px / 2)
-  z-index 50
-  text-align center
 </style>

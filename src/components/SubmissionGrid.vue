@@ -1,8 +1,9 @@
 <template lang="pug">
 
   .submission-grid-wrapper(v-if="content.submissions.length > 0")
-    pre.hidden {{ content}}
-    ul.submission-grid
+    p.content-description You have made {{ content.submissions.length }} submission(s)
+
+    ul.hidden.submission-grid
       li.submission-grid--tile(v-for="submission in content.submissions" @click="viewSubmissions")
         img(v-bind:src="submission.thumbnail")
       .clearfix
@@ -31,7 +32,8 @@ export default {
   margin 0 10px
   overflow hidden
   p.content-description
-    color $color-text-dark-grey
+    color alpha(white, 0.5)
+    text-align center
   ul.submission-grid
     cleanlist()
     height 100px

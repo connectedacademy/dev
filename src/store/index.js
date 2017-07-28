@@ -39,6 +39,7 @@ export default new Vuex.Store({
     fauxTime: fauxTime,
     debug: false,
     scrollPosition: 0.0,
+    pendingScrollPosition: 0,
     offsetScrollPosition: 0.0,
     autoPlaying: false,
     scrollPoints: {},

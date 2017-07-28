@@ -2,7 +2,14 @@
 
   .video-wrapper
 
-    #media-overlay(v-bind:style="{ 'background-image': currentMedia }")
+    #media-overlay
+      //- pre {{ currentSegmentIndex }}
+      span(v-for="(mediaItem, index) in mediaItems")
+        img.media-item-tile(v-bind:src="mediaItem" v-bind:class="{ active: (currentSegmentIndex === index) }")
+
+      //- .media-tile#previous(v-bind:style="{ 'background-image': `url(${previousMedia})` }")
+      //- .media-tile#current(v-bind:style="{ 'background-image': `url(${currentMedia})` }")
+      //- .media-tile#next(v-bind:style="{ 'background-image': `url(${nextMedia})` }")
 
     youtube.video-container(v-if="src" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="ready" @paused="paused" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="playerStyle")
 
@@ -27,6 +34,7 @@ export default {
     return {
       pHeight: 90,
       pWidth: 160,
+      currentSegmentIndex: 0,
     };
   },
   watch: {
@@ -83,33 +91,70 @@ export default {
       } else {
         this.pHeight = 219;
         this.pWidth = (219 / 0.5625);
-
-        // const percentage = 0.8;
-        // this.pHeight = (((document.documentElement.clientHeight / 2) * percentage) * 0.5625);
-        // this.pWidth = ((document.documentElement.clientHeight / 2) * percentage);
       }
-      // this.pHeight = (this.pHeight > 219) ? 219 : this.pHeight;
-      // this.pWidth = (this.pWidth > (219 / 0.5625)) ? (219 / 0.5625) : this.pWidth;
     }, 500),
   },
   computed: {
+    ...mapGetters([
+      'videoIsActive', 'videoEnabled', 'currentTime', 'currentSection', 'videoPlaying', 'media', 'currentSegment',
+    ]),
     src() {
       this.$log.log('src changed');
       return (this.currentSection) ? this.currentSection.videoId : '';
     },
-    ...mapGetters([
-      'videoIsActive', 'videoEnabled', 'currentTime', 'currentSection', 'videoPlaying',
-    ]),
     playerStyle() {
       return {
         height: `${this.pHeight}px`,
         width: `${this.pWidth}px`,
       };
     },
+    mediaItems() {
+      let mediaItems = [];
+
+      if (this.media.length === 0) { return mediaItems; }
+
+      let media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${this.media[0].text}`;
+
+      for (var i = 0; i < this.media.length; i++) {
+        const image = this.media[i];
+        media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${image.text}`
+        mediaItems.push(media);
+      }
+
+      return mediaItems;
+    },
     currentMedia() {
-      const media = 'https://images.pexels.com/photos/24486/pexels-photo-24486.jpg?w=940&h=650&auto=compress&cs=tinysrgb';
-      return `url('${media}')`;
-    }
+      if (this.media.length === 0) { return ''; }
+
+      let media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${this.media[0].text}`;
+
+      for (var i = 0; i < this.media.length; i++) {
+        const image = this.media[i];
+        if (this.currentSegment > (image.start) && this.currentSegment < (image.end)) {
+          this.currentSegmentIndex = i;
+          media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${image.text}`
+          return media;
+        }
+      }
+
+      return media;
+    },
+    previousMedia() {
+      if (!this.media[this.currentSegmentIndex - 1]) {
+        return '';
+      }
+      const image = this.media[this.currentSegmentIndex - 1];
+      const media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${image.text}`
+      return media;
+    },
+    nextMedia() {
+      if (!this.media[this.currentSegmentIndex + 1]) {
+        return '';
+      }
+      const image = this.media[this.currentSegmentIndex + 1];
+      const media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${image.text}`
+      return media;
+    },
   },
 };
 </script>
@@ -119,30 +164,55 @@ export default {
 @import '~stylus/shared'
 
 .video-wrapper
-  /*background-color darken($color-purple, 25%)*/
-  /*border-right $color-purple 1px solid*/
-  /*bottom 0*/
-  padding 0
-  /*padding-left 0*/
-  /*left 50%
-  margin-left -100px*/
-  /*position absolute*/
-  z-index 52
   animate()
+  background white
+  padding 0
+  position relative
+  // top 100px
+  height 120px
+  overflow hidden
+  border-top $color-border 1px solid
   #media-overlay
     pinned()
-    background-image()
-    /*border $color-darkest-grey 15px solid*/
-    position absolute
-    z-index 2
-    right 50%
-  @media(max-width: 800px)
-    top 100px
-    left 10px
-    margin-left 0
-    padding 0
-    position fixed
+    // background-color $color-darkest-grey
+    padding 4px
+    .media-item-tile
+      border transparent 4px solid
+      height calc(120px - 16px)
+      width auto
+      &.active
+        border-color $color-darkest-grey
+    .media-tile
+      pinned()
+      background-image()
+      // background-color $color-darkest-grey
+      background-size contain
+      position absolute
+      &#current
+        background-position left
+        top 0
+        bottom 0
+        width 100%
+
+      &#previous, &#next
+        // border alpha(white, 0.2) 2px solid
+        display none
+        opacity 1
+        bottom 20px
+        z-index 1
+        width 15%
+        top 20px
+      &#previous
+        background-position left
+        left 400px
+        right auto
+      &#next
+        background-position right
+        right 400px
+        left auto
+
   .video-container
+    opacity 0
     box-sizing border-box
     overflow hidden
     padding 0
@@ -155,28 +225,4 @@ export default {
     left 0 !important
     right 0 !important
 
-  /* Video controls */
-  .video-controls-overlay
-    pinned()
-    top auto
-    position absolute
-    ul.video-controls
-      cleanlist()
-      padding 5px
-      li.video-control
-        cleanlist()
-        radius(50%)
-        background-color alpha($color-primary, 1)
-        float left
-        height 20px
-        padding 10px
-        text-align center
-        width 20px
-        .fa-icon
-          color alpha(white, 0.9)
-          height 20px
-        &:hover
-          cursor pointer
-          .fa-icon
-            color white
 </style>

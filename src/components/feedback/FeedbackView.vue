@@ -3,7 +3,7 @@
   .feedback-view(v-if="currentFeedbackId")
 
     .feedback-header
-      p {{ feedbackItem.user.name }}
+      p {{ feedbackItem.user.name }} - {{ currentFeedbackId }}
 
     .feedback-section
 
@@ -13,18 +13,19 @@
 
     .feedback-conversation(v-if="!loading")
       .feedback-message-wrapper(v-for="message in feedbackMessages")
-        //- pre {{ message.fromuser }}
-        .feedback-message.animated.fadeInUp(v-bind:class="{ reply: (message.fromuser.id !== currentUser.id) }")
+        .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (!message.canview), reply: (message.fromuser.id !== currentUser.id) }")
           .feedback-message--bubble
-            p(v-if="!message.canview") Message hidden
+            p(v-if="!message.canview")
+              icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
+              | Message locked (click here)
             p(v-if="message.canview") {{ message.message }}
           .feedback-message--author
             p by {{ message.fromuser.name }}
         .clearfix
 
       .feedback-submission
-        textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment"  @keyup.enter="postFeedbackComment")
-        .pure-button(@click="postFeedbackComment") Send
+        textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment"  @keydown.enter="postFeedbackComment")
+        .pure-button(v-on:click="postFeedbackComment") Send
         .clearfix
       .clearfix
 
@@ -51,6 +52,26 @@ export default {
   mixins: [
     FourCornersMixin,
   ],
+  mounted() {
+
+    var self = this;
+
+    this.$io.socket.on('user', function(obj) {
+      console.log('Submission message received');
+      console.log(obj);
+      switch (obj.data.msgtype) {
+        case 'discussion':
+
+          if (self.currentFeedbackId === obj.data.msg.relates_to) {
+            self.discussion.push(obj.data.msg);
+            // self.getDiscussion();
+          }
+
+          break;
+        default:
+      }
+    });
+  },
   watch: {
     currentFeedbackId() {
       // Fetch feedback item
@@ -80,7 +101,15 @@ export default {
     previous() {
       this.$router.go(-1);
     },
+    unlockMessage(message) {
+      if (!message.canview) {
+        if (confirm(`Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`)) {
+          this.currentFeedbackId = '#15:3340';
+        }
+      }
+    },
     postFeedbackComment() {
+
       let message = { reply: false, text: this.comment, user: { name: 'You' } };
 
       const request = { text: this.comment, id: this.encodedContentId };
@@ -91,7 +120,6 @@ export default {
           this.$log.log('Response from feedback request');
           this.$log.log(response);
           this.comment = '';
-          this.getDiscussion();
         },
         (response) => {
           // TODO: Handle failed request
@@ -146,7 +174,11 @@ export default {
       return _.orderBy(this.discussion, ['createdAt'], ['asc']);
     },
     encodedContentId() {
-      return this.currentFeedbackId.replace('#','%23');
+      if (!this.currentFeedbackId) {
+        return undefined;
+      } else {
+        return this.currentFeedbackId.replace('#','%23');
+      }
     },
     currentUser() {
       return this.$store.getters.user;
@@ -221,10 +253,12 @@ export default {
       float right
       margin-bottom 10px
       .feedback-message--bubble
+        animate()
         radius(6px)
         background-color $color-homework
         padding 6px 12px
         p
+          animate()
           reset()
           color white
       .feedback-message--author
@@ -243,6 +277,13 @@ export default {
             color $color-text-dark-grey
         .feedback-message--author
           text-align left
+      &.locked
+        &:hover
+          cursor pointer
+          .feedback-message--bubble
+            background-color $color-homework
+            p
+              color white
 
   .feedback-submission
     background-color $color-lightest-grey

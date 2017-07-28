@@ -1,30 +1,25 @@
 <template lang="pug">
 
-  .conversation-container(ref="conversationContainer" v-bind:class="{ 'message-priority': messagePriority }" v-bind:style="conversationContainerStyles")
+  .conversation-container(ref="conversationContainer")
 
-    //- #fade-out
+    #the-toggle(@click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority}")
+      icon(name="quote-right")
+      icon(name="twitter")
 
     //- Efficent
-    .activity-visualisation
-      svg(width="400" v-bind:height="svgHeight")
+    #activity-visualisation(v-if="activeSegment")
+      svg(width="400" v-bind:height="containerHeight")
 
         g
           //- line(x1="100" y1="0" x2="100" v-bind:y2="svgHeight")
           //- path(v-bind:d="visualisationPoints" transform="translate(102,0)")
-          path(v-bind:d="visualisationPoints" transform="translate(100,0) scale(-1, 1)")
+          path(v-bind:d="visualisationPoints" transform="translate(400,0)")
 
       //- svg(width="200" v-bind:height="svgHeight")
         g(v-html="visualisationLabels")
 
-    .inner-wrapper(v-bind:style="innerWrapperContainerStyles")
-      .subtitle-container(v-bind:style="subtitlesContainerStyles")
-
-        subtitle(v-for="subtitle in subtitles" v-bind:subtitle="subtitle" v-bind:key="subtitle.start" v-bind:current-segment="currentSegment")
-
-      .messages-container(v-bind:style="messagesContainerStyles")
-
-        span(v-for="message in chunkedMessages" v-bind:key="message.segmentGroup")
-          time-segment(v-bind:message="message" v-bind:subtitles="subtitles")
+    .inner-wrapper(v-bind:style="{ height: containerHeight }", v-bind:class="{ 'message-priority': messagePriority }")
+      time-segment(v-for="message in chunkedMessages" v-bind:key="message.id" v-bind:message="message")
 
       .clearfix
 
@@ -39,43 +34,39 @@ import * as types from '@/store/mutation-types';
 import axios from 'axios';
 import Moment from 'moment';
 
-import Visualisation from '@/mixins/Visualisation';
+import Media from '@/mixins/Media';
 import Subtitles from '@/mixins/Subtitles';
+import Visualisation from '@/mixins/Visualisation';
 
 import TimeSegment from '@/components/conversation/TimeSegment';
-import Subtitle from '@/components/conversation/Subtitle';
 
 export default {
   /* eslint-disable */
   name: 'conversation-container',
   mixins: [
-    Visualisation,
+    Media,
     Subtitles,
+    Visualisation,
   ],
   props: ['content'],
   data() {
     return {
       navTitle: 'Connected Academy - Main',
-      messagePriority: true,
       spacerHeight: 0,
       points: '',
-      subtitles: [],
+      // subtitles: [],
+      media: [],
       chunkedMessages: {},
       cancelSources: [],
       cancel: undefined,
+      messagePriority: true,
     };
   },
   components: {
-    Subtitle,
     TimeSegment,
   },
   mounted() {
     const self = this;
-
-    this.windowResized();
-    window.addEventListener('resize', () => {
-      this.windowResized(self);
-    });
 
     setInterval(function() {
 
@@ -116,53 +107,36 @@ export default {
       if (oV !== nV) {
         var self = this;
 
-        API.message.getSubtitles(
-          `${this.currentSection.slug}`,
-          `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${this.currentSection.transcript}`,
-          function(response) {
-            self.subtitles = response.response;
-            // this.loadSubtitles();
-          },
-          function(response) {
-            self.subtitles = response.response;
-            // this.loadSubtitles();
-          },
-        );
-
-        API.message.getMedia(
-          `${this.currentSection.slug}`,
-          `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${this.currentSection.images}`,
-          function(response) {
-            self.media = response.response;
-            // this.loadSubtitles();
-          },
-          function(response) {
-            self.media = response.response;
-            // this.loadSubtitles();
-          },
-        );
+        // API.message.getSubtitles(
+        //   `${this.currentSection.slug}`,
+        //   `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${this.currentSection.transcript}`,
+        //   function(response) {
+        //     self.subtitles = response.response;
+        //     // this.loadSubtitles();
+        //   },
+        //   function(response) {
+        //     self.subtitles = response.response;
+        //     // this.loadSubtitles();
+        //   },
+        // );
 
         const request = {
           theClass: this.$store.getters.currentClass.slug,
           theContent: this.currentSection.slug,
         };
 
+        // TODO: Remove hardcoded value
+        const images = 'transcripts/SI0kWdWG0JY_images.json';
+
+        this.$store.dispatch('getMedia', { slug: `${this.currentSection.slug}`, path: `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${images}` });
+
         this.$store.dispatch('getVisualisation', request);
+
+        this.$store.dispatch('getSubtitles', request);
       }
     },
   },
   methods: {
-    windowResized(self) {
-
-      if (this.$refs.spacer) {
-        const windowHeight = window.innerHeight;
-        const childOffset = this.$refs.spacer.parentElement.offsetTop;
-
-        let height = (windowHeight / 2);
-
-        this.spacerHeight = (height < 200) ? 200 : height;
-      }
-    },
     getMessagesSummary(segmentGroup) {
 
       if (this.content === undefined) { return; }
@@ -201,7 +175,7 @@ export default {
       let segmentViewport = _.floor(window.innerHeight / 158.0);
 
       currentSegment += 1; // Think ahead
-      segmentViewport += 2; // Think behind
+      segmentViewport += 3; // Think behind
 
       let startSegment = currentSegment - segmentViewport;
       startSegment = (startSegment < 5) ? 0 : startSegment;
@@ -228,47 +202,22 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'messages', 'visualisation', 'lastMessage',
+      'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'messages', 'visualisation', 'lastMessage', 'subtitles', 'activeSegment',
     ]),
     containerHeight() {
-      return ((this.content.duration * 0.2) * 158.0);
-    },
-    svgHeight() {
-      return `${this.containerHeight}px`;
-    },
-    innerWrapperContainerStyles() {
-      return {
-        height: `${this.containerHeight}px`,
-      };
-    },
-    conversationContainerStyles() {
-      return {
-        height: `${this.containerHeight}px`,
-      };
-    },
-    messagesContainerStyles() {
-      return {
-        height: `${this.containerHeight}px`,
-      };
-    },
-    subtitlesContainerStyles() {
-      return {
-        height: `${this.containerHeight}px`,
-      };
-    },
-    spacerStyles() {
-      return {
-        height: `${this.spacerHeight}px`,
-      };
+      return `${(((this.content.duration) * 0.2) * 158.0) + 400}px`;
     },
     visualisationPoints() {
       return this.points;
+    },
+    chunkedSubtitles() {
+      return _.compact(this.subtitles);
     },
   },
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '~stylus/shared'
 
@@ -280,17 +229,6 @@ export default {
     max-height 600px
     overflow hidden
 
-  .spacer
-    position relative
-    .floating-text
-      height 100px
-      position absolute
-      top 50%
-      margin-top -50px
-      text-align center
-      width 100%
-    .fa-icon
-      height 40px
   h5
     reset()
     color #444
@@ -298,12 +236,13 @@ export default {
     line-height 60px
     width 100%
 
-  .activity-visualisation
+  #activity-visualisation
+    pointer-events none
     position absolute
+    right 0
     top 0
-    /*left 50%*/
-    margin-left -100px
     z-index 0
+
     svg
       overflow visible
       line
@@ -311,42 +250,70 @@ export default {
         stroke-width 4
       path
         fill alpha($color-primary, 1)
-        /*fill alpha(white, 1)*/
+
+    @media(max-width: 600px)
+      z-index 50
+      left -400px
+      right auto
+
+      svg path
+        fill alpha($color-primary, 0.3)
+
+
   .inner-wrapper
     overflow hidden
-    position relative
-    width 100%
-  .subtitle-container, .messages-container
-    min-height 100px
-    position absolute
-    width 50%
-    left 0
-    top 0
-    bottom 0
+    .subtitle-wrapper
+      animate()
+      width 50%
+      transform translate(0%, -50%)
+    .message-wrapper
+      animate()
+      width 50%
+      transform translate(100%, -50%)
+    @media(max-width: 600px)
+      .subtitle-wrapper
+        animate()
+        width 100%
+        transform translate(0%, -50%)
+      .message-wrapper
+        animate()
+        width 100%
+        transform translate(100%, -50%)
+      &.message-priority
+        .subtitle-wrapper
+          animate()
+          width 100%
+          transform translate(-100%, -50%)
+        .message-wrapper
+          animate()
+          width 100%
+          transform translate(0%, -50%)
 
-  .messages-container
-    left 50%
-
-  @media(max-width: 800px)
-    .subtitle-container, .messages-container
-      left 0
-      width 100%
-    &.message-priority
-      .subtitle-container
-        display none
-    &.subtitle-priority
-      .message-container
-        display none
-
-#fade-out
-  pinned()
+#the-toggle
+  animate()
+  radius(50%)
+  background-color $color-primary
+  color white
+  display none
+  height 80px
+  width 80px
   position fixed
-  background-color alpha(white, 0.8)
-  background linear-gradient(bottom, alpha(white, 0.0), alpha(white, 1.0))
-  z-index 50
-  left 50%
-  bottom 219px
-  margin-left calc(-780px / 2)
-  width 780px
+  z-index 57
+  top 50%
+  left calc(100% - 40px)
+  transform translate(0%, -50%)
+  text-align left
+  @media(max-width: 600px)
+    display block
+  .fa-icon
+    animate()
+    float left
+    height 80px
+    padding 0 10px
+    width 20px
+
+  &.message-priority
+    left -40px
+    transform translate(0%, -50%)
 
 </style>

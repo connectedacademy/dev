@@ -1,15 +1,16 @@
 <template lang="pug">
 
-  #action-panel.animated.slideInUp(v-bind:class="{ hide: composerHidden, hidden: !videoIsActive, 'segment-view': activeSegmentVisible }")
-    video-container
-    message-composer
+  #action-panel(v-bind:class="{ hide: composerHidden, pinned: (this.currentSectionScrollPosition > 0), 'segment-view': (activeSegment !== undefined) }")
+    icon#twitter-branding(name="twitter" scale="2")
     ul#experience-controls
       li.experience-control(@click="toggleVideoPlaying")
         icon(name="pause" v-if="videoPlaying")
         icon(name="play" v-else)
       li.experience-control(@click="toggleComposer")
-        icon(name="eye")
+        icon(name="photo")
       .clearfix
+    video-container
+
 
 
 </template>
@@ -23,28 +24,20 @@ import VideoContainer from '@/components/VideoContainer';
 
 export default {
   name: 'action-panel',
-  props: ['composerHidden', 'videoIsActive', 'activeSegmentVisible'],
+  props: ['composerHidden', 'activeSegment'],
   components: {
     MessageComposer,
     VideoContainer,
   },
   computed: {
-    ...mapGetters(['videoPlaying']),
+    ...mapGetters(['videoPlaying', 'currentSectionScrollPosition']),
   },
   methods: {
     toggleComposer() {
-      if (this.composerHidden) {
-        this.$store.commit(types.SHOW_COMPOSER);
-      } else {
-        this.$store.commit(types.HIDE_COMPOSER);
-      }
+      this.$store.commit(this.composerHidden ? types.SHOW_COMPOSER : types.HIDE_COMPOSER);
     },
     toggleVideoPlaying() {
-      if (this.videoPlaying) {
-        this.$store.commit(types.PAUSE_VIDEO);
-      } else {
-        this.$store.commit(types.PLAY_VIDEO);
-      }
+      this.$store.commit(this.videoPlaying ? types.PAUSE_VIDEO : types.PLAY_VIDEO);
     },
   }
 };
@@ -56,55 +49,60 @@ export default {
 
 #action-panel
   animate()
-  background-color white
+  background white
   border-top $color-border 1px solid
-  position fixed
-  bottom 0
-  left 50%
-  margin-left -390px
-  height 219px
-  width 780px
+  height 170px
   z-index 50
 
-  @media(max-width: 800px)
-    left 0
-    margin-left 0
-    width 100%
+  bottom -170px
+  overflow hidden
+  position fixed
+  left 50%
+  margin-left -390px
+  width 780px
+
+  #twitter-branding
+    animate()
+    color $color-text-light-grey
+    position absolute
+    top 10px
+    right 10px
+    z-index 2
+  &.pinned
+    bottom -120px
   &.hide
-    bottom -160px
+    bottom -0px
+
+  @media(max-width: 800px)
+    margin-left 0
+    left 0
+    width 100%
 
   &.segment-view
-    margin-left -370px
-    width 740px
-    z-index 57
-    /*.video-wrapper
-      margin-left -370px*/
-    @media(max-width: 800px)
-      left 0
-      margin-left 10px
-      width calc(100% - 20px)
-      .playhead-bobble
-        display none
+    bottom -120px
 
-ul#experience-controls
-  cleanlist()
-  background-color $color-lightest-grey
-  height 60px
-  left calc(219px / 0.5625 + 1px)
-  right 0
-  position absolute
-  top 0
-  right 0
-  li.experience-control
+  ul#experience-controls
     cleanlist()
-    float left
-    border-left $color-border 1px solid
+    box-sizing border-box
+    height 50px
+    z-index 1
 
-    .fa-icon
-      color $color-text-dark-grey
-      display block
-      font-size 0.7em
-      height 30px
-      width 30px
-      margin 15px
+    li.experience-control
+      cleanlist()
+      animate()
+      float left
+      &.pull-right
+        float right
+        border none
+      .fa-icon
+        animate()
+        color $color-text-dark-grey
+        display block
+        font-size 0.5em
+        height 30px
+        width 20px
+        margin 10px 15px
+      &:hover
+        background-color $color-lighter-grey
+        cursor pointer
 </style>

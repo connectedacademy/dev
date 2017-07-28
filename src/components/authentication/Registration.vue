@@ -3,8 +3,6 @@
 .col#col-main.narrow
 
   .container.registration-container(v-if="!checkingRegistration")
-    .registration-container--header
-      h1 {{ $t('auth.register') }}
 
     form.pure-form.pure-form-stacked
 
