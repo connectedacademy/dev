@@ -49,12 +49,9 @@ export default {
   width 52px
 
   position fixed
-  top 15px
+  top 5px
   left 5px
   z-index 55
-
-  @media(max-width 900px)
-    background-color alpha(black, 0.2)
 
   &:hover
     cursor pointer

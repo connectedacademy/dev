@@ -60,7 +60,7 @@ export default {
     },
     timeStamp() {
       return Moment(this.message.createdAt).fromNow();
-      return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
+      // return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
     },
   },
 };
@@ -89,6 +89,7 @@ export default {
   p.message-content
     reset()
     color $color-text-dark-grey
+    word-break break-all
     a, a:active
       color $color-text-dark-grey
 
@@ -108,6 +109,7 @@ export default {
 
     ul.tweet-actions
       cleanlist()
+      background-color white
       li
         cleanlist()
         box-sizing border-box

@@ -26,12 +26,20 @@ export default {
 @import '~stylus/shared'
 
 #section-navigator
-  min-height 40px
-  min-width 40px
+  animate()
+  background-color $color-primary
+  border-top-left-radius 6px
+  border-bottom-left-radius 6px
+  overflow hidden
   position fixed
-  top 90px
-  right 10px
+  top 70px
+  right 0
   z-index 51
+  top 50%
+  transform translateY(-50%)
+  width 40px
+  &:hover
+    width 220px
   ul.navigation-items
     cleanlist()
     radius(30px)

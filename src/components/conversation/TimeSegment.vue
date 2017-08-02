@@ -1,8 +1,10 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, current: isCurrent, opened: segmentOpened }" v-bind:style="[{ top: `${158.0 * this.message.segmentGroup}px` }, segmentStyle]")
+  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, current: isCurrent, opened: segmentOpened }" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
 
     .primary-wrapper(@click="peek()")
+
+      .segment-label--group.hidden {{ `${message.segmentGroup} (${message.segmentGroup / 0.2} - ${(message.segmentGroup / 0.2) + 5}` }})
 
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
@@ -39,15 +41,20 @@ import {mapGetters} from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
+// Mixins
+import Messages from '@/mixins/Messages';
+
 import MessageComposer from '@/components/MessageComposer';
 import Subtitle from '@/components/conversation/Subtitle';
 import Message from '@/components/conversation/Message';
 import MockMessage from '@/components/conversation/MockMessage';
-import Icon from 'vue-awesome/components/Icon';
 
 export default {
   name: 'time-segment',
-  props: ['message'],
+  props: ['index', 'message', 'subtitle'],
+  mixins: [
+    Messages
+  ],
   components: {
     MessageComposer,
     Message,
@@ -55,11 +62,10 @@ export default {
     Subtitle,
   },
   watch: {
-    'lastMessage': {
-      handler: function(nV, oV) {
-        this.loadSegmentMessages();
-      },
-      deep: true,
+    lastMessage() {
+      if (this.segmentPeeking || this.segmentOpened) {
+        setTimeout(() => { this.loadSegmentMessages() }, 600);
+      }
     },
     'activeSegment': {
       handler: function(nV, oV) {
@@ -67,12 +73,14 @@ export default {
           this.closeSegment();
         }
       },
-      deep: true,
+      deep: false,
     },
     'peekSegment': {
       handler: function(nV, oV) {
         if (nV === this.message.segmentGroup) {
-          if (!this.segmentPeeking) { this.segmentPeeking = true; }
+          
+          this.segmentPeeking = (this.segmentPeeking) ? this.segmentPeeking : true;
+
         } else if (oV === this.message.segmentGroup) {
 
           this.segmentStyle = {
@@ -82,12 +90,10 @@ export default {
             'z-index': 56,
           };
 
-          setTimeout(() => {
-            this.unpeek();
-          }, 50);
+          setTimeout(() => { this.unpeek() }, 50);
         }
       },
-      deep: true,
+      deep: false,
     },
   },
   data() {
@@ -106,15 +112,10 @@ export default {
       'activeSegment',
       'peekSegment',
       'lastMessage',
-      'currentSectionScrollPosition',
-      'subtitles',
       'currentSegmentGroup',
     ]),
     isCurrent() {
       return this.currentSegmentGroup === this.message.segmentGroup;
-    },
-    subtitle() {
-      return this.subtitles[(parseInt(this.message.segmentGroup) * 5)];
     },
   },
   methods: {
@@ -192,58 +193,6 @@ export default {
       };
 
       setTimeout(() => { this.unpeek() }, 300);
-
-    },
-    loadSegmentMessages() {
-
-      this.$log.log('Loading segment messages');
-
-      let theContent = '';
-
-      if (this.message.message && this.message.message.content) {
-        theContent = this.message.message.content;
-      } else {
-        theContent = this.$store.getters.currentSection.slug;
-      }
-
-      const request = {
-        theClass: this.$store.getters.currentClass.slug,
-        theContent: theContent,
-        startSegment: `${_.floor(parseInt(this.message.segmentGroup) / 0.2, 5)}`,
-        endSegment: `${_.floor(parseInt(this.message.segmentGroup) / 0.2, 5) + 5}`,
-      };
-
-      API.message.getMessages(
-        request,
-        response => {
-
-          // Filter out highlighted message
-          var self = this;
-          let filteredMessages = response.data;
-          filteredMessages = _.orderBy(filteredMessages, ['createdAt'], ['asc']);
-          filteredMessages = _.filter(filteredMessages, function(obj) {
-            return obj.id !== self.message.message.id;
-          });
-          this.segmentMessages = filteredMessages;
-        },
-        response => {
-          alert('There was an error');
-          this.segmentMessages = [];
-        },
-      );
-
-      // API.message.subscribe(
-      //   request,
-      //   response => {
-      //     this.$log.log(response.data);
-      //     this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['asc']);
-      //   },
-      //   response => {
-      //     alert('There was an error');
-      //     this.segmentMessages = [];
-      //   },
-      // );
-
     },
   },
 };
@@ -276,6 +225,15 @@ export default {
     min-height 156px
     position relative
     z-index 2
+
+    .segment-label--group
+      radius(4px)
+      background $color-lightest-grey
+      font-size 0.8em
+      padding 6px 12px
+      position absolute
+      top 10px
+      left 10px
 
     .suggestion
       padding 20px
@@ -338,6 +296,8 @@ export default {
     .message-wrapper
       transform translate(0, 0) !important
       width 100%
+      .tweet-actions
+        background-color inherit
     &.active
       opacity 1
 

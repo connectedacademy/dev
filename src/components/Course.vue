@@ -67,6 +67,11 @@ export default {
       deep: true,
     },
   },
+  computed: {
+    ...mapGetters([
+      'currentClass', 'courseContent',
+    ]),
+  },
   methods: {
     leaveClass() {
       this.$store.dispatch('getSpec', undefined);
@@ -88,11 +93,6 @@ export default {
         this.$log.log('No query passed');
       }
     },
-  },
-  computed: {
-    ...mapGetters([
-      'currentClass', 'courseContent',
-    ]),
   },
 };
 </script>

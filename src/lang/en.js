@@ -67,7 +67,7 @@ export default {
   composer: {
     compose_message: 'Compose message',
     compose_message_active: 'Write your message',
-    message_placeholder: 'Make your notes here...',
+    message_placeholder: 'Make a note here...',
     duration: '{currentTime}s',
   },
   course: {

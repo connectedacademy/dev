@@ -7,9 +7,8 @@
       span(v-if="content.content_type === 'class'") {{ `Live class ` }}
       span(v-else) {{ `New content ` }}
       | coming soon
-    h2.content-subtitle {{ releaseIn }}
-    p.content-description {{ releaseAt }}
-    .pure-button(name="circle" @click="jumpForwardInTime") Release Future Content
+    h2.content-subtitle {{ releaseAt }}
+    .pure-button(name="circle" @click="jumpForwardInTime") Release Now
 
 </template>
 

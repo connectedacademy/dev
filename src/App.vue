@@ -53,7 +53,6 @@ import LeftDrawer from './components/navigation/drawers/LeftDrawer';
 import RightDrawer from './components/navigation/drawers/RightDrawer';
 import DebugPanel from './components/DebugPanel';
 import ActionPanel from './components/conversation/ActionPanel';
-import VideoContainer from './components/VideoContainer';
 
 export default {
   name: 'app',
@@ -93,7 +92,7 @@ export default {
     this.$store.dispatch('getHubs');
 
     // Periodically update document height variable
-    window.setInterval(this.updateDocumentHeight, 500);
+    window.setInterval(this.updateDocumentHeight, 1000);
   },
   mounted() {
     // Subscribe to socket
@@ -125,7 +124,6 @@ export default {
     LeftDrawer,
     RightDrawer,
     ActionPanel,
-    VideoContainer,
   },
   methods: {
     goBack() {
@@ -192,6 +190,9 @@ body.disable-scroll
     max-width 780px
     padding-top 80px
     position relative
+    &.narrow
+      max-width 640px    
+
     @media(max-width: 800px)
       max-width 100%
       margin 0 0px
@@ -229,7 +230,7 @@ body.disable-scroll
   z-index -1
 
   &.minimized
-    height 80px
+    height 60px
 
 #app
   &.chat

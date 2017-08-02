@@ -1,6 +1,21 @@
 import Vue from 'vue';
+import _ from 'lodash';
+import { mapGetters } from 'vuex';
 
 export default {
+  data() {
+    return {
+      points: '',
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'currentSection',
+    ]),
+    visualisationPoints() {
+      return this.points;
+    },
+  },
   methods: {
     loadVisualisation(visualisation) {
         if (!this.currentSection) { return false; }

@@ -7,8 +7,6 @@ import store from '@/store';
 
 // initial state
 const state = {
-  messages: new Array(999),
-  subtitles: new Array(999),
   visualisation: [],
   media: [],
   activeSegment: undefined,
@@ -26,13 +24,6 @@ const getters = {
   },
   peekSegment() {
     return state.peekSegment;
-  },
-  messages() {
-    return state.messages;
-  },
-  subtitles() {
-    Vue.log.log('Subtitles from state');
-    return state.subtitles;
   },
   media() {
     Vue.log.log('Media from state');
@@ -78,58 +69,6 @@ const getters = {
 
 // actions
 const actions = {
-  getMessagesSummary({
-    commit,
-  }, params) {
-
-    const request = params.request;
-
-    const startSegmentGroup = parseInt(parseInt(request.startSegment) * 0.2);
-    const endSegmentGroup = parseInt(parseInt(request.endSegment) * 0.2);
-
-    // Vue.log.log(`** API request ${startSegmentGroup} - ${endSegmentGroup}`);
-    // Vue.log.log(request);
-
-    let segmentCount = (endSegmentGroup - startSegmentGroup);
-    let segmentIterator = 0;
-
-    while (segmentIterator < segmentCount) {
-      const segmentGroup = startSegmentGroup + segmentIterator;
-      const loading = {
-        loading: true,
-        segmentGroup: segmentGroup,
-      };
-
-      if (state.messages[segmentGroup] === undefined) {
-        Vue.set(state.messages, segmentGroup, loading);
-      }
-      segmentIterator += 1;
-    }
-
-    API.message.getMessagesSummaryBatch(
-      request,
-      response => commit(types.GET_MESSAGES_SUCCESS, {
-        response,
-      }),
-      response => commit(types.GET_MESSAGES_FAILURE, {
-        response,
-      }),
-    );
-  },
-  getSubtitles({
-    commit,
-  }) {
-    API.message.getSubtitles(
-      `${store.getters.currentSection.slug}`,
-      `${store.getters.course.baseUri}${store.getters.currentClass.dir}/${store.getters.currentSection.transcript}`,
-      response => commit(types.GET_SUBTITLES_SUCCESS, {
-        response,
-      }),
-      response => commit(types.GET_SUBTITLES_FAILURE, {
-        response,
-      }),
-    );
-  },
   getVisualisation({
     commit,
   }, request) {
@@ -181,40 +120,6 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.GET_SUBTITLES_SUCCESS](initialState, {
-    response,
-  }) {
-
-    // TODO: bucket subtitles
-
-    state.subtitles = [];
-
-    for (var subtitle of response.response) {
-
-      let group = _.divide(_.floor(_.multiply(subtitle.start, 2), -1), 2);
-
-      const segmentGroup = parseInt(group);
-
-      let newSubtitle = subtitle;
-
-      newSubtitle.segmentGroup = segmentGroup;
-
-      // Vue.set(state.subtitles, segmentGroup, newSubtitle);
-      if (state.subtitles[segmentGroup]) {
-        Vue.set(state.subtitles, segmentGroup, state.subtitles[segmentGroup] + ' ' + newSubtitle.text);
-      } else {
-        Vue.set(state.subtitles, segmentGroup, newSubtitle.text);
-      }
-    }
-
-    // state.subtitles = response.response;
-  },
-  [types.GET_SUBTITLES_FAILURE](initialState, {
-    response,
-  }) {
-    state.subtitles = [];
-    // error in response
-  },
   [types.GET_VISUALISATION_SUCCESS](initialState, {
     response,
   }) {
@@ -254,11 +159,6 @@ const mutations = {
 
       Vue.set(state.messages, segmentGroup, newMessage);
     }
-  },
-  [types.GET_MESSAGES_FAILURE](initialState, {
-    response,
-  }) {
-    // error in response
   },
   [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
     state.activeSegment = activeSegment;

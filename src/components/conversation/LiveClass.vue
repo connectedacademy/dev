@@ -10,12 +10,13 @@
   .course-content--container(v-bind:class="{ collapsed: collapsed }")
     #fade-out(v-if="collapsed")
 
-    action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment="activeSegment")
+    action-panel(v-bind:content="content" v-bind:video-is-active="videoIsActive" v-bind:active-segment="activeSegment")
 
     conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
 
   .course-content--footer
     .pure-button.pure-button-primary(v-if="collapsed" @click="collapsed = false") Continue Listening
+    .pure-button.pure-button-primary(v-if="!collapsed" @click="collapsed = true") Finished Listening
 
 </template>
 
@@ -26,7 +27,6 @@ import {mapGetters} from 'vuex';
 
 import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
-import VideoContainer from '@/components/VideoContainer';
 
 export default {
   name: 'live-class',
@@ -34,7 +34,6 @@ export default {
   components: {
     ActionPanel,
     ConversationContainer,
-    VideoContainer,
   },
   data() {
     return {
@@ -42,7 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['composerHidden', 'activeSegment', 'videoIsActive']),
+    ...mapGetters(['activeSegment', 'videoIsActive']),
   },
 };
 </script>

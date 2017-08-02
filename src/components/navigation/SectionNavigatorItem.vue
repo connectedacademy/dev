@@ -47,44 +47,33 @@ export default {
 
 li.navigation-item
   cleanlist()
-  radius(20px)
-  background-color alpha(black, 0.1)
-  width calc(40px - 8px)
+  width 100%
   position relative
-  margin 4px
-  height calc(40px - 8px)
+  height calc(40px)
   animate()
   .fa-icon
     color white
     float left
-    padding 10px
+    padding 14px
     height 12px
     width 12px
     animate()
   .content-label
-    radius(20px)
-    background-color white//alpha(black, 0.5)
-    box-shadow 0 0 5px 5px alpha(black, 0.05)
-    color $color-primary
+    color white
     font-weight bold
-    line-height 32px
-    opacity 0
-    padding 0 40px 0 15px
+    line-height 40px
+    padding 0 15px 0 40px
     position absolute
+    left 0
     right 0
-    text-transform uppercase
-    z-index -1
+    text-transform capitalize
+    z-index 1
     pointer-events none
     animate()
   &.active
-    background-color $color-primary
-    width auto
+    background-color darken($color-primary, 10%)
   &:hover
-    background-color white
+    background-color darken($color-primary, 5%)
     cursor pointer
     pointer-events all
-    .fa-icon
-      color $color-primary
-    .content-label
-      opacity 1
 </style>

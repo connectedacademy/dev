@@ -1,8 +1,9 @@
 <template lang="pug">
 
 .animated-logo(@click="goHome")
-  //- img.logo(src="../assets/logos/main-white.svg")
-  svg(id="logo" v-bind:class="{loaded: loaded}" width="140" height="77" viewBox="0 0 140 77")
+  #logo-text Connected Academy
+  img.logo(src="../assets/logos/main-white.svg")
+  //- svg(id="logo" v-bind:class="{loaded: loaded}" width="140" height="77" viewBox="0 0 140 77")
     path#main(d="M1069.34,221.6l-34.53-61.74L1004,212.25l-2.14,3.45a37.58,37.58,0,1,1-7.5-47" transform="translate(-930.95 -158.24)")
     line#bar(x1="98" y1="50" x2="110" y2="50")
 
@@ -47,10 +48,23 @@ cross-length = 320px
   pinned()
   transition(all 0.2s ease)
   background-color $color-primary
+  border-bottom alpha(black, 0.1) 1px solid
   bottom auto
-  height 80px
+  height 60px
   position absolute
   z-index 50
+  &:hover
+    cursor pointer
+  #logo-text
+    color white
+    font-size 1em
+    font-weight bold
+    line-height 40px
+    margin 10px
+  img
+    display none
+    height 40px
+    margin 10px
   svg#logo
     transform(scale(.5,.5))
     path, line
