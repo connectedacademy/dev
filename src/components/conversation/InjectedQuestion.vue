@@ -1,11 +1,11 @@
 <template lang="pug">
 
-.course-content(v-if="isRegistered && !hidden && question && !question.alreadyanswered")
+.course-content#wrapper.hidden(ref="question" v-if="isRegistered && !hidden")
 
   .course-content--header
     h1.content-title Question
 
-  .course-content--body
+  .course-content--body.animated.fadeIn(v-if="question && !question.alreadyanswered")
     p.content-description {{ question.text }}
 
     .vue-slider-wrapper(v-if="question.response_type === 'scale'")
@@ -16,8 +16,8 @@
     input.full-width(v-model="answer" v-if="question.response_type === 'boolean'" type="checkbox")
 
   .course-content--footer
-    .pure-button(@click="hidden = true") Maybe later
-    .pure-button.pure-button-primary.pull-right(@click="postAnswer") Answer
+    .pure-button.pure-button-subtle.pure-button-text(@click="hidden = true") Maybe later
+    .pure-button.pull-right(@click="postAnswer") Answer
 
 </template>
 
@@ -91,8 +91,8 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/layout/course-content'
 
-.course-content
-   margin 10px
+#wrapper
+  animate()
 
 fieldset
   border none

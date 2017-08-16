@@ -1,6 +1,8 @@
 <template lang="pug">
 
-.rendered-markdown(v-html="renderedMarkdown")
+div
+  //- pre {{ markdown }}
+  .rendered-markdown(v-html="renderedMarkdown")
 
 </template>
 
@@ -13,6 +15,7 @@ import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
 import MarkdownItFrontMatter from 'markdown-it-front-matter';
+import MarkdownItCustomBlock from 'markdown-it-custom-block';
 
 import API from '@/api';
 import * as types from '@/store/mutation-types';
@@ -26,36 +29,56 @@ export default {
     ]),
     renderedMarkdown() {
 
-      const md = new MarkdownIt({
-        html: true,
-        linkify: true,
-        replaceLink: (link, env) => {
+      const md = new MarkdownIt()
+        .use(MarkdownItCustomBlock, {
 
-          if (_.startsWith(link, 'http')) { return link; }
-          if (_.endsWith(link, '.md')) {
-            const url = this.getUrl();
-            const currentUrl = url.substring(0, url.lastIndexOf('/') + 1);
-            return `/#/markdown/${encodeURIComponent(link)}`;
-          }
-          return `${this.$store.getters.course.baseUri}${link}`;
-        },
-      })
-      .use(MarkdownItReplaceLink)
-      .use(MarkdownItVideo, {
-        youtube: { width: 640, height: 390 },
-        vimeo: { width: 500, height: 281 },
-      })
-      .use(MarkdownItFrontMatter, (fm) => {
-        this.frontMatter = fm;
+          testexample(arg) {
+            return `<h1>${arg}</h1>`
+          },
+
+          bio(arg) {
+            if (!arg) { return 'loading...'; }
+
+            const parts = arg.split('|');
+
+            const caption = parts[0].trim();
+            const image = parts[1].trim();
+
+            if (parts.length > 2) {
+              const bio = parts[2].trim();
+              const link = parts[3].trim();
+
+              return `
+              <div class="md-bio md-bio--with-bio">
+                <img class="md-bio--image" src="${image}" />
+                <div class="md-bio--content">
+                  <h5 class="md-bio--caption">${caption}</h5>
+                  <p class="md-bio--bio">${bio}</p>
+                  <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
+                </div>
+              </div>
+              `;
+
+            } else {
+
+              return `
+              <div class="md-bio">
+                <img class="md-bio--image" src="${image}" />
+                <h5 class="md-bio--caption">${caption}</h5>
+              </div>
+              `;
+
+            }
+          },
       });
 
-      return `<div>${md.render(this.markdown)}</div>`;
+      return md.render(this.markdown.replace("@","\n\n@"));
     },
   },
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
 @import '~stylus/shared'
 
@@ -66,32 +89,5 @@ export default {
     margin-bottom 5px
   h1, h2, h3, h4, h5, p, a, li
     color $color-text-dark-grey
-  img
-    max-width 100%
-.fourcorners-submission
-  radius(6px)
-  background-color $color-primary
-  box-sizing border-box
-  padding 15px
-  width 100%
-  label
-    color white
-  p
-    reset()
-    color white
-  textarea
-    radius(6px)
-    border none
-    box-shadow none
-    box-sizing border-box
-    line-height 40px
-    margin 10px 0
-    padding 0 10px
-    outline 0
-    resize none
-    width 100%
-  button
-    margin-top 10px
-
 
 </style>

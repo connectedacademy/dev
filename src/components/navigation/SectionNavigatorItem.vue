@@ -3,16 +3,16 @@
 li.navigation-item(@click="jumpToContent" v-bind:class="{ active: isActive }")
   icon(v-if="scrollPoint.content_type === 'class'" name="play")
   icon(v-else-if="scrollPoint.content_type === 'webinar'" name="play")
-  icon(v-else-if="scrollPoint.content_type === 'pre'" name="info-circle")
   icon(v-else name="circle")
 
-  .content-label {{ scrollPoint.slug }}
+  .content-label {{ scrollPoint.title }}
   .clearfix
 
 </template>
 
 <script>
 import {mapGetters} from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'section-navigator-item',
@@ -34,9 +34,11 @@ export default {
 
       this.$store.commit('setScrollPosition', segmentPosition);
 
-      this.$nextTick(function() {
+      this.$store.commit(types.PAUSE_VIDEO);
+
+      setTimeout(() => {
         window.scroll(0, segmentPosition);
-      });
+      }, 200);
     }
   },
 };
@@ -47,48 +49,35 @@ export default {
 @import '~stylus/shared'
 
 li.navigation-item
-  cleanlist()
-  radius(20px)
-  background-color $color-primary
-  width calc(40px - 8px)
-  position relative
-  margin 4px
-  height calc(40px - 8px)
   animate()
+  cleanlist()
+  width 100%
+  position relative
+  height calc(40px)
+  overflow hidden
   .fa-icon
     color white
     float left
-    padding 10px
+    padding 14px
     height 12px
     width 12px
     animate()
   .content-label
-    radius(20px)
-    background-color alpha(black, 0.5)
+    animate()
     color white
     font-weight bold
-    line-height 32px
-    opacity 0
-    padding 0 50px 0 15px
+    line-height 40px
+    padding 0 15px 0 40px
     position absolute
+    left 0
     right 0
-    text-transform uppercase
-    z-index -1
+    text-transform capitalize
+    z-index 1
     pointer-events none
-    animate()
+  &.active
+    background-color darken($color-primary, 10%)
   &:hover
-    background-color white
+    background-color darken($color-primary, 5%)
     cursor pointer
     pointer-events all
-    .fa-icon
-      color $color-primary
-    .content-label
-      opacity 1
-  &.active
-    background-color $color-success
-    width auto
-    &:hover
-      background-color darken($color-success, 10%)
-      .fa-icon
-        color white
 </style>

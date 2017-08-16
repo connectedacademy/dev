@@ -15,14 +15,16 @@
           a(v-bind:href="likeLink" target="_blank")
             icon(name="heart")
         li
-          a(v-bind:href="replyLink" target="_blank")
-            icon(name="reply")
-        li
           a(v-bind:href="retweetLink" target="_blank")
             icon(name="retweet")
-        li.message-timestamp
+        li
+          a(v-bind:href="replyLink" target="_blank")
+            icon(name="reply")
+        li.hidden
           a(v-bind:href="tweetLink" target="_blank")
-            | {{ timeStamp }}
+            icon(name="twitter")
+        li.message-timestamp
+          | {{ timeStamp }}
 
         .clearfix
 
@@ -38,7 +40,8 @@ export default {
   props: ['message'],
   computed: {
     html() {
-      return TweetPatch(this.message.text, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+      let html = this.message.text.replace('#wpca17 http://a.short.link', '');
+      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
     authorLink() {
       return `https://twitter.com/${this.message.author.account}`;
@@ -56,7 +59,8 @@ export default {
       return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}`;
     },
     timeStamp() {
-      return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
+      return Moment(this.message.createdAt).fromNow();
+      // return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
     },
   },
 };
@@ -67,11 +71,11 @@ export default {
 @import '~stylus/shared'
 
 .message
-  max-height 98px
-  margin 0 15px 0 15px
-  padding 0 10px 50px 10px
+  box-sizing border-box
+  max-height 128px
+  margin 10px
+  padding 0 10px 40px 10px
   padding-left 50px
-
   position relative
 
   img.profile-image
@@ -79,12 +83,13 @@ export default {
     height 40px
     width 40px
     position absolute
-    top 5px
-    left 0
+    top 0px
+    left 0px
 
   p.message-content
     reset()
     color $color-text-dark-grey
+    word-break break-all
     a, a:active
       color $color-text-dark-grey
 
@@ -97,13 +102,14 @@ export default {
   .message--footer
     pinned()
     height 36px
-    left 40px
+    left 42px
     top auto
     overflow hidden
     position absolute
 
     ul.tweet-actions
       cleanlist()
+      background-color white
       li
         cleanlist()
         box-sizing border-box
@@ -119,9 +125,9 @@ export default {
             color $color-primary
 
         &.message-timestamp
+          color #CCC
+          font-size 0.9em
+          float right
           max-width 55%
-          a
-            font-size 0.8 !important
-
 
 </style>

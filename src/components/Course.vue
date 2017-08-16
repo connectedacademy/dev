@@ -1,14 +1,15 @@
 <template lang="pug">
 
-  .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
+  .course-page
 
-    .main-container
+    .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
 
-      class-selector
+      .main-container
 
-      transition(name="fade" mode="out-in")
+        class-selector
+        //- full-class-selector
 
-        course-content(v-if="currentClass" v-bind:course-content="courseContent")
+        course-content(v-bind:course-content="courseContent")
 
 </template>
 
@@ -18,7 +19,10 @@ import _ from 'lodash';
 import { mapGetters } from 'vuex';
 
 import * as types from '@/store/mutation-types';
-import ClassSelector from './ClassSelector';
+
+import AnimatedLogo from '@/components/AnimatedLogo';
+import ClassSelector from '@/components/ClassSelector';
+import FullClassSelector from '@/components/FullClassSelector';
 
 import CourseContent from '@/components/conversation/CourseContent';
 
@@ -26,8 +30,13 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'course',
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
+      this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    });
+  },
   beforeRouteLeave (to, from, next) {
-    // Reset state
     this.$store.dispatch('resetState');
     next();
   },
@@ -40,11 +49,14 @@ export default {
     return {
       navTitle: 'Connected Academy - Main',
       infoVisible: false,
+      loaded: false,
     };
   },
   components: {
+    AnimatedLogo,
     ClassSelector,
     CourseContent,
+    FullClassSelector,
     MarkdownRenderer,
   },
   watch: {
@@ -54,6 +66,11 @@ export default {
       },
       deep: true,
     },
+  },
+  computed: {
+    ...mapGetters([
+      'currentClass', 'courseContent',
+    ]),
   },
   methods: {
     leaveClass() {
@@ -77,12 +94,11 @@ export default {
       }
     },
   },
-  computed: {
-    ...mapGetters([
-      'currentClass', 'courseContent',
-    ]),
-  },
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+
+@import '~stylus/shared'
+
+</style>

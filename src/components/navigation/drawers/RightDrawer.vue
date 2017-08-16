@@ -1,52 +1,33 @@
 <template lang="pug">
 
-  .drawer.drawer-right(v-bind:class="{ visible: state.visible }")
-    .profile-container
-      img.user-profile(:src="user.profile")
-      h1.user-name {{ user.name }}
-      h2.user-account {{ `@${user.account}` }}
+  .drawer#drawer-right(v-bind:class="{ visible: state.visible }")
 
-    .settings-container
-      form.pure-form.pure-form-stacked
-        fieldset(v-if="user.registration")
-          label
-            strong {{ $t('common.age') }}
-          label {{ `${user.registration.age}` }}
-        fieldset(v-if="user.registration")
-          label
-            strong {{ $t('common.current_language') }}
-          label {{ `${user.registration.lang}` }}
-        fieldset
-          label
-            strong {{ $t('common.current_service') }}
-          label {{ `${user.service}` }}
-        fieldset(v-if="user.registration")
-          label
-            strong {{ $t('common.current_hub') }}
-          label {{ `${user.registration.hub_id}` }}
-
-        fieldset
-          .pure-button.pure-button-primary.full-width(v-if="user" v-on:click="logout") {{ $t('auth.logout') }}
-          router-link.pure-button.pure-button-primary.full-width.hidden(to="/registration" @click="toggleRightDrawer") {{ $t('auth.register') }}
-
-      pre.hidden {{ user }}
-
-
+    user-card(v-bind:visible="state.visible")
+    //- profile-card(v-bind:visible="state.visible")
+    classroom-card(v-bind:visible="state.visible")
+    admin-card.hidden(v-bind:visible="state.visible")
 
 </template>
 
 <script>
 import * as types from '@/store/mutation-types';
 
+import AdminCard from '@/components/cards/AdminCard';
+import ClassroomCard from '@/components/cards/ClassroomCard';
+import ProfileCard from '@/components/cards/ProfileCard';
+import UserCard from '@/components/cards/UserCard';
+
 export default {
   name: 'right-drawer',
+  components: {
+    AdminCard,
+    ClassroomCard,
+    ProfileCard,
+    UserCard,
+  },
   methods: {
     toggleRightDrawer() {
       this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
-    },
-    logout() {
-      this.toggleRightDrawer();
-      this.$store.dispatch('logout');
     },
   },
   data() {
@@ -55,9 +36,6 @@ export default {
     };
   },
   computed: {
-    user() {
-      return this.$store.state.auth.user;
-    },
     state() {
       return this.$store.state.navigation.rightDrawer;
     },
@@ -70,32 +48,4 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/drawer'
 
-// Profile container
-.profile-container
-  padding 20px
-  text-align center
-  img.user-profile
-    radius(50%)
-    height 60px
-    width 60px
-  h1.user-name
-    reset()
-    color white
-    font-size 1.3em
-    font-weight normal
-  h2.user-account
-    reset()
-    color white
-    font-size 1em
-    font-weight normal
-
-// Settings container
-.settings-container
-  padding 20px
-  fieldset
-    label
-      color white
-      margin-bottom 5px
-    select
-      width 100%
 </style>

@@ -1,6 +1,8 @@
 <template lang="pug">
 
-  router-link.pure-button(v-if="isRegistered" v-bind:to="url") {{ $t('common.explore_content') }}
+  router-link.pure-button(v-if="isRegistered" v-bind:to="url")
+    | {{ $t('common.explore_content') }}
+    icon.angle-icon(name="angle-right")
 
 </template>
 
@@ -22,3 +24,14 @@ export default {
   },
 };
 </script>
+
+<style lang="stylus" scoped>
+
+@import '~stylus/shared'
+
+.angle-icon
+  top 3px
+  position relative
+  margin-left 7px
+
+</style>

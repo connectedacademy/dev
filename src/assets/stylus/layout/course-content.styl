@@ -2,11 +2,16 @@
 
 .course-content-wrapper
   margin-bottom 10px
+  &:last-child
+    margin-bottom 0
   .course-content-group
     .course-content
       radius(4px)
+      box-shadow 0 0 10px 5px alpha(black, 0.02)
+
       background-color white
       margin 20px 0 0 0
+      min-height 100px
       padding 0
       position relative
       @media(max-width: 800px)
@@ -15,7 +20,7 @@
       .type-indicator
         radius(50%)
         content ''
-        background-color $color-primary
+        background-color $color-light-grey
         height 16px
         width 16px
         position absolute
@@ -23,13 +28,11 @@
         right 10px
         &.active
           background-color $color-success
-      h1.content-title
-        reset()
-        color $color-text-dark-grey
-        font-size 1.3em
+
       h5.content-subheader
         reset()
         color $color-text-dark-grey
+        font-weight 300
       p.content-description
         reset()
         color $color-text-grey
@@ -39,17 +42,33 @@
 
       .course-content--header
         background-color transparent
-        padding 20px 20px 0px 20px
+        padding 20px 20px 10px 20px
         h1.content-title
-          color $color-text-dark-grey !important
+          reset()
+          color $color-text-dark-grey
+          font-size 1.3em
+          font-weight bold
+        &.block
+          background-color $color-primary
+          padding 30px
+          text-align center
+          h1.content-title
+            color white
+            font-size 2em
+            font-weight bold
+            margin-bottom 10px
+          p.content-description
+            color white
+            margin 0 auto
+
+
       .course-content--body
         overflow hidden
         padding 0px 20px 10px 20px
+        h1, h2, h3, h4, h5
+          font-weight 300
       .course-content--footer
-        background-color transparent
-        border-top $color-light-grey 1px solid
-        margin-top 10px
-        padding 10px
+        padding 20px
 
     &.course-content-group--question
       radius(6px)

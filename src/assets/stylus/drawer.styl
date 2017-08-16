@@ -1,23 +1,90 @@
 .drawer
-  background-color $color-darkest-purple
   max-width 320px
   overflow-y auto
-  overflow-x none
-  padding-bottom 60px
+  overflow-x hidden
   position fixed
   top 0
   bottom 0
-  width calc(100% - 60px)
-  z-index 51
+  width calc(100% - 40px)
+  z-index 56
 
-  &.drawer-right
+  &#drawer-right
     right -320px
     transition right 0.4s
     &.visible
-      right 0px
+      right 0
 
-  &.drawer-left
+  &#drawer-left
     left -320px
     transition left 0.4s
     &.visible
-      left 0px
+      left 0
+
+  .card
+    radius(6px)
+    background-color darken($color-drawer-background, 0%)
+    margin 10px
+    opacity 0
+    position relative
+
+    .pure-button.pure-button-action
+      background-color alpha(black, 0.1)
+      border-color transparent
+      color white
+      display block
+      margin-top 10px
+      &:hover
+        background-color alpha(black, 0.2)
+
+  &#drawer-right
+    .card
+      transition background-color 0.6s, right 0.6s, opacity 0.6s
+      for num in (1..100)
+        &:nth-child({num}n)
+          right (num * -100px)
+
+    &.visible
+      .card
+        right 0
+        opacity 1
+
+  &#drawer-left
+    .card
+      transition background-color 0.6s, left 0.6s, opacity 0.6s
+      for num in (1..100)
+        &:nth-child({num}n)
+          left (num * -100px)
+
+    &.visible
+      .card
+        left 0
+        opacity 1
+
+  /* Drawer List */
+  ul.drawer-list
+    list-style none
+    margin 0
+    padding 0
+    li.drawer-list-item
+      background-color alpha(white, 0)
+      list-style none
+      margin 0
+      padding 15px 40px 15px 25px
+      position relative
+
+      h1
+        color white
+        margin 0
+        padding 0
+        font-size 1.6em
+
+      h2
+        color alpha(white, 0.6)
+        margin 0
+        padding 0
+        font-size 1em
+        font-weight normal
+
+      &:hover
+        cursor pointer
+        background-color alpha(black, 0.05)

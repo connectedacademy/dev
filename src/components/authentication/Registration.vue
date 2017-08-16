@@ -3,8 +3,6 @@
 .col#col-main.narrow
 
   .container.registration-container(v-if="!checkingRegistration")
-    .registration-container--header
-      h1 {{ $t('auth.register') }}
 
     form.pure-form.pure-form-stacked
 
@@ -19,15 +17,19 @@
             label {{ $t('auth.enter_your_email') }}
             input(type="text" v-model="response.email")
 
-          fieldset.validate(v-bind:class="{ valid: validatedResponse.age }")
+          fieldset.pull-left.validate(v-bind:class="{ valid: validatedResponse.age }")
             label {{ $t('auth.enter_your_age') }}
             input(type="text" v-model="response.age")
 
-          fieldset.validate(v-bind:class="{ valid: validatedResponse.lang }")
+          fieldset.pull-left.validate(v-bind:class="{ valid: validatedResponse.lang }")
             label {{ $t('auth.select_your_language') }}
             select(v-model="response.lang")
               option(value="") {{ $t('common.choose_one') }}
               option(v-for="lang in course.langs") {{ getCountryName(lang) }}
+          
+          .clearfix
+
+          hr
 
           fieldset
             label Pick the hub closest to your timezone to receive notifications when class content is released.
@@ -35,6 +37,7 @@
               li.hub-selector--tile(v-for="hub in hubs" v-bind:class="{ selected: (response.hub_id === hub.id) }" @click="response.hub_id = hub.id")
                 h1.hub-title {{ hub.name }}
                 h2.hub-timezone {{ hub.timezone }}
+              .clearfix
 
           router-link.pure-button(to="/") {{ $t('common.cancel') }}
           .pure-button.pure-button-primary.pull-right(v-bind:disabled="!formIsValid" @click="nextPage") {{ $t('common.continue') }}
@@ -112,12 +115,12 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { visible: false });
+      document.documentElement.className = 'colourful';
     });
   },
   beforeRouteLeave (to, from, next) {
     // Reset state
-    this.$store.commit(types.SET_NAV_STATE, { visible: true });
+    document.documentElement.className = '';
     next();
   },
   created() {
@@ -125,7 +128,7 @@ export default {
       (response) => {
         this.checkingRegistration = false;
         if (response.user.registration) {
-          this.$router.replace('/');
+          // this.$router.replace('/');
         }
       },
       (response) => {
@@ -257,9 +260,13 @@ export default {
 
       input, select
         margin 10px 0
-        min-width 200px
+        max-width calc(100% - 20px)
+        width 260px
         &.full-width
           width 100%
+      
+      select
+        font-size 1.1em
 
       input[type="checkbox"]
         margin-right 10px
@@ -281,16 +288,20 @@ ul.hub-selector
     cleanlist()
     animate()
     background-color white
+    box-sizing border-box
     border $color-border 1px solid
-    display inline-block
+    float left
+    height 100px
     overflow hidden
     text-align center
     position relative
 
     margin 10px
-    padding 10px 20px
+    padding 10px 0px
 
-    width 120px
+    width calc((calc(100% - 0px) / 3) - 20px)
+    @media(max-width: 600px)
+      width calc(50% - 20px)
 
     h1.hub-title
       animate()
@@ -299,6 +310,11 @@ ul.hub-selector
       font-size 1.2em
       line-height 30px
       padding 15px 0
+      position absolute
+      top 50%
+      margin-top -30px
+      text-align center
+      width 100%
     h2.hub-timezone
       animate()
       reset()
@@ -309,7 +325,8 @@ ul.hub-selector
       position absolute
       left 0
       right 0
-      bottom 0
+      top 50%
+      margin-top 5px
 
     &:hover
       cursor pointer
@@ -318,9 +335,8 @@ ul.hub-selector
       h1.hub-title, h2.hub-timezone
         color white
       h1.hub-title
-        padding 5px 0 25px 0
+        margin-top -45px
       h2.hub-timezone
-        bottom 15px
         opacity 1
 
     &.selected

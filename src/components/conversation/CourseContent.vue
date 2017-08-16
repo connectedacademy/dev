@@ -13,9 +13,7 @@
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       .course-content--footer
-        .pure-button.pure-button-success.pull-right(v-if="isRegistered" @click="startDemo") Start Demo
-        .login-button.pure-button.pure-button-primary.pull-right(v-else @click="showAuth") {{ $t('auth.login') }}
-        //- .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
+        .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
@@ -23,37 +21,59 @@
     //- QUESTION
     injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
 
+    //- HOMEWORK
+    homework(v-else-if="content.expectsubmission" v-bind:content="content")
+
+    //- FOURCORNERS
+    four-corners(v-else-if="content.fourcornersintro")
+
+    //- LIVECLASS
+    live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+
     //- CONTENT
     .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
 
-      .type-indicator(v-bind:title="content.slug" v-bind:class="{ active: (currentActiveSection !== undefined) && (content.slug === currentActiveSection.slug) }")
+      //- .type-indicator(v-bind:title="content.slug" v-bind:class="{ active: (currentActiveSection !== undefined) && (content.slug === currentActiveSection.slug) }")
 
       like-indicator(v-bind:content="content")
 
       .course-content--header
-        h1.content-title(v-if="content.title") {{ content.title }}
+        h1.content-title(v-if="content.title")
+          | {{ content.title }}
 
       .course-content--body
+
         p.content-description(v-if="content.description")
           markdown-content(v-bind:markdown="content.description")
 
-        video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
+        .md-thumbnail-row(v-if="content.thumbnails")
+          router-link(v-for="thumbnail in content.thumbnails" v-bind:to="thumbnail.link" v-bind:key="thumbnail.link")
+            .md-thumbnail(v-bind:style="{ 'background-image': `url('${thumbnail.image}')` }")
+              .md-thumbnail-caption {{ thumbnail.caption }}
+          .clearfix
 
-        submission-grid(v-if="isRegistered && content.expectsubmission" v-bind:content="content")
+        video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
 
         message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
 
-      .course-content--footer(v-if="isRegistered && (content.expectsubmission || content.url)")
-        markdown-link.pull-right(v-bind:md-content="content" v-if="content.url")
-        submission-button(v-if="isRegistered" v-bind:content="content")
+      .course-content--footer(v-if="isRegistered && (content.expectsubmission || (content.url && !content.thumbnails))")
+        markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
         .clearfix
-
-      conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
 
   .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-if="index === 0")
 
-    //- FUTURE CONTENT
-    future-content(v-bind:content="content")
+    div(v-if="content.content_type === 'nextclass'")
+
+      .course-content
+        .course-content--header.block
+          h1.content-title(v-if="content.title")
+            | Coming Soon
+          p.content-description
+            | The next class of the course will be made available soon, please check back later.
+
+    div(v-else)
+      //- FUTURE CONTENT
+      future-content(v-bind:content="content")
 
 </template>
 
@@ -69,10 +89,11 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 import MarkdownContent from '@/components/MarkdownContent';
 import MarkdownLink from '@/components/MarkdownLink';
 import VideoEmbed from '@/components/VideoEmbed';
-import ConversationContainer from '@/components/ConversationContainer';
 import LikeIndicator from '@/components/LikeIndicator';
-import SubmissionGrid from '@/components/SubmissionGrid';
-import SubmissionButton from '@/components/SubmissionButton';
+
+import LiveClass from '@/components/conversation/LiveClass';
+import Homework from '@/components/conversation/Homework';
+import FourCorners from '@/components/conversation/FourCorners';
 import FutureContent from '@/components/conversation/FutureContent';
 import InjectedQuestion from '@/components/conversation/InjectedQuestion';
 
@@ -85,24 +106,20 @@ export default {
   ],
   props: ['courseContent'],
   components: {
-    ConversationContainer,
+    LiveClass,
     MarkdownContent,
     MarkdownLink,
     VideoEmbed,
     LikeIndicator,
-    SubmissionGrid,
-    SubmissionButton,
+    Homework,
+    FourCorners,
     FutureContent,
     MarkdownRenderer,
     InjectedQuestion,
     MessageComposer,
   },
-  watch: {
-    course(nV, oV) {
-      if (this.isRegistered) {
-        this.viewCurrentClass();
-      }
-    }
+  mounted() {
+    setTimeout(this.startDemo, 500).bind(this);
   },
   computed: {
     ...mapGetters([
@@ -123,14 +140,14 @@ export default {
       this.$store.commit(types.SHOW_AUTH);
     },
     startDemo() {
-      this.$ga.event('demo-button', 'click', 'started-demo', true);
-      this.$store.dispatch('getCourse');
+      this.$store.dispatch('getCourse').then(() => {
+        setTimeout(this.viewCurrentClass, 500);
+      });
     },
     viewCurrentClass() {
       if (!this.course) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
-          window.scroll(0, 0);
           this.$store.dispatch('getSpec', theClass.slug);
         }
       }
@@ -142,5 +159,42 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/layout/course-content'
+.md-thumbnail-row
+  height 120px
+  margin 15px 0
+  overflow-x scroll
+  overflow-y hidden
+  position relative
+  white-space nowrap
+  &::-webkit-scrollbar
+    display none
+  .md-thumbnail
+    animate()
+    background-image()
+    box-sizing border-box
+    display inline-block
+    height 0
+    margin 10px
+    overflow hidden
+    padding 5px
+    padding-bottom 100px
+    position relative
+    white-space nowrap
+    width 160px
+    .md-thumbnail-caption
+      animate()
+      pinned()
+      background-color alpha(black, 0.1)
+      color white
+      font-weight bold
+      line-height 110px
+      position absolute
+      text-align center
+    &:hover
+      cursor pointer
+      transform scale(1.1)
+      .md-thumbnail-caption
+        background-color alpha(black, 0.5)
+        transform scale(1.3)
 
 </style>

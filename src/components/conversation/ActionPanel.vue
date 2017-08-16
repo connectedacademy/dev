@@ -1,25 +1,73 @@
 <template lang="pug">
 
-  #action-panel.animated.slideInUp(v-bind:class="{ hide: composerHidden, hidden: !videoIsActive, 'segment-view': activeSegmentVisible }")
-    playhead
-    video-container
-    message-composer
+  #action-panel(v-bind:class="{ hide: (this.currentSectionScrollPosition <= 0), pinned: composerHidden }")
+    ul#experience-controls
+    
+      li.experience-control(@click="toggleVideoPlaying")
+        icon(name="pause" v-if="videoPlaying")
+        icon(name="play" v-else)
+      li.experience-control
+        icon(name="step-forward")
+      li.experience-control#progress-bar
+        #progress-bar--start {{ start }}
+        #progress-bar--end {{ end }}
+        #progress-bar--track
+        #progress-bar--thumb(v-bind:style="{ left: `${((100 / content.duration) * currentTime)}%` }")
+
+      li.experience-control.pull-right(@click="toggleComposer")
+        icon(v-bind:name="composerHidden ? 'angle-down' : 'angle-up'")
+      li.experience-control.pull-right
+        icon(name="twitter")
+      li.experience-control.pull-right(@click="togglePlayerType")
+        icon(v-bind:name="(playerType === 'youtube') ? 'youtube' : 'soundcloud'")
+
+      .clearfix
+    media-container(v-bind:player-type="playerType")
+
+
 
 </template>
 
 <script>
+import * as types from '@/store/mutation-types';
+import {mapGetters} from 'vuex';
+import Moment from 'moment';
+
 import MessageComposer from '@/components/MessageComposer';
-import VideoContainer from '@/components/VideoContainer';
-import Playhead from '@/components/Playhead';
+import MediaContainer from '@/components/MediaContainer';
 
 export default {
   name: 'action-panel',
-  props: ['composerHidden', 'videoIsActive', 'activeSegmentVisible'],
+  props: ['content'],
   components: {
     MessageComposer,
-    VideoContainer,
-    Playhead,
+    MediaContainer,
   },
+  data() {
+    return {
+      playerType: 'youtube',
+    };
+  },
+  computed: {
+    ...mapGetters(['composerHidden', 'videoPlaying', 'currentSectionScrollPosition', 'currentTime']),
+    start() {
+      return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
+    },
+    end() {
+      return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss');
+    },
+  },
+  methods: {
+    toggleComposer() {
+      this.$store.commit(this.composerHidden ? types.SHOW_COMPOSER : types.HIDE_COMPOSER);
+    },
+    toggleVideoPlaying() {
+      this.$store.commit(this.videoPlaying ? types.PAUSE_VIDEO : types.PLAY_VIDEO);
+    },
+    togglePlayerType() {
+      this.playerType = (this.playerType === 'soundcloud') ? 'youtube' : 'soundcloud';
+    },
+  }
 };
 </script>
 
@@ -27,41 +75,92 @@ export default {
 
 @import '~stylus/shared'
 
+$media-height = 220px
+
 #action-panel
   animate()
-  background-color white
-  position fixed
-  bottom 0
-  left 50%
-  margin-left -400px
-  height 140px
-  width 800px
+  background white
+  border-top $color-border 1px solid
+  height ($media-height + 50px)
   z-index 50
+  bottom -($media-height)
+  overflow hidden
+  position fixed
+  left 50%
+  margin-left -390px
+  width 780px
+
+  &.pinned
+    bottom 0
+  &.hide
+    bottom -($media-height + 51px)
 
   @media(max-width: 800px)
-    left 0
     margin-left 0
+    left 0
     width 100%
-  &.hide
-    bottom -140px
-    .playhead-bobble
-      top -70px
-      /*right 20px*/
 
-  &.segment-view
-    bottom 20px
-    border-bottom-left-radius 6px
-    border-bottom-right-radius 6px
-    margin-left -370px
-    width 740px
-    z-index 52
-    .video-wrapper
-      margin-left -370px
-    @media(max-width: 800px)
-      left 0
-      margin-left 10px
-      width calc(100% - 20px)
-      .playhead-bobble
-        display none
+  ul#experience-controls
+    cleanlist()
+    box-sizing border-box
+    height 50px
+    padding 0 10px 0 10px
+    z-index 1
 
+    li.experience-control
+      cleanlist()
+      animate()
+      float left
+      &.pull-right
+        float right
+        border none
+      .fa-icon
+        animate()
+        color $color-text-dark-grey
+        display block
+        height 18px
+        width 18px
+        margin 16px 10px
+      &:hover
+        // background-color $color-lighter-grey
+        cursor pointer
+
+    li#progress-bar
+      pinned()
+      margin 0
+      position absolute
+      left (38px * 2) + 20px + 40px
+      right (38px * 2) + 20px + 40px + 40px
+      #progress-bar--start, #progress-bar--end
+        font-size 0.8em
+        font-weight bold
+        line-height 50px
+        padding 0 10px
+        position absolute
+        &#progress-bar--start
+          color $color-primary
+          left -50px
+        &#progress-bar--end
+          color $color-text-grey
+          right -50px
+      #progress-bar--track
+        background-color $color-primary
+        height 2px
+        margin 24px 10px
+        @media(max-width: 360px)
+          display none
+      #progress-bar--thumb
+        animate()
+        radius(50%)
+        background-color $color-primary
+        height 10px
+        width 10px
+        position absolute
+        top 20px
+        left 0px
+        @media(max-width: 360px)
+          display none
+      &:hover
+        #progress-bar--thumb
+          transform scale(2)
 </style>

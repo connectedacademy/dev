@@ -4,50 +4,37 @@ import * as config from './config';
 
 import axios from 'axios';
 
-var CancelToken = axios.CancelToken;
-var cancel;
-
-// Include and set up Sails client
-import socketIOClient from 'socket.io-client';
-import sailsIOClient from 'sails.io.js';
-const io = sailsIOClient(socketIOClient);
-// io.sails.url = 'http://localhost:4000'; // TODO: Enabled for local server
-io.sails.url = 'https://api.connectedacademy.io'; // TODO: Enabled for live server
-import vueSails from 'vue-sails';
-
-
-// Enable the plugin globally
-Vue.use(vueSails, io);
+let CancelToken = axios.CancelToken;
+let cancel;
 
 export default {
-  getMessagesSummary(request, cb, errorCb) {
+  subscribeToSocket() {
 
-    io.socket.get(`/v1/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres){
-      cb(resData);
+    console.log('Subscribing to socket');
+
+    Vue.io.socket.on('*', function (obj) {
+      alert(JSON.stringify(obj));
     });
 
-    // Vue.http.get(`${config.WATERCOOLER_API}/messages/summary/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {
-    //   cb(response.body);
-    // }, (response) => {
-    //   errorCb(response);
-    // });
+    Vue.io.socket.on('user', function(obj) {
+      console.log('SOCKET - user');
+      console.log(obj);
+    });
 
+    Vue.io.socket.on('message', function(obj) {
+      console.log('SOCKET - message');
+      console.log(obj);
+    });
+
+    Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
+      console.log('SOCKET RESPONSE - me');
+      console.log(resData);
+    });
   },
   cancelBatchRequests() {
     cancel();
   },
-  getMessagesSummaryBatch(request, cb, errorCb) {
-
-    // io.socket.get(`/v1/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, function (resData, jwres){
-    //   cb(resData);
-    // });
-
-
-    // Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`).then((response) => {
-    //   cb(response.body);
-    // }, (response) => {
-    //   errorCb(response);
-    // });
+  getSegmentSummary(request, cb, errorCb) {
 
     axios.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, {
       cancelToken: new CancelToken(function executor(c) {
@@ -57,13 +44,26 @@ export default {
     }).then(function (response) {
       Vue.log.log(response);
       cb(response.data);
-    }).catch(function(thrown) {
+    }).catch(function (thrown) {
       if (axios.isCancel(thrown)) {
         Vue.log.log('Request canceled', thrown.message);
       } else {
         // handle error
         Vue.log.log('There was an error fetching request');
       }
+    });
+  },
+  getSegmentSummarySocket(request, cb, errorCb) {
+    // https://api.connectedacademy.io/v1/messages/subscribe/:class/:content/:startsegment/:endsegment
+    Vue.io.socket.get(`/v1/messages/subscribe/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres) {
+      cb(resData);
+      console.log('SOCKET RESPONSE - subscribe');
+      console.log(resData);
+    });
+    Vue.io.socket.get(`/v1/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, function (resData, jwres) {
+      cb(resData);
+      console.log('SOCKET RESPONSE - summarybatch');
+      console.log(resData);
     });
   },
   getMessages(request, cb, errorCb) {
@@ -75,6 +75,13 @@ export default {
   },
   getSubtitles(slug, url, cb, errorCb) {
     Vue.http.get(url, { credentials: false, responseType: 'json' }).then((response) => {
+      cb({slug: slug, response: response.body});
+    }, (response) => {
+      errorCb({slug: slug, response: response});
+    });
+  },
+  getMedia(slug, path, cb, errorCb) {
+    Vue.http.get(path, { credentials: false, responseType: 'json' }).then((response) => {
       cb({slug: slug, response: response.body});
     }, (response) => {
       errorCb({slug: slug, response: response});

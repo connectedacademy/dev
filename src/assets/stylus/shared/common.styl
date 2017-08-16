@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Arimo')
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro')
+
+html, body
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+
 .pull-left
   float left
 
@@ -12,35 +20,36 @@
   width auto
   height 1em
 
+.no-margin
+  margin 0 !important
+
+.no-padding
+  padding 0 !important
+
 .background-white
   background-color white !important
 
 .text-white
   color white
 
-// Buttons
-
-.pure-button
-  &.full-width
-    display block
-    margin-bottom 10px
-
-  &.pure-button-success
-    background-color $color-success
-    color white
-
 // Transitions
-
-.fade-enter-active, .fade-leave-active
-  transition opacity .5s
-
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
-  opacity 0
-
-.fade-enter-to, .fade-leave
-  opacity 1
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
+.fade-enter-to, .fade-leave /* .fade-leave-active in <2.1.8 */ {
+  opacity: 1
+}
 
 // Content block
+
+.main-container
+  radius(4px)
+  position relative
+  &.main-container-padded
+    padding 20px
 
 .content-block
   radius(4px)

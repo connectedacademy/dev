@@ -7,7 +7,7 @@ export default {
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
-    explore_content: 'Explore',
+    explore_content: 'Continue reading',
 
     age: 'Your age',
     current_language: 'Current language',
@@ -18,6 +18,7 @@ export default {
     next_page: 'Next Page',
     previous_page: 'Previous Page',
     choose_one: 'Choose one',
+    participate: 'Participate',
 
     scroll_down_for_live_class: 'Scroll down for the live class',
   },
@@ -66,7 +67,7 @@ export default {
   composer: {
     compose_message: 'Compose message',
     compose_message_active: 'Write your message',
-    message_placeholder: 'Write something here...',
+    message_placeholder: 'Make a note here...',
     duration: '{currentTime}s',
   },
   course: {

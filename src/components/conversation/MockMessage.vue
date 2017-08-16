@@ -21,10 +21,8 @@ export default {
 @import '~stylus/shared'
 
 .mock-message
-  animate()
   height 140px
   padding-left 60px
-  position absolute
   top 0
   left 0
   right 30px
@@ -46,10 +44,10 @@ export default {
       &:first-child
         max-width 100px
   .mock-message--user, .mock-message--line
-    background-color darken(#eaeaea, 5%)
+    background-color $color-lighter-grey
     animate()
   &.loading
     .mock-message--user, .mock-message--line
-      background-color #eaeaea
+      background-color lighten($color-lighter-grey, 10%)
 
 </style>

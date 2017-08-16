@@ -44,16 +44,17 @@ export default {
 
 .profile-icon
   position absolute
-  top 0
-  right 0
-  padding 10px
+  top 9px
+  right 7px
   transition right 0.6s
+  z-index 53
+
   .profile-image
     radius(50%)
     background-image()
     background-color white
-    height 40px
-    width 40px
+    height 42px
+    width 42px
 
     &:hover
       cursor pointer

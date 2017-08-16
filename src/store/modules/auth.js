@@ -8,7 +8,8 @@ const state = {
   isAuthenticated: false,
   isAuthenticating: false,
   session: {},
-  user: {},
+  user: undefined,
+  admin: undefined,
 };
 
 // getters
@@ -19,6 +20,7 @@ const getters = {
     return (isRegistered) ? initialState.user.registration : false;
   },
   user: (initialState) => initialState.user,
+  admin: (initialState) => initialState.admin,
 };
 
 // actions
@@ -58,9 +60,11 @@ const mutations = {
     response,
   }) {
     Vue.log.log('Auth success');
+    Vue.log.log(response);
     state.isAuthenticated = true;
     // Save user in session
     state.user = response.user;
+    state.admin = response.admin;
   },
   [types.CHECK_AUTH_FAILURE](initialState, {
     response,

@@ -8,7 +8,12 @@ export default {
       this.$store.commit(types.DISMISS_COMPOSER);
       this.$store.commit(types.DISMISS_LEFT_DRAWER);
       this.$store.commit(types.DISMISS_RIGHT_DRAWER);
-      this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
+
+      if (this.$store.getters.activeSegment) {
+        this.$store.commit(types.SET_ACTIVE_SEGMENT, undefined);
+      } else {
+        this.$store.commit(types.SET_PEEK_SEGMENT, undefined);
+      }
     },
   },
 }

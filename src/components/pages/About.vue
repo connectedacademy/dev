@@ -1,10 +1,12 @@
 <template lang="pug">
 
-  .col#col-main.background-white(v-bind:class="this.$store.state.layout.columns.main.state")
+    .about-page
 
-    .container
+      .col#col-main
 
-      markdown-renderer(v-bind:markdown-url="markdownUrl")
+        .main-container.main-container-padded.background-white
+
+          markdown-renderer(v-bind:markdown-url="markdownUrl")
 
 </template>
 

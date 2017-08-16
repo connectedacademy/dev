@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import FourCorners from '@/mixins/FourCorners';
+import FourCornersMixin from '@/mixins/FourCorners';
 
 export default {
   name: 'four-corners',
   props: ['html'],
   mixins: [
-    FourCorners,
+    FourCornersMixin,
   ],
 };
 </script>

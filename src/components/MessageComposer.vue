@@ -3,18 +3,16 @@
   .message-composer-wrapper(v-bind:class="{ static: section }")
 
     .message-composer(v-bind:class="{ unactive: hidden }")
-    .message-composer(v-bind:class="{ unactive: hidden }")
 
       .message-composer--body
         .textarea-wrapper(v-if="isRegistered" )
-          textarea(name="name" rows="3" v-on:keyup.enter="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text" v-on:focus="composerFocus" v-on:blur="composerBlur")
-        .login-warning(v-else @click="showAuth")
-          h3 Please login to send messages
-          .pure-button.pure-button-primary {{ $t('auth.login') }}
+          textarea(name="name" autofocus rows="3" v-on:keyup.prevent.enter="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
+        .login-warning(v-else)
+          h4 Please login to send messages
 
       .message-composer--footer(v-if="isRegistered")
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage") {{ submitText }}
-        p.info-label.animated.fadeInUp(v-if="infoLabel") {{ infoLabel }}
+        .info-label.animated.fadeIn(v-if="infoLabel") {{ infoLabel }}
         .clearfix
 
 
@@ -40,54 +38,17 @@ export default {
     };
   },
   methods: {
-    showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
-    },
-    composerFocus() {
-      this.$log.log('Composer gained focus');
-
-      this.$log.log('Pausing video');
-      this.$store.commit(types.PAUSE_VIDEO);
-
-      this.infoLabel = "";
-    },
-    composerBlur() {
-      this.$log.log('Composer lost focus');
-
-      this.$log.log('Playing video');
-      this.$store.commit(types.PLAY_VIDEO);
-
-    },
-    showComposer() {
-      this.$store.commit(types.PEEK_COMPOSER);
-    },
-    dismissComposer() {
-      this.$store.commit(types.DISMISS_COMPOSER);
-    },
     sendMessage() {
+      const url = (this.section) ? `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.section}` : this.url;
+
+      let postData = {
+        text: `${this.message.text} ${this.course.hashtag} ${url}`,
+        currentClass: this.currentClass.slug,
+        currentSection: (this.section) ? this.section : this.currentSection.slug,
+        currentSegment: (this.section) ? this.messageSegment : undefined,
+      };
 
       this.sending = true;
-
-      let postData = {};
-
-      if (this.section) {
-        const url = `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.section}`;
-
-        postData = {
-          text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
-          currentClass: this.$store.getters.currentClass.slug,
-          currentSection: this.section,
-        };
-      } else {
-        const url = this.url;
-
-        postData = {
-          text: `${this.message.text} ${this.$store.getters.course.hashtag} ${url}`,
-          currentClass: this.$store.getters.currentClass.slug,
-          currentSection: this.$store.getters.currentSection.slug,
-          currentSegment: this.messageSegment,
-        };
-      }
 
       API.message.sendMessage(
         postData,
@@ -95,30 +56,32 @@ export default {
           this.$store.dispatch('pushMessage', { response, postData });
           this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response, postData })
           this.message.text = '';
+          this.infoLabel = 'Posted note';
+          setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
-          this.infoLabel = 'Message sent successfully';
         },
         (response, postData) => {
           this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
           alert('Failed to send message');
+          this.infoLabel = 'Failed to post note';
+          setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
-          this.infoLabel = 'Failed to send message!';
         },
       );
     },
   },
   computed: {
-    ...mapGetters(['isRegistered']),
+    ...mapGetters(['isRegistered', 'peekSegment', 'currentSegment', 'isRegistered', 'course', 'currentClass', 'currentSection']),
     messageSegment() {
-      return this.$store.getters.activeSegmentVisible ? (this.$store.getters.activeSegment.segmentGroup / 0.2) : this.$store.getters.currentSegment;
+      return this.peekSegment ? (this.peekSegment / 0.2) : this.currentSegment;
     },
     url() {
-      if (this.$store.getters.currentSection === undefined) { return ''; }
-      return `https://testclass.connectedacademy.io/#/course/${this.$store.getters.currentClass.slug}/${this.$store.getters.currentSection.slug}/${this.messageSegment}`;
+      if (this.currentSection === undefined) { return ''; }
+      return `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
     },
     hidden() {
-      return (this.$store.getters.currentSection === undefined) ||
-        !this.$store.getters.isRegistered ||
+      return (this.currentSection === undefined) ||
+        !this.isRegistered ||
         this.$store.state.composer.hidden ||
         this.$store.state.auth.visible ||
         this.$store.state.navigation.leftDrawer.visible ||
@@ -126,14 +89,10 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     currentTime() {
-      return `Tweeting at - ${_.round(this.$store.getters.currentTime)}`;
+      return `Tweeting at - ${_.round(this.currentTime)}`;
     },
     submitText() {
-      if (this.sending) {
-        return 'Sending';
-      } else {
-        return (this.$store.getters.activeSegmentVisible) ? 'Post Reply' : 'Send Message';
-      }
+      return (this.sending) ? 'Sending' : 'Post';
     }
   },
 };
@@ -144,29 +103,34 @@ export default {
 @import '~stylus/shared'
 
 .message-composer-wrapper
+  pinned()
+  position absolute
+  left 50%
+  position relative
+  top auto
+  bottom auto
+  left auto
+  right auto
+  height 50px
+  // border-top $color-border 1px solid
+
+  @media(max-width: 800px)
+    width 100%
+    left 0
+    right 0
+    margin 0
 
   .message-composer
-    background-color white
-    border-left $color-light-grey 1px solid
+    animate()
+    pinned()
+    top 0
     box-sizing border-box
 
     position absolute
-    bottom 0
-    right 0
-
-    height 140px
-    left calc(140px / 0.5625 + 1px)
-    animate()
-
-    @media(max-width: 800px)
-      width 100%
-      left 0
-      right 0
-      margin 0
+    z-index 2
 
     .message-composer--body
       pinned()
-      background-color white
       position absolute
 
       .login-warning
@@ -176,12 +140,12 @@ export default {
         padding 0 20px
         position absolute
         text-align center
-        h2
+        h4
           reset()
-          line-height 45px !important
+          color $color-text-dark-grey
+          line-height 50px !important
 
       .textarea-wrapper
-        background-color white
         overflow hidden
         position absolute
         top 0
@@ -189,8 +153,6 @@ export default {
         right 0
         left 0
         textarea
-          background-color transparent
-          color black
           border none
           font-size 1em
 
@@ -201,8 +163,8 @@ export default {
 
           position absolute
           top 0
-          bottom 48px
-          right 0
+          bottom 0
+          right 100px
           left 0
 
           width 100%
@@ -212,39 +174,41 @@ export default {
             width calc(100% - 20px)
 
     .message-composer--footer
-      height 38px
-      padding 5px
+      height 30px
+      padding 10px
       position absolute
       bottom 0
       right 0
-      left 0
+      left auto
       animate()
-      @media(max-width: 800px)
-        padding 10px
-      p.info-label
+      button.pure-button.pure-button-primary
+        padding 3px 20px
+      .info-label
         reset()
         radius(5px)
         display inline-block
-        background-color $color-success
-        color white
-        font-size 0.9em
-        line-height 28px
-        margin 5px
+        background-color $color-border
+        color $color-text-dark-grey
+        font-size 1em
+        line-height 30px
+        margin 0px 15px
         padding 0 15px
 
   &.static
 
+    radius(4px)
+    border $color-border 1px solid
+    margin-bottom 20px
+    overflow hidden
+    position relative !important
+    bottom auto
+    top auto
+    left auto
+    right auto
     .message-composer
-      radius(4px)
-      border $color-border 1px solid
-      margin-bottom 20px
-      overflow hidden
-      position relative
-      bottom auto
-      top auto
-      left auto
-      right auto
-      .message-composer--footer
-        background-color #f9f9f9
+      border-top none
+      top 0
+    .message-composer--footer
+      border-top $color-border 1px solid
 
 </style>

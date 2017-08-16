@@ -10,7 +10,6 @@ const state = {
   playing: false,
   position: 0.0,
   duration: undefined,
-  ready: false,
 };
 
 // getters
@@ -23,9 +22,6 @@ const getters = {
   },
   videoDuration() {
     return state.duration;
-  },
-  videoReady() {
-    return state.ready;
   },
 };
 
@@ -40,9 +36,6 @@ const mutations = {
   },
   [types.PLAY_VIDEO](initialState) {
     state.playing = true;
-  },
-  [types.VIDEO_READY](initialState) {
-    state.ready = true;
   },
 };
 

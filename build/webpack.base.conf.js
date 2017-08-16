@@ -32,7 +32,7 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: "pre",
-        include: [resolve('src'), resolve('test')],
+        include: [resolve('src'), resolve('test'), resolve('node_modules/vue-awesome')],
         options: {
           formatter: require('eslint-friendly-formatter')
         }
@@ -45,7 +45,8 @@ module.exports = {
       {
         test: /\.styl$/,
         loader: 'style-loader!css-loader!stylus-loader',
-        include: [resolve('src')],
+        include: [resolve('src'),require('nib')()],
+        // import: ['~nib/lib/nib/index.styl'],
       },
       {
         test: /\.js$/,

@@ -3,7 +3,9 @@
 
 <template lang="pug">
 
-#app
+#app(v-bind:class="pageStyles")
+
+  lock(passcode="76234")
 
   debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
@@ -17,11 +19,15 @@
 
   right-drawer(v-if="isRegistered")
 
-  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '60px' : '0px' }")
-    navigation
-    router-view(transition transition-mode="out-in")
+  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '0' : '0px' }")
 
-  action-panel(v-bind:composer-hidden="composerHidden" v-bind:video-is-active="videoIsActive" v-bind:active-segment-visible="activeSegmentVisible")
+    navigation
+
+    .page-header(v-bind:class="{ minimized: navigation.minimized }")
+
+    transition(name="fade" appear mode="out-in")
+      keep-alive
+        router-view
 
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
 
@@ -41,6 +47,7 @@ import AutoScroll from '@/mixins/AutoScroll';
 import Overlay from '@/mixins/Overlay';
 
 // Components
+import Lock from './components/authentication/Lock'
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
 import Navigation from './components/navigation/Navigation';
 import SectionNavigator from './components/navigation/SectionNavigator';
@@ -58,7 +65,7 @@ export default {
     Overlay,
   ],
   watch: {
-    activeSegmentVisible(nV, oV) {
+    activeSegment(nV, oV) {
       if (nV) {
         // Segment visible, disable scroll on window
         document.body.className = "disable-scroll";
@@ -74,11 +81,13 @@ export default {
       if (self.isAuthenticated && !self.isRegistered) {
         self.$router.push('/registration');
       } else {
-        self.$ga.set('userId', self.$store.state.auth.user.account);
+        if (self.user && self.user.account) {
+          self.$ga.set('userId', self.user.account);
+        }
       }
     });
 
-    // Fetch course and then hubs// Set faux time
+    // Fetch course and then hubs
     const fauxTime = Moment().format();
     this.$store.commit('setFauxTime', fauxTime);
 
@@ -86,7 +95,11 @@ export default {
     this.$store.dispatch('getHubs');
 
     // Periodically update document height variable
-    window.setInterval(this.updateDocumentHeight, 200);
+    window.setInterval(this.updateDocumentHeight, 1000);
+  },
+  mounted() {
+    // Subscribe to socket
+    API.message.subscribeToSocket();
   },
   data() {
     return {
@@ -95,16 +108,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'videoIsActive', 'activeSegmentVisible', 'composerHidden',
+      'isRegistered', 'activeSegment', 'peekSegment', 'pageStyles', 'user', 'navigation',
     ]),
     overlayVisible() {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
-      || this.$store.state.conversation.activeSegmentVisible;
+      || this.$store.state.conversation.activeSegment
+      || this.$store.state.conversation.peekSegment;
     },
   },
   store,
   components: {
+    Lock,
     AuthenticationFlow,
     DebugPanel,
     Navigation,
@@ -115,6 +130,9 @@ export default {
     ActionPanel,
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     updateDocumentHeight() {
       // Check if document height has changed
       if (this.documentHeight !== document.documentElement.scrollHeight) {
@@ -132,8 +150,17 @@ export default {
 
 @import '~stylus/shared'
 
-html, body
+html
   background-color $color-main-page
+  transition background-color 0.6s
+  &::-webkit-scrollbar
+    display none
+  &.colourful
+    background-color $color-primary
+  &.dark-mode
+    background-color #242424
+
+html, body
   margin 0
   padding 0
 
@@ -147,18 +174,12 @@ body.disable-scroll
   right 0
   bottom 0
 
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-
 .main-page
-  padding-top 60px
 
   .col
     box-sizing border-box
     padding 0
-    top 60px
+    /*top 60px*/
 
     .container
       padding 20px
@@ -171,6 +192,11 @@ body.disable-scroll
     radius(4px)
     margin 0 auto 60px auto
     max-width 780px
+    padding-top 80px
+    position relative
+    &.narrow
+      max-width 640px    
+
     @media(max-width: 800px)
       max-width 100%
       margin 0 0px
@@ -187,10 +213,40 @@ body.disable-scroll
   background-color alpha(black, 0)
   pointer-events none
   position fixed
-  transition background-color 0.6s
-  z-index 50
+  transition background-color 0.3s
+  z-index 55
   &.visible
-    background-color alpha(black, 0.85)
+    background-color alpha(black, 0.8)
     pointer-events all
 
+// Page header
+
+.page-header
+  transition(all 0.2s ease)
+  background-color $color-primary
+  height 240px
+  position absolute
+  left 0
+  right 0
+  top $navigation-height
+  top 0
+  text-align center
+  z-index -1
+
+  &.minimized
+    height 60px
+
+#app
+  &.chat
+    .page-header
+      background-color $color-homework
+
+  &.admin
+    .page-header
+      background-color $color-darkest-grey
+
+// Hide page header on colourful pages
+html.colourful
+  .page-header
+    display none
 </style>

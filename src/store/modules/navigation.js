@@ -17,6 +17,7 @@ const state = {
   rightDrawer: {
     visible: false,
   },
+  pageStyles: undefined,
 };
 
 // getters
@@ -27,14 +28,23 @@ const getters = {
   navigationVisible() {
     return state.visible;
   },
+  pageStyles() {
+    return state.pageStyles;
+  },
 };
 
 // actions
 const actions = {
+  setHeaderHeight() {
+    commit();
+  }
 };
 
 // mutations
 const mutations = {
+  [types.SET_PAGE_STYLE](initialState, newState) {
+    state.pageStyles = newState;
+  },
   [types.SET_NAV_STATE](initialState, newState) {
     _.forEach(newState, function(value, key) {
       state[key] = value;

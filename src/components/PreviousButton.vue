@@ -1,6 +1,8 @@
 <template lang="pug">
 
-  .previous-button(@click="previous") {{ $t('common.previous_page') }}
+  .previous-button(@click="previous")
+    icon(name="angle-left")
+    | {{ $t('common.previous_page') }}
 
 </template>
 
@@ -21,18 +23,23 @@ export default {
 @import '~stylus/shared'
 
 .previous-button
-  background-color $color-light-grey
-  border-top-right-radius 6px
-  border-bottom-right-radius 6px
-  color $color-text-dark-grey
+  animate()
+  radius(6px)
+  color white
   display inline-block
   text-align center
-  margin-top 20px
-  padding 6px 12px
-  left 0
-  animate()
+  padding 10px 20px
+  margin-bottom 10px
+  left 0px
+  right 0px
+  position relative
+  padding-left 30px
+  .fa-icon
+    height 20px
+    padding 0 15px
+    position absolute
+    left 0
   &:hover
-    background-color darken($color-light-grey, 10%)
+    background-color alpha(white, 0.2)
     cursor pointer
-
 </style>

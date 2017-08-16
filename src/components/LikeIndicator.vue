@@ -1,8 +1,7 @@
 <template lang="pug">
 
   .like-indicator(@click="getLikeCount")
-    icon.hidden(name="heart")
-    | {{ likeCount }}
+    icon(name="ca-heart")
 
 </template>
 
@@ -23,7 +22,7 @@ export default {
   },
   computed: {
     likeCount() {
-      return `${this.count} likes`;
+      return `${this.count}`;
     },
   },
   methods: {
@@ -55,10 +54,10 @@ export default {
 
 .like-indicator
   radius(6px)
-  font-size 0.7em
+  font-size 1em
   position absolute
-  top 6px
-  right 30px
+  top 15px
+  right 8px
   line-height 24px
   padding 0 8px
   min-width 20px

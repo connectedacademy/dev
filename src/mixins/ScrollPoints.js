@@ -19,19 +19,13 @@ export default {
 
           if (element) {
 
-            // Search for conversation container and add as offset
-            const conversationContainer = element.querySelector('.conversation-container');
-
-            let additionalOffset = (conversationContainer) ? conversationContainer.offsetTop : 0;
-
-            if (conversationContainer) {
-              additionalOffset += conversationContainer.querySelector('.spacer').offsetHeight;
-            }
+            let additionalOffset = 180;
 
             this.$store.commit('setScrollPoint', {
+              title: content.title,
               slug: content.slug,
               content_type: content.content_type,
-              sectionTop: element.offsetTop - 60.0, // Navbar height
+              sectionTop: element.offsetTop,
               top: (additionalOffset + element.offsetTop),
               bottom: element.offsetTop + element.offsetHeight,
               duration: content.duration,

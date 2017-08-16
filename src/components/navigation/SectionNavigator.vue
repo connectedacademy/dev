@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.section-navigator
+#section-navigator
   transition-group(name="fade" mode="in-out" tag="ul" class="navigation-items")
     section-navigator-item(v-for="scrollPoint in scrollPoints" v-bind:key="scrollPoint.slug" v-bind:scroll-point="scrollPoint")
 
@@ -25,13 +25,21 @@ export default {
 
 @import '~stylus/shared'
 
-.section-navigator
-  min-height 40px
-  min-width 40px
+#section-navigator
+  animate()
+  background-color $color-primary
+  border-top-left-radius 6px
+  border-bottom-left-radius 6px
+  overflow hidden
   position fixed
-  top 60px
-  right 10px
-  z-index 50
+  top 70px
+  right -240px
+  z-index 51
+  top 50%
+  transform translateY(-50%)
+  width 280px
+  &:hover
+    right 0px
   ul.navigation-items
     cleanlist()
     radius(30px)
