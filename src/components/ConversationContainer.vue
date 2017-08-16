@@ -78,7 +78,7 @@ export default {
     currentSegmentGroup(nV, oV) {
       if (nV === undefined) { return; }
       if (oV !== nV) {
-        this.$log.log(`Getting messages for segment ${nV}`);
+        this.$log.info(`Getting messages for segment ${nV}`);
 
         this.loadSegmentSummary(nV);
       }

@@ -64,7 +64,7 @@ export default {
     },
     videoPlaying(nv, oV) {
       if (nv) {
-        this.$log.log('play');
+        this.$log.info('play');
         switch (this.playerType) {
           case 'youtube':
             this.player.playVideo();
@@ -74,7 +74,7 @@ export default {
             break;
         }
       } else {
-        this.$log.log('pause');
+        this.$log.info('pause');
         switch (this.playerType) {
           case 'youtube':
             this.player.pauseVideo();
@@ -111,7 +111,7 @@ export default {
       || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
       if (outOfSync) {
-        self.$log.log('Video out of sync - seeking');
+        self.$log.info('Video out of sync - seeking');
         self.player.seekTo(position);
       }
     }, 200),
@@ -126,7 +126,7 @@ export default {
         const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
         if (outOfSync) {
-          self.$log.log('Audio out of sync - seeking');
+          self.$log.info('Audio out of sync - seeking');
           self.soundcloudPlayer.seek(position * 1000);
         }
       } catch (Exception) {

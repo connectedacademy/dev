@@ -4,7 +4,7 @@ import Vue from 'vue';
 export default {
   methods: {
     setScrollPoints() {
-      Vue.log.log('Updating scroll points');
+      Vue.$log.info('Updating scroll points');
 
       const currentClass = this.$store.getters.currentClass;
 

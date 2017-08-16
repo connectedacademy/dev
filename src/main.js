@@ -8,7 +8,7 @@ import VueScrollBehavior from 'vue-scroll-behavior';
 import Vuex from 'vuex';
 import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
-import vueLogger from 'vue-logger';
+import VueLogger from 'vuejs-logger'
 import VueCookie from 'vue-cookie';
 import VueAnalytics from 'vue-analytics'
 import Raven from 'raven-js';
@@ -70,7 +70,17 @@ Vue.use(VueScrollBehavior, {
 })
 
 Vue.use(VueConfig, Vue.config);
-Vue.use(vueLogger, { prefix: new Date(), dev: false });
+
+const options = {
+  logLevel: 'info',
+  // optional : defaults to false if not specified 
+  stringifyArguments: false,
+  // optional : defaults to false if not specified 
+  showLogLevel: false
+}
+
+Vue.use(VueLogger, options)
+
 Vue.use(VueCookie);
 
 Vue.use(VueAnalytics, {
@@ -96,7 +106,7 @@ Vue.http.options = { credentials: true, responseType: 'json' };
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
     if (response.status === 403) {
-      this.$log.log('Session invalid');
+      this.$log.info('Session invalid');
       store.dispatch('logout');
     }
   });

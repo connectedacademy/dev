@@ -31,15 +31,15 @@ export default {
       API.course.getLikeCount(
         request,
         (response) => {
-          this.$log.log(`Response from like count request - '${this.content.slug}'`);
-          this.$log.log(response);
+          this.$log.info(`Response from like count request - '${this.content.slug}'`);
+          this.$log.info(response);
           this.count = _.reduce(response, function(sum, o) {
             return o;
           });
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log(`Failed to retrieve like count for '${this.content.slug}'`);
+          this.$log.info(`Failed to retrieve like count for '${this.content.slug}'`);
           this.count = '-';
         },
       );

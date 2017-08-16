@@ -52,12 +52,12 @@ export default {
     API.question.getQuestion(
       request,
       (response) => {
-        this.$log.log(response);
+        this.$log.info(response);
         this.question = response;
       },
       (response) => {
         // TODO: Handle failed request
-        this.$log.log('Failed to retrieve question');
+        this.$log.info('Failed to retrieve question');
       },
     );
   },
@@ -78,7 +78,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to post answer');
+          this.$log.info('Failed to post answer');
         },
       );
     },

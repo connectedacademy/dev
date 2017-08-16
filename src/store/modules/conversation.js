@@ -26,11 +26,11 @@ const getters = {
     return state.peekSegment;
   },
   media() {
-    Vue.log.log('Media from state');
+    Vue.$log.info('Media from state');
     return state.media;
   },
   visualisation() {
-    Vue.log.log('Visualisation from state');
+    Vue.$log.info('Visualisation from state');
     return state.visualisation;
   },
   videoIsActive() {
@@ -115,7 +115,7 @@ const mutations = {
   [types.GET_VISUALISATION_FAILURE](initialState, {
     response,
   }) {
-    Vue.log.log('error');
+    Vue.$log.info('error');
     state.visualisation = [];
     // error in response
   },
@@ -127,7 +127,7 @@ const mutations = {
   [types.GET_MEDIA_FAILURE](initialState, {
     response,
   }) {
-    Vue.log.log('error');
+    Vue.$log.info('error');
     state.media = [];
     // error in response
   },

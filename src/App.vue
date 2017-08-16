@@ -136,7 +136,7 @@ export default {
     updateDocumentHeight() {
       // Check if document height has changed
       if (this.documentHeight !== document.documentElement.scrollHeight) {
-        this.$log.log('Document height changed');
+        this.$log.info('Document height changed');
         this.documentHeight = document.documentElement.scrollHeight;
         this.setScrollPoints();
       }

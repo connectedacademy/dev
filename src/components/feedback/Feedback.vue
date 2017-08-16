@@ -142,8 +142,8 @@ export default {
       API.feedback.getFeedbackItems(
         request,
         (response) => {
-          this.$log.log('Response from feedback request');
-          this.$log.log(response);
+          this.$log.info('Response from feedback request');
+          this.$log.info(response);
           var self = this;
           this.myFeedbackItems = _.filter(response.data, function(item) {
             return item.user.account_number === self.user.account_number;
@@ -154,7 +154,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback');
         },
       );
     },
@@ -163,13 +163,13 @@ export default {
       API.feedback.getAvailableFeedbackItems(
         request,
         (response) => {
-          this.$log.log('Response from feedback request (available)');
-          this.$log.log(response);
+          this.$log.info('Response from feedback request (available)');
+          this.$log.info(response);
           this.availableFeedbackItems = response.data;
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback');
         },
       );
     },

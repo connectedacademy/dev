@@ -66,7 +66,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve student list');
+          this.$log.info('Failed to retrieve student list');
           this.students = [];
         },
       );

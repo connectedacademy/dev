@@ -28,7 +28,7 @@ const actions = {
   checkAuth({
     commit,
   }) {
-    Vue.log.log('Checking auth...');
+    Vue.$log.info('Checking auth...');
     API.auth.checkAuth(
       response => commit(types.CHECK_AUTH_SUCCESS, {
         response,
@@ -59,8 +59,8 @@ const mutations = {
   [types.CHECK_AUTH_SUCCESS](initialState, {
     response,
   }) {
-    Vue.log.log('Auth success');
-    Vue.log.log(response);
+    Vue.$log.info('Auth success');
+    Vue.$log.info(response);
     state.isAuthenticated = true;
     // Save user in session
     state.user = response.user;
@@ -69,7 +69,7 @@ const mutations = {
   [types.CHECK_AUTH_FAILURE](initialState, {
     response,
   }) {
-    Vue.log.log('Auth failure');
+    Vue.$log.info('Auth failure');
     state.isAuthenticated = false;
     // error in response
   },

@@ -69,7 +69,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve question responses');
+          this.$log.info('Failed to retrieve question responses');
           this.responses = [];
         },
       );

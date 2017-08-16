@@ -90,7 +90,7 @@ export default {
 
       }
       else {
-        this.$log.log('No query passed');
+        this.$log.info('No query passed');
       }
     },
   },

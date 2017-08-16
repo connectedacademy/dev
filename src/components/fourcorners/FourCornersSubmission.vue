@@ -34,8 +34,8 @@ export default {
 
     API.feedback.getFeedbackItems(request,
       (response) =>{
-        this.$log.log('Submission check response');
-        this.$log.log(response);
+        this.$log.info('Submission check response');
+        this.$log.info(response);
         this.checkingSubmissions = false;
         this.submitted = false;// (response.data.length === 0) ? false : true;
       },

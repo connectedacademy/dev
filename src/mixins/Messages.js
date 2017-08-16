@@ -43,7 +43,7 @@ export default {
       if (this.currentSection === undefined) { return; }
       if (this.content.slug !== this.currentSection.slug) { return; }
 
-      Vue.log.log(`Getting message summary for - ${segmentGroup}`);
+      Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
       let thinkAhead = 15; // Think ahead
       let thinkBehind = 15; // Think behind
@@ -78,13 +78,13 @@ export default {
           }
         },
         response => {
-          Vue.log.log('Failed to get messages summary');
+          Vue.$log.info('Failed to get messages summary');
         },
       );
     },
     loadSegmentMessages() {
 
-      Vue.log.log('Loading segment messages');
+      Vue.$log.info('Loading segment messages');
 
       let theContent =  (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.getters.currentSection.slug;
 
@@ -115,7 +115,7 @@ export default {
       // API.message.subscribe(
       //   request,
       //   response => {
-      //     Vue.log.log(response.data);
+      //     Vue.$log.info(response.data);
       //     this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['asc']);
       //   },
       //   response => {

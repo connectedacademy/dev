@@ -53,12 +53,12 @@ export default {
           API.classroom.getTeacherCode(
             request,
             (response) => {
-              this.$log.log(response);
+              this.$log.info(response);
               this.classroomCode = response.code;
             },
             (response) => {
               // TODO: Handle failed request
-              this.$log.log('Failed to retrieve teacher code');
+              this.$log.info('Failed to retrieve teacher code');
             },
           );
 
@@ -78,12 +78,12 @@ export default {
       API.classroom.registerAttendance(
         postData,
         (response) => {
-          this.$log.log(response);
+          this.$log.info(response);
           this.currentClassroom = true;
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to register attendance');
+          this.$log.info('Failed to register attendance');
           alert(`Failed to register attendance - ${response.body.data}`);
         },
       );

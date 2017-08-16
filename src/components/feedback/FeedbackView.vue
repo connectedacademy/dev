@@ -117,13 +117,13 @@ export default {
       API.feedback.postFeedbackMessage(
         request,
         (response) => {
-          this.$log.log('Response from feedback request');
-          this.$log.log(response);
+          this.$log.info('Response from feedback request');
+          this.$log.info(response);
           this.comment = '';
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback');
         },
       );
     },
@@ -134,15 +134,15 @@ export default {
       API.feedback.getDiscussion(
         request,
         (response) => {
-          this.$log.log('Response from feedback request');
-          this.$log.log(response);
+          this.$log.info('Response from feedback request');
+          this.$log.info(response);
           this.discussion = response;
           // Set loading state
           this.loading = false;
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback');
           // Set loading state
           this.loading = false;
         },
@@ -155,13 +155,13 @@ export default {
       API.feedback.getFeedbackItem(
         request,
         (response) => {
-          this.$log.log('Response from feedback request');
-          this.$log.log(response);
+          this.$log.info('Response from feedback request');
+          this.$log.info(response);
           this.feedbackItem = response;
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.log('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback');
         },
       );
     },

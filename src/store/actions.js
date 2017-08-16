@@ -3,7 +3,7 @@ import store from '@/store';
 
 export const setScrollPosition = ({ commit }, scrollPosition) => {
 
-  Vue.log.log('Setting scroll position from action');
+  Vue.$log.info('Setting scroll position from action');
 
   // Set current section
   let currentSection = undefined;
@@ -27,7 +27,7 @@ export const setScrollPosition = ({ commit }, scrollPosition) => {
 };
 
 export const resetState = ({ commit }) => {
-  Vue.log.log('Reseting store.state...');
+  Vue.$log.info('Reseting store.state...');
   commit('resetScrollPoints');
   // commit('setScrollPosition', 0);
 };

@@ -1,6 +1,6 @@
 const CALCULATE_FPS = false; // Calculate the scrolling FPS
 const AUTOSCROLL_CHECK = 200; // Periodically check if scroll is possible
-const AUTOSCROLL_ATTEMPT = 100; // Interval at which to attempt auto scroll
+const AUTOSCROLL_ATTEMPT = 500; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 500; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
@@ -65,12 +65,12 @@ export default {
     },
     attemptAutoScroll() {
 
-      Vue.log.log('Attempting auto scroll');
+      Vue.$log.debug('Attempting auto scroll');
 
       var self = this;
 
-      if (!self.canAutoScroll) { Vue.log.log('Cannot auto scroll'); self.isAutoScrolling = false; return; }
-      if (self.isAutoScrolling) { Vue.log.log('Already auto scrolling'); return; }
+      if (!self.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); self.isAutoScrolling = false; return; }
+      if (self.isAutoScrolling) { Vue.$log.debug('Already auto scrolling'); return; }
 
       self.isAutoScrolling = true;
 
@@ -137,7 +137,7 @@ export default {
 
         const yPos = position(start, end, elapsed, duration);
 
-        // Vue.log.log(`step ${start} ${end} ${elapsed} ${duration} ${yPos}`);
+        // Vue.$log.debug(`step ${start} ${end} ${elapsed} ${duration} ${yPos}`);
         if (!self.preventScroll) {
           window.scroll(0, yPos);
         }
@@ -204,13 +204,13 @@ export default {
       }
     },
     onMousedown() {
-      this.$log.log('MOUSEDOWN');
+      Vue.$log.debug('MOUSEDOWN');
       // this.$store.commit(types.PAUSE_VIDEO);
       this.preventScroll = true;
       this.isAutoScrolling = false;
     },
     onMouseup() {
-      this.$log.log('MOUSEUP');
+      Vue.$log.debug('MOUSEUP');
       // this.$store.commit(types.PLAY_VIDEO);
       this.preventScroll = false;
       this.isAutoScrolling = false;

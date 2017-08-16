@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     loadSubtitles(content) {
-      Vue.log.log('Getting subtitles...');
+      Vue.$log.info('Getting subtitles...');
 
       this.subtitles = []; // Clear existing subtitles
 
