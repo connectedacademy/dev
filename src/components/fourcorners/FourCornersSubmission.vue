@@ -56,10 +56,7 @@ export default {
       'isRegistered',
     ]),
     contentUrl() {
-      let sub = window.location.host.split('.')[0];
-      sub = (_.startsWith(sub, 'localhost')) ? 'testclass' : sub;
-
-      return `https://${sub}.connectedacademy.io/#/submission/${this.theClass}/${this.theContent}`;
+      return `${window.location.protocol}//${window.location.host}/#/submission/${this.theClass}/${this.theContent}`;
     },
     tweet() {
       return `${this.fourcornersLink} ${this.contentUrl} ${this.$store.getters.course.hashtag}`;

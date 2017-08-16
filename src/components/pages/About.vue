@@ -11,23 +11,28 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'about',
+  components: {
+    MarkdownRenderer,
+  },
   created() {
     this.$store.dispatch('setColumnState', 'narrow');
   },
   data() {
     return {
       navTitle: 'About - Connected Academy',
-      markdownUrl: 'https://testclass.connectedacademy.io/course/content/en/about.md',
     };
   },
-  components: {
-    MarkdownRenderer,
-  },
+  computed: {
+    ...mapGetters(['course']),
+    markdownUrl() {
+      return `${this.course.baseUri}about.md`
+    }
+  }
 };
 
 </script>

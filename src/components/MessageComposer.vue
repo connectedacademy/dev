@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     sendMessage() {
-      const url = (this.section) ? `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.section}` : this.url;
+      const url = (this.section) ? `${window.location.protocol}//${window.location.host}/#/course/${this.currentClass.slug}/${this.section}` : this.url;
 
       let postData = {
         text: `${this.message.text} ${this.course.hashtag} ${url}`,
@@ -77,7 +77,7 @@ export default {
     },
     url() {
       if (this.currentSection === undefined) { return ''; }
-      return `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
+      return `${window.location.protocol}//${window.location.host}/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
     },
     hidden() {
       return (this.currentSection === undefined) ||

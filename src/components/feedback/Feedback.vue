@@ -176,7 +176,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'user', 'currentClass',
+      'isAuthenticated', 'isRegistered', 'user', 'currentClass', 'course',
     ]),
     classSlug() {
       return this.$route.params.classSlug;
@@ -185,7 +185,7 @@ export default {
       return this.$route.params.contentSlug;
     },
     markdownUrl() {
-      return `https://testclass.connectedacademy.io/course/content/en/class1/${this.contentSlug}.md`;
+      return `${this.course.baseUri}class1/${this.contentSlug}.md`;
     },
   },
 };
