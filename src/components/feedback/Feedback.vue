@@ -46,7 +46,7 @@
 
         four-corners-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug")
 
-        .login(v-if="!isRegistered") Please login to submit homework
+        #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
 
       transition(name="fade" type="in out")
         feedback-view(v-bind:current-feedback-id="currentFeedbackId" v-bind:currentFeedbackId.sync="currentFeedbackId")
@@ -61,6 +61,7 @@ import { mapGetters } from 'vuex';
 
 import API from '@/api';
 import * as types from '@/store/mutation-types';
+import Auth from '@/mixins/Auth';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersSubmission from '@/components/fourcorners/FourCornersSubmission';
@@ -72,6 +73,9 @@ import InfoDialogue from '../InfoDialogue';
 
 export default {
   name: 'feedback',
+  mixins: [
+    Auth,
+  ],
   components: {
     MarkdownRenderer,
     FourCornersSubmission,
@@ -321,4 +325,10 @@ $chat-list-width = 320px
   .markdown-wrapper
     padding 5px
 
+#login-notice
+  radius(4px)
+  background-color $color-homework
+  color white
+  padding 30px
+  text-align center
 </style>

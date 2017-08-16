@@ -5,12 +5,7 @@
 
 #app(v-bind:class="pageStyles")
 
-  #overlay-lock(v-if="locked")
-    .overlay-lock--modal
-      h2 Content Locked
-      p Please enter the passcode you were given to continue
-      input(v-model="enteredPasscode" type="text" placeholder="Enter Passcode" v-on:keyup.enter="attemptUnlock")
-      .pure-button.pure-button--success(@click="attemptUnlock") Unlock
+  lock(passcode="76234")
 
   debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 
@@ -52,6 +47,7 @@ import AutoScroll from '@/mixins/AutoScroll';
 import Overlay from '@/mixins/Overlay';
 
 // Components
+import Lock from './components/authentication/Lock'
 import AuthenticationFlow from './components/authentication/AuthenticationFlow';
 import Navigation from './components/navigation/Navigation';
 import SectionNavigator from './components/navigation/SectionNavigator';
@@ -108,9 +104,6 @@ export default {
   data() {
     return {
       navTitle: 'Connected Academy',
-      locked: true,
-      enteredPasscode: undefined,
-      passcode: 76234,
     };
   },
   computed: {
@@ -126,6 +119,7 @@ export default {
   },
   store,
   components: {
+    Lock,
     AuthenticationFlow,
     DebugPanel,
     Navigation,
@@ -147,13 +141,6 @@ export default {
         this.setScrollPoints();
       }
     },
-    attemptUnlock() {
-      if (parseInt(this.enteredPasscode) === parseInt(this.passcode)) {
-        this.locked = false;
-      } else {
-        this.locked = true;
-      }
-    }
   },
 };
 
@@ -262,33 +249,4 @@ body.disable-scroll
 html.colourful
   .page-header
     display none
-
-#overlay-lock
-  pinned()
-  background-color $color-primary
-  position fixed
-  z-index 999
-  .overlay-lock--modal
-    radius(20px)
-    background-color white
-    padding 30px
-    position absolute
-    left 50%
-    top 50px
-    margin-left -120px
-    text-align center
-    width 240px
-    h2
-      reset()
-      color $color-text-dark-grey
-      margin-bottom 20px
-    p
-      color $color-text-grey
-    input
-      box-sizing border-box
-      font-size 1.4em
-      margin 10px auto 30px auto
-      outline 0
-      padding 10px
-      text-align center
 </style>
