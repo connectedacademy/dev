@@ -10,7 +10,7 @@
         h1.content-title About the course
 
       .course-content--body
-        markdown-renderer(v-bind:markdown-url="`${baseUri}/info.md`")
+        markdown-renderer(v-bind:markdown-url="`${course.baseUri}/info.md`")
 
       .course-content--footer
         .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
