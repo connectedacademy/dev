@@ -22,7 +22,6 @@
   p {{ `currentSegment - ${currentSegment}` }}
 
   p {{ `videoPlaying - ${videoPlaying}` }}
-  p {{ `videoReady - ${videoReady}` }}
 
 </template>
 
@@ -51,7 +50,6 @@ export default {
       'currentSegment',
 
       'videoPlaying',
-      'videoReady',
     ]),
   },
   components: {},

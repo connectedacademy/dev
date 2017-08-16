@@ -5,13 +5,14 @@ li.navigation-item(@click="jumpToContent" v-bind:class="{ active: isActive }")
   icon(v-else-if="scrollPoint.content_type === 'webinar'" name="play")
   icon(v-else name="circle")
 
-  .content-label {{ scrollPoint.slug }}
+  .content-label {{ scrollPoint.title }}
   .clearfix
 
 </template>
 
 <script>
 import {mapGetters} from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'section-navigator-item',
@@ -33,9 +34,11 @@ export default {
 
       this.$store.commit('setScrollPosition', segmentPosition);
 
-      this.$nextTick(function() {
+      this.$store.commit(types.PAUSE_VIDEO);
+
+      setTimeout(() => {
         window.scroll(0, segmentPosition);
-      });
+      }, 200);
     }
   },
 };
@@ -46,11 +49,12 @@ export default {
 @import '~stylus/shared'
 
 li.navigation-item
+  animate()
   cleanlist()
   width 100%
   position relative
   height calc(40px)
-  animate()
+  overflow hidden
   .fa-icon
     color white
     float left
@@ -59,6 +63,7 @@ li.navigation-item
     width 12px
     animate()
   .content-label
+    animate()
     color white
     font-weight bold
     line-height 40px
@@ -69,7 +74,6 @@ li.navigation-item
     text-transform capitalize
     z-index 1
     pointer-events none
-    animate()
   &.active
     background-color darken($color-primary, 10%)
   &:hover

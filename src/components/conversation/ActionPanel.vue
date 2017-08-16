@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  #action-panel(v-bind:class="{ hide: composerHidden, pinned: (this.currentSectionScrollPosition > 0) }")
-    icon#twitter-branding(name="twitter" scale="2")
+  #action-panel(v-bind:class="{ hide: (this.currentSectionScrollPosition <= 0), pinned: composerHidden }")
     ul#experience-controls
+    
       li.experience-control(@click="toggleVideoPlaying")
         icon(name="pause" v-if="videoPlaying")
         icon(name="play" v-else)
@@ -13,12 +13,16 @@
         #progress-bar--end {{ end }}
         #progress-bar--track
         #progress-bar--thumb(v-bind:style="{ left: `${((100 / content.duration) * currentTime)}%` }")
-      li.experience-control.pull-right
-        icon(name="volume-up")
+
       li.experience-control.pull-right(@click="toggleComposer")
-        icon(name="photo")
+        icon(v-bind:name="composerHidden ? 'angle-down' : 'angle-up'")
+      li.experience-control.pull-right
+        icon(name="twitter")
+      li.experience-control.pull-right(@click="togglePlayerType")
+        icon(v-bind:name="(playerType === 'youtube') ? 'youtube' : 'soundcloud'")
+
       .clearfix
-    media-container
+    media-container(v-bind:player-type="playerType")
 
 
 
@@ -39,6 +43,11 @@ export default {
     MessageComposer,
     MediaContainer,
   },
+  data() {
+    return {
+      playerType: 'youtube',
+    };
+  },
   computed: {
     ...mapGetters(['composerHidden', 'videoPlaying', 'currentSectionScrollPosition', 'currentTime']),
     start() {
@@ -54,6 +63,9 @@ export default {
     },
     toggleVideoPlaying() {
       this.$store.commit(this.videoPlaying ? types.PAUSE_VIDEO : types.PLAY_VIDEO);
+    },
+    togglePlayerType() {
+      this.playerType = (this.playerType === 'soundcloud') ? 'youtube' : 'soundcloud';
     },
   }
 };
@@ -71,25 +83,17 @@ $media-height = 220px
   border-top $color-border 1px solid
   height ($media-height + 50px)
   z-index 50
-
-  bottom -($media-height + 50px)
+  bottom -($media-height)
   overflow hidden
   position fixed
   left 50%
   margin-left -390px
   width 780px
 
-  #twitter-branding
-    animate()
-    color #4099ff
-    position absolute
-    top 10px
-    right 10px
-    z-index 2
   &.pinned
-    bottom -($media-height)
-  &.hide
     bottom 0
+  &.hide
+    bottom -($media-height + 51px)
 
   @media(max-width: 800px)
     margin-left 0
@@ -100,7 +104,7 @@ $media-height = 220px
     cleanlist()
     box-sizing border-box
     height 50px
-    padding 0 50px 0 10px
+    padding 0 10px 0 10px
     z-index 1
 
     li.experience-control

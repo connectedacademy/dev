@@ -12,9 +12,8 @@
     .class-selector-container(ref="classselector" v-scroll="onScroll")
       ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
-        //- li.class-selector--item#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
-          h1.class-selector--item--header
-            | About
+        //- li.class-selector--item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
+          h1.class-selector--item--header About
 
         li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
           h1.class-selector--item--header {{ theClass.title }}

@@ -12,19 +12,19 @@ export default {
     ...mapGetters(['course', 'currentClass', 'currentSection']),
   },
   methods: {
-    loadSubtitles() {
+    loadSubtitles(content) {
       Vue.log.log('Getting subtitles...');
 
       this.subtitles = []; // Clear existing subtitles
 
       API.message.getSubtitles(
-        `${this.currentSection.slug}`,
-        `${this.course.baseUri}${this.currentClass.dir}/${this.currentSection.transcript}`,
+        `${content.slug}`,
+        `${this.course.baseUri}${this.currentClass.dir}/${content.transcript}`,
         response => {
 
           for (var subtitle of response.response) {
 
-            let group = _.divide(_.floor(_.multiply(subtitle.start, 2), -1), 2);
+            let group = _.divide(_.floor(subtitle.start + 2.5), 5);
 
             const segmentGroup = parseInt(group);
 

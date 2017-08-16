@@ -5,7 +5,7 @@ import API from '@/api';
 // initial state
 const state = {
   visible: false,
-  hidden: false,
+  hidden: true,
 };
 
 // getters

@@ -9,10 +9,10 @@
     #activity-visualisation(v-if="!peekSegment")
       svg(width="400" v-bind:height="containerHeight")
         g
-          path(v-bind:d="visualisationPoints" transform="translate(400,0)")
+          path(v-bind:d="points" transform="translate(400,0)")
 
     .inner-wrapper(v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
-      time-segment(v-for="(message, index) in messages" v-bind:key="index" v-bind:index="index" v-bind:message="messages[index]" v-bind:subtitle="subtitles[(index / 0.2)]")
+      time-segment(v-for="(message, index) in chunkedMessages" v-bind:key="index" v-bind:index="index" v-bind:message="messages[index]" v-bind:subtitle="subtitles[index]")
 
 </template>
 
@@ -41,6 +41,25 @@ export default {
     TimeSegment,
   },
   props: ['content'],
+  mounted() {
+
+    setTimeout(() => {
+
+      const request = {
+        theClass: this.currentClass.slug,
+        theContent: this.content.slug,
+      };
+
+      // TODO: Remove hardcoded value
+      const images = 'transcripts/SI0kWdWG0JY_images.json';
+
+      this.$store.dispatch('getMedia', { slug: `${this.content.slug}`, path: `${this.course.baseUri}${this.currentClass.dir}/${images}` });
+
+      this.loadVisualisation(this.content);
+      this.loadSubtitles(this.content);
+
+    }, 500);
+  },
   data() {
     return {
       media: [],
@@ -49,48 +68,19 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSection', 'currentSegmentGroup', 'currentSegment', 'visualisation', 'lastMessage', 'peekSegment',
+      'currentClass', 'currentSegmentGroup', 'currentSegment', 'peekSegment', 'course',
     ]),
     containerHeight() {
       return `${(this.content.duration * 0.2) * 158.0 + 124}px`;
     },
   },
   watch: {
-    'lastMessage': {
-      handler: function(nV, oV) {
-        setTimeout(() => { this.loadSegmentSummary(this.currentSegmentGroup) }, 600);
-      },
-      deep: true,
-    },
     currentSegmentGroup(nV, oV) {
       if (nV === undefined) { return; }
       if (oV !== nV) {
         this.$log.log(`Getting messages for segment ${nV}`);
 
         this.loadSegmentSummary(nV);
-      }
-    },
-    visualisation(nV, oV) {
-      this.loadVisualisation(this.visualisation);
-    },
-    currentSection(nV, oV) {
-      if (nV === undefined) { return; }
-      if (oV !== nV) {
-        var self = this;
-
-        const request = {
-          theClass: this.$store.getters.currentClass.slug,
-          theContent: this.currentSection.slug,
-        };
-
-        // TODO: Remove hardcoded value
-        const images = 'transcripts/SI0kWdWG0JY_images.json';
-
-        this.$store.dispatch('getMedia', { slug: `${this.currentSection.slug}`, path: `${this.$store.getters.course.baseUri}${this.$store.getters.currentClass.dir}/${images}` });
-
-        this.$store.dispatch('getVisualisation', request);
-
-        this.loadSubtitles();
       }
     },
   },

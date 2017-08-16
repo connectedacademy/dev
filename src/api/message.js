@@ -12,6 +12,10 @@ export default {
 
     console.log('Subscribing to socket');
 
+    Vue.io.socket.on('*', function (obj) {
+      alert(JSON.stringify(obj));
+    });
+
     Vue.io.socket.on('user', function(obj) {
       console.log('SOCKET - user');
       console.log(obj);

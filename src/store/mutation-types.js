@@ -58,7 +58,6 @@ export const PEEK_COMPOSER = 'PEEK_COMPOSER';
 export const HIDE_COMPOSER = 'HIDE_COMPOSER';
 
 // Video
-export const VIDEO_READY = 'VIDEO_READY';
 export const PLAY_VIDEO = 'PLAY_VIDEO';
 export const PAUSE_VIDEO = 'PAUSE_VIDEO';
 

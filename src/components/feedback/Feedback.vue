@@ -12,15 +12,18 @@
 
     ul
       li.list-header My submissions
+      li.no-content(v-if="!myFeedbackItems.length") You have no submissions
       li(v-for="feedbackItem in myFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
 
     ul
       li.list-header Current conversations
+      li.no-content(v-if="!myFeedbackItems.length") You are not in any conversations
       li(v-for="feedbackItem in feedbackItems" @click="currentFeedbackId = feedbackItem.id")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
     ul
       li.list-header Suggested conversations
+      li.no-content(v-if="!myFeedbackItems.length") You have no suggestions
       li(v-for="feedbackItem in availableFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
 
@@ -42,6 +45,8 @@
           markdown-renderer(v-bind:markdown-url="markdownUrl")
 
         four-corners-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug")
+
+        .login(v-if="!isRegistered") Please login to submit homework
 
       transition(name="fade" type="in out")
         feedback-view(v-bind:current-feedback-id="currentFeedbackId" v-bind:currentFeedbackId.sync="currentFeedbackId")
@@ -263,6 +268,12 @@ $chat-list-width = 320px
         padding 20px 10px 5px 10px
         @media(max-width: 600px)
           display none
+      &.no-content
+        border-top none
+        color $color-text-light-grey
+        line-height 20px
+        padding 10px 10px 50px 10px
+        text-align left
       &#random-row
         /*background-color white*/
         border-top $color-lighter-grey 1px solid

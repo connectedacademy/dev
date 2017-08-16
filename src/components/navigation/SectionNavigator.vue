@@ -33,13 +33,13 @@ export default {
   overflow hidden
   position fixed
   top 70px
-  right 0
+  right -240px
   z-index 51
   top 50%
   transform translateY(-50%)
-  width 40px
+  width 280px
   &:hover
-    width 220px
+    right 0px
   ul.navigation-items
     cleanlist()
     radius(30px)

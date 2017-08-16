@@ -5,7 +5,6 @@
   .course-content--header.block
     h1.content-title {{ content.title }}
     p.content-description(v-if="content.description") {{ content.description }}
-    .pure-button.pure-button-primary(@click="collapsed = !collapsed") Join Live Class
 
   .course-content--container(v-bind:class="{ collapsed: collapsed }")
     #fade-out(v-if="collapsed")

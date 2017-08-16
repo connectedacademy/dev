@@ -69,19 +69,6 @@ const getters = {
 
 // actions
 const actions = {
-  getVisualisation({
-    commit,
-  }, request) {
-    API.visualisation.getVisualisation(
-      request,
-      response => commit(types.GET_VISUALISATION_SUCCESS, {
-        response,
-      }),
-      response => commit(types.GET_VISUALISATION_FAILURE, {
-        response,
-      }),
-    );
-  },
   getMedia({
     commit,
   }, request) {

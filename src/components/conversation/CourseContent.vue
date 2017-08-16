@@ -13,9 +13,7 @@
         markdown-renderer(markdown-url="https://testclass.connectedacademy.io/course/content/en/info.md")
 
       .course-content--footer
-        .pure-button.pure-button-success.pull-right(v-if="isRegistered" @click="startDemo") Start Demo
-        .login-button.pure-button.pure-button-primary.pull-right(v-else @click="showAuth") {{ $t('auth.login') }}
-        //- .pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="viewCurrentClass") {{ $t('course.view_current_class') }}
+        .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
@@ -24,7 +22,7 @@
     injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
 
     //- HOMEWORK
-    homework(v-else-if="content.expectsubmission && isRegistered" v-bind:content="content")
+    homework(v-else-if="content.expectsubmission" v-bind:content="content")
 
     //- FOURCORNERS
     four-corners(v-else-if="content.fourcornersintro")
@@ -142,7 +140,6 @@ export default {
       this.$store.commit(types.SHOW_AUTH);
     },
     startDemo() {
-      this.$ga.event('demo-button', 'click', 'started-demo', true);
       this.$store.dispatch('getCourse').then(() => {
         setTimeout(this.viewCurrentClass, 500);
       });
@@ -151,7 +148,6 @@ export default {
       if (!this.course) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
-          window.scroll(0, 0);
           this.$store.dispatch('getSpec', theClass.slug);
         }
       }

@@ -1,11 +1,39 @@
 import Vue from 'vue';
 import API from '@/api';
+import { mapGetters } from 'vuex';
 
 export default {
+  mounted() {
+    Vue.io.socket.on('message', function (obj) {
+      alert('SOCKET - message');
+      console.log(obj);
+      Vue.set(this.messages, _.round(obj.segment * 0.2), obj);
+    });
+  },
   data() {
     return {
       messages: {},
     };
+  },
+  computed: {
+    ...mapGetters([
+      'currentClass', 'currentSection', 'currentSegmentGroup', 'lastMessage',
+    ]),
+    chunkedMessages() {
+      return this.messages;
+      // Uncomment to chunk
+      // return _.pickBy(this.messages, (value, key) => {
+      //   return _.inRange(parseInt(key), this.currentSegmentGroup - 20, this.currentSegmentGroup + 5);
+      // });
+    },
+  },
+  watch: {
+    'lastMessage': {
+      handler: function (nV, oV) {
+        setTimeout(() => { this.loadSegmentSummary(this.currentSegmentGroup) }, 600);
+      },
+      deep: true,
+    },
   },
   methods: {
     loadSegmentSummary(segmentGroup) {

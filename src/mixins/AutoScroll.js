@@ -47,9 +47,6 @@ export default {
     };
   },
   watch: {
-    videoReady() {
-      this.attemptAutoScroll();
-    },
     videoPlaying() {
       this.attemptAutoScroll();
     },
@@ -59,12 +56,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'videoPlaying', 'videoReady', 'currentSectionScrollPosition', 'activeSegment', 'peekSegment',
+      'currentSection', 'videoPlaying', 'currentSectionScrollPosition', 'activeSegment', 'peekSegment',
     ]),
   },
   methods: {
     checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.activeSegment && !this.peekSegment && !this.preventScroll && this.videoReady && this.videoPlaying && (this.currentSection !== undefined));
+      this.canAutoScroll = (!this.activeSegment && !this.peekSegment && !this.preventScroll && this.videoPlaying && (this.currentSection !== undefined));
     },
     attemptAutoScroll() {
 
