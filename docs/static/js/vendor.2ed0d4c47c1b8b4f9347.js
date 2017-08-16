@@ -33417,7 +33417,7 @@ var keys = __webpack_require__(445);
 var hasBinary = __webpack_require__(102);
 var sliceBuffer = __webpack_require__(277);
 var after = __webpack_require__(276);
-var utf8 = __webpack_require__(1551);
+var utf8 = __webpack_require__(1552);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
@@ -56263,93 +56263,6 @@ module.exports = function (Vue, config) {
 /***/ }),
 /* 269 */,
 /* 270 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*!
- * vue-logger v0.0.1
- * https://github.com/Lluvio/vue-logger
- * Released under the MIT License.
- */
-
-(function (global, factory) {
-   true ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.VueLogger = factory());
-}(this, (function () { 'use strict';
-
-var vLogger = {};
-vLogger.install = function (Vue, options) {
-  if (vLogger.installed) return;
-  var logger = {
-    dev: true,
-    prefix: '',
-    shortname: true,
-    levels: ['log', 'warn', 'debug', 'error', 'dir']
-  };
-  if (options) {
-    for (var _iterator = Object.keys(options), _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-      var _ref;
-
-      if (_isArray) {
-        if (_i >= _iterator.length) break;
-        _ref = _iterator[_i++];
-      } else {
-        _i = _iterator.next();
-        if (_i.done) break;
-        _ref = _i.value;
-      }
-
-      var key = _ref;
-
-      if (key === 'levels') {
-        logger[key] = logger[key].concat(options[key]);
-      } else {
-        logger[key] = options[key];
-      }
-    }
-  }
-
-  var _loop = function () {
-    if (_isArray2) {
-      if (_i2 >= _iterator2.length) return 'break';
-      _ref2 = _iterator2[_i2++];
-    } else {
-      _i2 = _iterator2.next();
-      if (_i2.done) return 'break';
-      _ref2 = _i2.value;
-    }
-
-    var level = _ref2;
-
-    logger[level] = function () {
-      if (!logger.dev || typeof console === 'undefined') return;
-      var args = Array.prototype.slice.apply(arguments);
-      args.unshift(('[' + logger.prefix + ' :: ' + level + ']').toUpperCase());
-      console[level].apply(console, args);
-    };
-    if (logger.shortname) {
-      Vue.prototype['$' + level] = logger[level];
-    }
-  };
-
-  for (var _iterator2 = logger.levels, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
-    var _ref2;
-
-    var _ret = _loop();
-
-    if (_ret === 'break') break;
-  }
-  Vue.prototype.$console = logger;
-  Vue.console = logger;
-};
-
-return vLogger;
-
-})));
-
-
-/***/ }),
-/* 271 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57450,7 +57363,7 @@ var xhrClient = function (request) {
 
 var nodeClient = function (request) {
 
-    var client = __webpack_require__(1553);
+    var client = __webpack_require__(1554);
 
     return new PromiseObj(function (resolve) {
 
@@ -57926,7 +57839,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 /***/ }),
-/* 272 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function() {
@@ -57954,7 +57867,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 })();
 
 /***/ }),
-/* 273 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -57966,7 +57879,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 /***/ }),
-/* 274 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -58217,6 +58130,27 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 
+
+/***/ }),
+/* 274 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _logger = __webpack_require__(1550);
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    install: _logger2.default.install
+};
 
 /***/ }),
 /* 275 */
@@ -62354,7 +62288,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(1552);
+    NodeWebSocket = __webpack_require__(1553);
   } catch (e) { }
 }
 
@@ -72699,7 +72633,7 @@ module.exports = function (x) {
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(1550);
+  var isLoader = "function" === "function" && __webpack_require__(1551);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -91267,6 +91201,13 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 /* 1550 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+function _toConsumableArray(r){if(Array.isArray(r)){for(var e=0,o=Array(r.length);e<r.length;e++)o[e]=r[e];return o}return Array.from(r)}Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=function(){function r(r,o){var n={};return o.forEach(function(t){o.indexOf(t)>=o.indexOf(r.logLevel)?n[t]=function(){for(var o=arguments.length,n=Array(o),a=0;o>a;a++)n[a]=arguments[a];var l=r.showLogLevel?t+" | ":"",i=r.stringifyArguments?n.map(function(r){return JSON.stringify(r)}):n;e(t,l,i)}:n[t]=function(){}}),n}function e(r,e,o){if("warn"===r||"error"===r||"fatal"===r){var n;(n=console)["fatal"===r?"error":r].apply(n,[e].concat(_toConsumableArray(o)))}else{var t;(t=console).log.apply(t,[e].concat(_toConsumableArray(o)))}}function o(r,e){return r.logLevel&&"string"==typeof r.logLevel&&e.indexOf(r.logLevel)>-1?r.stringifyArguments&&"boolean"!=typeof r.stringifyArguments?!1:r.showLogLevel&&"boolean"!=typeof r.showLogLevel?!1:!0:!1}function n(e,n){if(!o(n,t))throw new Error("Provided options for vuejs-logger are not valid.");e.$log=r(n,t),e.prototype.$log=e.$log}var t=["debug","info","warn","error","fatal"];return{install:n,validateOptions:o,print:e,initLoggerInstance:r,logLevels:t}}();
+
+/***/ }),
+/* 1551 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -91275,7 +91216,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 1551 */
+/* 1552 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -91515,9 +91456,9 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)(module), __webpack_require__(11)))
 
 /***/ }),
-/* 1552 */,
 /* 1553 */,
-/* 1554 */
+/* 1554 */,
+/* 1555 */
 /***/ (function(module, exports) {
 
 /*
@@ -91573,7 +91514,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 1555 */
+/* 1556 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -91795,4 +91736,4 @@ function applyToTag (styleElement, obj) {
 
 /***/ })
 ]);
-//# sourceMappingURL=vendor.026e451deaa81df17503.js.map
+//# sourceMappingURL=vendor.2ed0d4c47c1b8b4f9347.js.map
