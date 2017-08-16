@@ -42,7 +42,7 @@ export default {
   position fixed
   z-index 999
   .overlay-lock--modal
-    radius(20px)
+    radius(10px)
     background-color white
     padding 30px
     position absolute
@@ -54,11 +54,11 @@ export default {
     .fa-icon
       reset()
       color $color-primary
-      height 50px
+      height 40px
     p
       color $color-text-grey
     input
-      font-size 1.4em
+      font-size 1.2em
       margin 10px auto 30px auto
       outline 0
       padding 10px 0
