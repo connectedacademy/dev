@@ -53,7 +53,7 @@ export default {
     position absolute
     left 50%
     top 50px
-    margin-left -120px
+    margin-left -150px
     text-align center
     width 240px
     .fa-icon
@@ -63,7 +63,6 @@ export default {
     p
       color $color-text-grey
     input
-      box-sizing bored-box
       font-size 1.2em
       margin 10px auto 30px auto
       outline 0
