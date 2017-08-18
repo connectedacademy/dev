@@ -24,8 +24,6 @@
       .clearfix
     media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]")
 
-
-
 </template>
 
 <script>
