@@ -20,6 +20,11 @@ export default {
       enteredPasscode: undefined,
     }
   },
+  created() {
+    if (window.location.hostname === 'localhost') {
+      this.locked = false;
+    }
+  },
   methods: {
     attemptUnlock() {
       if (parseInt(this.enteredPasscode) === parseInt(this.passcode)) {
@@ -53,11 +58,12 @@ export default {
     width 240px
     .fa-icon
       reset()
-      color $color-primary
+      color $color-light-grey
       height 40px
     p
       color $color-text-grey
     input
+      box-sizing bored-box
       font-size 1.2em
       margin 10px auto 30px auto
       outline 0

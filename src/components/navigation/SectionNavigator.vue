@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#section-navigator
+#section-navigator(v-if="scrollPoints")
   transition-group(name="fade" mode="in-out" tag="ul" class="navigation-items")
     section-navigator-item(v-for="scrollPoint in scrollPoints" v-bind:key="scrollPoint.slug" v-bind:scroll-point="scrollPoint")
 
@@ -30,6 +30,7 @@ export default {
   background-color $color-primary
   border-top-left-radius 6px
   border-bottom-left-radius 6px
+  border alpha(black, 0.1) 1px solid
   overflow hidden
   position fixed
   top 70px

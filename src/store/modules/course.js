@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 import store from '@/store';
@@ -24,6 +25,8 @@ const getters = {
   },
   courseContent() {
     if (state.current_class === undefined) { return undefined; }
+    console.log('state.current_class.content');
+    Vue.$log.info(state.current_class.content);
     return _.filter(state.current_class.content, item => {
       // Exclude titles from course content
       return !_.includes(['title'], item.content_type);
@@ -86,13 +89,13 @@ const mutations = {
   [types.GET_SCHEDULE_SUCCESS](initialState, {
     response,
   }) {
-    if (response.classes && (response.classes.length > 0) && response.classes[0].release_at) {
+    if (response.classes && response.classes.length && response.classes[0].release_at) {
       // Get start of first class
       const classStart = response.classes[0].release_at;
 
       if (classStart) {
         // Set faux time
-        const fauxTime = Moment(classStart).add(1, 'minute').format();
+        const fauxTime = Moment(classStart).add(1, 'days').format();
         store.commit('setFauxTime', fauxTime);
       }
     }

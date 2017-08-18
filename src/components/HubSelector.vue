@@ -1,7 +1,7 @@
 <template lang="pug">
 
 ul.hub-selector
-  li.hub(v-for="hub in hubs" v-bind:class="{active: (hub.id === 'ams')}")
+  li.hub(v-for="hub in hubs" v-bind:class="{active: (hub.id === 'ncl')}")
     h1.hub-name {{ hub.name }}
     h2.hub-timezone {{ hub.timezone }}
   .clearfix
@@ -27,7 +27,7 @@ export default {
 
 ul.hub-selector
   cleanlist()
-  margin 10px
+  margin 10px -10px
   li.hub
     cleanlist()
     radius(6px)

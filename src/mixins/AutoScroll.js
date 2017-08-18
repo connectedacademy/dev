@@ -1,7 +1,7 @@
 const CALCULATE_FPS = false; // Calculate the scrolling FPS
 const AUTOSCROLL_CHECK = 200; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 500; // Interval at which to attempt auto scroll
-const WHEEL_TIMEOUT = 500; // Interval before assumed no longer manually scrolling
+const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
 
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.activeSegment && !this.peekSegment && !this.preventScroll && this.videoPlaying && (this.currentSection !== undefined));
+      this.canAutoScroll = (!this.activeSegment && !this.peekSegment && !this.preventScroll && this.videoPlaying && (this.currentSection !== undefined) && (this.currentSection.content_type === 'class'));
     },
     attemptAutoScroll() {
 
@@ -158,25 +158,25 @@ export default {
       if (this.activeSegment || this.peekSegment || this.preventScroll) {
         return;
       }
-      var self = this;
-
       this.$store.commit(types.PAUSE_VIDEO);
       this.preventScroll = true;
       this.isAutoScrolling = false;
 
       clearTimeout(this.wheeling);
 
-      this.wheeling = setTimeout(function() {
+      this.wheeling = setTimeout(() => {
 
         // Wheeling stopped - fire events
-        self.scrollPosition = window.scrollY;
+        this.scrollPosition = window.scrollY;
 
-        self.$store.dispatch('setScrollPosition', self.scrollPosition).then(function() {
+        this.$store.dispatch('setScrollPosition', this.scrollPosition).then(() => {
 
-          self.wheeling = undefined;
-          self.preventScroll = false;
-
-          self.$store.commit(types.PLAY_VIDEO);
+          this.wheeling = undefined;
+          this.preventScroll = false;
+          
+          if (this.currentSection && (this.currentSection.content_type === 'class')) {
+            this.$store.commit(types.PLAY_VIDEO);
+          }
         });
 
       }, WHEEL_TIMEOUT);
@@ -187,12 +187,11 @@ export default {
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onScroll() {
-      var self = this;
       this.scrollPosition = window.scrollY;
       if (window.scrollY < 300) {
         this.preventScroll = true;
-        this.$store.dispatch('setScrollPosition', this.scrollPosition).then(function() {
-          self.preventScroll = false;
+        this.$store.dispatch('setScrollPosition', this.scrollPosition).then(() => {
+          this.preventScroll = false;
         });
       } else {
         this.setScrollPosition(this);

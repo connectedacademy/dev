@@ -29,8 +29,11 @@ export default {
               top: (additionalOffset + element.offsetTop),
               bottom: element.offsetTop + element.offsetHeight,
               duration: content.duration,
-              videoId: content.video,
               transcript: content.transcript,
+              prompts: content.prompts,
+              images: content.images,
+              videoId: content.video,
+              soundcloudId: content.soundcloudId,
             });
           }
         }

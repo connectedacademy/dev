@@ -19,9 +19,7 @@ import video from './modules/video';
 Vue.use(Vuex);
 
 
-let fauxTime = Moment();
-fauxTime = fauxTime.subtract(58, 'days');
-fauxTime = fauxTime.format();
+const fauxTime = Moment().format();
 
 export default new Vuex.Store({
   actions,

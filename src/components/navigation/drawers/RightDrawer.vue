@@ -3,16 +3,14 @@
   .drawer#drawer-right(v-bind:class="{ visible: state.visible }")
 
     user-card(v-bind:visible="state.visible")
-    //- profile-card(v-bind:visible="state.visible")
+    profile-card(v-bind:visible="state.visible")
     classroom-card(v-bind:visible="state.visible")
-    admin-card.hidden(v-bind:visible="state.visible")
 
 </template>
 
 <script>
 import * as types from '@/store/mutation-types';
 
-import AdminCard from '@/components/cards/AdminCard';
 import ClassroomCard from '@/components/cards/ClassroomCard';
 import ProfileCard from '@/components/cards/ProfileCard';
 import UserCard from '@/components/cards/UserCard';
@@ -20,7 +18,6 @@ import UserCard from '@/components/cards/UserCard';
 export default {
   name: 'right-drawer',
   components: {
-    AdminCard,
     ClassroomCard,
     ProfileCard,
     UserCard,

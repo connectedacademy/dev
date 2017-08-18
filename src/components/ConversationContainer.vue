@@ -50,8 +50,7 @@ export default {
         theContent: this.content.slug,
       };
 
-      // TODO: Remove hardcoded value
-      const images = 'transcripts/SI0kWdWG0JY_images.json';
+      const images = this.content.images;
 
       this.$store.dispatch('getMedia', { slug: `${this.content.slug}`, path: `${this.course.baseUri}${this.currentClass.dir}/${images}` });
 

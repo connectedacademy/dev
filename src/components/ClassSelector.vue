@@ -12,12 +12,12 @@
     .class-selector-container(ref="classselector" v-scroll="onScroll")
       ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
-        //- li.class-selector--item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
-          h1.class-selector--item--header About
+        li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
+          h1.class-selector--item--header
+            icon(name="info")
 
         li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
           h1.class-selector--item--header {{ theClass.title }}
-          pre.hidden {{ theClass.release_at }}
           icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
           icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
 
@@ -26,7 +26,7 @@
 
     .loading-wrapper(v-for="n in 5")
       .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
-//-
+//- 
   .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
     h2 This course has finished
   .padded-container(v-if="currentClass && currentClass.status === 'RELEASED' && currentExists")
@@ -123,7 +123,7 @@ export default {
       'course', 'currentClass', 'isRegistered'
     ]),
     theWidth() {
-      return (this.course && this.course.classes) ? (((this.course.classes.length) * 190.0) - 10) : 0;
+      return (this.course && this.course.classes) ? (((this.course.classes.length) * 190.0) - 10) + 190.0 : 190.0;
     },
     currentExists() {
       if (!(this.course && this.course.classes)) {
@@ -148,7 +148,7 @@ export default {
 $selector-height = 44px
 
 .class-selector-wrapper
-  radius(4px)
+  radius(22px)
   height $selector-height
   margin 0 0 20px 0
   overflow hidden
@@ -156,7 +156,8 @@ $selector-height = 44px
   @media(max-width: 800px)
     margin 0 10px 20px 10px
   .skip-button
-    background-color white
+    radius(22px)
+    background-color alpha(white, 0.5)
     height $selector-height
     width $selector-height
     position absolute
@@ -165,6 +166,7 @@ $selector-height = 44px
     bottom 0
     z-index 1
     &:hover
+      background-color white
       cursor pointer
     &.skip-button--left
       left 0px
@@ -176,9 +178,9 @@ $selector-height = 44px
       color $color-primary
       height 100%
       width 10px
-      margin 0 15px
+      margin 0 18px
   .class-selector-container
-    radius(4px)
+    radius(22px)
     height 140px
     overflow-x scroll
     overflow-y hidden
@@ -190,8 +192,8 @@ $selector-height = 44px
       li.class-selector--item
         cleanlist()
         animate()
-        radius(4px)
-        background-color white
+        radius(22px)
+        background-color alpha(black, 0.1)
         border transparent 1px solid
         box-sizing border-box
         float left
@@ -204,14 +206,19 @@ $selector-height = 44px
         width 180px
         white-space normal
         &#intro-item
+          border none
           width 44px
+          .fa-icon
+            height 18px
+            margin 14px 0
         &:first-child
           margin-left 0
         .status-indicator
           color $color-primary
           position absolute
-          right 5px
-          top 5px
+          right 12px
+          top 50%
+          margin-top -8px
         h1.class-selector--item--header
           reset()
           color $color-primary
@@ -222,27 +229,24 @@ $selector-height = 44px
 
         /* Released styles */
         &.released
-          background-color $color-primary
-          border white 1px solid
+          background-color alpha(black, 0.1)
           h1.class-selector--item--header, .status-indicator
             color white
 
         /* Current styles */
         &.current
-          background-color $color-primary
-          border white 1px solid
+          background-color alpha(black, 0.1)
           h1.class-selector--item--header, .status-indicator
             color white
 
         /* Future styles */
         &.future
-          background-color alpha(white, 0.3) // lighten($color-primary, 50%)
+          background-color alpha(white, 0.3)
           pointer-events none
           .status-indicator
             color $color-primary
           h1.class-selector--item--header
             $color-primary
-
 
         &:hover
           background-color darken($color-primary, 10%)
@@ -250,13 +254,12 @@ $selector-height = 44px
 
         &.active
           background-color white
-          border white 1px solid
           transition none
           h1.class-selector--item--header, .status-indicator
             color $color-primary
 
 .padded-container
-  radius(4px)
+  radius(22px)
   background-color white
   padding 30px 0
   text-align center

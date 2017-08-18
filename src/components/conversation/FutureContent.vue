@@ -3,10 +3,7 @@
 .course-content
 
   .course-content--header.block
-    h1.content-title
-      span(v-if="content.content_type === 'class'") {{ `Live class ` }}
-      span(v-else) {{ `New content ` }}
-      | coming soon
+    h1.content-title {{ `${content.slug} coming soon` }}
     h2.content-subtitle {{ releaseAt }}
     .pure-button(name="circle" @click="jumpForwardInTime") Release Now
 
@@ -38,7 +35,7 @@ export default {
       this.$log.info('this.content');
       this.$log.info(this.content);
       let jumpTime = Moment(this.content.release_at);
-      jumpTime = jumpTime.add(1, 'minutes').format();
+      jumpTime = jumpTime.add(2, 'hours').format();
       this.$store.commit('setFauxTime', jumpTime);
       // this.$store.dispatch('getCourse');
       this.$store.dispatch('getSpec', this.currentClass.slug);
@@ -59,6 +56,7 @@ export default {
     text-align center
     h1.content-title
       color white
+      text-transform capitalize
     h2.content-subtitle
       color white
       font-weight normal

@@ -19,10 +19,10 @@
       li.experience-control.pull-right
         icon(name="twitter")
       li.experience-control.pull-right(@click="togglePlayerType")
-        icon(v-bind:name="(playerType === 'youtube') ? 'youtube' : 'soundcloud'")
+        icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
 
       .clearfix
-    media-container(v-bind:player-type="playerType")
+    media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]")
 
 
 
@@ -43,9 +43,21 @@ export default {
     MessageComposer,
     MediaContainer,
   },
+  created() {
+    this.availablePlayerTypes = []; // Remove all available player types
+    if (this.content.videoId) {
+      // If a videoId is set on the content then add YouTube as an available type
+      this.availablePlayerTypes.push('youtube');
+    }
+    if (this.content.soundcloudId) {
+      // If a soundcloudId is set on the content then add SoundCloud as an available type
+      this.availablePlayerTypes.push('soundcloud');
+    }
+  },
   data() {
     return {
-      playerType: 'youtube',
+      playerTypeIndex: 0,
+      availablePlayerTypes: [],
     };
   },
   computed: {
@@ -65,7 +77,7 @@ export default {
       this.$store.commit(this.videoPlaying ? types.PAUSE_VIDEO : types.PLAY_VIDEO);
     },
     togglePlayerType() {
-      this.playerType = (this.playerType === 'soundcloud') ? 'youtube' : 'soundcloud';
+      this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);
     },
   }
 };

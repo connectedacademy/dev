@@ -14,7 +14,7 @@
 </template>
 
 <script>
-const SYNC_THRESHOLD = 5.0;
+const SYNC_THRESHOLD = 1.0;
 
 import * as config from '@/api/config';
 import _ from 'lodash';
@@ -35,7 +35,41 @@ export default {
   },
   watch: {
     playerType(nV, oV) {
-      if (!this.soundcloudPlayer && (nV === 'soundcloud')) {
+      if (nV === 'soundcloud') {
+        this.initializeSoundcloudPlayer();
+        if (this.soundcloudPlayer) this.soundcloudPlayer.play();
+      }
+
+      if (oV === 'soundcloud') {
+        if (this.soundcloudPlayer) this.soundcloudPlayer.pause();
+      }
+    },
+    currentTime(nV, oV) {
+      if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
+      if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
+    },
+    videoPlaying(nv, oV) {
+      this.$log.info(nv ? 'play' : 'pause');
+      if (nv) {
+        if (this.playerType === 'youtube' && this.player) this.player.playVideo();
+        if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.play();
+      } else {
+        if (this.playerType === 'youtube' && this.player) this.player.pauseVideo();
+        if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.pause();
+      }
+    },
+    currentSection(nV) {
+      if (nV && (nV.content_type) && (nV.content_type === 'class')) {
+        if (this.playerType === 'soundcloud') this.initializeSoundcloudPlayer();
+      } else {
+        // Destroy players
+      }
+    },
+  },
+  methods: {
+    change() {},
+    initializeSoundcloudPlayer() {
+      if (!this.soundcloudPlayer && this.src) {
         SoundCloud.initialize({
           client_id: config.SOUNCLOUD_CLIENT_ID,
         });
@@ -43,51 +77,7 @@ export default {
           this.soundcloudPlayer = player;
         });
       }
-
-      if (oV === 'soundcloud') {
-        this.soundcloudPlayer.pause();
-      }
-
-      if (nV === 'soundcloud') {
-        this.soundcloudPlayer.play();
-      }
     },
-    currentTime(nV, oV) {
-      switch (this.playerType) {
-        case 'youtube':
-          this.youtubeSeek(this, nV);
-          break;
-        case 'soundcloud':
-          this.soundcloudSeek(this, nV);
-          break;
-      }
-    },
-    videoPlaying(nv, oV) {
-      if (nv) {
-        this.$log.info('play');
-        switch (this.playerType) {
-          case 'youtube':
-            this.player.playVideo();
-            break;
-          case 'soundcloud':
-            this.soundcloudPlayer.play();
-            break;
-        }
-      } else {
-        this.$log.info('pause');
-        switch (this.playerType) {
-          case 'youtube':
-            this.player.pauseVideo();
-            break;
-          case 'soundcloud':
-            this.soundcloudPlayer.pause();
-            break;
-        }
-      }
-    }
-  },
-  methods: {
-    change() {},
     youtubeReady(player) {
       this.player = player;
       this.player.seekTo(this.currentTime);
@@ -114,28 +104,27 @@ export default {
         self.$log.info('Video out of sync - seeking');
         self.player.seekTo(position);
       }
-    }, 200),
+    }, 500),
     soundcloudSeek: _.throttle(function (self, position) {
 
       if (!self.soundcloudPlayer) { return; }
 
       try {
         const playerTime = self.soundcloudPlayer.currentTime() / 1000;
-        console.log(playerTime);
-        console.log(self.currentTime);
+        self.$log.info(playerTime);
+        self.$log.info(self.currentTime);
         const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
         if (outOfSync) {
-          self.$log.info('Audio out of sync - seeking');
-          self.soundcloudPlayer.seek(position * 1000);
+          self.soundcloudPlayer.seek(position * 1000 + 300);
         }
       } catch (Exception) {
       }
-    }, 200),
+    }, 500),
   },
   computed: {
     ...mapGetters([
-      'videoIsActive', 'videoEnabled', 'currentTime', 'currentSection', 'videoPlaying', 'media', 'currentSegment',
+      'course', 'currentClass', 'videoIsActive', 'videoEnabled', 'currentTime', 'currentSection', 'videoPlaying', 'media', 'currentSegment',
     ]),
     src() {
       switch (this.playerType) {
@@ -143,7 +132,7 @@ export default {
           return (this.currentSection) ? this.currentSection.videoId : '';
           break;
         case 'soundcloud':
-          return '/tracks/336063279';
+          return (this.currentSection) ? `/tracks/${this.currentSection.soundcloudId}` : '';
           break;
       }
     },
@@ -152,11 +141,11 @@ export default {
 
       if (this.media.length === 0) { return mediaItems; }
 
-      let media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${this.media[0].text}`;
+      let media = `https://github.com/connectedacademy/${this.course.slug}/raw/master/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
 
       for (var i = 0; i < this.media.length; i++) {
         const image = this.media[i];
-        media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${image.text}`
+        media = `https://github.com/connectedacademy/${this.course.slug}/raw/master/course/content/en/${this.currentClass.dir}/transcripts/${image.text}`
         mediaItems.push(media);
       }
 
@@ -165,7 +154,7 @@ export default {
     currentSegmentIndex() {
       if (this.media.length === 0) { return 0; }
 
-      let media = `https://github.com/connectedacademy/testclass/raw/master/course/content/en/class1/transcripts/${this.media[0].text}`;
+      let media = `https://github.com/connectedacademy/${this.course.slug}/raw/master/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
 
       for (var i = 0; i < this.media.length; i++) {
         const image = this.media[i];

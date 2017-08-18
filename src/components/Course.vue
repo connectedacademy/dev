@@ -2,7 +2,7 @@
 
   .course-page
 
-    .col#col-main(ref="main" v-bind:class="this.$store.state.layout.columns.main.state")
+    .col#col-main(ref="main")
 
       .main-container
 
@@ -33,7 +33,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
-      this.$store.commit(types.SET_PAGE_STYLE, undefined);
+      vm.$store.commit(types.SET_PAGE_STYLE, undefined);
     });
   },
   beforeRouteLeave (to, from, next) {

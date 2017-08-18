@@ -5,15 +5,17 @@
   .course-content-group(v-if="isIntroduction")
 
     //- ABOUT
-    .course-content
+    .course-content(v-if="aboutMarkdown")
       .course-content--header
         h1.content-title About the course
 
       .course-content--body
-        markdown-renderer(v-bind:markdown-url="`${course.baseUri}/info.md`")
+        markdown-renderer(v-bind:markdown-url="aboutMarkdown")
 
       .course-content--footer
+        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="startDemo") Start Demo
         .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
+        input(type="text" v-model="currentTime")
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
@@ -32,7 +34,6 @@
 
     //- CONTENT
     .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
-
 
       //- .type-indicator(v-bind:title="content.slug" v-bind:class="{ active: (currentActiveSection !== undefined) && (content.slug === currentActiveSection.slug) }")
 
@@ -61,20 +62,13 @@
         markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
         .clearfix
 
-  .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-if="index === 0")
+  .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
 
-    div(v-if="content.content_type === 'nextclass'")
+    //- FUTURE CONTENT
+    future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
 
-      .course-content
-        .course-content--header.block
-          h1.content-title(v-if="content.title")
-            | Coming Soon
-          p.content-description
-            | The next class of the course will be made available soon, please check back later.
-
-    div(v-else)
-      //- FUTURE CONTENT
-      future-content(v-bind:content="content")
+    //- NEXT CLASS
+    next-class(v-else v-bind:content="content")
 
 </template>
 
@@ -97,6 +91,7 @@ import Homework from '@/components/conversation/Homework';
 import FourCorners from '@/components/conversation/FourCorners';
 import FutureContent from '@/components/conversation/FutureContent';
 import InjectedQuestion from '@/components/conversation/InjectedQuestion';
+import NextClass from '@/components/conversation/NextClass';
 
 import MessageComposer from '@/components/MessageComposer';
 
@@ -117,23 +112,55 @@ export default {
     FutureContent,
     MarkdownRenderer,
     InjectedQuestion,
+    NextClass,
     MessageComposer,
   },
-  mounted() {
-    setTimeout(this.startDemo, 500).bind(this);
+  created() {
+
+    this.currentTime = Moment().format('YYYY-MM-DD');
+
+    setTimeout(() => {
+      this.$store.dispatch('getCourse').then(() => {
+        setTimeout(this.viewCurrentClass, 500);
+      });
+    }, 500);
+  },
+  watch: {
+    currentTime(nV) {
+      // Set faux time if adjusted
+      const newTime = Moment(nV).format('YYYY-MM-DD');
+      console.log(newTime);
+      this.$store.commit('setFauxTime', newTime);
+
+      this.$store.dispatch('getCourse');
+      this.$store.dispatch('getHubs');
+    }
+  },
+  data() {
+    return {
+      currentTime: undefined,
+    }
   },
   computed: {
     ...mapGetters([
       'course', 'currentClass', 'currentSection', 'isRegistered', 'currentActiveSection', 'fauxTime'
     ]),
+    aboutMarkdown() {
+      if (!this.course.baseUri) return undefined;
+      return `${this.course.baseUri}/info.md`
+    },
     isIntroduction() {
       return (this.currentClass && (this.currentClass.slug === 'intro'));
     },
     releasedContent() {
-      return _.filter(this.courseContent, { status: 'RELEASED' });
+      return _.filter(this.courseContent, (o) => {
+        return (o.status === 'RELEASED');
+      });
     },
     futureContent() {
-      return _.filter(this.courseContent, { status: 'FUTURE' });
+      return _.filter(this.courseContent, (o) => {
+        return ((o.status === 'FUTURE')); //  && (o.content_type !== 'nextclass')
+      });
     },
   },
   methods: {
@@ -152,7 +179,7 @@ export default {
           this.$store.dispatch('getSpec', theClass.slug);
         }
       }
-    },
+    }
   },
 };
 </script>

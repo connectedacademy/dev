@@ -87,10 +87,6 @@ export default {
       }
     });
 
-    // Fetch course and then hubs
-    const fauxTime = Moment().format();
-    this.$store.commit('setFauxTime', fauxTime);
-
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');
 
