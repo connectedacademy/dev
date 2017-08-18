@@ -81,9 +81,12 @@ export default {
 
 #fade-out
   pinned()
-  position absolute
-  background-color red
+  background transparent
+  background -webkit-linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
+  background -o-linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
+  background -moz-linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
   background linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
+  position absolute
   z-index 1
   height 300px
   top auto
