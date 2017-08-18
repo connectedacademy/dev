@@ -1,0 +1,45 @@
+<template lang="pug">
+
+.admin-panel
+
+  .admin-panel--header
+    h1 Storify
+
+  .admin-panel--content
+
+    h5 Please copy and paste the following link into the Storify editor.
+    input(v-model="rssLink" placeholder="RSS Link")
+
+</template>
+
+<script>
+export default {
+  name: 'storify',
+  computed: {
+    rssLink() {
+      return `https://api.connectedacademy.io/v1/classroom/rss/${this.classroomCode}`;
+    }
+  },
+};
+
+</script>
+
+<style lang="stylus" scoped>
+
+@import '~stylus/shared'
+@import '~stylus/admin'
+
+.admin-panel
+
+  .admin-panel--content
+    h5
+      reset()
+      margin-bottom 15px
+    input
+      radius(4px)
+      border $color-border 1px solid
+      box-sizing()
+      padding 10px
+      width 100%
+
+</style>
