@@ -3,7 +3,7 @@
 .admin-page
   .admin-panels.animated.fadeIn(ref="panels")
 
-    .admin-panel.no-padding(v-if="visiblePanels[0]" v-bind:style="panelStyles[0]")
+    .admin-panel.no-padding(v-if="visiblePanels['0']" v-bind:style="panelStyles['0']")
 
       .admin-panel--content
         a#prose-editor-link(v-bind:href="proseLink" target="_blank")
@@ -11,38 +11,50 @@
           | Prose content editor
           icon(name="angle-right")
 
+        .content-filter--selector
+          select.full-width
+            option(name="Classroom A") Classroom A
+            option(name="Classroom B") Classroom B
+
         ul.panel-selector
-          li.panel-selector--item(v-bind:class="{'active': visiblePanels.CourseStudents}" @click="togglePanel(1)")
+          li.panel-selector--item(v-bind:class="{'active': visiblePanels['1']}" @click="togglePanel('1')")
             | Students on course
-            .toggle(v-bind:class="{active: visiblePanels[1]}")
-          li.panel-selector--item(v-bind:class="{'active': visiblePanels[2]}" @click="togglePanel(2)")
+            .toggle(v-bind:class="{active: visiblePanels['1']}")
+          li.panel-selector--item(v-bind:class="{'active': visiblePanels['2']}" @click="togglePanel('2')")
             | Student submissions
-            .toggle(v-bind:class="{active: visiblePanels[2]}")
-          li.panel-selector--item(v-bind:class="{'active': visiblePanels[3]}" @click="togglePanel(3)")
+            .toggle(v-bind:class="{active: visiblePanels['2']}")
+          li.panel-selector--item(v-bind:class="{'active': visiblePanels['3']}" @click="togglePanel('3')")
+            | Storify content
+            .toggle(v-bind:class="{active: visiblePanels['3']}")
+          //- li.panel-selector--item(v-bind:class="{'active': visiblePanels['4']}" @click="togglePanel('4')")
             | Question responses
-            .toggle(v-bind:class="{active: visiblePanels[3]}")
-          li.panel-selector--item(v-bind:class="{'active': visiblePanels[4]}" @click="togglePanel(4)")
+            .toggle(v-bind:class="{active: visiblePanels['4']}")
+          //- li.panel-selector--item(v-bind:class="{'active': visiblePanels['5']}" @click="togglePanel('5')")
             | Students in class
-            .toggle(v-bind:class="{active: visiblePanels[4]}")
+            .toggle(v-bind:class="{active: visiblePanels['5']}")
 
     transition(name="fade-out" mode="out-in")
-      course-students(v-if="visiblePanels[1]" v-bind:style="panelStyles[1]")
+      course-students(v-if="visiblePanels['1']" v-bind:style="panelStyles['1']")
     transition(name="fade-out" mode="out-in")
-      student-submissions(v-if="visiblePanels[2]" v-bind:style="panelStyles[2]")
+      student-submissions(v-if="visiblePanels['2']" v-bind:style="panelStyles['2']")
     transition(name="fade-out" mode="out-in")
-      question-responses(v-if="visiblePanels[3]" v-bind:style="panelStyles[3]")
-    transition(name="fade-out" mode="out-in")
-      class-students(v-if="visiblePanels[4]" v-bind:style="panelStyles[4]")
+      storify(v-if="visiblePanels['3']" v-bind:style="panelStyles['3']")
+    //- transition(name="fade-out" mode="out-in")
+    //-   question-responses(v-if="visiblePanels['4']" v-bind:style="panelStyles['4']")
+    //- transition(name="fade-out" mode="out-in")
+    //-   class-students(v-if="visiblePanels['5']" v-bind:style="panelStyles['5']")
 
 </template>
 
 <script>
+import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 
 import CourseStudents from '@/components/admin/panels/CourseStudents';
 import ClassStudents from '@/components/admin/panels/ClassStudents';
 import StudentSubmissions from '@/components/admin/panels/StudentSubmissions';
 import QuestionResponses from '@/components/admin/panels/QuestionResponses';
+import Storify from '@/components/admin/panels/Storify';
 
 export default {
   name: 'admin-main',
@@ -62,16 +74,24 @@ export default {
   },
   data() {
     return {
-      panelMargin: 0,
+      panelMargin: 10,
       panelWidth: 340,
-      visiblePanels: [ true, true, true, true, true ],
-      panelStyles: [
-        { left: 0, width: 0 },
-        { left: 0, width: 0 },
-        { left: 0, width: 0 },
-        { left: 0, width: 0 },
-        { left: 0, width: 0 },
-      ],
+      visiblePanels: {
+        0: true,
+        1: true,
+        2: true,
+        3: true,
+        4: false,
+        5: false,
+      },
+      panelStyles: {
+        0: { left: 0, width: 0 },
+        1: { left: 0, width: 0 },
+        2: { left: 0, width: 0 },
+        3: { left: 0, width: 0 },
+        4: { left: 0, width: 0 },
+        5: { left: 0, width: 0 },
+      },
     };
   },
   computed: {
@@ -81,7 +101,7 @@ export default {
   },
   methods: {
     togglePanel(index) {
-      this.visiblePanels.splice(index, 1, !this.visiblePanels[index]);
+      Vue.set(this.visiblePanels, index, !this.visiblePanels[index]);
       this.layout();
     },
     layout() {
@@ -116,6 +136,7 @@ export default {
     ClassStudents,
     StudentSubmissions,
     QuestionResponses,
+    Storify,
   },
 };
 
@@ -195,4 +216,12 @@ ul.panel-selector
   opacity 1
   transform scale(1.0,1.0)
 
+
+.content-filter--selector
+  select.full-width
+    box-sizing()
+    height 40px
+    margin-top 20px
+    width 100%
+    outline 0
 </style>

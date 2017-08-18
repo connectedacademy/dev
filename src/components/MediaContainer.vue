@@ -217,7 +217,7 @@ $media-height = 220px
       top 16px
       left 16px
       opacity 1
-      box-sizing border-box
+      box-sizing()
       overflow hidden
 
       iframe, object, embed, video

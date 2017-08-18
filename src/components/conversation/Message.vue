@@ -71,7 +71,7 @@ export default {
 @import '~stylus/shared'
 
 .message
-  box-sizing border-box
+  box-sizing()
   max-height 128px
   margin 10px
   padding 0 10px 40px 10px
@@ -112,7 +112,7 @@ export default {
       background-color white
       li
         cleanlist()
-        box-sizing border-box
+        box-sizing()
         float left
         font-size 1em
         line-height 36px

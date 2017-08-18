@@ -1,35 +1,22 @@
 <template lang="pug">
 
-.content-filter(v-bind:class="{active: selectorVisible}")
+.content-filter
 
-    ul.content-filter--tags(@click="selectorVisible = !selectorVisible")
-      li.content-filter--tag(v-if="filterClass") {{ classSlug }}
-      li.content-filter--tag(v-if="filterContent") {{ contentSlug }}
-      .clearfix
-
-    .content-filter--selector(v-if="selectorVisible")
-      select.full-width(v-model="classSlug" v-if="filterClass")
-        option(disabled) Select class
-        option(v-for="slug in classSlugs") {{ slug }}
-
+    .content-filter--selector
       select.full-width(v-model="contentSlug" v-if="filterContent")
         option(disabled) Select content
         option(v-for="slug in contentSlugs") {{ slug }}
 
-      .pure-button.pure-button-subtle.full-width.no-margin(@click="selectorVisible = false") Close
-
 </template>
 
 <script>
+import _ from 'lodash';
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'content-filter',
   props: ['filterClass', 'filterContent'],
   watch: {
-    classSlug(nV, oV) {
-      if (nV !== oV) {
-        this.$emit('update:classSlug', nV)
-      }
-    },
     contentSlug(nV, oV) {
       if (nV !== oV) {
         this.$emit('update:contentSlug', nV)
@@ -38,13 +25,17 @@ export default {
   },
   data() {
     return {
-      selectorVisible: false,
-      classSlugs: ['evidence', 'interpretation', 'fiction', 'fact', 'narrative'],
-      contentSlugs: ['intro', 'liveclass', 'webinar', 'evidence', 'homework'],
-      classSlug: 'evidence',
-      contentSlug: 'intro',
+      contentSlug: undefined,
     };
   },
+  computed: {
+    ...mapGetters(['course']),
+    contentSlugs() {
+      return _.map(this.course.classes, (o) => {
+        return o.slug;
+      });
+    }
+  }
 };
 
 </script>
@@ -67,21 +58,24 @@ export default {
   ul.content-filter--tags
     cleanlist()
     cursor pointer
+    margin -5px
     min-height 38px
     li.content-filter--tag
       cleanlist()
+      border-box()
       radius(4px)
       background-color $color-primary
       color white
       float left
+      line-height 40px
       margin 5px
-      padding 3px 10px
+      padding 0 10px
+      width 100%
 
   .content-filter--selector
-    margin-top 10px
     select.full-width
+      box-sizing()
       height 40px
-      margin-bottom 10px
       width 100%
       outline 0
 

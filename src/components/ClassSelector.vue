@@ -195,7 +195,7 @@ $selector-height = 44px
         radius(22px)
         background-color alpha(black, 0.1)
         border transparent 1px solid
-        box-sizing border-box
+        box-sizing()
         float left
         overflow hidden
         margin-left 10px

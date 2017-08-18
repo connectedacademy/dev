@@ -93,7 +93,7 @@ export default {
 .navigation
   animate()
   background-color $navigation-background-color
-  box-sizing border-box
+  box-sizing()
   height 60px
   padding 0
   position fixed

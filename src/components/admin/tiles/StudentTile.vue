@@ -1,9 +1,12 @@
 <template lang="pug">
 
 .student-tile
-  img.student--profile(v-bind:src="student.user.profile")
-  .student--name {{ student.user.name }}
-  .student--email {{ student.user.email }}
+  img.student--profile(v-bind:src="student.profile")
+  a.student--name(v-bind:href="student.link") {{ student.name }}
+  .student--email {{ student.email }}
+  p {{ (student.admin) ? 'Administrator' : 'Standard User' }}
+  p Messages : {{ student.messages }}
+  p Homework : {{ student.homework }}
 
 </template>
 

@@ -124,7 +124,7 @@ export default {
     animate()
     pinned()
     top 0
-    box-sizing border-box
+    box-sizing()
 
     position absolute
     z-index 2
@@ -156,7 +156,7 @@ export default {
           border none
           font-size 1em
 
-          box-sizing border-box
+          box-sizing()
           padding 15px
           resize none
           outline 0

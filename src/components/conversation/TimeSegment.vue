@@ -284,7 +284,7 @@ export default {
   .meta-container
     animate()
     background-color $color-lightest-grey
-    box-sizing border-box
+    box-sizing()
     opacity 0
     padding 10px
     position absolute
@@ -303,7 +303,7 @@ export default {
 
 .quick-note
   border-top $color-border 1px solid
-  box-sizing border-box
+  box-sizing()
   position absolute
   bottom 0
   left 0

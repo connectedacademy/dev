@@ -13,14 +13,15 @@
       pinned()
       background-color white
       border-right $color-light-grey 1px solid
-      /*box-shadow 0 0 5px 5px alpha(black, 0.025)*/
-      box-sizing border-box
+      box-shadow 0 0 5px 5px alpha(black, 0.025)
+      box-sizing()
       float left
       overflow-y scroll
       padding-top 60px
       position absolute
       right auto
       z-index 1
+
       &.active
         z-index 0
       .admin-panel--header

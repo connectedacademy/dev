@@ -199,7 +199,7 @@ export default {
   .md-thumbnail
     animate()
     background-image()
-    box-sizing border-box
+    box-sizing()
     display inline-block
     height 0
     margin 10px

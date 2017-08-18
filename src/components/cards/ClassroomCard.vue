@@ -47,8 +47,14 @@ export default {
         case 'teacher':
 
           this.classroomCode = 'loading';
+          
+          const classroomSlug = _.find(this.currentClass.content, (o) => {
+            return (o.content_type === 'class');
+          }).slug;
 
-          const request = { theClass: this.currentClass.slug, slug: 'undefined' };
+          alert(classroomSlug);
+
+          const request = { theClass: this.currentClass.slug, slug: classroomSlug };
 
           API.classroom.getTeacherCode(
             request,
@@ -142,7 +148,7 @@ export default {
     placeholderColor(alpha(white, 0.5))
     background-color alpha(black, 0.0)
     border alpha(black, 0.1) 2px dashed
-    box-sizing border-box
+    box-sizing()
     color white
     display block
     font-size 1.6em

@@ -112,7 +112,7 @@ export default {
         cleanlist()
         radius(4px)
         background-color white
-        box-sizing border-box
+        box-sizing()
         float left
         overflow hidden
         margin-left 10px

@@ -173,7 +173,7 @@ body.disable-scroll
 .main-page
 
   .col
-    box-sizing border-box
+    box-sizing()
     padding 0
     /*top 60px*/
 

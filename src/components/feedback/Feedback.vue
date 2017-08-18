@@ -210,7 +210,7 @@ $chat-list-width = 320px
   pinned()
   background-color $color-lightest-grey
   border-right $color-lighter-grey 1px solid
-  box-sizing border-box
+  box-sizing()
   overflow scroll
   position absolute
   right auto
@@ -221,7 +221,7 @@ $chat-list-width = 320px
   .navigation-button
     animate()
     background-color white
-    box-sizing border-box
+    box-sizing()
     float left
     height 50px
     &:hover

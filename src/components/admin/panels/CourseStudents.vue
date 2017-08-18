@@ -10,7 +10,7 @@
 
   .admin-panel--content.no-padding
     ul
-      li(v-for="student in students" v-if="student.user")
+      li(v-for="(student, index) in students" v-if="student" v-bind:key="index")
         student-tile(v-bind:student="student")
 
 

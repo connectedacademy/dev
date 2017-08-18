@@ -138,7 +138,7 @@ export default {
             this.$store.commit(types.SHOW_AUTH);
           },
           goToLink(href) {
-            this.$router.push(href.replace('/#/markdown','/markdown'));
+            this.$router.push(href.replace('/#/markdown', '/markdown'));
           },
           postTweet() {
 
@@ -250,7 +250,14 @@ export default {
       });
 
       md.renderer.rules.link_open = (tokens, idx) => {
-        return `<a v-on:click="goToLink('${md.utils.escapeHtml(tokens[idx].attrs[0][1])}')">`;
+        const href = md.utils.escapeHtml(tokens[idx].attrs[0][1]);
+        if (href.startsWith('http')) {
+          // Absolute link so do nothing
+          return `<a href="${href}" target="_blank">`
+        } else {
+          // Relative link so replace with Vue navigation
+          return `<a v-on:click="goToLink('${href}')">`;
+        }
       };
 
       return `<div>${md.render(this.renderedMarkdown)}</div>`;
@@ -329,7 +336,7 @@ export default {
       text-align center
     &.md-bio--with-bio
       radius(6px)
-      box-sizing border-box
+      box-sizing()
       padding 10px
       padding-left 100px
       max-width 100%

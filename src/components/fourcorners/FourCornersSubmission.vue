@@ -105,7 +105,7 @@ export default {
 .fourcorners-submission
   radius(6px)
   background-color $color-dark-grey
-  box-sizing border-box
+  box-sizing()
   overflow hidden
   padding 15px
   width 100%
@@ -119,7 +119,7 @@ export default {
       radius(6px)
       border none
       box-shadow none
-      box-sizing border-box
+      box-sizing()
       line-height 40px
       margin 10px 0
       padding 0 10px

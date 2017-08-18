@@ -288,7 +288,7 @@ ul.hub-selector
     cleanlist()
     animate()
     background-color white
-    box-sizing border-box
+    box-sizing()
     border $color-border 1px solid
     float left
     height 100px

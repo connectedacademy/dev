@@ -112,7 +112,7 @@ $media-height = 220px
 
   ul#experience-controls
     cleanlist()
-    box-sizing border-box
+    box-sizing()
     height 50px
     padding 0 10px 0 10px
     z-index 1
