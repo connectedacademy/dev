@@ -111,8 +111,8 @@ export default {
 
       try {
         const playerTime = self.soundcloudPlayer.currentTime() / 1000;
-        self.$log.info(playerTime);
-        self.$log.info(self.currentTime);
+        // self.$log.info(playerTime);
+        // self.$log.info(self.currentTime);
         const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
         if (outOfSync) {
