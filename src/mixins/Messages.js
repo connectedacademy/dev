@@ -6,7 +6,7 @@ export default {
   mounted() {
     Vue.io.socket.on('message', function (obj) {
       alert('SOCKET - message');
-      console.log('obj');
+      console.log('SOCKET - message');
       console.log(obj);
       Vue.set(this.messages, _.round(obj.segment * 0.2), obj);
     });
@@ -28,14 +28,14 @@ export default {
       // });
     },
   },
-  watch: {
-    'lastMessage': {
-      handler: function (nV, oV) {
-        setTimeout(() => { this.loadSegmentSummary(this.currentSegmentGroup) }, 600);
-      },
-      deep: true,
-    },
-  },
+  // watch: {
+  //   'lastMessage': {
+  //     handler: function (nV, oV) {
+  //       setTimeout(() => { this.loadSegmentSummary(this.currentSegmentGroup) }, 600);
+  //     },
+  //     deep: true,
+  //   },
+  // },
   methods: {
     loadSegmentSummary(segmentGroup) {
 
@@ -46,8 +46,8 @@ export default {
 
       Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
-      let thinkAhead = 15; // Think ahead
-      let thinkBehind = 15; // Think behind
+      let thinkAhead = 5; // Think ahead
+      let thinkBehind = 5; // Think behind
 
       let segmentViewport = _.floor(window.innerHeight / 158.0) + thinkBehind;
 
@@ -64,19 +64,31 @@ export default {
         endSegment,
       };
 
+      // if ((startSegment % 5) === 0) {
+      //   API.message.getSegmentSummary(
+      //     request,
+      //     response => {
+
+      //       for (var group in response.data) {
+
+      //         let newMessage = response.data[group];
+      //         newMessage.segmentGroup = parseInt(parseInt(group) * 0.2);
+
+      //         if (newMessage.segmentGroup < (this.content.duration * 0.2)) {
+      //           Vue.set(this.messages, newMessage.segmentGroup, newMessage);
+      //         }
+      //       }
+      //     },
+      //     response => {
+      //       Vue.$log.info('Failed to get messages summary');
+      //     },
+      //   );
+      // }
+
       API.message.getSegmentSummarySocket(
         request,
         response => {
-
-          for (var group in response.data) {
-
-            let newMessage = response.data[group];
-            newMessage.segmentGroup = parseInt(parseInt(group) * 0.2);
-            
-            if (newMessage.segmentGroup < (this.content.duration * 0.2)) {
-              Vue.set(this.messages, newMessage.segmentGroup, newMessage);
-            }
-          }
+          Vue.$log.info('Fetched messages summary');
         },
         response => {
           Vue.$log.info('Failed to get messages summary');

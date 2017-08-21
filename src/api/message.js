@@ -35,7 +35,6 @@ export default {
     cancel();
   },
   getSegmentSummary(request, cb, errorCb) {
-
     axios.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, {
       cancelToken: new CancelToken(function executor(c) {
         // An executor function receives a cancel function as a parameter
@@ -54,15 +53,9 @@ export default {
     });
   },
   getSegmentSummarySocket(request, cb, errorCb) {
-    // https://api.connectedacademy.io/v1/messages/subscribe/:class/:content/:startsegment/:endsegment
     Vue.io.socket.get(`/v1/messages/subscribe/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres) {
       cb(resData);
       console.log('SOCKET RESPONSE - subscribe');
-      console.log(resData);
-    });
-    Vue.io.socket.get(`/v1/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, function (resData, jwres) {
-      cb(resData);
-      console.log('SOCKET RESPONSE - summarybatch');
       console.log(resData);
     });
   },
