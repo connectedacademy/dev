@@ -77,7 +77,11 @@ export default {
     },
     url() {
       if (this.currentSection === undefined) { return ''; }
-      return `${window.location.protocol}//${window.location.host}/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
+      if (window.location.host === 'localhost:8080') {
+        return `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
+      } else {
+        return `${window.location.protocol}//${window.location.host}/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
+      }
     },
     hidden() {
       return (this.currentSection === undefined) ||

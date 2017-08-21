@@ -57,7 +57,7 @@ export default {
       startSegment = (startSegment < 0) ? 0 : startSegment;
       endSegment = (endSegment < 5) ? 5 : endSegment;
 
-      const request = {
+      const theRequest = {
         theClass: this.currentClass.slug,
         theContent: this.content.slug,
         startSegment,
@@ -66,7 +66,7 @@ export default {
 
       if ((startSegment % 20) === 0) {
         API.message.getSegmentSummary(
-          request,
+          theRequest,
           response => {
 
             for (var group in response.data) {
@@ -86,12 +86,13 @@ export default {
       }
 
       API.message.getSegmentSummarySocket(
-        request,
+        theRequest,
         response => {
-          Vue.$log.info('Fetched messages summary');
+          Vue.$log.info('Subscribed to messages summary');
+          Vue.$log.info(theRequest);
         },
         response => {
-          Vue.$log.info('Failed to get messages summary');
+          Vue.$log.info('Failed to subscribe to messages summary');
         },
       );
     },
