@@ -1,12 +1,13 @@
 <template lang="pug">
 
   .card#classroom-card(v-if="user" v-bind:class="{ visible: visible, active: currentClassroom }")
-    input#classroom-input(v-model="classroomCode" v-bind:disabled="currentClassroom || (currentRole === 'teacher')" v-bind:class="{ disabled: currentClassroom || (currentRole === 'teacher') }" placeholder="Class Code")
 
-    ul#role-selector(v-if="!currentClassroom && ((currentRole === 'teacher') || (classroomCode.length <= 2))" @click="toggleRole")
+    ul#role-selector(@click="toggleRole")
       li(v-bind:class="{ active: (currentRole === 'student') }") Student
       li(v-bind:class="{ active: (currentRole === 'teacher') }") Teacher
       .clearfix
+
+    input#classroom-input(v-model="classroomCode" v-bind:disabled="currentClassroom || (currentRole === 'teacher')" v-bind:class="{ disabled: currentClassroom || (currentRole === 'teacher') }" placeholder="Enter Class Code")
 
     a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") Leave
     a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2) && (currentRole === 'student')" v-on:click="joinClassroom") Join Classroom
@@ -41,6 +42,8 @@ export default {
   },
   methods: {
     toggleRole() {
+      if (this.currentClassroom) return;
+
       this.role = (this.currentRole === 'teacher') ? 'Student' : 'Teacher';
 
       switch (this.currentRole) {
@@ -51,8 +54,6 @@ export default {
           const classroomSlug = _.find(this.currentClass.content, (o) => {
             return (o.content_type === 'class');
           }).slug;
-
-          alert(classroomSlug);
 
           const request = { theClass: this.currentClass.slug, slug: classroomSlug };
 
@@ -126,12 +127,11 @@ export default {
   ul#role-selector
     cleanlist()
     radius(6px)
-    border alpha(black, 0.1) 1px solid
-    margin-top 10px
+    border alpha(black, 0.2) 1px solid
     li
       cleanlist()
-      background-color alpha(black, 0.1)
-      color alpha(white, 0.6)
+      background-color alpha(black, 0.2)
+      color alpha(white, 0.3)
       float left
       line-height 40px
       width 50%
@@ -141,6 +141,7 @@ export default {
         background-color transparent
         color white
         cursor default
+        font-weight bold
 
   input#classroom-input
     animate()
@@ -153,6 +154,7 @@ export default {
     display block
     font-size 1.6em
     padding 10px
+    margin-top 10px
     text-align center
     width 100%
     outline 0

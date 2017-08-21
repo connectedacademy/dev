@@ -12,9 +12,8 @@
           icon(name="angle-right")
 
         .content-filter--selector
-          select.full-width
-            option(name="Classroom A") Classroom A
-            option(name="Classroom B") Classroom B
+          select.full-width(v-model="classSlug")
+            option(v-for="(theClass, index) in classes" v-bind:value="theClass.slug" v-bind:key="index") {{ theClass.title }}
 
         ul.panel-selector
           li.panel-selector--item(v-bind:class="{'active': visiblePanels['1']}" @click="togglePanel('1')")
@@ -36,7 +35,7 @@
     transition(name="fade-out" mode="out-in")
       course-students(v-if="visiblePanels['1']" v-bind:style="panelStyles['1']")
     transition(name="fade-out" mode="out-in")
-      student-submissions(v-if="visiblePanels['2']" v-bind:style="panelStyles['2']")
+      student-submissions(v-if="visiblePanels['2']" v-bind:style="panelStyles['2']" v-bind:class-slug="classSlug")
     transition(name="fade-out" mode="out-in")
       storify(v-if="visiblePanels['3']" v-bind:style="panelStyles['3']")
     //- transition(name="fade-out" mode="out-in")
@@ -49,6 +48,7 @@
 <script>
 import Vue from 'vue';
 import * as types from '@/store/mutation-types';
+import { mapGetters } from 'vuex';
 
 import CourseStudents from '@/components/admin/panels/CourseStudents';
 import ClassStudents from '@/components/admin/panels/ClassStudents';
@@ -92,12 +92,17 @@ export default {
         4: { left: 0, width: 0 },
         5: { left: 0, width: 0 },
       },
+      classSlug: undefined,
     };
   },
   computed: {
+    ...mapGetters(['course']),
     proseLink() {
       return 'http://prose.io/#connectedacademy';
     },
+    classes() {
+      return this.course.classes;
+    }
   },
   methods: {
     togglePanel(index) {

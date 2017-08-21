@@ -30,7 +30,8 @@ export default {
 @import '~stylus/admin'
 
 .admin-panel
-
+  background-image()
+  background-image url('https://storify.com/public/img/homepage/background.png') !important
   .admin-panel--content
     h5
       reset()

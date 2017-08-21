@@ -13,9 +13,9 @@
         markdown-renderer(v-bind:markdown-url="aboutMarkdown")
 
       .course-content--footer
-        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered" @click="startDemo") Start Demo
+        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered && $route.query.debug" @click="startDemo") Start Demo
         .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
-        input(type="text" v-model="currentTime")
+        input(type="text" v-model="currentTime" v-if="$route.query.debug")
         .clearfix
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")

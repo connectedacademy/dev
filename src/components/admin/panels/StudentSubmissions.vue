@@ -8,7 +8,7 @@
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  content-filter(v-bind:classSlug.sync="classSlug" v-bind:contentSlug.sync="contentSlug" v-bind:filter-class="true" v-bind:filter-content="true")
+  content-filter(v-bind:contentSlug.sync="contentSlug" v-bind:filter-class="true" v-bind:filter-content="true")
 
   .admin-panel--content
 
@@ -33,6 +33,7 @@ import ContentFilter from '@/components/admin/ContentFilter';
 
 export default {
   name: 'student-submissions',
+  props: ['classSlug'],
   components: {
     ContentFilter,
   },
@@ -54,7 +55,6 @@ export default {
   data() {
     return {
       submissions: [],
-      classSlug: undefined,
       contentSlug: undefined,
     };
   },
