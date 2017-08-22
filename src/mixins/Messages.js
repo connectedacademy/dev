@@ -7,7 +7,7 @@ export default {
     Vue.io.socket.on('message', function (obj) {
       alert('SOCKET - message');
       console.log('SOCKET - message');
-      console.log(obj);
+      console.log(JSON.stringify(obj));
       Vue.set(this.messages, _.round(obj.segment * 0.2), obj);
     });
   },

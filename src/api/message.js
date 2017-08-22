@@ -19,11 +19,6 @@ export default {
       console.log(obj);
     });
 
-    Vue.io.socket.on('message', function(obj) {
-      console.log('SOCKET - message');
-      console.log(obj);
-    });
-
     Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
       console.log('SOCKET RESPONSE - me');
       console.log(resData);
