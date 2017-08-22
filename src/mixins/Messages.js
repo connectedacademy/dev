@@ -60,11 +60,11 @@ export default {
       const theRequest = {
         theClass: this.currentClass.slug,
         theContent: this.content.slug,
-        startSegment,
-        endSegment,
+        startSegment: parseInt(startSegment),
+        endSegment: parseInt(endSegment),
       };
 
-      if ((startSegment % 20) === 0) {
+      if ((startSegment % 10) === 0) {
         API.message.getSegmentSummary(
           theRequest,
           response => {
