@@ -102,7 +102,7 @@ export default {
 
       let theContent =  (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.getters.currentSection.slug;
 
-      const request = {
+      const theRequest = {
         theClass: this.$store.getters.currentClass.slug,
         theContent: theContent,
         startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
@@ -110,7 +110,7 @@ export default {
       };
 
       API.message.getMessages(
-        request,
+        theRequest,
         response => {
           // Filter out highlighted message
           let filteredMessages = response.data;
@@ -126,17 +126,16 @@ export default {
         },
       );
 
-      // API.message.subscribe(
-      //   request,
-      //   response => {
-      //     Vue.$log.info(response.data);
-      //     this.segmentMessages = _.orderBy(response.data, ['createdAt'], ['asc']);
-      //   },
-      //   response => {
-      //     alert('There was an error');
-      //     this.segmentMessages = [];
-      //   },
-      // );
+      API.message.getSegmentSummarySocket(
+        theRequest,
+        response => {
+          Vue.$log.info('Subscribed to messages summary');
+          Vue.$log.info(theRequest);
+        },
+        response => {
+          Vue.$log.info('Failed to subscribe to messages summary');
+        },
+      );
 
     },
   },
