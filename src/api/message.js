@@ -51,7 +51,6 @@ export default {
     });
   },
   getSegmentSummarySocket(request, cb, errorCb) {
-    
     store.commit(types.SET_SUBSCRIBED_TO, `${request.startSegment} - ${request.endSegment}`)
 
     Vue.io.socket.get(`/v1/messages/subscribe/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres) {
