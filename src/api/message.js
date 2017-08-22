@@ -1,6 +1,8 @@
 /* eslint-disable */
 import Vue from 'vue';
 import * as config from './config';
+import * as types from '@/store/mutation-types';
+import store from '@/store';
 
 import axios from 'axios';
 
@@ -11,10 +13,6 @@ export default {
   subscribeToSocket() {
 
     console.log('Subscribing to socket');
-
-    Vue.io.socket.on('*', function (obj) {
-      alert(JSON.stringify(obj));
-    });
 
     Vue.io.socket.on('user', function(obj) {
       console.log('SOCKET - user');
@@ -53,6 +51,9 @@ export default {
     });
   },
   getSegmentSummarySocket(request, cb, errorCb) {
+    
+    store.commit(types.SET_SUBSCRIBED_TO, `${request.startSegment} - ${request.endSegment}`)
+
     Vue.io.socket.get(`/v1/messages/subscribe/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres) {
       cb(resData);
       console.log('SOCKET RESPONSE - subscribe');

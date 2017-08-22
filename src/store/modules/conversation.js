@@ -12,10 +12,14 @@ const state = {
   activeSegment: undefined,
   peekSegment: undefined,
   lastMessage: undefined,
+  subscribedTo: undefined,
 };
 
 // getters
 const getters = {
+  subscribedTo() {
+    return state.subscribedTo;
+  },
   lastMessage() {
     return state.lastMessage;
   },
@@ -156,6 +160,9 @@ const mutations = {
   updateLastMessage({ commit }, newMessage) {
     state.lastMessage = newMessage;
   },
+  [types.SET_SUBSCRIBED_TO](initialState, subscribedTo) {
+    state.subscribedTo = subscribedTo;
+  }
 };
 
 export default {
