@@ -8,7 +8,7 @@ export default {
       alert('SOCKET - message');
       console.log('SOCKET - message object');
       console.log(JSON.stringify(obj));
-      Vue.set(this.messages, _.round(obj.segment * 0.2), obj);
+      Vue.set(this.messages, _.round(parseInt(obj.segment) * 0.2), obj);
     });
   },
   data() {
