@@ -17,8 +17,9 @@
       li.experience-control.pull-right(@click="toggleComposer")
         icon(v-bind:name="composerHidden ? 'angle-down' : 'angle-up'")
       li.experience-control.pull-right
-        icon(name="twitter")
-      li.experience-control.pull-right(@click="togglePlayerType")
+        a(v-bind:href="twitterLink" target="_blank")
+          icon(name="twitter")
+      li.experience-control.pull-right(@click="togglePlayerType" v-bind:class="{ unclickable: (availablePlayerTypes <= 1) }")
         icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
 
       .clearfix
@@ -65,6 +66,10 @@ export default {
     },
     end() {
       return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss');
+    },
+    twitterLink() {
+      return 'https://twitter.com';
+      // return `https://twitter.com/${hashtag}`;
     },
   },
   methods: {
@@ -134,6 +139,8 @@ $media-height = 220px
       &:hover
         // background-color $color-lighter-grey
         cursor pointer
+        &.unclickable
+          cursor default
 
     li#progress-bar
       pinned()

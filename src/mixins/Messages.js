@@ -4,7 +4,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   mounted() {
-    Vue.io.socket.on('message', function (obj) {
+    Vue.io.socket.on('message', (obj) => {
       alert('SOCKET - message');
       console.log('SOCKET - message object');
       console.log(JSON.stringify(obj));

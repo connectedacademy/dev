@@ -47,15 +47,15 @@ import AutoScroll from '@/mixins/AutoScroll';
 import Overlay from '@/mixins/Overlay';
 
 // Components
-import Lock from './components/authentication/Lock'
-import AuthenticationFlow from './components/authentication/AuthenticationFlow';
-import Navigation from './components/navigation/Navigation';
-import SectionNavigator from './components/navigation/SectionNavigator';
-import BurgerMenu from './components/navigation/BurgerMenu';
-import LeftDrawer from './components/navigation/drawers/LeftDrawer';
-import RightDrawer from './components/navigation/drawers/RightDrawer';
-import DebugPanel from './components/DebugPanel';
-import ActionPanel from './components/conversation/ActionPanel';
+import Lock from '@/components/authentication/Lock'
+import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
+import Navigation from '@/components/navigation/Navigation';
+import SectionNavigator from '@/components/navigation/SectionNavigator';
+import BurgerMenu from '@/components/navigation/BurgerMenu';
+import LeftDrawer from '@/components/navigation/drawers/LeftDrawer';
+import RightDrawer from '@/components/navigation/drawers/RightDrawer';
+import DebugPanel from '@/components/DebugPanel';
+import ActionPanel from '@/components/conversation/ActionPanel';
 
 export default {
   name: 'app',
