@@ -103,47 +103,5 @@ export default {
         },
       );
     },
-    loadSegmentMessages() {
-
-      Vue.$log.info('Loading segment messages');
-
-      let theContent =  (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.getters.currentSection.slug;
-
-      const theRequest = {
-        theClass: this.$store.getters.currentClass.slug,
-        theContent: theContent,
-        startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
-        endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 5}`,
-      };
-
-      API.message.getMessages(
-        theRequest,
-        response => {
-          // Filter out highlighted message
-          let filteredMessages = response.data;
-          filteredMessages = _.filter(filteredMessages, (obj) => {
-            return obj.id !== this.message.message.id;
-          });
-          filteredMessages = _.orderBy(filteredMessages, ['createdAt'], ['desc']);
-          this.segmentMessages = filteredMessages;
-        },
-        response => {
-          alert('There was an error');
-          this.segmentMessages = [];
-        },
-      );
-
-      API.message.getSegmentSummarySocket(
-        theRequest,
-        response => {
-          Vue.$log.info('Subscribed to messages summary');
-          Vue.$log.info(theRequest);
-        },
-        response => {
-          Vue.$log.info('Failed to subscribe to messages summary');
-        },
-      );
-
-    },
   },
 }
