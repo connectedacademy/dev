@@ -64,8 +64,8 @@ export default {
       const theRequest = {
         theClass: this.currentClass.slug,
         theContent: this.content.slug,
-        startSegment: parseInt(startSegment),
-        endSegment: parseInt(endSegment),
+        startSegment: `${parseInt(startSegment)}`,
+        endSegment: `${parseInt(endSegment)}`,
       };
 
       if ((startSegment % 10) === 0) {
