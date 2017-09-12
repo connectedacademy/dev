@@ -5,9 +5,11 @@ import { mapGetters } from 'vuex';
 export default {
   mounted() {
     Vue.io.socket.on('user', (obj) => {
+      console.log('user - obj')
       console.log(obj)
     });
     Vue.io.socket.on('message', (obj) => {
+      console.log('messageg sat - obj')
       console.log(obj);
       console.log(`SEGMENT - ${obj.segment}`)
       console.log(`SEGMENT - ${_.round(parseInt(obj.segment) * 0.2)}`)
