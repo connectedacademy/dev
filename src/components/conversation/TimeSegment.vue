@@ -42,9 +42,6 @@ import {mapGetters} from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
-// Mixins
-// import Messages from '@/mixins/Messages';
-
 import MessageComposer from '@/components/MessageComposer';
 import Subtitle from '@/components/conversation/Subtitle';
 import Message from '@/components/conversation/Message';
@@ -53,9 +50,6 @@ import MockMessage from '@/components/conversation/MockMessage';
 export default {
   name: 'time-segment',
   props: ['index', 'message', 'subtitle'],
-  mixins: [
-    // Messages
-  ],
   components: {
     MessageComposer,
     Message,
