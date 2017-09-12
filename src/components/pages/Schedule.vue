@@ -4,9 +4,10 @@
 
       .col#col-main
 
-        hub-selector
+        //- hub-selector
 
         .main-container.main-container-padded.background-white
+          h3 Course Schedule
           ul
             li(v-for="(theClass, index) in course.classes")
               h3 {{ theClass.title }}

@@ -2,9 +2,9 @@
 
   .conversation-container(ref="conversationContainer")
 
-    #view-toggle(@click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority}")
-      icon(name="quote-right")
+    #view-toggle(v-show="currentSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority}")
       icon(name="twitter")
+      icon(name="quote-right")
 
     #activity-visualisation(v-if="!peekSegment")
       svg(width="400" v-bind:height="containerHeight")

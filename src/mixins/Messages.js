@@ -50,7 +50,7 @@ export default {
 
       Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
-      let thinkAhead = 4; // Think ahead
+      let thinkAhead = 10; // Think ahead
       let thinkBehind = 10; // Think behind
 
       let segmentViewport = _.floor(window.innerHeight / 158.0) + thinkBehind;
