@@ -4,7 +4,7 @@
 
     .primary-wrapper(@click="peek()")
 
-      //- .segment-label--group {{ `${message.segmentGroup} (${message.segmentGroup / 0.2} - ${(message.segmentGroup / 0.2) + 5}` }})
+      .segment-label--group {{ `${message.segmentGroup} (${message.segmentGroup / 0.2} - ${(message.segmentGroup / 0.2) + 5}` }})
 
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
