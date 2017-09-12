@@ -5,14 +5,17 @@ import { mapGetters } from 'vuex';
 export default {
   mounted() {
     Vue.io.socket.on('message', (obj) => {
-      alert('SOCKET - message');
+      // alert('SOCKET - message');
       console.log('SOCKET - message object');
       console.log(JSON.stringify(obj));
       console.log(`SEGMENT - ${obj.segment}`)
       console.log(`SEGMENT - ${parseInt(obj.segment)}`)
       console.log(`SEGMENT - ${_.round(parseInt(obj.segment) * 0.2)}`)
+      console.log('SOCKET - current messages');
       console.log(this.messages)
       Vue.set(this.messages, _.round(parseInt(obj.segment) * 0.2), obj);
+      console.log('SOCKET - altered messages');
+      console.log(this.messages)
     });
   },
   data() {
