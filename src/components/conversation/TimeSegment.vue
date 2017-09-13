@@ -172,7 +172,7 @@ export default {
           position: 'fixed',
         };
 
-        setTimeout(() => { this.loadSegmentMessages() }, 300);
+        setInterval(() => { this.loadSegmentMessages() }, 300);
 
       }, 50);
     },
@@ -219,16 +219,16 @@ export default {
         },
       );
 
-      API.message.getSegmentSummarySocket(
-        theRequest,
-        response => {
-          Vue.$log.info('Subscribed to messages summary');
-          Vue.$log.info(theRequest);
-        },
-        response => {
-          Vue.$log.info('Failed to subscribe to messages summary');
-        },
-      );
+      // API.message.getSegmentSummarySocket(
+      //   theRequest,
+      //   response => {
+      //     Vue.$log.info('Subscribed to messages summary');
+      //     Vue.$log.info(theRequest);
+      //   },
+      //   response => {
+      //     Vue.$log.info('Failed to subscribe to messages summary');
+      //   },
+      // );
 
     },
   },
