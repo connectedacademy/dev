@@ -4,10 +4,6 @@ import { mapGetters } from 'vuex';
 
 export default {
   mounted() {
-    Vue.io.socket.on('user', (obj) => {
-      console.log('user - obj')
-      console.log(obj)
-    });
     Vue.io.socket.on('message', (obj) => {
       console.log('message received over socket connection')
       console.log(obj);
@@ -27,6 +23,11 @@ export default {
 
         // Update messages object
         Vue.set(this.messages, key, updateMessage);
+
+        // Update active segment messages
+        if (this.currentSegmentGroup === `${_.round(parseInt(obj.msg.segment) * 0.2)}`) {
+          this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
+        }
 
         // Log
         console.log('SOCKET - altered messages');
