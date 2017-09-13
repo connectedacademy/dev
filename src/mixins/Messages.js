@@ -12,6 +12,8 @@ export default {
       console.log('message received over socket connection')
       console.log(obj);
       if (obj.msgtype === 'message') {
+
+        // Log
         console.log('SOCKET - current messages');
         console.log(this.messages)
         
@@ -26,6 +28,7 @@ export default {
         // Update messages object
         Vue.set(this.messages, key, updateMessage);
 
+        // Log
         console.log('SOCKET - altered messages');
         console.log(this.messages)
       }
