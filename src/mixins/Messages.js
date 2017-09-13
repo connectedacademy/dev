@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import API from '@/api';
+import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
 export default {
