@@ -56,6 +56,16 @@ export default {
     MockMessage,
     Subtitle,
   },
+  created() {
+
+    Vue.io.socket.on('message', (obj) => {
+      console.log('message received over socket connection TIMESEGMENT')
+      console.log(obj);
+      if (obj.msgtype === 'message') {
+        this.segmentMessages.push(obj.msg);
+      }
+    });
+  },
   watch: {
     // lastMessage() {
     //   if (this.segmentPeeking || this.segmentOpened) {
@@ -172,7 +182,7 @@ export default {
           position: 'fixed',
         };
 
-        setInterval(() => { this.loadSegmentMessages() }, 300);
+        setTimeout(() => { this.loadSegmentMessages() }, 300);
 
       }, 50);
     },
