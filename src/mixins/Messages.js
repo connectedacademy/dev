@@ -37,7 +37,6 @@ export default {
       'currentClass', 'currentSection', 'currentSegmentGroup',
     ]),
     chunkedMessages() {
-      // let messages = this.messages;
       return this.messages;
       // Uncomment to chunk
       // return _.pickBy(this.messages, (value, key) => {
