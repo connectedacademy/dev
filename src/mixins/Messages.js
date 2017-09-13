@@ -9,14 +9,17 @@ export default {
       console.log(obj)
     });
     Vue.io.socket.on('message', (obj) => {
-      console.log('message - obj')
+      console.log('message received over socket connection')
       console.log(obj);
       if (obj.msgtype === 'message') {
-        console.log(`SEGMENT - ${obj.msg.segment}`)
-        console.log(`SEGMENT - ${_.round(parseInt(obj.msg.segment) * 0.2)}`)
         console.log('SOCKET - current messages');
         console.log(this.messages)
-        Vue.set(this.messages, `${_.round(parseInt(obj.msg.segment) * 0.2)}`, obj.msg);
+        
+        // Update message
+        const key = `${_.round(parseInt(obj.msg.segment) * 0.2)}`
+        this.messages[key].message = obj.msg
+        Vue.set(this.messages, key, this.messages[key].message);
+
         console.log('SOCKET - altered messages');
         console.log(this.messages)
       }
@@ -39,14 +42,6 @@ export default {
       // });
     },
   },
-  // watch: {
-  //   'lastMessage': {
-  //     handler: function (nV, oV) {
-  //       setTimeout(() => { this.loadSegmentSummary(this.currentSegmentGroup) }, 600);
-  //     },
-  //     deep: true,
-  //   },
-  // },
   methods: {
     loadSegmentSummary(segmentGroup) {
 
