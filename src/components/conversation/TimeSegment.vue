@@ -57,11 +57,11 @@ export default {
     Subtitle,
   },
   watch: {
-    lastMessage() {
-      if (this.segmentPeeking || this.segmentOpened) {
-        setTimeout(() => { this.loadSegmentMessages() }, 600);
-      }
-    },
+    // lastMessage() {
+    //   if (this.segmentPeeking || this.segmentOpened) {
+    //     setTimeout(() => { this.loadSegmentMessages() }, 600);
+    //   }
+    // },
     'activeSegment': {
       handler: function(nV, oV) {
         if (oV === this.message.segmentGroup) {
