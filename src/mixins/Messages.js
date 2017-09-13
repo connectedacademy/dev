@@ -18,7 +18,7 @@ export default {
         // Update message
         const key = `${_.round(parseInt(obj.msg.segment) * 0.2)}`
         this.messages[key].message = obj.msg
-        Vue.set(this.messages, key, this.messages[key].message);
+        Vue.set(this.messages, key, this.messages[key]);
 
         console.log('SOCKET - altered messages');
         console.log(this.messages)
