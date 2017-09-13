@@ -8,10 +8,6 @@ export default {
       console.log('message received over socket connection')
       console.log(obj);
       if (obj.msgtype === 'message') {
-
-        // Log
-        console.log('SOCKET - current messages');
-        console.log(this.messages)
         
         // Update message
         const key = `${_.round(parseInt(obj.msg.segment) * 0.2)}`
@@ -28,10 +24,6 @@ export default {
         if (this.currentSegmentGroup === `${_.round(parseInt(obj.msg.segment) * 0.2)}`) {
           this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
         }
-
-        // Log
-        console.log('SOCKET - altered messages');
-        console.log(this.messages)
       }
     });
   },
@@ -45,6 +37,7 @@ export default {
       'currentClass', 'currentSection', 'currentSegmentGroup',
     ]),
     chunkedMessages() {
+      // let messages = this.messages;
       return this.messages;
       // Uncomment to chunk
       // return _.pickBy(this.messages, (value, key) => {

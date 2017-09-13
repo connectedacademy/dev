@@ -174,6 +174,9 @@ export default {
 
       if (this.opened) { return }
 
+      // Remove segment messages
+      this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+
       this.segmentStyle = {
         transition: 'all .3s ease',
         top: `${this.calculatedOffset}px`,
