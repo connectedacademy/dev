@@ -11,7 +11,7 @@ export default {
     Vue.io.socket.on('message', (obj) => {
       console.log('message - obj')
       console.log(obj);
-      if (msgtype === 'message') {
+      if (obj.msgtype === 'message') {
         console.log(`SEGMENT - ${obj.msg.segment}`)
         console.log(`SEGMENT - ${_.round(parseInt(obj.msg.segment) * 0.2)}`)
         console.log('SOCKET - current messages');
