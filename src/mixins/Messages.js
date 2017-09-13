@@ -9,15 +9,17 @@ export default {
       console.log(obj)
     });
     Vue.io.socket.on('message', (obj) => {
-      console.log('messageg sat - obj')
+      console.log('message - obj')
       console.log(obj);
-      console.log(`SEGMENT - ${obj.segment}`)
-      console.log(`SEGMENT - ${_.round(parseInt(obj.segment) * 0.2)}`)
-      console.log('SOCKET - current messages');
-      console.log(this.messages)
-      Vue.set(this.messages, `${_.round(parseInt(obj.segment) * 0.2)}`, obj);
-      console.log('SOCKET - altered messages');
-      console.log(this.messages)
+      if (msgtype === 'message') {
+        console.log(`SEGMENT - ${obj.msg.segment}`)
+        console.log(`SEGMENT - ${_.round(parseInt(obj.msg.segment) * 0.2)}`)
+        console.log('SOCKET - current messages');
+        console.log(this.messages)
+        Vue.set(this.messages, `${_.round(parseInt(obj.msg.segment) * 0.2)}`, obj.msg);
+        console.log('SOCKET - altered messages');
+        console.log(this.messages)
+      }
     });
   },
   data() {
