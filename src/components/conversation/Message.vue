@@ -41,7 +41,8 @@ export default {
   computed: {
     html() {
       // Remove links
-      let html = this.message.text.replace('/(https?:\/\/[^\s]+)/g', '');
+      var urlRegex = /(https?:\/\/[^\s]+)/g;
+      let html = this.message.text.replace(urlRegex, '');
       return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
     authorLink() {
