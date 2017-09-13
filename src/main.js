@@ -116,6 +116,10 @@ Vue.http.interceptors.push((request, next) => {
 Vue.config.lang = 'en';
 Vue.config.fallbackLang = 'en';
 
+Vue.config.devtools = true
+Vue.config.debug = true
+Vue.config.silent = false
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
