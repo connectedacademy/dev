@@ -50,9 +50,6 @@ const mutations = {
       state[key] = value;
     });
   },
-  [types.TOGGLE_DEBUG_MODE](initialState) {
-    state.debug = !state.debug;
-  },
   [types.TOGGLE_LEFT_DRAWER](initialState) {
     state.leftDrawer.visible = !state.leftDrawer.visible;
     state.overlayVisible = state.leftDrawer.visible;

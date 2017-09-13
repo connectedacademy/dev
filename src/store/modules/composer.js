@@ -4,8 +4,8 @@ import API from '@/api';
 
 // initial state
 const state = {
-  visible: false,
-  hidden: true,
+  visible: true,
+  hidden: false,
 };
 
 // getters

@@ -4,7 +4,7 @@
 
     .primary-wrapper(@click="peek()")
 
-      .segment-label--group {{ `${message.segmentGroup} (${message.segmentGroup / 0.2} - ${(message.segmentGroup / 0.2) + 5}` }})
+      .segment-label--group {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
 
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
@@ -267,6 +267,7 @@ export default {
       radius(4px)
       background $color-lightest-grey
       font-size 0.8em
+      opacity 0.1
       padding 6px 12px
       position absolute
       top 10px
@@ -291,6 +292,8 @@ export default {
 
     &:hover
       cursor pointer
+      .segment-label--group
+        opacity 1
 
   &.current
     .primary-wrapper

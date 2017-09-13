@@ -34,8 +34,9 @@ export default new Vuex.Store({
     video,
   },
   state: {
-    fauxTime: fauxTime,
     debug: false,
+    timetravel: false,
+    fauxTime: fauxTime,
     scrollPosition: 0.0,
     pendingScrollPosition: 0,
     offsetScrollPosition: 0.0,

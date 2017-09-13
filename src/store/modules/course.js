@@ -89,17 +89,18 @@ const mutations = {
   [types.GET_SCHEDULE_SUCCESS](initialState, {
     response,
   }) {
-    if (response.classes && response.classes.length && response.classes[0].release_at) {
-      // Get start of first class
-      const classStart = response.classes[0].release_at;
-
-      if (classStart) {
-        // Set faux time
-        const fauxTime = Moment(classStart).add(1, 'days').format();
-        store.commit('setFauxTime', fauxTime);
+    if (store.state.timetravel) {
+      if (response.classes && response.classes.length && response.classes[0].release_at) {
+        // Get start of first class
+        const classStart = response.classes[0].release_at;
+  
+        if (classStart) {
+          // Set faux time
+          const fauxTime = Moment(classStart).add(1, 'days').format();
+          store.commit('setFauxTime', fauxTime);
+        }
       }
     }
-
     state.course = response;
   },
   [types.GET_SCHEDULE_FAILURE](initialState, {

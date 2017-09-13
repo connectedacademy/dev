@@ -30,6 +30,10 @@ export const TOGGLE_DEBUG_MODE = (state) => {
   state.debug = !state.debug;
 };
 
+export const TOGGLE_TIMETRAVEL_MODE = (state) => {
+  state.timetravel = !state.timetravel;
+};
+
 export const setAutoPlaying = (state, isAutoPlaying) => {
   state.autoPlaying = isAutoPlaying;
 };

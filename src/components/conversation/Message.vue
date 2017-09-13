@@ -40,7 +40,8 @@ export default {
   props: ['message'],
   computed: {
     html() {
-      let html = this.message.text.replace('#wpca17 http://a.short.link', '');
+      // Remove links
+      let html = this.message.text.replace('/(https?:\/\/[^\s]+)/g', '');
       return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
     authorLink() {
