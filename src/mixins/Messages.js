@@ -23,6 +23,7 @@ export default {
 
         // Update active segment messages
         if (this.currentSegmentGroup === `${_.round(parseInt(obj.msg.segment) * 0.2)}`) {
+          console.log('Pushing message');
           this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
         }
       }
