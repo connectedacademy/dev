@@ -26,7 +26,7 @@
 
     .meta-container(v-bind:class="{ active: segmentOpened }")
 
-      .message-wrapper.animated.fadeIn(v-for="segmentMessage in segmentMessages")
+      .message-wrapper.animated.fadeIn(v-for="segmentMessage in activeSegmentMessages")
         message(v-bind:message="segmentMessage")
 
     .quick-note(v-if="segmentPeeking || segmentOpened")
@@ -56,22 +56,7 @@ export default {
     MockMessage,
     Subtitle,
   },
-  created() {
-
-    Vue.io.socket.on('message', (obj) => {
-      console.log('message received over socket connection TIMESEGMENT')
-      console.log(obj);
-      if (obj.msgtype === 'message') {
-        this.segmentMessages.push(obj.msg);
-      }
-    });
-  },
   watch: {
-    // lastMessage() {
-    //   if (this.segmentPeeking || this.segmentOpened) {
-    //     setTimeout(() => { this.loadSegmentMessages() }, 600);
-    //   }
-    // },
     'activeSegment': {
       handler: function(nV, oV) {
         if (oV === this.message.segmentGroup) {
@@ -109,15 +94,14 @@ export default {
       segmentStyle: {},
       calculatedOffset: 0,
       calculatedOffsetBottom: 0,
-      segmentMessages: [],
     };
   },
   computed: {
     ...mapGetters([
       'activeSegment',
       'peekSegment',
-      'lastMessage',
       'currentSegmentGroup',
+      'activeSegmentMessages',
     ]),
     isCurrent() {
       return this.currentSegmentGroup === this.message.segmentGroup;
@@ -221,11 +205,13 @@ export default {
             return obj.id !== this.message.message.id;
           });
           filteredMessages = _.orderBy(filteredMessages, ['createdAt'], ['desc']);
-          this.segmentMessages = filteredMessages;
+          this.$store.commit(types.SET_SEGMENT_MESSAGES, filteredMessages);
+          // this.segmentMessages = filteredMessages;
         },
         response => {
           alert('There was an error');
-          this.segmentMessages = [];
+          this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+          // this.segmentMessages = [];
         },
       );
 

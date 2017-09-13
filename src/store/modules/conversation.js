@@ -11,7 +11,7 @@ const state = {
   media: [],
   activeSegment: undefined,
   peekSegment: undefined,
-  lastMessage: undefined,
+  activeSegmentMessages: [],
   subscribedTo: undefined,
 };
 
@@ -20,14 +20,14 @@ const getters = {
   subscribedTo() {
     return state.subscribedTo;
   },
-  lastMessage() {
-    return state.lastMessage;
-  },
   activeSegment() {
     return state.activeSegment;
   },
   peekSegment() {
     return state.peekSegment;
+  },
+  activeSegmentMessages () {
+    return state.activeSegmentMessages;
   },
   media() {
     Vue.$log.info('Media from state');
@@ -87,26 +87,6 @@ const actions = {
       }),
     );
   },
-  pushMessage({
-    commit,
-  }, request) {
-    const currentSegmentGroup = _.multiply(_.floor(_.divide(request.postData.currentSegment, 10)), 10) * 0.2
-
-    let newMessage = {
-      message: request.response.body,
-      info: {
-        total: 1,
-      },
-      segmentGroup: currentSegmentGroup,
-      faux: true,
-    };
-
-    newMessage.message.author = newMessage.message.user;
-
-    // Vue.set(state.messages, currentSegmentGroup, newMessage);
-
-    store.commit('updateLastMessage', newMessage);
-  },
 };
 
 // mutations
@@ -138,7 +118,6 @@ const mutations = {
   [types.GET_MESSAGES_SUCCESS](initialState, {
     response,
   }) {
-
     const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
     const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2);
 
@@ -157,12 +136,15 @@ const mutations = {
   [types.SET_PEEK_SEGMENT](initialState, peekSegment) {
     state.peekSegment = peekSegment;
   },
-  updateLastMessage({ commit }, newMessage) {
-    state.lastMessage = newMessage;
-  },
   [types.SET_SUBSCRIBED_TO](initialState, subscribedTo) {
     state.subscribedTo = subscribedTo;
-  }
+  },
+  [types.SET_SEGMENT_MESSAGES](initialState, messages) {
+    state.activeSegmentMessages = messages;
+  },
+  [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
+    state.activeSegmentMessages.push(newMessage);
+  },
 };
 
 export default {

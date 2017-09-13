@@ -53,7 +53,7 @@ export default {
       API.message.sendMessage(
         postData,
         (response, postData) => {
-          this.$store.dispatch('pushMessage', { response, postData });
+          // this.$store.dispatch('pushMessage', { response, postData });
           this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response, postData })
           this.message.text = '';
           this.infoLabel = 'Posted note';

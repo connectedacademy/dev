@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSection', 'currentSegmentGroup', 'lastMessage',
+      'currentClass', 'currentSection', 'currentSegmentGroup',
     ]),
     chunkedMessages() {
       return this.messages;
