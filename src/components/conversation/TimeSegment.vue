@@ -196,7 +196,7 @@ export default {
         theClass: this.$store.getters.currentClass.slug,
         theContent: theContent,
         startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
-        endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 5}`,
+        endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 4}`,
       };
 
       API.message.getMessages(

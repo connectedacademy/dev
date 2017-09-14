@@ -110,7 +110,8 @@ export default {
       return this.$store.state.navigation.overlayVisible
       || this.$store.state.auth.visible
       || this.$store.state.conversation.activeSegment
-      || this.$store.state.conversation.peekSegment;
+      || this.$store.state.conversation.peekSegment
+      || this.$store.state.conversation.likeModalVisible;
     },
   },
   store,

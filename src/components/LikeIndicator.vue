@@ -1,16 +1,23 @@
 <template lang="pug">
 
-  .like-indicator(@click="getLikeCount")
-    icon(name="ca-heart")
+  .like-indicator
+    span(@click="showModal")
+      icon(name="ca-heart")
+    like-modal(v-bind:content="content" v-on:hide="hideModal" v-bind:visible="modalVisible")
 
 </template>
 
 <script>
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import * as types from '@/store/mutation-types';
+import LikeModal from '@/components/modals/LikeModal';
 
 export default {
   name: 'like-indicator',
+  components: {
+    LikeModal,
+  },
   props: ['content'],
   created() {
     this.getLikeCount();
@@ -18,6 +25,7 @@ export default {
   data() {
     return {
       count: 0,
+      modalVisible: false,
     };
   },
   computed: {
@@ -26,6 +34,15 @@ export default {
     },
   },
   methods: {
+    showModal() {
+      this.modalVisible = true;
+      this.$store.commit(types.SHOW_LIKE);
+    },
+    hideModal() {
+      this.modalVisible = false;
+      this.getLikeCount();
+      this.$store.commit(types.DISMISS_LIKE);
+    },
     getLikeCount() {
       const request = { class: this.$store.getters.currentClass.slug, content: this.content.slug };
       API.course.getLikeCount(

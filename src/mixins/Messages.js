@@ -40,10 +40,6 @@ export default {
     ]),
     chunkedMessages() {
       return this.messages;
-      // Uncomment to chunk
-      // return _.pickBy(this.messages, (value, key) => {
-      //   return _.inRange(parseInt(key), this.currentSegmentGroup - 20, this.currentSegmentGroup + 5);
-      // });
     },
   },
   methods: {

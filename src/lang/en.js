@@ -81,4 +81,8 @@ export default {
     view_submissions: 'View Submissions',
     make_a_submission: 'Make a Submission',
   },
+  like: {
+    like_content: 'Like Content',
+    confirm_like: 'Confirm Like',
+  },
 };
