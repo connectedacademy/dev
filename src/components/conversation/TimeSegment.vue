@@ -26,7 +26,7 @@
 
     .meta-container(v-bind:class="{ active: segmentOpened }")
 
-      .message-wrapper.animated.fadeIn(v-for="segmentMessage in activeSegmentMessages")
+      .message-wrapper.animated.fadeIn(v-for="segmentMessage in filteredMessages")
         message(v-bind:message="segmentMessage")
 
     .quick-note(v-if="segmentPeeking || segmentOpened")
@@ -103,6 +103,14 @@ export default {
       'currentSegmentGroup',
       'activeSegmentMessages',
     ]),
+    filteredMessages() {
+      // Filter out highlighted message
+      let filteredMessages = this.activeSegmentMessages;
+      filteredMessages = _.filter(filteredMessages, (obj) => {
+        return obj.id !== this.message.message.id;
+      });
+      return _.orderBy(filteredMessages, ['createdAt'], ['desc']);
+    },
     isCurrent() {
       return this.currentSegmentGroup === this.message.segmentGroup;
     },
@@ -202,33 +210,13 @@ export default {
       API.message.getMessages(
         theRequest,
         response => {
-          // Filter out highlighted message
-          let filteredMessages = response.data;
-          filteredMessages = _.filter(filteredMessages, (obj) => {
-            return obj.id !== this.message.message.id;
-          });
-          filteredMessages = _.orderBy(filteredMessages, ['createdAt'], ['desc']);
-          this.$store.commit(types.SET_SEGMENT_MESSAGES, filteredMessages);
-          // this.segmentMessages = filteredMessages;
+          this.$store.commit(types.SET_SEGMENT_MESSAGES, response.data);
         },
         response => {
           alert('There was an error');
           this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
-          // this.segmentMessages = [];
         },
       );
-
-      // API.message.getSegmentSummarySocket(
-      //   theRequest,
-      //   response => {
-      //     Vue.$log.info('Subscribed to messages summary');
-      //     Vue.$log.info(theRequest);
-      //   },
-      //   response => {
-      //     Vue.$log.info('Failed to subscribe to messages summary');
-      //   },
-      // );
-
     },
   },
 };
