@@ -38,6 +38,7 @@ export default {
        }
 
        this.hasLiked = !this.hasLiked;
+      //  alert(`Liking content - ${JSON.stringify(this.content)}`);
     },
     showModal() {
       this.$store.commit(types.SHOW_LIKE);
@@ -78,7 +79,6 @@ export default {
   position absolute
   top 25px
   right 5px
-  // line-height 24px
   padding 0 8px
   min-width 20px
   text-align right
