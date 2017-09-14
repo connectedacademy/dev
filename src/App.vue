@@ -11,6 +11,8 @@
 
   authentication-flow
 
+  like-modal
+
   section-navigator
 
   burger-menu
@@ -56,6 +58,7 @@ import LeftDrawer from '@/components/navigation/drawers/LeftDrawer';
 import RightDrawer from '@/components/navigation/drawers/RightDrawer';
 import DebugPanel from '@/components/DebugPanel';
 import ActionPanel from '@/components/conversation/ActionPanel';
+import LikeModal from '@/components/modals/LikeModal';
 
 export default {
   name: 'app',
@@ -125,6 +128,7 @@ export default {
     LeftDrawer,
     RightDrawer,
     ActionPanel,
+    LikeModal,
   },
   methods: {
     goBack() {

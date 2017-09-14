@@ -1,9 +1,9 @@
 <template lang="pug">
 
   .like-indicator
-    span(@click="showModal")
-      icon(name="ca-heart")
-    like-modal(v-bind:content="content" v-on:hide="hideModal" v-bind:visible="modalVisible")
+    span(@click="toggleLike")
+      .heart(v-bind:class="{ active: hasLiked }")
+      //- span {{ likeCount }}
 
 </template>
 
@@ -11,13 +11,9 @@
 import API from '@/api';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
-import LikeModal from '@/components/modals/LikeModal';
 
 export default {
   name: 'like-indicator',
-  components: {
-    LikeModal,
-  },
   props: ['content'],
   created() {
     this.getLikeCount();
@@ -25,7 +21,8 @@ export default {
   data() {
     return {
       count: 0,
-      modalVisible: false,
+      hasLiked: false,
+      hasLikedBefore: true,
     };
   },
   computed: {
@@ -34,12 +31,18 @@ export default {
     },
   },
   methods: {
+    toggleLike() {
+       if (!this.hasLikedBefore) {
+         this.showModal();
+         return;
+       }
+
+       this.hasLiked = !this.hasLiked;
+    },
     showModal() {
-      this.modalVisible = true;
       this.$store.commit(types.SHOW_LIKE);
     },
     hideModal() {
-      this.modalVisible = false;
       this.getLikeCount();
       this.$store.commit(types.DISMISS_LIKE);
     },
@@ -73,11 +76,41 @@ export default {
   radius(6px)
   font-size 1em
   position absolute
-  top 15px
-  right 8px
-  line-height 24px
+  top 25px
+  right 5px
+  // line-height 24px
   padding 0 8px
   min-width 20px
   text-align right
 
+.heart {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  opacity 0.5
+  transform: translate(-50%, -50%) scale(0.5);
+  background: url(../assets/icons/heart.png) no-repeat;
+  background-position: 0 0;
+  background-size: auto 100px;
+  cursor: pointer;
+  animation: opacity 0.3s, fave-heart 1s steps(28);
+}
+.heart.active {
+  background-position: -2800px 0;
+  transition: background 1s steps(28);
+  opacity 1.0
+}
+.heart:hover {
+  opacity 1.0
+}
+@keyframes fave-heart {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -2800px 0;
+  }
+}
 </style>

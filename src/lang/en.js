@@ -83,6 +83,6 @@ export default {
   },
   like: {
     like_content: 'Like Content',
-    confirm_like: 'Confirm Like',
+    confirm: 'Okay, got it',
   },
 };

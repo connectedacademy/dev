@@ -1,35 +1,28 @@
 <template lang="pug">
 
-  .like-modal(v-bind:class="{ visible: visible }")
+  .like-modal(v-bind:class="{ visible: likeModalVisible }")
     .like-modal--header
       h1 {{ $t('like.like_content') }}
     .like-modal--container
       p When you like course material on connected academy we post a tweet with the link to that content through your twitter account.
 
       button.pure-button.pure-button-primary(v-on:click="likeContent")
-        | {{ $t('like.confirm_like') }}
-
+        | {{ $t('like.confirm') }}
+    
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import * as types from '@/store/mutation-types';
+
 export default {
   name: 'like-modal',
-  props: ['content', 'visible'],
-  watch: {
-    likeModalVisible(nV) {
-      if (!nV) {
-        this.$emit('hide');
-      }
-    }
-  },
   computed: {
-    ...mapGetters(['likeModalVisible']),
+    ...mapGetters(['likeModalVisible', 'currentLikeContent']),
   },
   methods: {
     likeContent() {
-      this.$log.info('Content liked');
-      this.$emit('hide');
+      this.$store.commit(types.DISMISS_LIKE);
     },
   },
 };
