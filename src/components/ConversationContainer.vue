@@ -42,26 +42,16 @@ export default {
   },
   props: ['content'],
   mounted() {
-
+    this.loadMedia(this.content);
+    this.loadVisualisation(this.content);
+    this.loadSubtitles(this.content);
     setTimeout(() => {
-
-      const request = {
-        theClass: this.currentClass.slug,
-        theContent: this.content.slug,
-      };
-
-      const images = this.content.images;
-
-      this.$store.dispatch('getMedia', { slug: `${this.content.slug}`, path: `${this.course.baseUri}${this.currentClass.dir}/${images}` });
-
-      this.loadVisualisation(this.content);
-      this.loadSubtitles(this.content);
-
-    }, 500);
+      this.$log.info(`Getting messages for segment ${0}`);
+      this.loadSegmentSummary(0);
+    }, 100);
   },
   data() {
     return {
-      media: [],
       messagePriority: true,
     };
   },

@@ -47,8 +47,11 @@ export default {
 
       if (this.content === undefined) { return; }
       if (this.currentClass === undefined) { return; }
-      if (this.currentSection === undefined) { return; }
-      if (this.content.slug !== this.currentSection.slug) { return; }
+
+      if (segmentGroup !== 0) {
+        if (this.currentSection === undefined) { return; }
+        if (this.content.slug !== this.currentSection.slug) { return; }
+      }
 
       Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
@@ -70,7 +73,7 @@ export default {
         endSegment: `${parseInt(endSegment)}`,
       };
 
-      if ((startSegment % 10) === 0) {
+      if (((startSegment % 10) === 0) || (startSegment === 0)) {
         API.message.getSegmentSummary(
           theRequest,
           response => {

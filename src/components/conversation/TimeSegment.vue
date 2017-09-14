@@ -264,13 +264,15 @@ export default {
 
     .segment-label--group
       radius(4px)
+      animate()
       background $color-lightest-grey
       font-size 0.8em
-      opacity 0.1
+      opacity 0.05
       padding 6px 12px
       position absolute
       top 10px
       left 10px
+      z-index 2
 
     .suggestion
       padding 20px
