@@ -5,7 +5,7 @@
     #video-wrapper
       youtube#video-container(v-if="src && (this.playerType === 'youtube')" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="youtubeReady" @playing="youtubePlaying" @paused="youtubePaused" @ended="youtubeEnded" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="{ height: `${this.pHeight}px`, width: `${this.pWidth}px` }")
       #soundcloud-container(v-if="src && (this.playerType === 'soundcloud')")
-        img(src="https://developers.soundcloud.com/assets/logo_black-8c4cb46bf63fda8936f9a4d967416dc6.png")
+        img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
       img.image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:src="mediaItem" v-bind:class="{ active: (currentSegmentIndex === index) }")
