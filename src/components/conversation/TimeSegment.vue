@@ -22,9 +22,13 @@
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
       span(v-if="message.info && message.info.total && (message.info.total > 1)") {{ `Read ${message.info.total} other notes` }}
-      span(v-else) Be the first to make a note
+      span(v-else-if="message.info && message.info.total && (message.info.total > 0)") {{ `Read all notes` }}
+      span(v-else) Be the first to make a note.
 
     .meta-container(v-bind:class="{ active: segmentOpened }")
+
+      .status-indicator(v-if="loadingMessages") Looking for notes...
+      .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Be the first to make a note.
 
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages" v-bind:class="{ featured: (segmentMessage.id === message.message.id) }")
         message(v-bind:message="segmentMessage")
@@ -91,6 +95,7 @@ export default {
       segmentExpanded: false,
       segmentOpened: false,
       segmentPeeking: false,
+      loadingMessages: false,
       segmentStyle: {},
       calculatedOffset: 0,
       calculatedOffsetBottom: 0,
@@ -146,6 +151,11 @@ export default {
 
       if (this.segmentOpened) { return; }
 
+      // Remove segment messages
+      this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+
+      this.loadingMessages = true;
+
       this.$store.commit(types.SET_ACTIVE_SEGMENT, this.message.segmentGroup)
 
       let calculatedOffset = document.getElementsByClassName('peek')[0].getBoundingClientRect().top;
@@ -194,6 +204,8 @@ export default {
 
       Vue.$log.info('Loading segment messages');
 
+      this.loadingMessages = true;
+
       let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.getters.currentSection.slug;
 
       const theRequest = {
@@ -207,10 +219,12 @@ export default {
         theRequest,
         response => {
           this.$store.commit(types.SET_SEGMENT_MESSAGES, response.data);
+          this.loadingMessages = false;
         },
         response => {
           alert('There was an error');
           this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+          this.loadingMessages = false;
         },
       );
     },
@@ -340,6 +354,11 @@ export default {
   left 0
   right 0
   z-index 0
+
+.status-indicator
+  color $color-text-grey
+  padding 40px
+  text-align center
 
 .segment-expansion-bar
   animate()
