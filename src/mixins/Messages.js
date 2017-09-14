@@ -22,12 +22,10 @@ export default {
         Vue.set(this.messages, key, updateMessage);
 
         // Update active segment messages
-        console.log(this.currentSegmentGroup);
-        console.log(`${_.round(parseInt(obj.msg.segment) * 0.2)}`);
-        // if (this.currentSegmentGroup === _.round(parseInt(obj.msg.segment) * 0.2)) {
+        if (this.peekSegment === _.round(parseInt(obj.msg.segment) * 0.2)) {
           console.log('Pushing message');
           this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
-        // }
+        }
       }
     });
   },

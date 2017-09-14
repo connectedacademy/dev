@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #action-panel(v-bind:class="{ hide: (this.currentSectionScrollPosition <= 0), pinned: composerHidden }")
+  #action-panel(v-bind:class="{ hide: (this.currentSectionScrollPosition <= 0), pinned: !composerHidden }")
     ul#experience-controls
     
       li.experience-control(@click="toggleVideoPlaying")
@@ -15,7 +15,7 @@
         #progress-bar--thumb(v-bind:style="{ left: `${((100 / content.duration) * currentTime)}%` }")
 
       li.experience-control.pull-right(@click="toggleComposer")
-        icon(v-bind:name="composerHidden ? 'angle-down' : 'angle-up'")
+        icon(v-bind:name="composerHidden ? 'angle-up' : 'angle-down'")
       li.experience-control.pull-right
         a(v-bind:href="twitterLink" target="_blank")
           icon(name="twitter")

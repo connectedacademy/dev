@@ -78,7 +78,7 @@ export default {
     url() {
       if (this.currentSection === undefined) { return ''; }
       if (window.location.host === 'localhost:8080') {
-        return `https://testclass.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
+        return `https://${this.course.slug}.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
       } else {
         return `${window.location.protocol}//${window.location.host}/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
       }

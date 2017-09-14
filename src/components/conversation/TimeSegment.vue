@@ -4,7 +4,7 @@
 
     .primary-wrapper(@click="peek()")
 
-      .segment-label--group(v-once) {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
+      .segment-label--group(v-once v-if="this.$store.state.debug") {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
 
       .subtitle-wrapper
         subtitle(v-once v-bind:subtitle="subtitle")
@@ -26,7 +26,7 @@
 
     .meta-container(v-bind:class="{ active: segmentOpened }")
 
-      .message-wrapper.animated.fadeIn(v-for="segmentMessage in filteredMessages")
+      .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages" v-bind:class="{ featured: (segmentMessage.id === message.message.id) }")
         message(v-bind:message="segmentMessage")
 
     .quick-note(v-if="segmentPeeking || segmentOpened")
@@ -103,13 +103,9 @@ export default {
       'currentSegmentGroup',
       'activeSegmentMessages',
     ]),
-    filteredMessages() {
-      // Filter out highlighted message
-      let filteredMessages = this.activeSegmentMessages;
-      filteredMessages = _.filter(filteredMessages, (obj) => {
-        return obj.id !== this.message.message.id;
-      });
-      return _.orderBy(filteredMessages, ['createdAt'], ['desc']);
+    orderedMessages() {
+      // Order messages
+      return _.orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
     },
     isCurrent() {
       return this.currentSegmentGroup === this.message.segmentGroup;
@@ -325,6 +321,12 @@ export default {
     .message-wrapper
       transform translate(0, 0) !important
       width 100%
+      &.featured
+        border-left $color-primary 2px solid
+        &:before
+          content ''
+          height 100px
+          width 100px
       .tweet-actions
         background-color inherit
     &.active
