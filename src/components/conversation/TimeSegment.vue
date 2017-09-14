@@ -4,19 +4,19 @@
 
     .primary-wrapper(@click="peek()")
 
-      .segment-label--group {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
+      .segment-label--group(v-once) {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
 
       .subtitle-wrapper
-        subtitle(v-bind:subtitle="subtitle")
+        subtitle(v-once v-bind:subtitle="subtitle")
 
       .message-wrapper
 
-        message(v-once v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
+        message(v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
-        .suggestion(v-if="message.message && message.message.suggestion")
+        .suggestion(v-once v-if="message.message && message.message.suggestion")
           h3 "{{ message.message.text }}"
 
-        mock-message(v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))" v-bind:message="message")
+        mock-message(v-once v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))" v-bind:message="message")
 
       .clearfix
 
