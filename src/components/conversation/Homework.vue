@@ -17,7 +17,7 @@
     p.content-description {{ content.description }}
 
     .submission-button-wrapper
-      .pure-button(v-if="content.url" @click="viewSubmissions")
+      .pure-button(v-if="content.url" @click="openHomework")
         | {{ $t('common.participate') }}
 
   submission-grid(v-bind:content="content")
@@ -39,7 +39,7 @@ export default {
     SubmissionGrid,
   },
   methods: {
-    viewSubmissions() {
+    openHomework() {
       this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`);
     },
   },

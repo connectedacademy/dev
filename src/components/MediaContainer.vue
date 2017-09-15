@@ -9,9 +9,9 @@
     
     #images-wrapper
       #image-current
-        .image-tile.active(v-bind:style="{ 'background-image': `url('${mediaItems[currentSegmentIndex]}')` }")
+        .image-tile.active(v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/small/${mediaItems[currentSegmentIndex]}')` }")
       .image-thumbnails
-        .image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:style="{ 'background-image': `url('${mediaItem}')` }")
+        .image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/thumb/${mediaItem}')` }")
         .clearfix
 
 </template>
@@ -148,8 +148,7 @@ export default {
 
       for (var i = 0; i < this.media.length; i++) {
         const image = this.media[i];
-        media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${image.text}`
-        mediaItems.push(media);
+        mediaItems.push(image.text);
       }
 
       return mediaItems;

@@ -4,6 +4,7 @@ import * as config from './config';
 import auth from './auth';
 import admin from './admin';
 import analytics from './analytics';
+import like from './like';
 import markdown from './markdown';
 import course from './course';
 import message from './message';
@@ -16,6 +17,7 @@ export default {
   auth,
   admin,
   analytics,
+  like,
   markdown,
   course,
   message,

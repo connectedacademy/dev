@@ -35,9 +35,7 @@
     //- CONTENT
     .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
 
-      //- .type-indicator(v-bind:title="content.slug" v-bind:class="{ active: (currentActiveSection !== undefined) && (content.slug === currentActiveSection.slug) }")
-
-      like-indicator(v-bind:content="content")
+      like-indicator(v-bind:content-slug="content.slug" v-bind:class-slug="currentClass.slug" v-bind:haveliked="content.haveliked" v-bind:likes="content.likes" v-bind:has-liked.sync="content.haveliked" v-bind:like-count.sync="content.likes")
 
       .course-content--header
         h1.content-title(v-if="content.title")

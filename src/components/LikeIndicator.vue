@@ -1,9 +1,9 @@
 <template lang="pug">
 
   .like-indicator
-    span(@click="toggleLike")
-      .heart(v-bind:class="{ active: hasLiked }")
-      //- span {{ likeCount }}
+    .like-indicator-wrapper(@click="toggleLike")
+      .heart(v-bind:class="{ active: haveliked }")
+      .like-count(v-if="likeCount > 0") {{ likeCount }}
 
 </template>
 
@@ -14,31 +14,59 @@ import * as types from '@/store/mutation-types';
 
 export default {
   name: 'like-indicator',
-  props: ['content'],
+  props: ['contentSlug', 'classSlug', 'haveliked', 'likes'],
   created() {
+    this.hasLiked = this.haveliked;
+    this.likeCount = this.likes;
     this.getLikeCount();
   },
   data() {
     return {
-      count: 0,
+      firstTime: false,
       hasLiked: false,
-      hasLikedBefore: true,
+      likeCount: 0,
     };
-  },
-  computed: {
-    likeCount() {
-      return `${this.count}`;
-    },
   },
   methods: {
     toggleLike() {
-       if (!this.hasLikedBefore) {
-         this.showModal();
-         return;
-       }
+      if (this.firstTime) {
+        this.showModal();
+        return;
+      }
 
-       this.hasLiked = !this.hasLiked;
-      //  alert(`Liking content - ${JSON.stringify(this.content)}`);
+      const request = { class: this.classSlug, content: this.contentSlug };
+
+      if (this.haveliked) {
+        API.like.unlikeContent(
+          request,
+          (response) => {
+            this.$log.info(`Response from unlike request - '${this.contentSlug}'`);
+            this.$log.info(response);
+            this.likeCount = this.likeCount - 1;
+            this.$emit('update:hasLiked', false);
+            this.$emit('update:likeCount', this.likeCount);
+          },
+          (response) => {
+            // TODO: Handle failed request
+            this.$log.info(`Failed to unlike content - '${this.contentSlug}'`);
+          },
+        )
+      } else {
+        API.like.likeContent(
+          request,
+          (response) => {
+            this.$log.info(`Response from like request - '${this.contentSlug}'`);
+            this.$log.info(response);
+            this.likeCount = this.likeCount + 1;
+            this.$emit('update:hasLiked', true);
+            this.$emit('update:likeCount', this.likeCount);
+          },
+          (response) => {
+            // TODO: Handle failed request
+            this.$log.info(`Failed to like content - '${this.contentSlug}'`);
+          },
+        )
+      }
     },
     showModal() {
       this.$store.commit(types.SHOW_LIKE);
@@ -48,20 +76,20 @@ export default {
       this.$store.commit(types.DISMISS_LIKE);
     },
     getLikeCount() {
-      const request = { class: this.$store.getters.currentClass.slug, content: this.content.slug };
+      const request = { class: this.classSlug, content: this.contentSlug };
       API.course.getLikeCount(
         request,
         (response) => {
-          this.$log.info(`Response from like count request - '${this.content.slug}'`);
+          this.$log.info(`123Response from like count request - '${this.contentSlug}'`);
           this.$log.info(response);
-          this.count = _.reduce(response, function(sum, o) {
-            return o;
-          });
+          // this.likeCount = _.reduce(response, function(sum, o) {
+          //   return o;
+          // });
+          // this.$emit('update:likeCount', this.likeCount);
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info(`Failed to retrieve like count for '${this.content.slug}'`);
-          this.count = '-';
+          this.$log.info(`Failed to retrieve like count for '${this.contentSlug}'`);
         },
       );
     },
@@ -77,11 +105,22 @@ export default {
   radius(6px)
   font-size 1em
   position absolute
-  top 25px
-  right 5px
-  padding 0 8px
-  min-width 20px
-  text-align right
+  top 0
+  right 0
+  .like-indicator-wrapper
+    height 50px
+    width 50px
+    position relative
+    .heart
+      padding 0 8px
+    .like-count
+      color $color-text-grey
+      font-size 0.9em
+      position absolute
+      line-height 50px
+      top 1px
+      left 0px
+    
 
 .heart {
   width: 100px;
