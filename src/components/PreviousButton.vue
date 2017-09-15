@@ -24,7 +24,7 @@ export default {
 
 .previous-button
   animate()
-  radius(6px)
+  radius(26px)
   color white
   display inline-block
   text-align center

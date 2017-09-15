@@ -8,8 +8,11 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      img.image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:src="mediaItem" v-bind:class="{ active: (currentSegmentIndex === index) }")
-      .clearfix
+      #image-current
+        .image-tile.active(v-bind:style="{ 'background-image': `url('${mediaItems[currentSegmentIndex]}')` }")
+      .image-thumbnails
+        .image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:style="{ 'background-image': `url('${mediaItem}')` }")
+        .clearfix
 
 </template>
 
@@ -141,11 +144,11 @@ export default {
 
       if (this.media.length === 0) { return mediaItems; }
 
-      let media = `https://github.com/connectedacademy/${this.course.slug}/raw/master/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
+      let media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
 
       for (var i = 0; i < this.media.length; i++) {
         const image = this.media[i];
-        media = `https://github.com/connectedacademy/${this.course.slug}/raw/master/course/content/en/${this.currentClass.dir}/transcripts/${image.text}`
+        media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${image.text}`
         mediaItems.push(media);
       }
 
@@ -154,7 +157,7 @@ export default {
     currentSegmentIndex() {
       if (this.media.length === 0) { return 0; }
 
-      let media = `https://github.com/connectedacademy/${this.course.slug}/raw/master/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
+      let media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
 
       for (var i = 0; i < this.media.length; i++) {
         const image = this.media[i];
@@ -178,24 +181,43 @@ $media-height = 220px
   padding 0 8px
   position relative
   height $media-height
-  overflow-x scroll
-  overflow-y hidden
+  overflow-y scroll
   &.youtube-mode
     padding-left (188px / 0.5625) + 16px
   &.soundcloud-mode
     padding-left 38px + 16px
   #images-wrapper
     background white
-    padding 8px
-    white-space nowrap
-    .image-tile
-      animate()
-      height ($media-height - 32px)
-      margin 8px
-      opacity 0.5
-      width auto
-      &.active
-        opacity 1
+    height ($media-height - 16px)
+    overflow hidden
+    padding 0
+    position relative    
+    .image-thumbnails
+      overflow scroll
+      height ($media-height - 16px)
+      padding-left 220px
+      .image-tile
+        background-image()
+        background-color $color-lightest-grey
+        float left 
+        margin 4px
+        height calc(200px / 2)
+        width calc(200px / 2)
+    #image-current
+      background-color $color-light-grey
+      border $color-border 1px solid
+      border-box()
+      height ($media-height - 16px)
+      margin 0
+      position absolute
+      left 15px
+      top 0
+      width 200px
+      .image-tile
+        background-image()
+        pinned()
+        background-size contain
+        position absolute
 
   #video-wrapper
     top 0

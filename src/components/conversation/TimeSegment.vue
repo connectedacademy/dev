@@ -334,13 +334,18 @@ export default {
     overflow scroll
     .message-wrapper
       transform translate(0, 0) !important
+      position relative
       width 100%
       &.featured
-        border-left $color-primary 2px solid
         &:before
+          radius(50%)
           content ''
-          height 100px
-          width 100px
+          background-color $color-primary
+          position absolute
+          top 0
+          left 0
+          height 8px
+          width 8px
       .tweet-actions
         background-color inherit
     &.active

@@ -55,6 +55,8 @@
           .clearfix
 
         video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
+        
+        soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud")
 
         message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
 
@@ -83,6 +85,7 @@ import Auth from '@/mixins/Auth';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import MarkdownContent from '@/components/MarkdownContent';
 import MarkdownLink from '@/components/MarkdownLink';
+import SoundcloudEmbed from '@/components/SoundcloudEmbed';
 import VideoEmbed from '@/components/VideoEmbed';
 import LikeIndicator from '@/components/LikeIndicator';
 
@@ -106,6 +109,7 @@ export default {
     MarkdownContent,
     MarkdownLink,
     VideoEmbed,
+    SoundcloudEmbed,
     LikeIndicator,
     Homework,
     FourCorners,
