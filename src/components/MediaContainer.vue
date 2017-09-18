@@ -8,10 +8,10 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      #image-current
+      #image-current(@click="setLightboxMedia(mediaItems[currentSegmentIndex])")
         .image-tile.active(v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/small/${mediaItems[currentSegmentIndex]}')` }")
       .image-thumbnails
-        .image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/thumb/${mediaItem}')` }")
+        .image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/thumb/${mediaItem}')` }" @click="setLightboxMedia(mediaItem)")
         .clearfix
 
 </template>
@@ -31,6 +31,8 @@ export default {
   props: ['player-type'],
   data() {
     return {
+      lightboxVisible: false,
+      lightboxImage: undefined,
       soundcloudPlayer: undefined,
       pHeight: 188,
       pWidth: (188 / 0.5625),
@@ -70,6 +72,9 @@ export default {
     },
   },
   methods: {
+    setLightboxMedia(media) {
+      this.$store.commit(types.SET_LIGHTBOX_MEDIA, media);
+    },
     change() {},
     initializeSoundcloudPlayer() {
       if (!this.soundcloudPlayer && this.src) {
@@ -176,7 +181,6 @@ export default {
 $media-height = 220px
 
 #media-wrapper
-  animate()
   padding 0 8px
   position relative
   height $media-height
@@ -194,7 +198,7 @@ $media-height = 220px
     .image-thumbnails
       overflow scroll
       height ($media-height - 16px)
-      padding-left 220px
+      padding-left 280px
       .image-tile
         background-image()
         background-color $color-lightest-grey
@@ -202,8 +206,10 @@ $media-height = 220px
         margin 4px
         height calc(200px / 2)
         width calc(200px / 2)
+        &:hover
+          cursor pointer
     #image-current
-      background-color $color-light-grey
+      // background-color $color-light-grey
       border $color-border 1px solid
       border-box()
       height ($media-height - 16px)
@@ -211,12 +217,14 @@ $media-height = 220px
       position absolute
       left 15px
       top 0
-      width 200px
+      width 260px
       .image-tile
         background-image()
         pinned()
         background-size contain
         position absolute
+        &:hover
+          cursor pointer
 
   #video-wrapper
     top 0

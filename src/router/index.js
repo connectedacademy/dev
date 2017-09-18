@@ -12,6 +12,8 @@ import Markdown from '@/components/Markdown';
 import Feedback from '@/components/feedback/Feedback';
 import FeedbackView from '@/components/feedback/FeedbackView';
 
+import FourCornersView from '@/components/fourcorners/FourCornersView';
+
 import About from '@/components/pages/About';
 import Schedule from '@/components/pages/Schedule';
 
@@ -68,6 +70,12 @@ export default new Router({
       name: 'view_feedback',
       path: '/feedback/:id',
       component: FeedbackView,
+      meta: { scrollToTop: true },
+    },
+    {
+      name: 'fourcorners',
+      path: '/fourcorners',
+      component: FourCornersView,
       meta: { scrollToTop: true },
     },
     {

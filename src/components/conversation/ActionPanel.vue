@@ -99,7 +99,6 @@ $media-height = 220px
   height ($media-height + 50px)
   z-index 50
   bottom -($media-height)
-  overflow hidden
   position fixed
   left 50%
   margin-left -390px

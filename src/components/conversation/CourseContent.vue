@@ -56,6 +56,8 @@
         
         soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud")
 
+        webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClass.slug" v-bind:content-slug="content.slug")
+
         message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
 
       .course-content--footer(v-if="isRegistered && (content.expectsubmission || (content.url && !content.thumbnails))")
@@ -93,6 +95,7 @@ import FourCorners from '@/components/conversation/FourCorners';
 import FutureContent from '@/components/conversation/FutureContent';
 import InjectedQuestion from '@/components/conversation/InjectedQuestion';
 import NextClass from '@/components/conversation/NextClass';
+import WebinarMessageTicker from '@/components/webinar/WebinarMessageTicker';
 
 import MessageComposer from '@/components/MessageComposer';
 
@@ -116,6 +119,7 @@ export default {
     InjectedQuestion,
     NextClass,
     MessageComposer,
+    WebinarMessageTicker,
   },
   created() {
 
@@ -189,6 +193,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/layout/course-content'
+
 .md-thumbnail-row
   height 120px
   margin 15px 0

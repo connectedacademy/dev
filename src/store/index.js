@@ -14,6 +14,7 @@ import composer from './modules/composer';
 
 import course from './modules/course';
 import conversation from './modules/conversation';
+import lightbox from './modules/lightbox';
 import video from './modules/video';
 
 Vue.use(Vuex);
@@ -31,6 +32,7 @@ export default new Vuex.Store({
 
     course,
     conversation,
+    lightbox,
     video,
   },
   state: {

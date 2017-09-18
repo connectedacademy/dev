@@ -8,7 +8,7 @@
       h1 {{ corners[currentCorner].title }}
       p {{ (expanded) ? corners[currentCorner].text : bannerText }}
       .buttons(v-if="expanded") 
-        router-link.pure-button.pure-button-subtle(v-if="currentCorner !== 'default'" to="/markdown/fourcorners.md") Learn More
+        router-link.pure-button.pure-button-subtle(v-if="currentCorner !== 'default'" to="/fourcorners") Learn More
         .pure-button.pure-button-subtle(v-if="currentCorner === 'default'" @click="currentCorner = 'default'; expanded = false") Minimize
 
     #corners
@@ -91,7 +91,7 @@ $corner-width = 8px
 #fourcorners-banner
   radius(6px)
   background-color $color-darkest-grey
-  background url('https://raw.githubusercontent.com/connectedacademy/testclass/master/course/content/media/lake.jpg')
+  background url('../../assets/images/lake.jpg')
   background-image()
   background-position center right
 

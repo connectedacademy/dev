@@ -11,11 +11,23 @@
 </template>
 
 <script>
+import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex'
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default {
   name: 'about',
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
+      vm.$store.commit(types.SET_PAGE_STYLE, undefined);
+    });
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit(types.SET_NAV_STATE, { minimized: true });
+    this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    next();
+  },
   components: {
     MarkdownRenderer,
   },

@@ -18,12 +18,24 @@
 </template>
 
 <script>
+import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
 import Moment from 'moment';
 import HubSelector from '../HubSelector';
 
 export default {
   name: 'schedule',
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
+      vm.$store.commit(types.SET_PAGE_STYLE, undefined);
+    });
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit(types.SET_NAV_STATE, { minimized: true });
+    this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    next();
+  },
   data() {
     return {
       navTitle: 'Schedule - Connected Academy',

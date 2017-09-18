@@ -13,6 +13,8 @@
 
   like-modal
 
+  media-lightbox
+
   section-navigator
 
   burger-menu
@@ -59,6 +61,7 @@ import RightDrawer from '@/components/navigation/drawers/RightDrawer';
 import DebugPanel from '@/components/DebugPanel';
 import ActionPanel from '@/components/conversation/ActionPanel';
 import LikeModal from '@/components/modals/LikeModal';
+import MediaLightbox from '@/components/modals/MediaLightbox';
 
 export default {
   name: 'app',
@@ -129,6 +132,7 @@ export default {
     RightDrawer,
     ActionPanel,
     LikeModal,
+    MediaLightbox,
   },
   methods: {
     goBack() {
@@ -245,6 +249,10 @@ body.disable-scroll
   &.admin
     .page-header
       background-color $color-darkest-grey
+  &.fourcorners
+    .page-header
+      background-color #232323
+      // background-color $color-fourcorners
 
 // Hide page header on colourful pages
 html.colourful

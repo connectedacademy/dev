@@ -9,6 +9,8 @@
         class-selector
         //- full-class-selector
 
+        join-banner
+
         course-content(v-bind:course-content="courseContent")
 
 </template>
@@ -23,6 +25,7 @@ import * as types from '@/store/mutation-types';
 import AnimatedLogo from '@/components/AnimatedLogo';
 import ClassSelector from '@/components/ClassSelector';
 import FullClassSelector from '@/components/FullClassSelector';
+import JoinBanner from '@/components/banners/JoinBanner';
 
 import CourseContent from '@/components/conversation/CourseContent';
 
@@ -57,6 +60,7 @@ export default {
     ClassSelector,
     CourseContent,
     FullClassSelector,
+    JoinBanner,
     MarkdownRenderer,
   },
   watch: {

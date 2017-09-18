@@ -299,13 +299,20 @@ export default {
     margin 30px 20px 30px 0px
     padding-left 20px
     font-style italic
+
+  pre
+    radius(6px)
+    background-color $color-lighter-grey
+    max-width 100%
+    padding 20px
+
   img
     display inline-block
     margin 10px
     width 100%
     max-width 160px
 
-  img[data-4c], .fc-image img
+  img[data-4c], .fc-image img, .fc-image > img
     display block
     margin 0
     max-width 100%

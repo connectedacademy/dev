@@ -97,4 +97,9 @@ cross-length = 320px
     .animated-logo
       background-color transparent
 
+  &.fourcorners
+    .animated-logo
+      // background-color $color-fourcorners
+      background-color #232323
+
 </style>

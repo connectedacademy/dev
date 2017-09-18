@@ -24,7 +24,7 @@
         .clearfix
 
       .feedback-submission
-        textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment"  @keydown.enter="postFeedbackComment")
+        textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment" @keydown.enter.prevent.stop="postFeedbackComment")
         .pure-button(v-on:click="postFeedbackComment") Send
         .clearfix
       .clearfix
@@ -43,7 +43,6 @@ import * as types from '@/store/mutation-types';
 import FourCornersMixin from '@/mixins/FourCorners';
 import FourCorners from '../fourcorners/FourCorners';
 
-import PreviousButton from '../PreviousButton';
 import InfoDialogue from '../InfoDialogue';
 
 export default {
@@ -53,22 +52,14 @@ export default {
     FourCornersMixin,
   ],
   mounted() {
-
-    var self = this;
-
-    this.$io.socket.on('user', function(obj) {
+    this.$io.socket.on('user', (obj) => {
       console.log('Submission message received');
       console.log(obj);
-      switch (obj.data.msgtype) {
-        case 'discussion':
 
-          if (self.currentFeedbackId === obj.data.msg.relates_to) {
-            self.discussion.push(obj.data.msg);
-            // self.getDiscussion();
-          }
-
-          break;
-        default:
+      if (obj.data.msgtype === 'discussion') {
+        if (this.currentFeedbackId === obj.data.msg.relates_to) {
+          this.discussion.push(obj.data.msg);
+        }
       }
     });
   },
@@ -185,7 +176,6 @@ export default {
     },
   },
   components: {
-    PreviousButton,
     InfoDialogue,
     FourCorners,
   },

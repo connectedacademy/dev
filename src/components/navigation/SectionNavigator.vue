@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#section-navigator
+#section-navigator(v-if="isVisible")
   transition-group(name="fade" mode="in-out" tag="ul" class="navigation-items")
     section-navigator-item(v-for="scrollPoint in scrollPoints" v-bind:key="scrollPoint.slug" v-bind:scroll-point="scrollPoint")
 
@@ -9,11 +9,15 @@
 <script>
 import {mapGetters} from 'vuex';
 import SectionNavigatorItem from './SectionNavigatorItem';
+import _ from 'lodash';
 
 export default {
   name: 'section-navigator',
   computed: {
     ...mapGetters(['scrollPoints']),
+    isVisible() {
+      return _.size(this.scrollPoints)
+    },
   },
   components: {
     SectionNavigatorItem,

@@ -6,25 +6,39 @@ import { mapGetters } from 'vuex';
 export default {
   mounted() {
     Vue.io.socket.on('message', (obj) => {
-      console.log('message received over socket connection')
-      console.log(obj);
+      
       if (obj.msgtype === 'message') {
+
+        console.log('message received over socket connection')
+        console.log(obj);
         
-        // Update message
         const key = `${_.round(parseInt(obj.msg.segment) * 0.2)}`
         let updateMessage = this.messages[key]
-        updateMessage.message = obj.msg
 
-        // Increment total
-        updateMessage.info.total = updateMessage.info.total + 1
+        if (!obj.msg.tag && updateMessage) {
+          // Update message
+          updateMessage.message = obj.msg
 
-        // Update messages object
-        Vue.set(this.messages, key, updateMessage);
+          // Increment total
+          updateMessage.info.total = updateMessage.info.total + 1
 
-        // Update active segment messages
-        if (this.peekSegment === _.round(parseInt(obj.msg.segment) * 0.2)) {
-          console.log('Pushing message');
-          this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
+          // Update messages object
+          Vue.set(this.messages, key, updateMessage);
+
+          // Update active segment messages
+          if (this.peekSegment === _.round(parseInt(obj.msg.segment) * 0.2)) {
+            console.log('Pushing message');
+            this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
+          }
+        }
+        
+        if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
+
+          console.log('message received over socket connection')
+          console.log(obj);
+
+          console.log('Pushing message to webinar ticker');
+          this.webinarMessages.push(obj.msg);
         }
       }
     });
