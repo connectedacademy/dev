@@ -5,7 +5,9 @@
 
     .tile#info-tile
       //- icon(v-if="expanded && !(currentCorner === default)" v-bind:name="currentCorner.icon")
-      h1 {{ corners[currentCorner].title }}
+      h1(v-if="expanded && (currentCorner !== 'default')") {{ corners[currentCorner].title }}
+      img(v-if="!expanded || (currentCorner === 'default')" src="../../assets/logos/fourcorners/white-text.svg" height="20")
+
       p {{ (expanded) ? corners[currentCorner].text : bannerText }}
       .buttons(v-if="expanded") 
         router-link.pure-button.pure-button-subtle(v-if="currentCorner !== 'default'" to="/fourcorners") Learn More
@@ -148,6 +150,8 @@ $corner-width = 8px
 
     .tile
       &#info-tile
+        img
+          padding 10px
         .buttons
           .pure-button
             display inline-block
