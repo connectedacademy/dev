@@ -2,7 +2,7 @@
 
 #join-banner.course-content(v-if="!isRegistered")
 
-  .course-content--header.block
+  .course-content--header
     h1.content-title
       | Ready to join the class?
     .auth-button-wrapper
@@ -37,24 +37,13 @@ export default {
   radius(4px)
   box-shadow()
   background-color white
-  // background-color darken($color-primary, 5%) !important
-
   .course-content--header
     padding 10px 20px 30px 20px
     text-align center
     h1.content-title
       color $color-text-dark-grey
-      // color white !important
+      margin 20px auto
     .auth-button-wrapper
       margin 10px auto 0 auto
       text-align center
-      // .pure-button
-      //   background-color transparent
-      //   border white 1px solid
-      //   color white
-      //   display inline-block
-      //   margin 5px
-      //   &:hover
-      //     background-color white
-      //     color $color-warning
 </style>

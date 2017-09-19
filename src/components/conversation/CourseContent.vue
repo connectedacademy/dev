@@ -2,6 +2,8 @@
 
 .course-content-wrapper
 
+  join-banner(v-if="!isIntroduction")
+
   .course-content-group(v-if="isIntroduction")
 
     //- ABOUT
@@ -17,6 +19,8 @@
         .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
         input(type="text" v-model="currentTime" v-if="$route.query.debug")
         .clearfix
+
+    join-banner
 
   .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
@@ -46,11 +50,9 @@
         p.content-description(v-if="content.description")
           markdown-content(v-bind:markdown="content.description")
 
-        .md-thumbnail-row(v-if="content.thumbnails")
-          router-link(v-for="thumbnail in content.thumbnails" v-bind:to="thumbnail.link" v-bind:key="thumbnail.link")
-            .md-thumbnail(v-bind:style="{ 'background-image': `url('${thumbnail.image}')` }")
-              .md-thumbnail-caption {{ thumbnail.caption }}
-          .clearfix
+        media-thumbnails(v-if="content.thumbnails" v-bind:thumbnails="content.thumbnails")
+
+        media-carousel(v-if="content.carousel" v-bind:media="content.carousel")
 
         video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
         
@@ -96,6 +98,10 @@ import FutureContent from '@/components/conversation/FutureContent';
 import InjectedQuestion from '@/components/conversation/InjectedQuestion';
 import NextClass from '@/components/conversation/NextClass';
 import WebinarMessageTicker from '@/components/webinar/WebinarMessageTicker';
+import JoinBanner from '@/components/banners/JoinBanner';
+
+import MediaCarousel from '@/components/MediaCarousel';
+import MediaThumbnails from '@/components/MediaThumbnails';
 
 import MessageComposer from '@/components/MessageComposer';
 
@@ -120,6 +126,9 @@ export default {
     NextClass,
     MessageComposer,
     WebinarMessageTicker,
+    JoinBanner,
+    MediaCarousel,
+    MediaThumbnails,
   },
   created() {
 
@@ -193,43 +202,5 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/layout/course-content'
-
-.md-thumbnail-row
-  height 120px
-  margin 15px 0
-  overflow-x scroll
-  overflow-y hidden
-  position relative
-  white-space nowrap
-  &::-webkit-scrollbar
-    display none
-  .md-thumbnail
-    animate()
-    background-image()
-    box-sizing()
-    display inline-block
-    height 0
-    margin 10px
-    overflow hidden
-    padding 5px
-    padding-bottom 100px
-    position relative
-    white-space nowrap
-    width 160px
-    .md-thumbnail-caption
-      animate()
-      pinned()
-      background-color alpha(black, 0.1)
-      color white
-      font-weight bold
-      line-height 110px
-      position absolute
-      text-align center
-    &:hover
-      cursor pointer
-      transform scale(1.1)
-      .md-thumbnail-caption
-        background-color alpha(black, 0.5)
-        transform scale(1.3)
 
 </style>

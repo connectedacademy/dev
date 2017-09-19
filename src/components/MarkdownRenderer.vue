@@ -32,7 +32,7 @@ export default {
     FourCornersMixin,
   ],
   components: {
-    FourCorners,
+    FourCorners
   },
   watch: {
     '$route': {
@@ -53,7 +53,7 @@ export default {
     return {
       loading: true,
       renderedMarkdown: 'Loading...',
-      frontMatter: {},
+      frontMatter: {}
     };
   },
   methods: {
@@ -215,7 +215,6 @@ export default {
         this.frontMatter = fm;
       })
       .use(MarkdownItCustomBlock, {
-
         bio(arg) {
           if (!arg) { return 'loading...'; }
 
@@ -369,5 +368,4 @@ export default {
         reset()
         color $color-text-grey
         text-align left
-
 </style>

@@ -38,6 +38,7 @@
     "vue-analytics": "^4.1.2",
     "vue-autosize": "^1.0.0",
     "vue-awesome": "^2.2.3",
+    "vue-awesome-swiper": "^2.6.4",
     "vue-chat-scroll": "^1.1.2",
     "vue-config": "^1.0.0",
     "vue-cookie": "^1.1.4",

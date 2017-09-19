@@ -81,14 +81,13 @@ export default {
     },
   },
   created() {
-    var self = this;
-    this.$store.dispatch('checkAuth').then(function() {
+    this.$store.dispatch('checkAuth').then(() => {
       // Check if user has registered
-      if (self.isAuthenticated && !self.isRegistered) {
-        self.$router.push('/registration');
+      if (this.isAuthenticated && !this.isRegistered) {
+        this.$router.push('/registration');
       } else {
-        if (self.user && self.user.account) {
-          self.$ga.set('userId', self.user.account);
+        if (this.user && this.user.account) {
+          this.$ga.set('userId', this.user.account);
         }
       }
     });

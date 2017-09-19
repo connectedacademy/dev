@@ -17,6 +17,8 @@ import RavenVue from 'raven-js/plugins/vue';
 import VueScroll from 'vue-scroll';
 import VueAutosize from 'vue-autosize';
 
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
 import { sync } from 'vuex-router-sync';
 
 import VueYouTubeEmbed from 'vue-youtube-embed';
@@ -58,6 +60,7 @@ Icon.register({
 
 Vue.component('icon', Icon);
 
+require('swiper/dist/css/swiper.css')
 require('animate.css');
 
 Vue.use(VueResource);
@@ -68,6 +71,7 @@ Vue.use(VueScrollBehavior, {
   // maxLength: 100,
   // ignore: [], // [/\/boo/, /\/zoo/]
 })
+Vue.use(VueAwesomeSwiper)
 
 Vue.use(VueConfig, Vue.config);
 
