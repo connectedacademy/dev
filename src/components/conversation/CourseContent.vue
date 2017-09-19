@@ -14,60 +14,63 @@
 
     join-banner
 
-  .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .course-content-wrapper(v-else)
 
-    //- JOIN BANNER
-    join-banner(v-if="!isIntroduction && (index === 3)")
+    .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
-    //- QUESTION
-    injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
+      //- JOIN BANNER
+      join-banner(v-if="!isIntroduction && (index === 3)")
 
-    //- HOMEWORK
-    homework(v-else-if="content.expectsubmission" v-bind:content="content")
+      //- QUESTION
+      injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
 
-    //- FOURCORNERS
-    four-corners(v-else-if="content.fourcornersintro")
+      //- HOMEWORK
+      homework(v-else-if="content.expectsubmission" v-bind:content="content")
 
-    //- LIVECLASS
-    live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+      //- FOURCORNERS
+      four-corners(v-else-if="content.fourcornersintro")
 
-    //- CONTENT
-    .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
+      //- LIVECLASS
+      live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
-      like-indicator(v-bind:content-slug="content.slug" v-bind:class-slug="currentClass.slug" v-bind:haveliked="content.haveliked" v-bind:likes="content.likes" v-bind:has-liked.sync="content.haveliked" v-bind:like-count.sync="content.likes")
+      //- CONTENT
+      .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
 
-      .course-content--header
-        h1.content-title(v-if="content.title")
-          | {{ content.title }}
+        like-indicator(v-bind:content-slug="content.slug" v-bind:class-slug="currentClass.slug" v-bind:haveliked="content.haveliked" v-bind:likes="content.likes" v-bind:has-liked.sync="content.haveliked" v-bind:like-count.sync="content.likes")
 
-      .course-content--body
+        .course-content--header
+          h1.content-title(v-if="content.title")
+            | {{ content.title }}
 
-        p.content-description(v-if="content.description")
-          markdown-content(v-bind:markdown="content.description")
+        .course-content--body
 
-        media-thumbnails(v-if="content.thumbnails" v-bind:thumbnails="content.thumbnails")
+          p.content-description(v-if="content.description")
+            markdown-content(v-bind:markdown="content.description")
 
-        media-carousel(v-if="content.carousel" v-bind:media="content.carousel")
+          media-thumbnails(v-if="content.thumbnails" v-bind:thumbnails="content.thumbnails")
 
-        video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
-        
-        soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud")
+          media-carousel(v-if="content.carousel" v-bind:media="content.carousel")
 
-        webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClass.slug" v-bind:content-slug="content.slug")
+          video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
+          
+          soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud")
 
-        message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
+          webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClass.slug" v-bind:content-slug="content.slug")
 
-      .course-content--footer(v-if="isRegistered && (content.expectsubmission || (content.url && !content.thumbnails))")
-        markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
-        .clearfix
+          message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
 
-  .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
+        .course-content--footer(v-if="isRegistered && (content.expectsubmission || (content.url && !content.thumbnails))")
+          markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
+          .clearfix
 
-    //- FUTURE CONTENT
-    future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
+    .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
+
+      //- FUTURE CONTENT
+      future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
 
     //- NEXT CLASS
-    next-class(v-else v-bind:content="content")
+    .course-content-group.course-content-group--future.animated.fadeIn(v-if="courseContent")
+      next-class(v-if="futureContent.length === 0")
 
 </template>
 

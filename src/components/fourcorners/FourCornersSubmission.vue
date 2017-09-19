@@ -56,7 +56,8 @@ export default {
       'isRegistered',
     ]),
     contentUrl() {
-      return `${window.location.protocol}//${window.location.host}/#/submission/${this.theClass}/${this.theContent}`;
+      return `https://interpretation.connectedacademy.io/#/submission/${this.theClass}/${this.theContent}`;
+      // return `${window.location.protocol}//${window.location.host}/#/submission/${this.theClass}/${this.theContent}`;
     },
     tweet() {
       return `${this.fourcornersLink} ${this.contentUrl} ${this.$store.getters.course.hashtag}`;

@@ -15,3 +15,10 @@ export default {
   ],
 };
 </script>
+
+<style lang="stylus" scoped>
+
+// img
+//   width 100% !important
+
+</style>

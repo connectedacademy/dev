@@ -23,7 +23,6 @@
 
         .clearfix
 
-
     .loading-wrapper(v-for="n in 5")
       .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
 //- 
