@@ -98,7 +98,6 @@ export default {
         name: 'rendered-markdown',
         parent: this,
         mounted() {
-
           this.checkingSubmissions = true;
 
           const request = { class: parent.theClass, content: parent.theContent };

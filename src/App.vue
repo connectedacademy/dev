@@ -5,7 +5,7 @@
 
 #app(v-bind:class="pageStyles")
 
-  lock(passcode="76234")
+  //- lock(passcode="76234")
 
   debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
 

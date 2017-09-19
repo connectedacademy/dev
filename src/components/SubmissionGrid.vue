@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .submission-grid-wrapper(v-if="content.submissions.length > 0")
+  .submission-grid-wrapper(v-if="content.submissions && content.submissions.length > 0")
     p.content-description You have made {{ content.submissions.length }} submission(s)
 
     ul.hidden.submission-grid

@@ -43,14 +43,6 @@ import API from '@/api';
 
 export default {
   name: 'class-selector',
-  mounted() {
-    if (this.currentClass) {
-      this.activeClass = this.currentClass.slug;
-      return;
-    }
-    this.viewIntroClass();
-
-  },
   watch: {
     currentClass(nV, oV) {
       this.activeClass = nV.slug;

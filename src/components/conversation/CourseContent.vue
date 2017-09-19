@@ -2,8 +2,6 @@
 
 .course-content-wrapper
 
-  join-banner(v-if="!isIntroduction")
-
   .course-content-group(v-if="isIntroduction")
 
     //- ABOUT
@@ -14,15 +12,12 @@
       .course-content--body
         markdown-renderer(v-bind:markdown-url="aboutMarkdown")
 
-      .course-content--footer
-        .login-button.pure-button.pure-button-primary.pull-right(v-if="isRegistered && $route.query.debug" @click="startDemo") Start Demo
-        .login-button.pure-button.pure-button-primary.pull-right(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
-        input(type="text" v-model="currentTime" v-if="$route.query.debug")
-        .clearfix
-
     join-banner
 
-  .course-content-group(v-for="content in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+
+    //- JOIN BANNER
+    join-banner(v-if="!isIntroduction && (index === 3)")
 
     //- QUESTION
     injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")

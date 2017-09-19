@@ -138,6 +138,9 @@ export default {
       return this.$router.go(-1);
     },
     getFeedbackItems() {
+      
+      if (!this.classSlug || !this.contentSlug) { return }
+
       const request = { class: this.classSlug, content: this.contentSlug };
       API.feedback.getFeedbackItems(
         request,

@@ -38,12 +38,14 @@
               .platform-tile--title {{ provider.name }}
             .clearfix
 
-        .platform-details(v-if="currentProvider !== undefined")
-          .video-walkthrough(v-if="providers[currentProvider].type === 'video'")
-            video-embed(v-bind:video-src="providers[currentProvider].link")
-            a(href="https://digitalinteraction.github.io/fourcorners-editor/" target="_blank") Online metadata editor
+        .platform-details(v-for="(provider, index) in providers" v-if="index === currentProvider")
+          
+          markdown-renderer(v-if="provider.link !== undefined" v-bind:markdown-url="provider.link")
+          
+          br
 
-          markdown-renderer(v-if="providers[currentProvider].type === 'link'" v-bind:markdown-url="providers[currentProvider].link")
+          .video-walkthrough(v-if="provider.video !== undefined")
+            video-embed(v-bind:video-src="provider.video")
             
 </template>
 
@@ -84,23 +86,23 @@ export default {
       providers: [
         {
           name: 'Wordpress',
-          type: 'video',
-          link: 'qmkdO81NM8U',
+          link: 'https://digitalinteraction.github.io/fourcorners/howto/wordpress.md',          
+          video: 'VqmSFDc_ZlY',
         },
         {
           name: 'Squarespace',
-          type: 'video',
-          link: 'VqmSFDc_ZlY',
+          link: 'https://digitalinteraction.github.io/fourcorners/howto/squarespace.md',
+          video: 'VqmSFDc_ZlY',
         },
         {
           name: 'Blogger',
-          type: 'video',
-          link: 'qmkdO81NM8U',
+          link: 'https://digitalinteraction.github.io/fourcorners/howto/blogger.md',
+          video: 'VqmSFDc_ZlY',
         },
         {
           name: 'Other',
-          type: 'link',
-          link: 'https://raw.githubusercontent.com/digitalinteraction/fourcorners/master/README.md',
+          link: 'https://digitalinteraction.github.io/fourcorners/howto/generic.md',
+          video: undefined,
         },
       ],
     };

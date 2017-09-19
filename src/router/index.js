@@ -26,11 +26,11 @@ export default new Router({
     return savedPosition || { x: 0, y: 0 }
   },
   routes: [
-    {
-      name: 'authenticated',
-      path: '/authenticated',
-      redirect: '/registration',
-    },
+    // {
+    //   name: 'authenticated',
+    //   path: '/authenticated',
+    //   redirect: '/registration',
+    // },
     {
       name: 'course-redirect',
       path: '/course/:classSlug/:contentSlug/:segmentId',

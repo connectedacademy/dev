@@ -113,22 +113,13 @@ export default {
     InfoDialogue,
     VueSlider,
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      document.documentElement.className = 'colourful';
-    });
-  },
-  beforeRouteLeave (to, from, next) {
-    // Reset state
-    document.documentElement.className = '';
-    next();
-  },
   created() {
     API.auth.checkAuth(
       (response) => {
-        this.checkingRegistration = false;
         if (response.user.registration) {
-          // this.$router.replace('/');
+          this.$router.replace('/');
+        } else {
+          this.checkingRegistration = false;
         }
       },
       (response) => {
