@@ -12,7 +12,7 @@ import Markdown from '@/components/Markdown';
 import Feedback from '@/components/feedback/Feedback';
 import FeedbackView from '@/components/feedback/FeedbackView';
 
-import FourCornersView from '@/components/fourcorners/FourCornersView';
+import FourCornersOnboarding from '@/components/fourcorners/FourCornersOnboarding';
 
 import About from '@/components/pages/About';
 import Schedule from '@/components/pages/Schedule';
@@ -75,7 +75,7 @@ export default new Router({
     {
       name: 'fourcorners',
       path: '/fourcorners',
-      component: FourCornersView,
+      component: FourCornersOnboarding,
       meta: { scrollToTop: true },
     },
     {

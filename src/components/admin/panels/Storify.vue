@@ -5,7 +5,7 @@
   .admin-panel--header
     h1 Storify
 
-  .admin-panel--content
+  .admin-panel--content(v-if="rssLink !== undefined")
 
     h5 Please copy and paste the following link into the Storify editor.
     input(v-model="rssLink" placeholder="RSS Link")
@@ -15,11 +15,47 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import API from '@/api';
+
 export default {
   name: 'storify',
+  watch: {
+    currentClass() {
+      this.loadLink();
+    }
+  },
+  methods: {
+    loadLink() {
+      if (!this.currentClass) return false;
+      
+      this.classroomCode = 'loading';
+
+      const classroomSlug = _.find(this.currentClass.content, (o) => {
+        return (o.content_type === 'class');
+      }).slug;
+
+      const request = { theClass: this.currentClass.slug, slug: classroomSlug };
+
+      API.classroom.getTeacherCode(
+        request,
+        (response) => {
+          this.$log.info(response);
+          this.rssLink = `https://api.connectedacademy.io/v1/classroom/rss/${response.code}`;
+        },
+        (response) => {
+          // TODO: Handle failed request
+          this.$log.info('Failed to retrieve teacher code');
+        },
+      );
+    }
+  },
   computed: {
-    rssLink() {
-      return `https://api.connectedacademy.io/v1/classroom/rss/${this.classroomCode}`;
+    ...mapGetters(['currentClass'])
+  },
+  data() {
+    return {
+      rssLink: undefined
     }
   },
 };
@@ -32,8 +68,6 @@ export default {
 @import '~stylus/admin'
 
 .admin-panel
-  background-image()
-  background-image url('https://storify.com/public/img/homepage/background.png') !important
   .admin-panel--content
     h5
       reset()

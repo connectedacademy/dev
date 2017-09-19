@@ -12,6 +12,8 @@
       .course-content--body
         markdown-renderer(v-bind:markdown-url="aboutMarkdown")
 
+        four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
+
     join-banner
 
   .course-content-wrapper(v-else)
@@ -101,6 +103,7 @@ import MediaCarousel from '@/components/MediaCarousel';
 import MediaThumbnails from '@/components/MediaThumbnails';
 
 import MessageComposer from '@/components/MessageComposer';
+import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 
 export default {
   name: 'course-content',
@@ -126,6 +129,7 @@ export default {
     JoinBanner,
     MediaCarousel,
     MediaThumbnails,
+    FourCornersLink,
   },
   created() {
 

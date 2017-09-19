@@ -13,7 +13,7 @@
 
   .fourcorners-submission.fourcorners-submission-submit(v-if="isRegistered && !checkingSubmissions && !submitting && !submitted")
     label Submit a link (via Twitter)
-    input(type="text" name="text" placeholder="Paste link to webpage with your Four Corners image" v-model="fourcornersLink")
+    input(type="text" name="text" placeholder="Paste link to webpage with your FourCorners image" v-model="fourcornersLink")
     .pure-button.pure-button-primary.pull-right(v-on:click="postTweet") Submit Homework
     .clearfix
 

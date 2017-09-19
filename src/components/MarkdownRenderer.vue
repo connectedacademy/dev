@@ -171,7 +171,7 @@ export default {
 
       this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
 
-      // Load four corners
+      // Load fourcorners
       var self = this;
       setTimeout(function() {
         self.loadFourCornersScript();

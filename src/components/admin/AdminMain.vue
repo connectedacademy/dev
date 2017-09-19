@@ -71,6 +71,9 @@ export default {
   },
   mounted() {
     this.layout();
+    if (this.course.classes) {
+      this.classSlug = this.course.classes[0].slug;
+    }
   },
   watch: {
     classSlug(nV) {

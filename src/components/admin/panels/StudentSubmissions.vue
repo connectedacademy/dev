@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.admin-panel
+.admin-panel(v-if="currentClass")
 
   .admin-panel--header
     h1 Student submissions
@@ -62,6 +62,7 @@ export default {
   computed: {
     ...mapGetters(['course', 'currentClass']),
     contentSlugs() {
+      if (!this.currentClass) return [];
       return _.filter(this.currentClass.content, (obj) => {
         return obj.homework;
       })

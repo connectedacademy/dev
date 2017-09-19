@@ -44,6 +44,8 @@
         .markdown-wrapper
           markdown-renderer(v-bind:markdown-url="markdownUrl")
 
+        four-corners-link(message="This homework requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
+
         four-corners-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug")
 
         #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
@@ -65,6 +67,7 @@ import Auth from '@/mixins/Auth';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersSubmission from '@/components/fourcorners/FourCornersSubmission';
+import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 import PreviousButton from '../PreviousButton';
 import FeedbackTile from './FeedbackTile';
 import FeedbackRow from './FeedbackRow';
@@ -79,6 +82,7 @@ export default {
   components: {
     MarkdownRenderer,
     FourCornersSubmission,
+    FourCornersLink,
     PreviousButton,
     InfoDialogue,
     FeedbackTile,

@@ -75,7 +75,7 @@ export default {
       this.discussion = [];
       // Fetch discussion
       this.getDiscussion();
-      // Load four corners
+      // Load fourcorners
       this.loadFourCornersScript();
     }
   },

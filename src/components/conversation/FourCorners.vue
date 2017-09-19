@@ -34,12 +34,12 @@ export default {
     return {
       expanded: false,
       tease: false,
-      bannerText: 'Tap the bottom right corner to learn how Four Corners offers a new way of enriching photographs with rich metadata',
+      bannerText: 'Tap the bottom right corner to learn how FourCorners offers a new way of enriching photographs with rich metadata',
       corners: {
         default: {
           icon: 'picture-o',
-          title: 'Four Corners',
-          text: 'Explore each corner to learn the types of contextual information that can be linked in a Four Corners image'
+          title: 'FourCorners',
+          text: 'Explore each corner to learn the types of contextual information that can be linked in a FourCorners image'
         },
         topLeft: {
           icon: 'history',

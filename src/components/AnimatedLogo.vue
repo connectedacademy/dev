@@ -2,7 +2,8 @@
 
 .animated-logo(@click="goHome")
   #logo-text Connected Academy
-  img.logo(src="../assets/logos/main-white.svg")
+  //- img.fourcorners-logo(src="../assets/logos/fourcorners/white.svg")
+  //- img.logo(src="../assets/logos/main-white.svg")
   //- svg(id="logo" v-bind:class="{loaded: loaded}" width="140" height="77" viewBox="0 0 140 77")
     path#main(d="M1069.34,221.6l-34.53-61.74L1004,212.25l-2.14,3.45a37.58,37.58,0,1,1-7.5-47" transform="translate(-930.95 -158.24)")
     line#bar(x1="98" y1="50" x2="110" y2="50")
@@ -101,5 +102,9 @@ cross-length = 320px
     .animated-logo
       // background-color $color-fourcorners
       background-color #232323
+      // #logo-text
+      //   display none
+      // img.fourcorners-logo
+      //   display inline-block
 
 </style>

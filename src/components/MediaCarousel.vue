@@ -30,6 +30,7 @@ export default {
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
         slidesPerView: 1,
+        centeredSlides: true,
         spaceBetween: 0,
         loop: true,
         paginationClickable: true,
