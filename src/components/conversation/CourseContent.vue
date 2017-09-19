@@ -16,10 +16,10 @@
 
   .course-content-wrapper(v-else)
 
-    .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+    .course-content-group
+      join-banner
 
-      //- JOIN BANNER
-      join-banner(v-if="!isIntroduction && (index === 3)")
+    .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
       //- QUESTION
       injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
@@ -59,7 +59,7 @@
 
           message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
 
-        .course-content--footer(v-if="isRegistered && (content.expectsubmission || (content.url && !content.thumbnails))")
+        .course-content--footer(v-if="(content.expectsubmission || (content.url && !content.thumbnails))")
           markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
           .clearfix
 
@@ -67,10 +67,9 @@
 
       //- FUTURE CONTENT
       future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
-
-    //- NEXT CLASS
-    .course-content-group.course-content-group--future.animated.fadeIn(v-if="courseContent")
-      next-class(v-if="futureContent.length === 0")
+      
+      //- NEXT CLASS
+      next-class(v-if="content.content_type === 'nextclass'" v-bind:content="content")
 
 </template>
 

@@ -296,7 +296,7 @@ $chat-list-width = 320px
   border-right $color-lighter-grey 1px solid
   left $chat-list-width
   position absolute
-  max-width 640px
+  max-width 780px
   @media(max-width: 600px)
     left 75px
 

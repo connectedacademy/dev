@@ -4,9 +4,9 @@
     .auth-modal--header
       h1 {{ $t('auth.authenticate') }}
     .auth-modal--container
-      p Click the button below to authenticate with Twitter, this will give you access to advanced functionality within the platform.
+      p Click the button below to authenticate with Twitter, this will give you full access to the course.
 
-      button.pure-button.pure-button-primary(v-on:click.once="attemptAuth")
+      button.pure-button.pure-button-twitter(v-on:click.once="attemptAuth")
         | {{ $t('auth.login_with_twitter') }}
 
 </template>

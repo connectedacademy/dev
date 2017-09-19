@@ -9,6 +9,8 @@
 
     h5 Please copy and paste the following link into the Storify editor.
     input(v-model="rssLink" placeholder="RSS Link")
+    
+    img.storify-gif(src="../../../assets/gifs/storify.gif" width="100%")
 
 </template>
 
@@ -42,5 +44,7 @@ export default {
       box-sizing()
       padding 10px
       width 100%
-
+    img.storify-gif
+      border $color-border 1px solid
+      margin 30px auto
 </style>

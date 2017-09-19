@@ -16,9 +16,14 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
-// img
-//   width 100% !important
+.four-corners-wrapper > img
+    display block !important
+    margin 0 !important
+    max-width 100% !important
+    padding 0 !important
+    width 100% !important
+
 
 </style>

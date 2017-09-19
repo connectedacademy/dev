@@ -8,9 +8,9 @@
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  content-filter(v-bind:contentSlug.sync="contentSlug" v-bind:filter-class="true" v-bind:filter-content="true")
-
   .admin-panel--content
+
+    .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug") {{ content.title }}
 
     ul
       li(v-for="submission in submissions")
@@ -24,8 +24,9 @@
 
 <script>
 import * as types from '@/store/mutation-types';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import API from '@/api';
+import _ from 'lodash';
 
 import Moment from 'moment';
 
@@ -57,6 +58,14 @@ export default {
       submissions: [],
       contentSlug: undefined,
     };
+  },
+  computed: {
+    ...mapGetters(['course', 'currentClass']),
+    contentSlugs() {
+      return _.filter(this.currentClass.content, (obj) => {
+        return obj.homework;
+      })
+    },
   },
   methods: {
     timeStamp(timestamp) {
@@ -94,6 +103,10 @@ export default {
 .admin-panel
 
   .admin-panel--content
+
+    .pure-button.pure-button-subtle
+      display block
+      margin-bottom 10px
     ul
       cleanlist()
       li

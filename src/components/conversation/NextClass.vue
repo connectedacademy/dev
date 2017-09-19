@@ -2,9 +2,9 @@
 
 .course-content
   .course-content--header.block
-    h1.content-title Class Complete
-    p.content-description The next class of the course will be made available soon, please check back later.
-    a.pure-button(href="https://") Contact Organiser
+    h1.content-title {{ content.title }}
+    p.content-description {{ content.description }}
+    a.pure-button(href="https://twitter.com") Get in Touch
 
 </template>
 

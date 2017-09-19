@@ -72,6 +72,11 @@ export default {
   mounted() {
     this.layout();
   },
+  watch: {
+    classSlug(nV) {
+      this.$store.dispatch('getSpec', nV);
+    }
+  },
   data() {
     return {
       panelMargin: 10,

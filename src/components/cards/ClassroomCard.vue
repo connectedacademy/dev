@@ -2,9 +2,9 @@
 
   .card#classroom-card(v-if="user" v-bind:class="{ visible: visible, active: currentClassroom }")
 
-    ul#role-selector(@click="toggleRole")
-      li(v-bind:class="{ active: (currentRole === 'student') }") Student
-      li(v-bind:class="{ active: (currentRole === 'teacher') }") Teacher
+    ul#role-selector
+      li(v-bind:class="{ active: (currentRole === 'student') }" @click="toggleRole('student')") Student
+      li(v-bind:class="{ active: (currentRole === 'teacher') }" @click="toggleRole('teacher')") Teacher
       .clearfix
 
     input#classroom-input(v-model="classroomCode" v-bind:disabled="currentClassroom || (currentRole === 'teacher')" v-bind:class="{ disabled: currentClassroom || (currentRole === 'teacher') }" placeholder="Enter Class Code")
@@ -41,10 +41,10 @@ export default {
     },
   },
   methods: {
-    toggleRole() {
+    toggleRole(newRole) {
       if (this.currentClassroom) return;
 
-      this.role = (this.currentRole === 'teacher') ? 'Student' : 'Teacher';
+      this.role = newRole;
 
       switch (this.currentRole) {
         case 'teacher':
