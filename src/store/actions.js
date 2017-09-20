@@ -26,6 +26,10 @@ export const setScrollPosition = ({ commit }, scrollPosition) => {
   commit('setScrollPosition', scrollPosition);
 };
 
+export const saveScrollPosition = ({ commit }) => {
+  commit('setSavedScrollPosition', store.state.scrollPosition);
+};
+
 export const resetState = ({ commit }) => {
   Vue.$log.info('Reseting store.state...');
   commit('resetScrollPoints');

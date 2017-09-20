@@ -39,6 +39,9 @@ export const setAutoPlaying = (state, isAutoPlaying) => {
 };
 
 // Scroll points
+export const setSavedScrollPosition = (state, scrollPosition) => {
+  state.savedScrollPosition = scrollPosition;
+};
 export const resetScrollPoints = (state) => {
   state.scrollPoints = {};
 };

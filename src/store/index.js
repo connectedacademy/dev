@@ -40,6 +40,7 @@ export default new Vuex.Store({
     timetravel: false,
     fauxTime: fauxTime,
     scrollPosition: 0.0,
+    savedScrollPosition: 0.0,
     pendingScrollPosition: 0,
     offsetScrollPosition: 0.0,
     autoPlaying: false,

@@ -35,13 +35,14 @@ export default {
     });
   },
   beforeRouteLeave (to, from, next) {
+    this.$store.dispatch('saveScrollPosition');
     this.$store.dispatch('resetState');
     next();
   },
-  mounted() {
+  activated() {
     this.$store.dispatch('checkAuth');
-
-    this.toMessage(this.$route.query);
+    window.scrollTo(0, this.$store.state.savedScrollPosition);
+    // this.toMessage();
   },
   data() {
     return {
@@ -73,7 +74,9 @@ export default {
     leaveClass() {
       this.$store.dispatch('getSpec', undefined);
     },
-    toMessage(query) {
+    toMessage() {
+      alert('toMessage');
+      const query = this.$route.query;
       if (query.class && query.content) {
         // Set the class
         this.$store.dispatch('getSpec', query.class);

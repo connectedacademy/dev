@@ -21,9 +21,9 @@ Vue.use(Router);
 
 export default new Router({
   // mode: 'history',
-  scrollBehavior: function (to, from, savedPosition) {
-    return savedPosition || { x: 0, y: 0 }
-  },
+  // scrollBehavior: function (to, from, savedPosition) {
+  //   return savedPosition || { x: 0, y: 0 }
+  // },
   routes: [
     {
       name: 'course-redirect',
@@ -40,66 +40,55 @@ export default new Router({
       name: 'course',
       path: '/',
       component: Course,
-      meta: { scrollToTop: false },
     },
     {
       name: 'class',
       path: '/course/:classSlug',
       component: Course,
-      meta: { scrollToTop: false },
     },
     {
       name: 'registration',
       path: '/registration',
       component: Registration,
-      meta: { scrollToTop: true },
     },
     {
       name: 'feedback',
       path: '/feedback/browse/:classSlug/:contentSlug',
       component: Feedback,
-      meta: { scrollToTop: true },
     },
     {
       name: 'view_feedback',
       path: '/feedback/:id',
       component: FeedbackView,
-      meta: { scrollToTop: true },
     },
     {
       name: 'fourcorners',
       path: '/fourcorners',
       component: FourCornersOnboarding,
-      meta: { scrollToTop: true },
     },
     {
       name: 'markdown',
       path: '/markdown/:url',
       component: Markdown,
-      meta: { scrollToTop: true },
     },
     {
       name: 'schedule',
       path: '/schedule',
       component: Schedule,
-      meta: { scrollToTop: true },
     },
     {
       name: 'about',
       path: '/about',
       component: About,
-      meta: { scrollToTop: true },
     },
     {
       name: 'admin',
       path: '/admin',
       component: AdminMain,
-      meta: { scrollToTop: true },
     },
     {
       path: '*',
       redirect: '/',
-      meta: { scrollToTop: true },
     },
   ],
 });

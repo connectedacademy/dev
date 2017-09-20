@@ -76,7 +76,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
@@ -132,11 +131,12 @@ export default {
     FourCornersLink,
   },
   created() {
-    this.$store.dispatch('getCourse').then(() => {
-        setTimeout(() => {
-          this.viewCurrentClass();
-        }, 500);
-    });
+    this.$store.dispatch('getCourse');
+  },
+  watch: {
+    course() {
+      this.viewCurrentClass();
+    }
   },
   computed: {
     ...mapGetters([

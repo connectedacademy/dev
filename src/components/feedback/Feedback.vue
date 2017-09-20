@@ -94,7 +94,6 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.dispatch('checkAuth');
       vm.$store.commit(types.SET_NAV_STATE, { minimized: true });
       vm.$store.commit(types.SET_PAGE_STYLE, 'chat');
     });
@@ -104,7 +103,7 @@ export default {
     this.$store.commit(types.SET_PAGE_STYLE, undefined);
     next();
   },
-  created() {
+  activated() {
     // Check if user has registered
     if (this.isAuthenticated && !this.isRegistered) {
       this.$router.push('/registration');

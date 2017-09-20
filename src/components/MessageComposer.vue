@@ -6,7 +6,7 @@
 
       .message-composer--body
         .textarea-wrapper(v-if="isRegistered" )
-          textarea(name="name" autofocus rows="3" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
+          textarea(name="name" rows="3" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
         .login-warning(v-else)
           h4 Please login to send messages
 

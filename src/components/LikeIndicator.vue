@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .like-indicator.animated.fadeIn
+  .like-indicator
     .like-indicator-wrapper(@click="toggleLike")
       .heart(v-bind:class="{ active: haveliked }")
       .like-count(v-if="likeCount > 0") {{ likeCount }}

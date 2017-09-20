@@ -2,7 +2,7 @@
 {
   "files.exclude": {
     "public": true,
-    "docs": false,
+    "docs": true,
     "node_modules": false
   },
 }
