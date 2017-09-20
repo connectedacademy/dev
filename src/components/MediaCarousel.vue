@@ -4,7 +4,6 @@
     swiper-slide(v-for="(item, key) in media" v-bind:key="key")
       img.swiper-lazy(v-bind:data-src="`https://${course.slug}.connectedacademy.io/course/content/media/medium/${item.image}`")
       .swiper-lazy-preloader.swiper-lazy-preloader-white
-    //- .swiper-pagination(slot="pagination")
     .swiper-button-prev(slot="button-prev")
     .swiper-button-next(slot="button-next")
 </template>
@@ -12,6 +11,8 @@
 <script>
 import { mapGetters } from 'vuex';
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
+require('swiper/dist/css/swiper.css')
 
 export default {
   name: 'media-carousel',
@@ -26,7 +27,6 @@ export default {
   data() {
     return {
       swiperOption: {
-        // pagination: '.swiper-pagination',
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
         slidesPerView: 1,
