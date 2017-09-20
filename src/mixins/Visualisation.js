@@ -1,8 +1,7 @@
-import Vue from 'vue';
 import API from '@/api';
 import _ from 'lodash/core';
 import mean from 'lodash/mean';
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'x';
 
 import chunk from 'lodash/chunk';
 

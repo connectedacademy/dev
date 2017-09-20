@@ -9,14 +9,14 @@
 <script>
 import {mapGetters} from 'vuex';
 import SectionNavigatorItem from './SectionNavigatorItem';
-import _ from 'lodash/core';
+import size from 'lodash/size';
 
 export default {
   name: 'section-navigator',
   computed: {
     ...mapGetters(['scrollPoints']),
     isVisible() {
-      return _.size(this.scrollPoints)
+      return size(this.scrollPoints)
     },
   },
   components: {

@@ -38,7 +38,6 @@ import orderBy from 'lodash/orderBy';
 import { mapGetters } from 'vuex';
 
 import API from '@/api';
-import * as types from '@/store/mutation-types';
 
 import FourCornersMixin from '@/mixins/FourCorners';
 import FourCorners from '../fourcorners/FourCorners';
@@ -149,7 +148,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered',
+      'isRegistered',
     ]),
     feedbackMessages() {
       return orderBy(this.discussion, ['createdAt'], ['asc']);

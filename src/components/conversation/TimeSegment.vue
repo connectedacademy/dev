@@ -41,7 +41,6 @@
 
 <script>
 import Vue from 'vue';
-import _ from 'lodash/core';
 import orderBy from 'lodash/orderBy';
 import {mapGetters} from 'vuex';
 import API from '@/api';

@@ -1,9 +1,5 @@
 /* eslint-disable */
-import Vue from 'vue';
 import _ from 'lodash/core';
-import * as types from '@/store/mutation-types';
-import API from '@/api';
-import store from '@/store';;
 
 // initial state
 const state = {
@@ -31,10 +27,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.PAUSE_VIDEO](initialState) {
+  ['PAUSE_VIDEO'](initialState) {
     state.playing = false;
   },
-  [types.PLAY_VIDEO](initialState) {
+  ['PLAY_VIDEO'](initialState) {
     state.playing = true;
   },
 };

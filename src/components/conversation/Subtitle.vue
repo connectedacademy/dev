@@ -6,9 +6,6 @@
 </template>
 
 <script>
-/* eslint-disable */
-import _ from 'lodash/core';
-
 export default {
   name: 'subtitle',
   props: ['subtitle'],

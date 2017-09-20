@@ -1,16 +1,10 @@
 <template lang="pug">
 
-div
-  //- pre {{ markdown }}
-  .rendered-markdown(v-html="renderedMarkdown")
+.rendered-markdown(v-html="renderedMarkdown")
 
 </template>
 
 <script>
-import _ from 'lodash/core';
-import Vue from 'vue';
-import { mapGetters } from 'vuex';
-
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
 import MarkdownItVideo from 'markdown-it-video';
@@ -24,9 +18,6 @@ export default {
   name: 'markdown-content',
   props: ['markdown'],
   computed: {
-    ...mapGetters([
-      'course'
-    ]),
     renderedMarkdown() {
 
       const md = new MarkdownIt()

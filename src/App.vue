@@ -41,26 +41,10 @@
 import { mapGetters } from 'vuex';
 import API from '@/api';
 
-import store from '@/store';
-import * as types from '@/store/mutation-types';
-
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
 import AutoScroll from '@/mixins/AutoScroll';
 import Overlay from '@/mixins/Overlay';
-
-// Components
-import Lock from '@/components/authentication/Lock'
-import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
-import Navigation from '@/components/navigation/Navigation';
-import SectionNavigator from '@/components/navigation/SectionNavigator';
-import BurgerMenu from '@/components/navigation/BurgerMenu';
-import LeftDrawer from '@/components/navigation/drawers/LeftDrawer';
-import RightDrawer from '@/components/navigation/drawers/RightDrawer';
-import DebugPanel from '@/components/DebugPanel';
-import ActionPanel from '@/components/conversation/ActionPanel';
-import LikeModal from '@/components/modals/LikeModal';
-import MediaLightbox from '@/components/modals/MediaLightbox';
 
 export default {
   name: 'app',
@@ -120,17 +104,17 @@ export default {
   },
   store,
   components: {
-    Lock,
-    AuthenticationFlow,
-    DebugPanel,
-    Navigation,
-    SectionNavigator,
-    BurgerMenu,
-    LeftDrawer,
-    RightDrawer,
-    ActionPanel,
-    LikeModal,
-    MediaLightbox,
+    'LeftDrawer': () => import('@/components/navigation/drawers/LeftDrawer'),
+    'RightDrawer': () => import('@/components/navigation/drawers/RightDrawer'),
+    'Lock': () => import('@/components/authentication/Lock'),
+    'DebugPanel': () => import('@/components/DebugPanel'),
+    'BurgerMenu': () => import('@/components/navigation/BurgerMenu'),
+    'AuthenticationFlow': () => import('@/components/authentication/AuthenticationFlow'),
+    'Navigation': () => import('@/components/navigation/Navigation'),
+    'SectionNavigator': () => import('@/components/navigation/SectionNavigator'),
+    'ActionPanel': () => import('@/components/conversation/ActionPanel'),
+    'LikeModal': () => import('@/components/modals/LikeModal'),
+    'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
   },
   methods: {
     goBack() {

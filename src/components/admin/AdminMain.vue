@@ -47,7 +47,6 @@
 
 <script>
 import Vue from 'vue';
-import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
 import CourseStudents from '@/components/admin/panels/CourseStudents';
@@ -62,13 +61,13 @@ export default {
   name: 'admin-main',
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { minimized: true });
-      vm.$store.commit(types.SET_PAGE_STYLE, 'admin');
+      vm.$store.commit('SET_NAV_STATE', { minimized: true });
+      vm.$store.commit('SET_PAGE_STYLE', 'admin');
     });
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.commit(types.SET_NAV_STATE, { minimized: false });
-    this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    this.$store.commit('SET_NAV_STATE', { minimized: false });
+    this.$store.commit('SET_PAGE_STYLE', undefined);
     next();
   },
   mounted() {

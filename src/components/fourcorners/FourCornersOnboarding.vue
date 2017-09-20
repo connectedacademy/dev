@@ -48,9 +48,7 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
 
 import PreviousButton from '@/components/PreviousButton';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
@@ -62,13 +60,13 @@ export default {
   name: 'four-corners-onboarding',
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
-      vm.$store.commit(types.SET_PAGE_STYLE, 'fourcorners');
+      vm.$store.commit('SET_NAV_STATE', { minimized: false });
+      vm.$store.commit('SET_PAGE_STYLE', 'fourcorners');
     });
   },
   beforeRouteLeave(to, from, next) {
-    this.$store.commit(types.SET_NAV_STATE, { minimized: true });
-    this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    this.$store.commit('SET_NAV_STATE', { minimized: true });
+    this.$store.commit('SET_PAGE_STYLE', undefined);
     next();
   },
   components: {

@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
 import TweetPatch from 'tweet-patch';
 import Moment from 'moment-mini';
 

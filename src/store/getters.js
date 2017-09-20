@@ -1,4 +1,3 @@
-import _ from 'lodash/core';
 import store from '@/store';
 
 export const fauxTime = (state) => {
@@ -30,7 +29,7 @@ export const currentTime = (state) => {
   if (!store.getters.currentSectionScrollPosition) {
     return 0;
   }
-  let time = store.getters.currentSectionScrollPosition / (158.0 * 0.2); // _.ceil()
+  let time = store.getters.currentSectionScrollPosition / (158.0 * 0.2);
   return (time < 0) ? 0 : time;
 };
 

@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
 
 export default {
@@ -27,7 +26,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
+      this.$store.commit('TOGGLE_RIGHT_DRAWER');
       this.$store.dispatch('logout');
     },
   },

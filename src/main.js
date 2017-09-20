@@ -3,19 +3,16 @@
 
 import Vue from 'vue';
 import VueResource from 'vue-resource';
-// import VueKeepScrollPosition from 'vue-keep-scroll-position';
-// import VueScrollBehavior from 'vue-scroll-behavior';
 import Vuex from 'vuex';
 import VueConfig from 'vue-config';
 import VueI18n from 'vue-i18n';
 import VueLogger from 'vuejs-logger'
 import VueCookie from 'vue-cookie';
 import VueAnalytics from 'vue-analytics'
+// import VueAutosize from 'vue-autosize';
 // import Raven from 'raven-js';
 // import RavenVue from 'raven-js/plugins/vue';
 
-import VueScroll from 'vue-scroll';
-import VueAutosize from 'vue-autosize';
 
 import { sync } from 'vuex-router-sync';
 
@@ -28,8 +25,6 @@ import store from '@/store';;
 import router from '@/router';
 
 sync(store, router);
-
-
 
 import socketIOClient from 'socket.io-client';
 import sailsIOClient from 'sails.io.js';
@@ -45,10 +40,6 @@ require('animate.css');
 
 Vue.use(VueResource);
 Vue.use(Vuex);
-// Vue.use(VueKeepScrollPosition);
-// Vue.use(VueScrollBehavior, {
-//   router: router,
-// })
 
 Vue.use(VueConfig, Vue.config);
 
@@ -76,11 +67,10 @@ Vue.use(VueAnalytics, {
 // TODO: Enabled for production
 // Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
 
-Vue.use(VueScroll);
-Vue.use(VueAutosize);
+// Vue.use(VueAutosize);
 
 // General config
-// Vue.config.productionTip = false;
+Vue.config.productionTip = false;
 
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json' };
@@ -96,10 +86,6 @@ Vue.http.interceptors.push((request, next) => {
 // I18n config
 Vue.config.lang = 'en';
 Vue.config.fallbackLang = 'en';
-
-Vue.config.devtools = true;
-Vue.config.debug = true;
-Vue.config.silent = false;
 
 /* eslint-disable no-new */
 new Vue({

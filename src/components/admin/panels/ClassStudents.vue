@@ -18,8 +18,7 @@
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import API from '@/api';
 
 import ContentFilter from '@/components/admin/ContentFilter';

@@ -11,9 +11,7 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
 
 import 'vue-awesome/icons/angle-right';
 
@@ -31,7 +29,7 @@ export default {
   },
   methods: {
     showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
+      this.$store.commit('SHOW_AUTH');
     }
   },
 };

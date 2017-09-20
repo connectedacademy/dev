@@ -78,60 +78,35 @@
 <script>
 import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
-import Moment from 'moment-mini';
 import Auth from '@/mixins/Auth';
-
-import MarkdownRenderer from '@/components/MarkdownRenderer';
-import MarkdownContent from '@/components/MarkdownContent';
-import MarkdownLink from '@/components/MarkdownLink';
-import SoundcloudEmbed from '@/components/SoundcloudEmbed';
-import VideoEmbed from '@/components/VideoEmbed';
-import LikeIndicator from '@/components/LikeIndicator';
-
-import LiveClass from '@/components/conversation/LiveClass';
-import Homework from '@/components/conversation/Homework';
-import FourCorners from '@/components/conversation/FourCorners';
-import FutureContent from '@/components/conversation/FutureContent';
-import InjectedQuestion from '@/components/conversation/InjectedQuestion';
-import NextClass from '@/components/conversation/NextClass';
-import WebinarMessageTicker from '@/components/webinar/WebinarMessageTicker';
-import JoinBanner from '@/components/banners/JoinBanner';
-
-import MediaCarousel from '@/components/MediaCarousel';
-import MediaThumbnails from '@/components/MediaThumbnails';
-
-import MessageComposer from '@/components/MessageComposer';
-import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 
 export default {
   name: 'course-content',
   mixins: [
     Auth,
   ],
-  props: ['courseContent'],
   components: {
-    LiveClass,
-    MarkdownContent,
-    MarkdownLink,
-    VideoEmbed,
-    SoundcloudEmbed,
-    LikeIndicator,
-    Homework,
-    FourCorners,
-    FutureContent,
-    MarkdownRenderer,
-    InjectedQuestion,
-    NextClass,
-    MessageComposer,
-    WebinarMessageTicker,
-    JoinBanner,
-    MediaCarousel,
-    MediaThumbnails,
-    FourCornersLink,
+    'MarkdownRenderer': import('@/components/MarkdownRenderer'),
+    'MarkdownContent': () => import('@/components/MarkdownContent'),
+    'MarkdownLink': () => import('@/components/MarkdownLink'),
+    'SoundcloudEmbed': () => import('@/components/SoundcloudEmbed'),
+    'VideoEmbed': () => import('@/components/VideoEmbed'),
+    'LikeIndicator': () => import('@/components/LikeIndicator'),
+    'LiveClass': () => import('@/components/conversation/LiveClass'),
+    'Homework': () => import('@/components/conversation/Homework'),
+    'FourCorners': () => import('@/components/conversation/FourCorners'),
+    'FutureContent': () => import('@/components/conversation/FutureContent'),
+    'InjectedQuestion': () => import('@/components/conversation/InjectedQuestion'),
+    'NextClass': () => import('@/components/conversation/NextClass'),
+    'WebinarMessageTicker': () => import('@/components/webinar/WebinarMessageTicker'),
+    'JoinBanner': () => import('@/components/banners/JoinBanner'),
+    'MediaCarousel': () => import('@/components/MediaCarousel'),
+    'MediaThumbnails': () => import('@/components/MediaThumbnails'),
+    'MessageComposer': () => import('@/components/MessageComposer'),
+    'FourCornersLink': () => import('@/components/fourcorners/FourCornersLink'),
   },
   created() {
-    this.$store.dispatch('getCourse');
+    this.viewCurrentClass();    
   },
   watch: {
     course() {
@@ -140,7 +115,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass'
+      'course', 'currentClass', 'courseContent'
     ]),
     infoMarkdown() {
       if (!this.course.baseUri) return undefined;
@@ -150,20 +125,13 @@ export default {
       return (this.currentClass && (this.currentClass.slug === 'intro'));
     },
     releasedContent() {
-      return filter(this.courseContent, (o) => {
-        return (o.status === 'RELEASED');
-      });
+      return filter(this.courseContent, { status: 'RELEASED' });
     },
     futureContent() {
-      return filter(this.courseContent, (o) => {
-        return ((o.status === 'FUTURE')); //  && (o.content_type !== 'nextclass')
-      });
+      return filter(this.courseContent, { status: 'FUTURE' });
     },
   },
   methods: {
-    showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
-    },
     viewCurrentClass() {
       if (!this.course) { return; }
       for (const theClass of this.course.classes) {

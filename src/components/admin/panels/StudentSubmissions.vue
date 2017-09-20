@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 import API from '@/api';
 import filter from 'lodash/filter';

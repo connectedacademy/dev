@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
-import API from '@/api';
 
 // Mixins
 import Messages from '@/mixins/Messages';

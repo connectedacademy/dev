@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
+import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 
 import API from '@/api';
@@ -159,10 +159,10 @@ export default {
         (response) => {
           this.$log.info('Response from feedback request');
           this.$log.info(response);
-          this.myFeedbackItems = _.filter(response.data, (item) => {
+          this.myFeedbackItems = filter(response.data, (item) => {
             return item.user.account_number === this.user.account_number;
           });
-          this.feedbackItems = _.filter(response.data, (item) => {
+          this.feedbackItems = filter(response.data, (item) => {
             return item.user.account_number !== this.user.account_number;
           });
         },

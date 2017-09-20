@@ -12,7 +12,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
 
 export default {
   name: 'join-banner',

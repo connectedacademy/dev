@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
-import * as types from '@/store/mutation-types';
 import API from '@/api';
 import {mapGetters} from 'vuex';
 
@@ -56,14 +54,14 @@ export default {
         postData,
         (response, postData) => {
           // this.$store.dispatch('pushMessage', { response, postData });
-          this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response, postData })
+          this.$store.commit('SEND_MESSAGE_SUCCESS', { response, postData })
           this.message.text = '';
           this.infoLabel = 'Posted note';
           setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
         },
         (response, postData) => {
-          this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
+          this.$store.commit('SEND_MESSAGE_FAILURE', { response })
           alert('Failed to send message');
           this.infoLabel = 'Failed to post note';
           setTimeout(() => { this.infoLabel = ""}, 2000);

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-const SYNC_THRESHOLD = 1.0;
+const SYNC_THRESHOLD = 3.0;
 
 import SoundCloud from 'soundcloud';
 import VueYouTubeEmbed from 'vue-youtube-embed';
@@ -47,7 +47,7 @@ export default {
       pWidth: (188 / 0.5625),
       swiperOption: {
         slidesPerView: 3,
-        centeredSlides: true,
+        centeredSlides: false,
         spaceBetween: 20,
         loop: false,
         paginationClickable: false,
@@ -139,7 +139,7 @@ export default {
           setTimeout(() => {
             self.$log.info('SYNCED');
             self.$store.commit(types.PLAY_VIDEO);
-          }, 100);
+          }, 500);
         }
       } catch (Exception) {
       }

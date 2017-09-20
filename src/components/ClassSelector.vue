@@ -35,10 +35,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import {mapGetters} from 'vuex';
-import * as types from '@/store/mutation-types';
-import VueScroll from 'vue-scroll';
 import API from '@/api';
+import VueScroll from 'vue-scroll';
 
 import 'vue-awesome/icons/angle-left';
 import 'vue-awesome/icons/angle-right';
@@ -46,8 +46,13 @@ import 'vue-awesome/icons/info';
 import 'vue-awesome/icons/check-circle';
 import 'vue-awesome/icons/lock';
 
+Vue.use(VueScroll);
+
 export default {
   name: 'class-selector',
+  components: {
+    VueScroll,
+  },
   watch: {
     currentClass(nV, oV) {
       this.activeClass = nV.slug;
@@ -80,7 +85,7 @@ export default {
     viewIntroClass() {
       this.$ga.event('class-selector', 'click', 'class-switched', 'class-intro');
       this.$store.dispatch('resetState');
-      this.$store.commit(types.SET_CURRENT_CLASS, this.introClass);
+      this.$store.commit('SET_CURRENT_CLASS', this.introClass);
     },
     viewCurrentClass() {
       if (!this.currentExists) {

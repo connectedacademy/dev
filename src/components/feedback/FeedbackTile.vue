@@ -15,9 +15,6 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
-import { mapGetters } from 'vuex';
-
 export default {
   name: 'feedback-tile',
   props: ['content'],

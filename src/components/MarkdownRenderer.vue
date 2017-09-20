@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
-
+import Auth from '@/mixins/Auth';
 import FourCornersMixin from '@/mixins/FourCorners';
 import FourCorners from './fourcorners/FourCorners';
 
@@ -23,7 +22,6 @@ import MarkdownItCustomBlock from 'markdown-it-custom-block';
 
 import Vue from 'vue';
 import API from '@/api';
-import * as types from '@/store/mutation-types';
 
 import startsWith from 'lodash/startsWith';
 import endsWith from 'lodash/endsWith';
@@ -31,6 +29,7 @@ import endsWith from 'lodash/endsWith';
 export default {
   name: 'markdown-renderer',
   mixins: [
+    Auth,
     FourCornersMixin,
   ],
   components: {
@@ -43,9 +42,6 @@ export default {
       },
       deep: true,
     },
-    // course() {
-    //   this.loadMarkdown();
-    // },
   },
   mounted() {
     this.loadMarkdown();
@@ -132,9 +128,6 @@ export default {
           },
         },
         methods: {
-          showAuth() {
-            this.$store.commit(types.SHOW_AUTH);
-          },
           goToLink(href) {
             this.$router.push(href.replace('/#/markdown', '/markdown'));
           },
@@ -153,13 +146,13 @@ export default {
               (response) => {
                 this.submitting = false;
                 this.submitted = true;
-                this.$store.commit(types.SEND_MESSAGE_SUCCESS, { response })
+                this.$store.commit('SEND_MESSAGE_SUCCESS', { response })
               },
               (response) => {
                 alert('Submission failed, please try again.');
                 this.submitting = false;
                 this.submitted = false;
-                this.$store.commit(types.SEND_MESSAGE_FAILURE, { response })
+                this.$store.commit('SEND_MESSAGE_FAILURE', { response })
               },
             );
           },

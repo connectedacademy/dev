@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
 import * as config from '@/api/config';
 import {mapGetters} from 'vuex';
 import Moment from 'moment-mini';
