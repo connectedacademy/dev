@@ -43,7 +43,7 @@ export default {
       deep: true,
     },
   },
-  created() {
+  mounted() {
     this.loadMarkdown();
   },
   props: ['markdownUrl', 'frontMatterVisible'],

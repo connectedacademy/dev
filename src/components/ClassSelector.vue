@@ -37,9 +37,6 @@
             four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
 
         join-banner
-
-    //- .loading-wrapper(v-for="n in 5")
-      .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
     //- 
       .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
         h2 This course has finished
@@ -299,10 +296,6 @@ $selector-height = 44px
     height 40px
   .pure-button
     margin-top 20px
-
-.padded-container.mock-container
-  background-color rgba(255,255,255, 0.1)
-  margin-bottom 10px
 
 
 </style>

@@ -1,7 +1,7 @@
 const AUTOSCROLL_CHECK = 200; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 750; // Interval at which scroll position should be updated
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
 
 import Vue from 'vue';
@@ -162,14 +162,7 @@ export default {
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onScroll() {
       this.scrollPosition = window.scrollY;
-      if (window.scrollY < 300) {
-        this.preventScroll = true;
-        this.$store.dispatch('setScrollPosition', this.scrollPosition).then(() => {
-          this.preventScroll = false;
-        });
-      } else {
-        this.setScrollPosition(this);
-      }
+      this.setScrollPosition(this);
     },
     onWheel() {
       if (!this.activeSegment) {

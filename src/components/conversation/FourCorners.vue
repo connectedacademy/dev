@@ -87,7 +87,7 @@ $corner-width = 8px
 
 #fourcorners-banner
   radius(6px)
-  background-color $color-darkest-grey
+  background-color #0B2130
   background url('../../assets/images/lake.jpg')
   background-image()
   background-position center right

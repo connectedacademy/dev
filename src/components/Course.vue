@@ -10,7 +10,21 @@
 
 <script>
 import ClassSelector from '@/components/ClassSelector';
-import CourseContent from '@/components/conversation/CourseContent';
+import Loading from '@/components/Loading';
+
+const CourseContent = () => ({
+  // The component to load. Should be a Promise
+  component: import('@/components/conversation/CourseContent'),
+  // A component to use while the async component is loading
+  loading: Loading,
+  // A component to use if the load fails
+  // error: ErrorComp,
+  // Delay before showing the loading component. Default: 200ms.
+  delay: 10,
+  // The error component will be displayed if a timeout is
+  // provided and exceeded. Default: Infinity.
+  timeout: 3000
+});
 
 export default {
   name: 'course',
