@@ -133,7 +133,9 @@ export default {
   },
   created() {
     this.$store.dispatch('getCourse').then(() => {
-        this.viewCurrentClass();
+        setTimeout(() => {
+          this.viewCurrentClass();
+        }, 500);
     });
   },
   computed: {
