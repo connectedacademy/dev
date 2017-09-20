@@ -7,7 +7,7 @@
 
   //- lock(passcode="76234")
 
-  debug-panel(v-if="this.$store.state.debug" @click="$store.commit('TOGGLE_DEBUG_MODE')")
+  debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
   authentication-flow
 
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import store from '@/store';
 import { mapGetters } from 'vuex';
 import API from '@/api';
 

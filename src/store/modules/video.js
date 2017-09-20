@@ -1,6 +1,3 @@
-/* eslint-disable */
-import _ from 'lodash/core';
-
 // initial state
 const state = {
   playing: false,

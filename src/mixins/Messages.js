@@ -4,6 +4,7 @@ import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
 import floor from 'lodash/floor';
+import round from 'lodash/round';
 
 export default {
   mounted() {
@@ -14,7 +15,7 @@ export default {
         Vue.$log.info('message received over socket connection')
         Vue.$log.info(obj);
         
-        const key = `${_.round(parseInt(obj.msg.segment) * 0.2)}`
+        const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
         let updateMessage = this.messages[key]
 
         if (!obj.msg.tag && updateMessage) {
@@ -28,7 +29,7 @@ export default {
           Vue.set(this.messages, key, updateMessage);
 
           // Update active segment messages
-          if (this.peekSegment === _.round(parseInt(obj.msg.segment) * 0.2)) {
+          if (this.peekSegment === round(parseInt(obj.msg.segment) * 0.2)) {
             Vue.$log.info('Pushing message');
             this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
           }

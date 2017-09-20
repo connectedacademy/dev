@@ -2,7 +2,7 @@
 
 #section-navigator(v-if="isVisible")
   transition-group(name="fade" mode="in-out" tag="ul" class="navigation-items")
-    section-navigator-item(v-for="scrollPoint in scrollPoints" v-bind:key="scrollPoint.slug" v-bind:scroll-point="scrollPoint")
+    section-navigator-item(v-for="item in items" v-bind:key="item.slug" v-bind:scroll-point="item")
 
 </template>
 
@@ -10,6 +10,7 @@
 import {mapGetters} from 'vuex';
 import SectionNavigatorItem from './SectionNavigatorItem';
 import size from 'lodash/size';
+import orderBy from 'lodash/orderBy';
 
 export default {
   name: 'section-navigator',
@@ -18,6 +19,9 @@ export default {
     isVisible() {
       return size(this.scrollPoints)
     },
+    items() {
+      return orderBy(this.scrollPoints, ['sectionTop'])
+    }
   },
   components: {
     SectionNavigatorItem,

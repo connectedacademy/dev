@@ -44,7 +44,6 @@ import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
 import {mapGetters} from 'vuex';
 import API from '@/api';
-import * as types from '@/store/mutation-types';
 
 import MessageComposer from '@/components/MessageComposer';
 import Subtitle from '@/components/conversation/Subtitle';
@@ -125,13 +124,13 @@ export default {
           transition: 'height .3s ease'
         };
 
-        this.$store.commit(types.PAUSE_VIDEO);
-        this.$store.commit(types.SET_PEEK_SEGMENT, this.message.segmentGroup);
+        this.$store.commit('PAUSE_VIDEO');
+        this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
       }
     },
     unpeek() {
 
-      this.$store.commit(types.PLAY_VIDEO);
+      this.$store.commit('PLAY_VIDEO');
 
       this.segmentStyle = {
         position: 'absolute',
@@ -143,7 +142,7 @@ export default {
 
         this.segmentStyle = {};
         this.segmentOpened = this.segmentPeeking = false;
-        this.$store.commit(types.SET_PEEK_SEGMENT, undefined);
+        this.$store.commit('SET_PEEK_SEGMENT', undefined);
 
       }, 300); // Timeout equal to time for overlay to fade
     },
@@ -152,11 +151,11 @@ export default {
       if (this.segmentOpened) { return; }
 
       // Remove segment messages
-      this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+      this.$store.commit('SET_SEGMENT_MESSAGES', []);
 
       this.loadingMessages = true;
 
-      this.$store.commit(types.SET_ACTIVE_SEGMENT, this.message.segmentGroup)
+      this.$store.commit('SET_ACTIVE_SEGMENT', this.message.segmentGroup)
 
       let calculatedOffset = document.getElementsByClassName('peek')[0].getBoundingClientRect().top;
       let calculatedOffsetBottom = window.innerHeight - document.getElementsByClassName('peek')[0].getBoundingClientRect().bottom;
@@ -189,7 +188,7 @@ export default {
       if (this.opened) { return }
 
       // Remove segment messages
-      this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+      this.$store.commit('SET_SEGMENT_MESSAGES', []);
 
       this.segmentStyle = {
         transition: 'all .3s ease',
@@ -218,12 +217,12 @@ export default {
       API.message.getMessages(
         theRequest,
         response => {
-          this.$store.commit(types.SET_SEGMENT_MESSAGES, response.data);
+          this.$store.commit('SET_SEGMENT_MESSAGES', response.data);
           this.loadingMessages = false;
         },
         response => {
           alert('There was an error');
-          this.$store.commit(types.SET_SEGMENT_MESSAGES, []);
+          this.$store.commit('SET_SEGMENT_MESSAGES', []);
           this.loadingMessages = false;
         },
       );

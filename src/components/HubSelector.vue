@@ -14,8 +14,8 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'hub-selector',
   computed: {
-    ... mapGetters ([
-      'course', 'hubs',
+    ...mapGetters ([
+      'hubs'
     ]),
   },
 };

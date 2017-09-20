@@ -1,7 +1,10 @@
 import API from '@/api';
-import _ from 'lodash/core';
+import values from 'lodash/values';
+import map from 'lodash/map';
+import forEach from 'lodash/forEach';
+import size from 'lodash/size';
 import mean from 'lodash/mean';
-import { mapGetters } from 'x';
+import { mapGetters } from 'vuex';
 
 import chunk from 'lodash/chunk';
 
@@ -33,16 +36,16 @@ export default {
 
           this.points = '';
 
-          let chunkedVis = chunk(_.values(visualisation), 5);
+          let chunkedVis = chunk(values(visualisation), 5);
 
-          chunkedVis = _.map(chunkedVis, (val) => mean(val));
+          chunkedVis = map(chunkedVis, (val) => mean(val));
 
-          _.forEach(chunkedVis, (value, index) => {
+          forEach(chunkedVis, (value, index) => {
             const offsetTop = (index * segmentHeight) + parentOffsetTop;
             this.points += `S ${value * width} ${offsetTop - handleOffset}, ${value * width} ${offsetTop} `;
           });
 
-          this.points = `M0 0 ${this.points} L 0 ${(_.size(chunkedVis) * segmentHeight)} Z`;
+          this.points = `M0 0 ${this.points} L 0 ${(size(chunkedVis) * segmentHeight)} Z`;
         },
         response => (response) => {
           this.points = '';

@@ -93,7 +93,8 @@
 </template>
 
 <script>
-import _ from 'lodash/core';
+import every from 'lodash/every';
+import values from 'lodash/values';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 
@@ -183,7 +184,7 @@ export default {
       };
     },
     formIsValid() {
-      return _.every(_.values(this.validatedResponse), v => v);
+      return every(values(this.validatedResponse), v => v);
     },
     termsMarkdown() {
 

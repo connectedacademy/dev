@@ -4,6 +4,7 @@ import API from '@/api';
 import store from '@/store';
 import Moment from 'moment-mini';
 import includes from 'lodash/includes';
+import filter from 'lodash/filter';
 
 // initial state
 const state = {
@@ -27,7 +28,7 @@ const getters = {
   courseContent() {
     if (state.current_class === undefined) { return undefined; }
     Vue.$log.info(state.current_class.content);
-    return _.filter(state.current_class.content, item => {
+    return filter(state.current_class.content, item => {
       // Exclude titles from course content
       return !includes(['title'], item.content_type);
     });

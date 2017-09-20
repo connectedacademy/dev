@@ -35,15 +35,15 @@ export default {
   components: {
     FourCorners
   },
-  watch: {
-    '$route': {
-      handler: function(nV, oV) {
-        this.loadMarkdown();
-      },
-      deep: true,
-    },
-  },
-  mounted() {
+  // watch: {
+  //   '$route': {
+  //     handler: function(nV, oV) {
+  //       this.loadMarkdown();
+  //     },
+  //     deep: true,
+  //   },
+  // },
+  activated() {
     this.loadMarkdown();
   },
   props: ['markdownUrl', 'frontMatterVisible'],

@@ -15,6 +15,7 @@ import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
 
 import 'vue-awesome/icons/circle';
+import 'vue-awesome/icons/play';
 
 export default {
   name: 'section-navigator-item',

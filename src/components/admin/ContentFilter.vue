@@ -11,6 +11,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import map from 'lodash/map';
 
 export default {
   name: 'content-filter',
@@ -30,7 +31,7 @@ export default {
   computed: {
     ...mapGetters(['course']),
     contentSlugs() {
-      return _.map(this.course.classes, (o) => {
+      return map(this.course.classes, (o) => {
         return o.slug;
       });
     }

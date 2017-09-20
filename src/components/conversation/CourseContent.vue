@@ -80,17 +80,25 @@ import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 import Auth from '@/mixins/Auth';
 
+import MarkdownRenderer from '@/components/MarkdownRenderer';
+
 export default {
   name: 'course-content',
   mixins: [
     Auth,
   ],
   components: {
-    'MarkdownRenderer': import('@/components/MarkdownRenderer'),
+    MarkdownRenderer,
     'MarkdownContent': () => import('@/components/MarkdownContent'),
     'MarkdownLink': () => import('@/components/MarkdownLink'),
-    'SoundcloudEmbed': () => import('@/components/SoundcloudEmbed'),
-    'VideoEmbed': () => import('@/components/VideoEmbed'),
+    'SoundcloudEmbed': () => ({
+      component: import('@/components/SoundcloudEmbed'),
+      delay: 2000,
+    }),
+    'VideoEmbed': () => ({
+      component: import('@/components/VideoEmbed'),
+      delay: 2000,
+    }),
     'LikeIndicator': () => import('@/components/LikeIndicator'),
     'LiveClass': () => import('@/components/conversation/LiveClass'),
     'Homework': () => import('@/components/conversation/Homework'),
@@ -100,11 +108,19 @@ export default {
     'NextClass': () => import('@/components/conversation/NextClass'),
     'WebinarMessageTicker': () => import('@/components/webinar/WebinarMessageTicker'),
     'JoinBanner': () => import('@/components/banners/JoinBanner'),
-    'MediaCarousel': () => import('@/components/MediaCarousel'),
-    'MediaThumbnails': () => import('@/components/MediaThumbnails'),
     'MessageComposer': () => import('@/components/MessageComposer'),
     'FourCornersLink': () => import('@/components/fourcorners/FourCornersLink'),
+    'MediaCarousel': () => import('@/components/MediaCarousel'),
+    'MediaCarousel': () => ({
+      component: import('@/components/MediaCarousel'),
+      delay: 2000,
+    }),
+    'MediaThumbnails': () => ({
+      component: import('@/components/MediaThumbnails'),
+      delay: 2000,
+    })
   },
+  
   created() {
     this.viewCurrentClass();    
   },

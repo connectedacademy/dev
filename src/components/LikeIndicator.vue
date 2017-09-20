@@ -10,7 +10,8 @@
 <script>
 import API from '@/api';
 import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
+
+import reduce from 'lodash/reduce';
 
 export default {
   name: 'like-indicator',
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
+      this.$store.commit('SHOW_AUTH');
     },
     toggleLike() {
       if (this.firstTime) {
@@ -79,11 +80,11 @@ export default {
       }
     },
     showModal() {
-      this.$store.commit(types.SHOW_LIKE);
+      this.$store.commit('SHOW_LIKE');
     },
     hideModal() {
       this.getLikeCount();
-      this.$store.commit(types.DISMISS_LIKE);
+      this.$store.commit('DISMISS_LIKE');
     },
     getLikeCount() {
       const request = { class: this.classSlug, content: this.contentSlug };
@@ -92,7 +93,7 @@ export default {
         (response) => {
           this.$log.info(`123Response from like count request - '${this.contentSlug}'`);
           this.$log.info(response);
-          // this.likeCount = _.reduce(response, function(sum, o) {
+          // this.likeCount = reduce(response, function(sum, o) {
           //   return o;
           // });
           // this.$emit('update:likeCount', this.likeCount);

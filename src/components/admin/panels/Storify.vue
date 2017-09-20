@@ -17,6 +17,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import API from '@/api';
+import find from 'lodash/find';
 
 export default {
   name: 'storify',
@@ -31,7 +32,7 @@ export default {
       
       this.classroomCode = 'loading';
 
-      const classroomSlug = _.find(this.currentClass.content, (o) => {
+      const classroomSlug = find(this.currentClass.content, (o) => {
         return (o.content_type === 'class');
       }).slug;
 

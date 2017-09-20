@@ -1,4 +1,5 @@
 import * as types from '@/store/mutation-types';
+import forEach from 'lodash/forEach';
 
 const BURGER_DEFAULT = 'default';
 const BURGER_CLOSE = 'close';
@@ -46,7 +47,7 @@ const mutations = {
     state.pageStyles = newState;
   },
   [types.SET_NAV_STATE](initialState, newState) {
-    _.forEach(newState, function(value, key) {
+    forEach(newState, function(value, key) {
       state[key] = value;
     });
   },
