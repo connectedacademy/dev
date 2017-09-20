@@ -1,22 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-// import AdminMain from '@/components/admin/AdminMain';
-
-// import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
-// import Registration from '@/components/authentication/Registration';
-
-// import Course from '@/components/Course';
-// import Markdown from '@/components/Markdown';
-
-// import Feedback from '@/components/feedback/Feedback';
-// import FeedbackView from '@/components/feedback/FeedbackView';
-
-// import FourCornersOnboarding from '@/components/fourcorners/FourCornersOnboarding';
-
-// import About from '@/components/pages/About';
-// import Schedule from '@/components/pages/Schedule';
-
 const AdminMain = () => import('@/components/admin/AdminMain')
 
 const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow')
@@ -41,11 +25,6 @@ export default new Router({
     return savedPosition || { x: 0, y: 0 }
   },
   routes: [
-    // {
-    //   name: 'authenticated',
-    //   path: '/authenticated',
-    //   redirect: '/registration',
-    // },
     {
       name: 'course-redirect',
       path: '/course/:classSlug/:contentSlug/:segmentId',
