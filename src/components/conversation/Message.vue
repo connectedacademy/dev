@@ -31,9 +31,14 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import TweetPatch from 'tweet-patch';
-import Moment from 'moment';
+import Moment from 'moment-mini';
+
+import 'vue-awesome/icons/heart';
+import 'vue-awesome/icons/retweet';
+import 'vue-awesome/icons/reply';
+import 'vue-awesome/icons/twitter';
 
 export default {
   name: 'message',

@@ -3,14 +3,16 @@ import API from '@/api';
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
+import floor from 'lodash/floor';
+
 export default {
   mounted() {
     Vue.io.socket.on('message', (obj) => {
       
       if (obj.msgtype === 'message') {
 
-        console.log('message received over socket connection')
-        console.log(obj);
+        Vue.$log.info('message received over socket connection')
+        Vue.$log.info(obj);
         
         const key = `${_.round(parseInt(obj.msg.segment) * 0.2)}`
         let updateMessage = this.messages[key]
@@ -27,17 +29,17 @@ export default {
 
           // Update active segment messages
           if (this.peekSegment === _.round(parseInt(obj.msg.segment) * 0.2)) {
-            console.log('Pushing message');
+            Vue.$log.info('Pushing message');
             this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
           }
         }
         
         if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
 
-          console.log('message received over socket connection')
-          console.log(obj);
+          Vue.$log.info('message received over socket connection')
+          Vue.$log.info(obj);
 
-          console.log('Pushing message to webinar ticker');
+          Vue.$log.info('Pushing message to webinar ticker');
           this.webinarMessages.push(obj.msg);
         }
       }
@@ -72,7 +74,7 @@ export default {
       let thinkAhead = 10; // Think ahead
       let thinkBehind = 10; // Think behind
 
-      let segmentViewport = _.floor(window.innerHeight / 158.0) + thinkBehind;
+      let segmentViewport = floor(window.innerHeight / 158.0) + thinkBehind;
 
       let endSegment = ((segmentGroup + thinkAhead) / 0.2);
       let startSegment = endSegment - (segmentViewport / 0.2);

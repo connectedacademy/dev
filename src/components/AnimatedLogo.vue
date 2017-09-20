@@ -11,20 +11,16 @@
 </template>
 
 <script>
-
 export default {
   name: 'animated-logo',
-  data() {
-    return {
-      loaded: false,
-    };
-  },
-  mounted() {
-    var self = this;
-    setTimeout(function() {
-      self.loaded = true;
-    }, 0);
-  },
+  // data() {
+  //   return {
+  //     loaded: false,
+  //   };
+  // },
+  // mounted() {
+  //   setTimeout(() => { this.loaded = true }, 0);
+  // },
   methods: {
     goHome() {
       this.$router.push('/');

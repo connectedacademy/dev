@@ -9,7 +9,9 @@
 <script>
 import Vue from 'vue';
 import API from '@/api';
-import _ from 'lodash';
+import take from 'lodash/take';
+import reverse from 'lodash/reverse';
+import orderBy from 'lodash/orderBy';
 
 import Message from '@/components/conversation/Message';
 import Messages from '@/mixins/Messages';
@@ -38,7 +40,7 @@ export default {
   computed: {
     orderedMessages() {
       // Order messages
-      return _.reverse(_.take(_.orderBy(this.webinarMessages, ['createdAt'], ['desc']), 3));
+      return reverse(take(orderBy(this.webinarMessages, ['createdAt'], ['desc']), 3));
     },
   },
   methods: {

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
 
@@ -84,22 +84,22 @@ export default {
       providers: [
         {
           name: 'Wordpress',
-          link: 'https://digitalinteraction.github.io/fourcorners/howto/wordpress.md',          
-          video: 'VqmSFDc_ZlY',
+          link: 'https://cdn.fourcorners.io/howto/wordpress.md',          
+          video: 'cmYga-3gKAI',
         },
         {
           name: 'Squarespace',
-          link: 'https://digitalinteraction.github.io/fourcorners/howto/squarespace.md',
+          link: 'https://cdn.fourcorners.io/howto/squarespace.md',
           video: 'xSIU4yPzZ8E',
         },
         {
           name: 'Blogger',
-          link: 'https://digitalinteraction.github.io/fourcorners/howto/blogger.md',
+          link: 'https://cdn.fourcorners.io/howto/blogger.md',
           video: 'B5aAWHoYXGY',
         },
         {
           name: 'Other',
-          link: 'https://digitalinteraction.github.io/fourcorners/howto/generic.md',
+          link: 'https://cdn.fourcorners.io/howto/generic.md',
           video: undefined,
         },
       ],

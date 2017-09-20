@@ -26,11 +26,13 @@
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 import API from '@/api';
-import _ from 'lodash';
+import filter from 'lodash/filter';
 
-import Moment from 'moment';
+import Moment from 'moment-mini';
 
 import ContentFilter from '@/components/admin/ContentFilter';
+
+import 'vue-awesome/icons/refresh';
 
 export default {
   name: 'student-submissions',
@@ -63,7 +65,7 @@ export default {
     ...mapGetters(['course', 'currentClass']),
     contentSlugs() {
       if (!this.currentClass) return [];
-      return _.filter(this.currentClass.content, (obj) => {
+      return filter(this.currentClass.content, (obj) => {
         return obj.homework;
       })
     },

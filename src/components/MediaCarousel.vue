@@ -2,7 +2,7 @@
 .media-carousel-wrapper
   swiper(v-bind:options="swiperOption")
     swiper-slide(v-for="(item, key) in media" v-bind:key="key")
-      img.swiper-lazy(v-bind:data-src="`https://${course.slug}.connectedacademy.io/course/content/media/${item.image}`")
+      img.swiper-lazy(v-bind:data-src="`https://${course.slug}.connectedacademy.io/course/content/media/medium/${item.image}`")
       .swiper-lazy-preloader.swiper-lazy-preloader-white
     //- .swiper-pagination(slot="pagination")
     .swiper-button-prev(slot="button-prev")
@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       swiperOption: {
-        pagination: '.swiper-pagination',
+        // pagination: '.swiper-pagination',
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
         slidesPerView: 1,

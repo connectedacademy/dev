@@ -21,6 +21,8 @@ import AnimatedLogo from '@/components/AnimatedLogo';
 import ProfileIcon from './ProfileIcon';
 import Auth from '@/mixins/Auth';
 
+import 'vue-awesome/icons/wrench';
+
 export default {
   name: 'navigation',
   mixins: [

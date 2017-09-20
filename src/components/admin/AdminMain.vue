@@ -56,6 +56,8 @@ import StudentSubmissions from '@/components/admin/panels/StudentSubmissions';
 import QuestionResponses from '@/components/admin/panels/QuestionResponses';
 import Storify from '@/components/admin/panels/Storify';
 
+import 'vue-awesome/icons/angle-right';
+
 export default {
   name: 'admin-main',
   beforeRouteEnter(to, from, next) {

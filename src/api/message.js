@@ -12,16 +12,16 @@ let cancel;
 export default {
   subscribeToSocket() {
 
-    console.log('Subscribing to socket');
+    Vue.$log.info('Subscribing to socket');
 
     Vue.io.socket.on('user', function(obj) {
-      console.log('SOCKET - user');
-      console.log(obj);
+      Vue.$log.info('SOCKET - user');
+      Vue.$log.info(obj);
     });
 
     Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
-      console.log('SOCKET RESPONSE - me');
-      console.log(resData);
+      Vue.$log.info('SOCKET RESPONSE - me');
+      Vue.$log.info(resData);
     });
   },
   cancelBatchRequests() {
@@ -50,8 +50,8 @@ export default {
 
     Vue.io.socket.get(`/v1/messages/subscribe/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres) {
       cb(resData);
-      console.log('SOCKET RESPONSE - subscribe');
-      console.log(resData);
+      Vue.$log.info('SOCKET RESPONSE - subscribe');
+      Vue.$log.info(resData);
     });
   },
   getContentMessages(request, cb, errorCb) {

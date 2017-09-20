@@ -23,17 +23,26 @@
         icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
 
       .clearfix
-    media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]" v-bind:class-section="content")
+    media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]" v-bind:class-section="content" v-bind:video-is-active="videoIsActive")
 
 </template>
 
 <script>
 import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
-import Moment from 'moment';
+import Moment from 'moment-mini';
 
 import MessageComposer from '@/components/MessageComposer';
 import MediaContainer from '@/components/MediaContainer';
+
+import 'vue-awesome/icons/pause';
+import 'vue-awesome/icons/play';
+import 'vue-awesome/icons/step-forward';
+import 'vue-awesome/icons/twitter';
+import 'vue-awesome/icons/angle-up';
+import 'vue-awesome/icons/angle-down';
+import 'vue-awesome/icons/soundcloud';
+import 'vue-awesome/icons/youtube';
 
 export default {
   name: 'action-panel',
@@ -60,7 +69,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['composerHidden', 'videoPlaying', 'currentSectionScrollPosition', 'currentTime']),
+    ...mapGetters(['composerHidden', 'videoPlaying', 'currentSectionScrollPosition', 'currentTime', 'videoIsActive']),
     start() {
       return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
     },

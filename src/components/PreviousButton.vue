@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/angle-left';
 
 export default {
   name: 'previous-button',

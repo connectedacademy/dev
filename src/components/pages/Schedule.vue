@@ -20,7 +20,7 @@
 <script>
 import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
-import Moment from 'moment';
+import Moment from 'moment-mini';
 import HubSelector from '../HubSelector';
 
 export default {

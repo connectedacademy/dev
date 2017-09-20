@@ -2,7 +2,8 @@ import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 import store from '@/store';
-import Moment from 'moment';
+import Moment from 'moment-mini';
+import includes from 'lodash/includes';
 
 // initial state
 const state = {
@@ -25,11 +26,10 @@ const getters = {
   },
   courseContent() {
     if (state.current_class === undefined) { return undefined; }
-    console.log('state.current_class.content');
     Vue.$log.info(state.current_class.content);
     return _.filter(state.current_class.content, item => {
       // Exclude titles from course content
-      return !_.includes(['title'], item.content_type);
+      return !includes(['title'], item.content_type);
     });
   },
 };

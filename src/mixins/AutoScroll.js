@@ -1,4 +1,3 @@
-const CALCULATE_FPS = false; // Calculate the scrolling FPS
 const AUTOSCROLL_CHECK = 200; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
@@ -8,6 +7,7 @@ const SEGMENT_HEIGHT = 158.0; // Height of each segment
 import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
+import throttle from 'lodash/throttle';
 
 export default {
   mounted() {
@@ -67,12 +67,10 @@ export default {
 
       Vue.$log.debug('Attempting auto scroll');
 
-      var self = this;
+      if (!this.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); this.isAutoScrolling = false; return; }
+      if (this.isAutoScrolling) { Vue.$log.debug('Already auto scrolling'); return; }
 
-      if (!self.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); self.isAutoScrolling = false; return; }
-      if (self.isAutoScrolling) { Vue.$log.debug('Already auto scrolling'); return; }
-
-      self.isAutoScrolling = true;
+      this.isAutoScrolling = true;
 
       var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
 
@@ -104,51 +102,25 @@ export default {
 
       var lastCalledTime;
       var frameCount;
-      var fps;
 
-      var calculateFPS = function() {
-
-        if(!lastCalledTime) {
-           lastCalledTime = Date.now();
-           fps = 0;
-           frameCount = 0;
-        }
-
-        frameCount += 1;
-
-        const delta = (Date.now() - lastCalledTime)/1000;
-        lastCalledTime = Date.now();
-
-        if ((frameCount % 30) === 0) {
-          frameCount = 0;
-          fps = 1/delta;
-          fps   = _.round((100 / 60) * fps);
-          self.fps = (fps > 60) ? '60+' : fps;
-        }
-      };
-
-      var self = this;
-
-      var step = function() {
-
-        if (CALCULATE_FPS) { calculateFPS(); }
+      var step = () => {
 
         var elapsed = Date.now() - clock;
 
         const yPos = position(start, end, elapsed, duration);
 
         // Vue.$log.debug(`step ${start} ${end} ${elapsed} ${duration} ${yPos}`);
-        if (!self.preventScroll) {
+        if (!this.preventScroll) {
           window.scroll(0, yPos);
         }
 
-        if ((elapsed <= duration) && self.canAutoScroll) {
+        if ((elapsed <= duration) && this.canAutoScroll) {
           requestAnimationFrame(step);
         }
         if (elapsed > duration) {
-          self.$store.commit('setPendingScrollPosition', 0);
-          self.$store.commit(types.PAUSE_VIDEO);
-          self.attemptAutoScroll();
+          this.$store.commit('setPendingScrollPosition', 0);
+          this.$store.commit(types.PAUSE_VIDEO);
+          this.attemptAutoScroll();
         }
       }
       step();
@@ -164,6 +136,8 @@ export default {
 
       clearTimeout(this.wheeling);
 
+      var self = this;
+
       this.wheeling = setTimeout(() => {
 
         // Wheeling stopped - fire events
@@ -172,7 +146,7 @@ export default {
         this.$store.dispatch('setScrollPosition', this.scrollPosition).then(() => {
 
           this.wheeling = undefined;
-          this.preventScroll = false;
+          self.preventScroll = false;
           
           // if (this.currentSection && (this.currentSection.content_type === 'class')) {
           //   this.$store.commit(types.PLAY_VIDEO);
@@ -181,9 +155,9 @@ export default {
 
       }, WHEEL_TIMEOUT);
     },
-    setScrollPosition: _.throttle(function(self) {
-      this.scrollPosition = window.scrollY;
-      self.$store.dispatch('setScrollPosition', this.scrollPosition);
+    setScrollPosition: throttle(function(self) {
+      self.scrollPosition = window.scrollY;
+      self.$store.dispatch('setScrollPosition', self.scrollPosition);
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onScroll() {

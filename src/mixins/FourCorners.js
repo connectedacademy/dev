@@ -1,5 +1,3 @@
-import FourCorners from '@/fourcorners.js';
-
 export default {
   methods: {
     loadFourCornersScript() {

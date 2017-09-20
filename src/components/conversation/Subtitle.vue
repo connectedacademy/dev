@@ -7,7 +7,7 @@
 
 <script>
 /* eslint-disable */
-import _ from 'lodash';
+import _ from 'lodash/core';
 
 export default {
   name: 'subtitle',

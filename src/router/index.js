@@ -1,28 +1,43 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import AdminMain from '@/components/admin/AdminMain';
+// import AdminMain from '@/components/admin/AdminMain';
 
-import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
-import Registration from '@/components/authentication/Registration';
+// import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
+// import Registration from '@/components/authentication/Registration';
 
-import Course from '@/components/Course';
-import Markdown from '@/components/Markdown';
+// import Course from '@/components/Course';
+// import Markdown from '@/components/Markdown';
 
-import Feedback from '@/components/feedback/Feedback';
-import FeedbackView from '@/components/feedback/FeedbackView';
+// import Feedback from '@/components/feedback/Feedback';
+// import FeedbackView from '@/components/feedback/FeedbackView';
 
-import FourCornersOnboarding from '@/components/fourcorners/FourCornersOnboarding';
+// import FourCornersOnboarding from '@/components/fourcorners/FourCornersOnboarding';
 
-import About from '@/components/pages/About';
-import Schedule from '@/components/pages/Schedule';
+// import About from '@/components/pages/About';
+// import Schedule from '@/components/pages/Schedule';
+
+const AdminMain = () => import('@/components/admin/AdminMain')
+
+const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow')
+const Registration = () => import('@/components/authentication/Registration')
+
+const Course = () => import('@/components/Course')
+const Markdown = () => import('@/components/Markdown')
+
+const Feedback = () => import('@/components/feedback/Feedback')
+const FeedbackView = () => import('@/components/feedback/FeedbackView')
+
+const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');
+
+const About = () => import('@/components/pages/About');
+const Schedule = () => import('@/components/pages/Schedule');
 
 Vue.use(Router);
 
 export default new Router({
   // mode: 'history',
   scrollBehavior: function (to, from, savedPosition) {
-    console.log('one');
     return savedPosition || { x: 0, y: 0 }
   },
   routes: [

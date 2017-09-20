@@ -11,6 +11,8 @@
 import API from '@/api';
 import { mapGetters } from 'vuex';
 
+import 'vue-awesome/icons/times';
+
 export default {
   name: 'info-dialogue',
   props: ['dismissable'],

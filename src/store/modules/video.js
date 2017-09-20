@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue';
-import _ from 'lodash';
+import _ from 'lodash/core';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 import store from '@/store';;

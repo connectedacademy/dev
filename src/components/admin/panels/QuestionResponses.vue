@@ -31,6 +31,8 @@ import * as types from '@/store/mutation-types';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 
+import 'vue-awesome/icons/refresh';
+
 export default {
   name: 'question-responses',
   components: {

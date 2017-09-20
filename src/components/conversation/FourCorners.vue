@@ -22,11 +22,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import * as config from '@/api/config';
-import {mapGetters} from 'vuex';
-import Moment from 'moment';
-
 export default {
   name: 'four-corners',
   props: ['content'],

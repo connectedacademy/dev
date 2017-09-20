@@ -10,9 +10,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import _ from 'lodash/core';
 
 import FourCornersMixin from '@/mixins/FourCorners';
 import FourCorners from './fourcorners/FourCorners';
@@ -23,8 +21,12 @@ import MarkdownItVideo from 'markdown-it-video';
 import MarkdownItFrontMatter from 'markdown-it-front-matter';
 import MarkdownItCustomBlock from 'markdown-it-custom-block';
 
+import Vue from 'vue';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
+
+import startsWith from 'lodash/startsWith';
+import endsWith from 'lodash/endsWith';
 
 export default {
   name: 'markdown-renderer',
@@ -41,9 +43,9 @@ export default {
       },
       deep: true,
     },
-    course() {
-      this.loadMarkdown();
-    },
+    // course() {
+    //   this.loadMarkdown();
+    // },
   },
   mounted() {
     this.loadMarkdown();
@@ -62,7 +64,7 @@ export default {
         return this.markdownUrl;
       }
       let url = this.$route.params.url;
-      if (_.startsWith(url, 'http')) {
+      if (startsWith(url, 'http')) {
         return url;
       } else {
         if (!(this.$store.getters.course && this.$store.getters.course.baseUri)) {
@@ -122,9 +124,6 @@ export default {
           };
         },
         computed: {
-          ...mapGetters([
-            'isRegistered',
-          ]),
           contentUrl() {
             return `${window.location.protocol}//${window.location.host}/#/submission/${parent.theClass}/${parent.theContent}`;
           },
@@ -172,16 +171,12 @@ export default {
       this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
 
       // Load fourcorners
-      var self = this;
-      setTimeout(function() {
-        self.loadFourCornersScript();
+      setTimeout(() => {
+        this.loadFourCornersScript();
       }, 500);
     },
   },
   computed: {
-    ...mapGetters([
-      'course'
-    ]),
     rawMarkdown() {
 
       var parent = this;
@@ -191,8 +186,8 @@ export default {
         linkify: true,
         replaceLink: (link, env) => {
 
-          if (_.startsWith(link, 'http')) { return link; }
-          if (_.endsWith(link, '.md')) {
+          if (startsWith(link, 'http')) { return link; }
+          if (endsWith(link, '.md')) {
             const url = this.getUrl();
             const currentUrl = url.substring(0, url.lastIndexOf('/') + 1);
             return `/#/markdown/${encodeURIComponent(link)}`;

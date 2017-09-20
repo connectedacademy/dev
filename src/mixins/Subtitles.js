@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import math from 'lodash/math';
 
 export default {
   data() {
@@ -24,7 +25,7 @@ export default {
 
           for (var subtitle of response.response) {
 
-            let group = _.divide(_.floor(subtitle.start + 2.5), 5);
+            let group = math.divide(math.floor(subtitle.start + 2.5), 5);
 
             const segmentGroup = parseInt(group);
 

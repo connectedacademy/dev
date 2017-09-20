@@ -22,6 +22,9 @@ import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
 import VueScroll from 'vue-scroll';
 
+import 'vue-awesome/icons/angle-left';
+import 'vue-awesome/icons/angle-right';
+
 export default {
   name: 'full-class-selector',
   watch: {

@@ -1,7 +1,10 @@
 import Vue from 'vue';
 import API from '@/api';
-import _ from 'lodash';
+import _ from 'lodash/core';
+import mean from 'lodash/mean';
 import { mapGetters } from 'vuex';
+
+import chunk from 'lodash/chunk';
 
 export default {
   data() {
@@ -31,9 +34,9 @@ export default {
 
           this.points = '';
 
-          let chunkedVis = _.chunk(_.values(visualisation), 5);
+          let chunkedVis = chunk(_.values(visualisation), 5);
 
-          chunkedVis = _.map(chunkedVis, (val) => _.mean(val));
+          chunkedVis = _.map(chunkedVis, (val) => mean(val));
 
           _.forEach(chunkedVis, (value, index) => {
             const offsetTop = (index * segmentHeight) + parentOffsetTop;

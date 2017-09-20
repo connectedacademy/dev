@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
 import API from '@/api';
 
@@ -28,6 +28,9 @@ import Subtitles from '@/mixins/Subtitles';
 import Visualisation from '@/mixins/Visualisation';
 
 import TimeSegment from '@/components/conversation/TimeSegment';
+
+import 'vue-awesome/icons/twitter';
+import 'vue-awesome/icons/quote-right';
 
 export default {
   name: 'conversation-container',

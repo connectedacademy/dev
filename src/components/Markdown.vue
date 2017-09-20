@@ -15,9 +15,7 @@
 </template>
 
 <script>
-
-import AnimatedLogo from '@/components/AnimatedLogo';
-
+import * as types from '@/store/mutation-types';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import PreviousButton from '@/components/PreviousButton';
 
@@ -26,17 +24,10 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
-      this.$store.commit(types.SET_PAGE_STYLE, undefined);
+      vm.$store.commit(types.SET_PAGE_STYLE, undefined);
     });
   },
-  methods: {
-    back() { this.$router.go(-1); },
-  },
-  mounted() {
-    window.scroll(0, 0);
-  },
   components: {
-    AnimatedLogo,
     MarkdownRenderer,
     PreviousButton,
   },
@@ -45,11 +36,8 @@ export default {
       frontMatterVisible: false,
     };
   },
+  methods: {
+    back() { this.$router.go(-1); },
+  },
 };
 </script>
-
-<style lang="stylus" scoped>
-
-@import '~stylus/shared'
-
-</style>

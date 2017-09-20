@@ -23,6 +23,8 @@ import API from '@/api';
 
 import StudentTile from '@/components/admin/tiles/StudentTile';
 
+import 'vue-awesome/icons/refresh';
+
 export default {
   name: 'course-students',
   components: {

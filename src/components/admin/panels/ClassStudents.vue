@@ -25,6 +25,8 @@ import API from '@/api';
 import ContentFilter from '@/components/admin/ContentFilter';
 import StudentTile from '@/components/admin/tiles/StudentTile';
 
+import 'vue-awesome/icons/refresh';
+
 export default {
   name: 'class-students',
   components: {

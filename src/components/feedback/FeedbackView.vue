@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .feedback-view(v-if="currentFeedbackId")
+  .feedback-view(v-if="currentFeedbackId && feedbackItem")
 
     .feedback-header
       p {{ feedbackItem.user.name }} - {{ currentFeedbackId }}
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import orderBy from 'lodash/orderBy';
 import { mapGetters } from 'vuex';
 
 import API from '@/api';
@@ -45,24 +45,14 @@ import FourCorners from '../fourcorners/FourCorners';
 
 import InfoDialogue from '../InfoDialogue';
 
+import 'vue-awesome/icons/lock';
+
 export default {
   name: 'feedback-view',
-  props: ['currentFeedbackId'],
+  props: ['currentFeedbackId', 'discussion'],
   mixins: [
     FourCornersMixin,
   ],
-  mounted() {
-    this.$io.socket.on('user', (obj) => {
-      console.log('Submission message received');
-      console.log(obj);
-
-      if (obj.data.msgtype === 'discussion') {
-        if (this.currentFeedbackId === obj.data.msg.relates_to) {
-          this.discussion.push(obj.data.msg);
-        }
-      }
-    });
-  },
   watch: {
     currentFeedbackId() {
       // Fetch feedback item
@@ -72,7 +62,7 @@ export default {
       // Set loading state
       this.loading = true;
       // Clear discussion
-      this.discussion = [];
+      this.$emit('update:discussion', []);
       // Fetch discussion
       this.getDiscussion();
       // Load fourcorners
@@ -84,7 +74,6 @@ export default {
       navTitle: 'Connected Academy - View Feedback',
       loading: true,
       feedbackItem: undefined,
-      discussion: [],
       comment: '',
     };
   },
@@ -95,7 +84,8 @@ export default {
     unlockMessage(message) {
       if (!message.canview) {
         if (confirm(`Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`)) {
-          this.currentFeedbackId = '#15:3340';
+          // Redirect to other user's feedback
+          // this.currentFeedbackId = '#15:3340';
         }
       }
     },
@@ -127,7 +117,7 @@ export default {
         (response) => {
           this.$log.info('Response from feedback request');
           this.$log.info(response);
-          this.discussion = response;
+          this.$emit('update:discussion', response);
           // Set loading state
           this.loading = false;
         },
@@ -162,7 +152,7 @@ export default {
       'isAuthenticated', 'isRegistered',
     ]),
     feedbackMessages() {
-      return _.orderBy(this.discussion, ['createdAt'], ['asc']);
+      return orderBy(this.discussion, ['createdAt'], ['asc']);
     },
     encodedContentId() {
       if (!this.currentFeedbackId) {

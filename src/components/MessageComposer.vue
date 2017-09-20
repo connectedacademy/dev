@@ -19,10 +19,12 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 import {mapGetters} from 'vuex';
+
+import round from 'lodash/round';
 
 export default {
   name: 'message-composer',
@@ -89,7 +91,7 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     currentTime() {
-      return `Tweeting at - ${_.round(this.currentTime)}`;
+      return `Tweeting at - ${round(this.currentTime)}`;
     },
     submitText() {
       return (this.sending) ? 'Sending' : 'Post';

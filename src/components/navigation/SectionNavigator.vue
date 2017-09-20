@@ -9,7 +9,7 @@
 <script>
 import {mapGetters} from 'vuex';
 import SectionNavigatorItem from './SectionNavigatorItem';
-import _ from 'lodash';
+import _ from 'lodash/core';
 
 export default {
   name: 'section-navigator',

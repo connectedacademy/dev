@@ -41,7 +41,8 @@
 
 <script>
 import Vue from 'vue';
-import _ from 'lodash';
+import _ from 'lodash/core';
+import orderBy from 'lodash/orderBy';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
@@ -110,7 +111,7 @@ export default {
     ]),
     orderedMessages() {
       // Order messages
-      return _.orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
+      return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
     },
     isCurrent() {
       return this.currentSegmentGroup === this.message.segmentGroup;

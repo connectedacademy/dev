@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Vue from 'vue';
-import _ from 'lodash';
 import * as types from '@/store/mutation-types';
 import API from '@/api';
 import store from '@/store';
+import math from 'lodash/math';
 
 // initial state
 const state = {
@@ -67,11 +67,11 @@ const getters = {
   },
   currentSegmentGroup() {
     if (!store.getters.currentSection) { return -1; }
-    return _.floor(store.getters.currentSectionScrollPosition / 158.0);
+    return math.floor(store.getters.currentSectionScrollPosition / 158.0);
   },
   currentSegment() {
     if (!store.getters.currentSection) { return 0; }
-    return _.floor(store.getters.currentSectionScrollPosition / (158.0 * 0.2));
+    return math.floor(store.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };
 

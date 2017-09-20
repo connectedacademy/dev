@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash/core';
 import store from '@/store';
 
 export const fauxTime = (state) => {

@@ -14,6 +14,8 @@ li.navigation-item(@click="jumpToContent" v-bind:class="{ active: isActive }")
 import {mapGetters} from 'vuex';
 import * as types from '@/store/mutation-types';
 
+import 'vue-awesome/icons/circle';
+
 export default {
   name: 'section-navigator-item',
   props: ['scrollPoint'],

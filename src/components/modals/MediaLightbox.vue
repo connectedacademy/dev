@@ -11,6 +11,8 @@
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
+import 'vue-awesome/icons/close';
+
 export default {
   name: 'media-lightbox',
   computed: {

@@ -11,8 +11,8 @@ import VueI18n from 'vue-i18n';
 import VueLogger from 'vuejs-logger'
 import VueCookie from 'vue-cookie';
 import VueAnalytics from 'vue-analytics'
-import Raven from 'raven-js';
-import RavenVue from 'raven-js/plugins/vue';
+// import Raven from 'raven-js';
+// import RavenVue from 'raven-js/plugins/vue';
 
 import VueScroll from 'vue-scroll';
 import VueAutosize from 'vue-autosize';
@@ -21,9 +21,6 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 import { sync } from 'vuex-router-sync';
 
-import VueYouTubeEmbed from 'vue-youtube-embed';
-
-import 'vue-awesome/icons';
 import Icon from 'vue-awesome/components/Icon';
 
 import App from '@/App';
@@ -91,15 +88,14 @@ Vue.use(VueCookie);
 Vue.use(VueAnalytics, {
   id: 'UA-44963053-16',
   router,
-  autoTracking: {
-    exception: true,
-  },
+  // autoTracking: {
+  //   exception: true,
+  // },
 });
 
 // TODO: Enabled for production
 // Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
 
-Vue.use(VueYouTubeEmbed);
 Vue.use(VueScroll);
 Vue.use(VueAutosize);
 

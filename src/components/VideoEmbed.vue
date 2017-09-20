@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import startsWith from 'lodash/startsWith';
+
 export default {
   name: 'video-embed',
   props: ['contentType', 'videoSrc'],
@@ -28,7 +30,7 @@ export default {
           return `https://www.youtube.com/embed/${this.videoSrc}`;
           break;
         case 'live':
-          return (_.startsWith(this.videoSrc, 'http')) ? this.videoSrc : `https://www.youtube.com/embed/${this.videoSrc}`;
+          return (startsWith(this.videoSrc, 'http')) ? this.videoSrc : `https://www.youtube.com/embed/${this.videoSrc}`;
           break;
         default:
           return this.videoSrc;

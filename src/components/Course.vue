@@ -14,7 +14,7 @@
 
 <script>
 /* eslint-disable */
-import _ from 'lodash';
+import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
 
 import * as types from '@/store/mutation-types';
@@ -79,10 +79,9 @@ export default {
         this.$store.dispatch('getSpec', query.class);
 
         // Set the current section/scroll position
-        var self = this;
-        setTimeout(function() {
-          const scrollPoint = self.$store.state.scrollPoints[query.content];
-          self.$refs.main.scrollTop = scrollPoint.top + (query.segment * (158.0 * 0.2));
+        setTimeout(() => {
+          const scrollPoint = this.$store.state.scrollPoints[query.content];
+          this.$refs.main.scrollTop = scrollPoint.top + (query.segment * (158.0 * 0.2));
         }, 1000);
 
       }

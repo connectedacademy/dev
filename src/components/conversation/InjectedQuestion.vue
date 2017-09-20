@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 import VueSlider from 'vue-slider-component';

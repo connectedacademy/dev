@@ -3,7 +3,7 @@
   .submission-grid-wrapper(v-if="content.submissions && content.submissions.length > 0")
     p.content-description You have made {{ content.submissions.length }} submission(s)
 
-    ul.hidden.submission-grid
+    //- ul.submission-grid
       li.submission-grid--tile(v-for="submission in content.submissions" @click="viewSubmissions")
         img(v-bind:src="submission.thumbnail")
       .clearfix

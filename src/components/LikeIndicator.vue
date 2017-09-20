@@ -18,7 +18,6 @@ export default {
   created() {
     this.hasLiked = this.haveliked;
     this.likeCount = this.likes;
-    this.getLikeCount();
   },
   data() {
     return {

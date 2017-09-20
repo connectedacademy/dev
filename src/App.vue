@@ -43,7 +43,6 @@ import API from '@/api';
 
 import store from '@/store';
 import * as types from '@/store/mutation-types';
-import Moment from 'moment';
 
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';

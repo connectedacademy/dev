@@ -5,12 +5,12 @@
   .course-content-group(v-if="isIntroduction")
 
     //- ABOUT
-    .course-content(v-if="aboutMarkdown")
+    .course-content(v-if="infoMarkdown")
       .course-content--header
         h1.content-title About the course
 
       .course-content--body
-        markdown-renderer(v-bind:markdown-url="aboutMarkdown")
+        markdown-renderer(v-bind:markdown-url="infoMarkdown")
 
         four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
 
@@ -77,10 +77,10 @@
 
 <script>
 /* eslint-disable */
-import _ from 'lodash';
+import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
-import Moment from 'moment';
+import Moment from 'moment-mini';
 import Auth from '@/mixins/Auth';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
@@ -132,35 +132,15 @@ export default {
     FourCornersLink,
   },
   created() {
-
-    this.currentTime = Moment().format('YYYY-MM-DD');
-
-    setTimeout(() => {
-      this.$store.dispatch('getCourse').then(() => {
-        setTimeout(this.viewCurrentClass, 500);
-      });
-    }, 500);
-  },
-  watch: {
-    currentTime(nV) {
-      // Set faux time if adjusted
-      const newTime = Moment(nV).format('YYYY-MM-DD');
-      this.$store.commit('setFauxTime', newTime);
-
-      this.$store.dispatch('getCourse');
-      this.$store.dispatch('getHubs');
-    }
-  },
-  data() {
-    return {
-      currentTime: undefined,
-    }
+    this.$store.dispatch('getCourse').then(() => {
+        this.viewCurrentClass();
+    });
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'currentSection', 'isRegistered', 'currentActiveSection', 'fauxTime'
+      'course', 'currentClass'
     ]),
-    aboutMarkdown() {
+    infoMarkdown() {
       if (!this.course.baseUri) return undefined;
       return `${this.course.baseUri}/info.md`
     },
@@ -168,12 +148,12 @@ export default {
       return (this.currentClass && (this.currentClass.slug === 'intro'));
     },
     releasedContent() {
-      return _.filter(this.courseContent, (o) => {
+      return filter(this.courseContent, (o) => {
         return (o.status === 'RELEASED');
       });
     },
     futureContent() {
-      return _.filter(this.courseContent, (o) => {
+      return filter(this.courseContent, (o) => {
         return ((o.status === 'FUTURE')); //  && (o.content_type !== 'nextclass')
       });
     },
@@ -181,11 +161,6 @@ export default {
   methods: {
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
-    },
-    startDemo() {
-      this.$store.dispatch('getCourse').then(() => {
-        setTimeout(this.viewCurrentClass, 500);
-      });
     },
     viewCurrentClass() {
       if (!this.course) { return; }

@@ -11,9 +11,11 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
+
+import 'vue-awesome/icons/angle-right';
 
 export default {
   name: 'markdown-link',

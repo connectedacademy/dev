@@ -14,18 +14,18 @@
       li.list-header My submissions
       li.no-content(v-if="!myFeedbackItems.length") You have no submissions
       li(v-for="feedbackItem in myFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
-        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
+        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
     ul
       li.list-header Current conversations
       li.no-content(v-if="!myFeedbackItems.length") You are not in any conversations
       li(v-for="feedbackItem in feedbackItems" @click="currentFeedbackId = feedbackItem.id")
-        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
+        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
     ul
       li.list-header Suggested conversations
       li.no-content(v-if="!myFeedbackItems.length") You have no suggestions
       li(v-for="feedbackItem in availableFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
-        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id")
+        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
     //- ul
       li#random-row
@@ -51,14 +51,14 @@
         #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
 
       transition(name="fade" type="in out")
-        feedback-view(v-bind:current-feedback-id="currentFeedbackId" v-bind:currentFeedbackId.sync="currentFeedbackId")
+        feedback-view(v-bind:current-feedback-id="currentFeedbackId" v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion")
 
   .clearfix
 
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import { mapGetters } from 'vuex';
 
 import API from '@/api';
@@ -73,6 +73,9 @@ import FeedbackTile from './FeedbackTile';
 import FeedbackRow from './FeedbackRow';
 import FeedbackView from './FeedbackView';
 import InfoDialogue from '../InfoDialogue';
+
+import 'vue-awesome/icons/angle-left';
+import 'vue-awesome/icons/question';
 
 export default {
   name: 'feedback',
@@ -112,16 +115,21 @@ export default {
     this.getFeedbackItems();
     this.getAvailableFeedbackItems();
 
-    var self = this;
-
-    this.$io.socket.on('user', function(obj) {
-      console.log('Submission message received');
-      console.log(obj);
+    this.$io.socket.on('user', (obj) => {
+      this.$log.info('Submission message received');
+      this.$log.info(obj);
       switch (obj.data.msgtype) {
         case 'submission':
 
-          self.getFeedbackItems();
-          self.getAvailableFeedbackItems();
+          this.getFeedbackItems();
+          this.getAvailableFeedbackItems();
+
+          break;
+        case 'discussion':
+
+          if (this.currentFeedbackId === obj.data.msg.relates_to) {
+            this.discussion.push(obj.data.msg);
+          }
 
           break;
         default:
@@ -135,6 +143,7 @@ export default {
       feedbackItems: [],
       availableFeedbackItems: [],
       currentFeedbackId: '',
+      discussion: [],
     };
   },
   methods: {
@@ -151,12 +160,11 @@ export default {
         (response) => {
           this.$log.info('Response from feedback request');
           this.$log.info(response);
-          var self = this;
-          this.myFeedbackItems = _.filter(response.data, function(item) {
-            return item.user.account_number === self.user.account_number;
+          this.myFeedbackItems = _.filter(response.data, (item) => {
+            return item.user.account_number === this.user.account_number;
           });
-          this.feedbackItems = _.filter(response.data, function(item) {
-            return item.user.account_number !== self.user.account_number;
+          this.feedbackItems = _.filter(response.data, (item) => {
+            return item.user.account_number !== this.user.account_number;
           });
         },
         (response) => {

@@ -40,6 +40,12 @@ import * as types from '@/store/mutation-types';
 import VueScroll from 'vue-scroll';
 import API from '@/api';
 
+import 'vue-awesome/icons/angle-left';
+import 'vue-awesome/icons/angle-right';
+import 'vue-awesome/icons/info';
+import 'vue-awesome/icons/check-circle';
+import 'vue-awesome/icons/lock';
+
 export default {
   name: 'class-selector',
   watch: {
@@ -92,13 +98,12 @@ export default {
     setCurrentClass(newClass) {
       this.$ga.event('class-selector', 'click', 'class-switched', newClass);
 
-      let self = this;
-      this.$store.dispatch('resetState').then(function() {
+      this.$store.dispatch('resetState').then(() => {
         if (newClass === undefined) {
-          self.setInitalClass();
+          this.setInitalClass();
         } else {
-          self.activeClass = newClass;
-          self.$store.dispatch('getSpec', newClass);
+          this.activeClass = newClass;
+          this.$store.dispatch('getSpec', newClass);
         }
       });
     },

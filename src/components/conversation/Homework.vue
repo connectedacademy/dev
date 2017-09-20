@@ -3,7 +3,7 @@
 .course-content
 
   .course-content--header.block
-    svg.hidden(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
+    //- svg(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
 
       polyline(points="160 30 0 0 0 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash/core';
 import * as config from '@/api/config';
 import {mapGetters} from 'vuex';
-import Moment from 'moment';
+import Moment from 'moment-mini';
 
 import SubmissionGrid from '@/components/SubmissionGrid';
 

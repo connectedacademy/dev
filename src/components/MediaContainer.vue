@@ -8,33 +8,32 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="mediaItems")
+      swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && mediaItems")
         swiper-slide(v-for="(item, key) in mediaItems" v-bind:key="key")
           img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item}`" @click="setLightboxMedia(item)")
           .swiper-lazy-preloader.swiper-lazy-preloader-white
-        //- .swiper-pagination(slot="pagination")
-        //- .swiper-button-prev(slot="button-prev")
-        //- .swiper-button-next(slot="button-next")
 
 </template>
 
 <script>
 const SYNC_THRESHOLD = 1.0;
 
-import * as config from '@/api/config';
-import _ from 'lodash';
-import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
+import SoundCloud from 'soundcloud';
+import VueYouTubeEmbed from 'vue-youtube-embed';
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-import SoundCloud from 'soundcloud';
+import * as config from '@/api/config';
+import throttle from 'lodash/throttle';
+import { mapGetters } from 'vuex';
+import * as types from '@/store/mutation-types';
 
 export default {
   name: 'media-container',
-  props: ['player-type', 'class-section'],
+  props: ['player-type', 'class-section', 'video-is-active'],
   components: {
     swiper,
-    swiperSlide
+    swiperSlide,
+    VueYouTubeEmbed
   },
   created() {
     this.initializeSoundcloudPlayer();
@@ -47,22 +46,19 @@ export default {
       pHeight: 188,
       pWidth: (188 / 0.5625),
       swiperOption: {
-        // pagination: '.swiper-pagination',
-        // nextButton: '.swiper-button-next',
-        // prevButton: '.swiper-button-prev',
         slidesPerView: 3,
         centeredSlides: true,
         spaceBetween: 20,
         loop: false,
         paginationClickable: false,
-        preloadImages: true,
+        preloadImages: false,
         lazyLoading: true
       },
     };
   },
   watch: {
     currentSegmentIndex(nV) {
-      if (nV >= 0) {
+      if (nV >= 0 && this.$refs.mySwiper) {
         this.$refs.mySwiper.swiper.slideTo(nV);
       }
     },
@@ -114,7 +110,7 @@ export default {
     youtubePaused() {
       this.$store.commit(types.PAUSE_VIDEO);
     },
-    youtubeSeek: _.throttle(function(self, position) {
+    youtubeSeek: throttle(function(self, position) {
 
       if (!self.player) { return; }
 
@@ -128,7 +124,7 @@ export default {
         self.player.seekTo(position);
       }
     }, 500),
-    soundcloudSeek: _.throttle(function (self, position) {
+    soundcloudSeek: throttle(function (self, position) {
 
       if (!self.soundcloudPlayer) { return; }
 
@@ -137,11 +133,11 @@ export default {
         const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
         if (outOfSync && this.videoIsActive) {
-          console.log('OUTOFSYNC');
+          self.$log.info('OUTOFSYNC');
           self.$store.commit(types.PAUSE_VIDEO);
           self.soundcloudPlayer.seek(position * 1000);
           setTimeout(() => {
-            console.log('SYNCED');
+            self.$log.info('SYNCED');
             self.$store.commit(types.PLAY_VIDEO);
           }, 100);
         }
@@ -151,7 +147,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'videoIsActive', 'videoEnabled', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
+      'course', 'currentClass', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
     ]),
     src() {
       switch (this.playerType) {
