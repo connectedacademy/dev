@@ -145,7 +145,6 @@ export default {
     currentTime(nV) {
       // Set faux time if adjusted
       const newTime = Moment(nV).format('YYYY-MM-DD');
-      console.log(newTime);
       this.$store.commit('setFauxTime', newTime);
 
       this.$store.dispatch('getCourse');
