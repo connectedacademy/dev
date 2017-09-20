@@ -90,12 +90,12 @@ export default {
         {
           name: 'Squarespace',
           link: 'https://digitalinteraction.github.io/fourcorners/howto/squarespace.md',
-          video: 'VqmSFDc_ZlY',
+          video: 'xSIU4yPzZ8E',
         },
         {
           name: 'Blogger',
           link: 'https://digitalinteraction.github.io/fourcorners/howto/blogger.md',
-          video: 'VqmSFDc_ZlY',
+          video: 'B5aAWHoYXGY',
         },
         {
           name: 'Other',

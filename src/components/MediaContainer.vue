@@ -8,11 +8,13 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      #image-current(@click="setLightboxMedia(mediaItems[currentSegmentIndex])")
-        .image-tile.active(v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/small/${mediaItems[currentSegmentIndex]}')` }")
-      .image-thumbnails
-        .image-tile(v-for="(mediaItem, index) in mediaItems" v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/thumb/${mediaItem}')` }" @click="setLightboxMedia(mediaItem)")
-        .clearfix
+      swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="mediaItems")
+        swiper-slide(v-for="(item, key) in mediaItems" v-bind:key="key")
+          img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item}`" @click="setLightboxMedia(item)")
+          .swiper-lazy-preloader.swiper-lazy-preloader-white
+        //- .swiper-pagination(slot="pagination")
+        //- .swiper-button-prev(slot="button-prev")
+        //- .swiper-button-next(slot="button-next")
 
 </template>
 
@@ -23,12 +25,20 @@ import * as config from '@/api/config';
 import _ from 'lodash';
 import { mapGetters } from 'vuex';
 import * as types from '@/store/mutation-types';
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import SoundCloud from 'soundcloud';
 
 export default {
   name: 'media-container',
-  props: ['player-type'],
+  props: ['player-type', 'class-section'],
+  components: {
+    swiper,
+    swiperSlide
+  },
+  created() {
+    this.initializeSoundcloudPlayer();
+  },
   data() {
     return {
       lightboxVisible: false,
@@ -36,17 +46,24 @@ export default {
       soundcloudPlayer: undefined,
       pHeight: 188,
       pWidth: (188 / 0.5625),
+      swiperOption: {
+        // pagination: '.swiper-pagination',
+        // nextButton: '.swiper-button-next',
+        // prevButton: '.swiper-button-prev',
+        slidesPerView: 3,
+        centeredSlides: true,
+        spaceBetween: 20,
+        loop: false,
+        paginationClickable: false,
+        preloadImages: true,
+        lazyLoading: true
+      },
     };
   },
   watch: {
-    playerType(nV, oV) {
-      if (nV === 'soundcloud') {
-        this.initializeSoundcloudPlayer();
-        if (this.soundcloudPlayer) this.soundcloudPlayer.play();
-      }
-
-      if (oV === 'soundcloud') {
-        if (this.soundcloudPlayer) this.soundcloudPlayer.pause();
+    currentSegmentIndex(nV) {
+      if (nV >= 0) {
+        this.$refs.mySwiper.swiper.slideTo(nV);
       }
     },
     currentTime(nV, oV) {
@@ -63,13 +80,11 @@ export default {
         if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.pause();
       }
     },
-    currentSection(nV) {
-      if (nV && (nV.content_type) && (nV.content_type === 'class')) {
-        if (this.playerType === 'soundcloud') this.initializeSoundcloudPlayer();
-      } else {
-        // Destroy players
+    videoIsActive(nV) {
+      if (!nV) {
+        this.$store.commit(types.PAUSE_VIDEO);
       }
-    },
+    }
   },
   methods: {
     setLightboxMedia(media) {
@@ -119,28 +134,32 @@ export default {
 
       try {
         const playerTime = self.soundcloudPlayer.currentTime() / 1000;
-        // self.$log.info(playerTime);
-        // self.$log.info(self.currentTime);
         const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
-        if (outOfSync) {
-          self.soundcloudPlayer.seek(position * 1000 + 300);
+        if (outOfSync && this.videoIsActive) {
+          console.log('OUTOFSYNC');
+          self.$store.commit(types.PAUSE_VIDEO);
+          self.soundcloudPlayer.seek(position * 1000);
+          setTimeout(() => {
+            console.log('SYNCED');
+            self.$store.commit(types.PLAY_VIDEO);
+          }, 100);
         }
       } catch (Exception) {
       }
-    }, 500),
+    }, 1000),
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'videoIsActive', 'videoEnabled', 'currentTime', 'currentSection', 'videoPlaying', 'media', 'currentSegment',
+      'course', 'currentClass', 'videoIsActive', 'videoEnabled', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
     ]),
     src() {
       switch (this.playerType) {
         case 'youtube':
-          return (this.currentSection) ? this.currentSection.videoId : '';
+          return (this.classSection) ? this.classSection.videoId : '';
           break;
         case 'soundcloud':
-          return (this.currentSection) ? `/tracks/${this.currentSection.soundcloudId}` : '';
+          return (this.classSection) ? `/tracks/${this.classSection.soundcloudId}` : '';
           break;
       }
     },
@@ -159,7 +178,7 @@ export default {
       return mediaItems;
     },
     currentSegmentIndex() {
-      if (this.media.length === 0) { return 0; }
+      if (this.media.length === 0) { return -1; }
 
       let media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
 
@@ -188,7 +207,7 @@ $media-height = 220px
   &.youtube-mode
     padding-left (188px / 0.5625) + 16px
   &.soundcloud-mode
-    padding-left 38px + 16px
+    padding-left 38px + 30px
   #images-wrapper
     background white
     height ($media-height - 16px)
@@ -256,4 +275,42 @@ $media-height = 220px
         left 0 !important
         right 0 !important
 
+
+// Swiper
+.swiper-slide
+  background-image()
+  background-size contain
+  // background-color #222
+  min-height 205px
+.swiper-slide img
+  width auto
+  height auto
+  max-width 100%
+  max-height 100%
+  -ms-transform translate(-50%, -50%)
+  -webkit-transform translate(-50%, -50%)
+  -moz-transform translate(-50%, -50%)
+  transform translate(-50%, -50%)
+  position absolute
+  left 50%
+  top 50%
+  
+.swiper-slide
+  opacity 0.5
+  &:hover
+    cursor pointer
+
+.swiper-slide-active
+  border-bottom $color-primary 3px solid
+  opacity 1
+  position relative
+  &:before
+    radius(50%)
+    content ''
+    background-color $primary-color
+    bottom 0
+    left 0
+    position absolute
+    height 10px
+    width 10px
 </style>

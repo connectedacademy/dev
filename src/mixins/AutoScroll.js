@@ -1,6 +1,6 @@
 const CALCULATE_FPS = false; // Calculate the scrolling FPS
 const AUTOSCROLL_CHECK = 200; // Periodically check if scroll is possible
-const AUTOSCROLL_ATTEMPT = 500; // Interval at which to attempt auto scroll
+const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 500; // Interval at which scroll position should be updated
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
@@ -50,9 +50,9 @@ export default {
     videoPlaying() {
       this.attemptAutoScroll();
     },
-    currentSection() {
-      this.attemptAutoScroll();
-    },
+    // currentSection() {
+    //   this.attemptAutoScroll();
+    // },
   },
   computed: {
     ...mapGetters([
@@ -174,9 +174,9 @@ export default {
           this.wheeling = undefined;
           this.preventScroll = false;
           
-          if (this.currentSection && (this.currentSection.content_type === 'class')) {
-            this.$store.commit(types.PLAY_VIDEO);
-          }
+          // if (this.currentSection && (this.currentSection.content_type === 'class')) {
+          //   this.$store.commit(types.PLAY_VIDEO);
+          // }
         });
 
       }, WHEEL_TIMEOUT);

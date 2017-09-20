@@ -23,7 +23,7 @@
         icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
 
       .clearfix
-    media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]")
+    media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]" v-bind:class-section="content")
 
 </template>
 
@@ -119,6 +119,7 @@ $media-height = 220px
     box-sizing()
     height 50px
     padding 0 10px 0 10px
+    position relative
     z-index 1
 
     li.experience-control
@@ -177,6 +178,7 @@ $media-height = 220px
         @media(max-width: 360px)
           display none
       &:hover
-        #progress-bar--thumb
-          transform scale(2)
+        cursor default
+      //   #progress-bar--thumb
+      //     transform scale(2)
 </style>

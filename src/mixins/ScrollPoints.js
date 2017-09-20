@@ -19,7 +19,7 @@ export default {
 
           if (element) {
 
-            let additionalOffset = 180;
+            let additionalOffset = 380;
 
             this.$store.commit('setScrollPoint', {
               title: content.title,

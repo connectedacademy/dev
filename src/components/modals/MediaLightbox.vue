@@ -1,9 +1,9 @@
 <template lang="pug">
   
-  #media-lightbox(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
+  #media-lightbox.animated.fadeIn(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
     #lightbox--close(@click="toggleLightbox()")
       icon(name="close" scale="2")
-    .image-wrapper(v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/large/${currentLightboxMedia}')` }")
+    .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('https://${course.slug}.connectedacademy.io/course/content/media/medium/${currentLightboxMedia}')` }")
 
 </template>
 

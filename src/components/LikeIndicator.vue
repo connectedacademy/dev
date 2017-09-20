@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .like-indicator
+  .like-indicator.animated.fadeIn
     .like-indicator-wrapper(@click="toggleLike")
       .heart(v-bind:class="{ active: haveliked }")
       .like-count(v-if="likeCount > 0") {{ likeCount }}
@@ -27,10 +27,21 @@ export default {
       likeCount: 0,
     };
   },
+  computed: {
+    ...mapGetters(['isRegistered'])
+  },
   methods: {
+    showAuth() {
+      this.$store.commit(types.SHOW_AUTH);
+    },
     toggleLike() {
       if (this.firstTime) {
         this.showModal();
+        return;
+      }
+
+      if (!this.isRegistered) {
+        this.showAuth();
         return;
       }
 

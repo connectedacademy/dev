@@ -80,7 +80,8 @@ const options = {
   // optional : defaults to false if not specified 
   stringifyArguments: false,
   // optional : defaults to false if not specified 
-  showLogLevel: false
+  showLogLevel: false,
+  dev: false
 }
 
 Vue.use(VueLogger, options)
