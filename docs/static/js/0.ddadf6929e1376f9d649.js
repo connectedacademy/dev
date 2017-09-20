@@ -11322,7 +11322,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     var _this = this;
 
     this.$store.dispatch('getCourse').then(function () {
-      _this.viewCurrentClass();
+      setTimeout(function () {
+        _this.viewCurrentClass();
+      }, 500);
     });
   },
 
@@ -16522,4 +16524,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=0.8f48e9808ee8e1f0165f.js.map
+//# sourceMappingURL=0.ddadf6929e1376f9d649.js.map
