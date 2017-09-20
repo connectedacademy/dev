@@ -88,16 +88,16 @@ cross-length = 320px
 #app
   &.chat
     .animated-logo
-      background-color transparent
+      background-color $color-homework
 
   &.admin
     .animated-logo
-      background-color transparent
+      background-color $color-darkest-grey
 
   &.fourcorners
     .animated-logo
       // background-color $color-fourcorners
-      background-color #232323
+      background-color $color-darkest-grey
       // #logo-text
       //   display none
       // img.fourcorners-logo

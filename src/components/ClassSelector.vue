@@ -22,15 +22,33 @@
           icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
 
         .clearfix
+    
+    .course-content-wrapper(v-if="activeClass === 'intro'")
 
-    .loading-wrapper(v-for="n in 5")
+      .course-content-group
+        //- ABOUT
+        .course-content
+          .course-content--header
+            h1.content-title About the course
+
+          .course-content--body
+            markdown-renderer(v-bind:markdown-url="infoMarkdown")
+
+            four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
+
+        join-banner
+
+    //- .loading-wrapper(v-for="n in 5")
       .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 50}px` }")
-//- 
-  .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
-    h2 This course has finished
-  .padded-container(v-if="currentClass && currentClass.status === 'RELEASED' && currentExists")
-    h2 This is not the current class
-    .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
+    //- 
+      .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
+        h2 This course has finished
+      .padded-container(v-if="currentClass && currentClass.status === 'RELEASED' && currentExists")
+        h2 This is not the current class
+        .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
+
+      .course-content-group(v-if="isIntroduction")
+
 
 </template>
 
@@ -39,6 +57,10 @@ import Vue from 'vue';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 import VueScroll from 'vue-scroll';
+
+import MarkdownRenderer from '@/components/MarkdownRenderer';
+import FourCornersLink from '@/components/fourcorners/FourCornersLink';
+import JoinBanner from '@/components/banners/JoinBanner';
 
 import 'vue-awesome/icons/angle-left';
 import 'vue-awesome/icons/angle-right';
@@ -52,6 +74,9 @@ export default {
   name: 'class-selector',
   components: {
     VueScroll,
+    MarkdownRenderer,
+    FourCornersLink,
+    JoinBanner,
   },
   watch: {
     currentClass(nV, oV) {
@@ -83,9 +108,9 @@ export default {
       }
     },
     viewIntroClass() {
-      this.$ga.event('class-selector', 'click', 'class-switched', 'class-intro');
-      this.$store.dispatch('resetState');
       this.$store.commit('SET_CURRENT_CLASS', this.introClass);
+      this.$store.dispatch('resetState');
+      this.$ga.event('class-selector', 'click', 'class-switched', 'class-intro');
     },
     viewCurrentClass() {
       if (!this.currentExists) {
@@ -101,16 +126,15 @@ export default {
       }
     },
     setCurrentClass(newClass) {
+      
+      if (newClass === undefined) {
+        this.setInitalClass();
+      } else {
+        this.activeClass = newClass;
+        this.$store.dispatch('getSpec', newClass);
+      }
+      this.$store.dispatch('resetState');
       this.$ga.event('class-selector', 'click', 'class-switched', newClass);
-
-      this.$store.dispatch('resetState').then(() => {
-        if (newClass === undefined) {
-          this.setInitalClass();
-        } else {
-          this.activeClass = newClass;
-          this.$store.dispatch('getSpec', newClass);
-        }
-      });
     },
     scrollLeft() {
       this.$refs.classselector.scrollLeft -= 80;
@@ -123,6 +147,9 @@ export default {
     ...mapGetters([
       'course', 'currentClass', 'isRegistered'
     ]),
+    infoMarkdown() {
+      return `${this.course.baseUri}info.md`;
+    },
     theWidth() {
       return (this.course && this.course.classes) ? (((this.course.classes.length) * 190.0) - 10) + 190.0 : 190.0;
     },
@@ -144,7 +171,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
+@import '~stylus/layout/course-content'
 
 $selector-height = 44px
 
@@ -152,7 +179,6 @@ $selector-height = 44px
   radius(22px)
   height $selector-height
   margin 0 0 20px 0
-  overflow hidden
   position relative
   @media(max-width: 800px)
     margin 0 10px 20px 10px
@@ -182,12 +208,11 @@ $selector-height = 44px
       margin 0 18px
   .class-selector-container
     radius(22px)
-    height 140px
+    height 44px
     overflow-x scroll
     overflow-y hidden
     ul.class-selector
       cleanlist()
-      border-bottom #e1e1e1 1px solid
       height $selector-height
       white-space nowrap
       li.class-selector--item

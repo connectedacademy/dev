@@ -4,7 +4,7 @@
   .content-block.white-block(v-if="frontMatterVisible")
     pre {{ frontMatter }}
 
-  .rendered-markdown(ref="renderedmarkdown")
+  .rendered-markdown(ref="renderedmarkdown" @click="loadMarkdown")
     p {{ $t('common.loading') }}
 
 </template>
@@ -35,15 +35,15 @@ export default {
   components: {
     FourCorners
   },
-  // watch: {
-  //   '$route': {
-  //     handler: function(nV, oV) {
-  //       this.loadMarkdown();
-  //     },
-  //     deep: true,
-  //   },
-  // },
-  activated() {
+  watch: {
+    '$route': {
+      handler: function(nV, oV) {
+        this.loadMarkdown();
+      },
+      deep: true,
+    },
+  },
+  created() {
     this.loadMarkdown();
   },
   props: ['markdownUrl', 'frontMatterVisible'],

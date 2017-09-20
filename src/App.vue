@@ -232,10 +232,10 @@ body.disable-scroll
   &.admin
     .page-header
       background-color $color-darkest-grey
+      
   &.fourcorners
     .page-header
-      background-color #232323
-      // background-color $color-fourcorners
+      background-color $color-darkest-grey
 
 // Hide page header on colourful pages
 html.colourful
