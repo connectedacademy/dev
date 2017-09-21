@@ -12,14 +12,12 @@
 
     conversation-container(v-bind:content="content")
 
-    .pure-button.pure-button-primary#continue-listening(v-if="collapsed" @click="continueListening()") Continue Listening
+    #continue-listening
+      .pure-button.pure-button-primary(v-if="collapsed" @click="continueListening()") Continue Listening
 
 </template>
 
 <script>
-import * as config from '@/api/config';
-import {mapGetters} from 'vuex';
-
 import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
 
@@ -35,9 +33,6 @@ export default {
       collapsed: true,
     };
   },
-  computed: {
-    ...mapGetters(['activeSegment', 'videoIsActive']),
-  },
   methods: {
     continueListening() {
       this.collapsed = false;
@@ -46,7 +41,7 @@ export default {
         setTimeout(() => {
           this.$store.commit('PLAY_VIDEO');
         }, 1000);        
-      }, 1000);
+      }, 10);
     }
   }
 };
@@ -79,15 +74,21 @@ export default {
     position relative
 
     #continue-listening
+      pinned()
+      background-color white
+      height 158px
       position absolute
-      bottom 20px
-      left 50%
-      margin-left -100px
+      top auto
       text-align center
-      width 200px
+      .pure-button
+        left 50%
+        top calc(calc(158px - 40px) / 2)
+        margin-left -100px
+        position absolute
+        width 200px
 
     &.collapsed
-      max-height 1000px
+      max-height calc(calc(158px * 10) - 1px)
       overflow hidden
 
   .course-content--footer
