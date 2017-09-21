@@ -10093,6 +10093,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   created: function created() {
     var _this = this;
 
+    this.$store.dispatch('getHubs');
     __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].auth.checkAuth(function (response) {
       if (response.user.registration) {
         _this.$router.replace('/');
@@ -12858,4 +12859,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=1.312d61a21f10c24782e5.js.map
+//# sourceMappingURL=1.d207362c2f5de84a5fbe.js.map
