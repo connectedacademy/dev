@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #action-panel(v-bind:class="{ hide: (this.currentSectionScrollPosition <= 0), pinned: !composerHidden }")
+  #action-panel(v-bind:class="{ hide: (!this.currentSection), pinned: !composerHidden }")
     ul#experience-controls
     
       li.experience-control(@click="toggleVideoPlaying")
@@ -69,7 +69,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['composerHidden', 'videoPlaying', 'currentSectionScrollPosition', 'currentTime', 'videoIsActive']),
+    ...mapGetters(['composerHidden', 'videoPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
     start() {
       return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
     },
@@ -83,10 +83,10 @@ export default {
   },
   methods: {
     toggleComposer() {
-      this.$store.commit(this.composerHidden ? types.SHOW_COMPOSER : types.HIDE_COMPOSER);
+      this.$store.commit(this.composerHidden ? 'SHOW_COMPOSER' : 'HIDE_COMPOSER');
     },
     toggleVideoPlaying() {
-      this.$store.commit(this.videoPlaying ? types.PAUSE_VIDEO : types.PLAY_VIDEO);
+      this.$store.commit(this.videoPlaying ? 'PAUSE_VIDEO' : 'PLAY_VIDEO');
     },
     togglePlayerType() {
       this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);

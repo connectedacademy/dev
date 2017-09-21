@@ -2,7 +2,7 @@
 
   .conversation-container(ref="conversationContainer")
 
-    #view-toggle(v-show="currentSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority}")
+    #view-toggle(v-if="currentSection" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority}")
       icon(name="twitter")
       icon(name="quote-right")
 
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSegmentGroup', 'currentSegment', 'peekSegment', 'course',
+      'currentSection', 'currentSegmentGroup', 'peekSegment', 'course',
     ]),
     containerHeight() {
       return `${(this.content.duration * 0.2) * 158.0 + 124}px`;
@@ -129,7 +129,6 @@ export default {
     background url('../assets/images/line.png')
     background-repeat repeat
     background-size 1px 158px
-    background-position-y 1px
     
     overflow hidden
     .subtitle-wrapper, .message-wrapper
@@ -144,15 +143,19 @@ export default {
       .subtitle-wrapper, .message-wrapper
         width 100%
         &.subtitle-wrapper
+          display block
           transform translate(0%, -50%)
         &.message-wrapper
+          display none
           transform translate(100%, -50%)
       &.message-priority
         .subtitle-wrapper, .message-wrapper
           width 100%
           &.subtitle-wrapper
-            transform translate(-100%, -50%)            
+            display none
+            transform translate(-100%, -50%)
           &.message-wrapper
+            display block
             transform translate(0%, -50%)
 
 #view-toggle

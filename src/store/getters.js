@@ -26,11 +26,9 @@ export const offsetScrollPosition = (state) => {
 };
 
 export const currentTime = (state) => {
-  if (!store.getters.currentSectionScrollPosition) {
-    return 0;
-  }
-  let time = store.getters.currentSectionScrollPosition / (158.0 * 0.2);
-  return (time < 0) ? 0 : time;
+  let time = store.getters.currentSectionScrollPosition;
+  if (!time) return 0;
+  return (time < 0) ? 0 : (time / (158.0 * 0.2));
 };
 
 export const currentSection = (state) => {

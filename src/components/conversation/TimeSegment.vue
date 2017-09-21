@@ -238,8 +238,8 @@ export default {
 
 .time-segment
   background-color white
-  height 157px
-  min-height 157px
+  height 158px
+  min-height 158px
   overflow hidden
   position absolute
   left 50%
@@ -283,8 +283,8 @@ export default {
       animate()
       position absolute
       top 50%
-      &.loading
-        opacity 0.4
+      // &.loading
+      //   opacity 0.4
 
     .subtitle-wrapper
       animate()

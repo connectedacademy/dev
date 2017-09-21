@@ -8,7 +8,7 @@
 
   .course-content--container(v-bind:class="{ collapsed: collapsed }")
 
-    action-panel(v-bind:content="content" v-bind:video-is-active="videoIsActive" v-bind:active-segment="activeSegment")
+    action-panel(v-bind:content="content")
 
     conversation-container(v-bind:content="content")
 
@@ -43,7 +43,7 @@ export default {
       this.collapsed = false;
       setTimeout(() => {
         this.$store.commit('PLAY_VIDEO');
-      }, 200);
+      }, 500);
     }
   }
 };

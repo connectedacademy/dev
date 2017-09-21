@@ -24,13 +24,14 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import * as config from '@/api/config';
 import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 import inRange from 'lodash/inRange';
 
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'media-container',
-  props: ['player-type', 'class-section', 'video-is-active'],
+  props: ['playerType', 'classSection', 'videoIsActive'],
   components: {
     swiper,
     swiperSlide,
@@ -68,7 +69,7 @@ export default {
     },
     currentTime(nV, oV) {
       if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
-      if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
+      // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
     },
     videoPlaying(nv, oV) {
       this.$log.info(nv ? 'play' : 'pause');
@@ -99,19 +100,31 @@ export default {
         });
         SoundCloud.stream(this.src).then((player) => {
           this.soundcloudPlayer = player;
+          this.soundcloudPlayer.on('time', () => {
+            this.$log.info('time');
+            if (!this.currentTime || !this.videoIsActive) {
+              this.$store.commit('PAUSE_VIDEO');
+              return;
+            }
+            let playerTime = this.soundcloudPlayer.currentTime() / 1000;
+            const outOfSync = ((this.currentTime < (playerTime - SYNC_THRESHOLD)) || (this.currentTime > (playerTime + SYNC_THRESHOLD)));
+
+            if (outOfSync) {
+              this.$log.info('OUTOFSYNC');
+              this.soundcloudPlayer.seek(this.currentTime * 1000);
+            }
+          });
           this.soundcloudPlayer.on('play-resume', () => {
             this.$log.info('play-resume');
-            this.$store.commit('PLAY_VIDEO');
-
+            // this.$store.commit('PLAY_VIDEO');
           });
           this.soundcloudPlayer.on('buffering_start', () => {
             this.$log.info('buffering_start');
-            this.$store.commit('PAUSE_VIDEO');
-
+            // this.$store.commit('PAUSE_VIDEO');
           });
           this.soundcloudPlayer.on('buffering_end', () => {
             this.$log.info('buffering_end');
-            this.$store.commit('PLAY_VIDEO');
+            // this.$store.commit('PLAY_VIDEO');
 
           });
           this.soundcloudPlayer.on('seeked', () => {
@@ -150,22 +163,6 @@ export default {
         self.player.seekTo(position);
       }
     }, 500),
-    soundcloudSeek: throttle(function (self, position) {
-
-      if (!self.soundcloudPlayer) { return; }
-
-      try {
-        let playerTime = self.soundcloudPlayer.currentTime() / 1000;
-        const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
-
-        if (outOfSync && this.videoIsActive) {
-          self.$log.info('OUTOFSYNC');
-          self.$store.commit('PAUSE_VIDEO');
-          self.soundcloudPlayer.seek(position * 1000);
-        }
-      } catch (Exception) {
-      }
-    }, 1000),
   },
   computed: {
     ...mapGetters([
@@ -299,12 +296,10 @@ $media-height = 220px
   top 50%
   
 .swiper-slide
-  opacity 0.5
   &:hover
     cursor pointer
 
 .swiper-slide-active
-  border-bottom $color-primary 3px solid
   opacity 1
   position relative
   &:before

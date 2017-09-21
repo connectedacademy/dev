@@ -13,13 +13,15 @@ export default {
       
       if (obj.msgtype === 'message') {
 
-        Vue.$log.info('message received over socket connection')
-        Vue.$log.info(obj);
         
         const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
         let updateMessage = this.messages[key]
-
+        
         if (!obj.msg.tag && updateMessage) {
+          
+          Vue.$log.info('message received over socket connection')
+          Vue.$log.info(obj);
+
           // Update message
           updateMessage.message = obj.msg
 
@@ -72,8 +74,8 @@ export default {
 
       Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
-      let thinkAhead = 5; // Think ahead
-      let thinkBehind = 2; // Think behind
+      let thinkAhead = 10; // Think ahead
+      let thinkBehind = 10; // Think behind
 
       let segmentViewport = floor(window.innerHeight / 158.0) + thinkBehind;
 
@@ -109,18 +111,18 @@ export default {
             Vue.$log.info('Failed to get messages summary');
           },
         );
-      }
 
-      API.message.getSegmentSummarySocket(
-        theRequest,
-        response => {
-          Vue.$log.info('Subscribed to messages summary');
-          Vue.$log.info(theRequest);
-        },
-        response => {
-          Vue.$log.info('Failed to subscribe to messages summary');
-        },
-      );
+        API.message.getSegmentSummarySocket(
+          theRequest,
+          response => {
+            Vue.$log.info('Subscribed to messages summary');
+            Vue.$log.info(theRequest);
+          },
+          response => {
+            Vue.$log.info('Failed to subscribe to messages summary');
+          },
+        );
+      }
     },
   },
 }

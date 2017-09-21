@@ -11,7 +11,7 @@
 
   authentication-flow
 
-  like-modal
+  //- like-modal
 
   media-lightbox
 
@@ -84,7 +84,7 @@ export default {
     this.$store.dispatch('getHubs');
 
     // Periodically update document height variable
-    window.setInterval(this.updateDocumentHeight, 1000);
+    window.setInterval(this.updateDocumentHeight, 5000);
   },
   mounted() {
     // Subscribe to socket

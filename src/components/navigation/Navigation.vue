@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .navigation.clearfix(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
+  .navigation(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
 
-    animated-logo( @click="scrollTop")
+    animated-logo(@click="scrollTop")
 
     #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
       icon(name="wrench")
@@ -94,10 +94,8 @@ export default {
 
 .navigation
   animate()
-  background-color $navigation-background-color
-  box-sizing()
+  background-color $color-primary
   height 60px
-  padding 0
   position fixed
   top 0
   text-align center

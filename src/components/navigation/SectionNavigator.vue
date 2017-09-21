@@ -1,8 +1,7 @@
 <template lang="pug">
 
 #section-navigator(v-if="isVisible")
-  transition-group(name="fade" mode="in-out" tag="ul" class="navigation-items")
-    section-navigator-item(v-for="item in items" v-bind:key="item.slug" v-bind:scroll-point="item")
+  section-navigator-item(v-for="item in items" v-bind:key="item.slug" v-bind:scroll-point="item")
 
 </template>
 
@@ -41,11 +40,9 @@ export default {
   border alpha(black, 0.1) 1px solid
   overflow hidden
   position fixed
-  top 70px
+  top 280px
   right -240px
   z-index 51
-  top 50%
-  transform translateY(-50%)
   width 280px
   &:hover
     right 0px

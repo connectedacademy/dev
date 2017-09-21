@@ -1,7 +1,7 @@
 const AUTOSCROLL_CHECK = 500; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 750;//750; // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 2000;//750; // Interval at which scroll position should be updated
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
 
 import Vue from 'vue';
@@ -18,18 +18,20 @@ export default {
     window.setInterval(this.attemptAutoScroll, AUTOSCROLL_ATTEMPT);
 
     // Listen for scroll events
-    window.addEventListener('scroll', this.onScroll);
+    window.addEventListener('scroll', () => {
+      this.onScroll(this);
+    });
 
     // Listen for wheel events
     window.addEventListener('wheel', this.onWheel, { passive: true }); // Passive to improve mobile performance
 
     // Listen for mousedown events
-    window.addEventListener('mousedown', this.onMousedown, { passive: true }); // Passive to improve mobile performance
-    window.addEventListener('touchstart', this.onMousedown, { passive: true }); // Passive to improve mobile performance
+    // window.addEventListener('mousedown', this.onMousedown, { passive: true }); // Passive to improve mobile performance
+    // window.addEventListener('touchstart', this.onMousedown, { passive: true }); // Passive to improve mobile performance
 
     // Listen for mouseup events
-    window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
-    window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
+    // window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
+    // window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
   },
   destroyed () {
     // Remove event listeners
@@ -122,9 +124,9 @@ export default {
       if (this.activeSegment || this.peekSegment || this.preventScroll) {
         return;
       }
-      if (this.videoPlaying) {
-        this.$store.commit(types.PAUSE_VIDEO);
-      }
+      // if (this.videoPlaying) {
+      //   this.$store.commit(types.PAUSE_VIDEO);
+      // }
       this.preventScroll = true;
       this.isAutoScrolling = false;
 
@@ -146,21 +148,11 @@ export default {
 
       }, WHEEL_TIMEOUT);
     },
-    setScrollPosition: throttle(function (self) {
+    onScroll: throttle(function (self) {
       self.scrollPosition = window.scrollY;
-      self.$store.dispatch('setScrollPosition', self.scrollPosition);
-
-    }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
-    setCurrentSection: throttle(function (self) {
-      self.scrollPosition = window.scrollY;
+      self.$store.dispatch('setScrollPosition', window.scrollY);
       self.$store.dispatch('setCurrentSection');
-
-    }, 2000, { 'leading': false }),
-    onScroll() {
-      this.scrollPosition = window.scrollY;
-      this.setCurrentSection(this);
-      this.setScrollPosition(this);
-    },
+    }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onWheel() {
       if (!this.activeSegment) {
         this.wheelMovement(this);
