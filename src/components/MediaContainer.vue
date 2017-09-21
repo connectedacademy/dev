@@ -7,7 +7,7 @@
       #soundcloud-container(v-if="src && (this.playerType === 'soundcloud')")
         img(src="../assets/icons/soundcloud.png")
     
-    //- #images-wrapper
+    #images-wrapper
       swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && media")
         swiper-slide(v-for="(item, key) in media" v-bind:key="key")
           img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")

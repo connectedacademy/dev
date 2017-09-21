@@ -16,10 +16,10 @@
 
       li.experience-control.pull-right(@click="toggleComposer")
         icon(v-bind:name="composerHidden ? 'angle-up' : 'angle-down'")
-      li.experience-control.pull-right
+      li.experience-control#twitter-control.pull-right
         a(v-bind:href="twitterLink" target="_blank")
           icon(name="twitter")
-      li.experience-control.pull-right(@click="togglePlayerType" v-bind:class="{ unclickable: (availablePlayerTypes <= 1) }")
+      //- li.experience-control.pull-right(@click="togglePlayerType" v-bind:class="{ unclickable: (availablePlayerTypes <= 1) }")
         icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
 
       .clearfix
@@ -135,6 +135,9 @@ $media-height = 220px
       cleanlist()
       animate()
       float left
+      @media(max-width: 568px)        
+        &#twitter-control
+          display none
       &.pull-right
         float right
         border none
@@ -156,7 +159,11 @@ $media-height = 220px
       margin 0
       position absolute
       left (38px * 2) + 20px + 40px
-      right (38px * 2) + 20px + 40px + 40px
+      right (38px * 1) + 20px + 40px + 40px
+      @media(max-width: 568px)
+        right (38px * 0) + 20px + 40px
+        #progress-bar--end
+          display none
       #progress-bar--start, #progress-bar--end
         font-size 0.8em
         font-weight bold
