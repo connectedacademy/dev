@@ -49,14 +49,14 @@ export default {
     this.loadVisualisation(this.content);
     
     // Fill with blank messages
-    const segmentCount = this.content.duration * 0.2;
-    for (var index = 0; index < segmentCount; index++) {
-      if (this.messages[index]) continue;
-      this.messages[index] = {
-        loading: true,
-        segmentGroup: index
-      }
-    }
+    // const segmentCount = this.content.duration * 0.2;
+    // for (var index = 0; index < segmentCount; index++) {
+    //   if (this.messages[index]) continue;
+    //   this.messages[index] = {
+    //     loading: true,
+    //     segmentGroup: index
+    //   }
+    // }
   },
   data() {
     return {

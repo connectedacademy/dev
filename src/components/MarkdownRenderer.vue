@@ -149,7 +149,7 @@ export default {
                 this.submitting = false;
                 this.submitted = false;
                 this.$store.commit('SEND_MESSAGE_FAILURE', { response })
-              },
+              }, 
             );
           },
         },
