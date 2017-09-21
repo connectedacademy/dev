@@ -21,6 +21,8 @@
 import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
 
+import find from 'lodash/find';
+
 export default {
   name: 'live-class',
   props: ['content'],
@@ -36,12 +38,9 @@ export default {
   methods: {
     continueListening() {
       this.collapsed = false;
-      setTimeout(() => {
-        window.scroll(0, window.scrollY + 10);
-        setTimeout(() => {
-          this.$store.commit('PLAY_VIDEO');
-        }, 1000);        
-      }, 10);
+      const scrollPoint = find(this.$store.state.scrollPoints, { content_type: 'class' });
+      this.$store.commit('setCurrentSection', scrollPoint);
+      this.$store.commit('PLAY_VIDEO');
     }
   }
 };

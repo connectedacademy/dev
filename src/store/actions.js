@@ -18,9 +18,6 @@ export const setScrollPosition = ({ commit }, scrollPosition) => {
   }
 };
 
-export const setCurrentSection = ({ commit }) => {
-};
-
 export const saveScrollPosition = ({ commit }) => {
   commit('setSavedScrollPosition', store.state.scrollPosition);
 };

@@ -38,9 +38,13 @@ export default {
   },
   mounted() {
     this.initializeSoundcloudPlayer();
+    this.updateSwiperOptions();
+    window.addEventListener('resize', this.updateSwiperOptions);
   },
-  beforeDestroy() {
+  destroyed() {
+    // Remove event listeners
     this.soundcloudPlayer = undefined;
+    window.removeEventListener('resize', this.updateSwiperOptions);
   },
   data() {
     return {
@@ -50,7 +54,7 @@ export default {
       pHeight: 188,
       pWidth: (188 / 0.5625),
       swiperOption: {
-        slidesPerView: 3,
+        slidesPerView: 1,
         centeredSlides: false,
         spaceBetween: 20,
         loop: false,
@@ -87,6 +91,11 @@ export default {
     }
   },
   methods: {
+    updateSwiperOptions() {
+      this.swiperOption.slidesPerView = (window.outerWidth < 800) ? 1 : 3;
+      this.swiperOption.centeredSlides = (window.outerWidth < 800);
+      this.swiperOption.spaceBetween = (window.outerWidth < 800) ? 0 : 20;
+    },
     setLightboxMedia(media) {
       this.$store.commit('SET_LIGHTBOX_MEDIA', media);
     },

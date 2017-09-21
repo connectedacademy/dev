@@ -115,7 +115,7 @@ export default {
 
     ul.tweet-actions
       cleanlist()
-      background-color white
+      background-color inherit
       li
         cleanlist()
         box-sizing()
