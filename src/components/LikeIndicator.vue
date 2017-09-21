@@ -1,9 +1,8 @@
 <template lang="pug">
 
-  .like-indicator
-    .like-indicator-wrapper(@click="toggleLike")
-      .heart(v-bind:class="{ active: haveliked }")
-      .like-count(v-if="likeCount > 0") {{ likeCount }}
+  .like-indicator(@click="toggleLike")
+    .heart(v-bind:class="{ active: haveliked }")
+    .like-count(v-if="likeCount > 0") {{ likeCount }}
 
 </template>
 
@@ -113,42 +112,43 @@ export default {
 @import '~stylus/shared'
 
 .like-indicator
-  radius(6px)
   font-size 1em
+  overflow hidden
   position absolute
   top 0
   right 0
-  .like-indicator-wrapper
+  height 50px
+  width 80px
+  .heart
     height 50px
     width 50px
-    position relative
-    .heart
-      padding 0 8px
-    .like-count
-      color $color-text-grey
-      font-size 0.9em
-      position absolute
-      line-height 50px
-      top 1px
-      left 0px
+    padding 0
+    position absolute
+    top 0
+    right 0
+  .like-count
+    color $color-text-grey
+    font-size 0.9em
+    position absolute
+    line-height 50px
+    top 1px
+    right 40px
+    text-align right
     
 
 .heart {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   position: absolute;
-  left: 50%;
-  top: 50%;
   opacity 0.5
-  transform: translate(-50%, -50%) scale(0.5);
   background: url(../assets/icons/heart.png) no-repeat;
   background-position: 0 0;
-  background-size: auto 100px;
+  background-size: auto 50px;
   cursor: pointer;
   animation: opacity 0.3s, fave-heart 1s steps(28);
 }
 .heart.active {
-  background-position: -2800px 0;
+  background-position: -1400px 0;
   transition: background 1s steps(28);
   opacity 1.0
 }
@@ -160,7 +160,7 @@ export default {
     background-position: 0 0;
   }
   100% {
-    background-position: -2800px 0;
+    background-position: -1400px 0;
   }
 }
 </style>
