@@ -126,6 +126,11 @@ export default {
 
 
   .inner-wrapper
+    background url('../assets/images/line.png')
+    background-repeat repeat
+    background-size 1px 158px
+    background-position-y 1px
+    
     overflow hidden
     .subtitle-wrapper, .message-wrapper
       animate()
@@ -160,9 +165,8 @@ export default {
   width 80px
   position fixed
   z-index 57
-  top 50%
+  bottom 300px
   left calc(100% - 40px)
-  transform translate(0%, -50%)
   text-align left
   @media(max-width: 600px)
     display block
@@ -175,6 +179,5 @@ export default {
 
   &.message-priority
     left -40px
-    transform translate(0%, -50%)
 
 </style>

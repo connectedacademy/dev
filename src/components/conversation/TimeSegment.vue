@@ -15,7 +15,7 @@
           h3 "{{ message.message.text }}"
 
         mock-message(v-once v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
-
+        
         message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
       .clearfix
