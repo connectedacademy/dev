@@ -42,6 +42,10 @@ import store from '@/store';
 import { mapGetters } from 'vuex';
 import API from '@/api';
 
+// Components
+import Navigation from '@/components/navigation/Navigation';
+import BurgerMenu from '@/components/navigation/BurgerMenu';
+
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
 import AutoScroll from '@/mixins/AutoScroll';
@@ -105,13 +109,13 @@ export default {
   },
   store,
   components: {
+    Navigation,
+    BurgerMenu,
     'LeftDrawer': () => import('@/components/navigation/drawers/LeftDrawer'),
     'RightDrawer': () => import('@/components/navigation/drawers/RightDrawer'),
     'Lock': () => import('@/components/authentication/Lock'),
     'DebugPanel': () => import('@/components/DebugPanel'),
-    'BurgerMenu': () => import('@/components/navigation/BurgerMenu'),
     'AuthenticationFlow': () => import('@/components/authentication/AuthenticationFlow'),
-    'Navigation': () => import('@/components/navigation/Navigation'),
     'SectionNavigator': () => import('@/components/navigation/SectionNavigator'),
     'ActionPanel': () => import('@/components/conversation/ActionPanel'),
     'LikeModal': () => import('@/components/modals/LikeModal'),
@@ -232,7 +236,7 @@ body.disable-scroll
   &.admin
     .page-header
       background-color $color-darkest-grey
-      
+
   &.fourcorners
     .page-header
       background-color $color-darkest-grey

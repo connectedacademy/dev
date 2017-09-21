@@ -43,8 +43,6 @@
 
         webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClass.slug" v-bind:content-slug="content.slug")
 
-        message-composer(v-if="content.content_type === 'webinar'" v-bind:section="content.slug")
-
       .course-content--footer(v-if="(content.expectsubmission || (content.url && !content.thumbnails))")
         markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
         .clearfix
@@ -83,7 +81,6 @@ export default {
     'NextClass': () => import('@/components/conversation/NextClass'),
     'WebinarMessageTicker': () => import('@/components/webinar/WebinarMessageTicker'),
     'JoinBanner': () => import('@/components/banners/JoinBanner'),
-    'MessageComposer': () => import('@/components/MessageComposer'),
     'MediaCarousel': () => import('@/components/MediaCarousel'),
     'MediaCarousel': () => import('@/components/MediaCarousel'),
     'MediaThumbnails': () => import('@/components/MediaThumbnails'),

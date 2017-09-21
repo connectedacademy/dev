@@ -9,19 +9,20 @@
     transition(name="fade")
       .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
         icon(name="angle-right")
-    .class-selector-container(ref="classselector" v-scroll="onScroll")
-      ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
+    .class-selector-container-wrapper
+      .class-selector-container(ref="classselector" v-scroll="onScroll")
+        ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
-        li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
-          h1.class-selector--item--header
-            icon(name="info")
+          li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
+            h1.class-selector--item--header
+              icon(name="info")
 
-        li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
-          h1.class-selector--item--header {{ theClass.title }}
-          icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
-          icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
+          li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
+            h1.class-selector--item--header {{ theClass.title }}
+            icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
+            icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
 
-        .clearfix
+          .clearfix
     
     .course-content-wrapper(v-if="activeClass === 'intro'")
 
@@ -37,15 +38,6 @@
             four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
 
         join-banner
-    //- 
-      .padded-container(v-if="!currentExists && currentClass && !currentClass.loading")
-        h2 This course has finished
-      .padded-container(v-if="currentClass && currentClass.status === 'RELEASED' && currentExists")
-        h2 This is not the current class
-        .pure-button.pure-button-primary(@click="viewCurrentClass") {{ $t('course.view_current_class') }}
-
-      .course-content-group(v-if="isIntroduction")
-
 
 </template>
 
@@ -81,11 +73,17 @@ export default {
       this.$router.replace(`/course/${nV.slug}`);
     },
   },
+  mounted() {
+    window.addEventListener("resize", () => {
+      this.offset = this.$refs.classselector.offsetLeft;
+      this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - this.$refs.classselector.offsetLeft);
+    })
+  },
   data() {
     return {
       activeClass: undefined,
       offset: 0,
-      remainingOffset: 1,
+      remainingOffset: 0,
       leftPos: 0,
       introClass: {
         slug: 'intro',
@@ -194,92 +192,93 @@ $selector-height = 44px
       cursor pointer
     &.skip-button--left
       left 0px
-      border-right $color-primary 1px solid
     &.skip-button--right
       right 0px
-      border-left $color-primary 1px solid
     .fa-icon
       color $color-primary
       height 100%
       width 10px
       margin 0 18px
-  .class-selector-container
-    radius(22px)
-    height 44px
-    overflow-x scroll
-    overflow-y hidden
-    ul.class-selector
-      cleanlist()
+  .class-selector-container-wrapper
+      radius(22px)
       height $selector-height
-      white-space nowrap
-      li.class-selector--item
+      overflow hidden
+    .class-selector-container
+      height ($selector-height + 20px)
+      overflow-x scroll
+      overflow-y hidden
+      ul.class-selector
         cleanlist()
-        animate()
-        radius(22px)
-        background-color alpha(black, 0.1)
-        border transparent 1px solid
-        box-sizing()
-        float left
-        overflow hidden
-        margin-left 10px
-        padding 0 15px
-        position relative
-        text-align center
         height $selector-height
-        width 180px
-        white-space normal
-        &#intro-item
-          border none
-          width 44px
-          .fa-icon
-            height 18px
-            margin 14px 0
-        &:first-child
-          margin-left 0
-        .status-indicator
-          color $color-primary
-          position absolute
-          right 12px
-          top 50%
-          margin-top -8px
-        h1.class-selector--item--header
-          reset()
-          color $color-primary
-          font-size 1em
-          font-weight normal
-          line-height $selector-height
+        white-space nowrap
+        li.class-selector--item
+          cleanlist()
+          animate()
+          radius(22px)
+          background-color alpha(black, 0.1)
+          border transparent 1px solid
+          box-sizing()
+          float left
+          overflow hidden
+          margin-left 10px
+          padding 0 15px
+          position relative
           text-align center
-
-        /* Released styles */
-        &.released
-          background-color alpha(black, 0.1)
-          h1.class-selector--item--header, .status-indicator
-            color white
-
-        /* Current styles */
-        &.current
-          background-color alpha(black, 0.1)
-          h1.class-selector--item--header, .status-indicator
-            color white
-
-        /* Future styles */
-        &.future
-          background-color alpha(white, 0.3)
-          pointer-events none
+          height $selector-height
+          width 180px
+          white-space normal
+          &#intro-item
+            border none
+            width 44px
+            .fa-icon
+              height 18px
+              margin 14px 0
+          &:first-child
+            margin-left 0
           .status-indicator
             color $color-primary
+            position absolute
+            right 12px
+            top 50%
+            margin-top -8px
           h1.class-selector--item--header
-            $color-primary
-
-        &:hover
-          background-color darken($color-primary, 10%)
-          cursor pointer
-
-        &.active
-          background-color white
-          transition none
-          h1.class-selector--item--header, .status-indicator
+            reset()
             color $color-primary
+            font-size 1em
+            font-weight normal
+            line-height $selector-height
+            text-align center
+
+          /* Released styles */
+          &.released
+            background-color alpha(black, 0.1)
+            h1.class-selector--item--header, .status-indicator
+              color white
+
+          /* Current styles */
+          &.current
+            background-color alpha(black, 0.1)
+            h1.class-selector--item--header, .status-indicator
+              color white
+
+          /* Future styles */
+          &.future
+            background-color alpha(white, 0.3)
+            pointer-events none
+            .status-indicator
+              color $color-primary
+            h1.class-selector--item--header
+              $color-primary
+
+          &:hover
+            background-color darken($color-primary, 10%)
+            cursor pointer
+
+          &.active
+            background-color white
+            transition none
+            h1.class-selector--item--header, .status-indicator
+              color $color-primary
 
 .padded-container
   radius(22px)

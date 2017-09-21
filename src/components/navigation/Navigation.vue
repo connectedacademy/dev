@@ -9,7 +9,7 @@
 
     profile-icon(v-if="isRegistered")
 
-    #login-button.pure-button.pure-button-primary(v-if="!isRegistered" @click="showAuth") {{ $t('auth.login') }}
+    #login-button.pure-button.pure-button-primary(v-else @click="showAuth") {{ $t('auth.login') }}
 
 </template>
 

@@ -16,6 +16,7 @@ export default {
 @import '~stylus/shared'
 
 .padded-container.mock-container
+  radius(6px)
   background-color alpha(white, 0.8)
   margin-bottom 10px
 

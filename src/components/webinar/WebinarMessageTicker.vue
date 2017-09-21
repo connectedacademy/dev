@@ -2,18 +2,20 @@
   #webinar-message-ticker
     .message-wrapper(v-for="(message, index) in orderedMessages")
       message(v-bind:message="message")
-
-      
+    message-composer(v-if="isRegistered" v-bind:section="contentSlug")
 </template>
 
 <script>
 import Vue from 'vue';
 import API from '@/api';
+import { mapGetters } from 'vuex';
 import take from 'lodash/take';
 import reverse from 'lodash/reverse';
 import orderBy from 'lodash/orderBy';
 
 import Message from '@/components/conversation/Message';
+import MessageComposer from '@/components/MessageComposer';
+
 import Messages from '@/mixins/Messages';
 
 
@@ -22,6 +24,7 @@ export default {
   props: ['classSlug', 'contentSlug'],
   components: {
     Message,
+    MessageComposer,
   },
   mixins: [
     Messages,
@@ -38,6 +41,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['isRegistered']),
     orderedMessages() {
       // Order messages
       return reverse(take(orderBy(this.webinarMessages, ['createdAt'], ['desc']), 3));
