@@ -37,8 +37,8 @@ export default {
     // Remove event listeners
     window.removeEventListener('scroll', this.onScroll);
     window.removeEventListener('wheel', this.onWheel);
-    window.removeEventListener('mousedown', this.onMousedown);
-    window.removeEventListener('mouseup', this.onMouseup);
+    // window.removeEventListener('mousedown', this.onMousedown);
+    // window.removeEventListener('mouseup', this.onMouseup);
   },
   data() {
     return {
@@ -124,9 +124,9 @@ export default {
       if (this.activeSegment || this.peekSegment || this.preventScroll) {
         return;
       }
-      // if (this.videoPlaying) {
-      //   this.$store.commit(types.PAUSE_VIDEO);
-      // }
+      if (this.videoPlaying) {
+        this.$store.commit(types.PAUSE_VIDEO);
+      }
       this.preventScroll = true;
       this.isAutoScrolling = false;
 
@@ -151,7 +151,6 @@ export default {
     onScroll: throttle(function (self) {
       self.scrollPosition = window.scrollY;
       self.$store.dispatch('setScrollPosition', window.scrollY);
-      self.$store.dispatch('setCurrentSection');
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onWheel() {
       if (!this.activeSegment) {

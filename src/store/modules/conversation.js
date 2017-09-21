@@ -4,6 +4,8 @@ import * as types from '@/store/mutation-types';
 import API from '@/api';
 import store from '@/store';
 import math from 'lodash/math';
+import inRange from 'lodash/inRange';
+import forEach from 'lodash/forEach';
 
 // initial state
 const state = {
@@ -50,14 +52,12 @@ const getters = {
   currentActiveSection() {
     if (store.state.scrollPoints.length === 0) { return undefined; }
 
-    const offsetScrollPosition = store.state.scrollPosition;
-
-    for (const key in store.state.scrollPoints ) {
-      const scrollPoint = store.state.scrollPoints[key];
-      if ((offsetScrollPosition > scrollPoint.sectionTop) && (offsetScrollPosition < scrollPoint.bottom)) {
+    forEach(store.state.scrollPoints, function (scrollPoint, key) {
+      
+      if (inRange(store.state.scrollPosition, scrollPoint.sectionTop, scrollPoint.bottom)) { // (store.state.scrollPosition > scrollPoint.sectionTop) && (store.state.scrollPosition < scrollPoint.bottom)
         return scrollPoint;
       }
-    };
+    });    
 
     return undefined;
   },

@@ -22,9 +22,10 @@ export default {
   props: ['scrollPoint'],
   computed: {
     ...mapGetters([
-      'currentActiveSection',
+      // 'currentActiveSection',
     ]),
     isActive() {
+      return false;
       const currentActiveSection = this.currentActiveSection;
 
       if (!(currentActiveSection && this.scrollPoint)) { return false; }
