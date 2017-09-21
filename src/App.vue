@@ -45,16 +45,15 @@ import API from '@/api';
 // Components
 import Navigation from '@/components/navigation/Navigation';
 import BurgerMenu from '@/components/navigation/BurgerMenu';
+import SectionNavigator from '@/components/navigation/SectionNavigator';
 
 // Mixins
-import ScrollPoints from '@/mixins/ScrollPoints';
 import AutoScroll from '@/mixins/AutoScroll';
 import Overlay from '@/mixins/Overlay';
 
 export default {
   name: 'app',
   mixins: [
-    ScrollPoints,
     AutoScroll,
     Overlay,
   ],
@@ -82,9 +81,6 @@ export default {
 
     this.$store.dispatch('getCourse');
     this.$store.dispatch('getHubs');
-
-    // Periodically update document height variable
-    window.setInterval(this.updateDocumentHeight, 5000);
   },
   mounted() {
     // Subscribe to socket
@@ -111,12 +107,12 @@ export default {
   components: {
     Navigation,
     BurgerMenu,
+    SectionNavigator,
     'LeftDrawer': () => import('@/components/navigation/drawers/LeftDrawer'),
     'RightDrawer': () => import('@/components/navigation/drawers/RightDrawer'),
     'Lock': () => import('@/components/authentication/Lock'),
     'DebugPanel': () => import('@/components/DebugPanel'),
     'AuthenticationFlow': () => import('@/components/authentication/AuthenticationFlow'),
-    'SectionNavigator': () => import('@/components/navigation/SectionNavigator'),
     'ActionPanel': () => import('@/components/conversation/ActionPanel'),
     'LikeModal': () => import('@/components/modals/LikeModal'),
     'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
@@ -124,14 +120,6 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1);
-    },
-    updateDocumentHeight() {
-      // Check if document height has changed
-      if (this.documentHeight !== document.documentElement.scrollHeight) {
-        this.$log.info('Document height changed');
-        this.documentHeight = document.documentElement.scrollHeight;
-        this.setScrollPoints();
-      }
     },
   },
 };

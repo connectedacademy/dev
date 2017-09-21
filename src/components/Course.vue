@@ -9,25 +9,23 @@
 </template>
 
 <script>
+// Components
 import ClassSelector from '@/components/ClassSelector';
 import Loading from '@/components/Loading';
 
+// Mixins
+import ScrollPoints from '@/mixins/ScrollPoints';
+
 const CourseContent = () => ({
-  // The component to load. Should be a Promise
   component: import('@/components/conversation/CourseContent'),
-  // A component to use while the async component is loading
   loading: Loading,
-  // A component to use if the load fails
-  // error: ErrorComp,
-  // Delay before showing the loading component. Default: 200ms.
-  delay: 10,
-  // The error component will be displayed if a timeout is
-  // provided and exceeded. Default: Infinity.
-  timeout: 3000
 });
 
 export default {
   name: 'course',
+  mixins: [
+    ScrollPoints,
+  ],
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.$store.commit('SET_NAV_STATE', { minimized: false });
@@ -41,6 +39,7 @@ export default {
   },
   activated() {
     this.$store.dispatch('checkAuth');
+    this.setScrollPoints();
     window.scrollTo(0, this.$store.state.savedScrollPosition);
     // this.toMessage();
   },

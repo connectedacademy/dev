@@ -1,11 +1,16 @@
-/* eslint-disable */
-import Vue from 'vue';
-
 export default {
+  mounted() {
+    // Periodically update document height variable
+    window.setInterval(this.updateDocumentHeight, 2000);
+  },
   methods: {
+    updateDocumentHeight() {
+      // Check if document height has changed
+      if (this.documentHeight !== document.documentElement.scrollHeight) {
+        this.setScrollPoints();
+      }
+    },
     setScrollPoints() {
-      Vue.$log.info('Updating scroll points');
-
       const currentClass = this.$store.getters.currentClass;
 
       if ((currentClass === undefined) || (currentClass.content === undefined)) {
