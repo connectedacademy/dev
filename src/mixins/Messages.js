@@ -3,6 +3,7 @@ import API from '@/api';
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
+import _fill from 'lodash/fill';
 import floor from 'lodash/floor';
 import round from 'lodash/round';
 
@@ -60,10 +61,9 @@ export default {
     },
   },
   methods: {
-    loadSegmentSummary(segmentGroup) {
-
-      if (this.content === undefined) { return; }
-      if (this.currentClass === undefined) { return; }
+    loadSegmentSummary(segmentGroup, force) {
+      if (this.content === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
+      if (this.currentClass === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
 
       if (segmentGroup !== 0) {
         if (this.currentSection === undefined) { return; }
@@ -72,8 +72,8 @@ export default {
 
       Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
-      let thinkAhead = 10; // Think ahead
-      let thinkBehind = 10; // Think behind
+      let thinkAhead = 5; // Think ahead
+      let thinkBehind = 2; // Think behind
 
       let segmentViewport = floor(window.innerHeight / 158.0) + thinkBehind;
 
@@ -86,11 +86,11 @@ export default {
       const theRequest = {
         theClass: this.currentClass.slug,
         theContent: this.content.slug,
-        startSegment: `${parseInt(startSegment)}`,
-        endSegment: `${parseInt(endSegment)}`,
+        startSegment: startSegment,
+        endSegment: endSegment
       };
 
-      if (((startSegment % 10) === 0) || (startSegment === 0)) {
+      if (((startSegment % (endSegment - startSegment)) === 0) || force) {
         API.message.getSegmentSummary(
           theRequest,
           response => {

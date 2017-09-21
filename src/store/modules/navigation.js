@@ -8,7 +8,7 @@ const BURGER_CLOSE = 'close';
 const state = {
   overlayVisible: false,
   visible: true,
-  minimized: false,
+  minimized: true,
   burger: {
     state: BURGER_DEFAULT,
   },

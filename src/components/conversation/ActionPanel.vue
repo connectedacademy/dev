@@ -176,7 +176,6 @@ $media-height = 220px
         @media(max-width: 360px)
           display none
       #progress-bar--thumb
-        animate()
         radius(50%)
         background-color $color-primary
         height 10px

@@ -23,7 +23,7 @@ export default {
 
 .soundcloud-wrapper
   .soundcloud-container
-    margin-bottom 20px
+    margin-top 20px
     position relative
 
 </style>

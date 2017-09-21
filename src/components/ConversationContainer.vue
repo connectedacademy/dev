@@ -43,13 +43,20 @@ export default {
   },
   props: ['content'],
   mounted() {
+    this.loadSegmentSummary(0, true);
+    this.loadSubtitles(this.content);
     this.loadMedia(this.content);
     this.loadVisualisation(this.content);
-    this.loadSubtitles(this.content);
-    setTimeout(() => {
-      this.$log.info(`Getting messages for segment ${0}`);
-      this.loadSegmentSummary(0);
-    }, 100);
+    
+    // Fill with blank messages
+    const segmentCount = this.content.duration * 0.2;
+    for (var index = 0; index < segmentCount; index++) {
+      if (this.messages[index]) continue;
+      this.messages[index] = {
+        loading: true,
+        segmentGroup: index
+      }
+    }
   },
   data() {
     return {
@@ -70,7 +77,8 @@ export default {
       if (oV !== nV) {
         this.$log.info(`Getting messages for segment ${nV}`);
 
-        this.loadSegmentSummary(nV);
+        const force = (Math.abs(nV - oV) > 5);
+        this.loadSegmentSummary(nV, force);
       }
     },
   },

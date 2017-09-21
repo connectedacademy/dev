@@ -9,14 +9,14 @@
       .subtitle-wrapper
         subtitle(v-once v-bind:subtitle="subtitle")
 
-      .message-wrapper
-
-        message(v-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
+      .message-wrapper(v-bind:class="{ loading: message.loading }")
 
         .suggestion(v-once v-if="message.message && message.message.suggestion")
           h3 "{{ message.message.text }}"
 
-        mock-message(v-once v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))" v-bind:message="message")
+        mock-message(v-once v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
+
+        message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
       .clearfix
 
@@ -25,7 +25,7 @@
       span(v-else-if="message.info && message.info.total && (message.info.total > 0)") {{ `Read all notes` }}
       span(v-else) Be the first to make a note.
 
-    .meta-container(v-bind:class="{ active: segmentOpened }")
+    .meta-container(v-if="segmentPeeking || segmentOpened" v-bind:class="{ active: segmentOpened }")
 
       .status-indicator(v-if="loadingMessages") Looking for notes...
       .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Be the first to make a note.
@@ -98,22 +98,23 @@ export default {
       segmentStyle: {},
       calculatedOffset: 0,
       calculatedOffsetBottom: 0,
+      isCurrent: false,
     };
   },
   computed: {
     ...mapGetters([
       'activeSegment',
       'peekSegment',
-      'currentSegmentGroup',
+      // 'currentSegmentGroup',
       'activeSegmentMessages',
     ]),
     orderedMessages() {
       // Order messages
       return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
     },
-    isCurrent() {
-      return this.currentSegmentGroup === this.message.segmentGroup;
-    },
+    // isCurrent() {
+    //   return this.currentSegmentGroup === this.message.segmentGroup;
+    // },
   },
   methods: {
     peek() {
@@ -282,6 +283,8 @@ export default {
       animate()
       position absolute
       top 50%
+      &.loading
+        opacity 0.4
 
     .subtitle-wrapper
       animate()

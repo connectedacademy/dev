@@ -11,8 +11,6 @@
 
 <script>
 import Auth from '@/mixins/Auth';
-import FourCornersMixin from '@/mixins/FourCorners';
-import FourCorners from './fourcorners/FourCorners';
 
 import MarkdownIt from 'markdown-it';
 import MarkdownItReplaceLink from 'markdown-it-replace-link';
@@ -26,15 +24,13 @@ import API from '@/api';
 import startsWith from 'lodash/startsWith';
 import endsWith from 'lodash/endsWith';
 
+const FourCornersLib = require('fourcorners');
+
 export default {
   name: 'markdown-renderer',
   mixins: [
     Auth,
-    FourCornersMixin,
   ],
-  components: {
-    FourCorners
-  },
   watch: {
     '$route': {
       handler: function(nV, oV) {
@@ -163,10 +159,9 @@ export default {
 
       this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
 
-      // Load fourcorners
       setTimeout(() => {
-        this.loadFourCornersScript();
-      }, 500);
+        FourCornersLib.init();
+      }, 1000);
     },
   },
   computed: {

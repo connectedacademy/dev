@@ -5,14 +5,22 @@
 </template>
 
 <script>
-import FourCornersMixin from '@/mixins/FourCorners';
+const FourCornersLib = require('fourcorners');
 
 export default {
   name: 'four-corners',
   props: ['html'],
-  mixins: [
-    FourCornersMixin,
-  ],
+  watch: {
+    'html': {
+      handler: function(nV, oV) {
+
+        setTimeout(() => {
+          FourCornersLib.init();
+        }, 1000);
+      },
+      deep: true,
+    },
+  }
 };
 </script>
 

@@ -8,15 +8,15 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && mediaItems")
-        swiper-slide(v-for="(item, key) in mediaItems" v-bind:key="key")
-          img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item}`" @click="setLightboxMedia(item)")
+      swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && media")
+        swiper-slide(v-for="(item, key) in media" v-bind:key="key")
+          img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
           .swiper-lazy-preloader.swiper-lazy-preloader-white
 
 </template>
 
 <script>
-const SYNC_THRESHOLD = 3.0;
+const SYNC_THRESHOLD = 2.0;
 
 import SoundCloud from 'soundcloud';
 import VueYouTubeEmbed from 'vue-youtube-embed';
@@ -24,8 +24,9 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import * as config from '@/api/config';
 import throttle from 'lodash/throttle';
+import inRange from 'lodash/inRange';
+
 import { mapGetters } from 'vuex';
-import * as types from '@/store/mutation-types';
 
 export default {
   name: 'media-container',
@@ -35,8 +36,11 @@ export default {
     swiperSlide,
     VueYouTubeEmbed
   },
-  created() {
+  mounted() {
     this.initializeSoundcloudPlayer();
+  },
+  beforeDestroy() {
+    this.soundcloudPlayer = undefined;
   },
   data() {
     return {
@@ -78,22 +82,44 @@ export default {
     },
     videoIsActive(nV) {
       if (!nV) {
-        this.$store.commit(types.PAUSE_VIDEO);
+        this.$store.commit('PAUSE_VIDEO');
       }
     }
   },
   methods: {
     setLightboxMedia(media) {
-      this.$store.commit(types.SET_LIGHTBOX_MEDIA, media);
+      this.$store.commit('SET_LIGHTBOX_MEDIA', media);
     },
     change() {},
     initializeSoundcloudPlayer() {
+      this.$log.info('initializeSoundcloudPlayer');
       if (!this.soundcloudPlayer && this.src) {
         SoundCloud.initialize({
           client_id: config.SOUNCLOUD_CLIENT_ID,
         });
         SoundCloud.stream(this.src).then((player) => {
           this.soundcloudPlayer = player;
+          this.soundcloudPlayer.on('play-resume', () => {
+            this.$log.info('play-resume');
+            this.$store.commit('PLAY_VIDEO');
+
+          });
+          this.soundcloudPlayer.on('buffering_start', () => {
+            this.$log.info('buffering_start');
+            this.$store.commit('PAUSE_VIDEO');
+
+          });
+          this.soundcloudPlayer.on('buffering_end', () => {
+            this.$log.info('buffering_end');
+            this.$store.commit('PLAY_VIDEO');
+
+          });
+          this.soundcloudPlayer.on('seeked', () => {
+            this.$log.info('seeked');
+            this.$store.commit('PLAY_VIDEO');
+
+          }); 
+          
         });
       }
     },
@@ -102,13 +128,13 @@ export default {
       this.player.seekTo(this.currentTime);
     },
     youtubePlaying(player) {
-      this.$store.commit(types.PLAY_VIDEO);
+      this.$store.commit('PLAY_VIDEO');
     },
     youtubeEnded() {
-      this.$store.commit(types.PAUSE_VIDEO);
+      this.$store.commit('PAUSE_VIDEO');
     },
     youtubePaused() {
-      this.$store.commit(types.PAUSE_VIDEO);
+      this.$store.commit('PAUSE_VIDEO');
     },
     youtubeSeek: throttle(function(self, position) {
 
@@ -129,17 +155,13 @@ export default {
       if (!self.soundcloudPlayer) { return; }
 
       try {
-        const playerTime = self.soundcloudPlayer.currentTime() / 1000;
+        let playerTime = self.soundcloudPlayer.currentTime() / 1000;
         const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
 
         if (outOfSync && this.videoIsActive) {
           self.$log.info('OUTOFSYNC');
-          self.$store.commit(types.PAUSE_VIDEO);
+          self.$store.commit('PAUSE_VIDEO');
           self.soundcloudPlayer.seek(position * 1000);
-          setTimeout(() => {
-            self.$log.info('SYNCED');
-            self.$store.commit(types.PLAY_VIDEO);
-          }, 500);
         }
       } catch (Exception) {
       }
@@ -159,28 +181,13 @@ export default {
           break;
       }
     },
-    mediaItems() {
-      let mediaItems = [];
-
-      if (this.media.length === 0) { return mediaItems; }
-
-      let media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
-
-      for (var i = 0; i < this.media.length; i++) {
-        const image = this.media[i];
-        mediaItems.push(image.text);
-      }
-
-      return mediaItems;
-    },
     currentSegmentIndex() {
       if (this.media.length === 0) { return -1; }
 
-      let media = `https://${this.course.slug}.connectedacademy.io/course/content/en/${this.currentClass.dir}/transcripts/${this.media[0].text}`;
-
       for (var i = 0; i < this.media.length; i++) {
         const image = this.media[i];
-        if (this.currentSegment > (image.start) && this.currentSegment < (image.end)) {
+        
+        if (inRange(this.currentSegment, image.start, image.end)) {
           return i;
         }
       }

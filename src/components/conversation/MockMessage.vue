@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .mock-message(v-bind:class="{ loading: message.loading }")
+  .mock-message
     .mock-message--user
     .mock-message--body
       .mock-message--line
@@ -12,7 +12,6 @@
 <script>
 export default {
   name: 'mock-message',
-  props: ['message'],
 };
 </script>
 
@@ -45,9 +44,5 @@ export default {
         max-width 100px
   .mock-message--user, .mock-message--line
     background-color $color-lighter-grey
-    animate()
-  &.loading
-    .mock-message--user, .mock-message--line
-      background-color lighten($color-lighter-grey, 10%)
 
 </style>

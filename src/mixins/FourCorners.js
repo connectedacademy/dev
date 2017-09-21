@@ -7,11 +7,9 @@ export default {
         script.async = true;
         script.onload = function(){
           // Manually fire document load event to trigger fourcorner wrap
-          var evt = document.createEvent('Event');
-          evt.initEvent('load', false, false);
-          window.dispatchEvent(evt);
+          window.FourCorners.init();
         };
-        script.src = 'https://digitalinteraction.github.io/fourcorners/dist/4c.js';
+        script.src = 'https://cdn.fourcorners.io/dist/4c.js';
         d.getElementsByTagName('head')[0].appendChild(script);
       }(document));
     },

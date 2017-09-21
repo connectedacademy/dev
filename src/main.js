@@ -9,7 +9,7 @@ import VueI18n from 'vue-i18n';
 import VueLogger from 'vuejs-logger'
 import VueCookie from 'vue-cookie';
 import VueAnalytics from 'vue-analytics'
-// import VueAutosize from 'vue-autosize';
+import VueAutosize from 'vue-autosize';
 // import Raven from 'raven-js';
 // import RavenVue from 'raven-js/plugins/vue';
 
@@ -48,13 +48,13 @@ const options = {
   // optional : defaults to false if not specified 
   stringifyArguments: false,
   // optional : defaults to false if not specified 
-  showLogLevel: false,
-  dev: false
+  showLogLevel: true,
+  dev: true
 }
 
 Vue.use(VueLogger, options)
-
 Vue.use(VueCookie);
+Vue.use(VueAutosize);
 
 Vue.use(VueAnalytics, {
   id: 'UA-44963053-16',
@@ -67,7 +67,6 @@ Vue.use(VueAnalytics, {
 // TODO: Enabled for production
 // Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
 
-// Vue.use(VueAutosize);
 
 // General config
 Vue.config.productionTip = false;

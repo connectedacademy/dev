@@ -34,24 +34,24 @@
 </template>
 
 <script>
-import orderBy from 'lodash/orderBy';
+import API from '@/api';
 import { mapGetters } from 'vuex';
 
-import API from '@/api';
+import orderBy from 'lodash/orderBy';
 
-import FourCornersMixin from '@/mixins/FourCorners';
-import FourCorners from '../fourcorners/FourCorners';
+import FourCorners from '@/components/fourcorners/FourCorners';
+import InfoDialogue from '@/components/InfoDialogue';
 
-import InfoDialogue from '../InfoDialogue';
 
 import 'vue-awesome/icons/lock';
 
 export default {
   name: 'feedback-view',
-  props: ['currentFeedbackId', 'discussion'],
-  mixins: [
-    FourCornersMixin,
-  ],
+  props: ['currentFeedbackId', 'discussion', 'classSlug', 'contentSlug'],
+  components: {
+    InfoDialogue,
+    FourCorners,
+  },
   watch: {
     currentFeedbackId() {
       // Fetch feedback item
@@ -64,8 +64,6 @@ export default {
       this.$emit('update:discussion', []);
       // Fetch discussion
       this.getDiscussion();
-      // Load fourcorners
-      this.loadFourCornersScript();
     }
   },
   data() {
@@ -84,7 +82,26 @@ export default {
       if (!message.canview) {
         if (confirm(`Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`)) {
           // Redirect to other user's feedback
-          // this.currentFeedbackId = '#15:3340';
+
+          const request = {
+            classSlug: this.classSlug,
+            contentSlug: this.contentSlug,
+            userId: message.fromuser.id.replace('#', '%23')
+          };
+          API.feedback.getUserSubmissions(
+            request,
+            (response) => {
+              this.$log.info('Response from user submissions request');
+              this.$log.info(response);
+              const feedbackId = response.body[0].id;
+              this.$emit('update:currentFeedbackId', feedbackId)
+              
+            },
+            (response) => {
+              // TODO: Handle failed request
+              this.$log.info('Failed to user submissions');
+            },
+          );
         }
       }
     },
@@ -163,10 +180,6 @@ export default {
     currentUser() {
       return this.$store.getters.user;
     },
-  },
-  components: {
-    InfoDialogue,
-    FourCorners,
   },
 };
 </script>

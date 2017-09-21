@@ -7,15 +7,12 @@
     p.content-description(v-if="content.description") {{ content.description }}
 
   .course-content--container(v-bind:class="{ collapsed: collapsed }")
-    #fade-out(v-if="collapsed")
 
     action-panel(v-bind:content="content" v-bind:video-is-active="videoIsActive" v-bind:active-segment="activeSegment")
 
-    conversation-container(v-if="content.content_type === 'class'" v-bind:content="content")
+    conversation-container(v-bind:content="content")
 
-  .course-content--footer
-    .pure-button.pure-button-primary(v-if="collapsed" @click="collapsed = false") Continue Listening
-    .pure-button.pure-button-primary(v-if="!collapsed" @click="collapsed = true") Finished Listening
+    .pure-button.pure-button-primary#continue-listening(v-if="collapsed" @click="continueListening()") Continue Listening
 
 </template>
 
@@ -41,6 +38,14 @@ export default {
   computed: {
     ...mapGetters(['activeSegment', 'videoIsActive']),
   },
+  methods: {
+    continueListening() {
+      this.collapsed = false;
+      setTimeout(() => {
+        this.$store.commit('PLAY_VIDEO');
+      }, 200);
+    }
+  }
 };
 </script>
 
@@ -69,6 +74,14 @@ export default {
   .course-content--container
     background-color white
     position relative
+
+    #continue-listening
+      position absolute
+      bottom 20px
+      left 50%
+      margin-left -100px
+      text-align center
+      width 200px
 
     &.collapsed
       max-height 1000px

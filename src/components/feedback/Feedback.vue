@@ -51,7 +51,7 @@
         #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
 
       transition(name="fade" type="in out")
-        feedback-view(v-bind:current-feedback-id="currentFeedbackId" v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion")
+        feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug")
 
   .clearfix
 

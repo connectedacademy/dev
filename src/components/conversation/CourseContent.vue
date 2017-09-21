@@ -43,8 +43,8 @@
 
         webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClass.slug" v-bind:content-slug="content.slug")
 
-      .course-content--footer(v-if="(content.expectsubmission || (content.url && !content.thumbnails))")
-        markdown-link.pull-right(v-bind:md-content="content" v-if="content.url && !content.thumbnails")
+      .course-content--footer(v-if="(content.expectsubmission || (content.hasContent && !content.thumbnails))")
+        markdown-link.pull-right(v-bind:md-content="content" v-if="content.hasContent && !content.thumbnails")
         .clearfix
 
   .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")

@@ -39,4 +39,12 @@ export default {
       errorCb(response);
     });
   },
+  getUserSubmissions(request, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.get(`${config.WATERCOOLER_API}/discussion/user/${request.classSlug}/${request.contentSlug}/${request.userId}`).then((response) => {
+      cb(response);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
 };

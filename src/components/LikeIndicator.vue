@@ -145,7 +145,6 @@ export default {
   background-position: 0 0;
   background-size: auto 50px;
   cursor: pointer;
-  animation: opacity 0.3s, fave-heart 1s steps(28);
 }
 .heart.active {
   background-position: -1400px 0;
