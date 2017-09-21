@@ -24,7 +24,6 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import * as config from '@/api/config';
 import throttle from 'lodash/throttle';
-import debounce from 'lodash/debounce';
 import inRange from 'lodash/inRange';
 
 import { mapGetters } from 'vuex';

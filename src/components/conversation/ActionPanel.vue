@@ -15,7 +15,7 @@
         #progress-bar--thumb(v-bind:style="{ left: `${((100 / content.duration) * currentTime)}%` }")
 
       li.experience-control.pull-right(@click="toggleComposer")
-        icon(v-bind:name="composerHidden ? 'angle-up' : 'angle-down'")
+        icon(v-bind:name="composerHidden ? 'chevron-up' : 'chevron-down'")
       li.experience-control#twitter-control.pull-right
         a(v-bind:href="twitterLink" target="_blank")
           icon(name="twitter")
@@ -39,8 +39,8 @@ import 'vue-awesome/icons/pause';
 import 'vue-awesome/icons/play';
 import 'vue-awesome/icons/step-forward';
 import 'vue-awesome/icons/twitter';
-import 'vue-awesome/icons/angle-up';
-import 'vue-awesome/icons/angle-down';
+import 'vue-awesome/icons/chevron-up';
+import 'vue-awesome/icons/chevron-down';
 import 'vue-awesome/icons/soundcloud';
 import 'vue-awesome/icons/youtube';
 
@@ -159,9 +159,9 @@ $media-height = 220px
       margin 0
       position absolute
       left (38px * 2) + 20px + 40px
-      right (38px * 1) + 20px + 40px + 40px
+      right (38px * 1) + 10px + 40px + 40px
       @media(max-width: 568px)
-        right (38px * 0) + 20px + 40px
+        right (38px * 0) + 10px + 40px
         #progress-bar--end
           display none
       #progress-bar--start, #progress-bar--end

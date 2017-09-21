@@ -1,7 +1,7 @@
 const AUTOSCROLL_CHECK = 500; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
-const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 2000;//750; // Interval at which scroll position should be updated
+const WHEEL_TIMEOUT = 1500; // Interval before assumed no longer manually scrolling
+const SCROLL_UPDATE_INTERVAL = 500;//750; // Interval at which scroll position should be updated
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
 
 import Vue from 'vue';

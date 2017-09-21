@@ -91,8 +91,8 @@ export default {
         startSegment: startSegment,
         endSegment: endSegment
       };
-
-      if (((startSegment % (endSegment - startSegment)) === 0) || force) {
+      
+      if (((endSegment % (endSegment - startSegment)) === 0) || force) {
         API.message.getSegmentSummary(
           theRequest,
           response => {
