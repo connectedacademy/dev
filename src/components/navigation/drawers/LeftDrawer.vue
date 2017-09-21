@@ -7,10 +7,10 @@
       ul.drawer-list
 
         router-link.drawer-list-item(tag="li" to="/" v-bind:class="{ visible: state.visible }")
-          h1.drawer-list-item--header {{ $t('nav.course') }}
-          h2.drawer-list-item--body {{ $t('nav.course_description') }}
+          h1.drawer-list-item--header {{ $t('nav.take_part') }}
+          h2.drawer-list-item--body {{ $t('nav.take_part_description') }}
 
-        router-link.drawer-list-item(tag="li" to="/schedule" v-bind:class="{ visible: state.visible }")
+        //- router-link.drawer-list-item(tag="li" to="/schedule" v-bind:class="{ visible: state.visible }")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
           h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
 

@@ -42,8 +42,11 @@ export default {
     continueListening() {
       this.collapsed = false;
       setTimeout(() => {
-        this.$store.commit('PLAY_VIDEO');
-      }, 500);
+        window.scroll(0, window.scrollY + 10);
+        setTimeout(() => {
+          this.$store.commit('PLAY_VIDEO');
+        }, 1000);        
+      }, 1000);
     }
   }
 };

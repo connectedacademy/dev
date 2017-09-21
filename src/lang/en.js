@@ -25,8 +25,8 @@ export default {
   nav: {
     home: 'Home',
     home_description: 'Just go back to the home page.',
-    course: 'Course',
-    course_description: 'Take part in the course, experience the \'Live class\' and join the conversation as it unfolds.',
+    take_part: 'Take Part',
+    take_part_description: 'Take part in the course, experience the \'Live class\' and join the conversation as it unfolds.',
     schedule: 'Schedule',
     schedule_description: 'View the schedule for upcoming content and when it will be relased by your hub.',
     about: 'About',

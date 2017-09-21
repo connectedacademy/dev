@@ -80,7 +80,6 @@ export default {
     });
 
     this.$store.dispatch('getCourse');
-    this.$store.dispatch('getHubs');
   },
   mounted() {
     // Subscribe to socket

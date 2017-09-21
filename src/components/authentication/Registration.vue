@@ -114,6 +114,7 @@ export default {
     VueSlider,
   },
   created() {
+    this.$store.dispatch('getHubs');
     API.auth.checkAuth(
       (response) => {
         if (response.user.registration) {

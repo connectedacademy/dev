@@ -13,6 +13,9 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'hub-selector',
+  mounted() {
+    this.$store.dispatch('getHubs');
+  },
   computed: {
     ...mapGetters ([
       'hubs'

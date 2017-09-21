@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#section-navigator(v-if="isVisible")
+#section-navigator.animated.slideInRight(v-if="isVisible")
   section-navigator-item(v-for="item in items" v-bind:key="item.slug" v-bind:scroll-point="item")
 
 </template>
