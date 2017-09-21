@@ -45,6 +45,8 @@ html, body
 .main-container
   radius(4px)
   position relative
+  @media(max-width: 800px)
+    radius(0)
   &.main-container-padded
     padding 20px
 
@@ -52,6 +54,8 @@ html, body
   radius(4px)
   padding 20px
   margin 20px 0 0 0
+  @media(max-width: 800px)
+    radius(0)
   &.white-block
     background-color white
 

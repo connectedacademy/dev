@@ -174,7 +174,6 @@ export default {
   @media(max-width: 600px)
     display block
   .fa-icon
-    animate()
     float left
     height 80px
     padding 0 10px
