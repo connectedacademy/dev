@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, current: isCurrent, opened: segmentOpened }" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
+  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, opened: segmentOpened }" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
 
     .primary-wrapper(@click="peek()")
 
@@ -40,24 +40,23 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
 import {mapGetters} from 'vuex';
 import API from '@/api';
 
-import MessageComposer from '@/components/MessageComposer';
-import Subtitle from '@/components/conversation/Subtitle';
-import Message from '@/components/conversation/Message';
-import MockMessage from '@/components/conversation/MockMessage';
+// import MessageComposer from '@/components/MessageComposer';
+// import Subtitle from '@/components/conversation/Subtitle';
+// import Message from '@/components/conversation/Message';
+// import MockMessage from '@/components/conversation/MockMessage';
 
 export default {
   name: 'time-segment',
   props: ['index', 'message', 'subtitle'],
   components: {
-    MessageComposer,
-    Message,
-    MockMessage,
-    Subtitle,
+    'MessageComposer': () => import('@/components/MessageComposer'),
+    'Message': () => import('@/components/conversation/Message'),
+    'MockMessage': () => import('@/components/conversation/MockMessage'),
+    'Subtitle': () => import('@/components/conversation/Subtitle'),
   },
   watch: {
     'activeSegment': {
@@ -98,23 +97,18 @@ export default {
       segmentStyle: {},
       calculatedOffset: 0,
       calculatedOffsetBottom: 0,
-      isCurrent: false,
     };
   },
   computed: {
     ...mapGetters([
       'activeSegment',
       'peekSegment',
-      // 'currentSegmentGroup',
       'activeSegmentMessages',
     ]),
     orderedMessages() {
       // Order messages
       return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
     },
-    // isCurrent() {
-    //   return this.currentSegmentGroup === this.message.segmentGroup;
-    // },
   },
   methods: {
     peek() {
@@ -200,7 +194,7 @@ export default {
     },
     loadSegmentMessages() {
 
-      Vue.$log.info('Loading segment messages');
+      this.$log.info('Loading segment messages');
 
       this.loadingMessages = true;
 

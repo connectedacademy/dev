@@ -127,13 +127,13 @@ export default {
 
 
   .inner-wrapper
-    // background url('../assets/images/line.png')
-    // background-repeat repeat
-    // background-size 1px 158px
+    background-color white
+    background url('../assets/images/line.png')
+    background-repeat repeat
+    background-size 1px 158px
     
     overflow hidden
     .subtitle-wrapper, .message-wrapper
-      animate()
       width 50%
       &.subtitle-wrapper
         transform translate(0%, -50%)
