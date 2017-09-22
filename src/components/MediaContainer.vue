@@ -7,10 +7,10 @@
       #soundcloud-container(v-if="src && (this.playerType === 'soundcloud')")
         img(src="../assets/icons/soundcloud.png")
     
-    #images-wrapper
-      #mobile-image-view(v-if="videoIsActive && media" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentSegmentIndex].text})` }" @click="setLightboxMedia(media[currentSegmentIndex].text)")
+    #images-wrapper(v-if="videoIsActive && media")
+      #mobile-image-view(v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentSegmentIndex].text})` }" @click="setLightboxMedia(media[currentSegmentIndex].text)")
 
-      swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && media && swiperVisible")
+      //- swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper")
         swiper-slide(v-for="(item, key) in media" v-bind:key="key")
           img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
           .swiper-lazy-preloader.swiper-lazy-preloader-white
@@ -25,6 +25,7 @@ import VueYouTubeEmbed from 'vue-youtube-embed';
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 import * as config from '@/api/config';
+import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import inRange from 'lodash/inRange';
 
@@ -40,13 +41,14 @@ export default {
   },
   mounted() {
     this.initializeSoundcloudPlayer();
-    this.updateSwiperOptions();
-    window.addEventListener('resize', this.updateSwiperOptions);
+    // this.isMobile = (window.innerWidth < 600);
+    // window.addEventListener('resize', () => {
+    //   this.isMobile = (window.innerWidth < 600);
+    // });
   },
   destroyed() {
     // Remove event listeners
     this.soundcloudPlayer = undefined;
-    window.removeEventListener('resize', this.updateSwiperOptions);
   },
   data() {
     return {
@@ -55,9 +57,9 @@ export default {
       soundcloudPlayer: undefined,
       pHeight: 188,
       pWidth: (188 / 0.5625),
-      swiperVisible: false,
+      isMobile: false,
       swiperOption: {
-        slidesPerView: 1,
+        slidesPerView: 3,
         centeredSlides: false,
         spaceBetween: 20,
         loop: false,
@@ -94,12 +96,6 @@ export default {
     }
   },
   methods: {
-    updateSwiperOptions() {
-      this.swiperVisible = (window.innerWidth > 568);
-      this.swiperOption.slidesPerView = (window.outerWidth < 800) ? 1 : 3;
-      this.swiperOption.centeredSlides = (window.outerWidth < 800);
-      this.swiperOption.spaceBetween = (window.outerWidth < 800) ? 0 : 20;
-    },
     setLightboxMedia(media) {
       this.$store.commit('SET_LIGHTBOX_MEDIA', media);
     },
@@ -256,18 +252,18 @@ $media-height = 220px
         position absolute
         &:hover
           cursor pointer
-    #image-swiper
-      display block
-      @media(max-width: 568px)
-        display none
+    // .swiper-container
+    //   display block
+    //   @media(max-width: 568px)
+    //     display none
     #mobile-image-view
       background-image()
       background-size contain
       pinned()
       position absolute
-      display none
-      @media(max-width: 568px)
-        display block
+      // display none
+      // @media(max-width: 568px)
+      //   display block
 
   #video-wrapper
     top 0

@@ -1,4 +1,3 @@
-const AUTOSCROLL_CHECK = 500; // Periodically check if scroll is possible
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1500; // Interval before assumed no longer manually scrolling
 const SCROLL_UPDATE_INTERVAL = 500;//750; // Interval at which scroll position should be updated
@@ -11,9 +10,6 @@ import throttle from 'lodash/throttle';
 
 export default {
   mounted() {
-    // Periodically check if scroll is possible
-    window.setInterval(this.checkIfCanAutoScroll, AUTOSCROLL_CHECK);
-
     // Attempt auto scroll every second
     window.setInterval(this.attemptAutoScroll, AUTOSCROLL_ATTEMPT);
 
@@ -49,12 +45,19 @@ export default {
     };
   },
   watch: {
-    videoPlaying() {
-      this.attemptAutoScroll();
+    peekSegment(nV) {
+      this.checkIfCanAutoScroll();
     },
-    // currentSection() {
-    //   this.attemptAutoScroll();
-    // },
+    preventScroll(nV) {
+      this.checkIfCanAutoScroll();
+    },
+    videoPlaying(nV) {
+      this.checkIfCanAutoScroll();
+      if (nV) { this.attemptAutoScroll(); }
+    },
+    currentSection(nV) {
+      this.checkIfCanAutoScroll();
+    },
   },
   computed: {
     ...mapGetters([
@@ -63,7 +66,7 @@ export default {
   },
   methods: {
     checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.activeSegment && !this.peekSegment && !this.preventScroll && this.videoPlaying && (this.currentSection !== undefined) && (this.currentSection.content_type === 'class'));
+      this.canAutoScroll = (!this.peekSegment && !this.preventScroll && this.videoPlaying && (this.currentSection !== undefined));
     },
     attemptAutoScroll() {
 
@@ -74,10 +77,9 @@ export default {
 
       this.isAutoScrolling = true;
 
-      var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
+      // var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t; };
 
       var position = function(start, end, elapsed, duration) {
-        if (elapsed > duration) return end;
         return start + (end - start) * (elapsed / duration); // Linear
         // return start + (end - start) * easingFunction(elapsed / duration); // Easing
       }
@@ -114,14 +116,13 @@ export default {
         else if (elapsed > duration) {
           this.$store.commit('setPendingScrollPosition', 0);
           this.$store.commit(types.PAUSE_VIDEO);
-          this.attemptAutoScroll();
         }
       }
       step();
     },
     wheelMovement() {
 
-      if (this.activeSegment || this.peekSegment || this.preventScroll) {
+      if (this.peekSegment || this.preventScroll) {
         return;
       }
       if (this.videoPlaying) {
