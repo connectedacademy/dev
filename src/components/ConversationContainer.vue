@@ -116,12 +116,13 @@ export default {
         fill alpha($color-primary, 1)
 
     @media(max-width: 600px)
-      z-index 50
-      left -400px
-      right auto
-      svg
-        path
-          fill alpha($color-primary, 0.3)
+      display none
+      // z-index 50
+      // left -400px
+      // right auto
+      // svg
+      //   path
+      //     fill alpha($color-primary, 0.3)
 
 
   .inner-wrapper

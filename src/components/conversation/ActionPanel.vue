@@ -180,8 +180,6 @@ $media-height = 220px
         background-color $color-primary
         height 2px
         margin 24px 10px
-        @media(max-width: 360px)
-          display none
       #progress-bar--thumb
         radius(50%)
         background-color $color-primary

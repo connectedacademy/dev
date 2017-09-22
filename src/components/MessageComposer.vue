@@ -88,9 +88,6 @@ export default {
         this.$store.state.navigation.rightDrawer.visible ||
         this.$store.state.route.name !== 'main';
     },
-    currentTime() {
-      return `Tweeting at - ${round(this.currentTime)}`;
-    },
     submitText() {
       return (this.sending) ? 'Sending' : 'Post';
     }

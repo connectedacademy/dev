@@ -74,7 +74,7 @@ export default {
       }
     },
     currentTime(nV, oV) {
-      if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
+      // if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
       // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
     },
     videoPlaying(nv, oV) {
@@ -178,7 +178,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'course', 'currentClass', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
+      'course', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
     ]),
     src() {
       switch (this.playerType) {
