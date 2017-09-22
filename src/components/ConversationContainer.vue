@@ -76,7 +76,6 @@ export default {
       if (nV === undefined) { return; }
       if (oV !== nV) {
         this.$log.info(`Getting messages for segment ${nV}`);
-
         const force = (Math.abs(nV - oV) > 5);
         this.loadSegmentSummary(nV, force);
       }
