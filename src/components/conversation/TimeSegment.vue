@@ -40,23 +40,23 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
 import orderBy from 'lodash/orderBy';
+import {mapGetters} from 'vuex';
 import API from '@/api';
 
-// import MessageComposer from '@/components/MessageComposer';
-// import Subtitle from '@/components/conversation/Subtitle';
-// import Message from '@/components/conversation/Message';
-// import MockMessage from '@/components/conversation/MockMessage';
+import MessageComposer from '@/components/MessageComposer';
+import Subtitle from '@/components/conversation/Subtitle';
+import Message from '@/components/conversation/Message';
+import MockMessage from '@/components/conversation/MockMessage';
 
 export default {
   name: 'time-segment',
   props: ['index', 'message', 'subtitle'],
   components: {
-    'MessageComposer': () => import('@/components/MessageComposer'),
-    'Message': () => import('@/components/conversation/Message'),
-    'MockMessage': () => import('@/components/conversation/MockMessage'),
-    'Subtitle': () => import('@/components/conversation/Subtitle'),
+    MessageComposer,
+    Message,
+    MockMessage,
+    Subtitle,
   },
   watch: {
     'activeSegment': {

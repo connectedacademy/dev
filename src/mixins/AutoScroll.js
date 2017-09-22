@@ -145,10 +145,9 @@ export default {
         this.wheeling = undefined;
         this.preventScroll = false;
           
-        if (this.currentSection && (this.currentSection.content_type === 'class')) {
+        if (this.currentSection) {
           this.$store.commit(types.PLAY_VIDEO);
         }
-
       }, WHEEL_TIMEOUT);
     },
     onScroll: throttle(function (self) {
