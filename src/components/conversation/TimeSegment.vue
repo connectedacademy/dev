@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import orderBy from 'lodash/orderBy';
 import {mapGetters} from 'vuex';
+import orderBy from 'lodash/orderBy';
 import API from '@/api';
 
 // import MessageComposer from '@/components/MessageComposer';
