@@ -1,16 +1,15 @@
 <template lang="pug">
 
-  .drawer#drawer-right(v-bind:class="{ visible: state.visible }")
+  transition(name="slide-right")
+    .drawer#drawer-right(v-if="isVisible")
 
-    user-card(v-bind:visible="state.visible")
-    profile-card(v-bind:visible="state.visible")
-    classroom-card(v-bind:visible="state.visible")
+      user-card(v-bind:visible="isVisible")
+      profile-card(v-bind:visible="isVisible")
+      classroom-card(v-bind:visible="isVisible")
 
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
-
 import ClassroomCard from '@/components/cards/ClassroomCard';
 import ProfileCard from '@/components/cards/ProfileCard';
 import UserCard from '@/components/cards/UserCard';
@@ -24,17 +23,12 @@ export default {
   },
   methods: {
     toggleRightDrawer() {
-      this.$store.commit(types.TOGGLE_RIGHT_DRAWER);
+      this.$store.commit('TOGGLE_RIGHT_DRAWER');
     },
   },
-  data() {
-    return {
-      visible: false,
-    };
-  },
   computed: {
-    state() {
-      return this.$store.state.navigation.rightDrawer;
+    isVisible() {
+      return this.$store.state.navigation.rightDrawer.visible;
     },
   },
 };

@@ -61,11 +61,11 @@ export const DISMISS_LEFT_DRAWER = 'DISMISS_LEFT_DRAWER';
 export const DISMISS_RIGHT_DRAWER = 'DISMISS_RIGHT_DRAWER';
 
 // Composer
-export const SHOW_COMPOSER = 'SHOW_COMPOSER';
-export const DISMISS_COMPOSER = 'DISMISS_COMPOSER';
+export const SHOW_MEDIA = 'SHOW_MEDIA';
+export const DISMISS_MEDIA = 'DISMISS_MEDIA';
 
-export const PEEK_COMPOSER = 'PEEK_COMPOSER';
-export const HIDE_COMPOSER = 'HIDE_COMPOSER';
+export const PEEK_MEDIA = 'PEEK_MEDIA';
+export const HIDE_MEDIA = 'HIDE_MEDIA';
 
 // Video
 export const PLAY_VIDEO = 'PLAY_VIDEO';

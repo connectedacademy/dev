@@ -44,10 +44,10 @@ const getters = {
     return state.visualisation;
   },
   videoIsActive() {
-    if (store.getters.currentSection === undefined) {
+    if (store.state.currentSection === undefined) {
       return false;
     }
-    return (store.getters.currentSection.duration !== undefined);
+    return (store.state.currentSection.duration !== undefined);
   },
   currentActiveSection() {
     if (store.state.scrollPoints.length === 0) { return undefined; }
@@ -62,15 +62,15 @@ const getters = {
     return undefined;
   },
   currentSectionScrollPosition() {
-    if (!store.getters.currentSection) { return 0; }
-    return store.state.offsetScrollPosition - store.getters.currentSection.top;
+    if (!store.state.currentSection) { return 0; }
+    return store.state.offsetScrollPosition - store.state.currentSection.top;
   },
   currentSegmentGroup() {
-    if (!store.getters.currentSection) { return -1; }
+    if (!store.state.currentSection) { return -1; }
     return math.floor(store.getters.currentSectionScrollPosition / 158.0);
   },
   currentSegment() {
-    if (!store.getters.currentSection) { return 0; }
+    if (!store.state.currentSection) { return 0; }
     return math.floor(store.getters.currentSectionScrollPosition / (158.0 * 0.2));
   },
 };

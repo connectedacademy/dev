@@ -11,14 +11,12 @@
 <script>
 // Components
 import ClassSelector from '@/components/ClassSelector';
-import Loading from '@/components/Loading';
 
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
 
 const CourseContent = () => ({
   component: import('@/components/conversation/CourseContent'),
-  loading: Loading,
 });
 
 export default {

@@ -1,5 +1,23 @@
+$drawer-width = 320px
+
+
+// Transitions
+.slide-right-enter-active, .slide-left-enter-active
+  animate()
+
+.slide-right-leave-active, .slide-left-leave-active
+  animate()
+
+.slide-right-enter, .slide-right-leave-to
+  transform translateX(320px)
+  right 0
+
+.slide-left-enter, .slide-left-leave-to
+  transform translateX(-320px)
+  left 0
+
 .drawer
-  max-width 320px
+  max-width $drawer-width
   overflow-y auto
   overflow-x hidden
   position fixed
@@ -9,22 +27,15 @@
   z-index 56
 
   &#drawer-right
-    right -320px
-    transition right 0.4s
-    &.visible
-      right 0
+    right 0
 
   &#drawer-left
-    left -320px
-    transition left 0.4s
-    &.visible
-      left 0
+    left 0
 
   .card
     radius(6px)
     background-color darken($color-drawer-background, 0%)
     margin 10px
-    opacity 0
     position relative
 
     .pure-button.pure-button-action
@@ -36,29 +47,6 @@
       &:hover
         background-color alpha(black, 0.2)
 
-  &#drawer-right
-    .card
-      transition background-color 0.6s, right 0.6s, opacity 0.6s
-      for num in (1..100)
-        &:nth-child({num}n)
-          right (num * -100px)
-
-    &.visible
-      .card
-        right 0
-        opacity 1
-
-  &#drawer-left
-    .card
-      transition background-color 0.6s, left 0.6s, opacity 0.6s
-      for num in (1..100)
-        &:nth-child({num}n)
-          left (num * -100px)
-
-    &.visible
-      .card
-        left 0
-        opacity 1
 
   /* Drawer List */
   ul.drawer-list

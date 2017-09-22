@@ -24,20 +24,21 @@
 
           .clearfix
     
-    .course-content-wrapper(v-if="activeClass === 'intro'")
+  .course-content-wrapper
 
-      .course-content-group
-        //- ABOUT
-        .course-content
-          .course-content--header
-            h1.content-title About the course
+    .course-content-group(v-if="activeClass === 'intro'")
+      //- ABOUT
+      .course-content
+        .course-content--header
+          h1.content-title About the course
 
-          .course-content--body
-            markdown-renderer(v-bind:markdown-url="infoMarkdown")
+        .course-content--body
+          markdown-renderer(v-bind:markdown-url="infoMarkdown")
 
-            four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
-
-        join-banner
+          four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
+  
+    .course-content-group
+      join-banner
 
 </template>
 

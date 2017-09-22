@@ -2,9 +2,6 @@
 
 .course-content-wrapper
 
-  .course-content-group
-    join-banner
-
   .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- QUESTION

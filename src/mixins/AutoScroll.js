@@ -42,6 +42,7 @@ export default {
       canAutoScroll: true,
       isAutoScrolling: false,
       preventScroll: false,
+      scrollPosition: 0,
     };
   },
   watch: {
@@ -58,6 +59,9 @@ export default {
     currentSection(nV) {
       this.checkIfCanAutoScroll();
     },
+    scrollPosition(nV) {
+      this.$store.dispatch('setScrollPosition', nV);
+    }
   },
   computed: {
     ...mapGetters([
@@ -137,8 +141,6 @@ export default {
 
         // Wheeling stopped - fire events
         this.scrollPosition = window.scrollY;
-
-        this.$store.dispatch('setScrollPosition', window.scrollY);
       
         this.wheeling = undefined;
         this.preventScroll = false;
@@ -151,7 +153,6 @@ export default {
     },
     onScroll: throttle(function (self) {
       self.scrollPosition = window.scrollY;
-      self.$store.dispatch('setScrollPosition', window.scrollY);
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onWheel() {
       if (!this.activeSegment) {

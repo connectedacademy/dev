@@ -10,7 +10,7 @@ const state = {
 
 // getters
 const getters = {
-  composerHidden() {
+  mediaHidden() {
     return state.hidden;
   },
 };
@@ -21,23 +21,23 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.SHOW_COMPOSER](initialState) {
+  [types.SHOW_MEDIA](initialState) {
     state.visible = true;
     state.hidden = false;
   },
-  [types.DISMISS_COMPOSER](initialState) {
+  [types.DISMISS_MEDIA](initialState) {
     state.visible = false;
     state.hidden = false;
   },
-  [types.PEEK_COMPOSER](initialState) {
+  [types.PEEK_MEDIA](initialState) {
     state.visible = false;
     state.hidden = false;
   },
-  [types.HIDE_COMPOSER](initialState) {
+  [types.HIDE_MEDIA](initialState) {
     state.visible = false;
     state.hidden = true;
   },
-  [types.DISMISS_COMPOSER](initialState) {
+  [types.DISMISS_MEDIA](initialState) {
     state.visible = false;
     state.hidden = false;
   },

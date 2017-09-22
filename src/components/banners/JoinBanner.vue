@@ -36,6 +36,9 @@ export default {
   radius(4px)
   box-shadow()
   background-color white
+  @media(max-width: 800px)
+    radius(0)
+    margin 20px 0 0 0
   .course-content--header
     padding 10px 20px 30px 20px
     text-align center

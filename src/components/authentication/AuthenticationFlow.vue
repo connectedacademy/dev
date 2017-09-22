@@ -1,6 +1,6 @@
 <template lang="pug">
-
-  .auth-modal(v-bind:class="{ visible: visible }")
+transition(name="slide-up")
+  .auth-modal(v-if="isVisible")
     .auth-modal--header
       h1 {{ $t('auth.authenticate') }}
     .auth-modal--container
@@ -15,7 +15,7 @@
 export default {
   name: 'authentication-flow',
   computed: {
-    visible() {
+    isVisible() {
       return this.$store.state.auth.visible;
     },
   },
@@ -31,21 +31,29 @@ export default {
 
 @import '~stylus/shared'
 
+// Transitions
+.slide-up-enter-active
+  animate()
+
+.slide-up-leave-active
+  animate()
+
+.slide-up-enter, .slide-up-leave-to
+  transform translateY(40px)
+  opacity 0
+
+
 .auth-modal
   animate()
   display block
   max-width 320px
   position fixed
   z-index 57
-  top 120px
+  top 80px
   left 50%
   margin-left -160px
-  opacity 0
   pointer-events none
-  &.visible
-    top 80px
-    opacity 1
-    pointer-events all
+
   .auth-modal--header
     height 40px
     line-height 40px

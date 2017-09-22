@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #action-panel(v-bind:class="{ hide: (!this.currentSection), pinned: !composerHidden }")
+  #action-panel(v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }")
     ul#experience-controls
     
       li.experience-control(@click="toggleVideoPlaying")
@@ -15,7 +15,7 @@
         #progress-bar--thumb(v-bind:style="{ left: `${((100 / content.duration) * currentTime)}%` }")
 
       li.experience-control.pull-right(@click="toggleComposer")
-        icon(v-bind:name="composerHidden ? 'chevron-up' : 'chevron-down'")
+        icon(v-bind:name="mediaHidden ? 'chevron-up' : 'chevron-down'")
       li.experience-control#twitter-control.pull-right
         a(v-bind:href="twitterLink" target="_blank")
           icon(name="twitter")
@@ -69,7 +69,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['composerHidden', 'videoPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
+    ...mapGetters(['mediaHidden', 'videoPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
     start() {
       return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
     },
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     toggleComposer() {
-      this.$store.commit(this.composerHidden ? 'SHOW_COMPOSER' : 'HIDE_COMPOSER');
+      this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
     },
     toggleVideoPlaying() {
       this.$store.commit(this.videoPlaying ? 'PAUSE_VIDEO' : 'PLAY_VIDEO');
@@ -105,18 +105,17 @@ $media-height = 220px
   animate()
   background white
   border-top $color-border 1px solid
+  bottom 0
   height ($media-height + 50px)
   z-index 50
-  bottom -($media-height)
   position fixed
   left 50%
   margin-left -390px
   width 780px
-
-  &.pinned
-    bottom 0
+  &.hide-media
+    bottom -($media-height)
   &.hide
-    bottom -($media-height + 51px)
+    bottom -($media-height + 100px)
 
   @media(max-width: 800px)
     margin-left 0

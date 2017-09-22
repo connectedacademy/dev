@@ -158,15 +158,13 @@ export default {
 
       this.$store.commit('SET_ACTIVE_SEGMENT', this.message.segmentGroup)
 
-      let calculatedOffset = document.getElementsByClassName('peek')[0].getBoundingClientRect().top;
-      let calculatedOffsetBottom = window.innerHeight - document.getElementsByClassName('peek')[0].getBoundingClientRect().bottom;
-
-      this.calculatedOffset = calculatedOffset;
-      this.calculatedOffsetBottom = calculatedOffsetBottom;
+      const peekElement = document.getElementsByClassName('peek')[0].getBoundingClientRect();
+      this.calculatedOffset = peekElement.top;
+      this.calculatedOffsetBottom = window.innerHeight - peekElement.bottom;
 
       this.segmentStyle = {
-        top: `${calculatedOffset}px`,
-        bottom: `${calculatedOffsetBottom}px`,
+        top: `${this.calculatedOffset}px`,
+        bottom: `${this.calculatedOffsetBottom}px`,
         position: 'fixed',
       };
 
@@ -206,7 +204,7 @@ export default {
 
       this.loadingMessages = true;
 
-      let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.getters.currentSection.slug;
+      let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.state.currentSection.slug;
 
       const theRequest = {
         theClass: this.$store.getters.currentClass.slug,
