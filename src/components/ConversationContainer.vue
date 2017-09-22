@@ -117,7 +117,7 @@ export default {
 
     @media(max-width: 600px)
       display none
-      
+
       // z-index 50
       // left -400px
       // right auto
@@ -148,39 +148,43 @@ export default {
           transform translate(0%, -50%)
         &.message-wrapper
           display none
-          transform translate(100%, -50%)
       &.message-priority
         .subtitle-wrapper, .message-wrapper
           width 100%
           &.subtitle-wrapper
             display none
-            transform translate(-100%, -50%)
           &.message-wrapper
             display block
             transform translate(0%, -50%)
 
 #view-toggle
   animate()
-  radius(50%)
+  radius(4px)
   background-color $color-primary
   color white
   display none
-  height 80px
-  width 80px
+  height 100px
+  width 60px
   position fixed
   z-index 57
-  bottom 300px
-  left calc(100% - 40px)
-  text-align left
+  top 80px
+  right -10px
   @media(max-width: 600px)
     display block
   .fa-icon
-    float left
-    height 80px
-    padding 0 10px
+    display block
+    height 50px
+    padding 0 15px
     width 20px
-
+    &:first-child
+      opacity 0.5
+    &:last-child
+      border-top alpha(black, 0.1) 1px solid
+      opacity 1.0
   &.message-priority
-    left -40px
+    .fa-icon:first-child
+      opacity 1.0
+    .fa-icon:last-child
+      opacity 0.5
 
 </style>

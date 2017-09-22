@@ -187,8 +187,6 @@ $media-height = 220px
         position absolute
         top 20px
         left 0px
-        @media(max-width: 360px)
-          display none
       &:hover
         cursor default
       //   #progress-bar--thumb
