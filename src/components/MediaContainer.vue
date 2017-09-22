@@ -8,7 +8,9 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && media")
+      #mobile-image-view(v-if="videoIsActive && media" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentSegmentIndex].text})` }" @click="setLightboxMedia(media[currentSegmentIndex].text)")
+
+      swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper" v-if="videoIsActive && media && swiperVisible")
         swiper-slide(v-for="(item, key) in media" v-bind:key="key")
           img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
           .swiper-lazy-preloader.swiper-lazy-preloader-white
@@ -53,6 +55,7 @@ export default {
       soundcloudPlayer: undefined,
       pHeight: 188,
       pWidth: (188 / 0.5625),
+      swiperVisible: false,
       swiperOption: {
         slidesPerView: 1,
         centeredSlides: false,
@@ -92,6 +95,7 @@ export default {
   },
   methods: {
     updateSwiperOptions() {
+      this.swiperVisible = (window.innerWidth > 568);
       this.swiperOption.slidesPerView = (window.outerWidth < 800) ? 1 : 3;
       this.swiperOption.centeredSlides = (window.outerWidth < 800);
       this.swiperOption.spaceBetween = (window.outerWidth < 800) ? 0 : 20;
@@ -252,6 +256,18 @@ $media-height = 220px
         position absolute
         &:hover
           cursor pointer
+    #image-swiper
+      display block
+      @media(max-width: 568px)
+        display none
+    #mobile-image-view
+      background-image()
+      background-size contain
+      pinned()
+      position absolute
+      display none
+      @media(max-width: 568px)
+        display block
 
   #video-wrapper
     top 0
