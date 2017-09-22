@@ -9520,8 +9520,13 @@ module.exports = Component.exports
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_get_iterator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_get_iterator__);
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+  data: function data() {
+    return {
+      documentHeight: 0
+    };
+  },
   mounted: function mounted() {
-    window.setInterval(this.updateDocumentHeight, 2000);
+    window.setInterval(this.updateDocumentHeight, 3000);
   },
 
   methods: {
@@ -10777,4 +10782,4 @@ module.exports = __webpack_require__(961);
 /***/ })
 
 });
-//# sourceMappingURL=2.2f2cb6933ed2f97de52d.js.map
+//# sourceMappingURL=2.22f9234d2a0915ecf183.js.map
