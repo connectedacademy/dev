@@ -117,6 +117,7 @@ export default {
 
     @media(max-width: 600px)
       display none
+      
       // z-index 50
       // left -400px
       // right auto
