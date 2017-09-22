@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentClass', 'currentSection', 'currentSegmentGroup',
+      'currentClass', 'currentSection'
     ]),
     chunkedMessages() {
       return this.messages;
@@ -67,14 +67,11 @@ export default {
       if (this.content === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
       if (this.currentClass === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
 
-      if (segmentGroup !== 0) {
-        if (this.currentSection === undefined) { return; }
-        if (this.content.slug !== this.currentSection.slug) { return; }
-      }
+      if (this.currentSection === undefined) { return; }
 
       Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
-      let thinkAhead = 10; // Think ahead
+      let thinkAhead = 5; // Think ahead
       let thinkBehind = 10; // Think behind
 
       let segmentViewport = floor(window.innerHeight / 158.0) + thinkBehind;

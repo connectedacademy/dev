@@ -1,11 +1,10 @@
 <template lang="pug">
 
-  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), minimized: minimized }")
-    transition(name="rotate")
-      svg(v-bind:class="{cross:(state === 'close')}" viewBox="0 0 800 600")
-        g
-          path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="top")
-          path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="bottom" transform="translate(480, 300) scale(1, -1) translate(-480, -300)")
+  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
+    svg(v-bind:class="{cross:(state === 'close')}" viewBox="0 0 800 600")
+      g
+        path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="top")
+        path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="bottom" transform="translate(480, 300) scale(1, -1) translate(-480, -300)")
 
 </template>
 
@@ -29,9 +28,6 @@ export default {
     state() {
       return this.$store.state.navigation.burger.state;
     },
-    minimized() {
-      return (this.$store.state.navigation && this.$store.state.navigation.minimized);
-    },
   },
 };
 
@@ -43,7 +39,7 @@ export default {
 
 .burger-menu
   radius(50%)
-  transition(all 0.4s)
+  transition(left 0.4s)
   background-color transparent
   height 50px
   width 52px
@@ -77,16 +73,15 @@ svg
   width 60px
   height 50px
   cursor pointer
-  transform translate3d(0,0,0)
 
-path
-  fill none
-  transition stroke-dashoffset duration easing, stroke-dasharray duration easing
-  stroke-width 25px
-  stroke-linecap round
-  stroke white
-  stroke-dashoffset 0px
-  stroke-dasharray 320px cross-length
+  path
+    fill none
+    transition stroke-dashoffset duration easing, stroke-dasharray duration easing
+    stroke-width 25px
+    stroke-linecap round
+    stroke white
+    stroke-dashoffset 0px
+    stroke-dasharray 320px cross-length
 
 .cross
   path

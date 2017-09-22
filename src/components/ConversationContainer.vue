@@ -127,9 +127,9 @@ export default {
 
 
   .inner-wrapper
-    background url('../assets/images/line.png')
-    background-repeat repeat
-    background-size 1px 158px
+    // background url('../assets/images/line.png')
+    // background-repeat repeat
+    // background-size 1px 158px
     
     overflow hidden
     .subtitle-wrapper, .message-wrapper
@@ -166,9 +166,9 @@ export default {
   height 100px
   width 60px
   position fixed
-  z-index 57
   top 80px
   right -10px
+  z-index 56
   @media(max-width: 600px)
     display block
   .fa-icon

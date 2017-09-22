@@ -59,6 +59,7 @@ export default {
       pWidth: (188 / 0.5625),
       isMobile: false,
       swiperOption: {
+        performanceMode: false,
         slidesPerView: 3,
         centeredSlides: false,
         spaceBetween: 20,

@@ -3,7 +3,6 @@
   swiper(v-bind:options="swiperOption")
     swiper-slide(v-for="(item, key) in media" v-bind:key="key")
       img.swiper-lazy(v-bind:data-src="`https://${course.slug}.connectedacademy.io/course/content/media/medium/${item.image}`")
-      .swiper-lazy-preloader.swiper-lazy-preloader-white
     .swiper-button-prev(slot="button-prev")
     .swiper-button-next(slot="button-next")
 </template>
@@ -27,6 +26,7 @@ export default {
   data() {
     return {
       swiperOption: {
+        performanceMode: false,
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
         slidesPerView: 1,
