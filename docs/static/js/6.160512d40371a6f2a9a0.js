@@ -1,15 +1,19 @@
-webpackJsonp([5],{
+webpackJsonp([6],{
 
-/***/ 400:
+/***/ 410:
 /***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(770)
 
 var Component = __webpack_require__(8)(
   /* script */
-  __webpack_require__(637),
+  __webpack_require__(679),
   /* template */
-  __webpack_require__(947),
+  __webpack_require__(918),
   /* scopeId */
-  null,
+  "data-v-202d1e22",
   /* cssModules */
   null
 )
@@ -912,7 +916,7 @@ module.exports = baseClamp;
 
 
 /*eslint quotes:0*/
-module.exports = __webpack_require__(436);
+module.exports = __webpack_require__(433);
 
 
 /***/ }),
@@ -1932,332 +1936,6 @@ module.exports = function plugin (md, options) {
 /***/ }),
 
 /***/ 431:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// Process front matter and pass to cb
-//
-
-
-module.exports = function front_matter_plugin(md, cb) {
-  var min_markers = 3,
-      marker_str  = '-',
-      marker_char = marker_str.charCodeAt(0),
-      marker_len  = marker_str.length
-
-  function frontMatter(state, startLine, endLine, silent) {
-    var pos, nextLine, marker_count, markup, token,
-        old_parent, old_line_max, start_content,
-        auto_closed = false,
-        start = state.bMarks[startLine] + state.tShift[startLine],
-        max = state.eMarks[startLine];
-
-    // Check out the first character of the first line quickly,
-    // this should filter out non-front matter
-    //
-    if (startLine !== 0 || marker_char !== state.src.charCodeAt(0)) { return false; }
-
-    // Check out the rest of the marker string
-    //
-    for (pos = start + 1; pos <= max; pos++) { // while pos <= 3
-      if (marker_str[(pos - start) % marker_len] !== state.src[pos]) {
-        start_content = pos + 1
-        break;
-      }
-    }
-
-    marker_count = Math.floor((pos - start) / marker_len);
-
-    if (marker_count < min_markers) { return false; }
-    pos -= (pos - start) % marker_len;
-
-    // Since start is found, we can report success here in validation mode
-    //
-    if (silent) { return true; }
-
-    // Search for the end of the block
-    //
-    nextLine = startLine;
-
-    for (;;) {
-      nextLine++;
-      if (nextLine >= endLine) {
-        // unclosed block should be autoclosed by end of document.
-        // also block seems to be autoclosed by end of parent
-        break;
-      }
-
-      start = state.bMarks[nextLine] + state.tShift[nextLine];
-      max = state.eMarks[nextLine];
-
-      if (start < max && state.sCount[nextLine] < state.blkIndent) {
-        // non-empty line with negative indent should stop the list:
-        // - ```
-        //  test
-        break;
-      }
-
-      if (marker_char !== state.src.charCodeAt(start)) { continue; }
-
-      if (state.sCount[nextLine] - state.blkIndent >= 4) {
-        // closing fence should be indented less than 4 spaces
-        continue;
-      }
-
-      for (pos = start + 1; pos <= max; pos++) {
-        if (marker_str[(pos - start) % marker_len] !== state.src[pos]) {
-          break;
-        }
-      }
-
-      // closing code fence must be at least as long as the opening one
-      if (Math.floor((pos - start) / marker_len) < marker_count) { continue; }
-
-      // make sure tail has spaces only
-      pos -= (pos - start) % marker_len;
-      pos = state.skipSpaces(pos);
-
-      if (pos < max) { continue; }
-
-      // found!
-      auto_closed = true;
-      break;
-    }
-
-    old_parent = state.parentType;
-    old_line_max = state.lineMax;
-    state.parentType = 'container';
-
-    // this will prevent lazy continuations from ever going past our end marker
-    state.lineMax = nextLine;
-
-    token        = state.push('front_matter', null, 0);
-    token.hidden = true;
-    token.markup = state.src.slice(startLine, pos)
-    token.block  = true;
-    token.map    = [ startLine, pos ];
-
-    state.parentType = old_parent;
-    state.lineMax = old_line_max;
-    state.line = nextLine + (auto_closed ? 1 : 0);
-
-    cb(state.src.slice(start_content, start - 1))
-
-    return true;
-  }
-
-  md.block.ruler.before('table', 'front_matter', frontMatter, {
-    alt: [ 'paragraph', 'reference', 'blockquote', 'list' ]
-  });
-};
-
-/***/ }),
-
-/***/ 432:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function replaceAttr(token, attrName, replace, env) {
-    token.attrs.forEach(function (attr) {
-        if (attr[0] === attrName) {
-            attr[1] = replace(attr[1], env, token);
-        }
-    });
-}
-
-module.exports = function (md) {
-    md.core.ruler.after(
-        'inline',
-        'replace-link',
-        function (state) {
-            var replace = md.options.replaceLink;
-            if (typeof replace === 'function') {
-                state.tokens.forEach(function (blockToken) {
-                    if (blockToken.type === 'inline' && blockToken.children) {
-                        blockToken.children.forEach(function (token) {
-                            var type = token.type;
-                            if (type === 'link_open') {
-                                replaceAttr(token, 'href', replace, state.env);
-                            } else if (type === 'image') {
-                                replaceAttr(token, 'src', replace, state.env);
-                            }
-                        }); 
-                    }
-                }); 
-            }
-            return false;
-        }
-    );
-};
-
-/***/ }),
-
-/***/ 433:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// Process @[youtube](youtubeVideoID)
-// Process @[vimeo](vimeoVideoID)
-// Process @[vine](vineVideoID)
-// Process @[prezi](preziID)
-
-
-
-
-var yt_regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-function youtube_parser (url) {
-  var match = url.match(yt_regex);
-  return match && match[7].length === 11 ? match[7] : url;
-}
-
-/*eslint-disable max-len */
-var vimeo_regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
-/*eslint-enable max-len */
-function vimeo_parser (url) {
-  var match = url.match(vimeo_regex);
-  return match && typeof match[3] === 'string' ? match[3] : url;
-}
-
-var vine_regex = /^http(?:s?):\/\/(?:www\.)?vine\.co\/v\/([a-zA-Z0-9]{1,13}).*/;
-function vine_parser (url) {
-  var match = url.match(vine_regex);
-  return match && match[1].length === 11 ? match[1] : url;
-}
-
-var prezi_regex = /^https:\/\/prezi.com\/(.[^/]+)/;
-function prezi_parser(url) {
-  var match = url.match(prezi_regex);
-  return match ? match[1] : url;
-}
-
-var EMBED_REGEX = /@\[([a-zA-Z].+)\]\([\s]*(.*?)[\s]*[\)]/im;
-
-function video_embed(md, options) {
-  function video_return(state, silent) {
-    var serviceEnd,
-      serviceStart,
-      token,
-      oldPos = state.pos;
-
-    if (state.src.charCodeAt(oldPos) !== 0x40/* @ */ ||
-        state.src.charCodeAt(oldPos + 1) !== 0x5B/* [ */) {
-      return false;
-    }
-
-    var match = EMBED_REGEX.exec(state.src);
-
-    if (!match || match.length < 3) {
-      return false;
-    }
-
-    var service = match[1];
-    var videoID = match[2];
-    var serviceLower = service.toLowerCase();
-
-    if (serviceLower === 'youtube') {
-      videoID = youtube_parser(videoID);
-    } else if (serviceLower === 'vimeo') {
-      videoID = vimeo_parser(videoID);
-    } else if (serviceLower === 'vine') {
-      videoID = vine_parser(videoID);
-    } else if (serviceLower === 'prezi') {
-      videoID = prezi_parser(videoID);
-    } else if (!options[serviceLower]) {
-      return false;
-    }
-
-    // If the videoID field is empty, regex currently make it the close parenthesis.
-    if (videoID === ')') {
-      videoID = '';
-    }
-
-    serviceStart = oldPos + 2;
-    serviceEnd = md.helpers.parseLinkLabel(state, oldPos + 1, false);
-
-    //
-    // We found the end of the link, and know for a fact it's a valid link;
-    // so all that's left to do is to call tokenizer.
-    //
-    if (!silent) {
-      state.pos = serviceStart;
-      state.posMax = serviceEnd;
-      state.service = state.src.slice(serviceStart, serviceEnd);
-      var newState = new state.md.inline.State(service, state.md, state.env, []);
-      newState.md.inline.tokenize(newState);
-
-      token = state.push('video', '');
-      token.videoID = videoID;
-      token.service = service;
-      token.level = state.level;
-    }
-
-    state.pos = state.pos + state.src.indexOf(')', state.pos);
-    state.posMax = state.tokens.length;
-    return true;
-  }
-
-  return video_return;
-}
-
-function video_url(service, videoID, options) {
-  switch (service) {
-    case 'youtube':
-      return '//www.youtube.com/embed/' + videoID;
-    case 'vimeo':
-      return '//player.vimeo.com/video/' + videoID;
-    case 'vine':
-      return '//vine.co/v/' + videoID + '/embed/' + options.vine.embed;
-    case 'prezi':
-      return 'https://prezi.com/embed/' + videoID +
-      '/?bgcolor=ffffff&amp;lock_to_path=0&amp;autoplay=0&amp;autohide_ctrls=0&amp;' +
-      'landing_data=bHVZZmNaNDBIWnNjdEVENDRhZDFNZGNIUE43MHdLNWpsdFJLb2ZHanI5N1lQVHkxSHFxazZ0UUNCRHloSXZROHh3PT0&amp;' +
-      'landing_sign=1kD6c0N6aYpMUS0wxnQjxzSqZlEB8qNFdxtdjYhwSuI';
-  }
-}
-
-function tokenize_video(md, options) {
-  function tokenize_return(tokens, idx) {
-    var videoID = md.utils.escapeHtml(tokens[idx].videoID);
-    var service = md.utils.escapeHtml(tokens[idx].service).toLowerCase();
-    return videoID === '' ? '' :
-      '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" id="' +
-      service + 'player" type="text/html" width="' + (options[service].width) +
-      '" height="' + (options[service].height) +
-      '" src="' + options.url(service, videoID, options) +
-      '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
-  }
-
-  return tokenize_return;
-}
-
-var defaults = {
-  url: video_url,
-  youtube: { width: 640, height: 390 },
-  vimeo: { width: 500, height: 281 },
-  vine: { width: 600, height: 600, embed: 'simple' },
-  prezi: { width: 550, height: 400 }
-};
-
-module.exports = function video_plugin(md, options) {
-  if (options) {
-    Object.keys(defaults).forEach(function(key) {
-      if (typeof options[key] === 'undefined') {
-        options[key] = defaults[key];
-      }
-    });
-  } else {
-    options = defaults;
-  }
-  md.renderer.rules.video = tokenize_video(md, options);
-  md.inline.ruler.before('emphasis', 'video', video_embed(md, options));
-};
-
-
-/***/ }),
-
-/***/ 434:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2265,11 +1943,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_Auth__ = __webpack_require__(126);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it__ = __webpack_require__(429);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_markdown_it__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__ = __webpack_require__(432);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__ = __webpack_require__(439);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it_video__ = __webpack_require__(433);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it_video__ = __webpack_require__(440);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it_video___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_markdown_it_video__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter__ = __webpack_require__(431);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter__ = __webpack_require__(438);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block__ = __webpack_require__(430);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block__);
@@ -2277,7 +1955,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_startsWith__ = __webpack_require__(428);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_startsWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash_startsWith__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_endsWith__ = __webpack_require__(440);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_endsWith__ = __webpack_require__(437);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_endsWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_lodash_endsWith__);
 
 
@@ -2359,26 +2037,9 @@ var FourCornersLib = __webpack_require__(427);
       var RenderedMarkdown = new __WEBPACK_IMPORTED_MODULE_6_vue__["default"]({
         name: 'rendered-markdown',
         parent: this,
-        mounted: function mounted() {
-          var _this2 = this;
-
-          this.checkingSubmissions = true;
-
-          var request = { class: parent.theClass, content: parent.theContent };
-
-          __WEBPACK_IMPORTED_MODULE_7__api__["a" /* default */].feedback.getFeedbackItems(request, function (response) {
-            _this2.$log.info('Submission check response');
-            _this2.$log.info(response);
-            _this2.checkingSubmissions = false;
-            _this2.submitted = false;
-          }, function (response) {
-            _this2.checkingSubmissions = false;
-          });
-        },
         data: function data() {
           return {
             fourcornersLink: '',
-            checkingSubmissions: true,
             submitting: false,
             submitted: false
           };
@@ -2387,35 +2048,11 @@ var FourCornersLib = __webpack_require__(427);
         computed: {
           contentUrl: function contentUrl() {
             return window.location.protocol + '//' + window.location.host + '/#/submission/' + parent.theClass + '/' + parent.theContent;
-          },
-          tweet: function tweet() {
-            return this.fourcornersLink + ' ' + this.contentUrl + ' ' + this.$parent.$store.getters.course.hashtag;
           }
         },
         methods: {
           goToLink: function goToLink(href) {
             this.$router.push(href.replace('/#/markdown', '/markdown'));
-          },
-          postTweet: function postTweet() {
-            var _this3 = this;
-
-            this.submitting = true;
-            this.submitted = false;
-
-            var postData = {
-              text: this.tweet
-            };
-
-            __WEBPACK_IMPORTED_MODULE_7__api__["a" /* default */].message.sendMessage(postData, function (response) {
-              _this3.submitting = false;
-              _this3.submitted = true;
-              _this3.$store.commit('SEND_MESSAGE_SUCCESS', { response: response });
-            }, function (response) {
-              alert('Submission failed, please try again.');
-              _this3.submitting = false;
-              _this3.submitted = false;
-              _this3.$store.commit('SEND_MESSAGE_FAILURE', { response: response });
-            });
           }
         },
         render: res.render,
@@ -2431,7 +2068,7 @@ var FourCornersLib = __webpack_require__(427);
   },
   computed: {
     rawMarkdown: function rawMarkdown() {
-      var _this4 = this;
+      var _this2 = this;
 
       var parent = this;
 
@@ -2444,22 +2081,28 @@ var FourCornersLib = __webpack_require__(427);
             return link;
           }
           if (__WEBPACK_IMPORTED_MODULE_9_lodash_endsWith___default()(link, '.md')) {
-            var url = _this4.getUrl();
+            var url = _this2.getUrl();
             var currentUrl = url.substring(0, url.lastIndexOf('/') + 1);
             return '/#/markdown/' + encodeURIComponent(link);
           }
 
-          if (!_this4.$store.getters.course) {
+          if (!_this2.$store.getters.course) {
             return '';
           } else {
-            return '' + _this4.$store.getters.course.baseUri + link;
+            return '' + _this2.$store.getters.course.baseUri + link;
           }
         }
       }).use(__WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link___default.a).use(__WEBPACK_IMPORTED_MODULE_3_markdown_it_video___default.a, {
-        youtube: { width: 640, height: 390 },
-        vimeo: { width: 500, height: 281 }
+        youtube: {
+          width: 640,
+          height: 390
+        },
+        vimeo: {
+          width: 500,
+          height: 281
+        }
       }).use(__WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter___default.a, function (fm) {
-        _this4.frontMatter = fm;
+        _this2.frontMatter = fm;
       }).use(__WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block___default.a, {
         bio: function bio(arg) {
           if (!arg) {
@@ -2498,7 +2141,7 @@ var FourCornersLib = __webpack_require__(427);
 
 /***/ }),
 
-/***/ 435:
+/***/ 432:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(394)();
@@ -2513,20 +2156,20 @@ exports.push([module.i, ".pure-button{transition:all .3s ease;border-radius:4px;
 
 /***/ }),
 
-/***/ 436:
+/***/ 433:
 /***/ (function(module, exports) {
 
 module.exports = {"Aacute":"Á","aacute":"á","Abreve":"Ă","abreve":"ă","ac":"∾","acd":"∿","acE":"∾̳","Acirc":"Â","acirc":"â","acute":"´","Acy":"А","acy":"а","AElig":"Æ","aelig":"æ","af":"⁡","Afr":"𝔄","afr":"𝔞","Agrave":"À","agrave":"à","alefsym":"ℵ","aleph":"ℵ","Alpha":"Α","alpha":"α","Amacr":"Ā","amacr":"ā","amalg":"⨿","amp":"&","AMP":"&","andand":"⩕","And":"⩓","and":"∧","andd":"⩜","andslope":"⩘","andv":"⩚","ang":"∠","ange":"⦤","angle":"∠","angmsdaa":"⦨","angmsdab":"⦩","angmsdac":"⦪","angmsdad":"⦫","angmsdae":"⦬","angmsdaf":"⦭","angmsdag":"⦮","angmsdah":"⦯","angmsd":"∡","angrt":"∟","angrtvb":"⊾","angrtvbd":"⦝","angsph":"∢","angst":"Å","angzarr":"⍼","Aogon":"Ą","aogon":"ą","Aopf":"𝔸","aopf":"𝕒","apacir":"⩯","ap":"≈","apE":"⩰","ape":"≊","apid":"≋","apos":"'","ApplyFunction":"⁡","approx":"≈","approxeq":"≊","Aring":"Å","aring":"å","Ascr":"𝒜","ascr":"𝒶","Assign":"≔","ast":"*","asymp":"≈","asympeq":"≍","Atilde":"Ã","atilde":"ã","Auml":"Ä","auml":"ä","awconint":"∳","awint":"⨑","backcong":"≌","backepsilon":"϶","backprime":"‵","backsim":"∽","backsimeq":"⋍","Backslash":"∖","Barv":"⫧","barvee":"⊽","barwed":"⌅","Barwed":"⌆","barwedge":"⌅","bbrk":"⎵","bbrktbrk":"⎶","bcong":"≌","Bcy":"Б","bcy":"б","bdquo":"„","becaus":"∵","because":"∵","Because":"∵","bemptyv":"⦰","bepsi":"϶","bernou":"ℬ","Bernoullis":"ℬ","Beta":"Β","beta":"β","beth":"ℶ","between":"≬","Bfr":"𝔅","bfr":"𝔟","bigcap":"⋂","bigcirc":"◯","bigcup":"⋃","bigodot":"⨀","bigoplus":"⨁","bigotimes":"⨂","bigsqcup":"⨆","bigstar":"★","bigtriangledown":"▽","bigtriangleup":"△","biguplus":"⨄","bigvee":"⋁","bigwedge":"⋀","bkarow":"⤍","blacklozenge":"⧫","blacksquare":"▪","blacktriangle":"▴","blacktriangledown":"▾","blacktriangleleft":"◂","blacktriangleright":"▸","blank":"␣","blk12":"▒","blk14":"░","blk34":"▓","block":"█","bne":"=⃥","bnequiv":"≡⃥","bNot":"⫭","bnot":"⌐","Bopf":"𝔹","bopf":"𝕓","bot":"⊥","bottom":"⊥","bowtie":"⋈","boxbox":"⧉","boxdl":"┐","boxdL":"╕","boxDl":"╖","boxDL":"╗","boxdr":"┌","boxdR":"╒","boxDr":"╓","boxDR":"╔","boxh":"─","boxH":"═","boxhd":"┬","boxHd":"╤","boxhD":"╥","boxHD":"╦","boxhu":"┴","boxHu":"╧","boxhU":"╨","boxHU":"╩","boxminus":"⊟","boxplus":"⊞","boxtimes":"⊠","boxul":"┘","boxuL":"╛","boxUl":"╜","boxUL":"╝","boxur":"└","boxuR":"╘","boxUr":"╙","boxUR":"╚","boxv":"│","boxV":"║","boxvh":"┼","boxvH":"╪","boxVh":"╫","boxVH":"╬","boxvl":"┤","boxvL":"╡","boxVl":"╢","boxVL":"╣","boxvr":"├","boxvR":"╞","boxVr":"╟","boxVR":"╠","bprime":"‵","breve":"˘","Breve":"˘","brvbar":"¦","bscr":"𝒷","Bscr":"ℬ","bsemi":"⁏","bsim":"∽","bsime":"⋍","bsolb":"⧅","bsol":"\\","bsolhsub":"⟈","bull":"•","bullet":"•","bump":"≎","bumpE":"⪮","bumpe":"≏","Bumpeq":"≎","bumpeq":"≏","Cacute":"Ć","cacute":"ć","capand":"⩄","capbrcup":"⩉","capcap":"⩋","cap":"∩","Cap":"⋒","capcup":"⩇","capdot":"⩀","CapitalDifferentialD":"ⅅ","caps":"∩︀","caret":"⁁","caron":"ˇ","Cayleys":"ℭ","ccaps":"⩍","Ccaron":"Č","ccaron":"č","Ccedil":"Ç","ccedil":"ç","Ccirc":"Ĉ","ccirc":"ĉ","Cconint":"∰","ccups":"⩌","ccupssm":"⩐","Cdot":"Ċ","cdot":"ċ","cedil":"¸","Cedilla":"¸","cemptyv":"⦲","cent":"¢","centerdot":"·","CenterDot":"·","cfr":"𝔠","Cfr":"ℭ","CHcy":"Ч","chcy":"ч","check":"✓","checkmark":"✓","Chi":"Χ","chi":"χ","circ":"ˆ","circeq":"≗","circlearrowleft":"↺","circlearrowright":"↻","circledast":"⊛","circledcirc":"⊚","circleddash":"⊝","CircleDot":"⊙","circledR":"®","circledS":"Ⓢ","CircleMinus":"⊖","CirclePlus":"⊕","CircleTimes":"⊗","cir":"○","cirE":"⧃","cire":"≗","cirfnint":"⨐","cirmid":"⫯","cirscir":"⧂","ClockwiseContourIntegral":"∲","CloseCurlyDoubleQuote":"”","CloseCurlyQuote":"’","clubs":"♣","clubsuit":"♣","colon":":","Colon":"∷","Colone":"⩴","colone":"≔","coloneq":"≔","comma":",","commat":"@","comp":"∁","compfn":"∘","complement":"∁","complexes":"ℂ","cong":"≅","congdot":"⩭","Congruent":"≡","conint":"∮","Conint":"∯","ContourIntegral":"∮","copf":"𝕔","Copf":"ℂ","coprod":"∐","Coproduct":"∐","copy":"©","COPY":"©","copysr":"℗","CounterClockwiseContourIntegral":"∳","crarr":"↵","cross":"✗","Cross":"⨯","Cscr":"𝒞","cscr":"𝒸","csub":"⫏","csube":"⫑","csup":"⫐","csupe":"⫒","ctdot":"⋯","cudarrl":"⤸","cudarrr":"⤵","cuepr":"⋞","cuesc":"⋟","cularr":"↶","cularrp":"⤽","cupbrcap":"⩈","cupcap":"⩆","CupCap":"≍","cup":"∪","Cup":"⋓","cupcup":"⩊","cupdot":"⊍","cupor":"⩅","cups":"∪︀","curarr":"↷","curarrm":"⤼","curlyeqprec":"⋞","curlyeqsucc":"⋟","curlyvee":"⋎","curlywedge":"⋏","curren":"¤","curvearrowleft":"↶","curvearrowright":"↷","cuvee":"⋎","cuwed":"⋏","cwconint":"∲","cwint":"∱","cylcty":"⌭","dagger":"†","Dagger":"‡","daleth":"ℸ","darr":"↓","Darr":"↡","dArr":"⇓","dash":"‐","Dashv":"⫤","dashv":"⊣","dbkarow":"⤏","dblac":"˝","Dcaron":"Ď","dcaron":"ď","Dcy":"Д","dcy":"д","ddagger":"‡","ddarr":"⇊","DD":"ⅅ","dd":"ⅆ","DDotrahd":"⤑","ddotseq":"⩷","deg":"°","Del":"∇","Delta":"Δ","delta":"δ","demptyv":"⦱","dfisht":"⥿","Dfr":"𝔇","dfr":"𝔡","dHar":"⥥","dharl":"⇃","dharr":"⇂","DiacriticalAcute":"´","DiacriticalDot":"˙","DiacriticalDoubleAcute":"˝","DiacriticalGrave":"`","DiacriticalTilde":"˜","diam":"⋄","diamond":"⋄","Diamond":"⋄","diamondsuit":"♦","diams":"♦","die":"¨","DifferentialD":"ⅆ","digamma":"ϝ","disin":"⋲","div":"÷","divide":"÷","divideontimes":"⋇","divonx":"⋇","DJcy":"Ђ","djcy":"ђ","dlcorn":"⌞","dlcrop":"⌍","dollar":"$","Dopf":"𝔻","dopf":"𝕕","Dot":"¨","dot":"˙","DotDot":"⃜","doteq":"≐","doteqdot":"≑","DotEqual":"≐","dotminus":"∸","dotplus":"∔","dotsquare":"⊡","doublebarwedge":"⌆","DoubleContourIntegral":"∯","DoubleDot":"¨","DoubleDownArrow":"⇓","DoubleLeftArrow":"⇐","DoubleLeftRightArrow":"⇔","DoubleLeftTee":"⫤","DoubleLongLeftArrow":"⟸","DoubleLongLeftRightArrow":"⟺","DoubleLongRightArrow":"⟹","DoubleRightArrow":"⇒","DoubleRightTee":"⊨","DoubleUpArrow":"⇑","DoubleUpDownArrow":"⇕","DoubleVerticalBar":"∥","DownArrowBar":"⤓","downarrow":"↓","DownArrow":"↓","Downarrow":"⇓","DownArrowUpArrow":"⇵","DownBreve":"̑","downdownarrows":"⇊","downharpoonleft":"⇃","downharpoonright":"⇂","DownLeftRightVector":"⥐","DownLeftTeeVector":"⥞","DownLeftVectorBar":"⥖","DownLeftVector":"↽","DownRightTeeVector":"⥟","DownRightVectorBar":"⥗","DownRightVector":"⇁","DownTeeArrow":"↧","DownTee":"⊤","drbkarow":"⤐","drcorn":"⌟","drcrop":"⌌","Dscr":"𝒟","dscr":"𝒹","DScy":"Ѕ","dscy":"ѕ","dsol":"⧶","Dstrok":"Đ","dstrok":"đ","dtdot":"⋱","dtri":"▿","dtrif":"▾","duarr":"⇵","duhar":"⥯","dwangle":"⦦","DZcy":"Џ","dzcy":"џ","dzigrarr":"⟿","Eacute":"É","eacute":"é","easter":"⩮","Ecaron":"Ě","ecaron":"ě","Ecirc":"Ê","ecirc":"ê","ecir":"≖","ecolon":"≕","Ecy":"Э","ecy":"э","eDDot":"⩷","Edot":"Ė","edot":"ė","eDot":"≑","ee":"ⅇ","efDot":"≒","Efr":"𝔈","efr":"𝔢","eg":"⪚","Egrave":"È","egrave":"è","egs":"⪖","egsdot":"⪘","el":"⪙","Element":"∈","elinters":"⏧","ell":"ℓ","els":"⪕","elsdot":"⪗","Emacr":"Ē","emacr":"ē","empty":"∅","emptyset":"∅","EmptySmallSquare":"◻","emptyv":"∅","EmptyVerySmallSquare":"▫","emsp13":" ","emsp14":" ","emsp":" ","ENG":"Ŋ","eng":"ŋ","ensp":" ","Eogon":"Ę","eogon":"ę","Eopf":"𝔼","eopf":"𝕖","epar":"⋕","eparsl":"⧣","eplus":"⩱","epsi":"ε","Epsilon":"Ε","epsilon":"ε","epsiv":"ϵ","eqcirc":"≖","eqcolon":"≕","eqsim":"≂","eqslantgtr":"⪖","eqslantless":"⪕","Equal":"⩵","equals":"=","EqualTilde":"≂","equest":"≟","Equilibrium":"⇌","equiv":"≡","equivDD":"⩸","eqvparsl":"⧥","erarr":"⥱","erDot":"≓","escr":"ℯ","Escr":"ℰ","esdot":"≐","Esim":"⩳","esim":"≂","Eta":"Η","eta":"η","ETH":"Ð","eth":"ð","Euml":"Ë","euml":"ë","euro":"€","excl":"!","exist":"∃","Exists":"∃","expectation":"ℰ","exponentiale":"ⅇ","ExponentialE":"ⅇ","fallingdotseq":"≒","Fcy":"Ф","fcy":"ф","female":"♀","ffilig":"ﬃ","fflig":"ﬀ","ffllig":"ﬄ","Ffr":"𝔉","ffr":"𝔣","filig":"ﬁ","FilledSmallSquare":"◼","FilledVerySmallSquare":"▪","fjlig":"fj","flat":"♭","fllig":"ﬂ","fltns":"▱","fnof":"ƒ","Fopf":"𝔽","fopf":"𝕗","forall":"∀","ForAll":"∀","fork":"⋔","forkv":"⫙","Fouriertrf":"ℱ","fpartint":"⨍","frac12":"½","frac13":"⅓","frac14":"¼","frac15":"⅕","frac16":"⅙","frac18":"⅛","frac23":"⅔","frac25":"⅖","frac34":"¾","frac35":"⅗","frac38":"⅜","frac45":"⅘","frac56":"⅚","frac58":"⅝","frac78":"⅞","frasl":"⁄","frown":"⌢","fscr":"𝒻","Fscr":"ℱ","gacute":"ǵ","Gamma":"Γ","gamma":"γ","Gammad":"Ϝ","gammad":"ϝ","gap":"⪆","Gbreve":"Ğ","gbreve":"ğ","Gcedil":"Ģ","Gcirc":"Ĝ","gcirc":"ĝ","Gcy":"Г","gcy":"г","Gdot":"Ġ","gdot":"ġ","ge":"≥","gE":"≧","gEl":"⪌","gel":"⋛","geq":"≥","geqq":"≧","geqslant":"⩾","gescc":"⪩","ges":"⩾","gesdot":"⪀","gesdoto":"⪂","gesdotol":"⪄","gesl":"⋛︀","gesles":"⪔","Gfr":"𝔊","gfr":"𝔤","gg":"≫","Gg":"⋙","ggg":"⋙","gimel":"ℷ","GJcy":"Ѓ","gjcy":"ѓ","gla":"⪥","gl":"≷","glE":"⪒","glj":"⪤","gnap":"⪊","gnapprox":"⪊","gne":"⪈","gnE":"≩","gneq":"⪈","gneqq":"≩","gnsim":"⋧","Gopf":"𝔾","gopf":"𝕘","grave":"`","GreaterEqual":"≥","GreaterEqualLess":"⋛","GreaterFullEqual":"≧","GreaterGreater":"⪢","GreaterLess":"≷","GreaterSlantEqual":"⩾","GreaterTilde":"≳","Gscr":"𝒢","gscr":"ℊ","gsim":"≳","gsime":"⪎","gsiml":"⪐","gtcc":"⪧","gtcir":"⩺","gt":">","GT":">","Gt":"≫","gtdot":"⋗","gtlPar":"⦕","gtquest":"⩼","gtrapprox":"⪆","gtrarr":"⥸","gtrdot":"⋗","gtreqless":"⋛","gtreqqless":"⪌","gtrless":"≷","gtrsim":"≳","gvertneqq":"≩︀","gvnE":"≩︀","Hacek":"ˇ","hairsp":" ","half":"½","hamilt":"ℋ","HARDcy":"Ъ","hardcy":"ъ","harrcir":"⥈","harr":"↔","hArr":"⇔","harrw":"↭","Hat":"^","hbar":"ℏ","Hcirc":"Ĥ","hcirc":"ĥ","hearts":"♥","heartsuit":"♥","hellip":"…","hercon":"⊹","hfr":"𝔥","Hfr":"ℌ","HilbertSpace":"ℋ","hksearow":"⤥","hkswarow":"⤦","hoarr":"⇿","homtht":"∻","hookleftarrow":"↩","hookrightarrow":"↪","hopf":"𝕙","Hopf":"ℍ","horbar":"―","HorizontalLine":"─","hscr":"𝒽","Hscr":"ℋ","hslash":"ℏ","Hstrok":"Ħ","hstrok":"ħ","HumpDownHump":"≎","HumpEqual":"≏","hybull":"⁃","hyphen":"‐","Iacute":"Í","iacute":"í","ic":"⁣","Icirc":"Î","icirc":"î","Icy":"И","icy":"и","Idot":"İ","IEcy":"Е","iecy":"е","iexcl":"¡","iff":"⇔","ifr":"𝔦","Ifr":"ℑ","Igrave":"Ì","igrave":"ì","ii":"ⅈ","iiiint":"⨌","iiint":"∭","iinfin":"⧜","iiota":"℩","IJlig":"Ĳ","ijlig":"ĳ","Imacr":"Ī","imacr":"ī","image":"ℑ","ImaginaryI":"ⅈ","imagline":"ℐ","imagpart":"ℑ","imath":"ı","Im":"ℑ","imof":"⊷","imped":"Ƶ","Implies":"⇒","incare":"℅","in":"∈","infin":"∞","infintie":"⧝","inodot":"ı","intcal":"⊺","int":"∫","Int":"∬","integers":"ℤ","Integral":"∫","intercal":"⊺","Intersection":"⋂","intlarhk":"⨗","intprod":"⨼","InvisibleComma":"⁣","InvisibleTimes":"⁢","IOcy":"Ё","iocy":"ё","Iogon":"Į","iogon":"į","Iopf":"𝕀","iopf":"𝕚","Iota":"Ι","iota":"ι","iprod":"⨼","iquest":"¿","iscr":"𝒾","Iscr":"ℐ","isin":"∈","isindot":"⋵","isinE":"⋹","isins":"⋴","isinsv":"⋳","isinv":"∈","it":"⁢","Itilde":"Ĩ","itilde":"ĩ","Iukcy":"І","iukcy":"і","Iuml":"Ï","iuml":"ï","Jcirc":"Ĵ","jcirc":"ĵ","Jcy":"Й","jcy":"й","Jfr":"𝔍","jfr":"𝔧","jmath":"ȷ","Jopf":"𝕁","jopf":"𝕛","Jscr":"𝒥","jscr":"𝒿","Jsercy":"Ј","jsercy":"ј","Jukcy":"Є","jukcy":"є","Kappa":"Κ","kappa":"κ","kappav":"ϰ","Kcedil":"Ķ","kcedil":"ķ","Kcy":"К","kcy":"к","Kfr":"𝔎","kfr":"𝔨","kgreen":"ĸ","KHcy":"Х","khcy":"х","KJcy":"Ќ","kjcy":"ќ","Kopf":"𝕂","kopf":"𝕜","Kscr":"𝒦","kscr":"𝓀","lAarr":"⇚","Lacute":"Ĺ","lacute":"ĺ","laemptyv":"⦴","lagran":"ℒ","Lambda":"Λ","lambda":"λ","lang":"⟨","Lang":"⟪","langd":"⦑","langle":"⟨","lap":"⪅","Laplacetrf":"ℒ","laquo":"«","larrb":"⇤","larrbfs":"⤟","larr":"←","Larr":"↞","lArr":"⇐","larrfs":"⤝","larrhk":"↩","larrlp":"↫","larrpl":"⤹","larrsim":"⥳","larrtl":"↢","latail":"⤙","lAtail":"⤛","lat":"⪫","late":"⪭","lates":"⪭︀","lbarr":"⤌","lBarr":"⤎","lbbrk":"❲","lbrace":"{","lbrack":"[","lbrke":"⦋","lbrksld":"⦏","lbrkslu":"⦍","Lcaron":"Ľ","lcaron":"ľ","Lcedil":"Ļ","lcedil":"ļ","lceil":"⌈","lcub":"{","Lcy":"Л","lcy":"л","ldca":"⤶","ldquo":"“","ldquor":"„","ldrdhar":"⥧","ldrushar":"⥋","ldsh":"↲","le":"≤","lE":"≦","LeftAngleBracket":"⟨","LeftArrowBar":"⇤","leftarrow":"←","LeftArrow":"←","Leftarrow":"⇐","LeftArrowRightArrow":"⇆","leftarrowtail":"↢","LeftCeiling":"⌈","LeftDoubleBracket":"⟦","LeftDownTeeVector":"⥡","LeftDownVectorBar":"⥙","LeftDownVector":"⇃","LeftFloor":"⌊","leftharpoondown":"↽","leftharpoonup":"↼","leftleftarrows":"⇇","leftrightarrow":"↔","LeftRightArrow":"↔","Leftrightarrow":"⇔","leftrightarrows":"⇆","leftrightharpoons":"⇋","leftrightsquigarrow":"↭","LeftRightVector":"⥎","LeftTeeArrow":"↤","LeftTee":"⊣","LeftTeeVector":"⥚","leftthreetimes":"⋋","LeftTriangleBar":"⧏","LeftTriangle":"⊲","LeftTriangleEqual":"⊴","LeftUpDownVector":"⥑","LeftUpTeeVector":"⥠","LeftUpVectorBar":"⥘","LeftUpVector":"↿","LeftVectorBar":"⥒","LeftVector":"↼","lEg":"⪋","leg":"⋚","leq":"≤","leqq":"≦","leqslant":"⩽","lescc":"⪨","les":"⩽","lesdot":"⩿","lesdoto":"⪁","lesdotor":"⪃","lesg":"⋚︀","lesges":"⪓","lessapprox":"⪅","lessdot":"⋖","lesseqgtr":"⋚","lesseqqgtr":"⪋","LessEqualGreater":"⋚","LessFullEqual":"≦","LessGreater":"≶","lessgtr":"≶","LessLess":"⪡","lesssim":"≲","LessSlantEqual":"⩽","LessTilde":"≲","lfisht":"⥼","lfloor":"⌊","Lfr":"𝔏","lfr":"𝔩","lg":"≶","lgE":"⪑","lHar":"⥢","lhard":"↽","lharu":"↼","lharul":"⥪","lhblk":"▄","LJcy":"Љ","ljcy":"љ","llarr":"⇇","ll":"≪","Ll":"⋘","llcorner":"⌞","Lleftarrow":"⇚","llhard":"⥫","lltri":"◺","Lmidot":"Ŀ","lmidot":"ŀ","lmoustache":"⎰","lmoust":"⎰","lnap":"⪉","lnapprox":"⪉","lne":"⪇","lnE":"≨","lneq":"⪇","lneqq":"≨","lnsim":"⋦","loang":"⟬","loarr":"⇽","lobrk":"⟦","longleftarrow":"⟵","LongLeftArrow":"⟵","Longleftarrow":"⟸","longleftrightarrow":"⟷","LongLeftRightArrow":"⟷","Longleftrightarrow":"⟺","longmapsto":"⟼","longrightarrow":"⟶","LongRightArrow":"⟶","Longrightarrow":"⟹","looparrowleft":"↫","looparrowright":"↬","lopar":"⦅","Lopf":"𝕃","lopf":"𝕝","loplus":"⨭","lotimes":"⨴","lowast":"∗","lowbar":"_","LowerLeftArrow":"↙","LowerRightArrow":"↘","loz":"◊","lozenge":"◊","lozf":"⧫","lpar":"(","lparlt":"⦓","lrarr":"⇆","lrcorner":"⌟","lrhar":"⇋","lrhard":"⥭","lrm":"‎","lrtri":"⊿","lsaquo":"‹","lscr":"𝓁","Lscr":"ℒ","lsh":"↰","Lsh":"↰","lsim":"≲","lsime":"⪍","lsimg":"⪏","lsqb":"[","lsquo":"‘","lsquor":"‚","Lstrok":"Ł","lstrok":"ł","ltcc":"⪦","ltcir":"⩹","lt":"<","LT":"<","Lt":"≪","ltdot":"⋖","lthree":"⋋","ltimes":"⋉","ltlarr":"⥶","ltquest":"⩻","ltri":"◃","ltrie":"⊴","ltrif":"◂","ltrPar":"⦖","lurdshar":"⥊","luruhar":"⥦","lvertneqq":"≨︀","lvnE":"≨︀","macr":"¯","male":"♂","malt":"✠","maltese":"✠","Map":"⤅","map":"↦","mapsto":"↦","mapstodown":"↧","mapstoleft":"↤","mapstoup":"↥","marker":"▮","mcomma":"⨩","Mcy":"М","mcy":"м","mdash":"—","mDDot":"∺","measuredangle":"∡","MediumSpace":" ","Mellintrf":"ℳ","Mfr":"𝔐","mfr":"𝔪","mho":"℧","micro":"µ","midast":"*","midcir":"⫰","mid":"∣","middot":"·","minusb":"⊟","minus":"−","minusd":"∸","minusdu":"⨪","MinusPlus":"∓","mlcp":"⫛","mldr":"…","mnplus":"∓","models":"⊧","Mopf":"𝕄","mopf":"𝕞","mp":"∓","mscr":"𝓂","Mscr":"ℳ","mstpos":"∾","Mu":"Μ","mu":"μ","multimap":"⊸","mumap":"⊸","nabla":"∇","Nacute":"Ń","nacute":"ń","nang":"∠⃒","nap":"≉","napE":"⩰̸","napid":"≋̸","napos":"ŉ","napprox":"≉","natural":"♮","naturals":"ℕ","natur":"♮","nbsp":" ","nbump":"≎̸","nbumpe":"≏̸","ncap":"⩃","Ncaron":"Ň","ncaron":"ň","Ncedil":"Ņ","ncedil":"ņ","ncong":"≇","ncongdot":"⩭̸","ncup":"⩂","Ncy":"Н","ncy":"н","ndash":"–","nearhk":"⤤","nearr":"↗","neArr":"⇗","nearrow":"↗","ne":"≠","nedot":"≐̸","NegativeMediumSpace":"​","NegativeThickSpace":"​","NegativeThinSpace":"​","NegativeVeryThinSpace":"​","nequiv":"≢","nesear":"⤨","nesim":"≂̸","NestedGreaterGreater":"≫","NestedLessLess":"≪","NewLine":"\n","nexist":"∄","nexists":"∄","Nfr":"𝔑","nfr":"𝔫","ngE":"≧̸","nge":"≱","ngeq":"≱","ngeqq":"≧̸","ngeqslant":"⩾̸","nges":"⩾̸","nGg":"⋙̸","ngsim":"≵","nGt":"≫⃒","ngt":"≯","ngtr":"≯","nGtv":"≫̸","nharr":"↮","nhArr":"⇎","nhpar":"⫲","ni":"∋","nis":"⋼","nisd":"⋺","niv":"∋","NJcy":"Њ","njcy":"њ","nlarr":"↚","nlArr":"⇍","nldr":"‥","nlE":"≦̸","nle":"≰","nleftarrow":"↚","nLeftarrow":"⇍","nleftrightarrow":"↮","nLeftrightarrow":"⇎","nleq":"≰","nleqq":"≦̸","nleqslant":"⩽̸","nles":"⩽̸","nless":"≮","nLl":"⋘̸","nlsim":"≴","nLt":"≪⃒","nlt":"≮","nltri":"⋪","nltrie":"⋬","nLtv":"≪̸","nmid":"∤","NoBreak":"⁠","NonBreakingSpace":" ","nopf":"𝕟","Nopf":"ℕ","Not":"⫬","not":"¬","NotCongruent":"≢","NotCupCap":"≭","NotDoubleVerticalBar":"∦","NotElement":"∉","NotEqual":"≠","NotEqualTilde":"≂̸","NotExists":"∄","NotGreater":"≯","NotGreaterEqual":"≱","NotGreaterFullEqual":"≧̸","NotGreaterGreater":"≫̸","NotGreaterLess":"≹","NotGreaterSlantEqual":"⩾̸","NotGreaterTilde":"≵","NotHumpDownHump":"≎̸","NotHumpEqual":"≏̸","notin":"∉","notindot":"⋵̸","notinE":"⋹̸","notinva":"∉","notinvb":"⋷","notinvc":"⋶","NotLeftTriangleBar":"⧏̸","NotLeftTriangle":"⋪","NotLeftTriangleEqual":"⋬","NotLess":"≮","NotLessEqual":"≰","NotLessGreater":"≸","NotLessLess":"≪̸","NotLessSlantEqual":"⩽̸","NotLessTilde":"≴","NotNestedGreaterGreater":"⪢̸","NotNestedLessLess":"⪡̸","notni":"∌","notniva":"∌","notnivb":"⋾","notnivc":"⋽","NotPrecedes":"⊀","NotPrecedesEqual":"⪯̸","NotPrecedesSlantEqual":"⋠","NotReverseElement":"∌","NotRightTriangleBar":"⧐̸","NotRightTriangle":"⋫","NotRightTriangleEqual":"⋭","NotSquareSubset":"⊏̸","NotSquareSubsetEqual":"⋢","NotSquareSuperset":"⊐̸","NotSquareSupersetEqual":"⋣","NotSubset":"⊂⃒","NotSubsetEqual":"⊈","NotSucceeds":"⊁","NotSucceedsEqual":"⪰̸","NotSucceedsSlantEqual":"⋡","NotSucceedsTilde":"≿̸","NotSuperset":"⊃⃒","NotSupersetEqual":"⊉","NotTilde":"≁","NotTildeEqual":"≄","NotTildeFullEqual":"≇","NotTildeTilde":"≉","NotVerticalBar":"∤","nparallel":"∦","npar":"∦","nparsl":"⫽⃥","npart":"∂̸","npolint":"⨔","npr":"⊀","nprcue":"⋠","nprec":"⊀","npreceq":"⪯̸","npre":"⪯̸","nrarrc":"⤳̸","nrarr":"↛","nrArr":"⇏","nrarrw":"↝̸","nrightarrow":"↛","nRightarrow":"⇏","nrtri":"⋫","nrtrie":"⋭","nsc":"⊁","nsccue":"⋡","nsce":"⪰̸","Nscr":"𝒩","nscr":"𝓃","nshortmid":"∤","nshortparallel":"∦","nsim":"≁","nsime":"≄","nsimeq":"≄","nsmid":"∤","nspar":"∦","nsqsube":"⋢","nsqsupe":"⋣","nsub":"⊄","nsubE":"⫅̸","nsube":"⊈","nsubset":"⊂⃒","nsubseteq":"⊈","nsubseteqq":"⫅̸","nsucc":"⊁","nsucceq":"⪰̸","nsup":"⊅","nsupE":"⫆̸","nsupe":"⊉","nsupset":"⊃⃒","nsupseteq":"⊉","nsupseteqq":"⫆̸","ntgl":"≹","Ntilde":"Ñ","ntilde":"ñ","ntlg":"≸","ntriangleleft":"⋪","ntrianglelefteq":"⋬","ntriangleright":"⋫","ntrianglerighteq":"⋭","Nu":"Ν","nu":"ν","num":"#","numero":"№","numsp":" ","nvap":"≍⃒","nvdash":"⊬","nvDash":"⊭","nVdash":"⊮","nVDash":"⊯","nvge":"≥⃒","nvgt":">⃒","nvHarr":"⤄","nvinfin":"⧞","nvlArr":"⤂","nvle":"≤⃒","nvlt":"<⃒","nvltrie":"⊴⃒","nvrArr":"⤃","nvrtrie":"⊵⃒","nvsim":"∼⃒","nwarhk":"⤣","nwarr":"↖","nwArr":"⇖","nwarrow":"↖","nwnear":"⤧","Oacute":"Ó","oacute":"ó","oast":"⊛","Ocirc":"Ô","ocirc":"ô","ocir":"⊚","Ocy":"О","ocy":"о","odash":"⊝","Odblac":"Ő","odblac":"ő","odiv":"⨸","odot":"⊙","odsold":"⦼","OElig":"Œ","oelig":"œ","ofcir":"⦿","Ofr":"𝔒","ofr":"𝔬","ogon":"˛","Ograve":"Ò","ograve":"ò","ogt":"⧁","ohbar":"⦵","ohm":"Ω","oint":"∮","olarr":"↺","olcir":"⦾","olcross":"⦻","oline":"‾","olt":"⧀","Omacr":"Ō","omacr":"ō","Omega":"Ω","omega":"ω","Omicron":"Ο","omicron":"ο","omid":"⦶","ominus":"⊖","Oopf":"𝕆","oopf":"𝕠","opar":"⦷","OpenCurlyDoubleQuote":"“","OpenCurlyQuote":"‘","operp":"⦹","oplus":"⊕","orarr":"↻","Or":"⩔","or":"∨","ord":"⩝","order":"ℴ","orderof":"ℴ","ordf":"ª","ordm":"º","origof":"⊶","oror":"⩖","orslope":"⩗","orv":"⩛","oS":"Ⓢ","Oscr":"𝒪","oscr":"ℴ","Oslash":"Ø","oslash":"ø","osol":"⊘","Otilde":"Õ","otilde":"õ","otimesas":"⨶","Otimes":"⨷","otimes":"⊗","Ouml":"Ö","ouml":"ö","ovbar":"⌽","OverBar":"‾","OverBrace":"⏞","OverBracket":"⎴","OverParenthesis":"⏜","para":"¶","parallel":"∥","par":"∥","parsim":"⫳","parsl":"⫽","part":"∂","PartialD":"∂","Pcy":"П","pcy":"п","percnt":"%","period":".","permil":"‰","perp":"⊥","pertenk":"‱","Pfr":"𝔓","pfr":"𝔭","Phi":"Φ","phi":"φ","phiv":"ϕ","phmmat":"ℳ","phone":"☎","Pi":"Π","pi":"π","pitchfork":"⋔","piv":"ϖ","planck":"ℏ","planckh":"ℎ","plankv":"ℏ","plusacir":"⨣","plusb":"⊞","pluscir":"⨢","plus":"+","plusdo":"∔","plusdu":"⨥","pluse":"⩲","PlusMinus":"±","plusmn":"±","plussim":"⨦","plustwo":"⨧","pm":"±","Poincareplane":"ℌ","pointint":"⨕","popf":"𝕡","Popf":"ℙ","pound":"£","prap":"⪷","Pr":"⪻","pr":"≺","prcue":"≼","precapprox":"⪷","prec":"≺","preccurlyeq":"≼","Precedes":"≺","PrecedesEqual":"⪯","PrecedesSlantEqual":"≼","PrecedesTilde":"≾","preceq":"⪯","precnapprox":"⪹","precneqq":"⪵","precnsim":"⋨","pre":"⪯","prE":"⪳","precsim":"≾","prime":"′","Prime":"″","primes":"ℙ","prnap":"⪹","prnE":"⪵","prnsim":"⋨","prod":"∏","Product":"∏","profalar":"⌮","profline":"⌒","profsurf":"⌓","prop":"∝","Proportional":"∝","Proportion":"∷","propto":"∝","prsim":"≾","prurel":"⊰","Pscr":"𝒫","pscr":"𝓅","Psi":"Ψ","psi":"ψ","puncsp":" ","Qfr":"𝔔","qfr":"𝔮","qint":"⨌","qopf":"𝕢","Qopf":"ℚ","qprime":"⁗","Qscr":"𝒬","qscr":"𝓆","quaternions":"ℍ","quatint":"⨖","quest":"?","questeq":"≟","quot":"\"","QUOT":"\"","rAarr":"⇛","race":"∽̱","Racute":"Ŕ","racute":"ŕ","radic":"√","raemptyv":"⦳","rang":"⟩","Rang":"⟫","rangd":"⦒","range":"⦥","rangle":"⟩","raquo":"»","rarrap":"⥵","rarrb":"⇥","rarrbfs":"⤠","rarrc":"⤳","rarr":"→","Rarr":"↠","rArr":"⇒","rarrfs":"⤞","rarrhk":"↪","rarrlp":"↬","rarrpl":"⥅","rarrsim":"⥴","Rarrtl":"⤖","rarrtl":"↣","rarrw":"↝","ratail":"⤚","rAtail":"⤜","ratio":"∶","rationals":"ℚ","rbarr":"⤍","rBarr":"⤏","RBarr":"⤐","rbbrk":"❳","rbrace":"}","rbrack":"]","rbrke":"⦌","rbrksld":"⦎","rbrkslu":"⦐","Rcaron":"Ř","rcaron":"ř","Rcedil":"Ŗ","rcedil":"ŗ","rceil":"⌉","rcub":"}","Rcy":"Р","rcy":"р","rdca":"⤷","rdldhar":"⥩","rdquo":"”","rdquor":"”","rdsh":"↳","real":"ℜ","realine":"ℛ","realpart":"ℜ","reals":"ℝ","Re":"ℜ","rect":"▭","reg":"®","REG":"®","ReverseElement":"∋","ReverseEquilibrium":"⇋","ReverseUpEquilibrium":"⥯","rfisht":"⥽","rfloor":"⌋","rfr":"𝔯","Rfr":"ℜ","rHar":"⥤","rhard":"⇁","rharu":"⇀","rharul":"⥬","Rho":"Ρ","rho":"ρ","rhov":"ϱ","RightAngleBracket":"⟩","RightArrowBar":"⇥","rightarrow":"→","RightArrow":"→","Rightarrow":"⇒","RightArrowLeftArrow":"⇄","rightarrowtail":"↣","RightCeiling":"⌉","RightDoubleBracket":"⟧","RightDownTeeVector":"⥝","RightDownVectorBar":"⥕","RightDownVector":"⇂","RightFloor":"⌋","rightharpoondown":"⇁","rightharpoonup":"⇀","rightleftarrows":"⇄","rightleftharpoons":"⇌","rightrightarrows":"⇉","rightsquigarrow":"↝","RightTeeArrow":"↦","RightTee":"⊢","RightTeeVector":"⥛","rightthreetimes":"⋌","RightTriangleBar":"⧐","RightTriangle":"⊳","RightTriangleEqual":"⊵","RightUpDownVector":"⥏","RightUpTeeVector":"⥜","RightUpVectorBar":"⥔","RightUpVector":"↾","RightVectorBar":"⥓","RightVector":"⇀","ring":"˚","risingdotseq":"≓","rlarr":"⇄","rlhar":"⇌","rlm":"‏","rmoustache":"⎱","rmoust":"⎱","rnmid":"⫮","roang":"⟭","roarr":"⇾","robrk":"⟧","ropar":"⦆","ropf":"𝕣","Ropf":"ℝ","roplus":"⨮","rotimes":"⨵","RoundImplies":"⥰","rpar":")","rpargt":"⦔","rppolint":"⨒","rrarr":"⇉","Rrightarrow":"⇛","rsaquo":"›","rscr":"𝓇","Rscr":"ℛ","rsh":"↱","Rsh":"↱","rsqb":"]","rsquo":"’","rsquor":"’","rthree":"⋌","rtimes":"⋊","rtri":"▹","rtrie":"⊵","rtrif":"▸","rtriltri":"⧎","RuleDelayed":"⧴","ruluhar":"⥨","rx":"℞","Sacute":"Ś","sacute":"ś","sbquo":"‚","scap":"⪸","Scaron":"Š","scaron":"š","Sc":"⪼","sc":"≻","sccue":"≽","sce":"⪰","scE":"⪴","Scedil":"Ş","scedil":"ş","Scirc":"Ŝ","scirc":"ŝ","scnap":"⪺","scnE":"⪶","scnsim":"⋩","scpolint":"⨓","scsim":"≿","Scy":"С","scy":"с","sdotb":"⊡","sdot":"⋅","sdote":"⩦","searhk":"⤥","searr":"↘","seArr":"⇘","searrow":"↘","sect":"§","semi":";","seswar":"⤩","setminus":"∖","setmn":"∖","sext":"✶","Sfr":"𝔖","sfr":"𝔰","sfrown":"⌢","sharp":"♯","SHCHcy":"Щ","shchcy":"щ","SHcy":"Ш","shcy":"ш","ShortDownArrow":"↓","ShortLeftArrow":"←","shortmid":"∣","shortparallel":"∥","ShortRightArrow":"→","ShortUpArrow":"↑","shy":"­","Sigma":"Σ","sigma":"σ","sigmaf":"ς","sigmav":"ς","sim":"∼","simdot":"⩪","sime":"≃","simeq":"≃","simg":"⪞","simgE":"⪠","siml":"⪝","simlE":"⪟","simne":"≆","simplus":"⨤","simrarr":"⥲","slarr":"←","SmallCircle":"∘","smallsetminus":"∖","smashp":"⨳","smeparsl":"⧤","smid":"∣","smile":"⌣","smt":"⪪","smte":"⪬","smtes":"⪬︀","SOFTcy":"Ь","softcy":"ь","solbar":"⌿","solb":"⧄","sol":"/","Sopf":"𝕊","sopf":"𝕤","spades":"♠","spadesuit":"♠","spar":"∥","sqcap":"⊓","sqcaps":"⊓︀","sqcup":"⊔","sqcups":"⊔︀","Sqrt":"√","sqsub":"⊏","sqsube":"⊑","sqsubset":"⊏","sqsubseteq":"⊑","sqsup":"⊐","sqsupe":"⊒","sqsupset":"⊐","sqsupseteq":"⊒","square":"□","Square":"□","SquareIntersection":"⊓","SquareSubset":"⊏","SquareSubsetEqual":"⊑","SquareSuperset":"⊐","SquareSupersetEqual":"⊒","SquareUnion":"⊔","squarf":"▪","squ":"□","squf":"▪","srarr":"→","Sscr":"𝒮","sscr":"𝓈","ssetmn":"∖","ssmile":"⌣","sstarf":"⋆","Star":"⋆","star":"☆","starf":"★","straightepsilon":"ϵ","straightphi":"ϕ","strns":"¯","sub":"⊂","Sub":"⋐","subdot":"⪽","subE":"⫅","sube":"⊆","subedot":"⫃","submult":"⫁","subnE":"⫋","subne":"⊊","subplus":"⪿","subrarr":"⥹","subset":"⊂","Subset":"⋐","subseteq":"⊆","subseteqq":"⫅","SubsetEqual":"⊆","subsetneq":"⊊","subsetneqq":"⫋","subsim":"⫇","subsub":"⫕","subsup":"⫓","succapprox":"⪸","succ":"≻","succcurlyeq":"≽","Succeeds":"≻","SucceedsEqual":"⪰","SucceedsSlantEqual":"≽","SucceedsTilde":"≿","succeq":"⪰","succnapprox":"⪺","succneqq":"⪶","succnsim":"⋩","succsim":"≿","SuchThat":"∋","sum":"∑","Sum":"∑","sung":"♪","sup1":"¹","sup2":"²","sup3":"³","sup":"⊃","Sup":"⋑","supdot":"⪾","supdsub":"⫘","supE":"⫆","supe":"⊇","supedot":"⫄","Superset":"⊃","SupersetEqual":"⊇","suphsol":"⟉","suphsub":"⫗","suplarr":"⥻","supmult":"⫂","supnE":"⫌","supne":"⊋","supplus":"⫀","supset":"⊃","Supset":"⋑","supseteq":"⊇","supseteqq":"⫆","supsetneq":"⊋","supsetneqq":"⫌","supsim":"⫈","supsub":"⫔","supsup":"⫖","swarhk":"⤦","swarr":"↙","swArr":"⇙","swarrow":"↙","swnwar":"⤪","szlig":"ß","Tab":"\t","target":"⌖","Tau":"Τ","tau":"τ","tbrk":"⎴","Tcaron":"Ť","tcaron":"ť","Tcedil":"Ţ","tcedil":"ţ","Tcy":"Т","tcy":"т","tdot":"⃛","telrec":"⌕","Tfr":"𝔗","tfr":"𝔱","there4":"∴","therefore":"∴","Therefore":"∴","Theta":"Θ","theta":"θ","thetasym":"ϑ","thetav":"ϑ","thickapprox":"≈","thicksim":"∼","ThickSpace":"  ","ThinSpace":" ","thinsp":" ","thkap":"≈","thksim":"∼","THORN":"Þ","thorn":"þ","tilde":"˜","Tilde":"∼","TildeEqual":"≃","TildeFullEqual":"≅","TildeTilde":"≈","timesbar":"⨱","timesb":"⊠","times":"×","timesd":"⨰","tint":"∭","toea":"⤨","topbot":"⌶","topcir":"⫱","top":"⊤","Topf":"𝕋","topf":"𝕥","topfork":"⫚","tosa":"⤩","tprime":"‴","trade":"™","TRADE":"™","triangle":"▵","triangledown":"▿","triangleleft":"◃","trianglelefteq":"⊴","triangleq":"≜","triangleright":"▹","trianglerighteq":"⊵","tridot":"◬","trie":"≜","triminus":"⨺","TripleDot":"⃛","triplus":"⨹","trisb":"⧍","tritime":"⨻","trpezium":"⏢","Tscr":"𝒯","tscr":"𝓉","TScy":"Ц","tscy":"ц","TSHcy":"Ћ","tshcy":"ћ","Tstrok":"Ŧ","tstrok":"ŧ","twixt":"≬","twoheadleftarrow":"↞","twoheadrightarrow":"↠","Uacute":"Ú","uacute":"ú","uarr":"↑","Uarr":"↟","uArr":"⇑","Uarrocir":"⥉","Ubrcy":"Ў","ubrcy":"ў","Ubreve":"Ŭ","ubreve":"ŭ","Ucirc":"Û","ucirc":"û","Ucy":"У","ucy":"у","udarr":"⇅","Udblac":"Ű","udblac":"ű","udhar":"⥮","ufisht":"⥾","Ufr":"𝔘","ufr":"𝔲","Ugrave":"Ù","ugrave":"ù","uHar":"⥣","uharl":"↿","uharr":"↾","uhblk":"▀","ulcorn":"⌜","ulcorner":"⌜","ulcrop":"⌏","ultri":"◸","Umacr":"Ū","umacr":"ū","uml":"¨","UnderBar":"_","UnderBrace":"⏟","UnderBracket":"⎵","UnderParenthesis":"⏝","Union":"⋃","UnionPlus":"⊎","Uogon":"Ų","uogon":"ų","Uopf":"𝕌","uopf":"𝕦","UpArrowBar":"⤒","uparrow":"↑","UpArrow":"↑","Uparrow":"⇑","UpArrowDownArrow":"⇅","updownarrow":"↕","UpDownArrow":"↕","Updownarrow":"⇕","UpEquilibrium":"⥮","upharpoonleft":"↿","upharpoonright":"↾","uplus":"⊎","UpperLeftArrow":"↖","UpperRightArrow":"↗","upsi":"υ","Upsi":"ϒ","upsih":"ϒ","Upsilon":"Υ","upsilon":"υ","UpTeeArrow":"↥","UpTee":"⊥","upuparrows":"⇈","urcorn":"⌝","urcorner":"⌝","urcrop":"⌎","Uring":"Ů","uring":"ů","urtri":"◹","Uscr":"𝒰","uscr":"𝓊","utdot":"⋰","Utilde":"Ũ","utilde":"ũ","utri":"▵","utrif":"▴","uuarr":"⇈","Uuml":"Ü","uuml":"ü","uwangle":"⦧","vangrt":"⦜","varepsilon":"ϵ","varkappa":"ϰ","varnothing":"∅","varphi":"ϕ","varpi":"ϖ","varpropto":"∝","varr":"↕","vArr":"⇕","varrho":"ϱ","varsigma":"ς","varsubsetneq":"⊊︀","varsubsetneqq":"⫋︀","varsupsetneq":"⊋︀","varsupsetneqq":"⫌︀","vartheta":"ϑ","vartriangleleft":"⊲","vartriangleright":"⊳","vBar":"⫨","Vbar":"⫫","vBarv":"⫩","Vcy":"В","vcy":"в","vdash":"⊢","vDash":"⊨","Vdash":"⊩","VDash":"⊫","Vdashl":"⫦","veebar":"⊻","vee":"∨","Vee":"⋁","veeeq":"≚","vellip":"⋮","verbar":"|","Verbar":"‖","vert":"|","Vert":"‖","VerticalBar":"∣","VerticalLine":"|","VerticalSeparator":"❘","VerticalTilde":"≀","VeryThinSpace":" ","Vfr":"𝔙","vfr":"𝔳","vltri":"⊲","vnsub":"⊂⃒","vnsup":"⊃⃒","Vopf":"𝕍","vopf":"𝕧","vprop":"∝","vrtri":"⊳","Vscr":"𝒱","vscr":"𝓋","vsubnE":"⫋︀","vsubne":"⊊︀","vsupnE":"⫌︀","vsupne":"⊋︀","Vvdash":"⊪","vzigzag":"⦚","Wcirc":"Ŵ","wcirc":"ŵ","wedbar":"⩟","wedge":"∧","Wedge":"⋀","wedgeq":"≙","weierp":"℘","Wfr":"𝔚","wfr":"𝔴","Wopf":"𝕎","wopf":"𝕨","wp":"℘","wr":"≀","wreath":"≀","Wscr":"𝒲","wscr":"𝓌","xcap":"⋂","xcirc":"◯","xcup":"⋃","xdtri":"▽","Xfr":"𝔛","xfr":"𝔵","xharr":"⟷","xhArr":"⟺","Xi":"Ξ","xi":"ξ","xlarr":"⟵","xlArr":"⟸","xmap":"⟼","xnis":"⋻","xodot":"⨀","Xopf":"𝕏","xopf":"𝕩","xoplus":"⨁","xotime":"⨂","xrarr":"⟶","xrArr":"⟹","Xscr":"𝒳","xscr":"𝓍","xsqcup":"⨆","xuplus":"⨄","xutri":"△","xvee":"⋁","xwedge":"⋀","Yacute":"Ý","yacute":"ý","YAcy":"Я","yacy":"я","Ycirc":"Ŷ","ycirc":"ŷ","Ycy":"Ы","ycy":"ы","yen":"¥","Yfr":"𝔜","yfr":"𝔶","YIcy":"Ї","yicy":"ї","Yopf":"𝕐","yopf":"𝕪","Yscr":"𝒴","yscr":"𝓎","YUcy":"Ю","yucy":"ю","yuml":"ÿ","Yuml":"Ÿ","Zacute":"Ź","zacute":"ź","Zcaron":"Ž","zcaron":"ž","Zcy":"З","zcy":"з","Zdot":"Ż","zdot":"ż","zeetrf":"ℨ","ZeroWidthSpace":"​","Zeta":"Ζ","zeta":"ζ","zfr":"𝔷","Zfr":"ℨ","ZHcy":"Ж","zhcy":"ж","zigrarr":"⇝","zopf":"𝕫","Zopf":"ℤ","Zscr":"𝒵","zscr":"𝓏","zwj":"‍","zwnj":"‌"}
 
 /***/ }),
 
-/***/ 437:
+/***/ 434:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(435);
+var content = __webpack_require__(432);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -2534,7 +2177,7 @@ var update = __webpack_require__(395)("30da0989", content, true);
 
 /***/ }),
 
-/***/ 438:
+/***/ 435:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2690,7 +2333,7 @@ function createNormalizer() {
 function compile(self) {
 
   // Load & clone RE patterns.
-  var re = self.re = __webpack_require__(439)(self.__opts__);
+  var re = self.re = __webpack_require__(436)(self.__opts__);
 
   // Define dynamic patterns
   var tlds = self.__tlds__.slice();
@@ -3179,7 +2822,7 @@ module.exports = LinkifyIt;
 
 /***/ }),
 
-/***/ 439:
+/***/ 436:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3364,7 +3007,7 @@ module.exports = function (opts) {
 
 /***/ }),
 
-/***/ 440:
+/***/ 437:
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseClamp = __webpack_require__(417),
@@ -3410,6 +3053,332 @@ function endsWith(string, target, position) {
 }
 
 module.exports = endsWith;
+
+
+/***/ }),
+
+/***/ 438:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Process front matter and pass to cb
+//
+
+
+module.exports = function front_matter_plugin(md, cb) {
+  var min_markers = 3,
+      marker_str  = '-',
+      marker_char = marker_str.charCodeAt(0),
+      marker_len  = marker_str.length
+
+  function frontMatter(state, startLine, endLine, silent) {
+    var pos, nextLine, marker_count, markup, token,
+        old_parent, old_line_max, start_content,
+        auto_closed = false,
+        start = state.bMarks[startLine] + state.tShift[startLine],
+        max = state.eMarks[startLine];
+
+    // Check out the first character of the first line quickly,
+    // this should filter out non-front matter
+    //
+    if (startLine !== 0 || marker_char !== state.src.charCodeAt(0)) { return false; }
+
+    // Check out the rest of the marker string
+    //
+    for (pos = start + 1; pos <= max; pos++) { // while pos <= 3
+      if (marker_str[(pos - start) % marker_len] !== state.src[pos]) {
+        start_content = pos + 1
+        break;
+      }
+    }
+
+    marker_count = Math.floor((pos - start) / marker_len);
+
+    if (marker_count < min_markers) { return false; }
+    pos -= (pos - start) % marker_len;
+
+    // Since start is found, we can report success here in validation mode
+    //
+    if (silent) { return true; }
+
+    // Search for the end of the block
+    //
+    nextLine = startLine;
+
+    for (;;) {
+      nextLine++;
+      if (nextLine >= endLine) {
+        // unclosed block should be autoclosed by end of document.
+        // also block seems to be autoclosed by end of parent
+        break;
+      }
+
+      start = state.bMarks[nextLine] + state.tShift[nextLine];
+      max = state.eMarks[nextLine];
+
+      if (start < max && state.sCount[nextLine] < state.blkIndent) {
+        // non-empty line with negative indent should stop the list:
+        // - ```
+        //  test
+        break;
+      }
+
+      if (marker_char !== state.src.charCodeAt(start)) { continue; }
+
+      if (state.sCount[nextLine] - state.blkIndent >= 4) {
+        // closing fence should be indented less than 4 spaces
+        continue;
+      }
+
+      for (pos = start + 1; pos <= max; pos++) {
+        if (marker_str[(pos - start) % marker_len] !== state.src[pos]) {
+          break;
+        }
+      }
+
+      // closing code fence must be at least as long as the opening one
+      if (Math.floor((pos - start) / marker_len) < marker_count) { continue; }
+
+      // make sure tail has spaces only
+      pos -= (pos - start) % marker_len;
+      pos = state.skipSpaces(pos);
+
+      if (pos < max) { continue; }
+
+      // found!
+      auto_closed = true;
+      break;
+    }
+
+    old_parent = state.parentType;
+    old_line_max = state.lineMax;
+    state.parentType = 'container';
+
+    // this will prevent lazy continuations from ever going past our end marker
+    state.lineMax = nextLine;
+
+    token        = state.push('front_matter', null, 0);
+    token.hidden = true;
+    token.markup = state.src.slice(startLine, pos)
+    token.block  = true;
+    token.map    = [ startLine, pos ];
+
+    state.parentType = old_parent;
+    state.lineMax = old_line_max;
+    state.line = nextLine + (auto_closed ? 1 : 0);
+
+    cb(state.src.slice(start_content, start - 1))
+
+    return true;
+  }
+
+  md.block.ruler.before('table', 'front_matter', frontMatter, {
+    alt: [ 'paragraph', 'reference', 'blockquote', 'list' ]
+  });
+};
+
+/***/ }),
+
+/***/ 439:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function replaceAttr(token, attrName, replace, env) {
+    token.attrs.forEach(function (attr) {
+        if (attr[0] === attrName) {
+            attr[1] = replace(attr[1], env, token);
+        }
+    });
+}
+
+module.exports = function (md) {
+    md.core.ruler.after(
+        'inline',
+        'replace-link',
+        function (state) {
+            var replace = md.options.replaceLink;
+            if (typeof replace === 'function') {
+                state.tokens.forEach(function (blockToken) {
+                    if (blockToken.type === 'inline' && blockToken.children) {
+                        blockToken.children.forEach(function (token) {
+                            var type = token.type;
+                            if (type === 'link_open') {
+                                replaceAttr(token, 'href', replace, state.env);
+                            } else if (type === 'image') {
+                                replaceAttr(token, 'src', replace, state.env);
+                            }
+                        }); 
+                    }
+                }); 
+            }
+            return false;
+        }
+    );
+};
+
+/***/ }),
+
+/***/ 440:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Process @[youtube](youtubeVideoID)
+// Process @[vimeo](vimeoVideoID)
+// Process @[vine](vineVideoID)
+// Process @[prezi](preziID)
+
+
+
+
+var yt_regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+function youtube_parser (url) {
+  var match = url.match(yt_regex);
+  return match && match[7].length === 11 ? match[7] : url;
+}
+
+/*eslint-disable max-len */
+var vimeo_regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
+/*eslint-enable max-len */
+function vimeo_parser (url) {
+  var match = url.match(vimeo_regex);
+  return match && typeof match[3] === 'string' ? match[3] : url;
+}
+
+var vine_regex = /^http(?:s?):\/\/(?:www\.)?vine\.co\/v\/([a-zA-Z0-9]{1,13}).*/;
+function vine_parser (url) {
+  var match = url.match(vine_regex);
+  return match && match[1].length === 11 ? match[1] : url;
+}
+
+var prezi_regex = /^https:\/\/prezi.com\/(.[^/]+)/;
+function prezi_parser(url) {
+  var match = url.match(prezi_regex);
+  return match ? match[1] : url;
+}
+
+var EMBED_REGEX = /@\[([a-zA-Z].+)\]\([\s]*(.*?)[\s]*[\)]/im;
+
+function video_embed(md, options) {
+  function video_return(state, silent) {
+    var serviceEnd,
+      serviceStart,
+      token,
+      oldPos = state.pos;
+
+    if (state.src.charCodeAt(oldPos) !== 0x40/* @ */ ||
+        state.src.charCodeAt(oldPos + 1) !== 0x5B/* [ */) {
+      return false;
+    }
+
+    var match = EMBED_REGEX.exec(state.src);
+
+    if (!match || match.length < 3) {
+      return false;
+    }
+
+    var service = match[1];
+    var videoID = match[2];
+    var serviceLower = service.toLowerCase();
+
+    if (serviceLower === 'youtube') {
+      videoID = youtube_parser(videoID);
+    } else if (serviceLower === 'vimeo') {
+      videoID = vimeo_parser(videoID);
+    } else if (serviceLower === 'vine') {
+      videoID = vine_parser(videoID);
+    } else if (serviceLower === 'prezi') {
+      videoID = prezi_parser(videoID);
+    } else if (!options[serviceLower]) {
+      return false;
+    }
+
+    // If the videoID field is empty, regex currently make it the close parenthesis.
+    if (videoID === ')') {
+      videoID = '';
+    }
+
+    serviceStart = oldPos + 2;
+    serviceEnd = md.helpers.parseLinkLabel(state, oldPos + 1, false);
+
+    //
+    // We found the end of the link, and know for a fact it's a valid link;
+    // so all that's left to do is to call tokenizer.
+    //
+    if (!silent) {
+      state.pos = serviceStart;
+      state.posMax = serviceEnd;
+      state.service = state.src.slice(serviceStart, serviceEnd);
+      var newState = new state.md.inline.State(service, state.md, state.env, []);
+      newState.md.inline.tokenize(newState);
+
+      token = state.push('video', '');
+      token.videoID = videoID;
+      token.service = service;
+      token.level = state.level;
+    }
+
+    state.pos = state.pos + state.src.indexOf(')', state.pos);
+    state.posMax = state.tokens.length;
+    return true;
+  }
+
+  return video_return;
+}
+
+function video_url(service, videoID, options) {
+  switch (service) {
+    case 'youtube':
+      return '//www.youtube.com/embed/' + videoID;
+    case 'vimeo':
+      return '//player.vimeo.com/video/' + videoID;
+    case 'vine':
+      return '//vine.co/v/' + videoID + '/embed/' + options.vine.embed;
+    case 'prezi':
+      return 'https://prezi.com/embed/' + videoID +
+      '/?bgcolor=ffffff&amp;lock_to_path=0&amp;autoplay=0&amp;autohide_ctrls=0&amp;' +
+      'landing_data=bHVZZmNaNDBIWnNjdEVENDRhZDFNZGNIUE43MHdLNWpsdFJLb2ZHanI5N1lQVHkxSHFxazZ0UUNCRHloSXZROHh3PT0&amp;' +
+      'landing_sign=1kD6c0N6aYpMUS0wxnQjxzSqZlEB8qNFdxtdjYhwSuI';
+  }
+}
+
+function tokenize_video(md, options) {
+  function tokenize_return(tokens, idx) {
+    var videoID = md.utils.escapeHtml(tokens[idx].videoID);
+    var service = md.utils.escapeHtml(tokens[idx].service).toLowerCase();
+    return videoID === '' ? '' :
+      '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" id="' +
+      service + 'player" type="text/html" width="' + (options[service].width) +
+      '" height="' + (options[service].height) +
+      '" src="' + options.url(service, videoID, options) +
+      '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
+  }
+
+  return tokenize_return;
+}
+
+var defaults = {
+  url: video_url,
+  youtube: { width: 640, height: 390 },
+  vimeo: { width: 500, height: 281 },
+  vine: { width: 600, height: 600, embed: 'simple' },
+  prezi: { width: 550, height: 400 }
+};
+
+module.exports = function video_plugin(md, options) {
+  if (options) {
+    Object.keys(defaults).forEach(function(key) {
+      if (typeof options[key] === 'undefined') {
+        options[key] = defaults[key];
+      }
+    });
+  } else {
+    options = defaults;
+  }
+  md.renderer.rules.video = tokenize_video(md, options);
+  md.inline.ruler.before('emphasis', 'video', video_embed(md, options));
+};
 
 
 /***/ }),
@@ -3728,7 +3697,7 @@ var Renderer     = __webpack_require__(453);
 var ParserCore   = __webpack_require__(448);
 var ParserBlock  = __webpack_require__(447);
 var ParserInline = __webpack_require__(449);
-var LinkifyIt    = __webpack_require__(438);
+var LinkifyIt    = __webpack_require__(435);
 var mdurl        = __webpack_require__(422);
 var punycode     = __webpack_require__(426);
 
@@ -9183,11 +9152,11 @@ exports.Z   = __webpack_require__(424);
 
 
 /* styles */
-__webpack_require__(437)
+__webpack_require__(434)
 
 var Component = __webpack_require__(8)(
   /* script */
-  __webpack_require__(434),
+  __webpack_require__(431),
   /* template */
   __webpack_require__(492),
   /* scopeId */
@@ -9207,9 +9176,7 @@ module.exports = Component.exports
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "markdown-wrapper"
-  }, [(_vm.frontMatterVisible) ? _c('div', {
-    staticClass: "content-block white-block"
-  }, [_c('pre', [_vm._v(_vm._s(_vm.frontMatter))])]) : _vm._e(), _c('div', {
+  }, [_c('div', {
     ref: "renderedmarkdown",
     staticClass: "rendered-markdown",
     on: {
@@ -9220,41 +9187,60 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ }),
 
-/***/ 493:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Icon_vue__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Icon_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Icon_vue__);
-
-
-__WEBPACK_IMPORTED_MODULE_0__components_Icon_vue___default.a.register({"angle-left":{"width":640,"height":1792,"paths":[{"d":"M627 544q0 13-10 23l-393 393 393 393q10 10 10 23t-10 23l-50 50q-10 10-23 10t-23-10l-466-466q-10-10-10-23t10-23l466-466q10-10 23-10t23 10l50 50q10 10 10 23z"}]}})
-
-
-/***/ }),
-
-/***/ 506:
+/***/ 679:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_awesome_icons_angle_left__ = __webpack_require__(493);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_mutation_types__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_MarkdownRenderer__ = __webpack_require__(491);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_MarkdownRenderer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_MarkdownRenderer__);
+
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'previous-button',
-  methods: {
-    previous: function previous() {
-      return this.$router.go(-1);
+  name: 'about',
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      vm.$store.commit(__WEBPACK_IMPORTED_MODULE_1__store_mutation_types__["o" /* SET_NAV_STATE */], { minimized: false });
+      vm.$store.commit(__WEBPACK_IMPORTED_MODULE_1__store_mutation_types__["p" /* SET_PAGE_STYLE */], undefined);
+    });
+  },
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    this.$store.commit(__WEBPACK_IMPORTED_MODULE_1__store_mutation_types__["o" /* SET_NAV_STATE */], { minimized: true });
+    this.$store.commit(__WEBPACK_IMPORTED_MODULE_1__store_mutation_types__["p" /* SET_PAGE_STYLE */], undefined);
+    next();
+  },
+
+  components: {
+    MarkdownRenderer: __WEBPACK_IMPORTED_MODULE_3__components_MarkdownRenderer___default.a
+  },
+  created: function created() {
+    this.$store.dispatch('setColumnState', 'narrow');
+  },
+  data: function data() {
+    return {
+      navTitle: 'About - Connected Academy'
+    };
+  },
+
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['course']), {
+    markdownUrl: function markdownUrl() {
+      return this.course.baseUri + 'about.md';
     }
-  }
+  })
 });
 
 /***/ }),
 
-/***/ 507:
+/***/ 714:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(394)();
@@ -9262,136 +9248,48 @@ exports = module.exports = __webpack_require__(394)();
 
 
 // module
-exports.push([module.i, ".pure-button[data-v-1adc2319]{transition:all .3s ease;border-radius:4px;background:none;background-color:transparent;border:1px solid #29b474;color:#29b474}.pure-button[data-v-1adc2319]:hover{background:none;background-color:#29b474;color:#fff}.pure-button.full-width[data-v-1adc2319]{display:block;margin-bottom:10px}.pure-button.pure-button-primary[data-v-1adc2319]{background-color:#29b474;color:#fff}.pure-button.pure-button-primary[data-v-1adc2319]:hover{background-color:#25a268}.pure-button.pure-button-white[data-v-1adc2319]{background-color:transparent;border-color:#fff;color:#fff}.pure-button.pure-button-white[data-v-1adc2319]:hover{background-color:rgba(0,0,0,.1)}.pure-button.pure-button-success[data-v-1adc2319]{background-color:#29b474;color:#fff}.pure-button.pure-button-success[data-v-1adc2319]:hover{background-color:#25a268}.pure-button.pure-button-twitter[data-v-1adc2319]{border-radius:25px;background-color:#4099ff;border:none;color:#fff;line-height:50px;padding:0 30px}.pure-button.pure-button-twitter[data-v-1adc2319]:hover{background-color:#2088ff}.pure-button.pure-button-subtle[data-v-1adc2319]{background-color:transparent;border-color:#ccc;color:#666}.pure-button.pure-button-subtle[data-v-1adc2319]:hover{background-color:#e1e1e1;color:#444}.pure-button.pure-button-text[data-v-1adc2319]{border-color:transparent}.pure-button.pure-button-homework[data-v-1adc2319]{background-color:transparent;border-color:#fd3c51;color:#fd3c51}.pure-button.pure-button-homework[data-v-1adc2319]:hover{background-color:#fd3c51;color:#fff}body[data-v-1adc2319],html[data-v-1adc2319]{font-family:Avenir,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.pull-left[data-v-1adc2319]{float:left}.pull-right[data-v-1adc2319]{float:right}.clearfix[data-v-1adc2319]{clear:both;float:none}.fa-icon[data-v-1adc2319]{width:auto;height:1em}.no-margin[data-v-1adc2319]{margin:0!important}.no-padding[data-v-1adc2319]{padding:0!important}.background-white[data-v-1adc2319]{background-color:#fff!important}.text-white[data-v-1adc2319]{color:#fff}.fade-enter-active[data-v-1adc2319],.fade-leave-active[data-v-1adc2319]{transition:opacity .2s}.fade-enter[data-v-1adc2319],.fade-leave-to[data-v-1adc2319]{opacity:0}.fade-enter-to[data-v-1adc2319],.fade-leave[data-v-1adc2319]{opacity:1}.main-container[data-v-1adc2319]{border-radius:4px;position:relative}@media (max-width:800px){.main-container[data-v-1adc2319]{border-radius:0}}.main-container.main-container-padded[data-v-1adc2319]{padding:20px}.content-block[data-v-1adc2319]{border-radius:4px;padding:20px;margin:20px 0 0}@media (max-width:800px){.content-block[data-v-1adc2319]{border-radius:0}}.content-block.white-block[data-v-1adc2319]{background-color:#fff}.icon-margin[data-v-1adc2319]{margin:0 5px}.previous-button[data-v-1adc2319]{transition:all .3s ease;border-radius:26px;color:#fff;display:inline-block;text-align:center;padding:10px 20px;margin-bottom:10px;left:0;right:0;position:relative;padding-left:30px}.previous-button .fa-icon[data-v-1adc2319]{height:20px;padding:0 15px;position:absolute;left:0}.previous-button[data-v-1adc2319]:hover{background-color:hsla(0,0%,100%,.2);cursor:pointer}", "", {"version":3,"sources":["/root/connectedacademy/src/components/PreviousButton.vue"],"names":[],"mappings":"AACA,8BACE,wBAA0B,AAC1B,kBAAmB,AACnB,gBAAiB,AACjB,6BAA8B,AAC9B,yBAA0B,AAC1B,aAAe,CAChB,AACD,oCACE,gBAAiB,AACjB,yBAA0B,AAC1B,UAAY,CACb,AACD,yCACE,cAAe,AACf,kBAAoB,CACrB,AACD,kDACE,yBAA0B,AAC1B,UAAY,CACb,AACD,wDACE,wBAA0B,CAC3B,AACD,gDACE,6BAA8B,AAC9B,kBAAmB,AACnB,UAAY,CACb,AACD,sDACE,+BAAkC,CACnC,AACD,kDACE,yBAA0B,AAC1B,UAAY,CACb,AACD,wDACE,wBAA0B,CAC3B,AACD,kDACE,mBAAoB,AACpB,yBAA0B,AAC1B,YAAa,AACb,WAAY,AACZ,iBAAkB,AAClB,cAAgB,CACjB,AACD,wDACE,wBAA0B,CAC3B,AACD,iDACE,6BAA8B,AAC9B,kBAAmB,AACnB,UAAY,CACb,AACD,uDACE,yBAA0B,AAC1B,UAAY,CACb,AACD,+CACE,wBAA0B,CAC3B,AACD,mDACE,6BAA8B,AAC9B,qBAAsB,AACtB,aAAe,CAChB,AACD,yDACE,yBAA0B,AAC1B,UAAY,CACb,AACD,4CAEE,8CAAoD,AACpD,mCAAoC,AACpC,iCAAmC,CACpC,AACD,4BACE,UAAY,CACb,AACD,6BACE,WAAa,CACd,AACD,2BACE,WAAY,AACZ,UAAY,CACb,AACD,0BACE,WAAY,AACZ,UAAY,CACb,AACD,4BACE,kBAAqB,CACtB,AACD,6BACE,mBAAsB,CACvB,AACD,mCACE,+BAAkC,CACnC,AACD,6BACE,UAAY,CACb,AACD,wEAEE,sBAAyB,CAC1B,AACD,6DAEE,SAAW,CACZ,AACD,6DAEE,SAAW,CACZ,AACD,iCACE,kBAAmB,AACnB,iBAAmB,CACpB,AACD,yBACA,iCACI,eAAiB,CACpB,CACA,AACD,uDACE,YAAc,CACf,AACD,gCACE,kBAAmB,AACnB,aAAc,AACd,eAAmB,CACpB,AACD,yBACA,gCACI,eAAiB,CACpB,CACA,AACD,4CACE,qBAAuB,CACxB,AACD,8BACE,YAAc,CACf,AACD,kCACE,wBAA0B,AAC1B,mBAAoB,AACpB,WAAY,AACZ,qBAAsB,AACtB,kBAAmB,AACnB,kBAAmB,AACnB,mBAAoB,AACpB,OAAU,AACV,QAAW,AACX,kBAAmB,AACnB,iBAAmB,CACpB,AACD,2CACE,YAAa,AACb,eAAgB,AAChB,kBAAmB,AACnB,MAAQ,CACT,AACD,wCACE,oCAAwC,AACxC,cAAgB,CACjB","file":"PreviousButton.vue","sourcesContent":["\n.pure-button[data-v-1adc2319] {\n  transition: all 0.3s ease;\n  border-radius: 4px;\n  background: none;\n  background-color: transparent;\n  border: #29b474 1px solid;\n  color: #29b474;\n}\n.pure-button[data-v-1adc2319]:hover {\n  background: none;\n  background-color: #29b474;\n  color: #fff;\n}\n.pure-button.full-width[data-v-1adc2319] {\n  display: block;\n  margin-bottom: 10px;\n}\n.pure-button.pure-button-primary[data-v-1adc2319] {\n  background-color: #29b474;\n  color: #fff;\n}\n.pure-button.pure-button-primary[data-v-1adc2319]:hover {\n  background-color: #25a268;\n}\n.pure-button.pure-button-white[data-v-1adc2319] {\n  background-color: transparent;\n  border-color: #fff;\n  color: #fff;\n}\n.pure-button.pure-button-white[data-v-1adc2319]:hover {\n  background-color: rgba(0,0,0,0.1);\n}\n.pure-button.pure-button-success[data-v-1adc2319] {\n  background-color: #29b474;\n  color: #fff;\n}\n.pure-button.pure-button-success[data-v-1adc2319]:hover {\n  background-color: #25a268;\n}\n.pure-button.pure-button-twitter[data-v-1adc2319] {\n  border-radius: 25px;\n  background-color: #4099ff;\n  border: none;\n  color: #fff;\n  line-height: 50px;\n  padding: 0 30px;\n}\n.pure-button.pure-button-twitter[data-v-1adc2319]:hover {\n  background-color: #2088ff;\n}\n.pure-button.pure-button-subtle[data-v-1adc2319] {\n  background-color: transparent;\n  border-color: #ccc;\n  color: #666;\n}\n.pure-button.pure-button-subtle[data-v-1adc2319]:hover {\n  background-color: #e1e1e1;\n  color: #444;\n}\n.pure-button.pure-button-text[data-v-1adc2319] {\n  border-color: transparent;\n}\n.pure-button.pure-button-homework[data-v-1adc2319] {\n  background-color: transparent;\n  border-color: #fd3c51;\n  color: #fd3c51;\n}\n.pure-button.pure-button-homework[data-v-1adc2319]:hover {\n  background-color: #fd3c51;\n  color: #fff;\n}\nhtml[data-v-1adc2319],\nbody[data-v-1adc2319] {\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n.pull-left[data-v-1adc2319] {\n  float: left;\n}\n.pull-right[data-v-1adc2319] {\n  float: right;\n}\n.clearfix[data-v-1adc2319] {\n  clear: both;\n  float: none;\n}\n.fa-icon[data-v-1adc2319] {\n  width: auto;\n  height: 1em;\n}\n.no-margin[data-v-1adc2319] {\n  margin: 0 !important;\n}\n.no-padding[data-v-1adc2319] {\n  padding: 0 !important;\n}\n.background-white[data-v-1adc2319] {\n  background-color: #fff !important;\n}\n.text-white[data-v-1adc2319] {\n  color: #fff;\n}\n.fade-enter-active[data-v-1adc2319],\n.fade-leave-active[data-v-1adc2319] {\n  transition: opacity 0.2s;\n}\n.fade-enter[data-v-1adc2319],\n.fade-leave-to[data-v-1adc2319] {\n  opacity: 0;\n}\n.fade-enter-to[data-v-1adc2319],\n.fade-leave[data-v-1adc2319] {\n  opacity: 1;\n}\n.main-container[data-v-1adc2319] {\n  border-radius: 4px;\n  position: relative;\n}\n@media (max-width: 800px) {\n.main-container[data-v-1adc2319] {\n    border-radius: 0;\n}\n}\n.main-container.main-container-padded[data-v-1adc2319] {\n  padding: 20px;\n}\n.content-block[data-v-1adc2319] {\n  border-radius: 4px;\n  padding: 20px;\n  margin: 20px 0 0 0;\n}\n@media (max-width: 800px) {\n.content-block[data-v-1adc2319] {\n    border-radius: 0;\n}\n}\n.content-block.white-block[data-v-1adc2319] {\n  background-color: #fff;\n}\n.icon-margin[data-v-1adc2319] {\n  margin: 0 5px;\n}\n.previous-button[data-v-1adc2319] {\n  transition: all 0.3s ease;\n  border-radius: 26px;\n  color: #fff;\n  display: inline-block;\n  text-align: center;\n  padding: 10px 20px;\n  margin-bottom: 10px;\n  left: 0px;\n  right: 0px;\n  position: relative;\n  padding-left: 30px;\n}\n.previous-button .fa-icon[data-v-1adc2319] {\n  height: 20px;\n  padding: 0 15px;\n  position: absolute;\n  left: 0;\n}\n.previous-button[data-v-1adc2319]:hover {\n  background-color: rgba(255,255,255,0.2);\n  cursor: pointer;\n}"],"sourceRoot":""}]);
+exports.push([module.i, "", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"About.vue","sourceRoot":""}]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 513:
+/***/ 770:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(507);
+var content = __webpack_require__(714);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(395)("af2f9226", content, true);
+var update = __webpack_require__(395)("91c6349e", content, true);
 
 /***/ }),
 
-/***/ 520:
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(513)
-
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(506),
-  /* template */
-  __webpack_require__(521),
-  /* scopeId */
-  "data-v-1adc2319",
-  /* cssModules */
-  null
-)
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ 521:
+/***/ 918:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "previous-button",
-    on: {
-      "click": _vm.previous
-    }
-  }, [_c('icon', {
-    attrs: {
-      "name": "angle-left"
-    }
-  }), _vm._v(_vm._s(_vm.$t('common.previous_page')))], 1)
-},staticRenderFns: []}
-
-/***/ }),
-
-/***/ 637:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_mutation_types__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer__ = __webpack_require__(491);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_PreviousButton__ = __webpack_require__(520);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_PreviousButton___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_PreviousButton__);
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'markdown',
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    next(function (vm) {
-      vm.$store.commit(__WEBPACK_IMPORTED_MODULE_0__store_mutation_types__["o" /* SET_NAV_STATE */], { minimized: false });
-      vm.$store.commit(__WEBPACK_IMPORTED_MODULE_0__store_mutation_types__["p" /* SET_PAGE_STYLE */], undefined);
-    });
-  },
-
-  components: {
-    MarkdownRenderer: __WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer___default.a,
-    PreviousButton: __WEBPACK_IMPORTED_MODULE_2__components_PreviousButton___default.a
-  },
-  data: function data() {
-    return {
-      frontMatterVisible: false
-    };
-  },
-
-  methods: {
-    back: function back() {
-      this.$router.go(-1);
-    }
-  }
-});
-
-/***/ }),
-
-/***/ 947:
-/***/ (function(module, exports) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "markdown-page"
+    staticClass: "about-page"
   }, [_c('div', {
     staticClass: "col",
-    class: this.$store.state.layout.columns.main.state,
     attrs: {
       "id": "col-main"
     }
-  }, [_c('previous-button'), _c('div', {
-    staticClass: "main-container background-white"
   }, [_c('div', {
-    staticClass: "container"
+    staticClass: "main-container main-container-padded background-white"
   }, [_c('markdown-renderer', {
     attrs: {
-      "front-matter-visible": _vm.frontMatterVisible
+      "markdown-url": _vm.markdownUrl
     }
-  })], 1)])], 1)])
+  })], 1)])])
 },staticRenderFns: []}
 
 /***/ })
 
 });
-//# sourceMappingURL=5.399469a3aaaeeb1095c5.js.map
+//# sourceMappingURL=6.160512d40371a6f2a9a0.js.map
