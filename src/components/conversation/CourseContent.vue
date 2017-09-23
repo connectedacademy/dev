@@ -59,12 +59,15 @@ import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 import Auth from '@/mixins/Auth';
 
+import JoinBanner from '@/components/banners/JoinBanner';
+
 export default {
   name: 'course-content',
   mixins: [
     Auth,
   ],
   components: {
+    JoinBanner,
     'MarkdownContent': () => import('@/components/MarkdownContent'),
     'MarkdownLink': () => import('@/components/MarkdownLink'),
     'SoundcloudEmbed': () => import('@/components/SoundcloudEmbed'),
@@ -77,8 +80,6 @@ export default {
     'InjectedQuestion': () => import('@/components/conversation/InjectedQuestion'),
     'NextClass': () => import('@/components/conversation/NextClass'),
     'WebinarMessageTicker': () => import('@/components/webinar/WebinarMessageTicker'),
-    'JoinBanner': () => import('@/components/banners/JoinBanner'),
-    'MediaCarousel': () => import('@/components/MediaCarousel'),
     'MediaCarousel': () => import('@/components/MediaCarousel'),
     'MediaThumbnails': () => import('@/components/MediaThumbnails'),
   },

@@ -11,8 +11,6 @@
 
   authentication-flow
 
-  //- like-modal
-
   media-lightbox
 
   section-navigator
@@ -46,6 +44,7 @@ import API from '@/api';
 import Navigation from '@/components/navigation/Navigation';
 import BurgerMenu from '@/components/navigation/BurgerMenu';
 import SectionNavigator from '@/components/navigation/SectionNavigator';
+import Lock from '@/components/authentication/Lock';
 
 // Mixins
 import AutoScroll from '@/mixins/AutoScroll';
@@ -109,11 +108,9 @@ export default {
     SectionNavigator,
     'LeftDrawer': () => import('@/components/navigation/drawers/LeftDrawer'),
     'RightDrawer': () => import('@/components/navigation/drawers/RightDrawer'),
-    'Lock': () => import('@/components/authentication/Lock'),
     'DebugPanel': () => import('@/components/DebugPanel'),
     'AuthenticationFlow': () => import('@/components/authentication/AuthenticationFlow'),
     'ActionPanel': () => import('@/components/conversation/ActionPanel'),
-    'LikeModal': () => import('@/components/modals/LikeModal'),
     'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
   },
   methods: {

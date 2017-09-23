@@ -48,6 +48,8 @@ import {mapGetters} from 'vuex';
 import API from '@/api';
 import VueScroll from 'vue-scroll';
 
+import throttle from 'lodash/throttle';
+
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 import JoinBanner from '@/components/banners/JoinBanner';
@@ -76,9 +78,8 @@ export default {
   },
   mounted() {
     window.addEventListener("resize", () => {
-      this.offset = this.$refs.classselector.offsetLeft;
-      this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - this.$refs.classselector.offsetLeft);
-    })
+      this.windowResized(this);
+    }, { passive: true });
   },
   data() {
     return {
@@ -92,6 +93,10 @@ export default {
     };
   },
   methods: {
+    windowResized: throttle(function(self) {
+      this.offset = this.$refs.classselector.offsetLeft;
+      this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - this.$refs.classselector.offsetLeft);
+    }, 200, { 'leading': false }),
     onScroll(e, position) {
       this.offset = position.scrollLeft;
       this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - position.scrollLeft);

@@ -49,7 +49,7 @@
       // this.isMobile = (window.innerWidth < 600);
       // window.addEventListener('resize', () => {
       //   this.isMobile = (window.innerWidth < 600);
-      // });
+      // }, { passive: true });
     },
     destroyed() {
       // Remove event listeners

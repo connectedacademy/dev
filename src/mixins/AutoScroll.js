@@ -16,7 +16,7 @@ export default {
     // Listen for scroll events
     window.addEventListener('scroll', () => {
       this.onScroll(this);
-    });
+    }, { passive: true });
 
     // Listen for wheel events
     window.addEventListener('wheel', this.onWheel, { passive: true }); // Passive to improve mobile performance
