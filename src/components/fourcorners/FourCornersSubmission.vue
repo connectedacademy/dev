@@ -118,9 +118,9 @@ export default {
       color white
     input[type="text"]
       radius(6px)
+      box-sizing()
       border none
       box-shadow none
-      box-sizing()
       line-height 40px
       margin 10px 0
       padding 0 10px

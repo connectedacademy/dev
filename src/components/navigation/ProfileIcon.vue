@@ -36,7 +36,7 @@ export default {
   .profile-image
     radius(50%)
     background-image()
-    background-color white
+    background-color alpha(black, 0.1)
     height 42px
     width 42px
 

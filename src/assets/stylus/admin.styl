@@ -12,7 +12,6 @@
       animate()
       pinned()
       box-sizing()
-      // box-shadow()
       background-color white
       border-right $color-light-grey 1px solid
       float left
@@ -21,6 +20,8 @@
       position absolute
       right auto
       z-index 1
+      @media(min-width: 800px)
+        box-shadow()
       &.active
         z-index 0
       .admin-panel--header

@@ -33,9 +33,10 @@ export default {
 @import '~stylus/layout/course-content'
 
 #join-banner.course-content
-  radius(4px)
-  box-shadow()
   background-color white
+  @media(min-width: 800px)
+    radius(4px)
+    box-shadow()
   @media(max-width: 800px)
     radius(0)
     margin 20px 0 0 0

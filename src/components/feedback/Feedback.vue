@@ -210,12 +210,17 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '~stylus/feedback'
+@import '~stylus/shared'
 
 $chat-list-width = 320px
 
 .feedback-page
+  pinned()
   background-color $color-lightest-grey
+  top 60px
+  overflow-x none
+  overflow-y scroll
+  position fixed
 
 .chat-panel
   float left
