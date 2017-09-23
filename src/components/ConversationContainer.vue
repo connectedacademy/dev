@@ -2,7 +2,7 @@
 
   .conversation-container(ref="conversationContainer")
 
-    #view-toggle(v-if="currentSection" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority}")
+    #view-toggle(v-if="currentSection" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
       icon(name="twitter")
       icon(name="quote-right")
 
@@ -168,7 +168,9 @@ export default {
   position fixed
   top 80px
   right -10px
-  z-index 56
+  z-index 55
+  &.peeking
+    z-index 57  
   @media(max-width: 600px)
     display block
   .fa-icon

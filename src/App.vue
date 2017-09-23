@@ -182,12 +182,13 @@ body.disable-scroll
   left 0
   right 0
   top $navigation-height
-  top 0
   text-align center
   z-index -1
+  @media(max-width: 800px)
+    height 84px
 
   &.minimized
-    height 60px
+    height 0px
 
 #app
   &.chat
