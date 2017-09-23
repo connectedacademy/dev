@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       wheeling: false,
-      canAutoScroll: true,
+      canAutoScroll: false,
       isAutoScrolling: false,
       preventScroll: false,
       scrollPosition: 0,

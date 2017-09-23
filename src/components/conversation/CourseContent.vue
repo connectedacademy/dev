@@ -2,7 +2,7 @@
 
 .course-content-wrapper
 
-  .course-content-group(v-for="(content, index) in releasedContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .course-content-group(v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- QUESTION
     injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")

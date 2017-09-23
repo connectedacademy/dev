@@ -64,12 +64,10 @@ export default {
   },
   methods: {
     loadSegmentSummary(segmentGroup, force) {
+      Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
+
       if (this.content === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
       if (this.currentClass === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
-
-      if (this.currentSection === undefined) { return; }
-
-      Vue.$log.info(`Getting message summary for - ${segmentGroup}`);
 
       let thinkAhead = 4; // Think ahead
       let thinkBehind = 4; // Think behind

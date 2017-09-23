@@ -52,7 +52,6 @@ export default {
   top 80px
   left 50%
   margin-left -160px
-  pointer-events none
 
   .auth-modal--header
     height 40px

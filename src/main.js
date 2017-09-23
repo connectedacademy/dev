@@ -44,7 +44,7 @@ Vue.use(Vuex);
 Vue.use(VueConfig, Vue.config);
 
 const options = {
-  logLevel: 'info',
+  logLevel: 'error',
   // optional : defaults to false if not specified 
   stringifyArguments: false,
   // optional : defaults to false if not specified 

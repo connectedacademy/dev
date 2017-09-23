@@ -1,14 +1,11 @@
 <template lang="pug">
 
-.rendered-markdown(v-html="renderedMarkdown")
+.rendered-markdown(v-html="renderedMarkdown" v-once)
 
 </template>
 
 <script>
 import MarkdownIt from 'markdown-it';
-import MarkdownItReplaceLink from 'markdown-it-replace-link';
-import MarkdownItVideo from 'markdown-it-video';
-import MarkdownItFrontMatter from 'markdown-it-front-matter';
 import MarkdownItCustomBlock from 'markdown-it-custom-block';
 
 import API from '@/api';
@@ -22,11 +19,6 @@ export default {
 
       const md = new MarkdownIt()
         .use(MarkdownItCustomBlock, {
-
-          testexample(arg) {
-            return `<h1>${arg}</h1>`
-          },
-
           bio(arg) {
             if (!arg) { return 'loading...'; }
 

@@ -18,188 +18,201 @@
 </template>
 
 <script>
-const SYNC_THRESHOLD = 2.0;
-
-import SoundCloud from 'soundcloud';
-import VueYouTubeEmbed from 'vue-youtube-embed';
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
-
-import * as config from '@/api/config';
-import debounce from 'lodash/debounce';
-import throttle from 'lodash/throttle';
-import inRange from 'lodash/inRange';
-
-import { mapGetters } from 'vuex';
-
-export default {
-  name: 'media-container',
-  props: ['playerType', 'classSection', 'videoIsActive'],
-  components: {
+  const SYNC_THRESHOLD = 2.0;
+  
+  import SoundCloud from 'soundcloud';
+  import VueYouTubeEmbed from 'vue-youtube-embed';
+  import {
     swiper,
-    swiperSlide,
-    VueYouTubeEmbed
-  },
-  mounted() {
-    this.initializeSoundcloudPlayer();
-    // this.isMobile = (window.innerWidth < 600);
-    // window.addEventListener('resize', () => {
-    //   this.isMobile = (window.innerWidth < 600);
-    // });
-  },
-  destroyed() {
-    // Remove event listeners
-    this.soundcloudPlayer = undefined;
-  },
-  data() {
-    return {
-      lightboxVisible: false,
-      lightboxImage: undefined,
-      soundcloudPlayer: undefined,
-      pHeight: 188,
-      pWidth: (188 / 0.5625),
-      isMobile: false,
-      swiperOption: {
-        performanceMode: false,
-        slidesPerView: 3,
-        centeredSlides: false,
-        spaceBetween: 20,
-        loop: false,
-        paginationClickable: false,
-        preloadImages: false,
-        lazyLoading: true
+    swiperSlide
+  } from 'vue-awesome-swiper'
+  
+  import * as config from '@/api/config';
+  import debounce from 'lodash/debounce';
+  import throttle from 'lodash/throttle';
+  import inRange from 'lodash/inRange';
+  
+  import {
+    mapGetters
+  } from 'vuex';
+  
+  export default {
+    name: 'media-container',
+    props: ['playerType', 'classSection', 'videoIsActive'],
+    components: {
+      swiper,
+      swiperSlide,
+      VueYouTubeEmbed
+    },
+    mounted() {
+      this.initializeSoundcloudPlayer();
+      // this.isMobile = (window.innerWidth < 600);
+      // window.addEventListener('resize', () => {
+      //   this.isMobile = (window.innerWidth < 600);
+      // });
+    },
+    destroyed() {
+      // Remove event listeners
+      this.soundcloudPlayer = undefined;
+    },
+    data() {
+      return {
+        lightboxVisible: false,
+        lightboxImage: undefined,
+        soundcloudPlayer: undefined,
+        pHeight: 188,
+        pWidth: (188 / 0.5625),
+        isMobile: false,
+        swiperOption: {
+          performanceMode: false,
+          slidesPerView: 3,
+          centeredSlides: false,
+          spaceBetween: 20,
+          loop: false,
+          paginationClickable: false,
+          preloadImages: false,
+          lazyLoading: true
+        },
+      };
+    },
+    watch: {
+      currentSegmentIndex(nV) {
+        if (nV >= 0 && this.$refs.mySwiper) {
+          this.$refs.mySwiper.swiper.slideTo(nV);
+        }
       },
-    };
-  },
-  watch: {
-    currentSegmentIndex(nV) {
-      if (nV >= 0 && this.$refs.mySwiper) {
-        this.$refs.mySwiper.swiper.slideTo(nV);
-      }
-    },
-    currentTime(nV, oV) {
-      // if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
-      // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
-    },
-    videoPlaying(nv, oV) {
-      this.$log.info(nv ? 'play' : 'pause');
-      if (nv) {
-        if (this.playerType === 'youtube' && this.player) this.player.playVideo();
-        if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.play();
-      } else {
-        if (this.playerType === 'youtube' && this.player) this.player.pauseVideo();
-        if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.pause();
-      }
-    },
-    videoIsActive(nV) {
-      if (!nV) {
-        this.$store.commit('PAUSE_VIDEO');
-      }
-    }
-  },
-  methods: {
-    setLightboxMedia(media) {
-      this.$store.commit('SET_LIGHTBOX_MEDIA', media);
-    },
-    change() {},
-    initializeSoundcloudPlayer() {
-      this.$log.info('initializeSoundcloudPlayer');
-      if (!this.soundcloudPlayer && this.src) {
-        SoundCloud.initialize({
-          client_id: config.SOUNCLOUD_CLIENT_ID,
-        });
-        SoundCloud.stream(this.src).then((player) => {
-          this.soundcloudPlayer = player;
-          this.soundcloudPlayer.on('time', () => {
-            this.$log.info('time');
-            if (!this.currentTime || !this.videoIsActive) {
-              this.$store.commit('PAUSE_VIDEO');
-              return;
-            }
-            let playerTime = this.soundcloudPlayer.currentTime() / 1000;
-            const outOfSync = ((this.currentTime < (playerTime - SYNC_THRESHOLD)) || (this.currentTime > (playerTime + SYNC_THRESHOLD)));
-
-            if (outOfSync) {
-              this.$log.info('OUTOFSYNC');
-              this.soundcloudPlayer.seek(this.currentTime * 1000);
-            }
-          });
-          this.soundcloudPlayer.on('play-resume', () => {
-            this.$log.info('play-resume');
-            // this.$store.commit('PLAY_VIDEO');
-          });
-          this.soundcloudPlayer.on('buffering_start', () => {
-            this.$log.info('buffering_start');
-            // this.$store.commit('PAUSE_VIDEO');
-          });
-          this.soundcloudPlayer.on('buffering_end', () => {
-            this.$log.info('buffering_end');
-            // this.$store.commit('PLAY_VIDEO');
-
-          });
-          this.soundcloudPlayer.on('seeked', () => {
-            this.$log.info('seeked');
-            this.$store.commit('PLAY_VIDEO');
-
-          }); 
-          
-        });
-      }
-    },
-    youtubeReady(player) {
-      this.player = player;
-      this.player.seekTo(this.currentTime);
-    },
-    youtubePlaying(player) {
-      this.$store.commit('PLAY_VIDEO');
-    },
-    youtubeEnded() {
-      this.$store.commit('PAUSE_VIDEO');
-    },
-    youtubePaused() {
-      this.$store.commit('PAUSE_VIDEO');
-    },
-    youtubeSeek: throttle(function(self, position) {
-
-      if (!self.player) { return; }
-
-      const playerTime = self.player.getCurrentTime();
-      if (!playerTime) { return; }
-      const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD))
-      || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
-
-      if (outOfSync) {
-        self.$log.info('Video out of sync - seeking');
-        self.player.seekTo(position);
-      }
-    }, 500),
-  },
-  computed: {
-    ...mapGetters([
-      'course', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
-    ]),
-    src() {
-      switch (this.playerType) {
-        case 'youtube':
-          return (this.classSection) ? this.classSection.videoId : '';
-          break;
-        case 'soundcloud':
-          return (this.classSection) ? `/tracks/${this.classSection.soundcloudId}` : '';
-          break;
-      }
-    },
-    currentSegmentIndex() {
-      if (this.media.length === 0) { return -1; }
-
-      for (var i = 0; i < this.media.length; i++) {
-        const image = this.media[i];
-        
-        if (inRange(this.currentSegment, image.start, image.end)) {
-          return i;
+      currentTime(nV, oV) {
+        // if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
+        // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
+      },
+      videoPlaying(nv, oV) {
+        this.$log.info(nv ? 'play' : 'pause');
+        if (nv) {
+          if (this.playerType === 'youtube' && this.player) this.player.playVideo();
+          if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.play();
+        } else {
+          if (this.playerType === 'youtube' && this.player) this.player.pauseVideo();
+          if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudPlayer.pause();
+        }
+      },
+      videoIsActive(nV) {
+        if (!nV) {
+          this.$store.commit('PAUSE_VIDEO');
         }
       }
     },
-  },
-};
+    methods: {
+      setLightboxMedia(media) {
+        this.$store.commit('SET_LIGHTBOX_MEDIA', media);
+      },
+      change() {},
+      initializeSoundcloudPlayer() {
+        this.$log.info('initializeSoundcloudPlayer');
+        if (!this.soundcloudPlayer && this.src) {
+          SoundCloud.initialize({
+            client_id: config.SOUNCLOUD_CLIENT_ID,
+          });
+          SoundCloud.stream(this.src).then((player) => {
+            this.soundcloudPlayer = player;
+            this.soundcloudPlayer.on('time', () => {
+              this.performSync(this);
+            });
+            // this.soundcloudPlayer.on('play-resume', () => {
+            //   this.$log.info('play-resume');
+            //   // this.$store.commit('PLAY_VIDEO');
+            // });
+            // this.soundcloudPlayer.on('buffering_start', () => {
+            //   this.$log.info('buffering_start');
+            //   // this.$store.commit('PAUSE_VIDEO');
+            // });
+            // this.soundcloudPlayer.on('buffering_end', () => {
+            //   this.$log.info('buffering_end');
+            //   // this.$store.commit('PLAY_VIDEO');
+            // });
+            this.soundcloudPlayer.on('seeked', () => {
+              this.$log.info('seeked');
+              this.$store.commit('PLAY_VIDEO');
+            });
+          });
+        }
+      },
+      youtubeReady(player) {
+        this.player = player;
+        this.player.seekTo(this.currentTime);
+      },
+      youtubePlaying(player) {
+        this.$store.commit('PLAY_VIDEO');
+      },
+      youtubeEnded() {
+        this.$store.commit('PAUSE_VIDEO');
+      },
+      youtubePaused() {
+        this.$store.commit('PAUSE_VIDEO');
+      },
+      youtubeSeek: throttle(function(self, position) {
+  
+        if (!self.player) {
+          return;
+        }
+  
+        const playerTime = self.player.getCurrentTime();
+        if (!playerTime) {
+          return;
+        }
+        const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) ||
+          (self.currentTime > (playerTime + SYNC_THRESHOLD)));
+  
+        if (outOfSync) {
+          self.$log.info('Video out of sync - seeking');
+          self.player.seekTo(position);
+        }
+      }, 500),
+      performSync: throttle(function(self) {
+        self.$log.info('time');
+        const currentTime = self.currentTime;
+        if (!currentTime || !self.videoIsActive) {
+          self.$store.commit('PAUSE_VIDEO');
+          return;
+        }
+        const playerTime = self.soundcloudPlayer.currentTime() / 1000;
+        const outOfSync = ((currentTime < (playerTime - SYNC_THRESHOLD)) || (currentTime > (playerTime + SYNC_THRESHOLD)));
+  
+        if (outOfSync) {
+          self.$log.info('OUTOFSYNC');
+          self.soundcloudPlayer.seek(currentTime * 1000);
+        }
+  
+      }, 1000),
+    },
+    computed: {
+      ...mapGetters([
+        'course', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
+      ]),
+      src() {
+        switch (this.playerType) {
+          case 'youtube':
+            return (this.classSection) ? this.classSection.videoId : '';
+            break;
+          case 'soundcloud':
+            return (this.classSection) ? `/tracks/${this.classSection.soundcloudId}` : '';
+            break;
+        }
+      },
+      currentSegmentIndex() {
+        if (this.media.length === 0) {
+          return -1;
+        }
+  
+        for (var i = 0; i < this.media.length; i++) {
+          const image = this.media[i];
+  
+          if (inRange(this.currentSegment, image.start, image.end)) {
+            return i;
+          }
+        }
+      },
+    },
+  };
 </script>
 
 <style lang="stylus" scoped>
