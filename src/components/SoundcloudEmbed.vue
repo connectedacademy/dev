@@ -2,7 +2,7 @@
 
 .soundcloud-wrapper
 
-  //- .soundcloud-container(v-if="theSrc")
+  .soundcloud-container(v-if="theSrc")
     iframe(v-once v-bind:src="theSrc" width="100%" height="166" scrolling="no" frameborder="no")
 
 </template>
