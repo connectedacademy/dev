@@ -48,7 +48,7 @@ export default {
       this.loadSubtitles(this.content);
       this.loadMedia(this.content);
       this.loadVisualisation(this.content);
-    }, 5000);
+    }, 2500);
     
     // Fill with blank messages
     // const segmentCount = this.content.duration * 0.2;

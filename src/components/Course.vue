@@ -16,15 +16,13 @@ import ClassSelector from '@/components/ClassSelector';
 import SectionNavigator from '@/components/navigation/SectionNavigator';
 
 // Mixins
+import AutoScroll from '@/mixins/AutoScroll';
 import ScrollPoints from '@/mixins/ScrollPoints';
-
-// const CourseContent = () => ({
-//   component: import('@/components/conversation/CourseContent'),
-// });
 
 export default {
   name: 'course',
   mixins: [
+    AutoScroll,
     ScrollPoints,
   ],
   beforeRouteEnter(to, from, next) {
@@ -41,7 +39,7 @@ export default {
   activated() {
     setTimeout(() => {
       this.setScrollPoints();
-    }, 5000);
+    }, 2500);
     window.scrollTo(0, this.$store.state.savedScrollPosition);
     // this.toMessage();
   },

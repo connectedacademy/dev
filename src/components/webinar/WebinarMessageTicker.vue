@@ -33,7 +33,7 @@ export default {
     // Subscribe to socket for content messages
     setTimeout(() => {
       this.fetchMessages();
-    }, 5000);
+    }, 2500);
   },
   data() {
     return {

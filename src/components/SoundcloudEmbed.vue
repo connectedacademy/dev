@@ -19,7 +19,7 @@
     mounted() {
       setTimeout(() => {
         this.theSrc = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${this.soundcloudSrc}`;
-      }, 5000);
+      }, 2500);
     },
   };
 </script>

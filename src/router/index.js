@@ -1,21 +1,21 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import AdminMain from '@/components/admin/AdminMain';
+const AdminMain = () => import('@/components/admin/AdminMain')
 
-import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
-import Registration from '@/components/authentication/Registration';
+const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow')
+const Registration = () => import('@/components/authentication/Registration')
 
-import Course from '@/components/Course';
-import Markdown from '@/components/Markdown';
+const Course = () => import(/* webpackChunkName: "group-course" */ '@/components/Course')
+const Markdown = () => import('@/components/Markdown')
 
-import Feedback from '@/components/feedback/Feedback';
-import FeedbackView from '@/components/feedback/FeedbackView';
+const Feedback = () => import('@/components/feedback/Feedback')
+const FeedbackView = () => import('@/components/feedback/FeedbackView')
 
-import FourCornersOnboarding from '@/components/fourcorners/FourCornersOnboarding';
+const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');
 
-import About from '@/components/pages/About';
-import Schedule from '@/components/pages/Schedule';
+const About = () => import(/* webpackChunkName: "group-about" */ '@/components/pages/About');
+const Schedule = () => import('@/components/pages/Schedule');
 
 Vue.use(Router);
 

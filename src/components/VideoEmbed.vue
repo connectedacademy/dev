@@ -16,10 +16,12 @@ export default {
   mounted() {
     setTimeout(() => {
       this.theSrc = this.src;
-    }, 5000);
+    }, 2500);
   },
   data() {
-    theSrc: undefined
+    return {
+      theSrc: undefined
+    }
   },
   computed: {
     src() {

@@ -34,29 +34,23 @@
 </template>
 
 <script>
-  import store from '@/store';
-  import {
-    mapGetters
-  } from 'vuex';
-  import API from '@/api';
+  import { mapGetters } from 'vuex';
   
   // Components
   import Navigation from '@/components/navigation/Navigation';
   import BurgerMenu from '@/components/navigation/BurgerMenu';
-  import Lock from '@/components/authentication/Lock';
+  // import Lock from '@/components/authentication/Lock';
   
   // Mixins
-  import AutoScroll from '@/mixins/AutoScroll';
   import Overlay from '@/mixins/Overlay';
   
   export default {
     name: 'app',
     mixins: [
-      AutoScroll,
       Overlay,
     ],
     watch: {
-      activeSegment(nV, oV) {
+      activeSegment(nV) {
         if (nV) {
           // Segment visible, disable scroll on window
           document.body.className = "disable-scroll";
@@ -68,19 +62,6 @@
     mounted() {
       this.$store.dispatch('getCourse');
       this.$store.dispatch('checkAuth');
-      // .then(() => {
-      //   // Check if user has registered
-      //   if (this.isAuthenticated && !this.isRegistered) {
-      //     this.$router.push('/registration');
-      //   } else {
-      //     if (this.user && this.user.account) {
-      //       this.$ga.set('userId', this.user.account);
-      //     }
-      //   }
-      // });
-  
-      // Subscribe to socket
-      // API.message.subscribeToSocket();
     },
     data() {
       return {
@@ -99,7 +80,6 @@
           this.$store.state.conversation.likeModalVisible;
       },
     },
-    store,
     components: {
       Navigation,
       BurgerMenu,

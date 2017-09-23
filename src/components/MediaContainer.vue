@@ -2,13 +2,13 @@
 
   #media-wrapper(v-bind:class="{ 'soundcloud-mode': (src && playerType === 'soundcloud'), 'youtube-mode': (src && playerType === 'youtube') }")
 
-    #video-wrapper
+    #stream-wrapper
       youtube#video-container(v-if="src && (this.playerType === 'youtube')" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="youtubeReady" @playing="youtubePlaying" @paused="youtubePaused" @ended="youtubeEnded" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="{ height: `${this.pHeight}px`, width: `${this.pWidth}px` }")
       #soundcloud-container(v-if="src && (this.playerType === 'soundcloud')")
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper(v-if="videoIsActive && media")
-      #mobile-image-view(v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentSegmentIndex].text})` }" @click="setLightboxMedia(media[currentSegmentIndex].text)")
+      #mobile-image-view(v-if="media[currentSegmentIndex]" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentSegmentIndex].text})` }" @click="setLightboxMedia(media[currentSegmentIndex].text)")
 
       //- swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper")
         swiper-slide(v-for="(item, key) in media" v-bind:key="key")
@@ -47,7 +47,7 @@
     mounted() {
       setTimeout(() => {
         this.initializeSoundcloudPlayer();
-      }, 5000);
+      }, 2500);
       // this.isMobile = (window.innerWidth < 600);
       // window.addEventListener('resize', () => {
       //   this.isMobile = (window.innerWidth < 600);
@@ -281,7 +281,7 @@ $media-height = 220px
       // @media(max-width: 568px)
       //   display block
 
-  #video-wrapper
+  #stream-wrapper
     top 0
     bottom 0
     left 0

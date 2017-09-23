@@ -1,13 +1,7 @@
-/* eslint-disable */
 import Vue from 'vue';
 import * as config from './config';
 import * as types from '@/store/mutation-types';
 import store from '@/store';
-
-import axios from 'axios';
-
-let CancelToken = axios.CancelToken;
-let cancel;
 
 export default {
   subscribeToSocket() {
@@ -28,21 +22,10 @@ export default {
     cancel();
   },
   getSegmentSummary(request, cb, errorCb) {
-    axios.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`, {
-      cancelToken: new CancelToken(function executor(c) {
-        // An executor function receives a cancel function as a parameter
-        cancel = c;
-      })
-    }).then(function (response) {
-      Vue.$log.info(response);
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`).then((response) => {
       cb(response.data);
-    }).catch(function (thrown) {
-      if (axios.isCancel(thrown)) {
-        Vue.$log.info('Request canceled', thrown.message);
-      } else {
-        // handle error
-        Vue.$log.info('There was an error fetching request');
-      }
+    }, (response) => {
+      errorCb(response);
     });
   },
   getSegmentSummarySocket(request, cb, errorCb) {
@@ -58,11 +41,6 @@ export default {
     Vue.io.socket.get(`/v1/messages/content/${request.theClass}/${request.theContent}?whitelist=true&limit=100`, function (resData, jwres) {
       cb(resData);
     });
-    // Vue.http.get(`${config.WATERCOOLER_API}/messages/content/${request.theClass}/${request.theContent}?whitelist=true&limit=3`).then((response) => {
-    //   cb(response.body);
-    // }, (response) => {
-    //   errorCb(response);
-    // });
   },
   getMessages(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {

@@ -8,7 +8,7 @@ export default {
     // Periodically update document height variable
     setTimeout(() => {
       setInterval(this.updateDocumentHeight, 5000);
-    }, 5000);
+    }, 2500);
   },
   methods: {
     updateDocumentHeight() {

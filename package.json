@@ -13,8 +13,6 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
-    "axios": "^0.16.2",
-    "flatui": "^1.0.0",
     "fourcorners": "0.0.44",
     "fs": "0.0.1-security",
     "jquery": "^3.2.1",

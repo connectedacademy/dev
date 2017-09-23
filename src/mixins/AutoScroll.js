@@ -29,7 +29,7 @@ export default {
       // Listen for mouseup events
       // window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
       // window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
-    }, 5000);
+    }, 2500);
   },
   destroyed () {
     // Remove event listeners
