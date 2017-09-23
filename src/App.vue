@@ -59,10 +59,6 @@
         }
       },
     },
-    mounted() {
-      this.$store.dispatch('getCourse');
-      this.$store.dispatch('checkAuth');
-    },
     data() {
       return {
         navTitle: 'Connected Academy',
@@ -83,18 +79,12 @@
     components: {
       Navigation,
       BurgerMenu,
-      'LeftDrawer': () =>
-        import ('@/components/navigation/drawers/LeftDrawer'),
-      'RightDrawer': () =>
-        import ('@/components/navigation/drawers/RightDrawer'),
-      // 'DebugPanel': () =>
-        // import ('@/components/DebugPanel'),
-      'AuthenticationFlow': () =>
-        import ('@/components/authentication/AuthenticationFlow'),
-      'ActionPanel': () =>
-        import ('@/components/conversation/ActionPanel'),
-      'MediaLightbox': () =>
-        import ('@/components/modals/MediaLightbox'),
+      'LeftDrawer': () => import ('@/components/navigation/drawers/LeftDrawer'),
+      'RightDrawer': () => import ('@/components/navigation/drawers/RightDrawer'),
+      // 'DebugPanel': () => import ('@/components/DebugPanel'),
+      'AuthenticationFlow': () => import ('@/components/authentication/AuthenticationFlow'),
+      'ActionPanel': () => import ('@/components/conversation/ActionPanel'),
+      'MediaLightbox': () => import ('@/components/modals/MediaLightbox'),
     },
   };
 </script>

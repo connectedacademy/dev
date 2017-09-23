@@ -6,7 +6,7 @@ const AdminMain = () => import('@/components/admin/AdminMain')
 const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow')
 const Registration = () => import('@/components/authentication/Registration')
 
-const Course = () => import(/* webpackChunkName: "group-course" */ '@/components/Course')
+const Course = () => import('@/components/Course')
 const Markdown = () => import('@/components/Markdown')
 
 const Feedback = () => import('@/components/feedback/Feedback')
@@ -14,7 +14,7 @@ const FeedbackView = () => import('@/components/feedback/FeedbackView')
 
 const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');
 
-const About = () => import(/* webpackChunkName: "group-about" */ '@/components/pages/About');
+const About = () => import('@/components/pages/About');
 const Schedule = () => import('@/components/pages/Schedule');
 
 Vue.use(Router);

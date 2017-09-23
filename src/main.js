@@ -27,7 +27,7 @@ import router from '@/router';
 sync(store, router);
 
 Vue.component('icon', Icon);
-require('animate.css');
+
 
 Vue.use(VueResource);
 Vue.use(Vuex);
@@ -63,19 +63,22 @@ Vue.use(VueAnalytics, {
 Vue.config.productionTip = false;
 
 // Http config
-Vue.http.options = { credentials: true, responseType: 'json' };
-Vue.http.interceptors.push((request, next) => {
-  next((response) => {
-    if (response.status === 403) {
-      this.$log.info('Session invalid');
-      store.dispatch('logout');
-    }
-  });
-});
+// Vue.http.options = { credentials: true, responseType: 'json' };
+// Vue.http.interceptors.push((request, next) => {
+//   next((response) => {
+//     if (response.status === 403) {
+//       this.$log.info('Session invalid');
+//       store.dispatch('logout');
+//     }
+//   });
+// });
 
 // I18n config
 Vue.config.lang = 'en';
 Vue.config.fallbackLang = 'en';
+
+store.dispatch('getCourse');
+store.dispatch('checkAuth');
 
 /* eslint-disable no-new */
 new Vue({
@@ -85,8 +88,6 @@ new Vue({
   template: '<App/>',
   components: {
     App,
-    Icon,
     Lang,
-    VueCookie,
   },
 });
