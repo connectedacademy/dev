@@ -77,19 +77,13 @@ import InfoDialogue from '../InfoDialogue';
 import 'vue-awesome/icons/angle-left';
 import 'vue-awesome/icons/question';
 
-import socketIOClient from 'socket.io-client';
-import sailsIOClient from 'sails.io.js';
-import vueSails from 'vue-sails';
-// Setup socket connection
-const io = sailsIOClient(socketIOClient);
-io.sails.url = 'https://api.connectedacademy.io';
-Vue.io = io;
-Vue.use(vueSails, io);
+import Messages from '@/mixins/Messages';
 
 export default {
   name: 'feedback',
   mixins: [
     Auth,
+    Messages,
   ],
   components: {
     MarkdownRenderer,
