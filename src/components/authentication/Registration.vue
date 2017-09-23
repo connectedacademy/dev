@@ -93,139 +93,149 @@
 </template>
 
 <script>
-import every from 'lodash/every';
-import values from 'lodash/values';
-import {mapGetters} from 'vuex';
-import API from '@/api';
-
-
-import MarkdownIt from 'markdown-it';
-
-import MarkdownRenderer from '@/components/MarkdownRenderer';
-import InfoDialogue from '../InfoDialogue';
-import Validator from 'validator';
-import VueSlider from 'vue-slider-component';
-
-export default {
-  name: 'registration',
-  components: {
-    MarkdownRenderer,
-    InfoDialogue,
-    VueSlider,
-  },
-  mounted() {
-    this.$store.dispatch('getHubs');
-    API.auth.checkAuth(
-      (response) => {
-        if (response.user.registration) {
-          this.$router.replace('/');
-        } else {
+  import every from 'lodash/every';
+  import values from 'lodash/values';
+  import {
+    mapGetters
+  } from 'vuex';
+  import API from '@/api';
+  
+  
+  import MarkdownIt from 'markdown-it';
+  
+  import MarkdownRenderer from '@/components/MarkdownRenderer';
+  import InfoDialogue from '../InfoDialogue';
+  import Validator from 'validator';
+  import VueSlider from 'vue-slider-component';
+  
+  export default {
+    name: 'registration',
+    components: {
+      MarkdownRenderer,
+      InfoDialogue,
+      VueSlider,
+    },
+    mounted() {
+      this.$store.dispatch('getHubs');
+      API.auth.checkAuth(
+        (response) => {
+          if (response.user.registration) {
+            this.$router.replace('/');
+          } else {
+            this.checkingRegistration = false;
+          }
+        },
+        (response) => {
+          // TODO: Better handle failed request
           this.checkingRegistration = false;
-        }
-      },
-      (response) => {
-        // TODO: Better handle failed request
-        this.checkingRegistration = false;
-      },
-    );
-
-    API.auth.fetchQuestions(
-      (response) => {
-        this.release = response.release;
-        this.questions = response.questions;
-        this.loadingQuestions = false;
-      },
-      (response) => {
-        // TODO: Better handle failed request
-        this.loadingQuestions = false;
-      },
-    );
-  },
-  data() {
-    return {
-      currentPage: 1,
-      loadingQuestions: true,
-      checkingRegistration: true,
-      release: '',
-      questions: [],
-      response: {
-        consent: false,
-        hub_id: '',
-        email: '',
-        age: '',
-        lang: '',
-        registration_info: {
-          answers: {},
         },
-      },
-    };
-  },
-  computed: {
-    ...mapGetters([
-      'course', 'hubs', 'user', 'isRegistered',
-    ]),
-    sanitizedResponse() {
-      return {
-        consent: this.response.consent,
-        hub_id: this.response.hub_id,
-        email: Validator.normalizeEmail(this.response.email),
-        age: Validator.toInt(this.response.age),
-        lang: this.response.lang,
-        registration_info: {
-          answers: this.response.registration_info.answers,
-        },
-      };
-    },
-    validatedResponse() {
-      return {
-        hub_id: !Validator.isEmpty(this.response.hub_id),
-        email: Validator.isEmail(this.response.email),
-        age: Validator.isInt(this.response.age, { min: 1, max: 150 }),
-        lang: !Validator.isEmpty(this.response.lang),
-      };
-    },
-    formIsValid() {
-      return every(values(this.validatedResponse), v => v);
-    },
-    termsMarkdown() {
-
-      const md = new MarkdownIt({
-        html: true,
-        linkify: true,
-      });
-
-      return `<div>${md.render(this.release)}</div>`;
-    },
-  },
-  methods: {
-    nextPage() {
-      this.currentPage += 1;
-    },
-    previousPage() {
-      this.currentPage -= 1;
-    },
-    attemptRegistration() {
-      API.auth.register(
-        this.sanitizedResponse,
+      );
+  
+      API.auth.fetchQuestions(
         (response) => {
-          this.$router.push({ path: '/' });
+          this.release = response.release;
+          this.questions = response.questions;
+          this.loadingQuestions = false;
         },
         (response) => {
-          // alert('Registration failed');
-          this.$router.push({ path: '/' });
+          // TODO: Better handle failed request
+          this.loadingQuestions = false;
         },
       );
     },
-    getCountryName(lang) {
-      return lang;
+    data() {
+      return {
+        currentPage: 1,
+        loadingQuestions: true,
+        checkingRegistration: true,
+        release: '',
+        questions: [],
+        response: {
+          consent: false,
+          hub_id: '',
+          email: '',
+          age: '',
+          lang: '',
+          registration_info: {
+            answers: {},
+          },
+        },
+      };
     },
-  },
-};
+    computed: {
+      ...mapGetters([
+        'course', 'hubs', 'user', 'isRegistered',
+      ]),
+      sanitizedResponse() {
+        return {
+          consent: this.response.consent,
+          hub_id: this.response.hub_id,
+          email: Validator.normalizeEmail(this.response.email),
+          age: Validator.toInt(this.response.age),
+          lang: this.response.lang,
+          registration_info: {
+            answers: this.response.registration_info.answers,
+          },
+        };
+      },
+      validatedResponse() {
+        return {
+          hub_id: !Validator.isEmpty(this.response.hub_id),
+          email: Validator.isEmail(this.response.email),
+          age: Validator.isInt(this.response.age, {
+            min: 1,
+            max: 150
+          }),
+          lang: !Validator.isEmpty(this.response.lang),
+        };
+      },
+      formIsValid() {
+        return every(values(this.validatedResponse), v => v);
+      },
+      termsMarkdown() {
+  
+        const md = new MarkdownIt({
+          html: true,
+          linkify: true,
+        });
+  
+        return `<div>${md.render(this.release)}</div>`;
+      },
+    },
+    methods: {
+      nextPage() {
+        this.currentPage += 1;
+      },
+      previousPage() {
+        this.currentPage -= 1;
+      },
+      attemptRegistration() {
+        API.auth.register(
+          this.sanitizedResponse,
+          (response) => {
+            this.$router.push({
+              path: '/'
+            });
+          },
+          (response) => {
+            // alert('Registration failed');
+            this.$router.push({
+              path: '/'
+            });
+          },
+        );
+      },
+      getCountryName(lang) {
+        return lang;
+      },
+    },
+  };
 </script>
 
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/forms'
 
 .col#col-main
   .registration-container

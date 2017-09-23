@@ -10,7 +10,7 @@
 import API from '@/api';
 import { mapGetters } from 'vuex';
 
-import reduce from 'lodash/reduce';
+// import reduce from 'lodash/reduce';
 
 export default {
   name: 'like-indicator',
@@ -108,8 +108,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-@import '~stylus/shared'
 
 .like-indicator
   font-size 1em

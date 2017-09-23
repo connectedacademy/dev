@@ -227,7 +227,7 @@ $media-height = 220px
   padding 0 8px
   position relative
   height $media-height
-  overflow-y scroll
+  overflow hidden
   &.youtube-mode
     padding-left (188px / 0.5625) + 16px
   &.soundcloud-mode
