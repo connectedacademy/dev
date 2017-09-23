@@ -51,7 +51,7 @@ export default {
     MessageComposer,
     MediaContainer,
   },
-  created() {
+  mounted() {
     this.availablePlayerTypes = []; // Remove all available player types
     if (this.content.videoId) {
       // If a videoId is set on the content then add YouTube as an available type

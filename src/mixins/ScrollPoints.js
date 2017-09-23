@@ -6,7 +6,9 @@ export default {
   },
   mounted() {
     // Periodically update document height variable
-    window.setInterval(this.updateDocumentHeight, 3000);
+    setTimeout(() => {
+      setInterval(this.updateDocumentHeight, 5000);
+    }, 5000);
   },
   methods: {
     updateDocumentHeight() {

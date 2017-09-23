@@ -43,10 +43,12 @@ export default {
   },
   props: ['content'],
   mounted() {
-    this.loadSegmentSummary(0, true);
-    this.loadSubtitles(this.content);
-    this.loadMedia(this.content);
-    this.loadVisualisation(this.content);
+    setTimeout(() => {
+      this.loadSegmentSummary(0, true);
+      this.loadSubtitles(this.content);
+      this.loadMedia(this.content);
+      this.loadVisualisation(this.content);
+    }, 5000);
     
     // Fill with blank messages
     // const segmentCount = this.content.duration * 0.2;
@@ -60,7 +62,7 @@ export default {
   },
   data() {
     return {
-      messagePriority: true,
+      messagePriority: false,
     };
   },
   computed: {
@@ -134,9 +136,8 @@ export default {
     
     overflow hidden
     .subtitle-wrapper, .message-wrapper
+      transform translate(0%, -50%)
       width 50%
-      &.subtitle-wrapper
-        transform translate(0%, -50%)
       &.message-wrapper
         transform translate(100%, -50%)
 
@@ -145,7 +146,6 @@ export default {
         width 100%
         &.subtitle-wrapper
           display block
-          transform translate(0%, -50%)
         &.message-wrapper
           display none
       &.message-priority

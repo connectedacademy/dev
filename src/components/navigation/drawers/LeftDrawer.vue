@@ -19,44 +19,21 @@ transition(name="slide-left")
           h1.drawer-list-item--header {{ $t('nav.about') }}
           h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
-        li.drawer-list-item.hidden(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name")
-          h1.drawer-list-item--header {{ theClass.title }}
-          h2.drawer-list-item--body {{ theClass.description }}
-
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-import * as types from '@/store/mutation-types';
-
-import Overlay from '@/mixins/Overlay';
-
 export default {
   name: 'left-drawer',
-  mixins: [
-    Overlay,
-  ],
-  watch: {
-    '$route': {
-      handler: function(nV, oV) {
-        this.dismissOverlay();
-      },
-      deep: true,
-    },
-  },
   methods: {
     toggleLeftDrawer() {
-      this.$store.commit(types.TOGGLE_LEFT_DRAWER);
+      this.$store.commit('TOGGLE_LEFT_DRAWER');
     },
     setCurrentClass(newClass) {
-      this.$store.commit(types.TOGGLE_LEFT_DRAWER);
       this.$store.dispatch('getSpec', newClass);
+      this.toggleLeftDrawer();
     },
   },
   computed: {
-    ...mapGetters([
-      'course',
-    ]),
     isVisible() {
       return this.$store.state.navigation.leftDrawer.visible;
     },

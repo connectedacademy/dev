@@ -45,7 +45,9 @@
       VueYouTubeEmbed
     },
     mounted() {
-      this.initializeSoundcloudPlayer();
+      setTimeout(() => {
+        this.initializeSoundcloudPlayer();
+      }, 5000);
       // this.isMobile = (window.innerWidth < 600);
       // window.addEventListener('resize', () => {
       //   this.isMobile = (window.innerWidth < 600);

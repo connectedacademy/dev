@@ -30,6 +30,9 @@
       Auth,
     ],
     watch: {
+      markdownUrl(nV) {
+        this.loadMarkdown();
+      },
       '$route': {
         handler: function(nV, oV) {
           this.loadMarkdown();
@@ -40,7 +43,7 @@
     mounted() {
       this.loadMarkdown();
     },
-    props: ['markdownUrl', 'frontMatterVisible'],
+    props: ['markdownUrl'],
     data() {
       return {
         loading: true,
@@ -173,22 +176,22 @@
                 const link = parts[3].trim();
   
                 return `
-              <div class="md-bio md-bio--with-bio">
-                <img class="md-bio--image" src="${image}" />
-                <div class="md-bio--content">
-                  <h5 class="md-bio--caption">${caption}</h5>
-                  <p class="md-bio--bio">${bio}</p>
-                  <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
+                <div class="md-bio md-bio--with-bio">
+                  <img class="md-bio--image" src="${image}" />
+                  <div class="md-bio--content">
+                    <h5 class="md-bio--caption">${caption}</h5>
+                    <p class="md-bio--bio">${bio}</p>
+                    <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
+                  </div>
                 </div>
-              </div>
-              `;
+                `;
               } else {
                 return `
-              <div class="md-bio">
-                <img class="md-bio--image" src="${image}" />
-                <h5 class="md-bio--caption">${caption}</h5>
-              </div>
-              `;
+                <div class="md-bio">
+                  <img class="md-bio--image" src="${image}" />
+                  <h5 class="md-bio--caption">${caption}</h5>
+                </div>
+                `;
               }
             },
           });

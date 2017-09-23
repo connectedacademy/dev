@@ -60,6 +60,20 @@ import { mapGetters } from 'vuex';
 import Auth from '@/mixins/Auth';
 
 import JoinBanner from '@/components/banners/JoinBanner';
+import MarkdownContent from '@/components/MarkdownContent';
+import MarkdownLink from '@/components/MarkdownLink';
+import SoundcloudEmbed from '@/components/SoundcloudEmbed';
+import VideoEmbed from '@/components/VideoEmbed';
+import LikeIndicator from '@/components/LikeIndicator';
+import LiveClass from '@/components/conversation/LiveClass';
+import Homework from '@/components/conversation/Homework';
+import FourCorners from '@/components/conversation/FourCorners';
+import FutureContent from '@/components/conversation/FutureContent';
+import InjectedQuestion from '@/components/conversation/InjectedQuestion';
+import NextClass from '@/components/conversation/NextClass';
+import WebinarMessageTicker from '@/components/webinar/WebinarMessageTicker';
+import MediaCarousel from '@/components/MediaCarousel';
+import MediaThumbnails from '@/components/MediaThumbnails';
 
 export default {
   name: 'course-content',
@@ -68,23 +82,23 @@ export default {
   ],
   components: {
     JoinBanner,
-    'MarkdownContent': () => import('@/components/MarkdownContent'),
-    'MarkdownLink': () => import('@/components/MarkdownLink'),
-    'SoundcloudEmbed': () => import('@/components/SoundcloudEmbed'),
-    'VideoEmbed': () => import('@/components/VideoEmbed'),
-    'LikeIndicator': () => import('@/components/LikeIndicator'),
-    'LiveClass': () => import('@/components/conversation/LiveClass'),
-    'Homework': () => import('@/components/conversation/Homework'),
-    'FourCorners': () => import('@/components/conversation/FourCorners'),
-    'FutureContent': () => import('@/components/conversation/FutureContent'),
-    'InjectedQuestion': () => import('@/components/conversation/InjectedQuestion'),
-    'NextClass': () => import('@/components/conversation/NextClass'),
-    'WebinarMessageTicker': () => import('@/components/webinar/WebinarMessageTicker'),
-    'MediaCarousel': () => import('@/components/MediaCarousel'),
-    'MediaThumbnails': () => import('@/components/MediaThumbnails'),
+    MarkdownContent,
+    MarkdownLink,
+    SoundcloudEmbed,
+    VideoEmbed,
+    LikeIndicator,
+    LiveClass,
+    Homework,
+    FourCorners,
+    FutureContent,
+    InjectedQuestion,
+    NextClass,
+    WebinarMessageTicker,
+    MediaCarousel,
+    MediaThumbnails,
   },
   
-  created() {
+  mounted() {
     this.viewCurrentClass();
   },
   watch: {

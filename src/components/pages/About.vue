@@ -31,9 +31,6 @@ export default {
   components: {
     MarkdownRenderer,
   },
-  created() {
-    this.$store.dispatch('setColumnState', 'narrow');
-  },
   data() {
     return {
       navTitle: 'About - Connected Academy',

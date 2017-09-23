@@ -1,21 +1,21 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-const AdminMain = () => import('@/components/admin/AdminMain')
+import AdminMain from '@/components/admin/AdminMain';
 
-const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow')
-const Registration = () => import('@/components/authentication/Registration')
+import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
+import Registration from '@/components/authentication/Registration';
 
-const Course = () => import('@/components/Course')
-const Markdown = () => import('@/components/Markdown')
+import Course from '@/components/Course';
+import Markdown from '@/components/Markdown';
 
-const Feedback = () => import('@/components/feedback/Feedback')
-const FeedbackView = () => import('@/components/feedback/FeedbackView')
+import Feedback from '@/components/feedback/Feedback';
+import FeedbackView from '@/components/feedback/FeedbackView';
 
-const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');
+import FourCornersOnboarding from '@/components/fourcorners/FourCornersOnboarding';
 
-const About = () => import('@/components/pages/About');
-const Schedule = () => import('@/components/pages/Schedule');
+import About from '@/components/pages/About';
+import Schedule from '@/components/pages/Schedule';
 
 Vue.use(Router);
 

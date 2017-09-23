@@ -15,7 +15,7 @@ import reduce from 'lodash/reduce';
 export default {
   name: 'like-indicator',
   props: ['contentSlug', 'classSlug', 'haveliked', 'likes'],
-  created() {
+  mounted() {
     this.hasLiked = this.haveliked;
     this.likeCount = this.likes;
   },

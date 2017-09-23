@@ -29,11 +29,11 @@ export default {
   mixins: [
     Messages,
   ],
-  created() {
+  mounted() {
     // Subscribe to socket for content messages
     setTimeout(() => {
       this.fetchMessages();
-    }, 2000);
+    }, 5000);
   },
   data() {
     return {

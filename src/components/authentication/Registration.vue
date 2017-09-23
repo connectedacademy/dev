@@ -113,7 +113,7 @@ export default {
     InfoDialogue,
     VueSlider,
   },
-  created() {
+  mounted() {
     this.$store.dispatch('getHubs');
     API.auth.checkAuth(
       (response) => {

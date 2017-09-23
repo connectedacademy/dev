@@ -1,9 +1,9 @@
 <template lang="pug">
 
-.video-wrapper(v-if="videoSrc")
+.video-wrapper(v-if="theSrc")
 
   .video-container
-    iframe(v-bind:src="src" frameborder='0' allowfullscreen)
+    iframe(v-bind:src="theSrc" frameborder='0' allowfullscreen)
 
 </template>
 
@@ -13,27 +13,22 @@ import startsWith from 'lodash/startsWith';
 export default {
   name: 'video-embed',
   props: ['contentType', 'videoSrc'],
+  mounted() {
+    setTimeout(() => {
+      this.theSrc = this.src;
+    }, 5000);
+  },
+  data() {
+    theSrc: undefined
+  },
   computed: {
-    type() {
-      if (this.contentType === 'webinar') {
-        return 'live';
-      } else {
-        return 'default';
-      }
-    },
-    href() {
-      return `http://youtube.com/watch?v=${this.videoSrc}`;
-    },
     src() {
-      switch (this.type) {
-        case 'default':
-          return `https://www.youtube.com/embed/${this.videoSrc}`;
-          break;
-        case 'live':
+      switch (this.contentType) {
+        case 'webinar':
           return (startsWith(this.videoSrc, 'http')) ? this.videoSrc : `https://www.youtube.com/embed/${this.videoSrc}`;
           break;
         default:
-          return this.videoSrc;
+          return `https://www.youtube.com/embed/${this.videoSrc}`;
       }
     },
   },

@@ -10,24 +10,26 @@ import throttle from 'lodash/throttle';
 
 export default {
   mounted() {
-    // Attempt auto scroll every second
-    window.setInterval(this.attemptAutoScroll, AUTOSCROLL_ATTEMPT);
+    setTimeout(() => {
+      // Attempt auto scroll every second
+      window.setInterval(this.attemptAutoScroll, AUTOSCROLL_ATTEMPT);
 
-    // Listen for scroll events
-    window.addEventListener('scroll', () => {
-      this.onScroll(this);
-    }, { passive: true });
+      // Listen for scroll events
+      window.addEventListener('scroll', () => {
+        this.onScroll(this);
+      }, { passive: true });
 
-    // Listen for wheel events
-    window.addEventListener('wheel', this.onWheel, { passive: true }); // Passive to improve mobile performance
+      // Listen for wheel events
+      window.addEventListener('wheel', this.onWheel, { passive: true }); // Passive to improve mobile performance
 
-    // Listen for mousedown events
-    // window.addEventListener('mousedown', this.onMousedown, { passive: true }); // Passive to improve mobile performance
-    // window.addEventListener('touchstart', this.onMousedown, { passive: true }); // Passive to improve mobile performance
+      // Listen for mousedown events
+      // window.addEventListener('mousedown', this.onMousedown, { passive: true }); // Passive to improve mobile performance
+      // window.addEventListener('touchstart', this.onMousedown, { passive: true }); // Passive to improve mobile performance
 
-    // Listen for mouseup events
-    // window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
-    // window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
+      // Listen for mouseup events
+      // window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
+      // window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
+    }, 5000);
   },
   destroyed () {
     // Remove event listeners

@@ -16,7 +16,7 @@ export default {
       enteredPasscode: undefined,
     }
   },
-  created() {
+  mounted() {
     if (window.location.hostname === 'localhost') {
       this.locked = false;
     }

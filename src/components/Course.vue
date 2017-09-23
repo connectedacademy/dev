@@ -4,20 +4,23 @@
     .col#col-main
       .main-container
         class-selector
+        section-navigator
         course-content
 
 </template>
 
 <script>
 // Components
+import CourseContent from '@/components/conversation/CourseContent';
 import ClassSelector from '@/components/ClassSelector';
+import SectionNavigator from '@/components/navigation/SectionNavigator';
 
 // Mixins
 import ScrollPoints from '@/mixins/ScrollPoints';
 
-const CourseContent = () => ({
-  component: import('@/components/conversation/CourseContent'),
-});
+// const CourseContent = () => ({
+//   component: import('@/components/conversation/CourseContent'),
+// });
 
 export default {
   name: 'course',
@@ -36,8 +39,9 @@ export default {
     next();
   },
   activated() {
-    this.$store.dispatch('checkAuth');
-    this.setScrollPoints();
+    setTimeout(() => {
+      this.setScrollPoints();
+    }, 5000);
     window.scrollTo(0, this.$store.state.savedScrollPosition);
     // this.toMessage();
   },
@@ -49,6 +53,7 @@ export default {
   components: {
     ClassSelector,
     CourseContent,
+    SectionNavigator,
   },
   methods: {
     toMessage() {

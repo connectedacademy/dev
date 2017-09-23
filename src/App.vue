@@ -7,19 +7,17 @@
 
   //- lock(passcode="76234")
 
-  debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
+  //- debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
   authentication-flow
 
   media-lightbox
 
-  section-navigator
-
   burger-menu
 
   left-drawer
 
-  right-drawer(v-if="isRegistered")
+  right-drawer
 
   .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '0' : '0px' }")
 
@@ -36,90 +34,89 @@
 </template>
 
 <script>
-import store from '@/store';
-import { mapGetters } from 'vuex';
-import API from '@/api';
-
-// Components
-import Navigation from '@/components/navigation/Navigation';
-import BurgerMenu from '@/components/navigation/BurgerMenu';
-import SectionNavigator from '@/components/navigation/SectionNavigator';
-import Lock from '@/components/authentication/Lock';
-
-// Mixins
-import AutoScroll from '@/mixins/AutoScroll';
-import Overlay from '@/mixins/Overlay';
-
-export default {
-  name: 'app',
-  mixins: [
-    AutoScroll,
-    Overlay,
-  ],
-  watch: {
-    activeSegment(nV, oV) {
-      if (nV) {
-        // Segment visible, disable scroll on window
-        document.body.className = "disable-scroll";
-      } else {
-        document.body.className = "allow-scroll";
-      }
-    },
-  },
-  created() {
-    this.$store.dispatch('checkAuth').then(() => {
-      // Check if user has registered
-      if (this.isAuthenticated && !this.isRegistered) {
-        this.$router.push('/registration');
-      } else {
-        if (this.user && this.user.account) {
-          this.$ga.set('userId', this.user.account);
+  import store from '@/store';
+  import {
+    mapGetters
+  } from 'vuex';
+  import API from '@/api';
+  
+  // Components
+  import Navigation from '@/components/navigation/Navigation';
+  import BurgerMenu from '@/components/navigation/BurgerMenu';
+  import Lock from '@/components/authentication/Lock';
+  
+  // Mixins
+  import AutoScroll from '@/mixins/AutoScroll';
+  import Overlay from '@/mixins/Overlay';
+  
+  export default {
+    name: 'app',
+    mixins: [
+      AutoScroll,
+      Overlay,
+    ],
+    watch: {
+      activeSegment(nV, oV) {
+        if (nV) {
+          // Segment visible, disable scroll on window
+          document.body.className = "disable-scroll";
+        } else {
+          document.body.className = "allow-scroll";
         }
-      }
-    });
-
-    this.$store.dispatch('getCourse');
-  },
-  mounted() {
-    // Subscribe to socket
-    API.message.subscribeToSocket();
-  },
-  data() {
-    return {
-      navTitle: 'Connected Academy',
-    };
-  },
-  computed: {
-    ...mapGetters([
-      'isRegistered', 'activeSegment', 'peekSegment', 'pageStyles', 'user', 'navigation',
-    ]),
-    overlayVisible() {
-      return this.$store.state.navigation.overlayVisible
-      || this.$store.state.auth.visible
-      || this.$store.state.conversation.activeSegment
-      || this.$store.state.conversation.peekSegment
-      || this.$store.state.conversation.likeModalVisible;
+      },
     },
-  },
-  store,
-  components: {
-    Navigation,
-    BurgerMenu,
-    SectionNavigator,
-    'LeftDrawer': () => import('@/components/navigation/drawers/LeftDrawer'),
-    'RightDrawer': () => import('@/components/navigation/drawers/RightDrawer'),
-    'DebugPanel': () => import('@/components/DebugPanel'),
-    'AuthenticationFlow': () => import('@/components/authentication/AuthenticationFlow'),
-    'ActionPanel': () => import('@/components/conversation/ActionPanel'),
-    'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
-  },
-  methods: {
-    goBack() {
-      this.$router.go(-1);
+    mounted() {
+      this.$store.dispatch('getCourse');
+      this.$store.dispatch('checkAuth');
+      // .then(() => {
+      //   // Check if user has registered
+      //   if (this.isAuthenticated && !this.isRegistered) {
+      //     this.$router.push('/registration');
+      //   } else {
+      //     if (this.user && this.user.account) {
+      //       this.$ga.set('userId', this.user.account);
+      //     }
+      //   }
+      // });
+  
+      // Subscribe to socket
+      // API.message.subscribeToSocket();
     },
-  },
-};
-
+    data() {
+      return {
+        navTitle: 'Connected Academy',
+      };
+    },
+    computed: {
+      ...mapGetters([
+        'activeSegment', 'pageStyles', 'navigation',
+      ]),
+      overlayVisible() {
+        return this.$store.state.navigation.overlayVisible ||
+          this.$store.state.auth.visible ||
+          this.$store.state.conversation.activeSegment ||
+          this.$store.state.conversation.peekSegment ||
+          this.$store.state.conversation.likeModalVisible;
+      },
+    },
+    store,
+    components: {
+      Navigation,
+      BurgerMenu,
+      'LeftDrawer': () =>
+        import ('@/components/navigation/drawers/LeftDrawer'),
+      'RightDrawer': () =>
+        import ('@/components/navigation/drawers/RightDrawer'),
+      // 'DebugPanel': () =>
+        // import ('@/components/DebugPanel'),
+      'AuthenticationFlow': () =>
+        import ('@/components/authentication/AuthenticationFlow'),
+      'ActionPanel': () =>
+        import ('@/components/conversation/ActionPanel'),
+      'MediaLightbox': () =>
+        import ('@/components/modals/MediaLightbox'),
+    },
+  };
 </script>
 
 <style lang="stylus">

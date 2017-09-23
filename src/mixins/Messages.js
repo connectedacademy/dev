@@ -9,45 +9,48 @@ import round from 'lodash/round';
 
 export default {
   mounted() {
-    Vue.io.socket.on('message', (obj) => {
-      
-      if (obj.msgtype === 'message') {
+    setTimeout(() => {
 
+      Vue.io.socket.on('message', (obj) => {
         
-        const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
-        let updateMessage = this.messages[key]
-        
-        if (!obj.msg.tag && updateMessage) {
+        if (obj.msgtype === 'message') {
+
+          const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
+          let updateMessage = this.messages[key]
           
-          Vue.$log.info('message received over socket connection')
-          Vue.$log.info(obj);
+          if (!obj.msg.tag && updateMessage) {
+            
+            Vue.$log.info('message received over socket connection')
+            Vue.$log.info(obj);
 
-          // Update message
-          updateMessage.message = obj.msg
+            // Update message
+            updateMessage.message = obj.msg
 
-          // Increment total
-          updateMessage.info.total = updateMessage.info.total + 1
+            // Increment total
+            updateMessage.info.total = updateMessage.info.total + 1
 
-          // Update messages object
-          Vue.set(this.messages, key, updateMessage);
+            // Update messages object
+            Vue.set(this.messages, key, updateMessage);
 
-          // Update active segment messages
-          if (this.peekSegment === round(parseInt(obj.msg.segment) * 0.2)) {
-            Vue.$log.info('Pushing message');
-            this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
+            // Update active segment messages
+            if (this.peekSegment === round(parseInt(obj.msg.segment) * 0.2)) {
+              Vue.$log.info('Pushing message');
+              this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
+            }
+          }
+          
+          if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
+
+            Vue.$log.info('message received over socket connection')
+            Vue.$log.info(obj);
+
+            Vue.$log.info('Pushing message to webinar ticker');
+            this.webinarMessages.push(obj.msg);
           }
         }
-        
-        if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
+      });
+    }, 5000);
 
-          Vue.$log.info('message received over socket connection')
-          Vue.$log.info(obj);
-
-          Vue.$log.info('Pushing message to webinar ticker');
-          this.webinarMessages.push(obj.msg);
-        }
-      }
-    });
   },
   data() {
     return {
