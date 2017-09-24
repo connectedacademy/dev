@@ -21,11 +21,10 @@
             label {{ $t('auth.enter_your_age') }}
             input(type="text" v-model="response.age")
 
-          fieldset.pull-left.validate(v-bind:class="{ valid: validatedResponse.lang }")
+          fieldset.pull-left.validate(v-bind:class="{ valid: validatedResponse.lang }" v-if="course.langs.length > 1")
             label {{ $t('auth.select_your_language') }}
             select(v-model="response.lang")
-              option(value="") {{ $t('common.choose_one') }}
-              option(v-for="lang in course.langs") {{ getCountryName(lang) }}
+              option(v-for="(lang, index) in course.langs") {{ getCountryName(lang) }}
           
           .clearfix
 
@@ -143,6 +142,11 @@
         },
       );
     },
+    watch: {
+      course(nV) {
+        this.response.lang = (nV.langs.length === 1) ? nV.langs[0] : undefined;
+      }
+    },
     data() {
       return {
         currentPage: 1,
@@ -251,6 +255,7 @@
       fieldset.validate
         input, select
           border-color $color-danger
+          margin-top 24px
         &.valid
           input, select
             border-color $color-success
@@ -261,11 +266,13 @@
         margin-bottom 20px
 
       input, select
-        margin 10px 0
         max-width calc(100% - 20px)
         width 260px
         &.full-width
           width 100%
+
+      input[type="checkbox"]
+        width auto
       
       select
         font-size 1.1em
@@ -349,9 +356,9 @@ ul.hub-selector
 
 #terms-markdown
   radius(4px)
-  background-color $color-light-grey
-  border $color-light-grey 1px solid
+  background-color $color-lightest-grey
   max-height 340px
+  min-height 200px
   padding 5px 15px
   overflow-y auto
   overflow-x none

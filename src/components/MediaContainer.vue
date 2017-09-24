@@ -7,13 +7,12 @@
       #soundcloud-container(v-if="src && (this.playerType === 'soundcloud')")
         img(src="../assets/icons/soundcloud.png")
     
-    #images-wrapper(v-if="videoIsActive && media")
-      #mobile-image-view(v-if="media[currentSegmentIndex]" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentSegmentIndex].text})` }" @click="setLightboxMedia(media[currentSegmentIndex].text)")
+    #images-wrapper
+      #mobile-image-view(v-if="media[savedSegmentIndex]" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[savedSegmentIndex].text})` }" @click="setLightboxMedia(media[savedSegmentIndex].text)")
 
-      //- swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper")
+      swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper")
         swiper-slide(v-for="(item, key) in media" v-bind:key="key")
           img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
-          .swiper-lazy-preloader.swiper-lazy-preloader-white
 
 </template>
 
@@ -28,7 +27,6 @@
   } from 'vue-awesome-swiper'
   
   import * as config from '@/api/config';
-  import debounce from 'lodash/debounce';
   import throttle from 'lodash/throttle';
   import inRange from 'lodash/inRange';
   
@@ -53,37 +51,14 @@
       //   this.isMobile = (window.innerWidth < 600);
       // }, { passive: true });
     },
-    destroyed() {
+    beforeDestroy() {
       // Remove event listeners
       this.soundcloudPlayer = undefined;
     },
-    data() {
-      return {
-        lightboxVisible: false,
-        lightboxImage: undefined,
-        soundcloudPlayer: undefined,
-        pHeight: 188,
-        pWidth: (188 / 0.5625),
-        isMobile: false,
-        swiperOption: {
-          performanceMode: false,
-          slidesPerView: 3,
-          centeredSlides: false,
-          spaceBetween: 20,
-          loop: false,
-          paginationClickable: false,
-          preloadImages: false,
-          lazyLoading: true
-        },
-      };
-    },
     watch: {
-      currentSegmentIndex(nV) {
-        if (nV >= 0 && this.$refs.mySwiper) {
-          this.$refs.mySwiper.swiper.slideTo(nV);
-        }
-      },
       currentTime(nV, oV) {
+        this.updateSwiper(this)
+
         // if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
         // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
       },
@@ -102,6 +77,41 @@
           this.$store.commit('PAUSE_VIDEO');
         }
       }
+    },
+    data() {
+      return {
+        lightboxVisible: false,
+        lightboxImage: undefined,
+        soundcloudPlayer: undefined,
+        pHeight: 188,
+        pWidth: (188 / 0.5625),
+        isMobile: false,
+        savedSegmentIndex: 0,
+        swiperOption: {
+          slidesPerView: 3,
+          centeredSlides: false,
+          spaceBetween: 20,
+          loop: false,
+          paginationClickable: false,
+          preloadImages: false,
+          lazyLoading: true
+        },
+      };
+    },
+    computed: {
+      ...mapGetters([
+        'course', 'currentTime', 'videoPlaying', 'media'
+      ]),
+      src() {
+        switch (this.playerType) {
+          case 'youtube':
+            return (this.classSection) ? this.classSection.videoId : '';
+            break;
+          case 'soundcloud':
+            return (this.classSection) ? `/tracks/${this.classSection.soundcloudId}` : '';
+            break;
+        }
+      },
     },
     methods: {
       setLightboxMedia(media) {
@@ -185,34 +195,18 @@
         }
   
       }, 1000),
-    },
-    computed: {
-      ...mapGetters([
-        'course', 'currentTime', 'videoPlaying', 'media', 'currentSegment',
-      ]),
-      src() {
-        switch (this.playerType) {
-          case 'youtube':
-            return (this.classSection) ? this.classSection.videoId : '';
-            break;
-          case 'soundcloud':
-            return (this.classSection) ? `/tracks/${this.classSection.soundcloudId}` : '';
-            break;
-        }
-      },
-      currentSegmentIndex() {
-        if (this.media.length === 0) {
-          return -1;
-        }
-  
-        for (var i = 0; i < this.media.length; i++) {
-          const image = this.media[i];
-  
-          if (inRange(this.currentSegment, image.start, image.end)) {
-            return i;
+      updateSwiper: throttle(function(self) {
+        for (let i = 0; i < self.media.length; i++) {
+          const image = self.media[i];
+
+          if (inRange(self.currentTime, image.start, image.end)) {
+            self.savedSegmentIndex = i;
+            if (self.$refs.mySwiper.swiper.realIndex !== i) {
+              self.$refs.mySwiper.swiper.slideTo(i);
+            }
           }
         }
-      },
+      }, 2000),
     },
   };
 </script>
@@ -268,18 +262,18 @@ $media-height = 220px
         position absolute
         &:hover
           cursor pointer
-    // .swiper-container
-    //   display block
-    //   @media(max-width: 568px)
-    //     display none
+    .swiper-container
+      display block
+      @media(max-width: 568px)
+        display none
     #mobile-image-view
       background-image()
       background-size contain
       pinned()
       position absolute
-      // display none
-      // @media(max-width: 568px)
-      //   display block
+      display none
+      @media(max-width: 568px)
+        display block
 
   #stream-wrapper
     top 0

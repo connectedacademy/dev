@@ -20,9 +20,6 @@
         li
           a(v-bind:href="replyLink" target="_blank")
             icon(name="reply")
-        li.hidden
-          a(v-bind:href="tweetLink" target="_blank")
-            icon(name="twitter")
         li.message-timestamp
           | {{ timeStamp }}
 
@@ -79,7 +76,7 @@ export default {
 .message
   box-sizing()
   max-height 128px
-  margin 10px
+  margin 10px 15px
   padding 0 10px 40px 10px
   padding-left 50px
   position relative

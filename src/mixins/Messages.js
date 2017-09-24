@@ -25,7 +25,7 @@ export default {
         if (obj.msgtype === 'message') {
 
           const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
-          let updateMessage = this.messages[key]
+          let updateMessage = this.conversationMessages[key]
           
           if (!obj.msg.tag && updateMessage) {
             
@@ -39,7 +39,7 @@ export default {
             updateMessage.info.total = updateMessage.info.total + 1
 
             // Update messages object
-            Vue.set(this.messages, key, updateMessage);
+            Vue.set(this.conversationMessages, key, updateMessage);
 
             // Update active segment messages
             if (this.peekSegment === round(parseInt(obj.msg.segment) * 0.2)) {
@@ -63,16 +63,13 @@ export default {
   },
   data() {
     return {
-      messages: {},
+      conversationMessages: {},
     };
   },
   computed: {
     ...mapGetters([
       'currentClass', 'currentSection'
     ]),
-    chunkedMessages() {
-      return this.messages;
-    },
   },
   methods: {
     loadSegmentSummary(segmentGroup, force) {
@@ -81,8 +78,8 @@ export default {
       if (this.content === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
       if (this.currentClass === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return; }
 
-      let thinkAhead = 4; // Think ahead
-      let thinkBehind = 4; // Think behind
+      let thinkAhead = 5; // Think ahead
+      let thinkBehind = 5; // Think behind
 
       let segmentViewport = floor(window.innerHeight / 158.0) + thinkBehind;
 
@@ -103,8 +100,8 @@ export default {
 
         // Fill with blank messages
         for (var index = (startSegment * 0.2); index < (endSegment * 0.2); index++) {
-          if (this.messages[index]) continue;
-          Vue.set(this.messages, index, { loading: true, segmentGroup: index });
+          if (this.conversationMessages[index]) continue;
+          Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
         }
         API.message.getSegmentSummary(
           theRequest,
@@ -116,7 +113,7 @@ export default {
               newMessage.segmentGroup = parseInt(parseInt(group) * 0.2);
 
               if (newMessage.segmentGroup < (this.content.duration * 0.2)) {
-                Vue.set(this.messages, newMessage.segmentGroup, newMessage);
+                Vue.set(this.conversationMessages, newMessage.segmentGroup, newMessage);
               }
             }
           },

@@ -7,8 +7,8 @@
       .message-composer--body
         .textarea-wrapper(v-if="isRegistered" )
           textarea(name="name" rows="3" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
-        .login-warning(v-else)
-          h4 Please login to send messages
+        .login-warning(v-else @click="showAuth()")
+          | Please login to send messages
 
       .message-composer--footer(v-if="isRegistered")
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage") {{ submitText }}
@@ -22,11 +22,16 @@
 import API from '@/api';
 import {mapGetters} from 'vuex';
 
+import Auth from '@/mixins/Auth';
+
 import round from 'lodash/round';
 
 export default {
   name: 'message-composer',
   props: ['section'],
+  mixins: [
+    Auth,
+  ],
   data() {
     return {
       infoLabel: '',
@@ -137,10 +142,12 @@ export default {
         padding 0 20px
         position absolute
         text-align center
-        h4
-          reset()
-          color $color-text-dark-grey
-          line-height 50px !important
+        font-weight bold
+        color $color-text-dark-grey
+        line-height 50px !important
+        &:hover
+          cursor pointer
+          color darken($color-text-dark-grey, 10%)
 
       .textarea-wrapper
         overflow hidden

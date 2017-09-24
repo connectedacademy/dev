@@ -18,32 +18,34 @@
 </template>
 
 <script>
-import ActionPanel from '@/components/conversation/ActionPanel';
-import ConversationContainer from '@/components/ConversationContainer';
-
-import find from 'lodash/find';
-
-export default {
-  name: 'live-class',
-  props: ['content'],
-  components: {
-    ActionPanel,
-    ConversationContainer,
-  },
-  data() {
-    return {
-      collapsed: true,
-    };
-  },
-  methods: {
-    continueListening() {
-      this.collapsed = false;
-      const scrollPoint = find(this.$store.state.scrollPoints, { content_type: 'class' });
-      this.$store.commit('setCurrentSection', scrollPoint);
-      this.$store.commit('PLAY_VIDEO');
+  import ActionPanel from '@/components/conversation/ActionPanel';
+  import ConversationContainer from '@/components/ConversationContainer';
+  
+  import find from 'lodash/find';
+  
+  export default {
+    name: 'live-class',
+    props: ['content'],
+    components: {
+      ActionPanel,
+      ConversationContainer,
+    },
+    data() {
+      return {
+        collapsed: true,
+      };
+    },
+    methods: {
+      continueListening() {
+        this.collapsed = false;
+        const scrollPoint = find(this.$store.state.scrollPoints, {
+          content_type: 'class'
+        });
+        this.$store.commit('setCurrentSection', scrollPoint);
+        this.$store.commit('PLAY_VIDEO');
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="stylus" scoped>
@@ -70,6 +72,7 @@ export default {
 
   .course-content--container
     background-color white
+    overflow hidden
     position relative
 
     #continue-listening
@@ -85,6 +88,8 @@ export default {
         margin-left -100px
         position absolute
         width 200px
+        &:hover
+          cursor pointer
 
     &.collapsed
       max-height calc(calc(158px * 10) - 1px)

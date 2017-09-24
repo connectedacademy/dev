@@ -9,12 +9,12 @@
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
 
-      .message-wrapper(v-bind:class="{ loading: message.loading }")
+      .message-wrapper(v-bind:class="{ loading: message.loading, 'mock-message': (message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))) }")
 
         .suggestion(v-once v-if="message.message && message.message.suggestion")
           h3 "{{ message.message.text }}"
 
-        mock-message(v-once v-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
+        //- mock-message(v-once v-else-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
         
         message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
@@ -22,7 +22,6 @@
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
       span(v-if="message.info && message.info.total && (message.info.total > 1)") {{ `Read ${message.info.total} other notes` }}
-      span(v-else-if="message.info && message.info.total && (message.info.total > 0)") {{ `Read all notes` }}
       span(v-else) Be the first to make a note.
 
     .meta-container(v-if="segmentPeeking || segmentOpened" v-bind:class="{ active: segmentOpened }")
@@ -40,188 +39,200 @@
 </template>
 
 <script>
-import orderBy from 'lodash/orderBy';
-import {mapGetters} from 'vuex';
-import API from '@/api';
-
-import MessageComposer from '@/components/MessageComposer';
-import Subtitle from '@/components/conversation/Subtitle';
-import Message from '@/components/conversation/Message';
-import MockMessage from '@/components/conversation/MockMessage';
-
-export default {
-  name: 'time-segment',
-  props: ['index', 'message', 'subtitle'],
-  components: {
-    MessageComposer,
-    Message,
-    MockMessage,
-    Subtitle,
-  },
-  watch: {
-    'activeSegment': {
-      handler: function(nV, oV) {
-        if (oV === this.message.segmentGroup) {
-          this.closeSegment();
-        }
-      },
-      deep: false,
+  import orderBy from 'lodash/orderBy';
+  import {
+    mapGetters
+  } from 'vuex';
+  import API from '@/api';
+  
+  import MessageComposer from '@/components/MessageComposer';
+  import Subtitle from '@/components/conversation/Subtitle';
+  import Message from '@/components/conversation/Message';
+  import MockMessage from '@/components/conversation/MockMessage';
+  
+  export default {
+    name: 'time-segment',
+    props: ['index', 'message', 'subtitle', 'contentSlug'],
+    components: {
+      MessageComposer,
+      Message,
+      MockMessage,
+      Subtitle,
     },
-    'peekSegment': {
-      handler: function(nV, oV) {
-        if (nV === this.message.segmentGroup) {
-          
-          this.segmentPeeking = (this.segmentPeeking) ? this.segmentPeeking : true;
-
-        } else if (oV === this.message.segmentGroup) {
-
+    watch: {
+      'activeSegment': {
+        handler: function(nV, oV) {
+          if (oV === this.message.segmentGroup) {
+            this.closeSegment();
+          }
+        },
+        deep: false,
+      },
+      'peekSegment': {
+        handler: function(nV, oV) {
+          if (nV === this.message.segmentGroup) {
+  
+            this.segmentPeeking = (this.segmentPeeking) ? this.segmentPeeking : true;
+  
+          } else if (oV === this.message.segmentGroup) {
+  
+            this.segmentStyle = {
+              transition: 'all .3s ease',
+              position: 'absolute',
+              height: '157px',
+              'z-index': 56,
+            };
+  
+            setTimeout(() => {
+              this.unpeek()
+            }, 50);
+          }
+        },
+        deep: false,
+      },
+    },
+    data() {
+      return {
+        segmentExpanded: false,
+        segmentOpened: false,
+        segmentPeeking: false,
+        loadingMessages: false,
+        segmentStyle: {},
+        calculatedOffset: 0,
+        calculatedOffsetBottom: 0,
+      };
+    },
+    computed: {
+      ...mapGetters([
+        'activeSegment',
+        'peekSegment',
+        'activeSegmentMessages',
+      ]),
+      orderedMessages() {
+        // Order messages
+        return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
+      },
+    },
+    methods: {
+      peek() {
+  
+        if (!this.segmentOpened) {
+  
           this.segmentStyle = {
-            transition: 'all .3s ease',
-            position: 'absolute',
-            height: '157px',
-            'z-index': 56,
+            transition: 'height .3s ease'
           };
-
-          setTimeout(() => { this.unpeek() }, 50);
+  
+          this.$store.commit('PAUSE_VIDEO');
+          this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
         }
       },
-      deep: false,
-    },
-  },
-  data() {
-    return {
-      segmentExpanded: false,
-      segmentOpened: false,
-      segmentPeeking: false,
-      loadingMessages: false,
-      segmentStyle: {},
-      calculatedOffset: 0,
-      calculatedOffsetBottom: 0,
-    };
-  },
-  computed: {
-    ...mapGetters([
-      'activeSegment',
-      'peekSegment',
-      'activeSegmentMessages',
-    ]),
-    orderedMessages() {
-      // Order messages
-      return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
-    },
-  },
-  methods: {
-    peek() {
-
-      if (!this.segmentOpened) {
-
+      unpeek() {
+  
+        this.$store.commit('PLAY_VIDEO');
+  
         this.segmentStyle = {
-          transition: 'height .3s ease'
+          position: 'absolute',
+          height: '157px',
+          'z-index': 56,
         };
-
-        this.$store.commit('PAUSE_VIDEO');
-        this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
-      }
-    },
-    unpeek() {
-
-      this.$store.commit('PLAY_VIDEO');
-
-      this.segmentStyle = {
-        position: 'absolute',
-        height: '157px',
-        'z-index': 56,
-      };
-
-      setTimeout(() => {
-
-        this.segmentStyle = {};
-        this.segmentOpened = this.segmentPeeking = false;
-        this.$store.commit('SET_PEEK_SEGMENT', undefined);
-
-      }, 300); // Timeout equal to time for overlay to fade
-    },
-    openSegment() {
-
-      if (this.segmentOpened) { return; }
-
-      // Remove segment messages
-      this.$store.commit('SET_SEGMENT_MESSAGES', []);
-
-      this.loadingMessages = true;
-
-      this.$store.commit('SET_ACTIVE_SEGMENT', this.message.segmentGroup)
-
-      const peekElement = document.getElementsByClassName('peek')[0].getBoundingClientRect();
-      this.calculatedOffset = peekElement.top;
-      this.calculatedOffsetBottom = window.innerHeight - peekElement.bottom;
-
-      this.segmentStyle = {
-        top: `${this.calculatedOffset}px`,
-        bottom: `${this.calculatedOffsetBottom}px`,
-        position: 'fixed',
-      };
-
-      setTimeout(() => {
-        // DOM updated
-        this.segmentOpened = true;
+  
+        setTimeout(() => {
+  
+          this.segmentStyle = {};
+          this.segmentOpened = this.segmentPeeking = false;
+          this.$store.commit('SET_PEEK_SEGMENT', undefined);
+  
+        }, 300); // Timeout equal to time for overlay to fade
+      },
+      openSegment() {
+  
+        if (this.segmentOpened) {
+          return;
+        }
+  
+        // Remove segment messages
+        this.$store.commit('SET_SEGMENT_MESSAGES', []);
+  
+        this.loadingMessages = true;
+  
+        this.$store.commit('SET_ACTIVE_SEGMENT', this.message.segmentGroup)
+  
+        const peekElement = document.getElementsByClassName('peek')[0].getBoundingClientRect();
+        this.calculatedOffset = peekElement.top;
+        this.calculatedOffsetBottom = window.innerHeight - peekElement.bottom;
+  
         this.segmentStyle = {
-          transition: 'all .3s ease',
-          top: '60px',
-          bottom: '10px',
+          top: `${this.calculatedOffset}px`,
+          bottom: `${this.calculatedOffsetBottom}px`,
           position: 'fixed',
         };
-
-        setTimeout(() => { this.loadSegmentMessages() }, 300);
-
-      }, 50);
+  
+        setTimeout(() => {
+          // DOM updated
+          this.segmentOpened = true;
+          this.segmentStyle = {
+            transition: 'all .3s ease',
+            top: '60px',
+            bottom: '10px',
+            position: 'fixed',
+          };
+  
+          setTimeout(() => {
+            this.loadSegmentMessages()
+          }, 300);
+  
+        }, 50);
+      },
+      closeSegment() {
+  
+        if (this.opened) {
+          return
+        }
+  
+        // Remove segment messages
+        this.$store.commit('SET_SEGMENT_MESSAGES', []);
+  
+        this.segmentStyle = {
+          transition: 'all .3s ease',
+          top: `${this.calculatedOffset}px`,
+          bottom: `${this.calculatedOffsetBottom + 90}px`,
+          position: 'fixed',
+        };
+  
+        setTimeout(() => {
+          this.unpeek()
+        }, 300);
+      },
+      loadSegmentMessages() {
+  
+        this.$log.info('Loading segment messages');
+  
+        this.loadingMessages = true;
+  
+        let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.contentSlug;
+  
+        const theRequest = {
+          theClass: this.contentSlug,
+          theContent: theContent,
+          startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
+          endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 4}`,
+        };
+  
+        API.message.getMessages(
+          theRequest,
+          response => {
+            this.$store.commit('SET_SEGMENT_MESSAGES', response.data);
+            this.loadingMessages = false;
+          },
+          response => {
+            alert('There was an error');
+            this.$store.commit('SET_SEGMENT_MESSAGES', []);
+            this.loadingMessages = false;
+          },
+        );
+      },
     },
-    closeSegment() {
-
-      if (this.opened) { return }
-
-      // Remove segment messages
-      this.$store.commit('SET_SEGMENT_MESSAGES', []);
-
-      this.segmentStyle = {
-        transition: 'all .3s ease',
-        top: `${this.calculatedOffset}px`,
-        bottom: `${this.calculatedOffsetBottom + 90}px`,
-        position: 'fixed',
-      };
-
-      setTimeout(() => { this.unpeek() }, 300);
-    },
-    loadSegmentMessages() {
-
-      this.$log.info('Loading segment messages');
-
-      this.loadingMessages = true;
-
-      let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.$store.state.currentSection.slug;
-
-      const theRequest = {
-        theClass: this.$store.getters.currentClass.slug,
-        theContent: theContent,
-        startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
-        endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 4}`,
-      };
-
-      API.message.getMessages(
-        theRequest,
-        response => {
-          this.$store.commit('SET_SEGMENT_MESSAGES', response.data);
-          this.loadingMessages = false;
-        },
-        response => {
-          alert('There was an error');
-          this.$store.commit('SET_SEGMENT_MESSAGES', []);
-          this.loadingMessages = false;
-        },
-      );
-    },
-  },
-};
+  };
 </script>
 
 <style lang="stylus" scoped>
@@ -245,7 +256,9 @@ export default {
     width calc(100% - 20px)
 
   .primary-wrapper
+    
     background-color white
+
     border-bottom $color-border 1px solid
     height 156px
     min-height 156px
@@ -275,8 +288,14 @@ export default {
       animate()
       position absolute
       top 50%
-      // &.loading
-      //   opacity 0.4
+      &.mock-message
+        background url('../../assets/images/loading.png')
+        background-repeat repeat
+        background-size 780px 158px
+        background-position right center
+        height 158px
+        @media(max-width: 800px)
+          background-position -390px center
 
     .subtitle-wrapper
       animate()
@@ -316,8 +335,8 @@ export default {
 
   .meta-container
     animate()
-    background-color $color-lightest-grey
     box-sizing()
+    background-color $color-lightest-grey
     opacity 0
     padding 10px
     position absolute
@@ -325,7 +344,7 @@ export default {
     bottom 50px
     right 0
     left 0
-    overflow scroll
+    overflow auto
     .message-wrapper
       transform translate(0, 0) !important
       position relative

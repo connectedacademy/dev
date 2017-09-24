@@ -39,7 +39,9 @@ export default {
 @import '~stylus/shared'
 
 .info-dialogue
-  background-color $color-light-grey
+  radius(4px)
+  background-color $color-primary
+  color white
   margin-bottom 15px
   padding 15px
   position relative

@@ -28,71 +28,73 @@
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
-import {mapGetters} from 'vuex';
-import Moment from 'moment-mini';
-
-import MessageComposer from '@/components/MessageComposer';
-import MediaContainer from '@/components/MediaContainer';
-
-import 'vue-awesome/icons/pause';
-import 'vue-awesome/icons/play';
-import 'vue-awesome/icons/step-forward';
-import 'vue-awesome/icons/twitter';
-import 'vue-awesome/icons/chevron-up';
-import 'vue-awesome/icons/chevron-down';
-import 'vue-awesome/icons/soundcloud';
-import 'vue-awesome/icons/youtube';
-
-export default {
-  name: 'action-panel',
-  props: ['content'],
-  components: {
-    MessageComposer,
-    MediaContainer,
-  },
-  mounted() {
-    this.availablePlayerTypes = []; // Remove all available player types
-    if (this.content.videoId) {
-      // If a videoId is set on the content then add YouTube as an available type
-      this.availablePlayerTypes.push('youtube');
+  import * as types from '@/store/mutation-types';
+  import {
+    mapGetters
+  } from 'vuex';
+  import Moment from 'moment-mini';
+  
+  import MessageComposer from '@/components/MessageComposer';
+  import MediaContainer from '@/components/MediaContainer';
+  
+  import 'vue-awesome/icons/pause';
+  import 'vue-awesome/icons/play';
+  import 'vue-awesome/icons/step-forward';
+  import 'vue-awesome/icons/twitter';
+  import 'vue-awesome/icons/chevron-up';
+  import 'vue-awesome/icons/chevron-down';
+  import 'vue-awesome/icons/soundcloud';
+  import 'vue-awesome/icons/youtube';
+  
+  export default {
+    name: 'action-panel',
+    props: ['content'],
+    components: {
+      MessageComposer,
+      MediaContainer,
+    },
+    mounted() {
+      this.availablePlayerTypes = []; // Remove all available player types
+      if (this.content.videoId) {
+        // If a videoId is set on the content then add YouTube as an available type
+        this.availablePlayerTypes.push('youtube');
+      }
+      if (this.content.soundcloudId) {
+        // If a soundcloudId is set on the content then add SoundCloud as an available type
+        this.availablePlayerTypes.push('soundcloud');
+      }
+    },
+    data() {
+      return {
+        playerTypeIndex: 0,
+        availablePlayerTypes: [],
+      };
+    },
+    computed: {
+      ...mapGetters(['mediaHidden', 'videoPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
+      start() {
+        return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
+      },
+      end() {
+        return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss');
+      },
+      twitterLink() {
+        return 'https://twitter.com';
+        // return `https://twitter.com/${hashtag}`;
+      },
+    },
+    methods: {
+      toggleComposer() {
+        this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
+      },
+      toggleVideoPlaying() {
+        this.$store.commit(this.videoPlaying ? 'PAUSE_VIDEO' : 'PLAY_VIDEO');
+      },
+      togglePlayerType() {
+        this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);
+      },
     }
-    if (this.content.soundcloudId) {
-      // If a soundcloudId is set on the content then add SoundCloud as an available type
-      this.availablePlayerTypes.push('soundcloud');
-    }
-  },
-  data() {
-    return {
-      playerTypeIndex: 0,
-      availablePlayerTypes: [],
-    };
-  },
-  computed: {
-    ...mapGetters(['mediaHidden', 'videoPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
-    start() {
-      return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
-    },
-    end() {
-      return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss');
-    },
-    twitterLink() {
-      return 'https://twitter.com';
-      // return `https://twitter.com/${hashtag}`;
-    },
-  },
-  methods: {
-    toggleComposer() {
-      this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
-    },
-    toggleVideoPlaying() {
-      this.$store.commit(this.videoPlaying ? 'PAUSE_VIDEO' : 'PLAY_VIDEO');
-    },
-    togglePlayerType() {
-      this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);
-    },
-  }
-};
+  };
 </script>
 
 <style lang="stylus" scoped>
@@ -158,7 +160,7 @@ $media-height = 220px
       margin 0
       position absolute
       left (38px * 2) + 20px + 40px
-      right (38px * 1) + 10px + 40px + 40px
+      right (38px * 1) + 20px + 40px + 40px
       @media(max-width: 568px)
         right (38px * 0) + 10px + 40px
         #progress-bar--end
@@ -167,23 +169,24 @@ $media-height = 220px
         font-size 0.8em
         font-weight bold
         line-height 50px
-        padding 0 10px
+        padding 0 15px
         position absolute
         &#progress-bar--start
           color $color-primary
-          left -50px
+          left -60px
         &#progress-bar--end
           color $color-text-grey
-          right -50px
+          right -60px
       #progress-bar--track
         background-color $color-primary
         height 2px
-        margin 24px 10px
+        margin 24px 0
       #progress-bar--thumb
         radius(50%)
         background-color $color-primary
         height 10px
         width 10px
+        margin-left -5px
         position absolute
         top 20px
         left 0px

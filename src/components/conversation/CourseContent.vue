@@ -2,7 +2,7 @@
 
 .course-content-wrapper
 
-  .course-content-group(v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .course-content-group(v-if="releasedContent" v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- QUESTION
     injected-question(v-if="content.content_type === 'question'" v-bind:slug="content.slug")
@@ -44,7 +44,7 @@
         markdown-link.pull-right(v-bind:md-content="content" v-if="content.hasContent && !content.thumbnails")
         .clearfix
 
-  .course-content-group.course-content-group--future(v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
+  .course-content-group.course-content-group--future(v-if="futureContent" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
 
     //- FUTURE CONTENT
     future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     viewCurrentClass() {
-      if (!this.course) { return; }
+      if (!this.course || !this.course.classes) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           this.$store.dispatch('getSpec', theClass.slug);

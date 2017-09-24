@@ -2,7 +2,7 @@
 
   .conversation-container(ref="conversationContainer")
 
-    #view-toggle(v-if="currentSection" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
+    #view-toggle(v-if="currentSection && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
       icon(name="twitter")
       icon(name="quote-right")
 
@@ -12,7 +12,7 @@
           path(v-bind:d="points" transform="translate(400,0)")
 
     .inner-wrapper(v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
-      time-segment(v-for="(message, index) in chunkedMessages" v-bind:key="index" v-bind:index="index" v-bind:message="messages[index]" v-bind:subtitle="subtitles[index]")
+      time-segment(v-for="(message, index) in conversationMessages" v-bind:key="index" v-bind:index="index" v-bind:message="message" v-bind:subtitle="subtitles[index]" v-bind:contentSlug="content.slug")
 
 </template>
 
@@ -53,8 +53,8 @@ export default {
     // Fill with blank messages
     // const segmentCount = this.content.duration * 0.2;
     // for (var index = 0; index < segmentCount; index++) {
-    //   if (this.messages[index]) continue;
-    //   this.messages[index] = {
+    //   if (this.conversationMessages[index]) continue;
+    //   this.conversationMessages[index] = {
     //     loading: true,
     //     segmentGroup: index
     //   }
@@ -67,13 +67,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'currentSegmentGroup', 'peekSegment', 'course',
+      'currentSection', 'currentSegmentGroup', 'peekSegment', 'activeSegment', 'course',
     ]),
     containerHeight() {
       return `${(this.content.duration * 0.2) * 158.0 + 124}px`;
     },
   },
   watch: {
+    activeSegment(nV) {
+      setTimeout(() => {
+        this.messagePriority = (nV) ? false : this.messagePriority;
+      }, 300);
+    },
     currentSegmentGroup(nV, oV) {
       if (nV === undefined) { return; }
       if (oV !== nV) {
@@ -130,11 +135,17 @@ export default {
 
   .inner-wrapper
     background-color white
-    background url('../assets/images/line.png')
+    background url('../assets/images/loading.png')
     background-repeat repeat
-    background-size 1px 158px
+    background-size auto 158px
+    background-position right -1px
     
     overflow hidden
+    @media(max-width: 800px)
+      background-position center -1px
+    @media(max-width: 600px)
+      background-position -380px -1px
+    
     .subtitle-wrapper, .message-wrapper
       transform translate(0%, -50%)
       width 50%
