@@ -36,7 +36,7 @@ export default {
     jumpToContent() {
       const segmentPosition = this.scrollPoint.sectionTop + 1;
 
-      this.$store.commit(types.PAUSE_VIDEO);
+      this.$store.commit(types.PAUSE_MEDIA);
       this.$store.commit('setScrollPosition', segmentPosition);
 
       setTimeout(() => {

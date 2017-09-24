@@ -42,7 +42,6 @@
           content_type: 'class'
         });
         this.$store.commit('setCurrentSection', scrollPoint);
-        this.$store.commit('PLAY_VIDEO');
       }
     }
   };

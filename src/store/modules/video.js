@@ -24,10 +24,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  ['PAUSE_VIDEO'](initialState) {
+  ['PAUSE_MEDIA'](initialState) {
     state.playing = false;
   },
-  ['PLAY_VIDEO'](initialState) {
+  ['PLAY_MEDIA'](initialState) {
     state.playing = true;
   },
 };

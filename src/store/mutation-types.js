@@ -68,8 +68,8 @@ export const PEEK_MEDIA = 'PEEK_MEDIA';
 export const HIDE_MEDIA = 'HIDE_MEDIA';
 
 // Video
-export const PLAY_VIDEO = 'PLAY_VIDEO';
-export const PAUSE_VIDEO = 'PAUSE_VIDEO';
+export const PLAY_MEDIA = 'PLAY_MEDIA';
+export const PAUSE_MEDIA = 'PAUSE_MEDIA';
 
 export const SET_ACTIVE_SEGMENT = 'SET_ACTIVE_SEGMENT';
 export const SET_PEEK_SEGMENT = 'SET_PEEK_SEGMENT';

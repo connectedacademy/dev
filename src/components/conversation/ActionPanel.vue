@@ -88,7 +88,7 @@
         this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
       },
       toggleVideoPlaying() {
-        this.$store.commit(this.videoPlaying ? 'PAUSE_VIDEO' : 'PLAY_VIDEO');
+        this.$store.commit(this.videoPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
       },
       togglePlayerType() {
         this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);
@@ -114,6 +114,7 @@ $media-height = 220px
   left 50%
   margin-left -390px
   width 780px
+  // transform translateZ(0)
   &.hide-media
     bottom -($media-height)
   &.hide

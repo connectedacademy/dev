@@ -1,44 +1,39 @@
 <template lang="pug">
 .media-carousel-wrapper
-  swiper(v-bind:options="swiperOption")
-    swiper-slide(v-for="(item, key) in media" v-bind:key="key")
-      img.swiper-lazy(v-bind:data-src="`https://${course.slug}.connectedacademy.io/course/content/media/medium/${item.image}`")
-    .swiper-button-prev(slot="button-prev")
-    .swiper-button-next(slot="button-next")
+  slick#image-swiper(ref="slick" v-bind:options="slickOptions")
+    img(v-for="(item, key) in media" v-bind:key="key" height="200px" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.image}`")
+
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import Slick from 'vue-slick';
 
-require('swiper/dist/css/swiper.css')
+require('slick-carousel/slick/slick.css');
 
 export default {
   name: 'media-carousel',
   props: ['media'],
   components: {
-    swiper,
-    swiperSlide
+    Slick,
   },
   computed: {
     ...mapGetters(['course'])
   },
   data() {
     return {
-      swiperOption: {
-        performanceMode: false,
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        slidesPerView: 1,
-        centeredSlides: true,
-        spaceBetween: 0,
-        loop: true,
-        paginationClickable: true,
-        preloadImages: false,
-        lazyLoading: true
+      slickOptions: {
+        variableWidth: true,
+        lazyLoaded: true,
+        arrows: false,
+        centerMode: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+        swipe: true,
       },
     }
-  }
+  },
 }
 </script>
 
@@ -46,23 +41,12 @@ export default {
 
 @import '~stylus/shared'
 
-// Swiper
-.swiper-slide
-  background-image()
-  background-size contain
-  background-color #222
-  margin 10px auto
-  min-height 400px
-.swiper-slide img
-  width auto
-  height auto
-  max-width 100%
-  max-height 100%
-  -ms-transform translate(-50%, -50%)
-  -webkit-transform translate(-50%, -50%)
-  -moz-transform translate(-50%, -50%)
-  transform translate(-50%, -50%)
-  position absolute
-  left 50%
-  top 50%
+.slick-track
+  z-index 1
+  position relative
+
+  img.slick-slide
+    margin 0 10px
+    outline 0
+    height 320px
 </style>

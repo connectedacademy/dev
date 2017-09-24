@@ -100,7 +100,7 @@ export default {
       let end = this.currentSection.bottom;
 
       if (this.$store.state.pendingScrollPosition !== 0) {
-        this.$store.commit(types.PLAY_VIDEO);
+        this.$store.commit(types.PLAY_MEDIA);
         end = this.$store.state.pendingScrollPosition;
       }
 
@@ -121,7 +121,7 @@ export default {
         }
         else if (elapsed > duration) {
           this.$store.commit('setPendingScrollPosition', 0);
-          this.$store.commit(types.PAUSE_VIDEO);
+          this.$store.commit(types.PAUSE_MEDIA);
         }
       }
       step();
@@ -132,7 +132,7 @@ export default {
         return;
       }
       if (this.videoPlaying) {
-        this.$store.commit(types.PAUSE_VIDEO);
+        this.$store.commit(types.PAUSE_MEDIA);
       }
       this.preventScroll = true;
       this.isAutoScrolling = false;
@@ -148,7 +148,7 @@ export default {
         this.preventScroll = false;
           
         if (this.currentSection) {
-          this.$store.commit(types.PLAY_VIDEO);
+          this.$store.commit(types.PLAY_MEDIA);
         }
       }, WHEEL_TIMEOUT);
     },
@@ -162,13 +162,13 @@ export default {
     },
     onMousedown() {
       Vue.$log.debug('MOUSEDOWN');
-      // this.$store.commit(types.PAUSE_VIDEO);
+      // this.$store.commit(types.PAUSE_MEDIA);
       this.preventScroll = true;
       this.isAutoScrolling = false;
     },
     onMouseup() {
       Vue.$log.debug('MOUSEUP');
-      // this.$store.commit(types.PLAY_VIDEO);
+      // this.$store.commit(types.PLAY_MEDIA);
       this.preventScroll = false;
       this.isAutoScrolling = false;
     },

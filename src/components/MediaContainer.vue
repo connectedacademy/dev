@@ -10,9 +10,8 @@
     #images-wrapper
       #mobile-image-view(v-if="media[savedSegmentIndex]" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[savedSegmentIndex].text})` }" @click="setLightboxMedia(media[savedSegmentIndex].text)")
 
-      swiper#image-swiper(v-bind:options="swiperOption" ref="mySwiper")
-        swiper-slide(v-for="(item, key) in media" v-bind:key="key")
-          img.swiper-lazy(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+      slick#image-swiper(ref="classslick" v-bind:options="slickOptions")
+        img(v-for="(item, key) in media" v-bind:key="key" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
 
@@ -21,14 +20,13 @@
   
   import SoundCloud from 'soundcloud';
   import VueYouTubeEmbed from 'vue-youtube-embed';
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
+  import Slick from 'vue-slick';
   
   import * as config from '@/api/config';
   import throttle from 'lodash/throttle';
   import inRange from 'lodash/inRange';
+  
+  require('slick-carousel/slick/slick.css');
   
   import {
     mapGetters
@@ -38,27 +36,27 @@
     name: 'media-container',
     props: ['playerType', 'classSection', 'videoIsActive'],
     components: {
-      swiper,
-      swiperSlide,
+      Slick,
       VueYouTubeEmbed
     },
     mounted() {
       setTimeout(() => {
         this.initializeSoundcloudPlayer();
       }, 2500);
-      // this.isMobile = (window.innerWidth < 600);
-      // window.addEventListener('resize', () => {
-      //   this.isMobile = (window.innerWidth < 600);
-      // }, { passive: true });
     },
     beforeDestroy() {
       // Remove event listeners
       this.soundcloudPlayer = undefined;
     },
     watch: {
+      '$media': {
+        handler: function(nV, oV) {
+          this.reInit();
+        },
+        deep: true,
+      },
       currentTime(nV, oV) {
-        this.updateSwiper(this)
-
+        this.updateCarousel(this);
         // if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
         // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
       },
@@ -73,8 +71,9 @@
         }
       },
       videoIsActive(nV) {
+        this.reInit();
         if (!nV) {
-          this.$store.commit('PAUSE_VIDEO');
+          this.$store.commit('PAUSE_MEDIA');
         }
       }
     },
@@ -87,14 +86,20 @@
         pWidth: (188 / 0.5625),
         isMobile: false,
         savedSegmentIndex: 0,
-        swiperOption: {
-          slidesPerView: 3,
-          centeredSlides: false,
-          spaceBetween: 20,
-          loop: false,
-          paginationClickable: false,
-          preloadImages: false,
-          lazyLoading: true
+        slickOptions: {
+          lazyLoaded: false,
+          arrows: false,
+          centerMode: false,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          variableWidth: true,
+          infinite: false,
+          swipe: false,
+          swipeToSlide: false,
+          touchMove: false,
+          draggable: false,
+          useTransform: true,
+          useCSS: true,
         },
       };
     },
@@ -114,6 +119,9 @@
       },
     },
     methods: {
+      reInit() {
+        this.$refs.classslick.reSlick();
+      },
       setLightboxMedia(media) {
         this.$store.commit('SET_LIGHTBOX_MEDIA', media);
       },
@@ -131,19 +139,19 @@
             });
             // this.soundcloudPlayer.on('play-resume', () => {
             //   this.$log.info('play-resume');
-            //   // this.$store.commit('PLAY_VIDEO');
+            //   // this.$store.commit('PLAY_MEDIA');
             // });
             // this.soundcloudPlayer.on('buffering_start', () => {
             //   this.$log.info('buffering_start');
-            //   // this.$store.commit('PAUSE_VIDEO');
+            //   // this.$store.commit('PAUSE_MEDIA');
             // });
             // this.soundcloudPlayer.on('buffering_end', () => {
             //   this.$log.info('buffering_end');
-            //   // this.$store.commit('PLAY_VIDEO');
+            //   // this.$store.commit('PLAY_MEDIA');
             // });
             this.soundcloudPlayer.on('seeked', () => {
               this.$log.info('seeked');
-              this.$store.commit('PLAY_VIDEO');
+              this.$store.commit('PLAY_MEDIA');
             });
           });
         }
@@ -153,13 +161,13 @@
         this.player.seekTo(this.currentTime);
       },
       youtubePlaying(player) {
-        this.$store.commit('PLAY_VIDEO');
+        this.$store.commit('PLAY_MEDIA');
       },
       youtubeEnded() {
-        this.$store.commit('PAUSE_VIDEO');
+        this.$store.commit('PAUSE_MEDIA');
       },
       youtubePaused() {
-        this.$store.commit('PAUSE_VIDEO');
+        this.$store.commit('PAUSE_MEDIA');
       },
       youtubeSeek: throttle(function(self, position) {
   
@@ -181,9 +189,11 @@
       }, 500),
       performSync: throttle(function(self) {
         self.$log.info('time');
+        if (!self.soundcloudPlayer) return;
+  
         const currentTime = self.currentTime;
         if (!currentTime || !self.videoIsActive) {
-          self.$store.commit('PAUSE_VIDEO');
+          self.$store.commit('PAUSE_MEDIA');
           return;
         }
         const playerTime = self.soundcloudPlayer.currentTime() / 1000;
@@ -195,15 +205,13 @@
         }
   
       }, 1000),
-      updateSwiper: throttle(function(self) {
+      updateCarousel: throttle(function(self) {
         for (let i = 0; i < self.media.length; i++) {
           const image = self.media[i];
-
+  
           if (inRange(self.currentTime, image.start, image.end)) {
             self.savedSegmentIndex = i;
-            if (self.$refs.mySwiper.swiper.realIndex !== i) {
-              self.$refs.mySwiper.swiper.slideTo(i);
-            }
+            self.$refs.classslick.goTo(i);
           }
         }
       }, 2000),
@@ -306,39 +314,17 @@ $media-height = 220px
         right 0 !important
 
 
-// Swiper
-.swiper-slide
-  background-image()
-  background-size contain
-  // background-color #222
-  min-height 205px
-.swiper-slide img
-  width auto
-  height auto
-  max-width 100%
-  max-height 100%
-  -ms-transform translate(-50%, -50%)
-  -webkit-transform translate(-50%, -50%)
-  -moz-transform translate(-50%, -50%)
-  transform translate(-50%, -50%)
-  position absolute
-  left 50%
-  top 50%
-  
-.swiper-slide
-  &:hover
-    cursor pointer
-
-.swiper-slide-active
-  opacity 1
+.slick-track
+  z-index 1
   position relative
-  &:before
-    radius(50%)
-    content ''
-    background-color $primary-color
-    bottom 0
-    left 0
-    position absolute
-    height 10px
-    width 10px
+
+  img.slick-slide
+    height 204px
+    max-height 204px
+    max-width 100%
+    margin 0 10px
+    opacity 0.3
+    outline 0
+    &.slick-current
+      opacity 1
 </style>

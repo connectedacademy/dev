@@ -122,13 +122,13 @@
             transition: 'height .3s ease'
           };
   
-          this.$store.commit('PAUSE_VIDEO');
+          this.$store.commit('PAUSE_MEDIA');
           this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
         }
       },
       unpeek() {
   
-        this.$store.commit('PLAY_VIDEO');
+        this.$store.commit('PLAY_MEDIA');
   
         this.segmentStyle = {
           position: 'absolute',
