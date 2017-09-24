@@ -6,7 +6,7 @@
       icon(name="twitter")
       icon(name="quote-right")
 
-    #activity-visualisation(v-if="!peekSegment")
+    //- #activity-visualisation(v-if="!peekSegment")
       svg(width="400" v-bind:height="containerHeight")
         g
           path(v-bind:d="points" transform="translate(400,0)")
@@ -47,18 +47,18 @@ export default {
       this.loadSegmentSummary(0, true);
       this.loadSubtitles(this.content);
       this.loadMedia(this.content);
-      this.loadVisualisation(this.content);
+      // this.loadVisualisation(this.content);
     }, 2500);
     
     // Fill with blank messages
-    // const segmentCount = this.content.duration * 0.2;
-    // for (var index = 0; index < segmentCount; index++) {
-    //   if (this.conversationMessages[index]) continue;
-    //   this.conversationMessages[index] = {
-    //     loading: true,
-    //     segmentGroup: index
-    //   }
-    // }
+    const segmentCount = this.content.duration * 0.2;
+    for (var index = 0; index < segmentCount; index++) {
+      if (this.conversationMessages[index]) continue;
+      this.conversationMessages[index] = {
+        loading: true,
+        segmentGroup: index
+      }
+    }
   },
   data() {
     return {
@@ -135,16 +135,12 @@ export default {
 
   .inner-wrapper
     background-color white
-    background url('../assets/images/loading.png')
+    background url('../assets/images/line.png')
     background-repeat repeat
     background-size auto 158px
     background-position right -1px
-    
+    background-position center -1px
     overflow hidden
-    @media(max-width: 800px)
-      background-position center -1px
-    @media(max-width: 600px)
-      background-position -380px -1px
     
     .subtitle-wrapper, .message-wrapper
       transform translate(0%, -50%)

@@ -167,7 +167,7 @@ body.disable-scroll
 .page-header
   transition(all 0.2s ease)
   background-color $color-primary
-  height 240px
+  height 160px
   position absolute
   left 0
   right 0

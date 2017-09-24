@@ -6,7 +6,7 @@
       li.experience-control(@click="toggleVideoPlaying")
         icon(name="pause" v-if="videoPlaying")
         icon(name="play" v-else)
-      li.experience-control
+      li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
       li.experience-control#progress-bar
         #progress-bar--start {{ start }}
@@ -93,6 +93,10 @@
       togglePlayerType() {
         this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);
       },
+      skipToEnd() {
+        this.$store.commit('PAUSE_MEDIA');
+        window.scroll(0, this.currentSection.bottom);
+      }
     }
   };
 </script>
@@ -114,7 +118,6 @@ $media-height = 220px
   left 50%
   margin-left -390px
   width 780px
-  // transform translateZ(0)
   &.hide-media
     bottom -($media-height)
   &.hide

@@ -41,12 +41,15 @@ export default {
 
 @import '~stylus/shared'
 
-.slick-track
-  z-index 1
-  position relative
+.slick-slider
+  background-color $color-darkest-grey
+  padding 20px 0
+  .slick-track
+    z-index 1
+    position relative
 
-  img.slick-slide
-    margin 0 10px
-    outline 0
-    height 320px
+    img.slick-slide
+      margin 0 10px
+      outline 0
+      height 320px
 </style>

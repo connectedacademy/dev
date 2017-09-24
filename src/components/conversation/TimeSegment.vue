@@ -9,12 +9,12 @@
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
 
-      .message-wrapper(v-bind:class="{ loading: message.loading, 'mock-message': (message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))) }")
+      .message-wrapper(v-bind:class="{ loading: message.loading }")
 
         .suggestion(v-once v-if="message.message && message.message.suggestion")
           h3 "{{ message.message.text }}"
 
-        //- mock-message(v-once v-else-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
+        mock-message(v-once v-else-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
         
         message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
 
@@ -288,14 +288,6 @@
       animate()
       position absolute
       top 50%
-      &.mock-message
-        background url('../../assets/images/loading.png')
-        background-repeat repeat
-        background-size 780px 158px
-        background-position right center
-        height 158px
-        @media(max-width: 800px)
-          background-position -390px center
 
     .subtitle-wrapper
       animate()

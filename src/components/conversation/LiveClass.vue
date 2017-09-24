@@ -12,8 +12,8 @@
 
     conversation-container(v-bind:content="content")
 
-    #continue-listening
-      .pure-button.pure-button-primary(v-if="collapsed" @click="continueListening()") Continue Listening
+    #continue-listening(v-if="collapsed")
+      .pure-button.pure-button-primary(@click="continueListening()") Continue Listening
 
 </template>
 
@@ -71,7 +71,7 @@
 
   .course-content--container
     background-color white
-    overflow hidden
+    // overflow hidden
     position relative
 
     #continue-listening

@@ -99,10 +99,10 @@ export default {
       if (((endSegment % (endSegment - startSegment)) === 0) || force) {
 
         // Fill with blank messages
-        for (var index = (startSegment * 0.2); index < (endSegment * 0.2); index++) {
-          if (this.conversationMessages[index]) continue;
-          Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
-        }
+        // for (var index = (startSegment * 0.2); index < (endSegment * 0.2); index++) {
+        //   if (this.conversationMessages[index]) continue;
+        //   Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
+        // }
         API.message.getSegmentSummary(
           theRequest,
           response => {
