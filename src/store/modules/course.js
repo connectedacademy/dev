@@ -134,7 +134,8 @@ const mutations = {
   }) {
 
     // Only update spec if not exists
-    if (!store.state.current_class) { state.current_class = response.spec; }
+    // if (!store.state.current_class) { state.current_class = response.spec; }
+    state.current_class = response.spec;
 
     store.state.auth.user = response.user;
 
