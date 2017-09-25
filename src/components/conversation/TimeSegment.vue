@@ -351,6 +351,8 @@
       transform translate(0, 0) !important
       position relative
       width 100%
+      @media(max-width: 600px)
+        display block !important
       &.featured
         &:before
           radius(50%)
