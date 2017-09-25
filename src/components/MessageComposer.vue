@@ -11,8 +11,9 @@
           | Please login to send messages
 
       .message-composer--footer(v-if="isRegistered")
-        button.pure-button.pure-button-primary.pull-right(@click="sendMessage") {{ submitText }}
-        .info-label.animated.fadeIn(v-if="infoLabel") {{ infoLabel }}
+        button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
+          span(v-if="infoLabel") {{ infoLabel }}
+          span(v-else) {{ submitText }}
         .clearfix
 
 
@@ -94,7 +95,7 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     submitText() {
-      return (this.sending) ? 'Sending' : 'Post';
+      return (this.sending) ? 'Sending..' : 'Post';
     }
   },
 };
