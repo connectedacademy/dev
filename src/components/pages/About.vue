@@ -23,11 +23,6 @@ export default {
       vm.$store.commit(types.SET_PAGE_STYLE, undefined);
     });
   },
-  beforeRouteLeave(to, from, next) {
-    this.$store.commit(types.SET_NAV_STATE, { minimized: true });
-    this.$store.commit(types.SET_PAGE_STYLE, undefined);
-    next();
-  },
   components: {
     MarkdownRenderer,
   },

@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'navigation',
+      'isRegistered', 'navigation'
     ]),
     hidden() {
       return !this.$store.state.navigation.visible;

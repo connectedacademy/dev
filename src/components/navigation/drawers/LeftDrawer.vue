@@ -28,10 +28,6 @@ export default {
     toggleLeftDrawer() {
       this.$store.commit('TOGGLE_LEFT_DRAWER');
     },
-    setCurrentClass(newClass) {
-      this.$store.dispatch('getSpec', newClass);
-      this.toggleLeftDrawer();
-    },
   },
   computed: {
     isVisible() {

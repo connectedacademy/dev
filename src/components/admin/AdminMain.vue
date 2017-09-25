@@ -76,11 +76,6 @@ export default {
       this.classSlug = this.course.classes[0].slug;
     }
   },
-  watch: {
-    classSlug(nV) {
-      this.$store.dispatch('getSpec', nV);
-    }
-  },
   data() {
     return {
       panelMargin: 10,

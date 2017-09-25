@@ -31,6 +31,10 @@ export const currentTime = (state) => {
   return (time < 0) ? 0 : (time / (158.0 * 0.2));
 };
 
+export const pendingScrollPosition = (state) => {
+  return state.pendingScrollPosition;
+};
+
 export const currentSection = (state) => {
   return state.currentSection;
 };

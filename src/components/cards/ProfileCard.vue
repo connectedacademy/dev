@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'profile-card',
   props: ['visible'],
@@ -33,12 +35,13 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['user']),
     isAdmin() {
       // TODO: Check if admin
       return true;
     },
     user() {
-      return this.$store.state.auth.user;
+      return this.user;
     },
   },
   methods: {
@@ -53,6 +56,7 @@ export default {
 
 @import '~stylus/shared'
 @import '~stylus/drawer'
+@import '~stylus/forms'
 
 .card#profile-card
   padding 15px

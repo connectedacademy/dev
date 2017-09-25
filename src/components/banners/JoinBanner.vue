@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#join-banner.course-content(v-if="!isRegistered")
+#join-banner.course-content(v-if="!isRegistered && loaded")
 
   .course-content--header
     h1.content-title
@@ -15,10 +15,18 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'join-banner',
+  data() {
+    return {
+      loaded: false
+    }
+  },
   computed: {
     ...mapGetters([
       'isRegistered',
     ]),
+  },
+  mounted() {
+    setTimeout(() => { this.loaded = true; }, 100);
   },
   methods: {
     attemptAuth() {

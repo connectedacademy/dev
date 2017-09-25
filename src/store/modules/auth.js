@@ -14,6 +14,7 @@ const state = {
 
 // getters
 const getters = {
+  user: (initialState) => initialState.user,
   isAuthenticated: (initialState) => initialState.isAuthenticated,
   isRegistered: (initialState) => {
     const isRegistered = (initialState.user);

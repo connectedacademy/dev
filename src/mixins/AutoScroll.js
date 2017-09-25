@@ -99,11 +99,6 @@ export default {
       const durationRate = 5000;
       let end = this.currentSection.bottom;
 
-      if (this.$store.state.pendingScrollPosition !== 0) {
-        this.$store.commit(types.PLAY_MEDIA);
-        end = this.$store.state.pendingScrollPosition;
-      }
-
       var duration = (((end - start) / (SEGMENT_HEIGHT * 1.0)) * durationRate);
 
       var step = () => {
@@ -120,7 +115,6 @@ export default {
           requestAnimationFrame(step);
         }
         else if (elapsed > duration) {
-          this.$store.commit('setPendingScrollPosition', 0);
           this.$store.commit(types.PAUSE_MEDIA);
         }
       }

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  #action-panel(v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }")
+  #action-panel(v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }" ref="actionpanel")
     ul#experience-controls
     
       li.experience-control(@click="toggleVideoPlaying")
@@ -8,11 +8,11 @@
         icon(name="play" v-else)
       li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
-      li.experience-control#progress-bar
+      li.experience-control#progress-bar(ref="progressbar" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousemove="scrubMove")
         #progress-bar--start {{ start }}
         #progress-bar--end {{ end }}
         #progress-bar--track
-        #progress-bar--thumb(v-bind:style="{ left: `${((100 / content.duration) * currentTime)}%` }")
+        #progress-bar--thumb(v-bind:style="{ left: thumbLeft }")
 
       li.experience-control.pull-right(@click="toggleComposer")
         icon(v-bind:name="mediaHidden ? 'chevron-up' : 'chevron-down'")
@@ -37,6 +37,8 @@
   import MessageComposer from '@/components/MessageComposer';
   import MediaContainer from '@/components/MediaContainer';
   
+  import clamp from 'lodash/clamp';
+
   import 'vue-awesome/icons/pause';
   import 'vue-awesome/icons/play';
   import 'vue-awesome/icons/step-forward';
@@ -68,6 +70,8 @@
       return {
         playerTypeIndex: 0,
         availablePlayerTypes: [],
+        mouseOffsetStart: 0,
+        trackOffset: 0,
       };
     },
     computed: {
@@ -82,8 +86,33 @@
         return 'https://twitter.com';
         // return `https://twitter.com/${hashtag}`;
       },
+      thumbLeft() {
+        let position = (this.trackOffset === 0) ? ((100 / this.content.duration) * this.currentTime) : (100 / this.$refs.progressbar.offsetWidth) * this.trackOffset;
+        
+        return `${clamp(position, 0, 100)}%`;
+      }
     },
     methods: {
+      scrubMove(event) {
+        if (this.mouseOffsetStart !== 0) {
+          this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft);
+        }
+      },
+      startScrub(event) {
+        this.$store.commit('PAUSE_MEDIA');
+        this.trackOffset = 0;
+        this.mouseOffsetStart = event.pageX;
+      },
+      endScrub(event) {
+        const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration);
+        this.$store.commit('setPendingScrollPosition', newPos);
+
+        this.mouseOffsetStart = 0;
+
+        setTimeout(() => {
+          this.trackOffset = 0;
+        }, 500);
+      },
       toggleComposer() {
         this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
       },
@@ -194,8 +223,6 @@ $media-height = 220px
         position absolute
         top 20px
         left 0px
-      &:hover
-        cursor default
-      //   #progress-bar--thumb
-      //     transform scale(2)
+        &:hover
+          cursor pointer
 </style>

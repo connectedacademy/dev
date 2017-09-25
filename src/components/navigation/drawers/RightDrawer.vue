@@ -4,7 +4,7 @@
     .drawer#drawer-right(v-if="isVisible")
 
       user-card(v-bind:visible="isVisible")
-      profile-card(v-bind:visible="isVisible")
+      //- profile-card(v-bind:visible="isVisible")
       classroom-card(v-bind:visible="isVisible")
 
 </template>

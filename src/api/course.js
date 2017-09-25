@@ -9,6 +9,13 @@ export default {
       errorCb(response);
     });
   },
+  getSpecPreload(fauxTime, classSlug, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/course/specpreload/${classSlug}/2?time=${fauxTime}`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
   getSpec(fauxTime, classSlug, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${fauxTime}`).then((response) => {
       cb(response.body);

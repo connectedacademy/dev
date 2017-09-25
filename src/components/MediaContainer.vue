@@ -49,6 +49,19 @@
       this.soundcloudPlayer = undefined;
     },
     watch: {
+      pendingScrollPosition(nV) {
+        // this.$log.info(this.pendingScrollPosition);
+        if (nV === 0) return;
+
+        const scrollPoint = this.$store.state.scrollPoints[this.classSection.slug];
+        this.$store.commit('setPendingScrollPosition', 0);
+        
+        window.scroll(0, scrollPoint.top + ((nV * 0.2) * 158.0));
+
+        setTimeout(() => {
+          this.soundcloudPlayer.seek(nV * 1000);          
+        }, 300);
+      },
       '$media': {
         handler: function(nV, oV) {
           this.reInit();
@@ -105,7 +118,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'currentTime', 'videoPlaying', 'media'
+        'course', 'currentTime', 'videoPlaying', 'media', 'pendingScrollPosition'
       ]),
       src() {
         switch (this.playerType) {
@@ -194,7 +207,9 @@
       }, 1000),
       performSeeked: throttle(function(self) {
         this.$log.info('seeked');
-        this.$store.commit('PLAY_MEDIA');
+        setTimeout(() => {
+          this.$store.commit('PLAY_MEDIA');
+        }, 500);
       }, 1000),
       updateCarousel: throttle(function(self) {
         for (let i = 0; i < self.media.length; i++) {
@@ -205,7 +220,7 @@
             self.$refs.classslick.goTo(i);
           }
         }
-      }, 2000),
+      }, 1000),
     },
   };
 </script>

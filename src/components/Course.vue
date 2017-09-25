@@ -37,9 +37,7 @@ export default {
     next();
   },
   activated() {
-    setTimeout(() => {
-      this.setScrollPoints();
-    }, 2500);
+    this.setScrollPoints();    
     window.scrollTo(0, this.$store.state.savedScrollPosition);
     // this.toMessage();
   },
@@ -54,24 +52,7 @@ export default {
     SectionNavigator,
   },
   methods: {
-    toMessage() {
-      alert('toMessage');
-      const query = this.$route.query;
-      if (query.class && query.content) {
-        // Set the class
-        this.$store.dispatch('getSpec', query.class);
-
-        // Set the current section/scroll position
-        setTimeout(() => {
-          // const scrollPoint = this.$store.state.scrollPoints[query.content];
-          // this.$refs.main.scrollTop = scrollPoint.top + (query.segment * (158.0 * 0.2));
-        }, 1000);
-
-      }
-      else {
-        this.$log.info('No query passed');
-      }
-    },
+    toMessage() {},
   },
 };
 </script>

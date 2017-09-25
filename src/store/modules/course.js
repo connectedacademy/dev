@@ -51,6 +51,25 @@ const actions = {
       }),
     );
   },
+  getSpecPreload({
+    commit,
+  }, classSlug) {
+    const fauxTime = store.getters.fauxTime.replace('+', encodeURIComponent('+'));
+    state.current_class = {
+      slug: classSlug,
+      loading: true,
+    };
+    API.course.getSpecPreload(
+      fauxTime,
+      classSlug,
+      response => commit(types.GET_SPEC_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_SPEC_FAILURE, {
+        response,
+      }),
+    );
+  },
   getSpec({
     commit,
   }, classSlug) {
@@ -113,7 +132,16 @@ const mutations = {
   [types.GET_SPEC_SUCCESS](initialState, {
     response,
   }) {
-    state.current_class = response;
+    store.state.auth.user = response.user;
+
+    // Add user if exists
+    if (store.state.auth.user) {
+      store.state.auth.isAuthenticated = true;
+      store.state.auth.user.registration = {};
+    }
+
+    // Only update spec if not exists
+    if (!store.state.current_class) { state.current_class = response.spec; }
   },
   [types.GET_SPEC_FAILURE](initialState, {
     response,

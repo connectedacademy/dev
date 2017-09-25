@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.admin-panel(v-if="currentClass")
+.admin-panel
 
   .admin-panel--header
     h1 Student submissions

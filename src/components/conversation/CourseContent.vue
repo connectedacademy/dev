@@ -108,7 +108,11 @@ export default {
       if (!this.course || !this.course.classes) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
-          this.$store.dispatch('getSpec', theClass.slug);
+          this.$store.dispatch('getSpecPreload', theClass.slug).then(() => {
+            // setTimeout(() => {
+            this.$store.dispatch('getSpec', theClass.slug);              
+            // }, 2000);
+          });
         }
       }
     }

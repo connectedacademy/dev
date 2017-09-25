@@ -2,7 +2,7 @@
 
   .like-indicator(@click="toggleLike")
     .heart(v-bind:class="{ active: haveliked }")
-    .like-count(v-if="likeCount > 0") {{ likeCount }}
+    .like-count(v-if="likes > 0") {{ likes }}
 
 </template>
 
