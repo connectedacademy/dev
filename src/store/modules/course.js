@@ -132,6 +132,10 @@ const mutations = {
   [types.GET_SPEC_SUCCESS](initialState, {
     response,
   }) {
+
+    // Only update spec if not exists
+    if (!store.state.current_class) { state.current_class = response.spec; }
+
     store.state.auth.user = response.user;
 
     // Add user if exists
@@ -139,9 +143,6 @@ const mutations = {
       store.state.auth.isAuthenticated = true;
       store.state.auth.user.registration = {};
     }
-
-    // Only update spec if not exists
-    if (!store.state.current_class) { store.state.current_class = response.spec; }
   },
   [types.GET_SPEC_FAILURE](initialState, {
     response,
