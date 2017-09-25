@@ -141,7 +141,7 @@ const mutations = {
     }
 
     // Only update spec if not exists
-    if (!store.state.current_class) { state.current_class = response.spec; }
+    if (!store.state.current_class) { store.state.current_class = response.spec; }
   },
   [types.GET_SPEC_FAILURE](initialState, {
     response,
