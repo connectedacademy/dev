@@ -24,6 +24,10 @@ export default {
   methods: {
     goHome() {
       this.$router.push('/');
+      this.$store.commit('PAUSE_MEDIA');
+      setTimeout(() => {        
+        window.scroll(0, 0);
+      }, 500);
     },
   },
 };
