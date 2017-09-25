@@ -12,7 +12,7 @@
           path(v-bind:d="points" transform="translate(400,0)")
 
     .inner-wrapper(v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
-      time-segment(v-for="(message, index) in conversationMessages" v-bind:key="index" v-bind:index="index" v-bind:message="message" v-bind:subtitle="subtitles[index]" v-bind:contentSlug="content.slug")
+      time-segment(v-for="(message, index) in conversationMessages" v-bind:key="index" v-bind:index="index" v-bind:message="message" v-bind:subtitle="subtitles[index]" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug")
 
 </template>
 

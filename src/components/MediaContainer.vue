@@ -137,21 +137,8 @@
             this.soundcloudPlayer.on('time', () => {
               this.performSync(this);
             });
-            // this.soundcloudPlayer.on('play-resume', () => {
-            //   this.$log.info('play-resume');
-            //   // this.$store.commit('PLAY_MEDIA');
-            // });
-            // this.soundcloudPlayer.on('buffering_start', () => {
-            //   this.$log.info('buffering_start');
-            //   // this.$store.commit('PAUSE_MEDIA');
-            // });
-            // this.soundcloudPlayer.on('buffering_end', () => {
-            //   this.$log.info('buffering_end');
-            //   // this.$store.commit('PLAY_MEDIA');
-            // });
             this.soundcloudPlayer.on('seeked', () => {
-              this.$log.info('seeked');
-              this.$store.commit('PLAY_MEDIA');
+              this.performSeeked(this);
             });
           });
         }
@@ -190,7 +177,7 @@
       performSync: throttle(function(self) {
         self.$log.info('time');
         if (!self.soundcloudPlayer) return;
-  
+
         const currentTime = self.currentTime;
         if (!currentTime || !self.videoIsActive) {
           self.$store.commit('PAUSE_MEDIA');
@@ -198,12 +185,16 @@
         }
         const playerTime = self.soundcloudPlayer.currentTime() / 1000;
         const outOfSync = ((currentTime < (playerTime - SYNC_THRESHOLD)) || (currentTime > (playerTime + SYNC_THRESHOLD)));
-  
+
         if (outOfSync) {
           self.$log.info('OUTOFSYNC');
           self.soundcloudPlayer.seek(currentTime * 1000);
         }
-  
+
+      }, 1000),
+      performSeeked: throttle(function(self) {
+        this.$log.info('seeked');
+        this.$store.commit('PLAY_MEDIA');
       }, 1000),
       updateCarousel: throttle(function(self) {
         for (let i = 0; i < self.media.length; i++) {
@@ -325,6 +316,8 @@ $media-height = 220px
     margin 0 10px
     opacity 0.3
     outline 0
+    &:hover
+      cursor pointer
     &.slick-current
       opacity 1
 </style>

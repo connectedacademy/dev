@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, opened: segmentOpened }" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
+  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, opened: segmentOpened, 'below-modal': belowModal }" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
 
     .primary-wrapper(@click="peek()")
 
@@ -52,7 +52,7 @@
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'subtitle', 'contentSlug'],
+    props: ['index', 'message', 'subtitle', 'contentSlug', 'classSlug'],
     components: {
       MessageComposer,
       Message,
@@ -107,11 +107,15 @@
         'activeSegment',
         'peekSegment',
         'activeSegmentMessages',
+        'modalVisible',
       ]),
       orderedMessages() {
         // Order messages
         return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
       },
+      belowModal() {
+        return this.modalVisible;
+      }
     },
     methods: {
       peek() {
@@ -212,8 +216,8 @@
         let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.contentSlug;
   
         const theRequest = {
-          theClass: this.contentSlug,
-          theContent: theContent,
+          theClass: this.classSlug,
+          theContent: this.contentSlug,
           startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
           endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 4}`,
         };
@@ -319,11 +323,17 @@
   &.peek
     height 240px
 
+    &.below-modal
+      z-index 55
+
   &.opened
     height auto
     .segment-expansion-bar
       opacity 0
       pointer-events none
+
+    &.below-modal
+      z-index 55
 
   .meta-container
     animate()

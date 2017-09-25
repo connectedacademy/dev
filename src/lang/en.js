@@ -4,6 +4,7 @@ export default {
     disable_debug_mode: 'Disable Debug Mode',
     toggle_column: 'Toggle Column',
     optional: 'Optional',
+    confirm: 'Confirm',
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
@@ -84,5 +85,9 @@ export default {
   like: {
     like_content: 'Like Content',
     confirm: 'Okay, got it',
+  },
+  demo: {
+    unavailable_title: 'Unavailable',
+    unavailable_description: 'You are in a demo mode so this is not available right now.',
   },
 };

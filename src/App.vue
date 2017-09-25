@@ -9,6 +9,8 @@
 
   //- debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
+  demo-modal
+  
   authentication-flow
 
   media-lightbox
@@ -66,14 +68,14 @@
     },
     computed: {
       ...mapGetters([
-        'activeSegment', 'pageStyles', 'navigation',
+        'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
       ]),
       overlayVisible() {
         return this.$store.state.navigation.overlayVisible ||
           this.$store.state.auth.visible ||
           this.$store.state.conversation.activeSegment ||
           this.$store.state.conversation.peekSegment ||
-          this.$store.state.conversation.likeModalVisible;
+          this.modalVisible;
       },
     },
     components: {
@@ -84,7 +86,8 @@
       // 'DebugPanel': () => import ('@/components/DebugPanel'),
       'AuthenticationFlow': () => import ('@/components/authentication/AuthenticationFlow'),
       'ActionPanel': () => import ('@/components/conversation/ActionPanel'),
-      'MediaLightbox': () => import ('@/components/modals/MediaLightbox'),
+      'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
+      'DemoModal': () => import ('@/components/modals/DemoModal'),
     },
   };
 </script>

@@ -11,14 +11,17 @@
     .message--footer
 
       ul.tweet-actions
-        li
-          a(v-bind:href="likeLink" target="_blank")
+        li(@click="showDemoModal()")
+          a()
+            //-  v-bind:href="likeLink" target="_blank"
             icon(name="heart")
-        li
-          a(v-bind:href="retweetLink" target="_blank")
+        li(@click="showDemoModal()")
+          a()
+            //-  v-bind:href="retweetLink" target="_blank"
             icon(name="retweet")
-        li
-          a(v-bind:href="replyLink" target="_blank")
+        li(@click="showDemoModal()")
+          a()
+            //-  v-bind:href="replyLink" target="_blank"
             icon(name="reply")
         li.message-timestamp
           | {{ timeStamp }}
@@ -64,6 +67,11 @@ export default {
     timeStamp() {
       return Moment(this.message.createdAt).fromNow();
       // return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
+    },
+  },
+  methods: {
+    showDemoModal() {
+      this.$store.commit('SHOW_DEMO_MODAL');
     },
   },
 };
@@ -121,6 +129,8 @@ export default {
         line-height 36px
         margin 0 10px
         max-width 15%
+        &:hover
+          color $color-primary
         a
           color #CCC
           text-decoration none

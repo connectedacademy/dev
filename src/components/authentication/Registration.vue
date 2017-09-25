@@ -94,9 +94,7 @@
 <script>
   import every from 'lodash/every';
   import values from 'lodash/values';
-  import {
-    mapGetters
-  } from 'vuex';
+  import { mapGetters } from 'vuex';
   import API from '@/api';
   
   

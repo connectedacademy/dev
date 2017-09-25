@@ -16,6 +16,7 @@ const state = {
   activeSegmentMessages: [],
   subscribedTo: undefined,
   likeModalVisible: false,
+  demoModalVisible: false,
 };
 
 // getters
@@ -34,6 +35,13 @@ const getters = {
   },
   likeModalVisible() {
     return state.likeModalVisible;
+  },
+  demoModalVisible() {
+    return state.demoModalVisible;
+  },
+  modalVisible() {
+    return store.state.conversation.likeModalVisible ||
+      store.state.conversation.demoModalVisible;
   },
   media() {
     Vue.$log.info('Media from state');
@@ -149,11 +157,17 @@ const mutations = {
   [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
     state.activeSegmentMessages.push(newMessage);
   },
-  [types.SHOW_LIKE](initialState) {
+  [types.SHOW_LIKE_MODAL](initialState) {
     state.likeModalVisible = true;
   },
-  [types.DISMISS_LIKE](initialState) {
+  [types.DISMISS_LIKE_MODAL](initialState) {
     state.likeModalVisible = false;
+  },
+  [types.SHOW_DEMO_MODAL](initialState) {
+    state.demoModalVisible = true;
+  },
+  [types.DISMISS_DEMO_MODAL](initialState) {
+    state.demoModalVisible = false;
   },
 };
 
