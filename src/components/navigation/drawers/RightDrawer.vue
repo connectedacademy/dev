@@ -21,6 +21,9 @@ export default {
     ProfileCard,
     UserCard,
   },
+  mounted() {
+    this.$store.dispatch('checkAuth');
+  },
   methods: {
     toggleRightDrawer() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');

@@ -49,6 +49,7 @@ export default {
   text-align center
   img.user-profile
     radius(50%)
+    background-color alpha(black, 0.1)
     height 60px
     width 60px
   h1.user-name

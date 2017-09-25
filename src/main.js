@@ -78,7 +78,6 @@ Vue.config.lang = 'en';
 Vue.config.fallbackLang = 'en';
 
 store.dispatch('getCourse');
-// store.dispatch('checkAuth');
 
 /* eslint-disable no-new */
 new Vue({

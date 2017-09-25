@@ -11,7 +11,7 @@ transition(name="slide-left")
           h1.drawer-list-item--header {{ $t('nav.take_part') }}
           h2.drawer-list-item--body {{ $t('nav.take_part_description') }}
 
-        router-link.drawer-list-item(tag="li" to="/schedule")
+        //- router-link.drawer-list-item(tag="li" to="/schedule")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
           h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
 

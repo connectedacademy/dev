@@ -50,7 +50,6 @@ export default {
     cleanlist()
     radius(30px)
   @media(max-width: 900px)
-    .section-navigator-items
-      display none
+    display none
 
 </style>

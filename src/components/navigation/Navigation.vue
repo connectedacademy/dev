@@ -9,7 +9,9 @@
 
     profile-icon(v-if="isRegistered")
 
-    #login-button.pure-button.pure-button-primary(v-else @click="showAuth") {{ $t('auth.login') }}
+    #login-button(@click="showAuth")
+      icon(name="user")
+      //- {{ $t('auth.login') }}
 
 </template>
 
@@ -22,6 +24,7 @@ import ProfileIcon from './ProfileIcon';
 import Auth from '@/mixins/Auth';
 
 import 'vue-awesome/icons/wrench';
+import 'vue-awesome/icons/user';
 
 export default {
   name: 'navigation',
@@ -79,18 +82,21 @@ export default {
 
 #login-button
   animate()
-  background-color transparent
-  border transparent 1px solid
+  radius(50%)
+  position absolute
+  top 9px
+  right 7px
+  transition right 0.6s
+  z-index 52
+  height 42px
+  line-height 42px
+  width 42px
   color white
-  position fixed
-  top 0
-  right 0
-  margin 10px
-  z-index 56
+  .fa-icon
+    height 22px
+    margin 10px auto
   &:hover
-    //background-color white
-    //color $color-purple
-    border-color white
+    background-color alpha(black, 0.1)
 
 .navigation
   animate()

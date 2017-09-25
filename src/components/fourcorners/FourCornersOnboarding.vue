@@ -69,6 +69,9 @@ export default {
     this.$store.commit('SET_PAGE_STYLE', undefined);
     next();
   },
+  activated() {
+    window.scroll(0, 0);
+  },
   components: {
     PreviousButton,
     FourCornersInteraction,
