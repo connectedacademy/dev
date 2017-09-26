@@ -142,7 +142,7 @@
     },
     watch: {
       course(nV) {
-        this.response.lang = (nV.langs.length === 1) ? nV.langs[0] : undefined;
+        // this.response.lang = 'en';
       }
     },
     data() {
@@ -157,7 +157,7 @@
           hub_id: '',
           email: '',
           age: '',
-          lang: '',
+          lang: 'en',
           registration_info: {
             answers: {},
           },

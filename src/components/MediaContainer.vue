@@ -11,7 +11,7 @@
       //- #mobile-image-view(v-if="media[savedSegmentIndex]" v-bind:style="{ 'background-image': `url(https://${course.slug}.connectedacademy.io/course/content/media/small/${media[savedSegmentIndex].text})` }" @click="setLightboxMedia(media[savedSegmentIndex].text)")
 
       slick#image-swiper(ref="classslick" v-bind:options="slickOptions")
-        img(v-for="(item, key) in media" v-bind:key="key" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+        img(v-for="(item, key) in media" v-bind:key="key" v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
 
@@ -100,7 +100,6 @@
         isMobile: false,
         savedSegmentIndex: 0,
         slickOptions: {
-          lazyLoaded: false,
           arrows: false,
           centerMode: false,
           slidesToShow: 3,
@@ -113,6 +112,7 @@
           draggable: false,
           useTransform: true,
           useCSS: true,
+          lazyLoad: 'progressive',
         },
       };
     },
