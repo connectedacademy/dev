@@ -56,7 +56,7 @@ export default {
     padding 30px 15px
     position absolute
     top 50%
-    z-index 50
+    z-index 1
     &:hover
       cursor pointer
       background alpha(black, 0.8)

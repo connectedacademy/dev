@@ -18,8 +18,6 @@
           img(v-bind:src="submission.thumbnail")
         p {{ timeStamp(submission.createdAt) }}
 
-    pre.hidden {{ submissions }}
-
 </template>
 
 <script>

@@ -5,6 +5,7 @@ import store from '@/store';
 import Moment from 'moment-mini';
 import includes from 'lodash/includes';
 import filter from 'lodash/filter';
+import _merge from 'lodash/merge';
 
 // initial state
 const state = {
@@ -134,8 +135,11 @@ const mutations = {
   }) {
 
     // Only update spec if not exists
-    // if (!store.state.current_class) { state.current_class = response.spec; }
-    state.current_class = response.spec;
+    if (store.state.current_class === undefined) {
+      state.current_class = response.spec;
+    } else {
+      state.current_class = _merge(state.current_class, response.spec);
+    }
 
     store.state.auth.user = response.user;
 
