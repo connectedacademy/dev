@@ -11,15 +11,15 @@
     .message--footer
 
       ul.tweet-actions
-        li(@click="showDemoModal()")
+        li(@click="showInfoModal()")
           a()
             //-  v-bind:href="likeLink" target="_blank"
             icon(name="heart")
-        li(@click="showDemoModal()")
+        li(@click="showInfoModal()")
           a()
             //-  v-bind:href="retweetLink" target="_blank"
             icon(name="retweet")
-        li(@click="showDemoModal()")
+        li(@click="showInfoModal()")
           a()
             //-  v-bind:href="replyLink" target="_blank"
             icon(name="reply")
@@ -70,8 +70,8 @@ export default {
     },
   },
   methods: {
-    showDemoModal() {
-      this.$store.commit('SHOW_DEMO_MODAL');
+    showInfoModal() {
+      this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') });
     },
   },
 };

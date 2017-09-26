@@ -5,6 +5,7 @@ export default {
     toggle_column: 'Toggle Column',
     optional: 'Optional',
     confirm: 'Confirm',
+    okay: 'Okay',
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
@@ -81,6 +82,7 @@ export default {
   submission: {
     view_submissions: 'View Submissions',
     make_a_submission: 'Make a Submission',
+    view_submission: 'View Submission',
   },
   like: {
     like_content: 'Like Content',

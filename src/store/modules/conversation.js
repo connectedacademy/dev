@@ -15,8 +15,10 @@ const state = {
   peekSegment: undefined,
   activeSegmentMessages: [],
   subscribedTo: undefined,
-  likeModalVisible: false,
-  demoModalVisible: false,
+  infoModalVisible: false,
+  infoModalTitle: undefined,
+  infoModalBody: undefined,
+  infoModalAction: undefined,
 };
 
 // getters
@@ -33,15 +35,20 @@ const getters = {
   activeSegmentMessages () {
     return state.activeSegmentMessages;
   },
-  likeModalVisible() {
-    return state.likeModalVisible;
+  infoModalVisible() {
+    return state.infoModalVisible;
   },
-  demoModalVisible() {
-    return state.demoModalVisible;
+  infoModalTitle() {
+    return state.infoModalTitle;
+  },
+  infoModalBody() {
+    return state.infoModalBody;
+  },
+  infoModalAction() {
+    return state.infoModalAction;
   },
   modalVisible() {
-    return store.state.conversation.likeModalVisible ||
-      store.state.conversation.demoModalVisible;
+    return store.state.conversation.infoModalVisible;
   },
   media() {
     Vue.$log.info('Media from state');
@@ -157,17 +164,14 @@ const mutations = {
   [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
     state.activeSegmentMessages.push(newMessage);
   },
-  [types.SHOW_LIKE_MODAL](initialState) {
-    state.likeModalVisible = true;
+  [types.SHOW_INFO_MODAL](initialState, params) {
+    state.infoModalVisible = true;
+    state.infoModalTitle = params.title;
+    state.infoModalBody = params.body;
+    state.infoModalAction = params.action;
   },
-  [types.DISMISS_LIKE_MODAL](initialState) {
-    state.likeModalVisible = false;
-  },
-  [types.SHOW_DEMO_MODAL](initialState) {
-    state.demoModalVisible = true;
-  },
-  [types.DISMISS_DEMO_MODAL](initialState) {
-    state.demoModalVisible = false;
+  [types.DISMISS_INFO_MODAL](initialState) {
+    state.infoModalVisible = false;
   },
 };
 

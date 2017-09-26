@@ -6,7 +6,7 @@ export default {
     dismissOverlay() {
       this.$store.commit(types.DISMISS_AUTH);
       this.$store.commit(types.DISMISS_LIKE_MODAL);
-      this.$store.commit(types.DISMISS_DEMO_MODAL);
+      this.$store.commit(types.DISMISS_INFO_MODAL);
       this.$store.commit(types.DISMISS_LEFT_DRAWER);
       this.$store.commit(types.DISMISS_RIGHT_DRAWER);
 

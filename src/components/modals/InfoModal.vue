@@ -1,13 +1,13 @@
 <template lang="pug">
 
-  #like-modal(v-bind:class="{ visible: likeModalVisible }")
-    #like-modal--header
-      h1 {{ $t('like.like_content') }}
-    #like-modal--container
-      p When you like course material on connected academy we post a tweet with the link to that content through your twitter account.
+  #info-modal(v-bind:class="{ visible: infoModalVisible }")
+    #info-modal--header
+      h1 {{ infoModalTitle }}
+    #info-modal--container
+      p {{ infoModalBody }}
 
-      button.pure-button.pure-button-primary(v-on:click="likeContent")
-        | {{ $t('like.confirm') }}
+      button.pure-button.pure-button-primary(v-on:click="closeModal")
+        | {{ infoModalAction ? infoModalAction : $t('common.confirm') }}
     
 </template>
 
@@ -15,13 +15,13 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'like-modal',
+  name: 'info-modal',
   computed: {
-    ...mapGetters(['likeModalVisible', 'currentLikeContent']),
+    ...mapGetters(['infoModalVisible', 'infoModalTitle', 'infoModalBody', 'infoModalAction']),
   },
   methods: {
-    likeContent() {
-      this.$store.commit('DISMISS_LIKE_MODAL');
+    closeModal() {
+      this.$store.commit('DISMISS_INFO_MODAL');
     },
   },
 };
@@ -31,7 +31,7 @@ export default {
 
 @import '~stylus/shared'
 
-#like-modal
+#info-modal
   animate()
   display block
   max-width 320px
@@ -46,7 +46,7 @@ export default {
     top 80px
     opacity 1
     pointer-events all
-  #like-modal--header
+  #info-modal--header
     height 40px
     line-height 40px
     text-align center
@@ -54,7 +54,7 @@ export default {
       reset()
       color white
       font-size 1.2em
-  #like-modal--container
+  #info-modal--container
     radius(12px)
     background-color white
     padding 20px 30px

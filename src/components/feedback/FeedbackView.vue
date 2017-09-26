@@ -80,29 +80,30 @@ export default {
     },
     unlockMessage(message) {
       if (!message.canview) {
-        if (confirm(`Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`)) {
-          // Redirect to other user's feedback
+        
+        this.$store.commit('SHOW_INFO_MODAL', { title: 'Locked', body: `Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`, action: this.$t('submission.view_submission') });
 
-          const request = {
-            classSlug: this.classSlug,
-            contentSlug: this.contentSlug,
-            userId: message.fromuser.id.replace('#', '%23')
-          };
-          API.feedback.getUserSubmissions(
-            request,
-            (response) => {
-              this.$log.info('Response from user submissions request');
-              this.$log.info(response);
-              const feedbackId = response.body[0].id;
-              this.$emit('update:currentFeedbackId', feedbackId)
-              
-            },
-            (response) => {
-              // TODO: Handle failed request
-              this.$log.info('Failed to user submissions');
-            },
-          );
-        }
+        // Redirect to other user's feedback
+
+        const request = {
+          classSlug: this.classSlug,
+          contentSlug: this.contentSlug,
+          userId: message.fromuser.id.replace('#', '%23')
+        };
+        API.feedback.getUserSubmissions(
+          request,
+          (response) => {
+            this.$log.info('Response from user submissions request');
+            this.$log.info(response);
+            const feedbackId = response.body[0].id;
+            this.$emit('update:currentFeedbackId', feedbackId)
+            
+          },
+          (response) => {
+            // TODO: Handle failed request
+            this.$log.info('Failed to user submissions');
+          },
+        );
       }
     },
     postFeedbackComment() {

@@ -9,7 +9,7 @@
 
   //- debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
-  demo-modal
+  info-modal
   
   authentication-flow
 
@@ -87,7 +87,7 @@
       'AuthenticationFlow': () => import ('@/components/authentication/AuthenticationFlow'),
       'ActionPanel': () => import ('@/components/conversation/ActionPanel'),
       'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
-      'DemoModal': () => import ('@/components/modals/DemoModal'),
+      'InfoModal': () => import ('@/components/modals/InfoModal'),
     },
   };
 </script>
