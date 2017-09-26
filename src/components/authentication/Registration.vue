@@ -143,6 +143,7 @@
     watch: {
       course(nV) {
         // this.response.lang = 'en';
+        
       }
     },
     data() {
