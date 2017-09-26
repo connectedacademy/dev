@@ -218,6 +218,8 @@
 @import '~stylus/shared'
 
 .rendered-markdown
+  white-space initial
+  word-wrap break-word
   h1
     reset()
     color $color-text-dark-grey
@@ -252,6 +254,8 @@
     background-color $color-lighter-grey
     max-width 100%
     padding 20px
+    white-space initial
+    word-wrap break-word
 
   img
     display inline-block
