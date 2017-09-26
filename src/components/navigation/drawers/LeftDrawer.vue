@@ -7,15 +7,15 @@ transition(name="slide-left")
 
       ul.drawer-list
 
-        router-link.drawer-list-item(tag="li" to="/")
+        li.drawer-list-item(@click="navigateTo('/')")
           h1.drawer-list-item--header {{ $t('nav.take_part') }}
           h2.drawer-list-item--body {{ $t('nav.take_part_description') }}
 
-        //- router-link.drawer-list-item(tag="li" to="/schedule")
+        //- li.drawer-list-item(@click="navigateTo('/schedule')")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
           h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
 
-        router-link.drawer-list-item(tag="li" to="/about")
+        li.drawer-list-item(@click="navigateTo('/about')")
           h1.drawer-list-item--header {{ $t('nav.about') }}
           h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
@@ -25,6 +25,10 @@ transition(name="slide-left")
 export default {
   name: 'left-drawer',
   methods: {
+    navigateTo(toLink) {
+      this.toggleLeftDrawer();
+      this.$router.push(toLink);
+    },
     toggleLeftDrawer() {
       this.$store.commit('TOGGLE_LEFT_DRAWER');
     },

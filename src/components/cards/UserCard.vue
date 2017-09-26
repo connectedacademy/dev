@@ -6,7 +6,7 @@
   h1.user-name {{ user.name }}
   h2.user-account {{ `@${user.account}` }}
 
-  router-link.pure-button.pure-button-action(v-if="user.admin" to="/admin") Admin Panel
+  li.pure-button.pure-button-action(v-if="user.admin" @click="navigateTo('admin')") Admin Panel
   a.pure-button.pure-button-action(v-if="!user.admin" href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
 
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
@@ -25,6 +25,13 @@ export default {
     };
   },
   methods: {
+    navigateTo(toLink) {
+      this.toggleRightDrawer();
+      this.$router.push(toLink);
+    },
+    toggleRightDrawer() {
+      this.$store.commit('TOGGLE_RIGHT_DRAWER');
+    },
     logout() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
       this.$store.dispatch('logout');

@@ -141,9 +141,9 @@ export default {
         this.wheeling = undefined;
         this.preventScroll = false;
           
-        if (this.currentSection) {
-          this.$store.commit(types.PLAY_MEDIA);
-        }
+        // if (this.currentSection) {
+        //   this.$store.commit(types.PLAY_MEDIA);
+        // }
       }, WHEEL_TIMEOUT);
     },
     onScroll: throttle(function (self) {
