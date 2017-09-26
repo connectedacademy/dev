@@ -10044,9 +10044,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   watch: {
-    course: function course(nV) {
-      this.response.lang = nV.langs.length === 1 ? nV.langs[0] : undefined;
-    }
+    course: function course(nV) {}
   },
   data: function data() {
     return {
@@ -10060,7 +10058,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         hub_id: '',
         email: '',
         age: '',
-        lang: '',
+        lang: 'en',
         registration_info: {
           answers: {}
         }
@@ -12798,4 +12796,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=3.166c9cb70e61881791e6.js.map
+//# sourceMappingURL=3.e496403976f285fc7d17.js.map

@@ -10284,11 +10284,7 @@ var SEGMENT_HEIGHT = 158.0;
     };
   },
   mounted: function mounted() {
-    var _this = this;
-
-    setTimeout(function () {
-      setInterval(_this.updateDocumentHeight, 5000);
-    }, 1500);
+    setInterval(this.updateDocumentHeight, 2000);
   },
 
   methods: {
@@ -12162,4 +12158,4 @@ module.exports = __webpack_require__(945);
 /***/ })
 
 });
-//# sourceMappingURL=2.7bb631dd6866cee18a53.js.map
+//# sourceMappingURL=2.da6d561235ada063ea7e.js.map
