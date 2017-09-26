@@ -25,7 +25,7 @@ module.exports = merge(baseWebpackConfig, {
       },
       sourceMap: false
     }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),

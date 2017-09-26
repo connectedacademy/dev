@@ -5,7 +5,7 @@
 
     .tile#info-tile
       //- icon(v-if="expanded && !(currentCorner === default)" v-bind:name="currentCorner.icon")
-      h1(v-if="expanded && (currentCorner !== 'default')") {{ corners[currentCorner].title }}
+      h1(name="4c-banner-title" v-if="expanded && (currentCorner !== 'default')") {{ corners[currentCorner].title }}
       img(v-if="!expanded || (currentCorner === 'default')" src="../../assets/logos/fourcorners/white-text.svg" height="20")
 
       p {{ (expanded) ? corners[currentCorner].text : bannerText }}
@@ -14,10 +14,10 @@
         .pure-button.pure-button-subtle(v-if="currentCorner === 'default'" @click="currentCorner = 'default'; expanded = false") Minimize
 
     #corners
-      .corner#corner-top-left(v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")
-      .corner#corner-top-right(v-bind:class="{ active: currentCorner === 'topRight' }" @click="toggleCorner('topRight')")
-      .corner#corner-bottom-left(v-bind:class="{ active: currentCorner === 'bottomLeft' }" @click="toggleCorner('bottomLeft')")
-      .corner#corner-bottom-right(v-bind:class="{ active: currentCorner === 'bottomRight' }" @click="toggleCorner('bottomRight')")
+      .corner#corner-top-left(name="4c-banner-top-left" v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")
+      .corner#corner-top-right(name="4c-banner-top-right" v-bind:class="{ active: currentCorner === 'topRight' }" @click="toggleCorner('topRight')")
+      .corner#corner-bottom-left(name="4c-banner-bottom-left" v-bind:class="{ active: currentCorner === 'bottomLeft' }" @click="toggleCorner('bottomLeft')")
+      .corner#corner-bottom-right(name="4c-banner-bottom-right" v-bind:class="{ active: currentCorner === 'bottomRight' }" @click="toggleCorner('bottomRight')")
 
 </template>
 
