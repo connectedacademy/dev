@@ -9,7 +9,7 @@
 
     profile-icon(v-if="isRegistered")
 
-    #login-button(@click="showAuth")
+    #login-button(name="nav-login-button" @click="showAuth")
       icon(name="user")
       //- {{ $t('auth.login') }}
 

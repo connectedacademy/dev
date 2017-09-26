@@ -44,11 +44,13 @@ export default {
   props: ['content'],
   mounted() {
     setTimeout(() => {
+      alert(JSON.stringify(this.course));
+      alert(JSON.stringify(this.content));
       this.loadSegmentSummary(0, true);
       this.loadSubtitles(this.content);
       this.loadMedia(this.content);
       // this.loadVisualisation(this.content);
-    }, 2500);
+    }, 5000);
     
     // Fill with blank messages
     const segmentCount = this.content.duration * 0.2;
