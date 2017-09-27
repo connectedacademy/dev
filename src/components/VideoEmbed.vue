@@ -2,7 +2,7 @@
 
 .video-wrapper
   .loading-wrapper(v-if="!theSrc")
-    .pure-button.pure-button-success(@click="loadVideo") Click to load
+    .pure-button.pure-button-youtube(@click="loadEmbed") Click to Load
   .video-container(v-if="theSrc")
     iframe(v-bind:src="theSrc" frameborder='0' allowfullscreen)
 
@@ -36,7 +36,7 @@ export default {
     },
   },
   methods: {
-    loadVideo() {
+    loadEmbed() {
       this.theSrc = this.src;
     },
   },
@@ -47,7 +47,7 @@ export default {
 
 .video-wrapper
   .loading-wrapper
-    background-color #f2f2f2
+    // background-color #f2f2f2
     margin-bottom 20px
     padding 58px 20px
     text-align center

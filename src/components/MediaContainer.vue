@@ -88,6 +88,16 @@
         if (!nV) {
           this.$store.commit('PAUSE_MEDIA');
         }
+      },
+      activeSegment(nV) {
+        if (nV) {
+          this.$store.commit('PAUSE_MEDIA');
+        }
+      },
+      peekSegment(nV) {
+        if (nV) {
+          this.$store.commit('PAUSE_MEDIA');
+        }
       }
     },
     data() {
@@ -118,7 +128,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'currentTime', 'videoPlaying', 'media', 'pendingScrollPosition'
+        'course', 'currentTime', 'videoPlaying', 'media', 'pendingScrollPosition', 'peekSegment'
       ]),
       src() {
         switch (this.playerType) {
@@ -208,7 +218,9 @@
       performSeeked: throttle(function(self) {
         this.$log.info('seeked');
         setTimeout(() => {
-          this.$store.commit('PLAY_MEDIA');
+          if (!(this.peekSegment || this.activeSegment)) {
+            this.$store.commit('PLAY_MEDIA');
+          }
         }, 500);
       }, 1000),
       updateCarousel: throttle(function(self) {

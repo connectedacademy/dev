@@ -13,7 +13,7 @@
     conversation-container(v-bind:content="content" v-bind:collapsed="collapsed")
 
     #continue-listening(v-if="collapsed")
-      .pure-button.pure-button-primary(@click="continueListening()") Continue Listening
+      .pure-button.pure-button-continue(@click="continueListening()") Continue Listening
 
 </template>
 
@@ -82,6 +82,7 @@ export default {
       top auto
       text-align center
       .pure-button
+        box-sizing()
         left 50%
         top calc(calc(158px - 40px) / 2)
         margin-left -100px
