@@ -146,7 +146,10 @@ export default {
       }, WHEEL_TIMEOUT);
     },
     onScroll: throttle(function (self) {
-      self.scrollPosition = window.scrollY;
+      if (Math.abs(self.scrollPosition - window.scrollY) > 50) {
+        console.log(Math.abs(self.scrollPosition - window.scrollY));
+        self.scrollPosition = window.scrollY;
+      }
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onWheel() {
       if (!this.activeSegment) {
