@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .fourcorners-page
+  .fourcorners-page(name="fourcorners-page")
     
     .col#col-main
 

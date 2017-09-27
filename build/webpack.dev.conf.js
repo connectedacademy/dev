@@ -23,7 +23,7 @@ module.exports = merge(baseWebpackConfig, {
       compress: {
         warnings: false
       },
-      sourceMap: false
+      sourceMap: true
     }),
     // new BundleAnalyzerPlugin(),
     new webpack.DefinePlugin({

@@ -24,6 +24,8 @@ export default {
         
         if (obj.msgtype === 'message') {
 
+          Vue.$log.info(obj);
+
           const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
           let updateMessage = this.conversationMessages[key]
           

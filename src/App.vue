@@ -61,6 +61,9 @@
         }
       },
     },
+    mounted() {
+      this.$store.dispatch('checkAuth');
+    },
     data() {
       return {
         navTitle: 'Connected Academy',

@@ -79,11 +79,11 @@ export default {
       }
     },
     showModal() {
-      this.$store.commit('SHOW_LIKE_MODAL');
+      this.$store.commit('DISMISS_INFO_MODAL');
     },
     hideModal() {
       this.getLikeCount();
-      this.$store.commit('DISMISS_LIKE_MODAL');
+      this.$store.commit('DISMISS_INFO_MODAL');
     },
     getLikeCount() {
       const request = { class: this.classSlug, content: this.contentSlug };

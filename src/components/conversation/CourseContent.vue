@@ -59,27 +59,43 @@ import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 import Auth from '@/mixins/Auth';
 
+import JoinBanner from '@/components/banners/JoinBanner';
+import MarkdownContent from '@/components/MarkdownContent';
+import MarkdownLink from '@/components/MarkdownLink';
+import SoundcloudEmbed from '@/components/SoundcloudEmbed';
+import VideoEmbed from '@/components/VideoEmbed';
+import LikeIndicator from '@/components/LikeIndicator';
+import LiveClass from '@/components/conversation/LiveClass';
+import Homework from '@/components/conversation/Homework';
+import FourCorners from '@/components/conversation/FourCorners';
+import FutureContent from '@/components/conversation/FutureContent';
+import InjectedQuestion from '@/components/conversation/InjectedQuestion';
+import NextClass from '@/components/conversation/NextClass';
+import WebinarMessageTicker from '@/components/webinar/WebinarMessageTicker';
+import MediaCarousel from '@/components/MediaCarousel';
+import MediaThumbnails from '@/components/MediaThumbnails';
+
 export default {
   name: 'course-content',
   mixins: [
     Auth,
   ],
   components: {
-    JoinBanner: () => import('@/components/banners/JoinBanner'),
-    MarkdownContent: () => import(/* webpackChunkName: "group-course" */ '@/components/MarkdownContent'),
-    MarkdownLink: () => import(/* webpackChunkName: "group-course" */ '@/components/MarkdownLink'),
-    SoundcloudEmbed: () => import('@/components/SoundcloudEmbed'),
-    VideoEmbed: () => import('@/components/VideoEmbed'),
-    LikeIndicator: () => import(/* webpackChunkName: "group-course" */ '@/components/LikeIndicator'),
-    LiveClass: () => import('@/components/conversation/LiveClass'),
-    Homework: () => import(/* webpackChunkName: "group-course" */ '@/components/conversation/Homework'),
-    FourCorners: () => import(/* webpackChunkName: "group-course" */ '@/components/conversation/FourCorners'),
-    FutureContent: () => import(/* webpackChunkName: "group-course" */ '@/components/conversation/FutureContent'),
-    InjectedQuestion: () => import('@/components/conversation/InjectedQuestion'),
-    NextClass: () => import('@/components/conversation/NextClass'),
-    WebinarMessageTicker: () => import('@/components/webinar/WebinarMessageTicker'),
-    MediaCarousel: () => import('@/components/MediaCarousel'),
-    MediaThumbnails: () => import('@/components/MediaThumbnails')
+    JoinBanner, // : () => import('@/components/banners/JoinBanner'),
+    MarkdownContent, // : () => import('@/components/MarkdownContent'),
+    MarkdownLink, // : () => import('@/components/MarkdownLink'),
+    SoundcloudEmbed, // : () => import('@/components/SoundcloudEmbed'),
+    VideoEmbed, // : () => import('@/components/VideoEmbed'),
+    LikeIndicator, // : () => import('@/components/LikeIndicator'),
+    LiveClass, // : () => import('@/components/conversation/LiveClass'),
+    Homework, // : () => import('@/components/conversation/Homework'),
+    FourCorners, // : () => import('@/components/conversation/FourCorners'),
+    FutureContent, // : () => import('@/components/conversation/FutureContent'),
+    InjectedQuestion, // : () => import('@/components/conversation/InjectedQuestion'),
+    NextClass, // : () => import('@/components/conversation/NextClass'),
+    WebinarMessageTicker, // : () => import('@/components/webinar/WebinarMessageTicker'),
+    MediaCarousel, // : () => import('@/components/MediaCarousel'),
+    MediaThumbnails, // : () => import('@/components/MediaThumbnails'),
   },
   mounted() {
     this.viewCurrentClass();
@@ -108,7 +124,6 @@ export default {
       if (!this.course || !this.course.classes) { return; }
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
-          this.$store.dispatch('getSpecPreload', theClass.slug);
           this.$store.dispatch('getSpec', theClass.slug);
         }
       }

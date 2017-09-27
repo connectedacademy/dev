@@ -1,9 +1,9 @@
 <template lang="pug">
 
-  #action-panel(v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }" ref="actionpanel")
+  #action-panel(name="action-panel" v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }" ref="actionpanel")
     ul#experience-controls
     
-      li.experience-control(@click="toggleVideoPlaying")
+      li.experience-control(name="play-pause-button" @click="toggleVideoPlaying")
         icon(name="pause" v-if="videoPlaying")
         icon(name="play" v-else)
       li.experience-control(@click="skipToEnd")

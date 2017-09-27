@@ -4,7 +4,6 @@ const SCROLL_UPDATE_INTERVAL = 500;//750; // Interval at which scroll position s
 const SEGMENT_HEIGHT = 158.0; // Height of each segment
 
 import Vue from 'vue';
-import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 import throttle from 'lodash/throttle';
 
@@ -115,7 +114,7 @@ export default {
           requestAnimationFrame(step);
         }
         else if (elapsed > duration) {
-          this.$store.commit(types.PAUSE_MEDIA);
+          this.$store.commit('PAUSE_MEDIA');
         }
       }
       step();
@@ -126,7 +125,7 @@ export default {
         return;
       }
       if (this.videoPlaying) {
-        this.$store.commit(types.PAUSE_MEDIA);
+        this.$store.commit('PAUSE_MEDIA');
       }
       this.preventScroll = true;
       this.isAutoScrolling = false;
@@ -142,7 +141,7 @@ export default {
         this.preventScroll = false;
           
         // if (this.currentSection) {
-        //   this.$store.commit(types.PLAY_MEDIA);
+        //   this.$store.commit('PLAY_MEDIA');
         // }
       }, WHEEL_TIMEOUT);
     },
@@ -156,13 +155,13 @@ export default {
     },
     onMousedown() {
       Vue.$log.debug('MOUSEDOWN');
-      // this.$store.commit(types.PAUSE_MEDIA);
+      // this.$store.commit('PAUSE_MEDIA');
       this.preventScroll = true;
       this.isAutoScrolling = false;
     },
     onMouseup() {
       Vue.$log.debug('MOUSEUP');
-      // this.$store.commit(types.PLAY_MEDIA);
+      // this.$store.commit('PLAY_MEDIA');
       this.preventScroll = false;
       this.isAutoScrolling = false;
     },

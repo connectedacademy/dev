@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.feedback-page
+.feedback-page(name="feedback-page")
 
   .chat-panel#chat-list-container
     .navigation-button#previous-button(@click="previous")
@@ -163,10 +163,10 @@ export default {
           this.$log.info('Response from feedback request');
           this.$log.info(response);
           this.myFeedbackItems = filter(response.data, (item) => {
-            return item.user.account_number === this.user.account_number;
+            return item.user && (item.user.account_number === this.user.account_number);
           });
           this.feedbackItems = filter(response.data, (item) => {
-            return item.user.account_number !== this.user.account_number;
+            return item.user && (item.user.account_number !== this.user.account_number);
           });
         },
         (response) => {

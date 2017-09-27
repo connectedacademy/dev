@@ -1,8 +1,9 @@
 <template lang="pug">
 
-.video-wrapper(v-if="theSrc")
-
-  .video-container
+.video-wrapper
+  .loading-wrapper(v-if="!theSrc")
+    .pure-button.pure-button-success(@click="loadVideo") Click to load
+  .video-container(v-if="theSrc")
     iframe(v-bind:src="theSrc" frameborder='0' allowfullscreen)
 
 </template>
@@ -16,7 +17,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.theSrc = this.src;
-    }, 2500);
+    }, 10000);
   },
   data() {
     return {
@@ -34,12 +35,21 @@ export default {
       }
     },
   },
+  methods: {
+    loadVideo() {
+      this.theSrc = this.src;
+    },
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
 
 .video-wrapper
+  .loading-wrapper
+    background-color $color-lightest-grey
+    padding 100px 20px
+    text-align center
   .video-container
     margin-bottom 20px
     position relative

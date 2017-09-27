@@ -1,6 +1,6 @@
 <template lang="pug">
 
-    .about-page
+    .about-page(name="about-page")
 
       .col#col-main
 

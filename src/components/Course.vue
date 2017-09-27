@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .course-page
+  .course-page(name="course-page")
     .col#col-main
       .main-container
         class-selector

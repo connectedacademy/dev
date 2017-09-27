@@ -10,8 +10,8 @@
 
       p {{ (expanded) ? corners[currentCorner].text : bannerText }}
       .buttons(v-if="expanded") 
-        router-link.pure-button.pure-button-subtle(v-if="currentCorner !== 'default'" to="/fourcorners") Learn More
-        .pure-button.pure-button-subtle(v-if="currentCorner === 'default'" @click="currentCorner = 'default'; expanded = false") Minimize
+        router-link.pure-button.pure-button-subtle(name="4c-learn-more" v-if="currentCorner !== 'default'" to="/fourcorners") Learn More
+        .pure-button.pure-button-subtle(name="4c-minimize" v-if="currentCorner === 'default'" @click="currentCorner = 'default'; expanded = false") Minimize
 
     #corners
       .corner#corner-top-left(name="4c-banner-top-left" v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")

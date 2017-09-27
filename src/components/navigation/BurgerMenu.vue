@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .burger-menu(v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
+  .burger-menu(name="burger-menu" v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
     svg(v-bind:class="{cross:(state === 'close')}" viewBox="0 0 800 600")
       g
         path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="top")

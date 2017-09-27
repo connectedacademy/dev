@@ -1,21 +1,21 @@
 <template lang="pug">
 
 transition(name="slide-left")
-  .drawer#drawer-left(v-if="isVisible")
+  .drawer#drawer-left(name="left-drawer" v-if="isVisible")
 
     .card
 
       ul.drawer-list
 
-        li.drawer-list-item(@click="navigateTo('/')")
+        li.drawer-list-item(name="course-drawer-item" @click="navigateTo('/')")
           h1.drawer-list-item--header {{ $t('nav.take_part') }}
           h2.drawer-list-item--body {{ $t('nav.take_part_description') }}
 
-        //- li.drawer-list-item(@click="navigateTo('/schedule')")
+        //- li.drawer-list-item(name="schedule-drawer-item" @click="navigateTo('/schedule')")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
           h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
 
-        li.drawer-list-item(@click="navigateTo('/about')")
+        li.drawer-list-item(name="about-drawer-item" @click="navigateTo('/about')")
           h1.drawer-list-item--header {{ $t('nav.about') }}
           h2.drawer-list-item--body {{ $t('nav.about_description') }}
 

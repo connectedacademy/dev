@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .previous-button(@click="previous")
+  .previous-button(name="previous-button" @click="previous")
     icon(name="angle-left")
     | {{ $t('common.previous_page') }}
 

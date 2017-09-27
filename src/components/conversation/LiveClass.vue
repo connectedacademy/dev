@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.course-content
+.course-content(name="section-liveclass")
 
   .course-content--header.block
     h1.content-title {{ content.title }}

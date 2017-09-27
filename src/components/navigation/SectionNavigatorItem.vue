@@ -1,6 +1,6 @@
 <template lang="pug">
 
-li.navigation-item(@click="jumpToContent" v-bind:class="{ active: isActive }")
+li.navigation-item(v-bind:name="`navigator-${scrollPoint.slug}`" @click="jumpToContent" v-bind:class="{ active: isActive }")
   icon(v-if="scrollPoint.content_type === 'class'" name="play")
   icon(v-else-if="scrollPoint.content_type === 'webinar'" name="play")
   icon(v-else name="circle")
