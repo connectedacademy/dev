@@ -7,61 +7,46 @@ import _fill from 'lodash/fill';
 import floor from 'lodash/floor';
 import round from 'lodash/round';
 
-import socketIOClient from 'socket.io-client';
-import sailsIOClient from 'sails.io.js';
-import vueSails from 'vue-sails';
-// Setup socket connection
-const io = sailsIOClient(socketIOClient);
-io.sails.url = 'https://api.connectedacademy.io';
-Vue.io = io;
-Vue.use(vueSails, io);
-
 export default {
   mounted() {
-    setTimeout(() => {
 
-      Vue.io.socket.on('message', (obj) => {
+    Vue.io.socket.on('message', (obj) => {
+      Vue.$log.info('message socket');
+      Vue.$log.info(obj);
+      
+      if (obj.msgtype === 'message') {
+
+        const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
+        let updateMessage = this.conversationMessages[key]
         
-        if (obj.msgtype === 'message') {
+        if (!obj.msg.tag && updateMessage) {
 
-          Vue.$log.info(obj);
+          // Update message
+          updateMessage.message = obj.msg
 
-          const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
-          let updateMessage = this.conversationMessages[key]
-          
-          if (!obj.msg.tag && updateMessage) {
-            
-            Vue.$log.info('message received over socket connection')
-            Vue.$log.info(obj);
+          // Increment total
+          updateMessage.info.total = updateMessage.info.total + 1
 
-            // Update message
-            updateMessage.message = obj.msg
+          // Update messages object
+          Vue.set(this.conversationMessages, key, updateMessage);
 
-            // Increment total
-            updateMessage.info.total = updateMessage.info.total + 1
-
-            // Update messages object
-            Vue.set(this.conversationMessages, key, updateMessage);
-
-            // Update active segment messages
-            if (this.peekSegment === round(parseInt(obj.msg.segment) * 0.2)) {
-              Vue.$log.info('Pushing message');
-              this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
-            }
-          }
-          
-          if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
-
-            Vue.$log.info('message received over socket connection')
-            Vue.$log.info(obj);
-
-            Vue.$log.info('Pushing message to webinar ticker');
-            this.webinarMessages.push(obj.msg);
+          // Update active segment messages
+          if (this.peekSegment === round(parseInt(obj.msg.segment) * 0.2)) {
+            Vue.$log.info('Pushing message');
+            this.$store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg);
           }
         }
-      });
-    }, 2500);
+        
+        if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
 
+          Vue.$log.info('message received over socket connection')
+          Vue.$log.info(obj);
+
+          Vue.$log.info('Pushing message to webinar ticker');
+          this.webinarMessages.push(obj.msg);
+        }
+      }
+    });
   },
   data() {
     return {

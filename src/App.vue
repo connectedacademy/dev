@@ -45,7 +45,7 @@
   
   // Mixins
   import Overlay from '@/mixins/Overlay';
-  
+
   export default {
     name: 'app',
     mixins: [

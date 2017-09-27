@@ -11,7 +11,7 @@
 
         four-corners(v-bind:html="feedbackItem.html")
 
-    .feedback-conversation(v-if="!loading")
+    .feedback-conversation
       .feedback-message-wrapper(v-for="message in feedbackMessages")
         .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (!message.canview), reply: (message.fromuser.id !== currentUser.id) }")
           .feedback-message--bubble
@@ -41,7 +41,6 @@ import orderBy from 'lodash/orderBy';
 
 import FourCorners from '@/components/fourcorners/FourCorners';
 import InfoDialogue from '@/components/InfoDialogue';
-
 
 import 'vue-awesome/icons/lock';
 
@@ -126,12 +125,14 @@ export default {
       );
     },
     getDiscussion() {
-
       const request = { id: this.encodedContentId };
+
+      alert(this.encodedContentId);
 
       API.feedback.getDiscussion(
         request,
         (response) => {
+          alert('done');
           this.$log.info('Response from feedback request');
           this.$log.info(response);
           this.$emit('update:discussion', response);
@@ -139,6 +140,7 @@ export default {
           this.loading = false;
         },
         (response) => {
+          alert('nearly');
           // TODO: Handle failed request
           this.$log.info('Failed to retrieve feedback');
           // Set loading state

@@ -4,20 +4,6 @@ import * as types from '@/store/mutation-types';
 import store from '@/store';
 
 export default {
-  subscribeToSocket() {
-
-    Vue.$log.info('Subscribing to socket');
-
-    Vue.io.socket.on('user', function(obj) {
-      Vue.$log.info('SOCKET - user');
-      Vue.$log.info(obj);
-    });
-
-    Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
-      Vue.$log.info('SOCKET RESPONSE - me');
-      Vue.$log.info(resData);
-    });
-  },
   cancelBatchRequests() {
     cancel();
   },

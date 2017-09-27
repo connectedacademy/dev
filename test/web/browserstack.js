@@ -17,13 +17,13 @@ exports.config = {
       //   'os_version': '7',
       //   'resolution': '1024x768'
       // },
-      // {
-      //   'browserName': 'Chrome',
-      //   'browser_version': '60.0',
-      //   'os': 'OS X',
-      //   'os_version': 'Sierra',
-      //   'resolution': '1024x768'
-      // },
+      {
+        'browserName': 'Chrome',
+        'browser_version': '60.0',
+        'os': 'OS X',
+        'os_version': 'Sierra',
+        'resolution': '1024x768'
+      },
       // {
       //   'browserName': 'IE',
       //   'browser_version': '11.0',
@@ -43,11 +43,11 @@ exports.config = {
       //   'realMobile': 'true',
       //   'os_version': '8.0',
       // },
-      {
-        'device': 'Samsung Galaxy S6',
-        'realMobile': 'true',
-        'os_version': '5.0',
-      }
+      // {
+      //   'device': 'Samsung Galaxy S6',
+      //   'realMobile': 'true',
+      //   'os_version': '5.0',
+      // }
     ],
   
     logLevel: 'verbose',

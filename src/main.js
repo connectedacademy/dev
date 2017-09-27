@@ -20,8 +20,9 @@ import Icon from 'vue-awesome/components/Icon';
 
 import App from '@/App';
 import Lang from '@/Lang';
+import Sockets from '@/Sockets';
 
-import store from '@/store';;
+import store from '@/store';
 import router from '@/router';
 
 sync(store, router);
@@ -88,5 +89,6 @@ new Vue({
   components: {
     App,
     Lang,
+    Sockets,
   },
 });

@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 
@@ -117,7 +119,7 @@ export default {
     this.getFeedbackItems();
     this.getAvailableFeedbackItems();
 
-    this.$io.socket.on('user', (obj) => {
+    Vue.io.socket.on('user', (obj) => {
       this.$log.info('Submission message received');
       this.$log.info(obj);
       switch (obj.data.msgtype) {
