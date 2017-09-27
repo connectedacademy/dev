@@ -36,9 +36,9 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
-@import '~stylus/layout/course-content'
+@import '~stylus/buttons'
 
 #join-banner.course-content
   background-color white

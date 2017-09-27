@@ -31,10 +31,10 @@ const getters = {
   infoModalTitle: (initialState) => initialState.infoModalTitle,
   infoModalBody: (initialState) => initialState.infoModalBody,
   infoModalAction: (initialState) => initialState.infoModalAction,
-  modalVisible: (initialState) => initialState.state,
+  modalVisible: (initialState) => initialState.infoModalVisible,
   media: (initialState) => initialState.media,
   visualisation: (initialState) => initialState.visualisation,
-  
+
   videoIsActive() {
     if (store.state.currentSection === undefined) {
       return false;

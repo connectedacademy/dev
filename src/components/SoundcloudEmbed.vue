@@ -36,6 +36,8 @@
 
 <style lang="stylus" scoped>
 
+@import '~stylus/buttons'
+
 .soundcloud-wrapper
   .loading-wrapper
     // background-color #f2f2f2

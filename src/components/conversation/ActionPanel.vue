@@ -133,6 +133,7 @@
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 $media-height = 220px
 

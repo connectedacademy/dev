@@ -98,6 +98,7 @@
 <style lang="stylus">
 
 @import '~stylus/shared'
+@import '~stylus/variables'
 
 html
   background-color $color-main-page
@@ -110,6 +111,9 @@ html
     background-color #242424
 
 html, body
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
   margin 0
   padding 0
 

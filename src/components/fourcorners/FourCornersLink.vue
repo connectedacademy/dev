@@ -20,6 +20,7 @@ export default {
 <style lang="stylus">
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 .four-corners-link
   radius(6px)

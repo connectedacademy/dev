@@ -38,6 +38,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 .angle-icon
   top 3px

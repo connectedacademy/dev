@@ -102,6 +102,7 @@ export default {
 <style lang="stylus">
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 .fourcorners-submission
   radius(6px)

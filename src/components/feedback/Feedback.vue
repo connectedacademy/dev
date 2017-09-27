@@ -213,6 +213,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 $chat-list-width = 320px
 

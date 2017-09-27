@@ -186,6 +186,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 .feedback-view
   padding-top 50px

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#fourcorners-banner(v-bind:class="{ expanded: expanded }")
+#four-corners-banner(v-bind:class="{ expanded: expanded }")
   #tile-wrapper
 
     .tile#info-tile
@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'four-corners',
+  name: 'four-corners-banner',
   props: ['content'],
   data() {
     return {
@@ -78,14 +78,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~stylus/shared'
+
+@import '~stylus/buttons'
 @import '~stylus/layout/course-content'
 
 $corner-size = 50px
 $corner-offset = 15px
 $corner-width = 8px
 
-#fourcorners-banner
+#four-corners-banner
   radius(6px)
   background-color #0B2130
   background url('../../assets/images/lake.jpg')

@@ -55,6 +55,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 @import '~stylus/drawer'
 @import '~stylus/forms'
 

@@ -11,7 +11,7 @@
     homework(v-else-if="content.expectsubmission" v-bind:content="content")
 
     //- FOURCORNERS
-    four-corners(v-else-if="content.fourcornersintro")
+    four-corners-banner(v-else-if="content.fourcornersintro")
 
     //- LIVECLASS
     live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
@@ -67,7 +67,7 @@ import MarkdownLink from '@/components/MarkdownLink';
 import LikeIndicator from '@/components/LikeIndicator';
 import LiveClass from '@/components/conversation/LiveClass';
 import Homework from '@/components/conversation/Homework';
-import FourCorners from '@/components/conversation/FourCorners';
+import FourCornersBanner from '@/components/conversation/FourCornersBanner';
 import FutureContent from '@/components/conversation/FutureContent';
 import InjectedQuestion from '@/components/conversation/InjectedQuestion';
 import NextClass from '@/components/conversation/NextClass';
@@ -89,7 +89,7 @@ export default {
     LikeIndicator, // : () => import('@/components/LikeIndicator'),
     LiveClass, // : () => import('@/components/conversation/LiveClass'),
     Homework, // : () => import('@/components/conversation/Homework'),
-    FourCorners, // : () => import('@/components/conversation/FourCorners'),
+    FourCornersBanner, // : () => import('@/components/conversation/FourCornersBanner'),
     FutureContent, // : () => import('@/components/conversation/FutureContent'),
     InjectedQuestion, // : () => import('@/components/conversation/InjectedQuestion'),
     NextClass, // : () => import('@/components/conversation/NextClass'),
@@ -132,7 +132,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '~stylus/layout/course-content'
 

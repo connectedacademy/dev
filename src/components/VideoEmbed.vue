@@ -47,6 +47,8 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '~stylus/buttons'
+
 .video-wrapper
   .loading-wrapper
     // background-color #f2f2f2

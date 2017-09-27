@@ -172,6 +172,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/layout/course-content'
+@import '~stylus/buttons'
 
 $selector-height = 44px
 

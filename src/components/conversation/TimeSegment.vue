@@ -318,11 +318,11 @@
     z-index 56
     border none
 
+    &.below-modal
+      z-index 55 !important
+
   &.peek
     height 240px
-
-    &.below-modal
-      z-index 55
 
   &.opened
     height auto
@@ -331,7 +331,7 @@
       pointer-events none
 
     &.below-modal
-      z-index 55
+      z-index 55 !important
 
   .meta-container
     animate()

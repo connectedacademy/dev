@@ -104,6 +104,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 .message-composer-wrapper
   pinned()
@@ -179,15 +180,16 @@ export default {
             width calc(100% - 20px)
 
     .message-composer--footer
-      height 30px
-      padding 10px
+      height 40px
+      padding 5px
       position absolute
       bottom 0
       right 0
       left auto
       animate()
       button.pure-button.pure-button-primary
-        padding 3px 20px
+        line-height 38px
+        padding 0 25px
       .info-label
         reset()
         radius(5px)
