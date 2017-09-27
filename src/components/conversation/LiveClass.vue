@@ -10,7 +10,7 @@
 
     action-panel(v-bind:content="content")
 
-    conversation-container(v-bind:content="content")
+    conversation-container(v-bind:content="content" v-bind:collapsed="collapsed")
 
     #continue-listening(v-if="collapsed")
       .pure-button.pure-button-primary(@click="continueListening()") Continue Listening
@@ -18,33 +18,33 @@
 </template>
 
 <script>
-  import ActionPanel from '@/components/conversation/ActionPanel';
-  import ConversationContainer from '@/components/ConversationContainer';
-  
-  import find from 'lodash/find';
-  
-  export default {
-    name: 'live-class',
-    props: ['content'],
-    components: {
-      ActionPanel,
-      ConversationContainer,
-    },
-    data() {
-      return {
-        collapsed: true,
-      };
-    },
-    methods: {
-      continueListening() {
-        this.collapsed = false;
-        const scrollPoint = find(this.$store.state.scrollPoints, {
-          content_type: 'class'
-        });
-        this.$store.commit('setCurrentSection', scrollPoint);
-      }
+import ActionPanel from '@/components/conversation/ActionPanel';
+import ConversationContainer from '@/components/ConversationContainer';
+
+import find from 'lodash/find';
+
+export default {
+  name: 'live-class',
+  props: ['content'],
+  components: {
+    ActionPanel,
+    ConversationContainer,
+  },
+  data() {
+    return {
+      collapsed: true,
+    };
+  },
+  methods: {
+    continueListening() {
+      this.collapsed = false;
+      const scrollPoint = find(this.$store.state.scrollPoints, {
+        content_type: 'class'
+      });
+      this.$store.commit('setCurrentSection', scrollPoint);
     }
-  };
+  }
+};
 </script>
 
 <style lang="stylus" scoped>

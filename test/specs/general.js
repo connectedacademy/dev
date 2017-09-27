@@ -1,6 +1,7 @@
 var assert = require('assert');
+var testEnv = require('../test.env')
 
-const APP_URL = process.env.TEST_URL || 'https://interpretation.connectedacademy.io';
+const APP_URL = testEnv.APP_URL;
 
 describe('General tests', function() {
   it('does load page', function () {

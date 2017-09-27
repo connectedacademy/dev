@@ -14,11 +14,11 @@ import startsWith from 'lodash/startsWith';
 export default {
   name: 'video-embed',
   props: ['contentType', 'videoSrc'],
-  mounted() {
-    setTimeout(() => {
-      this.theSrc = this.src;
-    }, 10000);
-  },
+  // mounted() {
+  //   setTimeout(() => {
+  //     this.theSrc = this.src;
+  //   }, 10000);
+  // },
   data() {
     return {
       theSrc: undefined
@@ -47,8 +47,9 @@ export default {
 
 .video-wrapper
   .loading-wrapper
-    background-color $color-lightest-grey
-    padding 100px 20px
+    background-color #f2f2f2
+    margin-bottom 20px
+    padding 58px 20px
     text-align center
   .video-container
     margin-bottom 20px

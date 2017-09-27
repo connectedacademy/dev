@@ -3,7 +3,7 @@ var testEnv = require('../test.env')
 
 const APP_URL = testEnv.APP_URL;
 
-describe('Feedback tests', function() {
+describe('Content tests', function() {
   it('does load page', function () {
     browser
       .url(APP_URL)
@@ -12,20 +12,20 @@ describe('Feedback tests', function() {
       assert(browser.getTitle().match(/Connected Academy/i));      
   });
 
-  it('opens feedback', () => {
-
-    // Scroll to feedback
-    browser.scroll('[name="section-feedback"]').pause(1000);
+  it('opens additional content', () => {
+    browser.pause(2000);
+    // Scroll to intro
+    browser.scroll('[name="section-intro"]').pause(1000);
     // Save screenshot
-    browser.saveScreenshot('./test/screenshots/feedback-top.png');
+    browser.saveScreenshot('./test/screenshots/intro-top.png');
     // Pause
     browser.pause(2000);
     // Assert section is visible
-    browser.isVisible('[name="section-feedback"]');
+    browser.isVisible('[name="section-intro"]');
     // Click feedback button
-    browser.click('[name="feedback-button"]').pause(3000);
+    browser.click('[name="intro-markdown-link"]').pause(1000);
     // Check page loaded
-    browser.isVisible('[name="feedback-page"]');
+    assert(browser.isVisible('[name="markdown-page"]'));
   });
 
 });

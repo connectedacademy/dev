@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapGetters } from 'vuex';
 
 // Mixins
@@ -41,21 +42,28 @@ export default {
   components: {
     TimeSegment,
   },
-  props: ['content'],
+  props: ['content', 'collapsed'],
+  watch: {
+    collapsed(nV) {
+      if (nV) return;
+      const segmentCount = this.content.duration * 0.2;
+      for (var index = 10; index < segmentCount; index++) {
+        if (this.conversationMessages[index]) continue;
+        Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
+      }
+    }
+  },
   mounted() {
     this.loadSubtitles(this.content);
     this.loadMedia(this.content);
     this.loadSegmentSummary(0, true);
     // this.loadVisualisation(this.content);
-    
+
     // Fill with blank messages
-    const segmentCount = this.content.duration * 0.2;
+    const segmentCount = 10;
     for (var index = 0; index < segmentCount; index++) {
       if (this.conversationMessages[index]) continue;
-      this.conversationMessages[index] = {
-        loading: true,
-        segmentGroup: index
-      }
+      Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
     }
   },
   data() {
@@ -138,6 +146,7 @@ export default {
     background-size auto 158px
     background-position right -1px
     background-position center -1px
+    back
     overflow hidden
     
     .subtitle-wrapper, .message-wrapper

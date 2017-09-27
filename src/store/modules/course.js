@@ -27,7 +27,6 @@ const getters = {
   },
   courseContent() {
     if (state.current_class === undefined) { return undefined; }
-    Vue.$log.info(state.current_class.content);
     return filter(state.current_class.content, item => {
       // Exclude titles from course content
       return !includes(['title'], item.content_type);

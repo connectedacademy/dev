@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.markdown-page
+.markdown-page(name="markdown-page")
 
   .col#col-main
 

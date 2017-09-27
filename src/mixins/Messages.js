@@ -108,15 +108,13 @@ export default {
         API.message.getSegmentSummary(
           theRequest,
           response => {
-
+            
             for (var group in response.data) {
 
               let newMessage = response.data[group];
-              newMessage.segmentGroup = parseInt(parseInt(group) * 0.2);
+              newMessage.segmentGroup = (parseInt(group) * 0.2);
 
-              if (newMessage.segmentGroup < (this.content.duration * 0.2)) {
-                Vue.set(this.conversationMessages, newMessage.segmentGroup, newMessage);
-              }
+              Vue.set(this.conversationMessages, newMessage.segmentGroup, newMessage);
             }
           },
           response => {

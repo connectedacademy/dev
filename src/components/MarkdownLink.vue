@@ -1,10 +1,10 @@
 <template lang="pug">
 
   .markdown-link
-    router-link.pure-button(v-if="isRegistered" v-bind:to="url")
+    router-link.pure-button(v-bind:name="`${mdContent.slug}-markdown-link`" v-if="isRegistered" v-bind:to="url")
       | {{ $t('common.explore_content') }}
       icon.angle-icon(name="angle-right")
-    .pure-button(v-else @click="showAuth()")
+    .pure-button(v-bind:name="`${mdContent.slug}-markdown-link`" v-else @click="showAuth()")
       | {{ $t('common.explore_content') }}
       icon.angle-icon(name="angle-right")
 

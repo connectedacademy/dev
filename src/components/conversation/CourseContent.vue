@@ -17,7 +17,7 @@
     live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
     //- CONTENT
-    .course-content(v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
+    .course-content(v-bind:name="`section-${content.slug}`" v-else v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
 
       like-indicator(v-bind:content-slug="content.slug" v-bind:class-slug="currentClass.slug" v-bind:haveliked="content.haveliked" v-bind:likes="content.likes" v-bind:has-liked.sync="content.haveliked" v-bind:like-count.sync="content.likes")
 
@@ -62,8 +62,8 @@ import Auth from '@/mixins/Auth';
 import JoinBanner from '@/components/banners/JoinBanner';
 import MarkdownContent from '@/components/MarkdownContent';
 import MarkdownLink from '@/components/MarkdownLink';
-import SoundcloudEmbed from '@/components/SoundcloudEmbed';
-import VideoEmbed from '@/components/VideoEmbed';
+// import SoundcloudEmbed from '@/components/SoundcloudEmbed';
+// import VideoEmbed from '@/components/VideoEmbed';
 import LikeIndicator from '@/components/LikeIndicator';
 import LiveClass from '@/components/conversation/LiveClass';
 import Homework from '@/components/conversation/Homework';
@@ -84,8 +84,8 @@ export default {
     JoinBanner, // : () => import('@/components/banners/JoinBanner'),
     MarkdownContent, // : () => import('@/components/MarkdownContent'),
     MarkdownLink, // : () => import('@/components/MarkdownLink'),
-    SoundcloudEmbed, // : () => import('@/components/SoundcloudEmbed'),
-    VideoEmbed, // : () => import('@/components/VideoEmbed'),
+    SoundcloudEmbed : () => import('@/components/SoundcloudEmbed'),
+    VideoEmbed : () => import('@/components/VideoEmbed'),
     LikeIndicator, // : () => import('@/components/LikeIndicator'),
     LiveClass, // : () => import('@/components/conversation/LiveClass'),
     Homework, // : () => import('@/components/conversation/Homework'),
