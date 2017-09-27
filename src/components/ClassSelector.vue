@@ -44,7 +44,8 @@
 
 <script>
 import Vue from 'vue';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
+
 import API from '@/api';
 import VueScroll from 'vue-scroll';
 
@@ -91,6 +92,27 @@ export default {
         slug: 'intro',
       },
     };
+  },
+  computed: {
+    ...mapGetters(['course', 'currentClass', 'isRegistered']),
+    infoMarkdown() {
+      return `${this.course.baseUri}info.md`;
+    },
+    theWidth() {
+      return (this.course && this.course.classes) ? (((this.course.classes.length) * 190.0) - 10) + 190.0 : 190.0;
+    },
+    currentExists() {
+      if (!(this.course && this.course.classes)) {
+        return false;
+      }
+      for (const theClass of this.course.classes) {
+        if (theClass.status === 'CURRENT') {
+          return true;
+        }
+      }
+
+      return false;
+    },
   },
   methods: {
     windowResized: throttle(function(self) {
@@ -142,29 +164,6 @@ export default {
     },
     scrollRight() {
       this.$refs.classselector.scrollLeft += 80;
-    },
-  },
-  computed: {
-    ...mapGetters([
-      'course', 'currentClass', 'isRegistered'
-    ]),
-    infoMarkdown() {
-      return `${this.course.baseUri}info.md`;
-    },
-    theWidth() {
-      return (this.course && this.course.classes) ? (((this.course.classes.length) * 190.0) - 10) + 190.0 : 190.0;
-    },
-    currentExists() {
-      if (!(this.course && this.course.classes)) {
-        return false;
-      }
-      for (const theClass of this.course.classes) {
-        if (theClass.status === 'CURRENT') {
-          return true;
-        }
-      }
-
-      return false;
     },
   },
 };

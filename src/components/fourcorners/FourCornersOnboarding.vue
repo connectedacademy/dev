@@ -43,7 +43,7 @@
           br
 
           .video-walkthrough(v-if="provider.video !== undefined")
-            video-embed(v-bind:video-src="provider.video")
+            video-embed(v-bind:video-src="provider.video" v-bind:auto-load="true")
             
 </template>
 

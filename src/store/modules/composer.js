@@ -10,9 +10,7 @@ const state = {
 
 // getters
 const getters = {
-  mediaHidden() {
-    return state.hidden;
-  },
+  mediaHidden: (initialState) => initialState.hidden,
 };
 
 // actions

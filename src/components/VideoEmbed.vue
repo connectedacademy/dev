@@ -13,12 +13,14 @@ import startsWith from 'lodash/startsWith';
 
 export default {
   name: 'video-embed',
-  props: ['contentType', 'videoSrc'],
-  // mounted() {
-  //   setTimeout(() => {
-  //     this.theSrc = this.src;
-  //   }, 10000);
-  // },
+  props: ['contentType', 'videoSrc', 'autoLoad'],
+  mounted() {
+    if (this.autoLoad) {
+      setTimeout(() => {
+        this.theSrc = this.src;
+      }, 1000);
+    }
+  },
   data() {
     return {
       theSrc: undefined

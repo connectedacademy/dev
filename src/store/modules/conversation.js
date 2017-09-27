@@ -23,41 +23,18 @@ const state = {
 
 // getters
 const getters = {
-  subscribedTo() {
-    return state.subscribedTo;
-  },
-  activeSegment() {
-    return state.activeSegment;
-  },
-  peekSegment() {
-    return state.peekSegment;
-  },
-  activeSegmentMessages () {
-    return state.activeSegmentMessages;
-  },
-  infoModalVisible() {
-    return state.infoModalVisible;
-  },
-  infoModalTitle() {
-    return state.infoModalTitle;
-  },
-  infoModalBody() {
-    return state.infoModalBody;
-  },
-  infoModalAction() {
-    return state.infoModalAction;
-  },
-  modalVisible() {
-    return store.state.conversation.infoModalVisible;
-  },
-  media() {
-    Vue.$log.info('Media from state');
-    return state.media;
-  },
-  visualisation() {
-    Vue.$log.info('Visualisation from state');
-    return state.visualisation;
-  },
+  subscribedTo: (initialState) => initialState.subscribedTo,
+  activeSegment: (initialState) => initialState.activeSegment,
+  peekSegment: (initialState) => initialState.peekSegment,
+  activeSegmentMessages: (initialState) => initialState.activeSegmentMessages,
+  infoModalVisible: (initialState) => initialState.infoModalVisible,
+  infoModalTitle: (initialState) => initialState.infoModalTitle,
+  infoModalBody: (initialState) => initialState.infoModalBody,
+  infoModalAction: (initialState) => initialState.infoModalAction,
+  modalVisible: (initialState) => initialState.state,
+  media: (initialState) => initialState.media,
+  visualisation: (initialState) => initialState.visualisation,
+  
   videoIsActive() {
     if (store.state.currentSection === undefined) {
       return false;

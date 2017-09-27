@@ -1,7 +1,17 @@
 import store from '@/store';
 
-export const fauxTime = (state) => {
-  return state.fauxTime;
+export const fauxTime = state => state.fauxTime;
+export const scrollPosition = state => state.scrollPosition;
+export const scrollPoints = state => state.scrollPoints;
+export const offsetScrollPosition = state => state.offsetScrollPosition;
+export const pendingScrollPosition = state => state.pendingScrollPosition;
+export const currentSection = state => state.currentSection;
+export const autoPlaying = state => state.autoPlaying;
+
+export const currentTime = (state) => {
+  let time = store.getters.currentSectionScrollPosition;
+  if (!time) return 0;
+  return (time < 0) ? 0 : (time / (158.0 * 0.2));
 };
 
 export const pageStyle = (state) => {
@@ -12,31 +22,3 @@ export const pageStyle = (state) => {
   };
   return activeClasses;
 };
-
-export const scrollPosition = (state) => {
-  return state.scrollPosition;
-};
-
-export const scrollPoints = (state) => {
-  return state.scrollPoints;
-};
-
-export const offsetScrollPosition = (state) => {
-  return state.offsetScrollPosition;
-};
-
-export const currentTime = (state) => {
-  let time = store.getters.currentSectionScrollPosition;
-  if (!time) return 0;
-  return (time < 0) ? 0 : (time / (158.0 * 0.2));
-};
-
-export const pendingScrollPosition = (state) => {
-  return state.pendingScrollPosition;
-};
-
-export const currentSection = (state) => {
-  return state.currentSection;
-};
-
-export const autoPlaying = state => state.autoPlaying;

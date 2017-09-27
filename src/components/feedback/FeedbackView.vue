@@ -127,12 +127,9 @@ export default {
     getDiscussion() {
       const request = { id: this.encodedContentId };
 
-      alert(this.encodedContentId);
-
       API.feedback.getDiscussion(
         request,
         (response) => {
-          alert('done');
           this.$log.info('Response from feedback request');
           this.$log.info(response);
           this.$emit('update:discussion', response);
@@ -140,7 +137,6 @@ export default {
           this.loading = false;
         },
         (response) => {
-          alert('nearly');
           // TODO: Handle failed request
           this.$log.info('Failed to retrieve feedback');
           // Set loading state

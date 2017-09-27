@@ -11,7 +11,7 @@
 <script>
   export default {
     name: 'soundcloud-embed',
-    props: ['soundcloudSrc'],
+    props: ['soundcloudSrc', 'autoLoad'],
     data() {
       return {
         src: undefined,
@@ -19,9 +19,12 @@
       }
     },
     mounted() {
-      setTimeout(() => {
-        this.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${this.soundcloudSrc}`;
-      }, 2500);
+      this.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${this.soundcloudSrc}`;
+      if (this.autoLoad) {
+        setTimeout(() => {
+          this.theSrc = this.src;
+        }, 1000);
+      }
     },
     methods: {
       loadEmbed() {
