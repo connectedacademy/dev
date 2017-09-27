@@ -1,21 +1,22 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-const AdminMain = () => import('@/components/admin/AdminMain')
+const AdminMain = () => import('@/components/admin/AdminMain');
 
-const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow')
-const Registration = () => import('@/components/authentication/Registration')
+const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow');
+const Registration = () => import('@/components/authentication/Registration');
 
-const Course = () => import('@/components/Course')
-const Markdown = () => import('@/components/Markdown')
+// const Course = () => import('@/components/Course');
+import Course from '@/components/Course';
+const Markdown = () => import('@/components/Markdown');
 
-const Feedback = () => import('@/components/feedback/Feedback')
-const FeedbackView = () => import('@/components/feedback/FeedbackView')
+const Feedback = () => import('@/components/feedback/Feedback');
+const FeedbackView = () => import('@/components/feedback/FeedbackView');
 
-const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');
+const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');;
 
-const About = () => import('@/components/pages/About');
-const Schedule = () => import('@/components/pages/Schedule');
+const About = () => import('@/components/pages/About');;
+const Schedule = () => import('@/components/pages/Schedule');;
 
 Vue.use(Router);
 

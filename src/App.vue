@@ -1,5 +1,4 @@
 <meta id="token" name="token" value="{{ csrf_token() }}"></meta>
-<meta name = "viewport" content = "initial-scale = 1.0, user-scalable = no"></meta>
 
 <template lang="pug">
 
@@ -41,6 +40,12 @@
   // Components
   import Navigation from '@/components/navigation/Navigation';
   import BurgerMenu from '@/components/navigation/BurgerMenu';
+  import LeftDrawer from '@/components/navigation/drawers/LeftDrawer';
+  import RightDrawer from '@/components/navigation/drawers/RightDrawer';
+  import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
+  import MediaLightbox from '@/components/modals/MediaLightbox';
+  import InfoModal from '@/components/modals/InfoModal';
+  // import DebugPanel from '@/components/DebugPanel';
   // import Lock from '@/components/authentication/Lock';
   
   // Mixins
@@ -84,13 +89,11 @@
     components: {
       Navigation,
       BurgerMenu,
-      'LeftDrawer': () => import ('@/components/navigation/drawers/LeftDrawer'),
-      'RightDrawer': () => import ('@/components/navigation/drawers/RightDrawer'),
-      // 'DebugPanel': () => import ('@/components/DebugPanel'),
-      'AuthenticationFlow': () => import ('@/components/authentication/AuthenticationFlow'),
-      'ActionPanel': () => import ('@/components/conversation/ActionPanel'),
-      'MediaLightbox': () => import('@/components/modals/MediaLightbox'),
-      'InfoModal': () => import ('@/components/modals/InfoModal'),
+      LeftDrawer,
+      RightDrawer,
+      AuthenticationFlow,
+      MediaLightbox,
+      InfoModal,
     },
   };
 </script>

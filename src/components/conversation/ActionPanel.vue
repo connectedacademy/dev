@@ -35,8 +35,8 @@
   import Moment from 'moment-mini';
   
   import MessageComposer from '@/components/MessageComposer';
-  import MediaContainer from '@/components/MediaContainer';
-  
+  const MediaContainer = () => import('@/components/MediaContainer');
+
   import clamp from 'lodash/clamp';
 
   import 'vue-awesome/icons/pause';
