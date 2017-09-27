@@ -9332,7 +9332,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "markdown-page"
+    staticClass: "markdown-page",
+    attrs: {
+      "name": "markdown-page"
+    }
   }, [_c('div', {
     staticClass: "col",
     attrs: {
@@ -9348,4 +9351,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=5.ffc122f8227bcaa629a6.js.map
+//# sourceMappingURL=5.32128e32b9a7d41442af.js.map

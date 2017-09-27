@@ -13406,11 +13406,9 @@ __WEBPACK_IMPORTED_MODULE_1_vue__["default"].use(__WEBPACK_IMPORTED_MODULE_10_vu
           for (var group in response.data) {
 
             var newMessage = response.data[group];
-            newMessage.segmentGroup = parseInt(parseInt(group) * 0.2);
+            newMessage.segmentGroup = parseInt(group) * 0.2;
 
-            if (newMessage.segmentGroup < _this2.content.duration * 0.2) {
-              __WEBPACK_IMPORTED_MODULE_1_vue__["default"].set(_this2.conversationMessages, newMessage.segmentGroup, newMessage);
-            }
+            __WEBPACK_IMPORTED_MODULE_1_vue__["default"].set(_this2.conversationMessages, newMessage.segmentGroup, newMessage);
           }
         }, function (response) {
           __WEBPACK_IMPORTED_MODULE_1_vue__["default"].$log.info('Failed to get messages summary');
@@ -21894,4 +21892,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=2.71dd62bc6b789c666551.js.map
+//# sourceMappingURL=2.f569533dd6a3443dde56.js.map

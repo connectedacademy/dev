@@ -1,4 +1,4 @@
-webpackJsonp([4],{
+webpackJsonp([4,17],{
 
 /***/ 297:
 /***/ (function(module, exports, __webpack_require__) {
@@ -9319,13 +9319,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'video-embed',
   props: ['contentType', 'videoSrc'],
-  mounted: function mounted() {
-    var _this = this;
-
-    setTimeout(function () {
-      _this.theSrc = _this.src;
-    }, 10000);
-  },
   data: function data() {
     return {
       theSrc: undefined
@@ -9360,7 +9353,7 @@ exports = module.exports = __webpack_require__(288)();
 
 
 // module
-exports.push([module.i, ".video-wrapper .loading-wrapper[data-v-22d732ae]{background-color:$color-lightest-grey;padding:100px 20px;text-align:center}.video-wrapper .video-container[data-v-22d732ae]{margin-bottom:20px;position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%}.video-wrapper .video-container embed[data-v-22d732ae],.video-wrapper .video-container iframe[data-v-22d732ae],.video-wrapper .video-container object[data-v-22d732ae]{position:absolute;top:0;left:0;width:100%;height:100%}", "", {"version":3,"sources":["/root/connectedacademy/src/components/VideoEmbed.vue"],"names":[],"mappings":"AACA,iDACE,sCAAuC,AACvC,mBAAoB,AACpB,iBAAmB,CACpB,AACD,iDACE,mBAAoB,AACpB,kBAAmB,AACnB,sBAAuB,AACvB,SAAU,AACV,gBAAiB,AACjB,cAAgB,CACjB,AACD,uKAGE,kBAAmB,AACnB,MAAO,AACP,OAAQ,AACR,WAAY,AACZ,WAAa,CACd","file":"VideoEmbed.vue","sourcesContent":["\n.video-wrapper .loading-wrapper[data-v-22d732ae] {\n  background-color: $color-lightest-grey;\n  padding: 100px 20px;\n  text-align: center;\n}\n.video-wrapper .video-container[data-v-22d732ae] {\n  margin-bottom: 20px;\n  position: relative;\n  padding-bottom: 56.25%;\n  height: 0;\n  overflow: hidden;\n  max-width: 100%;\n}\n.video-wrapper .video-container iframe[data-v-22d732ae],\n.video-wrapper .video-container object[data-v-22d732ae],\n.video-wrapper .video-container embed[data-v-22d732ae] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}"],"sourceRoot":""}]);
+exports.push([module.i, ".video-wrapper .loading-wrapper[data-v-22d732ae]{background-color:#f2f2f2;margin-bottom:20px;padding:58px 20px;text-align:center}.video-wrapper .video-container[data-v-22d732ae]{margin-bottom:20px;position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%}.video-wrapper .video-container embed[data-v-22d732ae],.video-wrapper .video-container iframe[data-v-22d732ae],.video-wrapper .video-container object[data-v-22d732ae]{position:absolute;top:0;left:0;width:100%;height:100%}", "", {"version":3,"sources":["/root/connectedacademy/src/components/VideoEmbed.vue"],"names":[],"mappings":"AACA,iDACE,yBAA0B,AAC1B,mBAAoB,AACpB,kBAAmB,AACnB,iBAAmB,CACpB,AACD,iDACE,mBAAoB,AACpB,kBAAmB,AACnB,sBAAuB,AACvB,SAAU,AACV,gBAAiB,AACjB,cAAgB,CACjB,AACD,uKAGE,kBAAmB,AACnB,MAAO,AACP,OAAQ,AACR,WAAY,AACZ,WAAa,CACd","file":"VideoEmbed.vue","sourcesContent":["\n.video-wrapper .loading-wrapper[data-v-22d732ae] {\n  background-color: #f2f2f2;\n  margin-bottom: 20px;\n  padding: 58px 20px;\n  text-align: center;\n}\n.video-wrapper .video-container[data-v-22d732ae] {\n  margin-bottom: 20px;\n  position: relative;\n  padding-bottom: 56.25%;\n  height: 0;\n  overflow: hidden;\n  max-width: 100%;\n}\n.video-wrapper .video-container iframe[data-v-22d732ae],\n.video-wrapper .video-container object[data-v-22d732ae],\n.video-wrapper .video-container embed[data-v-22d732ae] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}"],"sourceRoot":""}]);
 
 // exports
 
@@ -9384,7 +9377,7 @@ var update = __webpack_require__(289)("17c7f754", content, true);
 /***/ 512:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "static/img/lake.2a572ed.jpg";
+module.exports = __webpack_require__.p + "static/img/lake.9f36efc.jpg";
 
 /***/ }),
 
@@ -9853,4 +9846,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=4.2ff9493cdf12ae3de30a.js.map
+//# sourceMappingURL=4.e1c4944782985474098f.js.map
