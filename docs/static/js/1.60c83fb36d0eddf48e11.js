@@ -36144,7 +36144,10 @@ var SEGMENT_HEIGHT = 158.0;
     },
 
     onScroll: __WEBPACK_IMPORTED_MODULE_3_lodash_throttle___default()(function (self) {
-      self.scrollPosition = window.scrollY;
+      if (Math.abs(self.scrollPosition - window.scrollY) > 50) {
+        console.log(Math.abs(self.scrollPosition - window.scrollY));
+        self.scrollPosition = window.scrollY;
+      }
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
     onWheel: function onWheel() {
       if (!this.activeSegment) {
@@ -43166,4 +43169,4 @@ module.exports = __webpack_require__(916);
 
 /***/ })
 ]));
-//# sourceMappingURL=1.2dc9fb8bf01686148fab.js.map
+//# sourceMappingURL=1.60c83fb36d0eddf48e11.js.map
