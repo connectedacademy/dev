@@ -5,25 +5,25 @@
   .chat-panel#chat-list-container
     .navigation-button#previous-button(@click="previous")
       icon(name="angle-left")
-      p Return to class
     .navigation-button#info-button(@click="currentFeedbackId = undefined")
-      icon(name="question")
+      icon(name="info")
+      p About the homework
     .clearfix
 
-    ul
+    ul(v-if="myFeedbackItems.length !== 0")
       li.list-header My submissions
       li.no-content(v-if="!myFeedbackItems.length") You have no submissions
       li(v-for="feedbackItem in myFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
-    ul
+    ul(v-if="feedbackItems.length !== 0")
       li.list-header Current conversations
-      li.no-content(v-if="!myFeedbackItems.length") You are not in any conversations
+      li.no-content(v-if="feedbackItems.length === 0") You are not in any conversations
       li(v-for="feedbackItem in feedbackItems" @click="currentFeedbackId = feedbackItem.id")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
-    ul
+    ul(v-if="availableFeedbackItems.length !== 0")
       li.list-header Suggested conversations
-      li.no-content(v-if="!myFeedbackItems.length") You have no suggestions
+      li.no-content(v-if="availableFeedbackItems.length === 0") You have no suggestions
       li(v-for="feedbackItem in availableFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
@@ -77,7 +77,7 @@ import FeedbackView from './FeedbackView';
 import InfoDialogue from '../InfoDialogue';
 
 import 'vue-awesome/icons/angle-left';
-import 'vue-awesome/icons/question';
+import 'vue-awesome/icons/info';
 
 import Messages from '@/mixins/Messages';
 
@@ -244,10 +244,11 @@ $chat-list-width = 320px
 
   .navigation-button
     animate()
-    background-color white
     box-sizing()
+    background-color white
     float left
     height 50px
+    position relative
     &:hover
       background-color $color-lightest-grey
       cursor pointer
@@ -262,23 +263,34 @@ $chat-list-width = 320px
       height 50px
       position absolute
       margin 0 20px
-      width 10px
 
     &#info-button
       border-left $color-light-grey 1px solid
-      width 50px
-    &#previous-button
-      padding-left 50px
+      padding 0 15px
+      padding-left 44px
       width calc(100% - 50px)
       .fa-icon
+        // display none
         left 0
+        width 6px
+    &#previous-button
+      padding-left 50px
+      width 50px
+      .fa-icon
+        left 0
+        width 10px
 
     @media(max-width: 600px)
-      max-width 50% !important
-      width 50% !important
+      max-width 100% !important
+      width 100% !important
       padding 0 !important
       .fa-icon
-        margin 0 12px
+        display block
+        margin 0 auto
+        position relative
+        left auto
+      &:nth-child(2)
+        border-top $color-border 1px solid
       p
         display none
 
