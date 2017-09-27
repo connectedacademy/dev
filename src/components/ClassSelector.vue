@@ -14,7 +14,6 @@
         ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
           li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
-            onboarding-prompt(prompt="Click here for class intro")
             h1.class-selector--item--header
               icon(name="info")
 
@@ -55,7 +54,6 @@ import throttle from 'lodash/throttle';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 import JoinBanner from '@/components/banners/JoinBanner';
-import OnboardingPrompt from '@/components/OnboardingPrompt';
 
 import 'vue-awesome/icons/angle-left';
 import 'vue-awesome/icons/angle-right';
@@ -72,7 +70,6 @@ export default {
     MarkdownRenderer,
     FourCornersLink,
     JoinBanner,
-    OnboardingPrompt,
   },
   watch: {
     currentClass(nV, oV) {
