@@ -6,7 +6,7 @@
   h1.user-name {{ user.name }}
   h2.user-account {{ `@${user.account}` }}
 
-  li.pure-button.pure-button-action(v-if="user.admin" @click="navigateTo('admin')") Admin Panel
+  li.pure-button.pure-button-action(v-if="user.admin" @click="navigateTo('/admin')") Admin Panel
   a.pure-button.pure-button-action(v-if="!user.admin" href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
 
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}

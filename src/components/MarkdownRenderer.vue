@@ -198,7 +198,7 @@
   
         md.renderer.rules.link_open = (tokens, idx) => {
           const href = md.utils.escapeHtml(tokens[idx].attrs[0][1]);
-          if (href.startsWith('http') || href.startsWith(link, 'www')) {
+          if (startsWith(href, 'http') || startsWith(href, 'www')) {
             // Absolute link so do nothing
             return `<a href="${href}" target="_blank">`
           } else {
