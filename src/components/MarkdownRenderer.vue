@@ -2,7 +2,7 @@
 
 .markdown-wrapper
 
-  .rendered-markdown(ref="renderedmarkdown" @click="loadMarkdown")
+  .rendered-markdown(ref="renderedmarkdown")
     p {{ $t('common.loading') }}
 
 </template>
