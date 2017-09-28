@@ -2,7 +2,7 @@
   #webinar-message-ticker
     .message-wrapper(v-for="(message, index) in orderedMessages")
       message(v-bind:message="message")
-    message-composer(v-if="isRegistered" v-bind:section="contentSlug")
+    message-composer(v-if="isRegistered" static="true" v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug")
 </template>
 
 <script>
@@ -17,7 +17,6 @@ import Message from '@/components/conversation/Message';
 import MessageComposer from '@/components/MessageComposer';
 
 import Messages from '@/mixins/Messages';
-
 
 export default {
   name: 'webinar-message-ticker',

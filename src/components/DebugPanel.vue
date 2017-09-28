@@ -22,7 +22,7 @@
   p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
   p {{ `currentSegment - ${currentSegment}` }}
 
-  p {{ `videoPlaying - ${videoPlaying}` }}
+  p {{ `mediaPlaying - ${mediaPlaying}` }}
 
 </template>
 
@@ -51,7 +51,7 @@ export default {
       'currentSegmentGroup',
       'currentSegment',
 
-      'videoPlaying',
+      'mediaPlaying',
     ]),
   },
   components: {},

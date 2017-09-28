@@ -73,7 +73,7 @@
         // if (this.playerType === 'youtube' && this.player) this.youtubeSeek(this, nV);
         // if (this.playerType === 'soundcloud' && this.soundcloudPlayer) this.soundcloudSeek(this, nV);
       },
-      videoPlaying(nv, oV) {
+      mediaPlaying(nv, oV) {
         this.$log.info(nv ? 'play' : 'pause');
         if (nv) {
           if (this.playerType === 'youtube' && this.player) this.player.playVideo();
@@ -128,7 +128,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'currentTime', 'videoPlaying', 'media', 'pendingScrollPosition', 'peekSegment'
+        'course', 'currentTime', 'mediaPlaying', 'media', 'pendingScrollPosition', 'peekSegment'
       ]),
       src() {
         switch (this.playerType) {
@@ -219,7 +219,7 @@
         this.$log.info('seeked');
         setTimeout(() => {
           if (!(this.peekSegment || this.activeSegment)) {
-            this.$store.commit('PLAY_MEDIA');
+            // this.$store.commit('PLAY_MEDIA');
           }
         }, 500);
       }, 1000),

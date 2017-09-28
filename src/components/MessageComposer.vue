@@ -1,14 +1,22 @@
 <template lang="pug">
 
-  .message-composer-wrapper(v-bind:class="{ static: section }")
+  .message-composer-wrapper(v-bind:class="{ static: static }")
 
     .message-composer(v-bind:class="{ unactive: hidden }")
 
       .message-composer--body
+      
+        .replying-to-banner(v-if="replyingTo")
+          //- icon(name="info")
+          p You are replying to 
+            strong {{ replyingTo.author.name }}
+          .dismiss-replying-to.animated.fadeInRight(@click="cancelReply")
+            icon(name="times")
+
         .textarea-wrapper(v-if="isRegistered" )
-          textarea(name="name" rows="3" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="$t('composer.message_placeholder')" v-model="message.text")
-        .login-warning(v-else @click="showAuth()")
-          | Please login to send messages
+          textarea(name="name" rows="3" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text")
+        
+        .login-warning(v-else @click="showAuth()") {{ $t('composer.login_required') }}
 
       .message-composer--footer(v-if="isRegistered")
         button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
@@ -21,15 +29,16 @@
 
 <script>
 import API from '@/api';
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 import Auth from '@/mixins/Auth';
 
-import round from 'lodash/round';
+import info from 'vue-awesome/icons/info';
+import times from 'vue-awesome/icons/times';
 
 export default {
   name: 'message-composer',
-  props: ['section'],
+  props: ['static', 'classSlug', 'contentSlug', 'currentSegment'],
   mixins: [
     Auth,
   ],
@@ -44,46 +53,58 @@ export default {
     };
   },
   methods: {
+    cancelReply() {
+      this.$store.commit('SET_REPLYING_TO', undefined);
+    },
     sendMessage() {
-      const url = (this.section) ? `https://${this.course.slug}.connectedacademy.io/#/course/${this.currentClass.slug}/${this.section}` : this.url;
+      const url = (this.static) ? `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}` : this.url;
 
       let postData = {
         text: `${this.message.text} ${this.course.hashtag} ${url}`,
-        currentClass: this.currentClass.slug,
-        currentSection: (this.section) ? this.section : this.currentSection.slug,
-        currentSegment: (this.section) ? this.messageSegment : undefined,
+        currentClass: this.classSlug,
+        currentSection: this.contentSlug,
+        currentSegment: (this.currentSegment / 0.2),
       };
+
+      // If this is a reply then append message id
+      if (this.replyingTo) { postData.replyto = this.replyingTo.message_id; }
 
       this.sending = true;
 
       API.message.sendMessage(
         postData,
         (response, postData) => {
-          // this.$store.dispatch('pushMessage', { response, postData });
           this.$store.commit('SEND_MESSAGE_SUCCESS', { response, postData })
           this.message.text = '';
-          this.infoLabel = 'Posted note';
+          this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Posted note';
           setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
+          this.$store.commit('SET_REPLYING_TO', undefined);
         },
         (response, postData) => {
           this.$store.commit('SEND_MESSAGE_FAILURE', { response })
           alert('Failed to send message');
-          this.infoLabel = 'Failed to post note';
+          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Replie to note';
           setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
+          this.$store.commit('SET_REPLYING_TO', undefined);
         },
       );
     },
   },
   computed: {
-    ...mapGetters(['isRegistered', 'peekSegment', 'currentSegment', 'isRegistered', 'course', 'currentClass', 'currentSection']),
-    messageSegment() {
-      return this.peekSegment ? (this.peekSegment / 0.2) : this.currentSegment;
-    },
+    ...mapGetters([
+      'isRegistered',
+      'peekSegment',
+      'isRegistered',
+      'course',
+      'currentClass',
+      'currentSection',
+      'replyingTo'
+    ]),
     url() {
       if (this.currentSection === undefined) { return ''; }
-      return `https://${this.course.slug}.connectedacademy.io/#/course/${this.currentClass.slug}/${this.currentSection.slug}/${this.messageSegment}`;
+      return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}/${(this.currentSegment / 0.2)}`;
     },
     hidden() {
       return (this.currentSection === undefined) ||
@@ -95,7 +116,8 @@ export default {
         this.$store.state.route.name !== 'main';
     },
     submitText() {
-      return (this.sending) ? 'Sending..' : 'Post';
+      if (this.sending) return 'Sending..';
+      return (this.replyingTo) ? 'Reply' : 'Post';
     }
   },
 };
@@ -137,6 +159,35 @@ export default {
       pinned()
       position absolute
 
+      .replying-to-banner
+        background-color $color-lighter-grey
+        color $color-text-dark-grey
+        position absolute
+        top -50px
+        line-height 50px
+        height 50px
+        overflow hidden
+        width 100%
+        p
+          reset()
+          padding 0 20px
+        .fa-icon
+          height 50px
+          margin 0 15px
+          width 6px
+        .dismiss-replying-to
+          pinned()
+          animate()
+          background-color darken($color-lighter-grey, 10%)
+          position absolute
+          left auto
+          min-width 50px
+          .fa-icon
+            margin 0 20px
+            width 14px
+          &:hover
+            cursor pointer
+            background-color darken($color-lighter-grey, 20%)
       .login-warning
         pinned()
         background-color white
@@ -206,7 +257,6 @@ export default {
     radius(4px)
     border $color-border 1px solid
     margin-bottom 20px
-    overflow hidden
     position relative !important
     bottom auto
     top auto

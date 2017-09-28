@@ -22,13 +22,15 @@ import App from '@/App';
 import Lang from '@/Lang';
 import Sockets from '@/Sockets';
 
+import OnboardingPrompt from '@/components/OnboardingPrompt';
+
 import store from '@/store';
 import router from '@/router';
 
 sync(store, router);
 
 Vue.component('icon', Icon);
-
+Vue.component('onboarding-prompt', OnboardingPrompt);
 
 Vue.use(VueResource);
 Vue.use(Vuex);

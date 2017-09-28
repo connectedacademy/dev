@@ -7,6 +7,7 @@
   h2.user-account {{ `@${user.account}` }}
 
   li.pure-button.pure-button-action(v-if="user.admin" @click="navigateTo('/admin')") Admin Panel
+  li.pure-button.pure-button-action(@click="showHints()") Show All Hints
   a.pure-button.pure-button-action(v-if="!user.admin" href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
 
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
@@ -35,6 +36,16 @@ export default {
     logout() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
       this.$store.dispatch('logout');
+    },
+    showHints() {
+      this.$cookie.delete('profile-button');
+      this.$cookie.delete('intro-button');
+      this.$cookie.delete('section-navigator');
+      this.$cookie.delete('media-toggle');
+      this.$cookie.delete('play-pause-toggle');
+      this.$cookie.delete('view-toggle');
+      
+      location.reload();
     },
   },
   computed: {

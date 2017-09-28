@@ -53,7 +53,7 @@ export default {
     preventScroll(nV) {
       this.checkIfCanAutoScroll();
     },
-    videoPlaying(nV) {
+    mediaPlaying(nV) {
       this.checkIfCanAutoScroll();
       if (nV) { this.attemptAutoScroll(); }
     },
@@ -66,12 +66,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'videoPlaying', 'currentSectionScrollPosition', 'activeSegment', 'peekSegment',
+      'currentSection', 'mediaPlaying', 'currentSectionScrollPosition', 'activeSegment', 'peekSegment',
     ]),
   },
   methods: {
     checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.peekSegment && !this.preventScroll && this.videoPlaying && (this.currentSection !== undefined));
+      this.canAutoScroll = (!this.peekSegment && !this.preventScroll && this.mediaPlaying && (this.currentSection !== undefined));
     },
     attemptAutoScroll() {
 
@@ -124,7 +124,7 @@ export default {
       if (this.peekSegment || this.preventScroll) {
         return;
       }
-      if (this.videoPlaying) {
+      if (this.mediaPlaying) {
         this.$store.commit('PAUSE_MEDIA');
       }
       this.preventScroll = true;

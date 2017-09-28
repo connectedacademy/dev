@@ -47,11 +47,12 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '~stylus/shared'
 @import '~stylus/buttons'
 
 .video-wrapper
   .loading-wrapper
-    // background-color #f2f2f2
+    background-color $color-lighter-grey
     margin-bottom 20px
     padding 58px 20px
     text-align center

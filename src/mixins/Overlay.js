@@ -11,6 +11,7 @@ export default {
       } else {
         this.$store.commit('SET_PEEK_SEGMENT', undefined);
       }
+      this.$store.commit('SET_REPLYING_TO', undefined);
     },
   },
 }

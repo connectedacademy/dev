@@ -11,9 +11,6 @@ li.navigation-item(v-bind:name="`navigator-${scrollPoint.slug}`" @click="jumpToC
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-import * as types from '@/store/mutation-types';
-
 import 'vue-awesome/icons/circle';
 import 'vue-awesome/icons/play';
 
@@ -21,9 +18,6 @@ export default {
   name: 'section-navigator-item',
   props: ['scrollPoint'],
   computed: {
-    ...mapGetters([
-      // 'currentActiveSection',
-    ]),
     isActive() {
       return false;
       const currentActiveSection = this.currentActiveSection;
@@ -34,9 +28,11 @@ export default {
   },
   methods: {
     jumpToContent() {
+      this.$cookie.delete('section-navigator');
+
       const segmentPosition = this.scrollPoint.sectionTop + 1;
 
-      this.$store.commit(types.PAUSE_MEDIA);
+      this.$store.commit('PAUSE_MEDIA');
       this.$store.commit('setScrollPosition', segmentPosition);
 
       setTimeout(() => {

@@ -7,7 +7,7 @@ const state = {
 
 // getters
 const getters = {
-  videoPlaying() {
+  mediaPlaying() {
     return state.playing;
   },
   videoPosition() {

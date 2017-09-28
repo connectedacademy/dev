@@ -25,15 +25,14 @@
       span(v-else) Be the first to make a note.
 
     .meta-container(v-if="segmentPeeking || segmentOpened" v-bind:class="{ active: segmentOpened }")
-
       .status-indicator(v-if="loadingMessages") Looking for notes...
       .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Be the first to make a note.
 
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages" v-bind:class="{ featured: (segmentMessage.id === message.message.id) }")
         message(v-bind:message="segmentMessage")
 
-    .quick-note(v-if="segmentPeeking || segmentOpened")
-      message-composer
+    .quick-note(v-if="segmentPeeking || segmentOpened" v-bind:class="{ replying: replyingTo }")
+      message-composer(v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug" v-bind:currentSegment="index")
     .clearfix
 
 </template>
@@ -106,6 +105,7 @@
         'peekSegment',
         'activeSegmentMessages',
         'modalVisible',
+        'replyingTo',
       ]),
       orderedMessages() {
         // Order messages
@@ -130,7 +130,7 @@
       },
       unpeek() {
   
-        this.$store.commit('PLAY_MEDIA');
+        // this.$store.commit('PLAY_MEDIA');
   
         this.segmentStyle = {
           position: 'absolute',
@@ -143,6 +143,7 @@
           this.segmentStyle = {};
           this.segmentOpened = this.segmentPeeking = false;
           this.$store.commit('SET_PEEK_SEGMENT', undefined);
+          this.$store.commit('SET_REPLYING_TO', undefined);
   
         }, 300); // Timeout equal to time for overlay to fade
       },
@@ -367,13 +368,15 @@
       opacity 1
 
 .quick-note
-  border-top $color-border 1px solid
   box-sizing()
+  border-top $color-border 1px solid
   position absolute
   bottom 0
   left 0
   right 0
   z-index 0
+  &.replying
+    z-index 2
 
 .status-indicator
   color $color-text-grey

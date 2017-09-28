@@ -12,7 +12,7 @@
 
     conversation-container(v-bind:content="content" v-bind:collapsed="collapsed")
 
-    #continue-listening(v-if="collapsed")
+    #continue-listening(v-if="collapsed" name="continue-listening")
       .pure-button.pure-button-continue(@click="continueListening()") Continue Listening
 
 </template>
@@ -93,23 +93,10 @@ export default {
           cursor pointer
 
     &.collapsed
-      max-height calc(calc(158px * 10) - 1px)
+      max-height calc(calc(158px * 5) - 1px)
       overflow hidden
 
   .course-content--footer
     background-color white
     text-align center
-
-#fade-out
-  pinned()
-  background transparent
-  background -webkit-linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
-  background -o-linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
-  background -moz-linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
-  background linear-gradient(bottom, alpha(white, 1.0), alpha(white, 0.0))
-  position absolute
-  z-index 1
-  height 300px
-  top auto
-  pointer-events none
 </style>

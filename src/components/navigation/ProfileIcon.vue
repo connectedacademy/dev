@@ -1,6 +1,7 @@
 <template lang="pug">
 
   .profile-icon(@click="showProfile")
+    onboarding-prompt(identifier="profile-button" prompt="click for profile actions" top="55" left="-210" position="top-right" z-index="50")
     .profile-image(v-bind:style="{ 'background-image': profile }")
 
 </template>
@@ -15,6 +16,7 @@ export default {
   },
   methods: {
     showProfile() {
+      this.$cookie.delete('profile-button');
       this.$ga.event('profile-button', 'click', 'profile-viewed', true);
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
     },

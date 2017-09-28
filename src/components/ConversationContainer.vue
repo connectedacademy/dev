@@ -3,6 +3,7 @@
   .conversation-container(ref="conversationContainer")
 
     #view-toggle(v-if="currentSection && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
+      onboarding-prompt(identifier="view-toggle" prompt="subtitles/tweets" top="110" left="-140" position="top-right" z-index="1")
       icon(name="twitter")
       icon(name="quote-right")
 
@@ -11,7 +12,7 @@
         g
           path(v-bind:d="points" transform="translate(400,0)")
 
-    .inner-wrapper(v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
+    .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
       time-segment(v-for="(message, index) in conversationMessages" v-bind:key="index" v-bind:index="index" v-bind:message="message" v-bind:subtitle="subtitles[index]" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug")
 
 </template>
@@ -187,7 +188,7 @@ export default {
     z-index 57  
   @media(max-width: 600px)
     display block
-  .fa-icon
+  > .fa-icon
     display block
     height 50px
     padding 0 15px
@@ -198,9 +199,9 @@ export default {
       border-top alpha(black, 0.1) 1px solid
       opacity 1.0
   &.message-priority
-    .fa-icon:first-child
+    > .fa-icon:first-child
       opacity 1.0
-    .fa-icon:last-child
+    > .fa-icon:last-child
       opacity 0.5
 
 </style>

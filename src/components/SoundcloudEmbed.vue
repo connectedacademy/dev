@@ -36,12 +36,13 @@
 
 <style lang="stylus" scoped>
 
+@import '~stylus/shared'
 @import '~stylus/buttons'
 
 .soundcloud-wrapper
   .loading-wrapper
-    // background-color #f2f2f2
-    margin-top 25px
+    background-color $color-lighter-grey
+    margin-top 15px
     margin-bottom 10px
     padding 58px 20px
     text-align center

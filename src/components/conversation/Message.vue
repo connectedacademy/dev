@@ -1,32 +1,36 @@
 <template lang="pug">
 
-  .message
+  .single-message-wrapper
+    .message
 
-    img.profile-image(v-bind:src="message.author.profile")
+      img.profile-image(v-bind:src="message.author.profile")
 
-    a.author-label(v-bind:href="authorLink" target="_blank") {{ message.author.account }}
+      a.author-label(v-bind:href="authorLink" target="_blank")
+        | {{ message.author.account }}
+        icon(v-if="message.replyto" name="reply")
 
-    p.message-content(v-html="html")
+      p.message-content(v-html="html")
 
-    .message--footer
+      .message--footer
 
-      ul.tweet-actions
-        li(@click="showInfoModal()")
-          a()
+        ul.tweet-actions
+          li.like-action(@click="showInfoModal()")
             //-  v-bind:href="likeLink" target="_blank"
             icon(name="heart")
-        li(@click="showInfoModal()")
-          a()
+          li.retweet-action(@click="showInfoModal()")
             //-  v-bind:href="retweetLink" target="_blank"
             icon(name="retweet")
-        li(@click="showInfoModal()")
-          a()
+          li.reply-action(@click="replyToMessage(message)")
             //-  v-bind:href="replyLink" target="_blank"
             icon(name="reply")
-        li.message-timestamp
-          | {{ timeStamp }}
+          li.message-timestamp
+            | {{ timeStamp }}
 
-        .clearfix
+          .clearfix
+    
+    .replies-wrapper
+      .reply-wrapper(v-for="(reply, index) in message.in_reply" v-bind:key="index")
+        message(v-bind:message="reply")
 
 </template>
 
@@ -37,7 +41,6 @@ import Moment from 'moment-mini';
 import 'vue-awesome/icons/heart';
 import 'vue-awesome/icons/retweet';
 import 'vue-awesome/icons/reply';
-import 'vue-awesome/icons/twitter';
 
 export default {
   name: 'message',
@@ -49,30 +52,20 @@ export default {
       let html = this.message.text.replace(urlRegex, '');
       return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
-    authorLink() {
-      return `https://twitter.com/${this.message.author.account}`;
-    },
-    tweetLink() {
-      return `https://twitter.com/statuses/${this.message.message_id}`;
-    },
-    replyLink() {
-      return `https://twitter.com/intent/tweet?in_reply_to=${this.message.message_id}`;
-    },
-    retweetLink() {
-      return `https://twitter.com/intent/retweet?tweet_id=${this.message.message_id}`;
-    },
-    likeLink() {
-      return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}`;
-    },
-    timeStamp() {
-      return Moment(this.message.createdAt).fromNow();
-      // return Moment(this.message.createdAt).format('LTS - ddd M YYYY');
-    },
+    authorLink() { return `https://twitter.com/${this.message.author.account}` },
+    tweetLink() { return `https://twitter.com/statuses/${this.message.message_id}` },
+    replyLink() { return `https://twitter.com/intent/tweet?in_reply_to=${this.message.message_id}` },
+    retweetLink() { return `https://twitter.com/intent/retweet?tweet_id=${this.message.message_id}` },
+    likeLink() { return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}` },
+    timeStamp() { return Moment(this.message.createdAt).fromNow() },
   },
   methods: {
     showInfoModal() {
       this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') });
     },
+    replyToMessage(message) {
+      this.$store.commit('SET_REPLYING_TO', message);
+    }
   },
 };
 </script>
@@ -81,66 +74,79 @@ export default {
 
 @import '~stylus/shared'
 
-.message
-  box-sizing()
-  max-height 128px
-  margin 10px 15px
-  padding 0 10px 40px 10px
-  padding-left 50px
-  position relative
+.single-message-wrapper
 
-  img.profile-image
-    radius(50%)
-    height 40px
-    width 40px
-    position absolute
-    top 0px
-    left 0px
+  .message
+    box-sizing()
+    max-height 128px
+    margin 10px 15px
+    padding 0 10px 40px 10px
+    padding-left 50px
+    position relative
 
-  p.message-content
-    reset()
-    color $color-text-dark-grey
-    word-break break-all
-    a, a:active
+    img.profile-image
+      radius(50%)
+      height 40px
+      width 40px
+      position absolute
+      top 0px
+      left 0px
+
+    p.message-content
+      reset()
       color $color-text-dark-grey
+      word-break break-all
+      a, a:active
+        color $color-text-dark-grey
 
-  a.author-label
-    color $color-purple
-    font-weight bold
-    text-decoration none
-    font-size 0.9em
-
-  .message--footer
-    pinned()
-    height 36px
-    left 42px
-    top auto
-    overflow hidden
-    position absolute
-
-    ul.tweet-actions
-      cleanlist()
-      background-color inherit
-      li
-        cleanlist()
-        box-sizing()
-        float left
-        font-size 1em
-        line-height 36px
+    a.author-label
+      color $color-text-dark-grey
+      font-weight bold
+      text-decoration none
+      font-size 0.9em
+      .fa-icon
+        color $color-primary
+        height 12px
         margin 0 10px
-        max-width 15%
-        &:hover
-          color $color-primary
-        a
+
+    .message--footer
+      pinned()
+      height 36px
+      left 42px
+      top auto
+      overflow hidden
+      position absolute
+
+      ul.tweet-actions
+        cleanlist()
+        background-color inherit
+        li
+          cleanlist()
+          box-sizing()
+          animate()
           color #CCC
+          float left
+          font-size 1em
+          line-height 36px
+          margin 0 10px
+          max-width 15%
           text-decoration none
           &:hover
+            cursor pointer
+            color $color-primary
+          &.like-action:hover, &.like-action.active
+            color red
+          &.retweet-action:hover, &.retweet-action.active
+            color $color-twitter
+          &.reply-action:hover, &.reply-action.active
             color $color-primary
 
-        &.message-timestamp
-          color #CCC
-          font-size 0.9em
-          float right
-          max-width 55%
+          &.message-timestamp
+            color #CCC
+            font-size 0.9em
+            float right
+            max-width 55%
 
+  .replies-wrapper
+    margin-left 20px
 </style>

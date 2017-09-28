@@ -6,6 +6,7 @@ import store from '@/store';
 import math from 'lodash/math';
 import inRange from 'lodash/inRange';
 import forEach from 'lodash/forEach';
+import findIndex from 'lodash/findIndex';
 
 // initial state
 const state = {
@@ -14,6 +15,7 @@ const state = {
   activeSegment: undefined,
   peekSegment: undefined,
   activeSegmentMessages: [],
+  replyingTo: undefined,
   subscribedTo: undefined,
   infoModalVisible: false,
   infoModalTitle: undefined,
@@ -27,6 +29,7 @@ const getters = {
   activeSegment: (initialState) => initialState.activeSegment,
   peekSegment: (initialState) => initialState.peekSegment,
   activeSegmentMessages: (initialState) => initialState.activeSegmentMessages,
+  replyingTo: (initialState) => initialState.replyingTo,
   infoModalVisible: (initialState) => initialState.infoModalVisible,
   infoModalTitle: (initialState) => initialState.infoModalTitle,
   infoModalBody: (initialState) => initialState.infoModalBody,
@@ -139,7 +142,17 @@ const mutations = {
     state.activeSegmentMessages = messages;
   },
   [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
-    state.activeSegmentMessages.push(newMessage);
+    if (newMessage.replyto) {
+      // A reply so push to message replies
+      const index = findIndex(state.activeSegmentMessages, function (message) { return message.message_id == newMessage.replyto.message_id })
+      state.activeSegmentMessages[index].in_reply.push(newMessage);
+    } else {
+      // Not a reply so just push onto array
+      state.activeSegmentMessages.push(newMessage);
+    }
+  },
+  [types.SET_REPLYING_TO](initialState, message) {
+    state.replyingTo = message;
   },
   [types.SHOW_INFO_MODAL](initialState, params) {
     state.infoModalVisible = true;

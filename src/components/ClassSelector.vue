@@ -1,29 +1,27 @@
 <template lang="pug">
 
 .class-selector
-
-  .class-selector-wrapper(v-show="activeClass && course && course.classes")
-    transition(name="fade")
+  transition(name="fade")
+    .class-selector-wrapper(v-if="activeClass && course && course.classes")
       .skip-button.skip-button--left(@click="scrollLeft" v-if="offset > 0")
         icon(name="angle-left")
-    transition(name="fade")
       .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
         icon(name="angle-right")
-    .class-selector-container-wrapper
-      .class-selector-container(ref="classselector" v-scroll="onScroll")
-        ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
+      .class-selector-container-wrapper
+        .class-selector-container(ref="classselector" v-scroll="onScroll")
+          ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
-          li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
-            h1.class-selector--item--header
-              icon(name="info")
+            li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
+              h1.class-selector--item--header
+                icon(name="info")
 
-          li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
-            h1.class-selector--item--header {{ theClass.title }}
-            icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
-            icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
+            li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
+              h1.class-selector--item--header {{ theClass.title }}
+              icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
+              icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
 
-          .clearfix
-    
+            .clearfix
+      
   .course-content-wrapper
 
     .course-content-group(v-if="activeClass === 'intro'")
@@ -36,7 +34,10 @@
           markdown-renderer(v-bind:markdown-url="infoMarkdown")
 
           four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
-  
+        
+        .course-content--footer(v-if="currentExists")
+          .pure-button.pure-button-continue(@click="viewCurrentClass") Continue to class
+
     .course-content-group
       join-banner
 
@@ -131,6 +132,7 @@ export default {
       }
     },
     viewIntroClass() {
+      this.$cookie.delete('intro-button');
       this.$store.commit('SET_CURRENT_CLASS', this.introClass);
       this.$store.dispatch('resetState');
       this.$ga.event('class-selector', 'click', 'class-switched', 'class-intro');
@@ -218,12 +220,12 @@ $selector-height = 44px
         height $selector-height
         white-space nowrap
         li.class-selector--item
-          cleanlist()
           animate()
+          box-sizing()
+          cleanlist()
           radius(22px)
           background-color alpha(black, 0.1)
           border transparent 1px solid
-          box-sizing()
           float left
           overflow hidden
           margin-left 10px
@@ -282,7 +284,6 @@ $selector-height = 44px
 
           &.active
             background-color white
-            transition none
             h1.class-selector--item--header, .status-indicator
               color $color-primary
 
@@ -299,8 +300,12 @@ $selector-height = 44px
   .fa-icon
     color $color-purple
     height 40px
-  .pure-button
-    margin-top 20px
+
+.course-content--footer
+  border-top $color-border 1px solid
+  text-align center
+  .pure-button-continue
+    margin 20px auto
 
 
 </style>

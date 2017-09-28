@@ -4,7 +4,7 @@
     .col#col-main
       .main-container
         class-selector
-        //- onboarding-prompt(prompt="Click here for class intro")
+        onboarding-prompt(identifier="intro-button" prompt="click for course intro" top="50" left="12" position="top-left" z-index="1")
         section-navigator
         course-content
 
@@ -15,7 +15,6 @@
 import CourseContent from '@/components/conversation/CourseContent';
 import ClassSelector from '@/components/ClassSelector';
 import SectionNavigator from '@/components/navigation/SectionNavigator';
-import OnboardingPrompt from '@/components/OnboardingPrompt';
 
 // Mixins
 import AutoScroll from '@/mixins/AutoScroll';
@@ -52,7 +51,6 @@ export default {
     ClassSelector,
     CourseContent,
     SectionNavigator,
-    OnboardingPrompt,
   },
   methods: {
     toMessage() {},

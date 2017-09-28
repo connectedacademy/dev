@@ -16,16 +16,16 @@ export default {
       
       if (obj.msgtype === 'message') {
 
-        const key = `${round(parseInt(obj.msg.segment) * 0.2)}`
-        let updateMessage = this.conversationMessages[key]
+        const key = `${round(parseInt(obj.msg.segment) * 0.2)}`;
+        let updateMessage = this.conversationMessages[key];
         
         if (!obj.msg.tag && updateMessage) {
 
           // Update message
-          updateMessage.message = obj.msg
+          updateMessage.message = obj.msg;
 
           // Increment total
-          updateMessage.info.total = updateMessage.info.total + 1
+          updateMessage.info.total = updateMessage.info.total + 1;
 
           // Update messages object
           Vue.set(this.conversationMessages, key, updateMessage);
@@ -99,7 +99,10 @@ export default {
               let newMessage = response.data[group];
               newMessage.segmentGroup = (parseInt(group) * 0.2);
 
-              Vue.set(this.conversationMessages, newMessage.segmentGroup, newMessage);
+              // Check does not fall out of wrapper height
+              if ((newMessage.segmentGroup * 158.0) < (this.$refs.innerwrapper.offsetHeight - 200)) {
+                Vue.set(this.conversationMessages, newMessage.segmentGroup, newMessage);
+              }
             }
           },
           response => {

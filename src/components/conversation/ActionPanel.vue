@@ -3,8 +3,9 @@
   #action-panel(name="action-panel" v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }" ref="actionpanel")
     ul#experience-controls
     
-      li.experience-control(name="play-pause-button" @click="toggleVideoPlaying")
-        icon(name="pause" v-if="videoPlaying")
+      li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
+        onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
+        icon(name="pause" v-if="mediaPlaying")
         icon(name="play" v-else)
       li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
@@ -15,6 +16,7 @@
         #progress-bar--thumb(v-bind:style="{ left: thumbLeft }")
 
       li.experience-control.pull-right(@click="toggleComposer")
+        onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
         icon(v-bind:name="mediaHidden ? 'chevron-up' : 'chevron-down'")
       li.experience-control#twitter-control.pull-right
         a(v-bind:href="twitterLink" target="_blank")
@@ -29,9 +31,7 @@
 
 <script>
   import * as types from '@/store/mutation-types';
-  import {
-    mapGetters
-  } from 'vuex';
+  import { mapGetters } from 'vuex';
   import Moment from 'moment-mini';
   
   import MessageComposer from '@/components/MessageComposer';
@@ -75,7 +75,7 @@
       };
     },
     computed: {
-      ...mapGetters(['mediaHidden', 'videoPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
+      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
       start() {
         return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
       },
@@ -116,8 +116,8 @@
       toggleComposer() {
         this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
       },
-      toggleVideoPlaying() {
-        this.$store.commit(this.videoPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
+      toggleMediaPlayback() {
+        this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
       },
       togglePlayerType() {
         this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);
@@ -151,7 +151,7 @@ $media-height = 220px
   &.hide-media
     bottom -($media-height)
   &.hide
-    bottom -($media-height + 100px)
+    bottom -($media-height + 200px)
 
   @media(max-width: 800px)
     margin-left 0
@@ -170,6 +170,7 @@ $media-height = 220px
       cleanlist()
       animate()
       float left
+      position relative
       @media(max-width: 568px)        
         &#twitter-control
           display none

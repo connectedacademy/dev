@@ -67,10 +67,12 @@ export default {
     },
   },
   composer: {
-    compose_message: 'Compose message',
-    compose_message_active: 'Write your message',
+    compose_message: 'Compose note',
+    compose_message_active: 'Write your note',
     message_placeholder: 'Make a note here...',
+    reply_placeholder: 'Reply here...',
     duration: '{currentTime}s',
+    login_required: 'Please login to post notes',
   },
   course: {
     load_course: 'Load Course',

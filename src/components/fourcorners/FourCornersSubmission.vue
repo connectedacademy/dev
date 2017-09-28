@@ -12,7 +12,9 @@
     h2 Thank you for your submission!
 
   .fourcorners-submission.fourcorners-submission-submit(v-if="isRegistered && !checkingSubmissions && !submitting && !submitted")
-    label Submit a link (via Twitter)
+    label
+      icon(name="twitter")
+      | Submit a link (via Twitter)
     input(type="text" name="text" placeholder="Paste link to webpage with your FourCorners image" v-model="fourcornersLink")
     .pure-button.pure-button-primary.pull-right(v-on:click="postTweet") Submit Homework
     .clearfix
@@ -106,14 +108,16 @@ export default {
 
 .fourcorners-submission
   radius(6px)
-  background-color $color-dark-grey
   box-sizing()
+  background-color $color-twitter
   overflow hidden
   padding 15px
   width 100%
   &.fourcorners-submission-submit
     label
       color white
+      .fa-icon
+        margin 0 5px
     p
       reset()
       color white
