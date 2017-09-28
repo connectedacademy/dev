@@ -57,7 +57,7 @@
           return this.markdownUrl;
         }
         let url = this.$route.params.url;
-        if (startsWith(url, 'http')) {
+        if (startsWith(url, 'http') || startsWith(url, 'www')) {
           return url;
         } else {
           if (!(this.$store.getters.course && this.$store.getters.course.baseUri)) {
@@ -130,7 +130,7 @@
             linkify: true,
             replaceLink: (link, env) => {
   
-              if (startsWith(link, 'http')) {
+              if (startsWith(link, 'http') || startsWith(link, 'www')) {
                 return link;
               }
               if (endsWith(link, '.md')) {
@@ -198,7 +198,7 @@
   
         md.renderer.rules.link_open = (tokens, idx) => {
           const href = md.utils.escapeHtml(tokens[idx].attrs[0][1]);
-          if (href.startsWith('http')) {
+          if (href.startsWith('http') || href.startsWith(link, 'www')) {
             // Absolute link so do nothing
             return `<a href="${href}" target="_blank">`
           } else {
