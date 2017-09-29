@@ -69,6 +69,7 @@ export default {
           this.currentCorner = corner;
         }
       } else {
+        // this.$store.commit('SHOW_QUESTION_MODAL', { title: 'Question', body: 'Have you used FourCorners before?', action: 'Yes' });
         this.currentCorner = 'bottomRight';
         this.expanded = true;
       }

@@ -1,13 +1,13 @@
 <template lang="pug">
 
-  #info-modal(v-bind:class="{ visible: infoModalVisible }")
-    #info-modal--header
-      h1 {{ infoModal.title }}
-    #info-modal--container
-      p {{ infoModal.body }}
+  #question-modal(v-bind:class="{ visible: questionModalVisible }")
+    #question-modal--header
+      h1 {{ questionModal.title }}
+    #question-modal--container
+      p {{ questionModal.body }}
 
       button.pure-button.pure-button-primary(v-on:click="closeModal")
-        | {{ infoModal.action ? infoModal.action : $t('common.confirm') }}
+        | {{ questionModal.action ? questionModal.action : $t('common.confirm') }}
     
 </template>
 
@@ -15,13 +15,13 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'info-modal',
+  name: 'question-modal',
   computed: {
-    ...mapGetters(['infoModal', 'infoModalVisible']),
+    ...mapGetters(['questionModal', 'questionModalVisible']),
   },
   methods: {
     closeModal() {
-      this.$store.commit('DISMISS_INFO_MODAL');
+      this.$store.commit('DISMISS_QUESTION_MODAL');
     },
   },
 };
@@ -32,7 +32,7 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/buttons'
 
-#info-modal
+#question-modal
   animate()
   display block
   max-width 320px
@@ -47,7 +47,7 @@ export default {
     top 80px
     opacity 1
     pointer-events all
-  #info-modal--header
+  #question-modal--header
     height 40px
     line-height 40px
     text-align center
@@ -55,7 +55,7 @@ export default {
       reset()
       color white
       font-size 1.2em
-  #info-modal--container
+  #question-modal--container
     radius(12px)
     background-color white
     padding 20px 30px

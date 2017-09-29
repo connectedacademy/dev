@@ -143,7 +143,6 @@ export default {
             this.performSeeked(this);
           });
           this.soundcloudPlayer.on('buffering_start', () => {
-            this.$log.info(this.initialBuffer);
             if (this.initialBuffer > 0) {
               this.$store.commit('PAUSE_MEDIA');
               this.mediaBuffering = true;

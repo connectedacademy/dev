@@ -72,20 +72,19 @@ export default {
 
   .course-content--container
     background-color white
-    // overflow hidden
     position relative
 
     #continue-listening
       pinned()
       background-color white
-      height $segment-height
+      height 160px
       position absolute
       top auto
       text-align center
       .pure-button
         box-sizing()
         left 50%
-        top calc(calc($segment-height - 40px) / 2)
+        top calc(calc(160px - 40px) / 2)
         margin-left -100px
         position absolute
         width 200px
@@ -93,7 +92,7 @@ export default {
           cursor pointer
 
     &.collapsed
-      max-height calc(calc($segment-height * 5) - 1px)
+      max-height 791px
       overflow hidden
 
   .course-content--footer

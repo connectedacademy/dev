@@ -11,7 +11,7 @@ import findIndex from 'lodash/findIndex';
 
 // initial state
 const state = {
-  collapsed: true,
+  isCollapsed: true,
   visualisation: [],
   media: [],
   activeSegment: undefined,
@@ -20,27 +20,36 @@ const state = {
   replyingTo: undefined,
   subscribedTo: undefined,
   infoModalVisible: false,
-  infoModalTitle: undefined,
-  infoModalBody: undefined,
-  infoModalAction: undefined,
+  infoModal: {
+    title: undefined,
+    body: undefined,
+    action: undefined,
+  },
+  questionModalVisible: false,
+  questionModal: {
+    title: undefined,
+    body: undefined,
+    action: undefined,
+  },
 };
 
 // getters
 const getters = {
-  isCollapsed: (initialState) => initialState.collapsed,
+  isCollapsed: (initialState) => initialState.isCollapsed,
   subscribedTo: (initialState) => initialState.subscribedTo,
   activeSegment: (initialState) => initialState.activeSegment,
   peekSegment: (initialState) => initialState.peekSegment,
   activeSegmentMessages: (initialState) => initialState.activeSegmentMessages,
   replyingTo: (initialState) => initialState.replyingTo,
   infoModalVisible: (initialState) => initialState.infoModalVisible,
-  infoModalTitle: (initialState) => initialState.infoModalTitle,
-  infoModalBody: (initialState) => initialState.infoModalBody,
-  infoModalAction: (initialState) => initialState.infoModalAction,
-  modalVisible: (initialState) => initialState.infoModalVisible,
+  infoModal: (initialState) => initialState.infoModal,
+  questionModalVisible: (initialState) => initialState.questionModalVisible,
+  questionModal: (initialState) => initialState.questionModal,
   media: (initialState) => initialState.media,
   visualisation: (initialState) => initialState.visualisation,
-
+  modalVisible() {
+    return state.infoModalVisible || state.questionModalVisible;
+  },
   videoIsActive() {
     if (store.state.currentSection === undefined) {
       return false;
@@ -158,19 +167,24 @@ const mutations = {
     state.replyingTo = message;
   },
   ['SHOW_INFO_MODAL'](initialState, params) {
+    state.infoModal = params;
     state.infoModalVisible = true;
-    state.infoModalTitle = params.title;
-    state.infoModalBody = params.body;
-    state.infoModalAction = params.action;
   },
   ['DISMISS_INFO_MODAL'](initialState) {
     state.infoModalVisible = false;
   },
+  ['SHOW_QUESTION_MODAL'](initialState, params) {
+    state.questionModal = params;
+    state.questionModalVisible = true;
+  },
+  ['DISMISS_QUESTION_MODAL'](initialState) {
+    state.questionModalVisible = false;
+  },
   ['EXPAND_CONVERSATION'](initialState) {
-    state.collapsed = false;
+    state.isCollapsed = false;
   },
   ['COLLAPSE_CONVERSATION'](initialState) {
-    state.collapsed = true;
+    state.isCollapsed = true;
   },
 };
 

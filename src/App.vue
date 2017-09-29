@@ -9,7 +9,9 @@
   //- debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
   info-modal
-  
+
+  question-modal
+   
   authentication-flow
 
   media-lightbox
@@ -45,6 +47,7 @@
   import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
   import MediaLightbox from '@/components/modals/MediaLightbox';
   import InfoModal from '@/components/modals/InfoModal';
+  import QuestionModal from '@/components/modals/QuestionModal';
   // import DebugPanel from '@/components/DebugPanel';
   // import Lock from '@/components/authentication/Lock';
   
@@ -78,13 +81,6 @@
       ...mapGetters([
         'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
       ]),
-      overlayVisible() {
-        return this.modalVisible ||
-          this.$store.state.navigation.overlayVisible ||
-          this.$store.state.auth.visible ||
-          (this.$store.state.conversation.activeSegment !== undefined) ||
-          (this.$store.state.conversation.peekSegment !== undefined);
-      },
     },
     components: {
       Navigation,
@@ -94,6 +90,7 @@
       AuthenticationFlow,
       MediaLightbox,
       InfoModal,
+      QuestionModal,
     },
   };
 </script>

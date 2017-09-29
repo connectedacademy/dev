@@ -146,7 +146,7 @@ export default {
     background-color white
     background url('../assets/images/line.png')
     background-repeat repeat
-    background-size auto $segment-height
+    // background-size auto $segment-height
     background-position right -1px
     background-position center -1px
     back
