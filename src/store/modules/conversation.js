@@ -10,6 +10,7 @@ import findIndex from 'lodash/findIndex';
 
 // initial state
 const state = {
+  collapsed: true,
   visualisation: [],
   media: [],
   activeSegment: undefined,
@@ -25,6 +26,7 @@ const state = {
 
 // getters
 const getters = {
+  isCollapsed: (initialState) => initialState.collapsed,
   subscribedTo: (initialState) => initialState.subscribedTo,
   activeSegment: (initialState) => initialState.activeSegment,
   peekSegment: (initialState) => initialState.peekSegment,
@@ -162,6 +164,12 @@ const mutations = {
   },
   [types.DISMISS_INFO_MODAL](initialState) {
     state.infoModalVisible = false;
+  },
+  [types.EXPAND_CONVERSATION](initialState) {
+    state.collapsed = false;
+  },
+  [types.COLLAPSE_CONVERSATION](initialState) {
+    state.collapsed = true;
   },
 };
 

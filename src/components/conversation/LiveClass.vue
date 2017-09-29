@@ -6,18 +6,20 @@
     h1.content-title {{ content.title }}
     p.content-description(v-if="content.description") {{ content.description }}
 
-  .course-content--container(v-bind:class="{ collapsed: collapsed }")
+  .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
 
     action-panel(v-bind:content="content")
 
-    conversation-container(v-bind:content="content" v-bind:collapsed="collapsed")
+    conversation-container(v-bind:content="content" v-bind:collapsed="isCollapsed")
 
-    #continue-listening(v-if="collapsed" name="continue-listening")
+    #continue-listening(v-if="isCollapsed" name="continue-listening")
       .pure-button.pure-button-continue(@click="continueListening()") Continue Listening
 
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
 
@@ -30,14 +32,12 @@ export default {
     ActionPanel,
     ConversationContainer,
   },
-  data() {
-    return {
-      collapsed: true,
-    };
+  computed: {
+    ...mapGetters(['isCollapsed'])
   },
   methods: {
     continueListening() {
-      this.collapsed = false;
+      this.$store.commit('EXPAND_CONVERSATION');
       const scrollPoint = find(this.$store.state.scrollPoints, {
         content_type: 'class'
       });

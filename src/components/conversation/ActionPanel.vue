@@ -100,6 +100,7 @@
       },
       startScrub(event) {
         this.$store.commit('PAUSE_MEDIA');
+        this.$store.commit('EXPAND_CONVERSATION');
         this.trackOffset = 0;
         this.mouseOffsetStart = event.pageX;
       },
