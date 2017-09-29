@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      initialBuffer: 0,
       mediaBuffering: false,
       soundcloudPlayer: undefined,
     };
@@ -86,6 +87,55 @@ export default {
         });
         SoundCloud.stream(this.src).then((player) => {
           this.soundcloudPlayer = player;
+
+
+          // this.soundcloudPlayer.on('state-change', () => {
+          //   this.$log.info('state');
+          // });
+          // this.soundcloudPlayer.on('play', () => {
+          //   this.$log.info('play');
+          // });
+          // this.soundcloudPlayer.on('play-start', () => {
+          //   this.$log.info('play');
+          // });
+          // this.soundcloudPlayer.on('play-resume', () => {
+          //   this.$log.info('play');
+          // });
+          // this.soundcloudPlayer.on('pause', () => {
+          //   this.$log.info('pause');
+          // });
+          // this.soundcloudPlayer.on('finish', () => {
+          //   this.$log.info('finish');
+          // });
+          // this.soundcloudPlayer.on('seek', () => {
+          //   this.$log.info('seek');
+          // });
+          // this.soundcloudPlayer.on('seeked', () => {
+          //   this.$log.info('seeked');
+          // });
+          // this.soundcloudPlayer.on('geo_blocked', () => {
+          //   this.$log.info('geo_blocked');
+          // });
+          // this.soundcloudPlayer.on('buffering_end', () => {
+          //   this.$log.info('buffering_end');
+          // });
+          // this.soundcloudPlayer.on('audio_error', () => {
+          //   this.$log.info('audio_error');
+          // });
+          // this.soundcloudPlayer.on('time', () => {
+          //   this.$log.info('time');
+          // });
+          // this.soundcloudPlayer.on('no_streams', () => {
+          //   this.$log.info('no_streams');
+          // });
+          // this.soundcloudPlayer.on('no_protocol', () => {
+          //   this.$log.info('no_protocol');
+          // });
+          // this.soundcloudPlayer.on('no_connection', () => {
+          //   this.$log.info('no_connection');
+          // });
+
+
           this.soundcloudPlayer.on('time', () => {
             this.performSync(this);
           });
@@ -93,8 +143,13 @@ export default {
             this.performSeeked(this);
           });
           this.soundcloudPlayer.on('buffering_start', () => {
-            this.$store.commit('PAUSE_MEDIA');
-            this.mediaBuffering = true;
+            this.$log.info(this.initialBuffer);
+            if (this.initialBuffer > 0) {
+              this.$store.commit('PAUSE_MEDIA');
+              this.mediaBuffering = true;
+            } else {
+              this.initialBuffer = (this.initialBuffer + 1);
+            }
           });
           this.soundcloudPlayer.on('buffering_end', () => {
             this.mediaBuffering = false;
@@ -112,7 +167,7 @@ export default {
         return;
       }
       const playerTime = self.soundcloudPlayer.currentTime() / 1000;
-      const outOfSync = ((currentTime < (playerTime - SYNC_THRESHOLD)) || (currentTime > (playerTime + SYNC_THRESHOLD)));
+      const outOfSync = ((currentTime < (playerTime-SYNC_THRESHOLD)) || (currentTime > (playerTime + SYNC_THRESHOLD)));
 
       if (outOfSync) {
         self.$log.info('OUTOFSYNC');

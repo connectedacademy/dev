@@ -113,6 +113,7 @@ export default {
           requestAnimationFrame(step);
         }
         else if (elapsed > duration) {
+          Vue.$log.info('(elapsed > duration) -- Pausing');
           this.$store.commit('PAUSE_MEDIA');
         }
       }
