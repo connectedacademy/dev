@@ -3,7 +3,6 @@ const SYNC_THRESHOLD = 2.0;
 
 import Vue from 'vue';
 import * as config from '@/api/config';
-import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
 import SoundCloud from 'soundcloud';
@@ -93,19 +92,12 @@ export default {
           this.soundcloudPlayer.on('seeked', () => {
             this.performSeeked(this);
           });
-          this.soundcloudPlayer.on('play-resume', () => {
-            // this.performSeeked(this);
-            this.$store.commit('PLAY_MEDIA');
-          });
-          
           this.soundcloudPlayer.on('buffering_start', () => {
-            this.mediaBuffering = true;
             this.$store.commit('PAUSE_MEDIA');
+            this.mediaBuffering = true;
           });
           this.soundcloudPlayer.on('buffering_end', () => {
-            setTimeout(() => {
-              this.mediaBuffering = false;
-            }, 500);
+            this.mediaBuffering = false;
           });
         });
       }
@@ -127,7 +119,7 @@ export default {
         self.soundcloudPlayer.seek(currentTime * 1000);
       }
 
-    }, 1000),
+    }, 2000),
     performSeeked: throttle(function (self) {
       this.$log.info('seeked');
       setTimeout(() => {

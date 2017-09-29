@@ -19,19 +19,21 @@ describe('General tests', function () {
     // Save screenshot
     browser.saveScreenshot('./test/screenshots/liveclass-top.png');
     // Pause
-    browser.pause(2000);
+    browser.pause(1000);
     // Assert section is visible
     browser.isVisible('[name="section-liveclass"]');
     // Assert action panel is visible
     browser.isVisible('[name="action-panel"]');
-    // Continue listening
-    browser.click('[name="continue-listening"]')
   });
 
   it('plays media', () => {
 
     // Pause
-    browser.pause(2000);
+    browser.pause(1000);
+    // Play
+    browser.click('[name="play-pause-button"]')
+    // Pause
+    browser.pause(1000);
     // Play
     browser.click('[name="play-pause-button"]')
     // Pause so scroll can take place
