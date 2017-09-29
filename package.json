@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
-    "fourcorners": "0.0.44",
+    "fourcorners": "0.0.45",
     "fs": "0.0.1-security",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
