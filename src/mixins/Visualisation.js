@@ -1,11 +1,12 @@
+import Vue from 'vue';
 import API from '@/api';
-import values from 'lodash/values';
+import { mapGetters } from 'vuex';
+
 import map from 'lodash/map';
+import values from 'lodash/values';
 import forEach from 'lodash/forEach';
 import size from 'lodash/size';
 import mean from 'lodash/mean';
-import { mapGetters } from 'vuex';
-
 import chunk from 'lodash/chunk';
 
 export default {
@@ -27,9 +28,10 @@ export default {
       API.visualisation.getVisualisation(
         request,
         (response) => {
+
           const visualisation = response.data;
           
-          const segmentHeight = 158.0;
+          const segmentHeight = this.$app.segmentHeight;
           const handleOffset = (segmentHeight / 4.0);
           const width = 200.0;
           const parentOffsetTop = (segmentHeight / 2.0);

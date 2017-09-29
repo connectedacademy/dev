@@ -35,6 +35,7 @@
       },
       '$route': {
         handler: function(nV, oV) {
+          // alert(`route - ${nV}`);
           this.loadMarkdown();
         },
         deep: true,
@@ -57,6 +58,9 @@
           return this.markdownUrl;
         }
         let url = this.$route.params.url;
+        if (!url) {
+          return undefined;
+        }
         if (startsWith(url, 'http') || startsWith(url, 'www')) {
           return url;
         } else {
@@ -68,9 +72,14 @@
         }
       },
       loadMarkdown() {
+
         this.loading = true;
+
+        const url = this.getUrl();
+        if (!url) return;
+
         API.markdown.fetchMarkdown(
-          this.getUrl(),
+          url,
           (response) => {
             this.renderedMarkdown = response;
             this.loading = false;

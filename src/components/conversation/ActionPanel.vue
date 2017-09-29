@@ -5,11 +5,12 @@
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
         onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
-        icon(name="pause" v-if="mediaPlaying")
-        icon(name="play" v-else)
+        icon(v-bind:name="mediaPlaying ? 'pause' : 'play'")
+      
       li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
-      li.experience-control#progress-bar(ref="progressbar" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousemove="scrubMove")
+      
+      li.experience-control#progress-bar(ref="progressbar" v-bind:class="{ buffering: mediaBuffering }" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousemove="scrubMove")
         #progress-bar--start {{ start }}
         #progress-bar--end {{ end }}
         #progress-bar--track
@@ -18,19 +19,21 @@
       li.experience-control.pull-right(@click="toggleComposer")
         onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
         icon(v-bind:name="mediaHidden ? 'chevron-up' : 'chevron-down'")
+
       li.experience-control#twitter-control.pull-right
         a(v-bind:href="twitterLink" target="_blank")
           icon(name="twitter")
+
       //- li.experience-control.pull-right(@click="togglePlayerType" v-bind:class="{ unclickable: (availablePlayerTypes <= 1) }")
         icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
 
       .clearfix
-    media-container(v-bind:player-type="availablePlayerTypes[playerTypeIndex]" v-bind:class-section="content" v-bind:video-is-active="videoIsActive")
+
+    media-container(v-bind:player-type="playerType" v-bind:content="content" v-bind:video-is-active="videoIsActive")
 
 </template>
 
 <script>
-  import * as types from '@/store/mutation-types';
   import { mapGetters } from 'vuex';
   import Moment from 'moment-mini';
   
@@ -38,6 +41,8 @@
   const MediaContainer = () => import('@/components/MediaContainer');
 
   import clamp from 'lodash/clamp';
+
+  import MediaStream from '@/mixins/MediaStream';
 
   import 'vue-awesome/icons/pause';
   import 'vue-awesome/icons/play';
@@ -47,6 +52,7 @@
   import 'vue-awesome/icons/chevron-down';
   import 'vue-awesome/icons/soundcloud';
   import 'vue-awesome/icons/youtube';
+  import 'vue-awesome/icons/circle-o-notch';
   
   export default {
     name: 'action-panel',
@@ -55,6 +61,9 @@
       MessageComposer,
       MediaContainer,
     },
+    mixins: [
+      MediaStream,
+    ],
     mounted() {
       this.availablePlayerTypes = []; // Remove all available player types
       if (this.content.videoId) {
@@ -90,7 +99,10 @@
         let position = (this.trackOffset === 0) ? ((100 / this.content.duration) * this.currentTime) : (100 / this.$refs.progressbar.offsetWidth) * this.trackOffset;
         
         return `${clamp(position, 0, 100)}%`;
-      }
+      },
+      playerType() {
+        return this.availablePlayerTypes[this.playerTypeIndex];
+      },
     },
     methods: {
       scrubMove(event) {
@@ -228,4 +240,33 @@ $media-height = 220px
         left 0px
         &:hover
           cursor pointer
+      &.buffering
+        #progress-bar--thumb
+          background-color $color-warning
+          &:after
+            background-color $color-warning
+            content ''
+            margin-left -2px
+            height 8px
+            width 4px
+            position absolute
+            top -6px
+            left 50%
+          &:before
+            radius(12px)
+            background-color $color-warning
+            content 'buffering'
+            color white
+            font-size 0.8em
+            font-weight bold
+            margin-left -50px
+            line-height 24px
+            position absolute
+            top -26px
+            left 50%
+            text-align center
+            text-transform uppercase
+            width 100px
+
+
 </style>

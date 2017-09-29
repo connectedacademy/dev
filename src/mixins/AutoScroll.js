@@ -1,11 +1,10 @@
-const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
-const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 500;//750; // Interval at which scroll position should be updated
-const SEGMENT_HEIGHT = 158.0; // Height of each segment
-
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import throttle from 'lodash/throttle';
+
+const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
+const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
+const SCROLL_UPDATE_INTERVAL = 500;//750; // Interval at which scroll position should be updated
 
 export default {
   mounted() {
@@ -98,7 +97,7 @@ export default {
       const durationRate = 5000;
       let end = this.currentSection.bottom;
 
-      var duration = (((end - start) / (SEGMENT_HEIGHT * 1.0)) * durationRate);
+      var duration = (((end - start) / (this.$app.segmentHeight * 1.0)) * durationRate);
 
       var step = () => {
 

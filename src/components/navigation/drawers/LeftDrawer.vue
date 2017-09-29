@@ -19,6 +19,8 @@ transition(name="slide-left")
           h1.drawer-list-item--header {{ $t('nav.about') }}
           h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
+    #app-version V{{ $app.version }}
+
 </template>
 
 <script>
@@ -61,3 +63,4 @@ export default {
       padding-left 30px
 
 </style>
+  

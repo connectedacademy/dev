@@ -79,11 +79,11 @@
         'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
       ]),
       overlayVisible() {
-        return this.$store.state.navigation.overlayVisible ||
+        return this.modalVisible ||
+          this.$store.state.navigation.overlayVisible ||
           this.$store.state.auth.visible ||
-          this.$store.state.conversation.activeSegment ||
-          this.$store.state.conversation.peekSegment ||
-          this.modalVisible;
+          (this.$store.state.conversation.activeSegment !== undefined) ||
+          (this.$store.state.conversation.peekSegment !== undefined);
       },
     },
     components: {
@@ -101,7 +101,6 @@
 <style lang="stylus">
 
 @import '~stylus/shared'
-@import '~stylus/variables'
 
 html
   background-color $color-main-page

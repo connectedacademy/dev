@@ -13,7 +13,6 @@ import VueAutosize from 'vue-autosize';
 // import Raven from 'raven-js';
 // import RavenVue from 'raven-js/plugins/vue';
 
-
 import { sync } from 'vuex-router-sync';
 
 import Icon from 'vue-awesome/components/Icon';
@@ -24,8 +23,11 @@ import Sockets from '@/Sockets';
 
 import OnboardingPrompt from '@/components/OnboardingPrompt';
 
+import app from '@/config';
 import store from '@/store';
 import router from '@/router';
+
+Vue.prototype.$app = app;
 
 sync(store, router);
 
@@ -39,9 +41,7 @@ Vue.use(VueConfig, Vue.config);
 
 const options = {
   logLevel: 'info',
-  // optional : defaults to false if not specified 
   stringifyArguments: false,
-  // optional : defaults to false if not specified 
   showLogLevel: false,
   dev: true
 }
@@ -60,7 +60,6 @@ Vue.use(VueAnalytics, {
 
 // TODO: Enabled for production
 // Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
-
 
 // General config
 Vue.config.productionTip = false;

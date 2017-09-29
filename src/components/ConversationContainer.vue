@@ -47,6 +47,8 @@ export default {
   watch: {
     collapsed(nV) {
       if (nV) return;
+
+      // Fill with blank messages      
       const segmentCount = this.content.duration * 0.2;
       for (var index = 10; index < segmentCount; index++) {
         if (this.conversationMessages[index]) continue;
@@ -58,7 +60,7 @@ export default {
     this.loadSubtitles(this.content);
     this.loadMedia(this.content);
     this.loadSegmentSummary(0, true);
-    // this.loadVisualisation(this.content);
+    this.loadVisualisation(this.content);
 
     // Fill with blank messages
     const segmentCount = 10;
@@ -77,7 +79,7 @@ export default {
       'currentSection', 'currentSegmentGroup', 'peekSegment', 'activeSegment', 'course',
     ]),
     containerHeight() {
-      return `${(this.content.duration * 0.2) * 158.0 + 124}px`;
+      return `${(this.content.duration * 0.2) * this.$app.segmentHeight + 124}px`;
     },
   },
   watch: {
@@ -144,7 +146,7 @@ export default {
     background-color white
     background url('../assets/images/line.png')
     background-repeat repeat
-    background-size auto 158px
+    background-size auto $segment-height
     background-position right -1px
     background-position center -1px
     back

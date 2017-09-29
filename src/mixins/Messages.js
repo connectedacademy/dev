@@ -68,7 +68,7 @@ export default {
       let thinkAhead = 5; // Think ahead
       let thinkBehind = 5; // Think behind
 
-      let segmentViewport = floor(window.innerHeight / 158.0) + thinkBehind;
+      let segmentViewport = floor(window.innerHeight / this.$app.segmentHeight) + thinkBehind;
 
       let endSegment = ((segmentGroup + thinkAhead) / 0.2);
       let startSegment = endSegment - (segmentViewport / 0.2);
@@ -100,7 +100,7 @@ export default {
               newMessage.segmentGroup = (parseInt(group) * 0.2);
 
               // Check does not fall out of wrapper height
-              if ((newMessage.segmentGroup * 158.0) < (this.$refs.innerwrapper.offsetHeight - 200)) {
+              if ((newMessage.segmentGroup * this.$app.segmentHeight) < (this.$refs.innerwrapper.offsetHeight - 200)) {
                 Vue.set(this.conversationMessages, newMessage.segmentGroup, newMessage);
               }
             }

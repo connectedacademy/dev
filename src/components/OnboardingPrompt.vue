@@ -47,11 +47,13 @@ export default {
 
 @import '~stylus/shared'
 
+$color-prompt = #1b6ff1;
+
 .onnboarding-prompt
   radius(6px)
   box-shadow()
   animate()
-  background-color #1b6ff1
+  background-color $color-prompt
   color white
   position absolute
   top 50px
@@ -78,7 +80,7 @@ export default {
       margin-left -6px
   .prompt--line
     content ''
-    background-color #1b6ff1
+    background-color $color-prompt
     position absolute
     height 10px
     width 4px
@@ -87,7 +89,7 @@ export default {
   .prompt--spot
     radius(50%)
     content ''
-    background-color #1b6ff1
+    background-color $color-prompt
     height 12px
     width 12px
     position absolute
@@ -123,8 +125,8 @@ export default {
       right 10px
   &:hover
     cursor pointer
-    background-color darken(#1b6ff1, 10%)
+    background-color darken($color-prompt, 10%)
     .prompt--spot, .prompt--line
-      background-color darken(#1b6ff1, 10%)
+      background-color darken($color-prompt, 10%)
 
 </style>

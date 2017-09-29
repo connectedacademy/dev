@@ -1,8 +1,7 @@
 <template lang="pug">
 
 .animated-logo(@click="goHome")
-  #logo-text Connected Academy
-  //- img.fourcorners-logo(src="../assets/logos/fourcorners/white.svg")
+  #logo-text {{ $app.name }}
   //- img.logo(src="../assets/logos/main-white.svg")
   //- svg(id="logo" v-bind:class="{loaded: loaded}" width="140" height="77" viewBox="0 0 140 77")
     path#main(d="M1069.34,221.6l-34.53-61.74L1004,212.25l-2.14,3.45a37.58,37.58,0,1,1-7.5-47" transform="translate(-930.95 -158.24)")

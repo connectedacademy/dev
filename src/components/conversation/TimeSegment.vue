@@ -244,8 +244,8 @@
 
 .time-segment
   background-color white
-  height 158px
-  min-height 158px
+  height $segment-height
+  min-height $segment-height
   overflow hidden
   position absolute
   left 50%

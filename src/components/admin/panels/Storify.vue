@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     loadLink() {
-      if (!this.currentClass) return false;
+      if (!this.currentClass) return;
       
       this.classroomCode = 'loading';
 

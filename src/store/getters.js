@@ -1,3 +1,4 @@
+import app from '@/config';
 import store from '@/store';
 
 export const fauxTime = state => state.fauxTime;
@@ -11,7 +12,7 @@ export const autoPlaying = state => state.autoPlaying;
 export const currentTime = (state) => {
   let time = store.getters.currentSectionScrollPosition;
   if (!time) return 0;
-  return (time < 0) ? 0 : (time / (158.0 * 0.2));
+  return (time < 0) ? 0 : (time / (app.segmentHeight * 0.2));
 };
 
 export const pageStyle = (state) => {

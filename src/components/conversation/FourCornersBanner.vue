@@ -229,7 +229,7 @@ $corner-width = 8px
   50%
     opacity 0.2
   100%
-    opacity 0.6g status
+    opacity 0.6
 
 @keyframes pulse
   0%
@@ -237,5 +237,5 @@ $corner-width = 8px
   50%
     opacity 0.2
   100%
-    opacity 0.6g status
+    opacity 0.6
 </style>

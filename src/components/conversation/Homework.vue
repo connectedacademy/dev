@@ -13,7 +13,7 @@
 
       path(d="M160,180 l0,80Z" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
-    h1.content-title Homework
+    h1.content-title {{ content.title }}
     p.content-description {{ content.description }}
 
     .submission-button-wrapper

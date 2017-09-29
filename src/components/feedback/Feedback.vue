@@ -60,12 +60,12 @@
 <script>
 import Vue from 'vue';
 
-import filter from 'lodash/filter';
 import { mapGetters } from 'vuex';
 
 import API from '@/api';
-import * as types from '@/store/mutation-types';
 import Auth from '@/mixins/Auth';
+
+import filter from 'lodash/filter';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersSubmission from '@/components/fourcorners/FourCornersSubmission';
@@ -99,25 +99,27 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { minimized: true });
-      vm.$store.commit(types.SET_PAGE_STYLE, 'chat');
+      vm.$store.commit('SET_NAV_STATE', { minimized: true });
+      vm.$store.commit('SET_PAGE_STYLE', 'chat');
     });
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.commit(types.SET_NAV_STATE, { minimized: false });
-    this.$store.commit(types.SET_PAGE_STYLE, undefined);
+    this.$store.commit('SET_NAV_STATE', { minimized: false });
+    this.$store.commit('SET_PAGE_STYLE', undefined);
     next();
   },
   activated() {
     // Check if user has registered
     if (this.isAuthenticated && !this.isRegistered) {
       this.$router.push('/registration');
+    } else {
+      // Fetch feedback items
+      this.getFeedbackItems();
+      this.getAvailableFeedbackItems();
     }
   },
   mounted() {
-    // Fetch feedback items
-    this.getFeedbackItems();
-    this.getAvailableFeedbackItems();
+    Vue.$log.info('Feedback view mounted');
 
     Vue.io.socket.on('user', (obj) => {
       this.$log.info('Submission message received');
@@ -156,9 +158,15 @@ export default {
     },
     getFeedbackItems() {
       
-      if (!this.classSlug || !this.contentSlug) { return }
+      if (!this.classSlug || !this.contentSlug) {
+        Vue.$log.info('No class or content slug so returning');
+        return;
+      }
 
       const request = { class: this.classSlug, content: this.contentSlug };
+
+      Vue.$log.info('No class or content slug so returning');
+
       API.feedback.getFeedbackItems(
         request,
         (response) => {
@@ -247,6 +255,7 @@ $chat-list-width = 320px
     animate()
     box-sizing()
     background-color white
+    border-bottom $color-light-grey 1px solid
     float left
     height 50px
     position relative
@@ -304,6 +313,7 @@ $chat-list-width = 320px
       cleanlist()
       border-top $color-lighter-grey 1px solid
       &.list-header
+        border-top none
         color $color-text-grey
         font-size 0.9em
         padding 20px 10px 5px 10px
