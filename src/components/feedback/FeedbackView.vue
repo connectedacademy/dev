@@ -25,9 +25,12 @@
 
       .feedback-submission
         textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment" @keydown.enter.prevent.stop="postFeedbackComment")
-        .pure-button(v-on:click="postFeedbackComment") Send
-        .clearfix
+        .feedback-submission--footer
+          .pure-button(v-on:click="postFeedbackComment") Send
+          p.feedback-submission-note Your comments are private and will not be posted to Twitter.
+          .clearfix
       .clearfix
+
 
     .clearfix
 
@@ -237,7 +240,7 @@ export default {
 
 .feedback-conversation
   padding-top 20px
-  padding-bottom 120px + 10px
+  padding-bottom 60px
 
   .feedback-message-wrapper
     .feedback-message
@@ -279,32 +282,39 @@ export default {
 
   .feedback-submission
     background-color $color-lightest-grey
-    /*border-top $color-light-grey 1px solid
-    border-bottom $color-light-grey 1px solid*/
     border $color-light-grey 1px solid
-    height 100px
     padding 10px
-    position absolute
-    bottom 20px
-    left 20px
-    right 20px
     textarea
       background-color transparent
       border none
       display block
+      font-size 1em
       outline 0
       resize none
-      line-height 22px
       min-height 60px
       width 100%
-    .pure-button
-      background-color $color-homework
-      border-color $color-homework
-      color white
-      float right
+    .feedback-submission--footer
+      pinned()
+      background white
+      border-top $color-border 1px solid
+      height 60px
       position absolute
-      bottom 10px
-      right 10px
-      &:hover
-        background-color darken($color-homework, 10%)
+      top auto
+      p.feedback-submission-note
+        reset()
+        box-sizing()
+        color $color-text-grey
+        float left
+        font-size 0.9em
+        line-height 20px
+        padding 20px 20px
+        width calc(100% - 12gc ''0px)
+      .pure-button
+        background-color $color-homework
+        border-color $color-homework
+        color white
+        float right
+        margin 10px 20px
+        &:hover
+          background-color darken($color-homework, 10%)
 </style>
