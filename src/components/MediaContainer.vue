@@ -8,9 +8,11 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      img#current-image(v-if="!slickMode" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
+      img#current-image(v-if="!slickMode && currentIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
+      //- img#next-image(v-if="!slickMode && nextIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[nextIndex].text}`" @click="setLightboxMedia(media[nextIndex].text)")
       slick#image-swiper(v-if="slickMode" ref="classslick" v-bind:options="slickOptions")
-        img(v-for="(item, key) in media" v-bind:key="key" v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+        .img-wrapper(v-for="(item, key) in media" v-bind:key="key" )
+          img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
 
@@ -52,8 +54,9 @@
     },
     data() {
       return {
-        slickMode: false,
+        slickMode: true,
         currentIndex: 0,
+        nextIndex: 1,
         lightboxVisible: false,
         lightboxImage: undefined,
         pHeight: 188,
@@ -130,6 +133,8 @@
               self.$refs.classslick.goTo(i);
             }
             self.currentIndex = i;
+            self.nextIndex = (i < self.media.length) ? (i + 1) : undefined;
+            
           }
         }
       }, 1000),
@@ -158,8 +163,9 @@ $media-height = 220px
     overflow hidden
     padding 0
     position relative    
-    img#current-image
+    img#current-image, img#next-image
       height 204px
+      margin-right 20px
       &:hover
         cursor pointer
     .image-thumbnails
@@ -211,13 +217,14 @@ $media-height = 220px
   z-index 1
   position relative
 
-  img.slick-slide
-    height 204px
-    max-height 204px
-    max-width 100%
-    margin 0 10px
-    opacity 0.3
+  .slick-slide
+    opacity 0.5
     outline 0
+    img
+      height 204px
+      max-height 204px
+      max-width 100%
+      margin 0 10px
     &:hover
       cursor pointer
     &.slick-current
