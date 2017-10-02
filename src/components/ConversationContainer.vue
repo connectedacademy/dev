@@ -49,8 +49,9 @@ export default {
       if (nV) return;
 
       // Fill with blank messages      
+      const start = 10;
       const segmentCount = this.content.duration * 0.2;
-      for (var index = 10; index < segmentCount; index++) {
+      for (var index = start; index < segmentCount; index++) {
         if (this.conversationMessages[index]) continue;
         this.$log.info('Filling...');
         Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
@@ -64,8 +65,10 @@ export default {
     // this.loadVisualisation(this.content);
 
     // Fill with blank messages
-    const segmentCount = 10;
-    for (var index = 0; index < segmentCount; index++) {
+    const start = 0;
+    const segmentCount = this.content.duration * 0.2;
+    // const segmentCount = 10;
+    for (var index = start; index < segmentCount; index++) {
       if (this.conversationMessages[index]) continue;
       Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
     }
