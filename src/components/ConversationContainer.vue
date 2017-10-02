@@ -7,7 +7,7 @@
       icon(name="twitter")
       icon(name="quote-right")
 
-    #activity-visualisation(v-if="!peekSegment")
+    //- #activity-visualisation(v-if="!peekSegment")
       svg(width="400" v-bind:height="containerHeight")
         g
           path(v-bind:d="points" transform="translate(400,0)")
@@ -52,6 +52,7 @@ export default {
       const segmentCount = this.content.duration * 0.2;
       for (var index = 10; index < segmentCount; index++) {
         if (this.conversationMessages[index]) continue;
+        this.$log.info('Filling...');
         Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
       }
     }
@@ -60,7 +61,7 @@ export default {
     this.loadSubtitles(this.content);
     this.loadMedia(this.content);
     this.loadSegmentSummary(0, true);
-    this.loadVisualisation(this.content);
+    // this.loadVisualisation(this.content);
 
     // Fill with blank messages
     const segmentCount = 10;

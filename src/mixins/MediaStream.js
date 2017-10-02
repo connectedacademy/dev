@@ -139,10 +139,10 @@ export default {
           this.soundcloudPlayer.on('time', () => {
             this.performSync(this);
           });
-          this.soundcloudPlayer.on('seeked', () => {
-            this.performSeeked(this);
-          });
-          this.soundcloudPlayer.on('buffering_start', () => {
+          // this.soundcloudPlayer.on('seeked', () => {
+          //   this.performSeeked(this);
+          // });
+          this.soundcloudPlayer.on('buffering_start', (event) => {
             if (this.initialBuffer > 0) {
               this.$store.commit('PAUSE_MEDIA');
               this.mediaBuffering = true;
@@ -150,8 +150,9 @@ export default {
               this.initialBuffer = (this.initialBuffer + 1);
             }
           });
-          this.soundcloudPlayer.on('buffering_end', () => {
+          this.soundcloudPlayer.on('buffering_end', (event) => {
             this.mediaBuffering = false;
+            this.$store.commit('PLAY_MEDIA');
           });
         });
       }

@@ -8,7 +8,8 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      slick#image-swiper(ref="classslick" v-bind:options="slickOptions")
+      img#current-image(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
+      //- slick#image-swiper(ref="classslick" v-bind:options="slickOptions")
         img(v-for="(item, key) in media" v-bind:key="key" v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
@@ -33,21 +34,22 @@
       // VueYouTubeEmbed
     },
     watch: {
-      '$media': {
-        handler: function(nV, oV) {
-          this.$refs.classslick.reSlick();
-        },
-        deep: true,
-      },
+      // '$media': {
+      //   handler: function(nV, oV) {
+      //     this.$refs.classslick.reSlick();
+      //   },
+      //   deep: true,
+      // },
       currentTime(nV, oV) {
         this.updateCarousel(this);
       },
-      videoIsActive(nV) {
-        this.$refs.classslick.reSlick();
-      },
+      // videoIsActive(nV) {
+      //   this.$refs.classslick.reSlick();
+      // },
     },
     data() {
       return {
+        currentIndex: 0,
         lightboxVisible: false,
         lightboxImage: undefined,
         pHeight: 188,
@@ -119,7 +121,8 @@
           const image = self.media[i];
   
           if (inRange(self.currentTime, image.start, image.end)) {
-            self.$refs.classslick.goTo(i);
+            // self.$refs.classslick.goTo(i);
+            this.currentIndex = i;
           }
         }
       }, 1000),
@@ -148,6 +151,10 @@ $media-height = 220px
     overflow hidden
     padding 0
     position relative    
+    img#current-image
+      height 204px
+      &:hover
+        cursor pointer
     .image-thumbnails
       overflow scroll
       height ($media-height - 16px)
