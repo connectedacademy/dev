@@ -5,7 +5,10 @@ import throttle from 'lodash/throttle';
 require('howler');
 
 var sound = new Howl({
-  src: ['https://interpretation.connectedacademy.io/course/content/audio/CA_TL_1_v4_56.mp3']
+  src: ['https://interpretation.connectedacademy.io/course/content/audio/CA_TL_1_v4_56.mp3'],
+  preload: false,
+  html5: true,
+  buffer: true
 });
 
 export default {
