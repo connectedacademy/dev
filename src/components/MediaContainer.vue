@@ -8,8 +8,8 @@
         img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
-      img#current-image(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
-      //- slick#image-swiper(ref="classslick" v-bind:options="slickOptions")
+      img#current-image(v-if="!slickMode" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
+      slick#image-swiper(v-if="slickMode" ref="classslick" v-bind:options="slickOptions")
         img(v-for="(item, key) in media" v-bind:key="key" v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
@@ -25,7 +25,6 @@
   
   require('slick-carousel/slick/slick.css');
   
-  
   export default {
     name: 'media-container',
     props: ['playerType', 'content', 'videoIsActive'],
@@ -34,27 +33,33 @@
       // VueYouTubeEmbed
     },
     watch: {
-      // '$media': {
-      //   handler: function(nV, oV) {
-      //     this.$refs.classslick.reSlick();
-      //   },
-      //   deep: true,
-      // },
+      '$media': {
+        handler: function(nV, oV) {
+          if (this.slickMode) {
+            this.$refs.classslick.reSlick();
+          }
+        },
+        deep: true,
+      },
       currentTime(nV, oV) {
         this.updateCarousel(this);
       },
-      // videoIsActive(nV) {
-      //   this.$refs.classslick.reSlick();
-      // },
+      videoIsActive(nV) {
+        if (this.slickMode) {
+          this.$refs.classslick.reSlick();
+        }
+      },
     },
     data() {
       return {
+        slickMode: false,
         currentIndex: 0,
         lightboxVisible: false,
         lightboxImage: undefined,
         pHeight: 188,
         pWidth: (188 / 0.5625),
         slickOptions: {
+          initialSlide: 0,
           arrows: false,
           centerMode: false,
           slidesToShow: 3,
@@ -67,7 +72,7 @@
           draggable: false,
           useTransform: true,
           useCSS: true,
-          lazyLoad: 'progressive',
+          lazyLoad: 'ondemand',
         },
       };
     },
@@ -121,8 +126,10 @@
           const image = self.media[i];
   
           if (inRange(self.currentTime, image.start, image.end)) {
-            // self.$refs.classslick.goTo(i);
-            this.currentIndex = i;
+            if (self.slickMode) {
+              self.$refs.classslick.goTo(i);
+            }
+            self.currentIndex = i;
           }
         }
       }, 1000),
