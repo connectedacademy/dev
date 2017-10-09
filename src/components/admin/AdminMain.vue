@@ -6,7 +6,7 @@
     .admin-panel.no-padding(v-if="visiblePanels['0']" v-bind:style="panelStyles['0']")
 
       .admin-panel--content
-        a#prose-editor-link(v-bind:href="proseLink" target="_blank")
+        a#prose-editor-link(v-bind:href="proseLink" target="_blank" v-if="user && user.admin")
           img.icon(src="../../assets/icons/prose.svg")
           | Prose content editor
           icon(name="angle-right")
@@ -17,13 +17,13 @@
 
         ul.panel-selector
           li.panel-selector--item(v-bind:class="{'active': visiblePanels['1']}" @click="togglePanel('1')")
-            | Students on course
+            | Student submissions
             .toggle(v-bind:class="{active: visiblePanels['1']}")
           li.panel-selector--item(v-bind:class="{'active': visiblePanels['2']}" @click="togglePanel('2')")
-            | Student submissions
+            | Storify content
             .toggle(v-bind:class="{active: visiblePanels['2']}")
           li.panel-selector--item(v-bind:class="{'active': visiblePanels['3']}" @click="togglePanel('3')")
-            | Storify content
+            | Students on course
             .toggle(v-bind:class="{active: visiblePanels['3']}")
           //- li.panel-selector--item(v-bind:class="{'active': visiblePanels['4']}" @click="togglePanel('4')")
             | Question responses
@@ -33,11 +33,11 @@
             .toggle(v-bind:class="{active: visiblePanels['5']}")
 
     transition(name="fade-out" mode="out-in")
-      course-students(v-if="visiblePanels['1']" v-bind:style="panelStyles['1']")
+      student-submissions(v-if="visiblePanels['1']" v-bind:style="panelStyles['1']" v-bind:class-slug="classSlug")
     transition(name="fade-out" mode="out-in")
-      student-submissions(v-if="visiblePanels['2']" v-bind:style="panelStyles['2']" v-bind:class-slug="classSlug")
+      storify(v-if="visiblePanels['2']" v-bind:style="panelStyles['2']" v-bind:class-slug="classSlug")
     transition(name="fade-out" mode="out-in")
-      storify(v-if="visiblePanels['3']" v-bind:style="panelStyles['3']")
+      course-students(v-if="visiblePanels['3']" v-bind:style="panelStyles['3']" v-bind:class-slug="classSlug")
     //- transition(name="fade-out" mode="out-in")
     //-   question-responses(v-if="visiblePanels['4']" v-bind:style="panelStyles['4']")
     //- transition(name="fade-out" mode="out-in")
@@ -100,7 +100,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['course']),
+    ...mapGetters(['course', 'user']),
     proseLink() {
       return 'http://prose.io/#connectedacademy';
     },

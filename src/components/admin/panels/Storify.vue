@@ -5,7 +5,10 @@
   .admin-panel--header
     h1 Storify
 
-  .admin-panel--content(v-if="rssLink !== undefined")
+    .reload-button(@click="loadLink")
+      icon(name="refresh")
+
+  .admin-panel--content
 
     h5 Please copy and paste the following link into the Storify editor.
     input(v-model="rssLink" placeholder="RSS Link")
@@ -19,24 +22,19 @@ import { mapGetters } from 'vuex';
 import API from '@/api';
 import find from 'lodash/find';
 
+import 'vue-awesome/icons/refresh';
+
 export default {
   name: 'storify',
-  watch: {
-    currentClass() {
-      this.loadLink();
-    }
+  props: ['classSlug'],
+  activated() {
+    this.loadLink();
   },
   methods: {
     loadLink() {
-      if (!this.currentClass) return;
-      
       this.classroomCode = 'loading';
 
-      const classroomSlug = find(this.currentClass.content, (o) => {
-        return (o.content_type === 'class');
-      }).slug;
-
-      const request = { theClass: this.currentClass.slug, slug: classroomSlug };
+      const request = { theClass: this.classSlug, slug: 'liveclass' };
 
       API.classroom.getTeacherCode(
         request,
@@ -50,9 +48,6 @@ export default {
         },
       );
     }
-  },
-  computed: {
-    ...mapGetters(['currentClass'])
   },
   data() {
     return {

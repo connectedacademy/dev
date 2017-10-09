@@ -11,6 +11,8 @@
 
     a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") Leave
     a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2) && (currentRole === 'student')" v-on:click="joinClassroom") Join Classroom
+    
+    li.pure-button.pure-button-action(v-if="currentRole === 'teacher'" @click="navigateTo('/admin')") View Classroom
 
 </template>
 
@@ -43,6 +45,10 @@ export default {
     },
   },
   methods: {
+    navigateTo(toLink) {
+      this.$router.push(toLink);
+      this.$store.commit('TOGGLE_RIGHT_DRAWER');
+    },
     toggleRole(newRole) {
       if (this.currentClassroom) return;
 

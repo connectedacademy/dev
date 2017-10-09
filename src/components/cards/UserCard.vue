@@ -1,13 +1,14 @@
 <template lang="pug">
 
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
+  #admin-link(@click="navigateTo('/admin')" v-if="user.admin")
+    icon(name="cog")
   img.user-profile(:src="user.profile" @click="showUser = !showUser")
-  pre(v-if="showUser") {{ user }}
+  //- pre(v-if="showUser") {{ user }}
   h1.user-name {{ user.name }}
   h2.user-account {{ `@${user.account}` }}
 
-  li.pure-button.pure-button-action(v-if="user.admin" @click="navigateTo('/admin')") Admin Panel
-  li.pure-button.pure-button-action(@click="showHints()") Show All Hints
+  li.pure-button.pure-button-action(@click="showHints()") Show Hints
   a.pure-button.pure-button-action(v-if="!user.admin" href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
 
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
@@ -16,6 +17,8 @@
 
 <script>
 import {mapGetters} from 'vuex';
+
+import 'vue-awesome/icons/cog';
 
 export default {
   name: 'user-card',
@@ -27,10 +30,7 @@ export default {
   },
   methods: {
     navigateTo(toLink) {
-      this.toggleRightDrawer();
       this.$router.push(toLink);
-    },
-    toggleRightDrawer() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
     },
     logout() {
@@ -65,7 +65,21 @@ export default {
 
 .card#user-card
   padding 15px
+  position relative
   text-align center
+  #admin-link
+    animate()
+    color alpha(white, 0.7)
+    position absolute
+    top 0
+    right 0
+    padding 20px
+    z-index 2
+    .fa-icon
+      height 20px
+    &:hover
+      color white    
+      cursor pointer
   img.user-profile
     radius(50%)
     background-color alpha(black, 0.1)

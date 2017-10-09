@@ -3,14 +3,23 @@
 .student-tile
   img.student--profile(v-bind:src="student.profile")
   a.student--name(v-bind:href="student.link") {{ student.name }}
-  .student--email {{ student.email }}
-  p {{ (student.admin) ? 'Administrator' : 'Standard User' }}
-  p Messages : {{ student.messages }}
-  p Homework : {{ student.homework }}
+  .student--email {{ `@${student.account}` }}
+  //- p {{ (student.admin) ? 'Administrator' : 'Standard User' }}
+  ul.labels
+    li.label
+      icon(name="comment")
+      | {{ student.messages }}
+    li.label
+      icon(name="graduation-cap")
+      | {{ student.homework }}
+    .clearfix
 
 </template>
 
 <script>
+import 'vue-awesome/icons/comment';
+import 'vue-awesome/icons/graduation-cap';
+
 export default {
   name: 'student-tile',
   props: ['student'],
@@ -35,5 +44,18 @@ export default {
   .student--email
     color $color-text-light-grey
     line-height 15px
+  ul.labels
+    cleanlist()
+    margin-top 10px
+    li.label
+      cleanlist()
+      radius(4px)
+      color $color-text-grey
+      display inline-block
+      float left
+      margin-right 10px
+      padding 0 10px
+      .fa-icon
+        margin-right 6px
 
 </style>
