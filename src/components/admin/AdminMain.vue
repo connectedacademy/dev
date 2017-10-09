@@ -6,10 +6,6 @@
     .admin-panel.no-padding(v-if="visiblePanels['0']" v-bind:style="panelStyles['0']")
 
       .admin-panel--content
-        a#prose-editor-link(v-bind:href="proseLink" target="_blank" v-if="user && user.admin")
-          img.icon(src="../../assets/icons/prose.svg")
-          | Prose content editor
-          icon(name="angle-right")
 
         .content-filter--selector
           select.full-width(v-model="classSlug")
@@ -32,6 +28,11 @@
           //- li.panel-selector--item(v-bind:class="{'active': visiblePanels['5']}" @click="togglePanel('5')")
             | Students in class
             .toggle(v-bind:class="{active: visiblePanels['5']}")
+
+        a#prose-editor-link(v-bind:href="proseLink" target="_blank" v-if="user && user.admin")
+          img.icon(src="../../assets/icons/prose.svg")
+          | Prose content editor
+          icon(name="angle-right")
 
     transition(name="fade-out" mode="out-in")
       student-submissions(v-if="visiblePanels['1']" v-bind:style="panelStyles['1']" v-bind:class-slug="classSlug")
@@ -231,7 +232,6 @@ ul.panel-selector
   select.full-width
     box-sizing()
     height 40px
-    margin-top 20px
     width 100%
     outline 0
 </style>

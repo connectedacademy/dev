@@ -28,7 +28,7 @@ export default {
     };
   },
   methods: {
-    navigateTo() {
+    navigateToAdmin() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
       if (this.user && this.user.admin) {
         this.$router.push('/admin');

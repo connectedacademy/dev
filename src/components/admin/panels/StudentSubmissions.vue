@@ -5,12 +5,12 @@
   .admin-panel--header
     h1 Student submissions
 
-    .reload-button(@click="reloadClass")
+    .reload-button(@click="loadData")
       icon(name="refresh")
 
   .admin-panel--content
 
-      .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug") {{ content.title }}
+      .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug" v-bind:class="{ 'active': (contentSlug === content.slug) }") {{ content.title }}
 
       ul
         li(v-for="submission in submissions")
@@ -72,9 +72,6 @@ export default {
       return Moment(timestamp).format('LTS - ddd M YYYY');
       return Moment(timestamp).fromNow();
     },
-    reloadClass() {
-      this.$store.dispatch('getSpec', this.classSlug);
-    },
     loadData() {
 
       this.submissions = [];
@@ -111,6 +108,9 @@ export default {
     .pure-button.pure-button-subtle
       display block
       margin-bottom 10px
+      &.active
+        background $color-border
+        color $color-text-dark-grey
     ul
       cleanlist()
       li
