@@ -13,7 +13,8 @@
 
         .content-filter--selector
           select.full-width(v-model="classSlug")
-            option(v-for="(theClass, index) in classes" v-bind:value="theClass.slug" v-bind:key="index") {{ theClass.title }}
+            option(v-for="(theClass, index) in classes" v-bind:value="theClass.slug" v-bind:key="index")
+              | {{ theClass.title }}
 
         ul.panel-selector
           li.panel-selector--item(v-bind:class="{'active': visiblePanels['1']}" @click="togglePanel('1')")
