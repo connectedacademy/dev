@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
-  #admin-link(@click="navigateTo('/admin')" v-if="user.admin")
+  #admin-link(@click="navigateToAdmin()" v-if="user.admin")
     icon(name="cog")
   img.user-profile(:src="user.profile" @click="showUser = !showUser")
   //- pre(v-if="showUser") {{ user }}
@@ -9,7 +9,6 @@
   h2.user-account {{ `@${user.account}` }}
 
   li.pure-button.pure-button-action(@click="showHints()") Show Hints
-  a.pure-button.pure-button-action(v-if="!user.admin" href="https://api.connectedacademy.io/v1/admin/login" target="_self") Admin Login
 
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 
@@ -29,9 +28,13 @@ export default {
     };
   },
   methods: {
-    navigateTo(toLink) {
-      this.$router.push(toLink);
+    navigateTo() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
+      if (this.user && this.user.admin) {
+        this.$router.push('/admin');
+      } else if (this.user) {
+        window.location = 'https://api.connectedacademy.io/v1/admin/login';
+      }
     },
     logout() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
