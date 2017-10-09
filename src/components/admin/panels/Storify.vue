@@ -10,10 +10,19 @@
 
   .admin-panel--content
 
-    h5 Please copy and paste the following link into the Storify editor.
+    h5 Storify allows you to create a narrative around the conversations and content of your live class.
+    h5 The following link will make your class content accessible from the Storify editor.
     input(v-model="rssLink" placeholder="RSS Link")
-    
+
+    br
+    br
+    h5 How to paste the link into Storify:
     img.storify-gif(src="../../../assets/gifs/storify.gif" width="100%")
+
+    br
+    br
+
+    a.pure-button.pure-button-primary(href="https://storify.com/" target="_blank") Open Storify
 
 </template>
 
@@ -76,5 +85,5 @@ export default {
       width 100%
     img.storify-gif
       border $color-border 1px solid
-      margin 30px auto
+      margin-bottom 30px auto
 </style>
