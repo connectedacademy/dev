@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
+  .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
 
     .message-count(v-if="messageCount") {{ messageCount }}
 
@@ -59,6 +59,23 @@
       Subtitle,
     },
     watch: {
+      markdownUrl(nV) {
+        this.loadMarkdown();
+      },
+      '$route': {
+        handler: function(nV, oV) {
+          if (nV !== oV) {
+            if ((oV.query.segment) && (this.message.segmentGroup === oV.query.segment)) {
+              if (this.activeSegment) {
+                this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
+              } else {
+                this.unpeek()
+              }
+            }
+          }
+        },
+        deep: true,
+      },
       'activeSegment': {
         handler: function(nV, oV) {
           if (oV === this.message.segmentGroup) {
@@ -134,7 +151,9 @@
     },
     methods: {
       peek() {
-  
+        
+        this.$router.push({ query: { segment: this.message.segmentGroup } });
+
         if (!this.segmentOpened) {
   
           this.segmentStyle = {
@@ -143,12 +162,9 @@
   
           this.$store.commit('PAUSE_MEDIA');
           this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
-          // this.$route.push('')
         }
       },
       unpeek() {
-  
-        // this.$store.commit('PLAY_MEDIA');
   
         this.segmentStyle = {
           position: 'absolute',
@@ -162,7 +178,9 @@
           this.segmentOpened = this.segmentPeeking = false;
           this.$store.commit('SET_PEEK_SEGMENT', undefined);
           this.$store.commit('SET_REPLYING_TO', undefined);
-  
+
+          this.$router.push({ query: { segment: undefined } });
+
         }, 300); // Timeout equal to time for overlay to fade
       },
       openSegment() {

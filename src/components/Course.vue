@@ -40,7 +40,7 @@ export default {
   activated() {
     this.setScrollPoints();    
     window.scrollTo(0, this.$store.state.savedScrollPosition);
-    // this.toMessage();
+    this.toMessage();
   },
   data() {
     return {
@@ -52,9 +52,20 @@ export default {
     CourseContent,
     SectionNavigator,
   },
-  methods: {
-    toMessage() {},
-  },
+  // methods: {
+  //   toMessage() {
+  //     if (this.$route.query.segment) {
+  //       const segmentGroup = parseInt(this.$route.query.segment)
+  //       setTimeout(() => {
+  //         this.$store.commit('SET_PEEK_SEGMENT', segmentGroup);
+  //         setTimeout(() => {
+  //           var el = document.querySelector(".peek");
+  //           window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')));
+  //         }, 1000);
+  //       }, 2000);
+  //     }
+  //   },
+  // },
 };
 </script>
 
