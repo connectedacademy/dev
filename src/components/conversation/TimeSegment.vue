@@ -1,6 +1,8 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:class="{ peek: segmentPeeking, opened: segmentOpened, 'below-modal': belowModal }" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
+  .time-segment(ref="timeSegment" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
+
+    .message-count(v-if="messageCount") {{ messageCount }}
 
     .primary-wrapper(@click="peek()")
 
@@ -11,12 +13,9 @@
 
       .message-wrapper(v-bind:class="{ loading: message.loading }")
 
-        .suggestion(v-once v-if="message.message && message.message.suggestion")
-          h3 "{{ message.message.text }}"
-
-        mock-message(v-once v-else-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
-        
-        message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message" v-bind:truncate="true")
+        .suggestion(v-once v-if="isSuggestion") "{{ message.message.text }}"
+        message(v-else-if="isMessage" v-bind:message="message.message" v-bind:truncate="true")
+        mock-message(v-once v-else-if="isMock")
 
       .clearfix
 
@@ -39,6 +38,8 @@
 
 <script>
   import orderBy from 'lodash/orderBy';
+  import _get from 'lodash/get';
+
   import { mapGetters } from 'vuex';
   import API from '@/api';
   
@@ -107,12 +108,27 @@
         'modalVisible',
         'replyingTo',
       ]),
-      orderedMessages() {
-        // Order messages
-        return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
+      segmentClasses() {
+        return {
+          peek: this.segmentPeeking,
+          opened: this.segmentOpened,
+          under: this.modalVisible
+        }
       },
-      belowModal() {
-        return this.modalVisible;
+      isMessage() {
+        return this.messageCount
+      },
+      isSuggestion() {
+        return _get(this.message, ['message', 'suggestion'], false);
+      },
+      isMock() {
+        return this.message.loading || !this.isMessage
+      },
+      messageCount() {
+        return _get(this.message, ['info', 'total'], undefined);
+      },
+      orderedMessages() {
+        return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
       }
     },
     methods: {
@@ -253,6 +269,21 @@
   z-index 0
   width 780px
 
+  .message-count
+    radius(10px)
+    box-sizing()
+    background-color $color-primary
+    color white
+    font-size 0.8em
+    line-height 20px
+    padding 0 5px
+    position absolute
+    top 10px
+    right 10px
+    min-width 20px
+    text-align center
+    z-index 51
+
   @media(max-width: 800px)
     left 10px
     margin-left 0
@@ -281,11 +312,11 @@
       z-index 2
 
     .suggestion
+      color $color-text-dark-grey
+      font-size 1.2em
+      font-weight bold
       padding 20px
       text-align center
-      h3
-        reset()
-        color $color-text-dark-grey
 
     .message-wrapper
       animate()
@@ -319,7 +350,7 @@
     z-index 56
     border none
 
-    &.below-modal
+    &.under
       z-index 55 !important
 
   &.peek
@@ -331,7 +362,7 @@
       opacity 0
       pointer-events none
 
-    &.below-modal
+    &.under
       z-index 55 !important
 
   .meta-container

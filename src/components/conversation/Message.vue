@@ -1,6 +1,7 @@
 <template lang="pug">
 
   .single-message-wrapper
+
     .message
 
       img.profile-image(v-bind:src="message.author.profile")
@@ -76,6 +77,7 @@ export default {
 @import '~stylus/shared'
 
 .single-message-wrapper
+  position relative
 
   .message
     box-sizing()
