@@ -9,9 +9,10 @@
       img(v-if="!expanded || (currentCorner === 'default')" src="../../assets/logos/fourcorners/white-text.svg" height="20")
 
       p {{ (expanded) ? corners[currentCorner].text : bannerText }}
-      .buttons(v-if="expanded") 
+      .buttons
         router-link.pure-button.pure-button-subtle(name="4c-learn-more" v-if="currentCorner !== 'default'" to="/fourcorners") Learn More
-        .pure-button.pure-button-subtle(name="4c-minimize" v-if="currentCorner === 'default'" @click="currentCorner = 'default'; expanded = false") Minimize
+        .pure-button.pure-button-subtle(name="4c-minimize" v-if="currentCorner === 'default' && expanded" @click="currentCorner = 'default'; expanded = false") Minimize
+        .pure-button.pure-button-subtle(name="4c-minimize" v-if="currentCorner === 'default' && !expanded" @click="currentCorner = 'bottomRight'; expanded = true") Explore
 
     #corners
       .corner#corner-top-left(name="4c-banner-top-left" v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")
@@ -64,6 +65,7 @@ export default {
     toggleCorner(corner) {
       if (this.expanded) {
         if (corner === this.currentCorner) {
+          this.expanded = false;
           this.currentCorner = 'default';
         } else {
           this.currentCorner = corner;
@@ -115,7 +117,7 @@ $corner-width = 8px
   #tile-wrapper
     animate()
     transition-duration 1s
-    height 100px
+    height 130px
     overflow visible
     padding 50px 30px
     position relative

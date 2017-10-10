@@ -86,7 +86,6 @@ export default {
   position absolute
   top 9px
   right 7px
-  transition right 0.6s
   z-index 52
   height 42px
   line-height 42px
@@ -97,6 +96,7 @@ export default {
     margin 10px auto
   &:hover
     background-color alpha(black, 0.1)
+    cursor pointer
 
 .navigation
   animate()

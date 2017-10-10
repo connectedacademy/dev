@@ -28,8 +28,6 @@ export default {
   },
   methods: {
     jumpToContent(slug) {
-      this.$cookie.delete('section-navigator');
-      
       this.$ga.event('section-navigator', 'navigated-to', slug);
 
       const segmentPosition = this.scrollPoint.sectionTop + 1;

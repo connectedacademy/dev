@@ -132,7 +132,6 @@ export default {
       }
     },
     viewIntroClass() {
-      this.$cookie.delete('intro-button');
       this.$store.commit('SET_CURRENT_CLASS', this.introClass);
       this.$store.dispatch('resetState');
       this.$ga.event('class-selector', 'class-switched', 'class-intro');
