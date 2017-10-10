@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
-  #admin-link(@click="navigateToAdmin()" v-if="user.admin")
+  #admin-link(@click="navigateToAdmin()")
     icon(name="cog")
   img.user-profile(:src="user.profile" @click="showUser = !showUser")
   //- pre(v-if="showUser") {{ user }}
