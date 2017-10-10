@@ -112,6 +112,8 @@ export default {
     // Check if user has registered
     if (this.isAuthenticated && !this.isRegistered) {
       this.$router.push('/registration');
+    } else if (this.isAuthenticated) {
+      this.$router.push('/');
     } else {
       // Fetch feedback items
       this.getFeedbackItems();
@@ -121,6 +123,9 @@ export default {
   mounted() {
     Vue.$log.info('Feedback view mounted');
 
+    this.getFeedbackItems();
+    this.getAvailableFeedbackItems();
+    
     Vue.io.socket.on('user', (obj) => {
       this.$log.info('Submission message received');
       this.$log.info(obj);

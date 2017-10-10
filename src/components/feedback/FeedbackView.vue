@@ -7,8 +7,7 @@
 
     .feedback-section
 
-      .feedback-tile(v-if="feedbackItem")
-
+      .feedback-tile(v-if="feedbackItem && feedbackItem.html")
         four-corners(v-bind:html="feedbackItem.html")
 
     .feedback-conversation
