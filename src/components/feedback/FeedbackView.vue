@@ -13,6 +13,7 @@
     .feedback-conversation
       .feedback-message-wrapper(v-for="message in feedbackMessages")
         .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (!message.canview), reply: (message.fromuser.id !== currentUser.id) }")
+          img.avatar(v-bind:src="message.fromuser.profile")
           .feedback-message--bubble
             p(v-if="!message.canview")
               icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
@@ -246,9 +247,17 @@ export default {
       display inline-block
       float right
       margin-bottom 10px
+      padding-right 40px
+      position relative
+      img.avatar
+        radius(50%)
+        height 34px
+        position absolute
+        top 0
+        right 0
       .feedback-message--bubble
         animate()
-        radius(6px)
+        radius(17px)
         background-color $color-homework
         padding 6px 12px
         p
@@ -256,6 +265,7 @@ export default {
           reset()
           color white
       .feedback-message--author
+        position relative
         text-align right
         p
           reset()
@@ -264,8 +274,12 @@ export default {
           font-size 0.7em
       &.reply
         float left
+        padding-right 0px
+        padding-left 40px
+        img.avatar
+          right auto
+          left 0
         .feedback-message--bubble
-          radius(6px)
           background-color $color-light-grey
           p
             color $color-text-dark-grey

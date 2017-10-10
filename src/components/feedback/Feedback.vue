@@ -304,16 +304,17 @@ $chat-list-width = 320px
         margin 0 auto
         position relative
         left auto
-      &:nth-child(2)
-        border-top $color-border 1px solid
+      // &:nth-child(2)
+      //   border-top $color-border 1px solid
       p
         display none
 
 
   ul
     cleanlist()
-    &:last-child
-      border-bottom $color-lighter-grey 1px solid
+    border-bottom $color-lighter-grey 1px solid
+    @media(max-width: 600px)
+      margin-top 10px
     li
       cleanlist()
       border-top $color-lighter-grey 1px solid

@@ -35,7 +35,7 @@
       // VueYouTubeEmbed
     },
     watch: {
-      '$media': {
+      'media': {
         handler: function(nV, oV) {
           if (this.slickMode) {
             this.$refs.classslick.reSlick();
@@ -93,37 +93,6 @@
       setLightboxMedia(media) {
         this.$store.commit('SET_LIGHTBOX_MEDIA', media);
       },
-      // youtubeReady(player) {
-      //   this.player = player;
-      //   this.player.seekTo(this.currentTime);
-      // },
-      // youtubePlaying(player) {
-      //   this.$store.commit('PLAY_MEDIA');
-      // },
-      // youtubeEnded() {
-      //   this.$store.commit('PAUSE_MEDIA');
-      // },
-      // youtubePaused() {
-      //   this.$store.commit('PAUSE_MEDIA');
-      // },
-      // youtubeSeek: throttle(function(self, position) {
-  
-      //   if (!self.player) {
-      //     return;
-      //   }
-  
-      //   const playerTime = self.player.getCurrentTime();
-      //   if (!playerTime) {
-      //     return;
-      //   }
-      //   const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) ||
-      //     (self.currentTime > (playerTime + SYNC_THRESHOLD)));
-  
-      //   if (outOfSync) {
-      //     self.$log.info('Video out of sync - seeking');
-      //     self.player.seekTo(position);
-      //   }
-      // }, 500),
       updateCarousel: throttle(function(self) {
         for (let i = 0; i < self.media.length; i++) {
           const image = self.media[i];
@@ -137,7 +106,7 @@
             
           }
         }
-      }, 1000),
+      }, 2000),
     },
   };
 </script>

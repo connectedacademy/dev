@@ -32,7 +32,8 @@ export default {
   margin 0 10px
   overflow hidden
   p.content-description
-    color alpha(white, 0.5)
+    color alpha(white, 0.5) !important
+    padding 20px 0 !important
     text-align center
   ul.submission-grid
     cleanlist()

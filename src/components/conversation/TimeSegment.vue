@@ -143,6 +143,7 @@
   
           this.$store.commit('PAUSE_MEDIA');
           this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
+          // this.$route.push('')
         }
       },
       unpeek() {
