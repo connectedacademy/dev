@@ -92,7 +92,7 @@ export default {
           cursor pointer
 
     &.collapsed
-      max-height 791px
+      max-height 950px
       overflow hidden
 
   .course-content--footer

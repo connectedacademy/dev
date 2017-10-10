@@ -6,7 +6,7 @@
 
   //- lock(passcode="76234")
 
-  //- debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
+  debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
   info-modal
 
@@ -48,7 +48,7 @@
   import MediaLightbox from '@/components/modals/MediaLightbox';
   import InfoModal from '@/components/modals/InfoModal';
   import QuestionModal from '@/components/modals/QuestionModal';
-  // import DebugPanel from '@/components/DebugPanel';
+  import DebugPanel from '@/components/DebugPanel';
   // import Lock from '@/components/authentication/Lock';
   
   // Mixins
@@ -83,6 +83,7 @@
       ]),
     },
     components: {
+      DebugPanel,
       Navigation,
       BurgerMenu,
       LeftDrawer,

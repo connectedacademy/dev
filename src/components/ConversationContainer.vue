@@ -44,20 +44,20 @@ export default {
     TimeSegment,
   },
   props: ['content', 'collapsed'],
-  watch: {
-    collapsed(nV) {
-      if (nV) return;
+  // watch: {
+  //   collapsed(nV) {
+  //     if (nV) return;
 
-      // Fill with blank messages      
-      const start = 10;
-      const segmentCount = this.content.duration * 0.2;
-      for (var index = start; index < segmentCount; index++) {
-        if (this.conversationMessages[index]) continue;
-        this.$log.info('Filling...');
-        Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
-      }
-    }
-  },
+  //     // Fill with blank messages      
+  //     const start = 20;
+  //     const segmentCount = this.content.duration * 0.2;
+  //     for (var index = start; index < segmentCount; index++) {
+  //       if (this.conversationMessages[index]) continue;
+  //       this.$log.info('Filling...');
+  //       Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
+  //     }
+  //   }
+  // },
   mounted() {
     this.loadSubtitles(this.content);
     this.loadMedia(this.content);
@@ -113,7 +113,6 @@ export default {
   position relative
 
   &.collapsed
-    max-height 600px
     overflow hidden
 
   h5

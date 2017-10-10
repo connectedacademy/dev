@@ -47,77 +47,80 @@ export default {
 
 @import '~stylus/shared'
 
-.slick-slider
-  button.slick-arrow
-    animate()
-    radius(4px)
-    border none
-    background alpha(black, 0.4)
-    margin-top -46px
-    outline 0
-    padding 30px 15px
-    position absolute
-    top 50%
+.media-carousel-wrapper
+  background-color $color-darkest-grey
+  .slick-slider
+    button.slick-arrow
+      animate()
+      radius(4px)
+      border none
+      background alpha($color-darkest-grey, 0.5)
+      margin-top -46px
+      outline 0
+      padding 30px 15px
+      position absolute
+      top 50%
+      z-index 1
+      &:hover
+        cursor pointer
+        background alpha($color-darkest-grey, 0.8)
+      .fa-icon
+        height 30px
+        color white
+      &.slick-prev
+        left 8px
+      &.slick-next
+        right 8px
+
+  .slick-track
     z-index 1
-    &:hover
-      cursor pointer
-      background alpha(black, 0.8)
-    .fa-icon
-      height 30px
-      color white
-    &.slick-prev
-      left 10px
-    &.slick-next
-      right 10px
+    position relative
 
-.slick-track
-  z-index 1
-  position relative
+    .slick-slide
+      animate()
+      opacity 0.3
+      outline 0
+      img
+        height 204px
+        max-height 204px
+        max-width 100%
+        margin 0 10px
+      &:hover
+        cursor pointer
+      &.slick-current
+        opacity 1
 
-  .slick-slide
-    opacity 0.5
-    outline 0
-    img
-      height 204px
-      max-height 204px
-      max-width 100%
-      margin 0 10px
-    &:hover
-      cursor pointer
-    &.slick-current
-      opacity 1
+  .slick-track
+    z-index 1
+    position relative
 
-.slick-track
-  z-index 1
-  position relative
+    .slick-slide
+      opacity 0.5
+      outline 0
+      img
+        height 204px
+        max-height 204px
+        max-width 100%
+        margin 0 10px
+      &:hover
+        cursor pointer
+      &.slick-current
+        opacity 1
 
-  .slick-slide
-    opacity 0.5
-    outline 0
-    img
-      height 204px
-      max-height 204px
-      max-width 100%
-      margin 0 10px
-    &:hover
-      cursor pointer
-    &.slick-current
-      opacity 1
+  .slick-track
+    z-index 1
+    position relative
 
-.slick-track
-  z-index 1
-  position relative
-
-  .slick-slide
-    opacity 0.5
-    outline 0
-    img
-      height 300px
-      max-height 300px
-      max-width 100%
-      margin 0 10px
-    &:hover
-      cursor pointer
-    &.slick-current
-      opacity 1
+    .slick-slide
+      opacity 0.5
+      outline 0
+      img
+        height 300px
+        max-height 300px
+        max-width 100%
+        margin 0 10px
+      &:hover
+        cursor pointer
+      &.slick-current
+        opacity 1
 </style>
