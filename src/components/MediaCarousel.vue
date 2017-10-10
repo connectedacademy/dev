@@ -1,7 +1,9 @@
 <template lang="pug">
 .media-carousel-wrapper
   slick#image-swiper(ref="slick" v-bind:options="slickOptions")
-    img(v-for="(item, key) in media" v-bind:key="key" height="200px" v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.image}`")
+    .img-wrapper(v-for="(item, key) in media" v-bind:key="key" )
+      img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.image}`")
+      
 </template>
 
 <script>
@@ -67,12 +69,55 @@ export default {
       left 10px
     &.slick-next
       right 10px
-  .slick-track
-    z-index 1
-    position relative
 
-    img.slick-slide
+.slick-track
+  z-index 1
+  position relative
+
+  .slick-slide
+    opacity 0.5
+    outline 0
+    img
+      height 204px
+      max-height 204px
+      max-width 100%
       margin 0 10px
-      outline 0
-      height 320px
+    &:hover
+      cursor pointer
+    &.slick-current
+      opacity 1
+
+.slick-track
+  z-index 1
+  position relative
+
+  .slick-slide
+    opacity 0.5
+    outline 0
+    img
+      height 204px
+      max-height 204px
+      max-width 100%
+      margin 0 10px
+    &:hover
+      cursor pointer
+    &.slick-current
+      opacity 1
+
+.slick-track
+  z-index 1
+  position relative
+
+  .slick-slide
+    opacity 0.5
+    outline 0
+    img
+      height 300px  
+      max-height 300px  
+      max-width 100%
+      margin 0 10px
+    &:hover
+      cursor pointer
+    &.slick-current
+      opacity 1
 </style>
