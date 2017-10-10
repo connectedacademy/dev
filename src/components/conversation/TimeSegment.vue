@@ -16,7 +16,7 @@
 
         mock-message(v-once v-else-if="message.loading || (message.info && (message.info.total === 0 && !message.message.suggestion))")
         
-        message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message")
+        message(v-else-if="message.info && (message.info.total > 0) && !message.message.suggestion" v-bind:message="message.message" v-bind:truncate="true")
 
       .clearfix
 

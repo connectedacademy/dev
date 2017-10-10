@@ -9,7 +9,7 @@
         | {{ message.author.account }}
         icon(v-if="message.replyto" name="reply")
 
-      p.message-content(v-html="html")
+      p.message-content(v-html="parseText()")
 
       .message--footer
 
@@ -44,14 +44,8 @@ import 'vue-awesome/icons/reply';
 
 export default {
   name: 'message',
-  props: ['message'],
+  props: ['message', 'truncate'],
   computed: {
-    html() {
-      // Remove links
-      var urlRegex = /(https?:\/\/[^\s]+)/g;
-      let html = this.message.text.replace(urlRegex, '');
-      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
-    },
     authorLink() { return `https://twitter.com/${this.message.author.account}` },
     tweetLink() { return `https://twitter.com/statuses/${this.message.message_id}` },
     replyLink() { return `https://twitter.com/intent/tweet?in_reply_to=${this.message.message_id}` },
@@ -60,6 +54,13 @@ export default {
     timeStamp() { return Moment(this.message.createdAt).fromNow() },
   },
   methods: {
+    parseText() {
+      // Remove links
+      var urlRegex = /(https?:\/\/[^\s]+)/g;
+      let html = this.message.text.replace(urlRegex, '');
+      html = (this.truncate && html.length > 110) ? `${html.substring(0, 110)}...` : html;
+      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+    },
     showInfoModal() {
       this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') });
     },
@@ -95,7 +96,9 @@ export default {
     p.message-content
       reset()
       color $color-text-dark-grey
-      word-break break-all
+      max-height 70px
+      overflow hidden
+      word-wrap break-word
       a, a:active
         color $color-text-dark-grey
 
