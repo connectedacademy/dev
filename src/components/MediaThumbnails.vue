@@ -38,7 +38,7 @@ export default {
     padding-bottom 100px
     position relative
     white-space nowrap
-    width 160px
+    width 166px
     .md-thumbnail-caption
       animate()
       pinned()

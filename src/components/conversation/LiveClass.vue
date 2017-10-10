@@ -12,8 +12,8 @@
 
     conversation-container(v-bind:content="content" v-bind:collapsed="isCollapsed")
 
-    #continue-listening(v-if="isCollapsed" name="continue-listening")
-      .pure-button.pure-button-continue(@click="continueListening()") Continue Listening
+  #continue-listening(v-if="isCollapsed" name="continue-listening")
+    .pure-button.pure-button-continue(@click="continueListening()") Continue Listening
 
 </template>
 
@@ -74,28 +74,29 @@ export default {
     background-color white
     position relative
 
-    #continue-listening
-      pinned()
-      background-color white
-      height 160px
-      position absolute
-      top auto
-      text-align center
-      .pure-button
-        box-sizing()
-        left 50%
-        top calc(calc(160px - 40px) / 2)
-        margin-left -100px
-        position absolute
-        width 200px
-        &:hover
-          cursor pointer
-
     &.collapsed
-      max-height 950px
+      height 927px
+      max-height 927px
       overflow hidden
 
   .course-content--footer
     background-color white
     text-align center
+
+  #continue-listening
+    pinned()
+    background-color white
+    height 160px
+    position relative
+    // top auto
+    text-align center
+    .pure-button
+      box-sizing()
+      left 50%
+      top calc(calc(160px - 40px) / 2)
+      margin-left -100px
+      position absolute
+      width 200px
+      &:hover
+        cursor pointer
 </style>

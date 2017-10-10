@@ -83,7 +83,7 @@ export default {
       'currentSection', 'currentSegmentGroup', 'peekSegment', 'activeSegment', 'course',
     ]),
     containerHeight() {
-      return `${(this.content.duration * 0.2) * this.$app.segmentHeight + 124}px`;
+      return `${(this.content.duration * 0.2) * this.$app.segmentHeight}px`;
     },
   },
   watch: {
@@ -150,9 +150,7 @@ export default {
     background url('../assets/images/line.png')
     background-repeat repeat
     // background-size auto $segment-height
-    background-position right -1px
     background-position center -1px
-    back
     overflow hidden
     
     .subtitle-wrapper, .message-wrapper

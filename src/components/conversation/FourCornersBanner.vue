@@ -94,7 +94,7 @@ $corner-width = 8px
   background-image()
   background-position center right
 
-  margin-top 20px
+  margin-top $tile-spacing
   overflow hidden
   position relative
   text-align center

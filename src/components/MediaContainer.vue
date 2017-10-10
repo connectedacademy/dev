@@ -1,11 +1,9 @@
 <template lang="pug">
 
-  #media-wrapper(v-bind:class="{ 'soundcloud-mode': (playerType === 'soundcloud'), 'youtube-mode': (src && playerType === 'youtube') }")
+  #media-wrapper(v-bind:class="{ 'youtube-mode': (src && playerType === 'youtube') }")
     
     #stream-wrapper
       //- youtube#video-container(v-if="src && (playerType === 'youtube')" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="youtubeReady" @playing="youtubePlaying" @paused="youtubePaused" @ended="youtubeEnded" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="{ height: `${pHeight}px`, width: `${pWidth}px` }")
-      #soundcloud-container(v-if="playerType === 'soundcloud'")
-        img(src="../assets/icons/soundcloud.png")
     
     #images-wrapper
       img#current-image(v-if="!slickMode && currentIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
@@ -124,8 +122,6 @@ $media-height = 220px
   overflow hidden
   &.youtube-mode
     padding-left (188px / 0.5625) + 16px
-  &.soundcloud-mode
-    padding-left 55px
   #images-wrapper
     background white
     height ($media-height - 16px)
@@ -158,15 +154,6 @@ $media-height = 220px
     right auto
     padding 10px
     position absolute
-    #soundcloud-container
-      height 188px
-      width 34px
-      img
-        position absolute
-        top 50%
-        left 50%
-        opacity 0.5
-        transform translate(-50%, -60%) rotate(270deg)
     #video-container
       top 16px
       left 16px

@@ -210,10 +210,9 @@ export default {
         right 0
         left 0
         textarea
+          box-sizing()
           border none
           font-size 1em
-
-          box-sizing()
           padding 15px
           resize none
           outline 0

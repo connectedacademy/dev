@@ -2,7 +2,7 @@
 
 .soundcloud-wrapper
   .loading-wrapper(v-if="!theSrc")
-    .pure-button.pure-button-soundcloud(@click="loadEmbed") Click to Load
+    .pure-button.pure-button-soundcloud(@click="loadEmbed") Click to listen to audio
   .soundcloud-container(v-if="theSrc")
     iframe(v-once v-bind:src="theSrc" width="100%" height="166" scrolling="no" frameborder="no")
 
@@ -42,7 +42,7 @@
 
 .soundcloud-wrapper
   .loading-wrapper
-    background-color $color-lighter-grey
+    background-color white // $color-lighter-grey
     margin-top 15px
     margin-bottom 10px
     padding 58px 20px

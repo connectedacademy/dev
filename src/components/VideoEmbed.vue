@@ -2,7 +2,7 @@
 
 .video-wrapper
   .loading-wrapper(v-if="!theSrc")
-    .pure-button.pure-button-youtube(@click="loadEmbed") Click to Load
+    .pure-button.pure-button-youtube(@click="loadEmbed") Click to watch video
   .video-container(v-if="theSrc")
     iframe(v-bind:src="theSrc" frameborder='0' allowfullscreen)
 
@@ -53,7 +53,7 @@ export default {
 
 .video-wrapper
   .loading-wrapper
-    background-color $color-lighter-grey
+    background-color white // $color-lighter-grey
     margin-bottom 20px
     padding 58px 20px
     text-align center
