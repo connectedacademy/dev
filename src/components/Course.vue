@@ -40,7 +40,7 @@ export default {
   activated() {
     this.setScrollPoints();    
     window.scrollTo(0, this.$store.state.savedScrollPosition);
-    this.toMessage();
+    // this.toMessage();
   },
   data() {
     return {
