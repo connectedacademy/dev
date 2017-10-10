@@ -32,5 +32,8 @@
       MarkdownRenderer,
       PreviousButton,
     },
+    mounted() {
+      this.$ga.event('markdown', 'rendered', window.location.href);
+    }
   };
 </script>

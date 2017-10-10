@@ -112,8 +112,8 @@ export default {
     opacity 0.5
     outline 0
     img
-      height 300px  
-      max-height 300px  
+      height 300px
+      max-height 300px
       max-width 100%
       margin 0 10px
     &:hover

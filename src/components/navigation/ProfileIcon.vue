@@ -17,7 +17,7 @@ export default {
   methods: {
     showProfile() {
       this.$cookie.delete('profile-button');
-      this.$ga.event('profile-button', 'click', 'profile-viewed', true);
+      this.$ga.event('profile-button', 'clicked', 1);
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
     },
   },

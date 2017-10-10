@@ -135,7 +135,7 @@ export default {
       this.$cookie.delete('intro-button');
       this.$store.commit('SET_CURRENT_CLASS', this.introClass);
       this.$store.dispatch('resetState');
-      this.$ga.event('class-selector', 'click', 'class-switched', 'class-intro');
+      this.$ga.event('class-selector', 'class-switched', 'class-intro');
     },
     viewCurrentClass() {
       if (!this.currentExists) {
@@ -159,7 +159,7 @@ export default {
         this.$store.dispatch('getSpec', newClass);
       }
       this.$store.dispatch('resetState');
-      this.$ga.event('class-selector', 'click', 'class-switched', newClass);
+      this.$ga.event('class-selector', 'class-switched', newClass);
     },
     scrollLeft() {
       this.$refs.classselector.scrollLeft -= 80;

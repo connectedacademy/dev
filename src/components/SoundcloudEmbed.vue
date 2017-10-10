@@ -29,6 +29,7 @@
     methods: {
       loadEmbed() {
         this.theSrc = this.src;
+        this.$ga.event('soundcloud-embed', 'embed-loaded', this.src);
       },
     },
   };

@@ -53,9 +53,9 @@ Vue.use(VueAutosize);
 Vue.use(VueAnalytics, {
   id: 'UA-44963053-16',
   router,
-  // autoTracking: {
-  //   exception: true,
-  // },
+  autoTracking: {
+    exception: true,
+  },
 });
 
 // TODO: Enabled for production
