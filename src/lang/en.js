@@ -72,7 +72,7 @@ export default {
     message_placeholder: 'Make a note here...',
     reply_placeholder: 'Reply here...',
     duration: '{currentTime}s',
-    login_required: 'Please login to post notes',
+    login_required: 'Please login to make notes',
   },
   course: {
     load_course: 'Load Course',

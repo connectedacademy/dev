@@ -2,22 +2,22 @@ import Vue from 'vue';
 import * as config from './config';
 
 export default {
-  getSchedule(fauxTime, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/course/schedule?time=${fauxTime}`).then((response) => {
+  getSchedule(cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/course/schedule`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
-  getSpecPreload(fauxTime, classSlug, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/course/specpreload/${classSlug}/2?time=${fauxTime}`).then((response) => {
+  getSpecPreload(classSlug, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/course/specpreload/${classSlug}/2`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
-  getSpec(fauxTime, classSlug, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}?time=${fauxTime}`).then((response) => {
+  getSpec(classSlug, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);

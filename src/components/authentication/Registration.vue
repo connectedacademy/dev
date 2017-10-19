@@ -2,7 +2,7 @@
 
 .col#col-main.narrow
 
-  .container.registration-container(v-if="!checkingRegistration")
+  .container.registration-container(v-if="!checkingAuthentication")
 
     form.pure-form.pure-form-stacked
 
@@ -96,7 +96,7 @@
   import values from 'lodash/values';
   import { mapGetters } from 'vuex';
   import API from '@/api';
-  
+  import Auth from '@/mixins/Auth';
   
   import MarkdownIt from 'markdown-it';
   
@@ -107,26 +107,17 @@
   
   export default {
     name: 'registration',
+    mixins: [ Auth ],
     components: {
       MarkdownRenderer,
       InfoDialogue,
       VueSlider,
     },
     mounted() {
+
+      this.ensureNotRegistered();
+
       this.$store.dispatch('getHubs');
-      API.auth.checkAuth(
-        (response) => {
-          if (response.user.registration) {
-            this.$router.replace('/');
-          } else {
-            this.checkingRegistration = false;
-          }
-        },
-        (response) => {
-          // TODO: Better handle failed request
-          this.checkingRegistration = false;
-        },
-      );
   
       API.auth.fetchQuestions(
         (response) => {
@@ -140,17 +131,10 @@
         },
       );
     },
-    watch: {
-      course(nV) {
-        // this.response.lang = 'en';
-        
-      }
-    },
     data() {
       return {
         currentPage: 1,
         loadingQuestions: true,
-        checkingRegistration: true,
         release: '',
         questions: [],
         response: {

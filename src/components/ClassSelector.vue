@@ -73,9 +73,21 @@ export default {
     JoinBanner,
   },
   watch: {
+    '$route.params.classSlug': {
+      handler: function(nV, oV) {
+        console.log('$route.params.classSlug');
+        
+        if (nV) {
+          if (nV !== oV) {
+            this.activeClass = nV;
+          }
+        }
+      },
+      deep: true,
+    },
     currentClass(nV, oV) {
       this.activeClass = nV.slug;
-      this.$router.replace(`/course/${nV.slug}`);
+      this.$router.push(`/course/${nV.slug}`);
     },
   },
   mounted() {

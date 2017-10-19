@@ -39,9 +39,7 @@ const actions = {
   getCourse({
     commit,
   }) {
-    const fauxTime = store.state.fauxTime.replace('+', encodeURIComponent('+'));
     API.course.getSchedule(
-      fauxTime,
       response => commit(types.GET_SCHEDULE_SUCCESS, {
         response,
       }),
@@ -53,13 +51,11 @@ const actions = {
   getSpecPreload({
     commit,
   }, classSlug) {
-    const fauxTime = store.getters.fauxTime.replace('+', encodeURIComponent('+'));
     state.current_class = {
       slug: classSlug,
       loading: true,
     };
     API.course.getSpecPreload(
-      fauxTime,
       classSlug,
       response => commit(types.GET_SPEC_SUCCESS, {
         response,
@@ -72,13 +68,11 @@ const actions = {
   getSpec({
     commit,
   }, classSlug) {
-    const fauxTime = store.getters.fauxTime.replace('+', encodeURIComponent('+'));
     state.current_class = {
       slug: classSlug,
       loading: true,
     };
     API.course.getSpec(
-      fauxTime,
       classSlug,
       response => commit(types.GET_SPEC_SUCCESS, {
         response,
@@ -112,12 +106,6 @@ const mutations = {
       if (response.classes && response.classes.length && response.classes[0].release_at) {
         // Get start of first class
         const classStart = response.classes[0].release_at;
-  
-        if (classStart) {
-          // Set faux time
-          const fauxTime = Moment(classStart).add(1, 'days').format();
-          store.commit('setFauxTime', fauxTime);
-        }
       }
     }
     state.course = response;

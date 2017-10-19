@@ -35,6 +35,7 @@
       },
       '$route': {
         handler: function(nV, oV) {
+          console.log('$route');
           // alert(`route - ${nV}`);
           this.loadMarkdown();
         },

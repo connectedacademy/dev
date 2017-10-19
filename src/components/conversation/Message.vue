@@ -4,9 +4,9 @@
 
     .message
 
-      img.profile-image(v-bind:src="message.author.profile")
+      img.profile-image(v-if="message.author" v-bind:src="message.author.profile")
 
-      a.author-label(v-bind:href="authorLink" target="_blank")
+      a.author-label(v-if="message.author" v-bind:href="authorLink" target="_blank")
         | {{ message.author.account }}
         icon(v-if="message.replyto" name="reply")
 
@@ -59,7 +59,7 @@ export default {
       // Remove links
       var urlRegex = /(https?:\/\/[^\s]+)/g;
       let html = this.message.text.replace(urlRegex, '');
-      html = (this.truncate && html.length > 110) ? `${html.substring(0, 110)}...` : html;
+      // html = (this.truncate && html.length > 110) ? `${html.substring(0, 110)}...` : html;
       return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
     },
     showInfoModal() {
@@ -99,8 +99,12 @@ export default {
       reset()
       color $color-text-dark-grey
       max-height 70px
+      display -webkit-box
       overflow hidden
+      text-overflow ellipsis
       word-wrap break-word
+      -webkit-line-clamp 3
+      -webkit-box-orient vertical
       a, a:active
         color $color-text-dark-grey
 

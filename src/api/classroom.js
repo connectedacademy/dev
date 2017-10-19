@@ -2,8 +2,8 @@ import Vue from 'vue';
 import * as config from './config';
 
 export default {
-  getTeacherCode(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/classroom/mycode/${request.theClass}/${request.slug}`).then((response) => {
+  getTeacherCode(theClass, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/classroom/mycode/${theClass}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);

@@ -4,26 +4,25 @@
 
 #app(v-bind:class="pageStyles")
 
-  //- lock(passcode="76234")
 
+  //- Debug
   debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
 
+  //- Modals
   info-modal
-
   question-modal
-   
-  authentication-flow
-
   media-lightbox
 
+  //- Authentication   
+  authentication-flow
+  //- lock(passcode="76234")
+
+  //- Navigaiton
   burger-menu
-
   left-drawer
-
   right-drawer
 
-  .main-page(v-bind:style="{ 'padding-top': (this.$store.getters.navigationVisible) ? '0' : '0px' }")
-
+  .main-page
     navigation
 
     .page-header(v-bind:class="{ minimized: navigation.minimized }")
@@ -107,8 +106,6 @@ html
     display none
   &.colourful
     background-color $color-primary
-  &.dark-mode
-    background-color #242424
 
 html, body
   font-family 'Avenir', Helvetica, Arial, sans-serif

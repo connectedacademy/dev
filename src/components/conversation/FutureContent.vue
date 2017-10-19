@@ -5,7 +5,6 @@
   .course-content--header.block
     h1.content-title {{ `${content.slug} coming soon` }}
     h2.content-subtitle {{ releaseAt }}
-    .pure-button(name="circle" @click="jumpForwardInTime") Release Now
 
 </template>
 
@@ -17,26 +16,9 @@ export default {
   name: 'future-content',
   props: ['content'],
   computed: {
-    ...mapGetters(['fauxTime', 'currentClass']),
-    releaseIn() {
-      return Moment(this.content.release_at).from(this.fauxTime, true);
-    },
+    ...mapGetters(['currentClass']),
     releaseAt() {
       return Moment(this.content.release_at).format('MMMM Do YYYY, HH:mm');
-    },
-    time() {
-      return Moment(this.fauxTime).format('MMMM Do YYYY, HH:mm');
-    },
-  },
-  methods: {
-    jumpForwardInTime() {
-      this.$log.info('this.content');
-      this.$log.info(this.content);
-      let jumpTime = Moment(this.content.release_at);
-      jumpTime = jumpTime.add(2, 'hours').format();
-      this.$store.commit('setFauxTime', jumpTime);
-      // this.$store.dispatch('getCourse');
-      this.$store.dispatch('getSpec', this.currentClass.slug);
     },
   },
 };

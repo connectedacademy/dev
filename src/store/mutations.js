@@ -2,12 +2,6 @@
 import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 
-// Faux time
-
-export const setFauxTime = (state, fauxTime) => {
-  state.fauxTime = fauxTime;
-};
-
 // Scroll position
 
 export const setScrollPosition = (state, scrollPosition) => {

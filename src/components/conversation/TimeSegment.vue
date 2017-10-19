@@ -8,7 +8,6 @@
 
       //- .segment-label--group(v-once v-if="this.$store.state.debug") {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
 
-
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
 
@@ -21,8 +20,7 @@
       .clearfix
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
-      span(v-if="message.info && message.info.total && (message.info.total > 1)") {{ `Read ${message.info.total} other notes` }}
-      span(v-else) Be the first to make a note.
+      | Read all notes
 
     .meta-container(v-if="segmentPeeking || segmentOpened" v-bind:class="{ active: segmentOpened }")
       .status-indicator(v-if="loadingMessages") Looking for notes...
@@ -62,20 +60,21 @@
       markdownUrl(nV) {
         this.loadMarkdown();
       },
-      '$route': {
-        handler: function(nV, oV) {
-          if (nV !== oV) {
-            if ((oV.query.segment) && (this.message.segmentGroup === oV.query.segment)) {
-              if (this.activeSegment) {
-                this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
-              } else {
-                this.unpeek()
-              }
-            }
-          }
-        },
-        deep: true,
-      },
+      // '$route.query.segment': {
+      //   handler: function(nV, oV) {
+      //   console.log('$route.query.segment');
+      //     if (nV !== oV) {
+      //       if ((oV) && (this.message.segmentGroup === oV)) {
+      //         if (this.activeSegment) {
+      //           this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
+      //         } else {
+      //           this.unpeek()
+      //         }
+      //       }
+      //     }
+      //   },
+      //   deep: true,
+      // },
       'activeSegment': {
         handler: function(nV, oV) {
           if (oV === this.message.segmentGroup) {

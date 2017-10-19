@@ -1,0 +1,95 @@
+@import '~stylus/shared'
+
+$panel-width = 340px
+
+.profile-page
+  .profile-panels
+
+    .profile-column
+      animate()
+      pinned()
+      box-sizing()
+      background-color white
+      overflow-y scroll
+      top 60px
+      bottom 0
+      left 0
+      right 0
+      position fixed
+      
+      .profile-panel
+        animate()
+        pinned()
+        box-sizing()
+        background-color white
+        overflow-y scroll
+        padding-top 60px
+        .profile-panel--content
+          padding 20px
+          
+      &#primary-panel
+        .profile-tab-bar
+          border-bottom $color-lightest-grey 3px solid
+          ul.profile-tab-bar-items
+            cleanlist()
+            li
+              cleanlist()
+              animate()
+              float left
+              line-height 60px
+              padding 0 30px
+              position relative 
+              text-decoration line-through
+              &:after
+                animate()
+                content ''
+                background-color $color-primary
+                position absolute
+                height 3px
+                bottom -3px
+                left 0
+                right 0
+                opacity 0
+              &:hover
+                border-bottom-color darken($color-lightest-grey, 10%)
+                cursor pointer
+                &:after
+                  opacity 1
+              &.active
+                border-bottom-color $color-primary
+                &:after
+                  opacity 1
+              &.enabled
+                color $color-text-dark-grey
+                text-decoration none
+
+
+      &#content-panel
+        top 60px
+        left auto
+        position fixed
+        width $panel-width
+        z-index 1
+
+    &.has-content
+      #primary-panel
+        right $panel-width + 10px
+
+    @media(max-width: 768px)
+      &.has-content
+        #primary-panel
+          pinned()
+          top 60px
+          bottom 60px
+          width auto
+        #content-panel
+          pinned()
+          background-color white
+          border-top $color-border 1px solid
+          top auto
+          bottom 0
+          height 60px
+          width auto
+          &.visible
+            top 120px
+            height auto

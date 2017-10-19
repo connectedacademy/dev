@@ -1,10 +1,51 @@
-import * as types from '@/store/mutation-types';
+import API from '@/api';
 import { mapGetters } from 'vuex';
 
 export default {
+  data() {
+    return {
+      checkingAuthentication: true
+    }
+  },
+  computed: {
+    ...mapGetters(['user']),
+    isAdmin() {
+      return this.user && this.user.admin
+    }
+  },
   methods: {
+    ensureAuthenticated() {
+      API.auth.checkAuth(
+        (response) => {
+          if (!response.user.registration) {
+            this.$router.replace('/');
+          } else {
+            this.checkingAuthentication = false;
+          }
+        },
+        (response) => {
+          // TODO: Better handle failed request
+          this.checkingAuthentication = false;
+        },
+      );
+    },
+    ensureNotRegistered() {
+      API.auth.checkAuth(
+        (response) => {
+          if (response.user.registration) {
+            this.$router.replace('/');
+          } else {
+            this.checkingAuthentication = false;
+          }
+        },
+        (response) => {
+          // TODO: Better handle failed request
+          this.checkingAuthentication = false;
+        },
+      );
+    },
     showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
+      this.$store.commit('SHOW_AUTH');
     },
   },
 }

@@ -22,9 +22,9 @@ export default {
   // },
   methods: {
     goHome() {
-      this.$router.push('/');
+      this.$router.push({ name: 'course' });
       this.$store.commit('PAUSE_MEDIA');
-      setTimeout(() => {        
+      setTimeout(() => {
         window.scroll(0, 0);
       }, 500);
     },

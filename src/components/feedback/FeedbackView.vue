@@ -9,11 +9,17 @@
 
       .feedback-tile(v-if="feedbackItem && feedbackItem.html")
         four-corners(v-bind:html="feedbackItem.html")
+        .clearfix
+        br
+        a.pure-button.pure-button-subtle.pull-left(v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original submission
+        .pure-button.pure-button-subtle.pull-right(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
+        .clearfix
 
     .feedback-conversation
       .feedback-message-wrapper(v-for="message in feedbackMessages")
-        .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (!message.canview), reply: (message.fromuser.id !== currentUser.id) }")
-          img.avatar(v-bind:src="message.fromuser.profile")
+        .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (!message.canview), reply: (message.fromuser.id !== user.id) }")
+          a(v-bind:href="`https://twitter.com/${message.fromuser.account}`" target="_blank")
+            img.avatar(v-bind:src="message.fromuser.profile")
           .feedback-message--bubble
             p(v-if="!message.canview")
               icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
@@ -76,9 +82,44 @@ export default {
       comment: '',
     };
   },
+  computed: {
+    ...mapGetters([
+      'isRegistered', 'user'
+    ]),
+    isOwner() {
+      return (this.user && (this.user.account === this.feedbackItem.user.account))
+    },
+    feedbackMessages() {
+      return orderBy(this.discussion, ['createdAt'], ['asc']);
+    },
+    encodedContentId() {
+      if (!this.currentFeedbackId) {
+        return undefined;
+      } else {
+        return this.currentFeedbackId.replace('#','%23');
+      }
+    },
+  },
   methods: {
     previous() {
       this.$router.go(-1);
+    },
+    removeSubmission() {
+      const postData = {
+        id: this.encodedContentId
+      }
+      API.feedback.removeSubmission(
+        postData,
+        (response) => {
+          this.$log.info('Response from remove submission request');
+          this.$log.info(response);
+          this.$emit('update:currentFeedbackId', undefined)
+        },
+        (response) => {
+          // TODO: Handle failed request
+          this.$log.info('Failed to remove submission');
+        },
+      );
     },
     unlockMessage(message) {
       if (!message.canview) {
@@ -165,24 +206,6 @@ export default {
       );
     },
   },
-  computed: {
-    ...mapGetters([
-      'isRegistered',
-    ]),
-    feedbackMessages() {
-      return orderBy(this.discussion, ['createdAt'], ['asc']);
-    },
-    encodedContentId() {
-      if (!this.currentFeedbackId) {
-        return undefined;
-      } else {
-        return this.currentFeedbackId.replace('#','%23');
-      }
-    },
-    currentUser() {
-      return this.$store.getters.user;
-    },
-  },
 };
 </script>
 
@@ -219,6 +242,10 @@ export default {
 
   .feedback-tile
     cleanlist()
+
+    // a#view-submission-link
+    //   color $color-text-grey
+    //   text-decoration none
 
     .user-strip
       padding-left 60px

@@ -1,14 +1,10 @@
 <template lang="pug">
 
-.admin-panel
+.profile-panel
 
-  .admin-panel--header
-    h1 Student submissions
+  profile-panel-header(v-bind:label="label" v-on:refresh="loadData")
 
-    .reload-button(@click="loadData")
-      icon(name="refresh")
-
-  .admin-panel--content
+  .profile-panel--content
 
       .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug" v-bind:class="{ 'active': (contentSlug === content.slug) }") {{ content.title }}
 
@@ -27,42 +23,32 @@ import filter from 'lodash/filter';
 
 import Moment from 'moment-mini';
 
-import ContentFilter from '@/components/admin/ContentFilter';
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
+import ContentFilter from '@/components/profile/ContentFilter';
 
 import 'vue-awesome/icons/refresh';
 
 export default {
-  name: 'student-submissions',
-  props: ['classSlug'],
+  name: 'submissions',
+  props: ['classSlug', 'label'],
   components: {
+    ProfilePanelHeader,
     ContentFilter,
   },
   mounted() {
     this.loadData();
   },
-  watch: {
-    classSlug(nV, oV) {
-      if (nV !== oV) {
-        this.loadData();
-      }
-    },
-    contentSlug(nV, oV) {
-      if (nV !== oV) {
-        this.loadData();
-      }
-    },
-  },
   data() {
     return {
       submissions: [],
-      contentSlug: undefined,
+      contentSlug: 'homework', //TODO make dynamic
     };
   },
   computed: {
-    ...mapGetters(['course', 'currentClass']),
+    ...mapGetters(['profileClass', 'profileClassSlug']),
     contentSlugs() {
-      if (!this.currentClass) return [];
-      return filter(this.currentClass.content, (obj) => {
+      if (!this.profileClass) return [];
+      return filter(this.profileClass.content, (obj) => {
         return obj.homework;
       })
     },
@@ -76,10 +62,8 @@ export default {
 
       this.submissions = [];
 
-      const request = { theClass: this.classSlug, slug: this.contentSlug };
-
       API.admin.getSubmissions(
-        request,
+        this.profileClassSlug,
         (response) => {
           this.submissions = response;
         },
@@ -97,13 +81,12 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
 @import '~stylus/buttons'
-@import '~stylus/admin'
+@import '~stylus/profile'
 
-.admin-panel
+.profile-panel
 
-  .admin-panel--content
+  .profile-panel--content
 
     .pure-button.pure-button-subtle
       display block

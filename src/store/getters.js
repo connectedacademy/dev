@@ -1,7 +1,6 @@
 import app from '@/config';
 import store from '@/store';
 
-export const fauxTime = state => state.fauxTime;
 export const scrollPosition = state => state.scrollPosition;
 export const scrollPoints = state => state.scrollPoints;
 export const offsetScrollPosition = state => state.offsetScrollPosition;

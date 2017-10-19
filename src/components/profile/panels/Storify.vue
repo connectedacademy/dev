@@ -1,14 +1,10 @@
 <template lang="pug">
 
-.admin-panel
+.profile-panel
 
-  .admin-panel--header
-    h1 Storify
+  profile-panel-header(label="Storify" v-on:refresh="loadLink")
 
-    .reload-button(@click="loadLink")
-      icon(name="refresh")
-
-  .admin-panel--content
+  .profile-panel--content
 
     h5 Storify allows you to create a narrative around the conversations and content of your live class.
     h5 The following link will make your class content accessible from the Storify editor.
@@ -27,26 +23,34 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import API from '@/api';
-import find from 'lodash/find';
+import { mapGetters } from 'vuex';
 
-import 'vue-awesome/icons/refresh';
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
 
 export default {
   name: 'storify',
   props: ['classSlug'],
-  activated() {
+  components: {
+    ProfilePanelHeader,
+  },
+  mounted() {
     this.loadLink();
+  },
+  data() {
+    return {
+      rssLink: undefined
+    }
+  },
+  computed: {
+    ...mapGetters(['profileClass', 'profileClassSlug']),
   },
   methods: {
     loadLink() {
       this.classroomCode = 'loading';
 
-      const request = { theClass: this.classSlug, slug: 'liveclass' };
-
       API.classroom.getTeacherCode(
-        request,
+        this.profileClassSlug,
         (response) => {
           this.$log.info(response);
           this.rssLink = `https://api.connectedacademy.io/v1/classroom/rss/${response.code}`;
@@ -58,22 +62,16 @@ export default {
       );
     }
   },
-  data() {
-    return {
-      rssLink: undefined
-    }
-  },
 };
 
 </script>
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
-@import '~stylus/admin'
+@import '~stylus/profile'
 
-.admin-panel
-  .admin-panel--content
+.profile-panel
+  .profile-panel--content
     h5
       reset()
       margin-bottom 15px

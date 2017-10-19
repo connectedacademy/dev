@@ -15,11 +15,9 @@ import course from './modules/course';
 import conversation from './modules/conversation';
 import lightbox from './modules/lightbox';
 import video from './modules/video';
+import profile from './modules/profile';
 
 Vue.use(Vuex);
-
-
-const fauxTime = Moment().format();
 
 export default new Vuex.Store({
   actions,
@@ -33,11 +31,11 @@ export default new Vuex.Store({
     conversation,
     lightbox,
     video,
+    profile,
   },
   state: {
     debug: false,
     timetravel: false,
-    fauxTime: fauxTime,
     scrollPosition: 0.0,
     savedScrollPosition: 0.0,
     pendingScrollPosition: 0,

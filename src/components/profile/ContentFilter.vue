@@ -42,8 +42,7 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
-@import '~stylus/admin'
+@import '~stylus/profile'
 
 .content-filter
   animate()
