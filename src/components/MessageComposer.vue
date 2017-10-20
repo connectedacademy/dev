@@ -15,7 +15,7 @@
           .textarea-wrapper
             .textarea-inner-wrapper(v-bind:class="{ focussed: (composerFocussed || showAction) }")
               textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @blur.native="composerFocussed = false" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
-              .appended-contents(v-if="showAction") {{ hashtags }} {{ url }}
+              .appended-contents(v-if="showAction") {{ hashtags }} {{ shortenedUrl }}
 
           .composer-actions(v-if="showAction" ref="composeractions")
             #character-count.pull-left(v-bind:class="{ warn: (messageLength > (maxCharacterCount - 20)), danger: (messageLength > maxCharacterCount) }") {{ maxCharacterCount - messageLength }}
@@ -140,6 +140,9 @@ export default {
         return `${url}/${(this.currentSegment / 0.2)}`;
       }
       return url;
+    },
+    shortenedUrl() {
+      return `${this.url.substring(0, 30)}...`;
     },
     hidden() {
       return (this.currentSection === undefined) ||
