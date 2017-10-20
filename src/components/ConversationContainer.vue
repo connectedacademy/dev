@@ -7,11 +7,6 @@
       icon(name="twitter")
       icon(name="quote-right")
 
-    //- #activity-visualisation(v-if="!peekSegment")
-      svg(width="400" v-bind:height="containerHeight")
-        g
-          path(v-bind:d="points" transform="translate(400,0)")
-
     .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
       time-segment(v-for="(message, index) in conversationMessages" v-bind:key="index" v-bind:index="index" v-bind:message="message" v-bind:subtitle="subtitles[index]" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug")
 
@@ -25,7 +20,6 @@ import { mapGetters } from 'vuex';
 import Messages from '@/mixins/Messages';
 import Media from '@/mixins/Media';
 import Subtitles from '@/mixins/Subtitles';
-import Visualisation from '@/mixins/Visualisation';
 
 import TimeSegment from '@/components/conversation/TimeSegment';
 
@@ -38,7 +32,6 @@ export default {
     Messages,
     Media,
     Subtitles,
-    Visualisation,
   ],
   components: {
     TimeSegment,
@@ -62,7 +55,6 @@ export default {
     this.loadSubtitles(this.content);
     this.loadMedia(this.content);
     this.loadSegmentSummary(0, true);
-    // this.loadVisualisation(this.content);
 
     // Fill with blank messages
     const start = 0;

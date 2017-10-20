@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px` }, segmentStyle]")
+  .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
 
     .message-count(v-if="messageCount") {{ messageCount }}
 
@@ -22,15 +22,15 @@
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
       | Read all notes
 
-    .meta-container(v-if="segmentPeeking || segmentOpened" v-bind:class="{ active: segmentOpened }")
+    .meta-container(v-if="segmentOpened" v-bind:class="{ active: segmentOpened }" v-bind:style="{ bottom: `${quickNoteHeight}px` }")
       .status-indicator(v-if="loadingMessages") Looking for notes...
       .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Be the first to make a note.
 
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages" v-bind:class="{ featured: (segmentMessage.id === message.message.id) }")
         message(v-bind:message="segmentMessage")
 
-    .quick-note(v-if="segmentPeeking || segmentOpened" v-bind:class="{ replying: replyingTo }")
-      message-composer(v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug" v-bind:currentSegment="index")
+    .quick-note(v-if="segmentPeeking || segmentOpened" v-bind:class="{ replying: replyingTo }" v-bind:style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
+      message-composer(v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug" v-bind:currentSegment="index" v-bind:quick-note-height.sync="quickNoteHeight")
     .clearfix
 
 </template>
@@ -115,6 +115,7 @@
         segmentStyle: {},
         calculatedOffset: 0,
         calculatedOffsetBottom: 0,
+        quickNoteHeight: 10,
       };
     },
     computed: {
@@ -125,6 +126,12 @@
         'modalVisible',
         'replyingTo',
       ]),
+      quickNoteTop() {
+        return `${158 + 32}px`;
+      },
+      segmentPeekHeight() {
+        return `${158 + 32 + this.quickNoteHeight}px`;
+      },
       segmentClasses() {
         return {
           peek: this.segmentPeeking,
@@ -385,11 +392,10 @@
       z-index 55 !important
 
   .meta-container
-    animate()
     box-sizing()
     background-color $color-lightest-grey
     opacity 0
-    padding 10px
+    padding 10px 0
     position absolute
     top 157px
     bottom 50px
@@ -409,13 +415,20 @@
           background-color $color-primary
           position absolute
           top 0
-          left 0
+          left 5px
           height 8px
           width 8px
       .tweet-actions
         background-color inherit
     &.active
       opacity 1
+    
+
+  .status-indicator
+    background-color transparent
+    color $color-text-grey
+    padding 40px
+    text-align center
 
 .quick-note
   box-sizing()
@@ -428,11 +441,6 @@
   &.replying
     z-index 2
 
-.status-indicator
-  color $color-text-grey
-  padding 40px
-  text-align center
-
 .segment-expansion-bar
   animate()
   background-color white
@@ -440,7 +448,7 @@
   cursor pointer
   padding 5px 20px
   position absolute
-  bottom 51px
+  top 158px
   left 0
   right 0
   z-index 1

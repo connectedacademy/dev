@@ -14,6 +14,10 @@
         #progress-bar--start {{ start }}
         #progress-bar--end {{ end }}
         #progress-bar--track
+          //- #activity-visualisation
+            svg(width="width" height="50")
+              g
+                path(v-bind:d="points")
         #progress-bar--thumb(v-bind:style="{ left: thumbLeft }")
 
       li.experience-control.pull-right(@click="toggleComposer")
@@ -43,6 +47,7 @@
   import clamp from 'lodash/clamp';
 
   import MediaStream from '@/mixins/MediaStream';
+  import Visualisation from '@/mixins/Visualisation';
 
   import 'vue-awesome/icons/pause';
   import 'vue-awesome/icons/play';
@@ -63,6 +68,7 @@
     },
     mixins: [
       MediaStream,
+      Visualisation,
     ],
     mounted() {
       this.availablePlayerTypes = []; // Remove all available player types
@@ -209,6 +215,16 @@ $media-height = 220px
       position absolute
       left (38px * 2) + 20px + 40px
       right (38px * 1) + 20px + 40px + 40px
+
+      #activity-visualisation
+        pinned()
+        position absolute
+
+        svg
+          overflow visible
+          path
+            fill alpha($color-primary, 1)
+            
       @media(max-width: 568px)
         right (38px * 0) + 10px + 40px
         #progress-bar--end

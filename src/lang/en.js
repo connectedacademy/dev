@@ -69,9 +69,10 @@ export default {
   composer: {
     compose_message: 'Compose note',
     compose_message_active: 'Write your note',
-    message_placeholder: 'Make a note here...',
+    message_placeholder: 'Make your notes here...',
     reply_placeholder: 'Reply here...',
     duration: '{currentTime}s',
+    replying_to: 'You are replying to {name}',
     login_required: 'Please login to make notes',
   },
   course: {

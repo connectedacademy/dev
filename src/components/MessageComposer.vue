@@ -7,34 +7,39 @@
       .message-composer--body
       
         .replying-to-banner(v-if="replyingTo")
-          //- icon(name="info")
-          p You are replying to 
-            strong {{ replyingTo.author.name }}
+          p {{ $t('composer.replying_to', { name: replyingTo.author.name }) }}
           .dismiss-replying-to.animated.fadeInRight(@click="cancelReply")
             icon(name="times")
 
-        .textarea-wrapper(v-if="isRegistered" )
-          textarea(name="name" rows="3" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text")
-        
+        .message-composer--footer(v-if="isRegistered")
+          .textarea-wrapper
+            .textarea-inner-wrapper(v-bind:class="{ focussed: (composerFocussed || showAction) }")
+              textarea-autosize(name="name" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @blur.native="composerFocussed = false" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
+              .appended-contents(v-if="showAction") {{ hashtags }} {{ url }}
+
+          .composer-actions(v-if="showAction" ref="composeractions")
+            #character-count.pull-left(v-bind:class="{ warn: (messageLength > (maxCharacterCount - 20)), danger: (messageLength > maxCharacterCount) }") {{ maxCharacterCount - messageLength }}
+            button#send-button.pure-button.pure-button-info.pull-right(@click="sendMessage" v-bind:class="{ disabled: (messageLength > maxCharacterCount) }")
+              span(v-if="infoLabel") {{ infoLabel }}
+              span(v-else) {{ submitText }}
+            .clearfix
+
         .login-warning(v-else @click="showAuth()") {{ $t('composer.login_required') }}
-
-      .message-composer--footer(v-if="isRegistered")
-        button.pure-button.pure-button-primary.pull-right(@click="sendMessage")
-          span(v-if="infoLabel") {{ infoLabel }}
-          span(v-else) {{ submitText }}
-        .clearfix
-
 
 </template>
 
 <script>
+import Vue from 'vue';
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import VueTextareaAutosize from 'vue-textarea-autosize'
 
 import Auth from '@/mixins/Auth';
 
 import info from 'vue-awesome/icons/info';
 import times from 'vue-awesome/icons/times';
+
+Vue.use(VueTextareaAutosize)
 
 export default {
   name: 'message-composer',
@@ -44,6 +49,9 @@ export default {
   ],
   data() {
     return {
+      composerFocussed: false,
+      minCharacterCount: 10,
+      maxCharacterCount: 140,
       infoLabel: '',
       message: {
         text: '',
@@ -52,15 +60,35 @@ export default {
       sending: false,
     };
   },
+  watch: {
+    composerFocussed() {
+      this.calculateHeight();
+    },
+    'message': {
+      handler: function(nV, oV) {
+        this.$nextTick(() => {
+          this.calculateHeight();
+        });
+      },
+      deep: true,
+    },
+  },
   methods: {
+    inputChanged() {
+      this.calculateHeight();
+    },
+    calculateHeight() {
+      const textareaPadding = 20;
+      const appendedHeight = (this.showAction) ? 30 : 0;
+      const footerHeight = (this.$refs.composeractions) ? this.$refs.composeractions.clientHeight : 0;
+      this.$emit('update:quickNoteHeight', (this.$refs.textarea.$el.clientHeight + textareaPadding + footerHeight + appendedHeight));
+    },
     cancelReply() {
       this.$store.commit('SET_REPLYING_TO', undefined);
     },
     sendMessage() {
-      const url = (this.static) ? `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}` : this.url;
-
       let postData = {
-        text: `${this.message.text} ${this.course.hashtag} ${url}`,
+        text: `${this.message.text} ${this.hashtags} ${this.url}`,
         currentClass: this.classSlug,
         currentSection: this.contentSlug,
         currentSegment: (this.currentSegment / 0.2),
@@ -102,9 +130,19 @@ export default {
       'currentSection',
       'replyingTo'
     ]),
+    hashtags() {
+      return this.course.hashtag;
+    },
     url() {
-      if (this.currentSection === undefined) { return ''; }
-      return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}/${(this.currentSegment / 0.2)}`;
+      if (this.currentSection === undefined) {
+        return '';
+      } 
+      else if (this.static){
+        return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}`;
+      }
+      else {
+        return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}/${(this.currentSegment / 0.2)}`;
+      }
     },
     hidden() {
       return (this.currentSection === undefined) ||
@@ -118,7 +156,13 @@ export default {
     submitText() {
       if (this.sending) return 'Sending..';
       return (this.replyingTo) ? 'Reply' : 'Post';
-    }
+    },
+    showAction() {
+      return (this.messageLength > this.minCharacterCount);
+    },
+    messageLength() {
+      return this.message.text.length;
+    },
   },
 };
 </script>
@@ -129,65 +173,42 @@ export default {
 @import '~stylus/buttons'
 
 .message-composer-wrapper
-  pinned()
-  position absolute
-  left 50%
-  position relative
-  top auto
-  bottom auto
-  left auto
-  right auto
-  height 50px
-  // border-top $color-border 1px solid
-
-  @media(max-width: 800px)
-    width 100%
-    left 0
-    right 0
-    margin 0
 
   .message-composer
     animate()
-    pinned()
-    top 0
     box-sizing()
 
-    position absolute
-    z-index 2
-
     .message-composer--body
-      pinned()
-      position absolute
 
       .replying-to-banner
-        background-color $color-lighter-grey
-        color $color-text-dark-grey
+        background-color $color-info
+        color white
         position absolute
-        top -50px
-        line-height 50px
-        height 50px
+        top -40px
+        line-height 40px
+        height 40px
         overflow hidden
         width 100%
         p
           reset()
-          padding 0 20px
+          padding 0 15px
         .fa-icon
-          height 50px
+          height 40px
           margin 0 15px
           width 6px
         .dismiss-replying-to
           pinned()
           animate()
-          background-color darken($color-lighter-grey, 10%)
+          background-color darken($color-info, 10%)
           position absolute
           left auto
-          min-width 50px
+          min-width 40px
           .fa-icon
             margin 0 20px
             width 14px
           &:hover
             cursor pointer
-            background-color darken($color-lighter-grey, 20%)
+            background-color darken($color-info, 20%)
       .login-warning
         pinned()
         background-color white
@@ -202,54 +223,69 @@ export default {
           cursor pointer
           color darken($color-text-dark-grey, 10%)
 
-      .textarea-wrapper
-        overflow hidden
-        position absolute
-        top 0
-        bottom 0
-        right 0
-        left 0
-        textarea
-          box-sizing()
-          border none
-          font-size 1em
-          padding 15px
-          resize none
-          outline 0
+      .message-composer--footer
+        background-color white
+        .textarea-wrapper
+          .textarea-inner-wrapper
+            radius(10px)
+            margin 10px
+            overflow hidden
+            textarea
+              animate()
+              box-sizing()
+              radius(10px)
+              background-color transparent
+              border none
+              display block
+              font-size 0.9em
+              outline 0
+              padding 10px
+              width 100%
+            .appended-contents
+              color alpha(black, 0.5)
+              display none
+              line-height 20px
+              padding 0 10px 10px 10px
+              white-space nowrap
+            &.focussed
+              background-color $color-lightest-grey
+              .appended-contents
+                display block
+        
+        .composer-actions
+          padding 0 10px 10px 10px
+          #character-count
+            color $color-text-grey
+            font-size 0.9em
+            line-height 26px
+            padding 0 6px
+            &.warn
+              color $color-warning
+            &.danger
+              color $color-danger
 
-          position absolute
-          top 0
-          bottom 0
-          right 100px
-          left 0
-
-          width 100%
-          animate()
-          @media(max-width: 800px)
-            right 10px
-            width calc(100% - 20px)
-
-    .message-composer--footer
-      height 40px
-      padding 5px
-      position absolute
-      bottom 0
-      right 0
-      left auto
-      animate()
-      button.pure-button.pure-button-primary
-        line-height 38px
-        padding 0 25px
-      .info-label
-        reset()
-        radius(5px)
-        display inline-block
-        background-color $color-border
-        color $color-text-dark-grey
-        font-size 1em
-        line-height 30px
-        margin 0px 15px
-        padding 0 15px
+          button#send-button
+            radius(10px)
+            line-height 26px
+            margin 0
+            padding 0 15px
+            &.disabled
+              background-color white
+              border-color white
+              color $color-text-grey
+              text-decoration line-through
+              pointer-events none
+              
+          .info-label
+            reset()
+            radius(5px)
+            display inline-block
+            background-color $color-border
+            color $color-text-dark-grey
+            font-size 1em
+            line-height 30px
+            margin 0px 15px
+            padding 0 15px
 
   &.static
 
