@@ -134,15 +134,11 @@ export default {
       return this.course.hashtag;
     },
     url() {
-      if (this.currentSection === undefined) {
-        return '';
-      } 
-      else if (this.static){
-        return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}`;
+      let url = `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}`;
+      if (!this.static){
+        return `${url}/${(this.currentSegment / 0.2)}`;
       }
-      else {
-        return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}/${(this.currentSegment / 0.2)}`;
-      }
+      return url;
     },
     hidden() {
       return (this.currentSection === undefined) ||
@@ -158,6 +154,7 @@ export default {
       return (this.replyingTo) ? 'Reply' : 'Post';
     },
     showAction() {
+      // return true; // TODO // Remove this line
       return (this.messageLength > this.minCharacterCount);
     },
     messageLength() {
