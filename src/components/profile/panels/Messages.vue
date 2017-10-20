@@ -50,7 +50,7 @@ export default {
         request.userId = this.user.id;
       }
 
-      API.admin.getMessages(
+      API.profile.getMessages(
         request,
         (response) => {
           this.messages = response.data;

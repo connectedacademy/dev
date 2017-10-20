@@ -62,7 +62,7 @@ export default {
 
       this.submissions = [];
 
-      API.admin.getSubmissions(
+      API.profile.getSubmissions(
         this.profileClassSlug,
         (response) => {
           this.submissions = response;

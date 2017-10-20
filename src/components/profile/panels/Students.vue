@@ -40,7 +40,7 @@ export default {
     loadData() {
       this.students = [];
       
-      API.admin.getStudents(
+      API.profile.getStudents(
         this.profileClassSlug,
         (response) => {
           this.students = response;

@@ -38,7 +38,7 @@ export default {
   methods: {
     getClasses() {
 
-      API.admin.getClasses(
+      API.profile.getClasses(
         (response) => {
           this.$emit('update:classes', response);
         },

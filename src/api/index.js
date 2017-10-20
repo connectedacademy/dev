@@ -2,7 +2,7 @@ import Vue from 'vue';
 import * as config from './config';
 
 import auth from './auth';
-import admin from './admin';
+import profile from './profile';
 import analytics from './analytics';
 import like from './like';
 import markdown from './markdown';
@@ -15,7 +15,7 @@ import classroom from './classroom';
 
 export default {
   auth,
-  admin,
+  profile,
   analytics,
   like,
   markdown,
