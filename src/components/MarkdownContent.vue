@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.rendered-markdown(v-html="renderedMarkdown" v-once)
+.rendered-markdown(v-html="renderedMarkdown")
 
 </template>
 
