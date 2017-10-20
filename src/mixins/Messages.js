@@ -4,6 +4,7 @@ import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex';
 
 import _fill from 'lodash/fill';
+import _get from 'lodash/get';
 import floor from 'lodash/floor';
 import round from 'lodash/round';
 
@@ -25,7 +26,10 @@ export default {
           updateMessage.message = obj.msg;
 
           // Increment total
-          updateMessage.info.total = updateMessage.info.total + 1;
+          const total = _get(updateMessage, ['info', 'total'], undefined);
+          if (typeof total !== 'undefined') {
+            updateMessage.info.total = updateMessage.info.total + 1;
+          }
 
           // Update messages object
           Vue.set(this.conversationMessages, key, updateMessage);
