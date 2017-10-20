@@ -20,12 +20,12 @@ exports.config = {
     specs: [
         // './test/specs/**/*.js',
         // './test/specs/general.js',
-        './test/specs/content.js',
+        // './test/specs/content.js',
         // './test/specs/drawers.js',
         // './test/specs/feedback.js',
         // './test/specs/fourcorners.js',
         // './test/specs/auth.js',
-        // './test/specs/liveclass.js',
+        './test/specs/liveclass.js',
     ],
     // Patterns to exclude.
     exclude: [

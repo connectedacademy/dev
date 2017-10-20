@@ -6,6 +6,7 @@ fs.ensureDirSync('./test/screenshots/auth/');
 const APP_URL = testEnv.APP_URL;
 
 describe('Authentication', function() {
+
   it('Does login using existing account and open profile', function () {
     browser
       .url('https://api.connectedacademy.io/v1/auth/loginexistinguser/?account='+testEnv.USER_ACCOUNT+'&psk='+testEnv.PSK+'&callback=' + APP_URL)
@@ -17,22 +18,27 @@ describe('Authentication', function() {
 
     browser.saveScreenshot('./test/screenshots/auth/sidebar.png');
 
-    browser.click(100,100).pause(500);
+    $('#content-overlay').click().pause(500);
 
     browser.saveScreenshot('./test/screenshots/auth/close-sidebar.png');
   });
 
   it('Does click all hints', function () {
+    browser.refresh().pause(4000);
+    let markdownlinks = $$('.onnboarding-prompt > .dismiss-button');
+    // console.log(markdownlinks);
+    for (let i = 0; i < markdownlinks.length; i++) {
+        let block = $$('.onnboarding-prompt > .dismiss-button')[0];
 
-    browser.click('.profile-image').pause(500);
-    
-    assert(browser.isVisible('.drawer'));
+        // console.log(block);
 
-    browser.saveScreenshot('./test/screenshots/auth/sidebar.png');
+        browser.scroll(0, browser.elementIdLocation(block.ELEMENT).value.y-50).pause(500);
 
-    browser.click(100,100).pause(500);
+        browser.elementIdClick(block.ELEMENT).pause(500);
+        // assert(!browser.elementIdDisplayed(block.ELEMENT));
+    }
 
-    browser.saveScreenshot('./test/screenshots/auth/close-sidebar.png');
+    browser.saveScreenshot('./test/screenshots/auth/dismiss-onboarding.png');
   });
 
 });
