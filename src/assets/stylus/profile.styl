@@ -43,7 +43,6 @@ $panel-width = 340px
               &:after
                 animate()
                 content ''
-                background-color $color-primary
                 position absolute
                 height 3px
                 bottom -3px
@@ -51,13 +50,13 @@ $panel-width = 340px
                 right 0
                 opacity 0
               &:hover
-                border-bottom-color darken($color-lightest-grey, 10%)
                 cursor pointer
                 &:after
+                  background-color darken($color-lightest-grey, 10%)
                   opacity 1
               &.active
-                border-bottom-color $color-primary
                 &:after
+                  background-color $color-primary
                   opacity 1
               &.enabled
                 color $color-text-dark-grey

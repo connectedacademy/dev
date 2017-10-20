@@ -8,7 +8,8 @@
 
       .profile-tab-bar
         ul.profile-tab-bar-items
-          li(v-for="(tab, index) in tabs" v-bind:key="index" v-bind:class="{ active: (activeTabIndex === index), enabled: userHasRole(tab.role) }" @click="setTab(index)") {{ tab.label }}
+          li(v-for="(tab, index) in tabs" v-bind:key="index" v-bind:class="{ active: (activeTabIndex === index), enabled: userHasRole(tab.role) }" @click="setTab(index)")
+            | {{ tab.label }}
           .clearfix
 
       .profile-tabs

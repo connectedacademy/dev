@@ -14,7 +14,7 @@
         .message-composer--footer(v-if="isRegistered")
           .textarea-wrapper
             .textarea-inner-wrapper(v-bind:class="{ focussed: (composerFocussed || showAction) }")
-              textarea-autosize(name="name" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @blur.native="composerFocussed = false" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
+              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @blur.native="composerFocussed = false" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
               .appended-contents(v-if="showAction") {{ hashtags }} {{ url }}
 
           .composer-actions(v-if="showAction" ref="composeractions")

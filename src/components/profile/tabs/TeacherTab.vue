@@ -42,7 +42,7 @@ export default {
     ...mapGetters(['profileClass', 'profileClassSlug']),
     filteredClasses() {
       return _filter(this.classes, (o) => {
-        return o.teacher.id === user.id;
+        return o.teacher && (o.teacher.id === user.id);
       });
     }
   },

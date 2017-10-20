@@ -2,8 +2,6 @@
 #profile-tab.profile-tab
   h1 Hi {{ user.name }}
 
-  img.user-profile(v-bind:src="user.profile")
-  
   h3 Your Roles
   tag-list(v-bind:tags="userRoles")
 
