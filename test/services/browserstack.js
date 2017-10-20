@@ -22,7 +22,8 @@ exports.config = {
         'browser_version': '60.0',
         'os': 'OS X',
         'os_version': 'Sierra',
-        'resolution': '1024x768'
+        'resolution': '1024x768',
+        'browserstack.networkLogs':true
       },
       // {
       //   'browserName': 'IE',
