@@ -9,14 +9,23 @@ exports.config = {
     // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
+    // services: ['selenium-standalone'],
+    // user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+    // key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+  
+    services: ['selenium-standalone'],
+    // services: ['browserstack'],
+    
+
     specs: [
         // './test/specs/**/*.js',
-        './test/specs/general.js',
-        './test/specs/content.js',
-        './test/specs/drawers.js',
-        './test/specs/feedback.js',
-        './test/specs/fourcorners.js',
-        // './test/specs/liveclass.js',
+        // './test/specs/general.js',
+        // './test/specs/content.js',
+        // './test/specs/drawers.js',
+        // './test/specs/feedback.js',
+        // './test/specs/fourcorners.js',
+        // './test/specs/auth.js',
+        './test/specs/liveclass.js',
     ],
     // Patterns to exclude.
     exclude: [
@@ -38,7 +47,7 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+    maxInstances: 1,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -50,7 +59,8 @@ exports.config = {
         // 5 instances get started at a time.
         maxInstances: 5,
         //
-        browserName: 'chrome'
+        // os
+        browserName: 'Chrome'
     }],
     //
     // ===================
@@ -78,7 +88,7 @@ exports.config = {
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", then the base url gets prepended.
-    baseUrl: 'http://localhost:8080',
+    baseUrl: 'https://researchmethods.connectedacademy.io',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 50000,
