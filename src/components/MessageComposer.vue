@@ -81,7 +81,8 @@ export default {
       const textareaPadding = 20;
       const appendedHeight = (this.showAction) ? 30 : 0;
       const footerHeight = (this.$refs.composeractions) ? this.$refs.composeractions.clientHeight : 0;
-      this.$emit('update:quickNoteHeight', (this.$refs.textarea.$el.clientHeight + textareaPadding + footerHeight + appendedHeight));
+      const notAuthed = this.isRegistered ? 0 : 50;
+      this.$emit('update:quickNoteHeight', (this.$refs.textarea.$el.clientHeight + textareaPadding + footerHeight + appendedHeight + notAuthed));
     },
     cancelReply() {
       this.$store.commit('SET_REPLYING_TO', undefined);
@@ -207,11 +208,9 @@ export default {
             cursor pointer
             background-color darken($color-info, 20%)
       .login-warning
-        pinned()
         background-color white
         z-index 2
         padding 0 20px
-        position absolute
         text-align center
         font-weight bold
         color $color-text-dark-grey

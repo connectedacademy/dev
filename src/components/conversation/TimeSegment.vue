@@ -115,7 +115,7 @@
         segmentStyle: {},
         calculatedOffset: 0,
         calculatedOffsetBottom: 0,
-        quickNoteHeight: 10,
+        quickNoteHeight: 50,
       };
     },
     computed: {

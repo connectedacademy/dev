@@ -38,7 +38,6 @@
                 h2.hub-timezone {{ hub.timezone }}
               .clearfix
 
-          router-link.pure-button(to="/") {{ $t('common.cancel') }}
           .pure-button.pure-button-primary.pull-right(v-bind:disabled="!formIsValid" @click="nextPage") {{ $t('common.continue') }}
           .clearfix
 
