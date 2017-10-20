@@ -4,7 +4,7 @@
 
     .message-count(v-if="messageCount") {{ messageCount }}
 
-    .primary-wrapper(@click="peek()")
+    .primary-wrapper(@click="peek")
 
       //- .segment-label--group(v-once v-if="this.$store.state.debug") {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
 
@@ -158,6 +158,9 @@
     methods: {
       peek() {
         
+        // Cancel peek if another segment is open
+        if (typeof this.peekSegment !== 'undefined') { return; }
+        
         this.$router.push({ query: { segment: this.message.segmentGroup } });
 
         if (!this.segmentOpened) {
@@ -190,10 +193,11 @@
         }, 300); // Timeout equal to time for overlay to fade
       },
       openSegment() {
+
+        // Cancel open if another segment is open
+        if (typeof this.activeSegment !== 'undefined') { return; }
   
-        if (this.segmentOpened) {
-          return;
-        }
+        if (this.segmentOpened) { return; }
   
         // Remove segment messages
         this.$store.commit('SET_SEGMENT_MESSAGES', []);
