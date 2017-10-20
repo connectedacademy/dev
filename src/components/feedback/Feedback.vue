@@ -13,18 +13,19 @@
     ul(v-if="myFeedbackItems.length !== 0")
       li.list-header My submissions
       li.no-content(v-if="!myFeedbackItems.length") You have no submissions
-      li(v-for="feedbackItem in myFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
+      router-link(v-for="(feedbackItem, index) in myFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
     ul(v-if="feedbackItems.length !== 0")
       li.list-header Current conversations
       li.no-content(v-if="feedbackItems.length === 0") You are not in any conversations
-      li(v-for="feedbackItem in feedbackItems" @click="currentFeedbackId = feedbackItem.id")
+      router-link(v-for="(feedbackItem, index) in feedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
+
     ul(v-if="availableFeedbackItems.length !== 0")
       li.list-header Suggested conversations
       li.no-content(v-if="availableFeedbackItems.length === 0") You have no suggestions
-      li(v-for="feedbackItem in availableFeedbackItems" @click="currentFeedbackId = feedbackItem.id")
+      router-link(v-for="(feedbackItem, index) in availableFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
     //- ul
@@ -64,27 +65,29 @@ import { mapGetters } from 'vuex';
 
 import API from '@/api';
 import Auth from '@/mixins/Auth';
+import PageStyle from '@/mixins/PageStyle';
+import Messages from '@/mixins/Messages';
 
 import filter from 'lodash/filter';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersSubmission from '@/components/fourcorners/FourCornersSubmission';
 import FourCornersLink from '@/components/fourcorners/FourCornersLink';
-import PreviousButton from '../PreviousButton';
-import FeedbackTile from './FeedbackTile';
-import FeedbackRow from './FeedbackRow';
-import FeedbackView from './FeedbackView';
-import InfoDialogue from '../InfoDialogue';
+import PreviousButton from '@/components/PreviousButton';
+import FeedbackTile from '@/components/feedback/FeedbackTile';
+import FeedbackRow from '@/components/feedback/FeedbackRow';
+import FeedbackView from '@/components/feedback/FeedbackView';
+import InfoDialogue from '@/components/InfoDialogue';
 
 import 'vue-awesome/icons/angle-left';
 import 'vue-awesome/icons/info';
 
-import Messages from '@/mixins/Messages';
 
 export default {
   name: 'feedback',
   mixins: [
     Auth,
+    PageStyle,
     Messages,
   ],
   components: {
@@ -96,17 +99,6 @@ export default {
     FeedbackTile,
     FeedbackRow,
     FeedbackView,
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.$store.commit('SET_NAV_STATE', { minimized: true });
-      vm.$store.commit('SET_PAGE_STYLE', 'chat');
-    });
-  },
-  beforeRouteLeave (to, from, next) {
-    this.$store.commit('SET_NAV_STATE', { minimized: false });
-    this.$store.commit('SET_PAGE_STYLE', undefined);
-    next();
   },
   activated() {
     // Check if user has registered
@@ -122,6 +114,10 @@ export default {
   },
   mounted() {
     Vue.$log.info('Feedback view mounted');
+
+    if (this.$route.params.id) {
+      this.currentFeedbackId = this.$route.params.id.replace('%23', '#');
+    }
 
     this.getFeedbackItems();
     this.getAvailableFeedbackItems();
@@ -147,8 +143,20 @@ export default {
       }
     });
   },
+  watch: {
+    '$route.params.id': {
+      handler: function(nV, oV) {
+        console.log('$route.params.id');
+        if (nV) {
+          this.currentFeedbackId = nV.replace('%23', '#');
+        }
+      },
+      deep: true,
+    },
+  },
   data() {
     return {
+      pageStyle: { type: 'chat', minimized: true },
       navTitle: 'Connected Academy - Feedback',
       myFeedbackItems: [],
       feedbackItems: [],
@@ -157,9 +165,26 @@ export default {
       discussion: [],
     };
   },
+  computed: {
+    ...mapGetters([
+      'isAuthenticated', 'isRegistered', 'user', 'currentClass', 'course',
+    ]),
+    classSlug() {
+      return this.$route.params.classSlug;
+    },
+    contentSlug() {
+      return this.$route.params.contentSlug;
+    },
+    markdownUrl() {
+      return `${this.course.baseUri}class1/${this.contentSlug}.md`;
+    },
+  },
   methods: {
     previous() {
       return this.$router.go(-1);
+    },
+    encodedId(id) {
+      return id.replace('#','%23');
     },
     getFeedbackItems() {
       
@@ -204,20 +229,6 @@ export default {
           this.$log.info('Failed to retrieve feedback');
         },
       );
-    },
-  },
-  computed: {
-    ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'user', 'currentClass', 'course',
-    ]),
-    classSlug() {
-      return this.$route.params.classSlug;
-    },
-    contentSlug() {
-      return this.$route.params.contentSlug;
-    },
-    markdownUrl() {
-      return `${this.course.baseUri}class1/${this.contentSlug}.md`;
     },
   },
 };

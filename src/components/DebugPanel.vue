@@ -12,7 +12,6 @@
     pre {{ scrollPoints }}
 
   p {{ `subscribedTo - ${subscribedTo}` }}
-  p {{ `fauxTime - ${fauxTime}` }}
   p {{ `scrollPosition - ${scrollPosition}` }}
   p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
 
@@ -41,7 +40,6 @@ export default {
       'scrollPoints',
       'subscribedTo',
 
-      'fauxTime',
       'scrollPosition',
       'offsetScrollPosition',
 

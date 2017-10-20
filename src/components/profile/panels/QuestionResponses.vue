@@ -1,14 +1,14 @@
 <template lang="pug">
 
-.admin-panel
+.profile-panel
 
-  .admin-panel--header
+  .profile-panel--header
     h1 Question responses
 
     .reload-button(@click="loadData")
       icon(name="refresh")
 
-  .admin-panel--content
+  .profile-panel--content
     ul
       li(v-for="response in responses.during")
         h3 {{ response.question.text }}
@@ -81,12 +81,11 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
-@import '~stylus/admin'
+@import '~stylus/profile'
 
-.admin-panel
+.profile-panel
 
-  .admin-panel--content
+  .profile-panel--content
     ul
       cleanlist()
       li

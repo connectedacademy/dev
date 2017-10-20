@@ -20,10 +20,10 @@ export default {
   props: ['mdContent'],
   computed: {
     ...mapGetters([
-      'isRegistered',
+      'isRegistered', 'currentClass'
     ]),
     url() {
-      const encodedURI = encodeURIComponent(`${this.$store.getters.currentClass.dir}/${this.mdContent.url}`);
+      const encodedURI = encodeURIComponent(`${this.currentClass.dir}/${this.mdContent.url}`);
       return `/markdown/${encodedURI}`;
     },
   },

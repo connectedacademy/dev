@@ -50,6 +50,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import PageStyle from '@/mixins/PageStyle';
+
 import PreviousButton from '@/components/PreviousButton';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import VideoEmbed from '@/components/VideoEmbed';
@@ -58,17 +60,7 @@ import FourCornersInteraction from '@/components/fourcorners/FourCornersInteract
 
 export default {
   name: 'four-corners-onboarding',
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.$store.commit('SET_NAV_STATE', { minimized: false });
-      vm.$store.commit('SET_PAGE_STYLE', 'fourcorners');
-    });
-  },
-  beforeRouteLeave(to, from, next) {
-    this.$store.commit('SET_NAV_STATE', { minimized: true });
-    this.$store.commit('SET_PAGE_STYLE', undefined);
-    next();
-  },
+  mixins: [ PageStyle ],
   activated() {
     window.scroll(0, 0);
   },
@@ -80,6 +72,7 @@ export default {
   },
   data() {
     return {
+      pageStyle: { type: 'fourcorners', minimized: false },
       navTitle: 'Connected Academy - FourCorners',
       currentProvider: undefined,
       providers: [

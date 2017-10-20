@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-const AdminMain = () => import('@/components/admin/AdminMain');
+const Profile = () => import('@/components/profile/Profile');
 
 const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow');
 const Registration = () => import('@/components/authentication/Registration');
@@ -58,9 +58,9 @@ export default new Router({
       component: Feedback,
     },
     {
-      name: 'view_feedback',
-      path: '/feedback/:id',
-      component: FeedbackView,
+      name: 'feedback_view',
+      path: '/feedback/browse/:classSlug/:contentSlug/:id',
+      component: Feedback,
     },
     {
       name: 'fourcorners',
@@ -83,9 +83,16 @@ export default new Router({
       component: About,
     },
     {
-      name: 'admin',
-      path: '/admin',
-      component: AdminMain,
+      name: 'profile',
+      path: '/profile',
+      component: Profile,
+    },
+    {
+      name: 'githubauth',
+      path: '/auth/github',
+      redirect: (to) => {
+        window.location = 'https://api.connectedacademy.io/v1/admin/login';
+      }
     },
     {
       path: '*',

@@ -47,4 +47,12 @@ export default {
       errorCb(response);
     });
   },
+  removeSubmission(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.post(`${config.WATERCOOLER_API}/discussion/remove`, postData).then((response) => {
+      cb(response);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
 };
