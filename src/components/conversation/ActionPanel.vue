@@ -11,7 +11,7 @@
       li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
       
-      li.experience-control#progress-bar(ref="progressbar" @click="trackClicked" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousemove="scrubMove")
+      li.experience-control#progress-bar(ref="progressbar" @click="trackClicked" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
         visualisation(v-bind:content="content")
       
       li.experience-control.pull-right(@click="toggleComposer")

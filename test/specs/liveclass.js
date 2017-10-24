@@ -109,7 +109,7 @@ describe('Live Class', function () {
       //let the media play for a bit:
       browser.click('[name="play-pause-button"]');
 
-      browser.pause(3000);
+      browser.pause(5000);
 
       browser.click('[name="play-pause-button"]');
 
@@ -125,12 +125,11 @@ describe('Live Class', function () {
 
       $('textarea[name="composer-textarea"]').click().keys(txt);
 
-      $('.message-composer--footer > .composer-actions > #send-button').click().pause(2000);
+      $('.message-composer--footer > .composer-actions > button').click();
+      
+      browser.pause(3000);
 
-      console.log($('.time-segment.peek .single-message-wrapper .message-content').getText());
-
-      assert($('.time-segment.peek .single-message-wrapper .message-content').getText() == txt + testEnv.HASHTAG);
-
+      assert($('.time-segment.peek .single-message-wrapper .message-content').getText() === `${txt } ${testEnv.HASHTAG}`);
 
       // Save screenshot
       browser.saveScreenshot('./test/screenshots/liveclass/liveclass-testmessage-'+i+'.png');

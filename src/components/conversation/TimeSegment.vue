@@ -3,6 +3,7 @@
   .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
 
     .message-count(v-if="messageCount") {{ messageCount }}
+    .subscribed-status(v-if="(((index * 5) >= subscribedTo.start) && ((index * 5) <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
@@ -120,6 +121,7 @@
         'activeSegmentMessages',
         'modalVisible',
         'replyingTo',
+        'subscribedTo',
       ]),
       quickNoteTop() {
         return `${158 + 32}px`;
@@ -312,6 +314,17 @@
     z-index 51
     @media(max-width: 800px)
       radius(4px)
+    
+  .subscribed-status
+    radius(4px)
+    background-color $color-danger
+    right auto
+    left 10px
+    top 10px
+    position absolute
+    height 8px
+    width 8px
+    z-index 51
 
   @media(max-width: 800px)
     left 10px

@@ -7,9 +7,6 @@ import vueSails from 'vue-sails';
 const io = sailsIOClient(socketIOClient);
 
 io.sails.url = config.SOCKET_API;
-io.sails.afterDisconnect = function() {
-  alert('disconnect!');
-};
 Vue.io = io;
 Vue.use(vueSails, io);
 
@@ -17,4 +14,21 @@ Vue.use(vueSails, io);
 Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
   Vue.$log.info('SOCKET RESPONSE - me');
   Vue.$log.info(resData);
+});
+
+
+Vue.io.socket.on('connect', function () {
+  console.log('Connected to server (SOCKET)');
+});
+
+Vue.io.socket.on('disconnect', function () {
+  console.log('Lost connection to server (SOCKET)');
+});
+
+Vue.io.socket.on('onDisconnect', function () {
+  console.log('Lost connection to server - onDisconnect (SOCKET)');
+});
+
+Vue.io.socket.on('afterDisconnect', function () {
+  console.log('Lost connection to server - afterDisconnect (SOCKET)');
 });
