@@ -8,8 +8,11 @@ const APP_URL = testEnv.APP_URL;
 
 describe('Live Class', function () {
   it('Nagivates to it as logged in user', function () {
+    browser.windowHandleMaximize();
     browser.url('https://api.connectedacademy.io/v1/auth/loginexistinguser/?account=' + testEnv.USER_ACCOUNT + '&psk=' + testEnv.PSK + '&callback=' + APP_URL);
     assert(browser.getTitle().match(/Connected Academy/i));
+    browser.waitForExist('[name="continue-listening"]');
+    // browser.pause(3000);
   });
 
   // it('Scrolls liveclass', () => {
@@ -88,9 +91,8 @@ describe('Live Class', function () {
 
   it('Scrolls up and down a lot then makes another message', () => {
 
-    //list all message blocks:
-
     //scroll to continue listening:
+    $('[name="continue-listening"]').scroll(0,300);
     $('[name="continue-listening"]').click();
 
     for (let i = 0; i < 5; i++) {
@@ -121,11 +123,14 @@ describe('Live Class', function () {
 
       let txt = 'This is a #test message from Selenium at ' + moment();
 
-      $('textarea[name="name"]').click().keys(txt);
+      $('textarea[name="composer-textarea"]').click().keys(txt);
 
-      $('.message-composer--footer > button').click().pause(2000);
+      $('#send-button').click().pause(2000);
 
-      assert($('.time-segment.peek .single-message-wrapper .message-content').getText() == txt + ' #cainterpretation');
+      console.log($('.time-segment.peek .single-message-wrapper .message-content').getText());
+
+      assert($('.time-segment.peek .single-message-wrapper .message-content').getText() == txt + testEnv.HASHTAG);
+
 
       // Save screenshot
       browser.saveScreenshot('./test/screenshots/liveclass/liveclass-testmessage-'+i+'.png');
@@ -143,7 +148,7 @@ function pickMessageVisibleBlock(sblock) {
   // console.log(time);
 
   let inviewport = [];
-  for (let i=1;i<4;i++)
+  for (let i=1;i<2;i++)
   {
     // console.log(i);
     let isview = browser.isVisibleWithinViewport('[data-top="'+(time + (i*158))+'"]');

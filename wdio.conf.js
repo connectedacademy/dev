@@ -12,11 +12,11 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     // services: ['selenium-standalone'],
-    user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
-    key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+    // user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+    // key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
   
-    // services: ['selenium-standalone'],
-    services: ['browserstack'],
+    services: ['selenium-standalone'],
+    // services: ['browserstack'],
     
 
     specs: [
@@ -65,11 +65,30 @@ exports.config = {
     //     // os
     //     browserName: 'Chrome'
     // }
-    {
-        'browserName': 'Chrome',
-        'browser_version': '60.0',
-        'os': 'OS X',
-        'os_version': 'Sierra',
+    // {
+    //     'browserName': 'Firefox',
+    //     'os': 'OS X',
+    //     'os_version': 'Sierra',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   }
+    // {
+    //     'browserName': 'Safari',
+    //     'os': 'OS X',
+    //     'os_version': 'Sierra',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   },
+    // {
+    //     'browserName': 'Chrome',
+    //     'browser_version': '60.0',
+    //     'os': 'OS X',
+    //     'os_version': 'Sierra',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   },
+      {
+        'browserName': 'chrome',
         'resolution': '1280x1024',
         'browserstack.networkLogs':true
       },
