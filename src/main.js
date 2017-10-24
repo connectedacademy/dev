@@ -66,14 +66,14 @@ Vue.config.productionTip = false;
 
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json' };
-Vue.http.interceptors.push((request, next) => {
-  next((response) => {
-    if (response.status === 403) {
-      this.$log.info('Session invalid');
-      store.dispatch('logout');
-    }
-  });
-});
+// Vue.http.interceptors.push((request, next) => {
+//   next((response) => {
+//     if (response.status === 403) {
+//       Vue.$log.info('Session invalid');
+//       store.dispatch('logout');
+//     }
+//   });
+// });
 
 // I18n config
 Vue.config.lang = 'en';

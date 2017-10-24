@@ -26,6 +26,7 @@ export default {
         (response) => {
           // TODO: Better handle failed request
           this.checkingAuthentication = false;
+          this.$router.replace('/');
         },
       );
     },

@@ -6,27 +6,25 @@
 
     .primary-wrapper(@click="peek")
 
-      //- .segment-label--group(v-once v-if="this.$store.state.debug") {{ `${message.segmentGroup}/${message.segmentGroup / 0.2}` }}
-
       .subtitle-wrapper
         subtitle(v-bind:subtitle="subtitle")
 
-      .message-wrapper(v-bind:class="{ loading: message.loading }")
+      .message-wrapper
 
-        .suggestion(v-once v-if="isSuggestion") "{{ message.message.text }}"
+        .suggestion(v-if="isSuggestion") "{{ message.message.text }}"
         message(v-else-if="isMessage" v-bind:message="message.message" v-bind:truncate="true")
-        mock-message(v-once v-else-if="isMock")
+        mock-message(v-else-if="isMock" v-bind:loading="message.loading")
 
       .clearfix
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
-      | Read all notes
+      | Show all notes
 
     .meta-container(v-if="segmentOpened" v-bind:class="{ active: segmentOpened }" v-bind:style="{ bottom: `${quickNoteHeight}px` }")
       .status-indicator(v-if="loadingMessages") Looking for notes...
       .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Be the first to make a note.
 
-      .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages" v-bind:class="{ featured: (segmentMessage.id === message.message.id) }")
+      .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages")
         message(v-bind:message="segmentMessage")
 
     .quick-note(v-if="segmentPeeking || segmentOpened" v-bind:class="{ replying: replyingTo }" v-bind:style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
@@ -36,7 +34,7 @@
 </template>
 
 <script>
-  import orderBy from 'lodash/orderBy';
+  import _orderBy from 'lodash/orderBy';
   import _get from 'lodash/get';
 
   import { mapGetters } from 'vuex';
@@ -49,7 +47,7 @@
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'subtitle', 'contentSlug', 'classSlug'],
+    props: ['index', 'message', 'subtitle', 'contentSlug', 'classSlug', 'isCurrent'],
     components: {
       MessageComposer,
       Message,
@@ -57,9 +55,6 @@
       Subtitle,
     },
     watch: {
-      markdownUrl(nV) {
-        this.loadMarkdown();
-      },
       // '$route.query.segment': {
       //   handler: function(nV, oV) {
       //   console.log('$route.query.segment');
@@ -136,7 +131,8 @@
         return {
           peek: this.segmentPeeking,
           opened: this.segmentOpened,
-          under: this.modalVisible
+          under: this.modalVisible,
+          current: this.isCurrent
         }
       },
       isMessage() {
@@ -152,14 +148,14 @@
         return _get(this.message, ['info', 'total'], undefined);
       },
       orderedMessages() {
-        return orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
+        return _orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
       }
     },
     methods: {
       peek() {
         
         // Cancel peek if another segment is open
-        if (typeof this.peekSegment !== 'undefined') { return; }
+        if (typeof this.peekSegment !== 'undefined') return;
         
         this.$router.push({ query: { segment: this.message.segmentGroup } });
 
@@ -195,9 +191,9 @@
       openSegment() {
 
         // Cancel open if another segment is open
-        if (typeof this.activeSegment !== 'undefined') { return; }
+        if (typeof this.activeSegment !== 'undefined') return;
   
-        if (this.segmentOpened) { return; }
+        if (this.segmentOpened) return;
   
         // Remove segment messages
         this.$store.commit('SET_SEGMENT_MESSAGES', []);
@@ -300,19 +296,22 @@
   width 780px
 
   .message-count
-    radius(10px)
     box-sizing()
+    border-top-left-radius 4px
+    border-bottom-left-radius 4px
     background-color $color-primary
     color white
     font-size 0.8em
     line-height 20px
-    padding 0 5px
+    padding 0 8px
     position absolute
     top 10px
-    right 10px
+    right 0
     min-width 20px
     text-align center
     z-index 51
+    @media(max-width: 800px)
+      radius(4px)
 
   @media(max-width: 800px)
     left 10px
@@ -372,8 +371,8 @@
         position absolute
         top 10px
         left 10px
-        height 12px
-        width 12px
+        height 10px
+        width 10px
 
   &.peek, &.active
     radius(4px)
@@ -412,16 +411,6 @@
       width 100%
       @media(max-width: 600px)
         display block !important
-      &.featured
-        &:before
-          radius(50%)
-          content ''
-          background-color $color-primary
-          position absolute
-          top 0
-          left 5px
-          height 8px
-          width 8px
       .tweet-actions
         background-color inherit
     &.active

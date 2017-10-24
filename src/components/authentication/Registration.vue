@@ -11,7 +11,7 @@
         .content-block.white-block
 
           info-dialogue
-            p Please fill in the fields below to register for Connected Academy, don't forget to select your hub.
+            p {{ $t('auth.registration_message') }}
 
           fieldset.validate(v-bind:class="{ valid: validatedResponse.email }")
             label {{ $t('auth.enter_your_email') }}
@@ -95,8 +95,10 @@
   import values from 'lodash/values';
   import { mapGetters } from 'vuex';
   import API from '@/api';
+
   import Auth from '@/mixins/Auth';
-  
+  import PageStyle from '@/mixins/PageStyle';
+
   import MarkdownIt from 'markdown-it';
   
   import MarkdownRenderer from '@/components/MarkdownRenderer';
@@ -106,7 +108,7 @@
   
   export default {
     name: 'registration',
-    mixins: [ Auth ],
+    mixins: [ PageStyle, Auth ],
     components: {
       MarkdownRenderer,
       InfoDialogue,
@@ -132,6 +134,7 @@
     },
     data() {
       return {
+        pageStyle: { type: 'registration', minimized: true },
         currentPage: 1,
         loadingQuestions: true,
         release: '',
@@ -199,15 +202,13 @@
         API.auth.register(
           this.sanitizedResponse,
           (response) => {
-            this.$router.push({
-              path: '/'
-            });
+            this.$store.dispatch('checkAuth');
+            this.$router.push('course');
           },
           (response) => {
-            // alert('Registration failed');
-            this.$router.push({
-              path: '/'
-            });
+            this.$log.info('Registration failed');
+            this.$store.dispatch('checkAuth');
+            this.$router.push('course');
           },
         );
       },

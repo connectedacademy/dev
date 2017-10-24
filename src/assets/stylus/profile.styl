@@ -11,18 +11,14 @@ $panel-width = 340px
       box-sizing()
       background-color white
       overflow-y scroll
-      top 60px
+      top $navigation-height
       bottom 0
       left 0
       right 0
       position fixed
       
       .profile-panel
-        animate()
-        pinned()
-        box-sizing()
         background-color white
-        overflow-y scroll
         padding-top 60px
         .profile-panel--content
           padding 20px
@@ -37,8 +33,10 @@ $panel-width = 340px
               animate()
               float left
               line-height 60px
-              padding 0 30px
+              padding 0
               position relative 
+              width calc(100% / 3)
+              text-align center
               text-decoration line-through
               &:after
                 animate()
@@ -64,31 +62,14 @@ $panel-width = 340px
 
 
       &#content-panel
-        top 60px
+        animate()
+        pinned()
+        border-left $color-border 1px solid
+        top $navigation-height
         left auto
         position fixed
+        right - $panel-width
         width $panel-width
-        z-index 1
-
-    &.has-content
-      #primary-panel
-        right $panel-width + 10px
-
-    @media(max-width: 768px)
-      &.has-content
-        #primary-panel
-          pinned()
-          top 60px
-          bottom 60px
-          width auto
-        #content-panel
-          pinned()
-          background-color white
-          border-top $color-border 1px solid
-          top auto
-          bottom 0
-          height 60px
-          width auto
-          &.visible
-            top 120px
-            height auto
+        z-index 10
+        &.visible
+          right 0

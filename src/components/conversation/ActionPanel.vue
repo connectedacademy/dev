@@ -1,6 +1,7 @@
 <template lang="pug">
 
   #action-panel(name="action-panel" v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }" ref="actionpanel")
+
     ul#experience-controls
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
@@ -10,23 +11,12 @@
       li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
       
-      li.experience-control#progress-bar(ref="progressbar" v-bind:class="{ buffering: mediaBuffering }" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousemove="scrubMove")
-        #progress-bar--start {{ start }}
-        #progress-bar--end {{ end }}
-        #progress-bar--track
-          //- #activity-visualisation
-            svg(width="width" height="50")
-              g
-                path(v-bind:d="points")
-        #progress-bar--thumb(v-bind:style="{ left: thumbLeft }")
-
+      li.experience-control#progress-bar(ref="progressbar" @click="trackClicked" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousemove="scrubMove")
+        visualisation(v-bind:content="content")
+      
       li.experience-control.pull-right(@click="toggleComposer")
         onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
         icon(v-bind:name="mediaHidden ? 'chevron-up' : 'chevron-down'")
-
-      li.experience-control#twitter-control.pull-right
-        a(v-bind:href="twitterLink" target="_blank")
-          icon(name="twitter")
 
       //- li.experience-control.pull-right(@click="togglePlayerType" v-bind:class="{ unclickable: (availablePlayerTypes <= 1) }")
         icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
@@ -42,17 +32,16 @@
   import Moment from 'moment-mini';
   
   import MessageComposer from '@/components/MessageComposer';
-  const MediaContainer = () => import('@/components/MediaContainer');
+  import MediaContainer from '@/components/MediaContainer';
+  import Visualisation from '@/components/conversation/Visualisation';
 
   import clamp from 'lodash/clamp';
 
   import MediaStream from '@/mixins/MediaStream';
-  import Visualisation from '@/mixins/Visualisation';
 
   import 'vue-awesome/icons/pause';
   import 'vue-awesome/icons/play';
   import 'vue-awesome/icons/step-forward';
-  import 'vue-awesome/icons/twitter';
   import 'vue-awesome/icons/chevron-up';
   import 'vue-awesome/icons/chevron-down';
   import 'vue-awesome/icons/soundcloud';
@@ -65,10 +54,10 @@
     components: {
       MessageComposer,
       MediaContainer,
+      Visualisation,
     },
     mixins: [
       MediaStream,
-      Visualisation,
     ],
     mounted() {
       this.availablePlayerTypes = []; // Remove all available player types
@@ -90,21 +79,9 @@
       };
     },
     computed: {
-      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection', 'currentTime', 'videoIsActive']),
-      start() {
-        return Moment().hour(0).minute(0).second(this.currentTime).format('mm:ss');
-      },
+      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection', 'videoIsActive']),
       end() {
         return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss');
-      },
-      twitterLink() {
-        return 'https://twitter.com';
-        // return `https://twitter.com/${hashtag}`;
-      },
-      thumbLeft() {
-        let position = (this.trackOffset === 0) ? ((100 / this.content.duration) * this.currentTime) : (100 / this.$refs.progressbar.offsetWidth) * this.trackOffset;
-        
-        return `${clamp(position, 0, 100)}%`;
       },
       playerType() {
         return this.availablePlayerTypes[this.playerTypeIndex];
@@ -114,23 +91,40 @@
       scrubMove(event) {
         if (this.mouseOffsetStart !== 0) {
           this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft);
+          
+          const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration);
+          window.scroll(0, ((newPos * 0.2) * 158.0));
         }
       },
       startScrub(event) {
-        this.$store.commit('PAUSE_MEDIA');
         this.$store.commit('EXPAND_CONVERSATION');
+        this.$store.commit('PAUSE_MEDIA');
         this.trackOffset = 0;
-        this.mouseOffsetStart = event.pageX;
+        setTimeout(() => {
+          this.mouseOffsetStart = event.pageX;
+        }, 200);
       },
       endScrub(event) {
-        const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration);
-        this.$store.commit('setPendingScrollPosition', newPos);
-
+        
         this.mouseOffsetStart = 0;
 
         setTimeout(() => {
           this.trackOffset = 0;
         }, 500);
+      },
+      trackClicked(event) {
+        // if (this.mouseOffsetStart !== 0) {
+        //   this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft);
+        // }
+        // const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration);
+        // console.log(newPos);
+        // window.scroll(0, (newPos + this.currentSection.top));
+
+        // this.mouseOffsetStart = 0;
+
+        // setTimeout(() => {
+        //   this.trackOffset = 0;
+        // }, 500);
       },
       toggleComposer() {
         this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
@@ -154,19 +148,24 @@
 @import '~stylus/shared'
 @import '~stylus/buttons'
 
-$media-height = 220px
+$controls-height = 60px
 
 #action-panel
   animate()
+  pinned()
   background white
   border-top $color-border 1px solid
-  bottom 0
-  height ($media-height + 50px)
+  top auto
+  height ($media-height + $controls-height)
   z-index 50
   position fixed
+  width 780px
   left 50%
   margin-left -390px
-  width 780px
+  &.full-width
+    width 100%
+    left 0
+    margin-left 0
   &.hide-media
     bottom -($media-height)
   &.hide
@@ -180,10 +179,12 @@ $media-height = 220px
   ul#experience-controls
     cleanlist()
     box-sizing()
-    height 50px
+    height $controls-height
     padding 0 10px 0 10px
     position relative
     z-index 1
+    max-width 780px
+    margin 0 auto
 
     li.experience-control
       cleanlist()
@@ -202,7 +203,7 @@ $media-height = 220px
         display block
         height 18px
         width 18px
-        margin 16px 10px
+        margin (($controls-height - 18px) / 2) 10px
       &:hover
         // background-color $color-lighter-grey
         cursor pointer
@@ -213,76 +214,7 @@ $media-height = 220px
       pinned()
       margin 0
       position absolute
-      left (38px * 2) + 20px + 40px
-      right (38px * 1) + 20px + 40px + 40px
-
-      #activity-visualisation
-        pinned()
-        position absolute
-
-        svg
-          overflow visible
-          path
-            fill alpha($color-primary, 1)
-            
-      @media(max-width: 568px)
-        right (38px * 0) + 10px + 40px
-        #progress-bar--end
-          display none
-      #progress-bar--start, #progress-bar--end
-        font-size 0.8em
-        font-weight bold
-        line-height 50px
-        padding 0 15px
-        position absolute
-        &#progress-bar--start
-          color $color-primary
-          left -60px
-        &#progress-bar--end
-          color $color-text-grey
-          right -60px
-      #progress-bar--track
-        background-color $color-primary
-        height 2px
-        margin 24px 0
-      #progress-bar--thumb
-        radius(50%)
-        background-color $color-primary
-        height 10px
-        width 10px
-        margin-left -5px
-        position absolute
-        top 20px
-        left 0px
-        &:hover
-          cursor pointer
-      &.buffering
-        #progress-bar--thumb
-          background-color $color-warning
-          &:after
-            background-color $color-warning
-            content ''
-            margin-left -2px
-            height 8px
-            width 4px
-            position absolute
-            top -6px
-            left 50%
-          &:before
-            radius(12px)
-            background-color $color-warning
-            content 'buffering'
-            color white
-            font-size 0.8em
-            font-weight bold
-            margin-left -50px
-            line-height 24px
-            position absolute
-            top -26px
-            left 50%
-            text-align center
-            text-transform uppercase
-            width 100px
-
+      left (38px * 2) + 20px
+      right (38px * 1) + 20px
 
 </style>

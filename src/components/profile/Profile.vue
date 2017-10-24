@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .profile-page
-  .profile-panels.animated.fadeIn(ref="panels" v-if="!checkingAuthentication" v-bind:class="{ 'has-content': profileAction }")
+  .profile-panels(ref="panels" v-if="!checkingAuthentication" v-bind:class="{ 'has-content': profileAction }")
 
     // - Filter Panel
     #primary-panel.profile-column.no-padding
@@ -30,9 +30,8 @@
           icon(name="angle-right")
 
     //- Content Panel
-    transition(name="fade-out" mode="out-in" v-if="profileAction")
-      #content-panel.profile-column.no-padding(v-bind:class="{ visible: contentPanelVisible }" @click="contentPanelVisible = !contentPanelVisible")
-        component(v-bind:is="profileAction.action" v-bind:class-slug="activeClassSlug" v-bind:label="profileAction.label")
+    #content-panel.profile-column.no-padding(v-bind:class="{ visible: profileAction }")
+      component(v-if="profileAction" v-bind:is="profileAction.action" v-bind:class-slug="activeClassSlug" v-bind:label="profileAction.label")
       //- transition(name="fade-out" mode="out-in" v-for="(panel, index) in panels" v-bind:key="index")
         component(v-bind:is="panel.component" v-if="panel.visible" v-bind:style="panelStyle(index)" v-bind:class-slug="activeClassSlug" v-bind:label="panel.label")
 

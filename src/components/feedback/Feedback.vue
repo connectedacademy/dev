@@ -244,7 +244,7 @@ $chat-list-width = 320px
 .feedback-page
   pinned()
   background-color $color-lightest-grey
-  top 60px
+  top $navigation-height
   overflow-x none
   overflow-y scroll
   position fixed

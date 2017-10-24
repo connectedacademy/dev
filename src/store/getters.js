@@ -3,16 +3,7 @@ import store from '@/store';
 
 export const scrollPosition = state => state.scrollPosition;
 export const scrollPoints = state => state.scrollPoints;
-export const offsetScrollPosition = state => state.offsetScrollPosition;
-export const pendingScrollPosition = state => state.pendingScrollPosition;
 export const currentSection = state => state.currentSection;
-export const autoPlaying = state => state.autoPlaying;
-
-export const currentTime = (state) => {
-  let time = store.getters.currentSectionScrollPosition;
-  if (!time) return 0;
-  return (time < 0) ? 0 : (time / (app.segmentHeight * 0.2));
-};
 
 export const pageStyle = (state) => {
   // Return classes

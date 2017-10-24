@@ -42,6 +42,7 @@ import Moment from 'moment-mini';
 import 'vue-awesome/icons/heart';
 import 'vue-awesome/icons/retweet';
 import 'vue-awesome/icons/reply';
+import 'vue-awesome/icons/star';
 
 export default {
   name: 'message',

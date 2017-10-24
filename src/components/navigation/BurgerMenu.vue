@@ -1,10 +1,9 @@
 <template lang="pug">
 
-  .burger-menu(name="burger-menu" v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
-    svg(v-bind:class="{cross:(state === 'close')}" viewBox="0 0 800 600")
-      g
-        path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="top")
-        path(d="M180,220 C300,220 520,220 540,220 C740,220 680,580 520,380 C440,300 300,160 300,160" id="bottom" transform="translate(480, 300) scale(1, -1) translate(-480, -300)")
+  .burger-menu(v-if="!isRegistering" name="burger-menu" v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close') }")
+    .bar-wrapper(v-bind:class="{cross: (state === 'close') }")
+      .top-bar
+      .bottom-bar
 
 </template>
 
@@ -28,6 +27,9 @@ export default {
     state() {
       return this.$store.state.navigation.burger.state;
     },
+    isRegistering() {
+      return this.$route.name === 'registration';
+    },
   },
 };
 
@@ -39,51 +41,61 @@ export default {
 
 .burger-menu
   radius(50%)
-  transition(left 0.4s)
+  animate()
   background-color transparent
   height 50px
   width 52px
 
   position fixed
-  top 5px
-  left 5px
+  top 0
+  left 0
   z-index 55
+
+  .bar-wrapper
+    pinned()
+    position absolute
+    .bottom-bar, .top-bar
+      animate()
+      pinned()
+      background-color white
+      height 2px
+      left 12px 
+      right 12px
+      position absolute
+    .top-bar
+      top 18px
+      bottom auto
+    .bottom-bar
+      bottom 18px
+      top auto
 
   &:hover
     cursor pointer
-    background-color alpha(black, 0.1)
-
+    .bar-wrapper
+      .top-bar
+        left 10px
+        right 14px
+      .bottom-bar
+        right 10px
+        left 14px
   /* Active styles */
   &.active
     background-color transparent
     left calc(100% - 60px)
     z-index 56
     @media(min-width: 360px)
-      left 300px
+      left 310px
+  
+  .bar-wrapper
+    &.cross
+      .bottom-bar, .top-bar
+        left 12px !important
+        right 12px !important
+      .top-bar
+        top 24px !important
+        transform rotate(-45deg)
+      .bottom-bar
+        bottom 24px !important
+        transform rotate(45deg)
 
-easeInOutSine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
-easeOutBack   = cubic-bezier(0.250,-0.250, 0.750, 1.250)
-easing = easeInOutSine
-duration = 0.8s
-
-dash-offset-cross = 0px
-cross-length = 800px
-
-svg
-  width 60px
-  height 50px
-  cursor pointer
-
-  path
-    fill none
-    transition stroke-dashoffset duration easing, stroke-dasharray duration easing
-    stroke-width 25px
-    stroke-linecap round
-    stroke white
-    stroke-dashoffset 0px
-    stroke-dasharray 320px cross-length
-
-.cross
-  path
-    stroke-dashoffset -745px
 </style>

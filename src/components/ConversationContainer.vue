@@ -8,13 +8,22 @@
       icon(name="quote-right")
 
     .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
-      time-segment(v-for="(message, index) in conversationMessages" v-bind:key="index" v-bind:index="index" v-bind:message="message" v-bind:subtitle="subtitles[index]" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug")
+      time-segment(v-for="(message, index) in conversationMessages"
+        v-bind:key="index"
+        v-bind:index="index"
+        v-bind:message="message"
+        v-bind:subtitle="subtitles[index]"
+        v-bind:contentSlug="content.slug"
+        v-bind:classSlug="currentClass.slug"
+        v-bind:isCurrent="false")
+        //- isCurrent(index)
 
 </template>
 
 <script>
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 
 // Mixins
 import Messages from '@/mixins/Messages';
@@ -37,20 +46,6 @@ export default {
     TimeSegment,
   },
   props: ['content', 'collapsed'],
-  // watch: {
-  //   collapsed(nV) {
-  //     if (nV) return;
-
-  //     // Fill with blank messages      
-  //     const start = 20;
-  //     const segmentCount = this.content.duration * 0.2;
-  //     for (var index = start; index < segmentCount; index++) {
-  //       if (this.conversationMessages[index]) continue;
-  //       this.$log.info('Filling...');
-  //       Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
-  //     }
-  //   }
-  // },
   mounted() {
     this.loadSubtitles(this.content);
     this.loadMedia(this.content);
@@ -64,18 +59,38 @@ export default {
       if (this.conversationMessages[index]) continue;
       Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
     }
+
+    EventBus.$on('scrollStatus', (scrollStatus) => {
+      this.scrollStatus = scrollStatus;
+    });
+
+    window.addEventListener('keydown', (event) => {
+      // SPACE
+      if (event.keyCode === 32) { 
+        if (typeof this.peekSegment !== 'undefined') return;
+        if (typeof this.currentSection === 'undefined') return;
+        event.preventDefault();
+        this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
+      }
+      // ESC
+      if (event.keyCode === 27) {
+        this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
+        this.$store.commit('SET_PEEK_SEGMENT', undefined);
+      }
+    });
   },
   data() {
     return {
       messagePriority: false,
+      scrollStatus: undefined,
     };
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'currentSegmentGroup', 'peekSegment', 'activeSegment', 'course',
+      'currentSection', 'peekSegment', 'activeSegment', 'course', 'mediaPlaying',
     ]),
     containerHeight() {
-      return `${(this.content.duration * 0.2) * this.$app.segmentHeight}px`;
+      return `${((this.content.duration * 0.2) + 1) * this.$app.segmentHeight}px`;
     },
   },
   watch: {
@@ -84,13 +99,22 @@ export default {
         this.messagePriority = (nV) ? false : this.messagePriority;
       }, 300);
     },
-    currentSegmentGroup(nV, oV) {
-      if (nV === undefined) { return; }
-      if (oV !== nV) {
-        this.$log.info(`Getting messages for segment ${nV}`);
-        const force = (Math.abs(nV - oV) > 2);
-        this.loadSegmentSummary(nV, force);
+    scrollStatus(nV, oV) {
+      if (typeof nV !== 'undefined') {
+        if (typeof oV === 'undefined') {
+          this.loadSegmentSummary(nV.currentSegmentGroup, true);
+        }
+        else if (oV.currentSegmentGroup !== nV.currentSegmentGroup) {
+          this.$log.info(`Getting messages for segment ${nV.currentSegmentGroup}`);
+          const force = (Math.abs(nV.currentSegmentGroup - oV.currentSegmentGroup) > 2);
+          this.loadSegmentSummary(nV.currentSegmentGroup, force);
+        }
       }
+    },
+  },
+  methods: {
+    isCurrent(index) {
+      return this.scrollStatus && (this.scrollStatus.currentSegmentGroup === parseInt(index))
     },
   },
 };
@@ -114,34 +138,10 @@ export default {
     line-height 60px
     width 100%
 
-  #activity-visualisation
-    pointer-events none
-    position absolute
-    right 0
-    top 0
-    z-index 0
-
-    svg
-      overflow visible
-      path
-        fill alpha($color-primary, 1)
-
-    @media(max-width: 600px)
-      display none
-
-      // z-index 50
-      // left -400px
-      // right auto
-      // svg
-      //   path
-      //     fill alpha($color-primary, 0.3)
-
-
   .inner-wrapper
     background-color white
     background url('../assets/images/line.png')
     background-repeat repeat
-    // background-size auto $segment-height
     background-position center -1px
     overflow hidden
     

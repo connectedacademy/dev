@@ -9,9 +9,8 @@
 
     profile-icon(v-if="isRegistered")
 
-    #login-button(name="nav-login-button" @click="showAuth")
+    #login-button(v-if="!isRegistered && !isRegistering" name="nav-login-button" @click="showAuth")
       icon(name="user")
-      //- {{ $t('auth.login') }}
 
 </template>
 
@@ -39,6 +38,9 @@ export default {
     ...mapGetters([
       'isRegistered', 'navigation'
     ]),
+    isRegistering() {
+      return this.$route.name === 'registration';
+    },
     hidden() {
       return !this.$store.state.navigation.visible;
     },
@@ -84,15 +86,15 @@ export default {
   animate()
   radius(50%)
   position absolute
-  top 9px
+  top 7px
   right 7px
   z-index 52
-  height 42px
-  line-height 42px
-  width 42px
+  height $navigation-height - 14px
+  line-height $navigation-height - 14px
+  width $navigation-height - 14px
   color white
   .fa-icon
-    height 22px
+    height $navigation-height - -14px 20px
     margin 10px auto
   &:hover
     background-color alpha(black, 0.1)
@@ -101,7 +103,7 @@ export default {
 .navigation
   animate()
   background-color $color-primary
-  height 60px
+  height 50px
   position fixed
   top 0
   text-align center

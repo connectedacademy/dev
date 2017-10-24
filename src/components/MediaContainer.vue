@@ -16,6 +16,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import { EventBus } from '@/event-bus.js';
 
   import throttle from 'lodash/throttle';
   import inRange from 'lodash/inRange';
@@ -32,6 +33,11 @@
       Slick,
       // VueYouTubeEmbed
     },
+    mounted() {
+      EventBus.$on('scrollStatus', (scrollStatus) => {
+        this.scrollStatus = scrollStatus;
+      });
+    },
     watch: {
       'media': {
         handler: function(nV, oV) {
@@ -41,7 +47,7 @@
         },
         deep: true,
       },
-      currentTime(nV, oV) {
+      scrollStatus(nV, oV) {
         this.updateCarousel(this);
       },
       videoIsActive(nV) {
@@ -52,6 +58,7 @@
     },
     data() {
       return {
+        scrollStatus: undefined,
         slickMode: true,
         currentIndex: 0,
         nextIndex: 1,
@@ -63,7 +70,7 @@
           initialSlide: 0,
           arrows: false,
           centerMode: false,
-          slidesToShow: 3,
+          slidesToShow: 5,
           slidesToScroll: 1,
           variableWidth: true,
           infinite: false,
@@ -79,7 +86,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'currentTime', 'media'
+        'course', 'media'
       ]),
       src() {
         if (this.playerType === 'soundcloud') {
@@ -91,11 +98,13 @@
       setLightboxMedia(media) {
         this.$store.commit('SET_LIGHTBOX_MEDIA', media);
       },
-      updateCarousel: throttle(function(self) {
+      updateCarousel: throttle(function (self) {
+        if (!self.scrollStatus) return;
+        
         for (let i = 0; i < self.media.length; i++) {
           const image = self.media[i];
   
-          if (inRange(self.currentTime, image.start, image.end)) {
+          if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
             if (self.slickMode) {
               self.$refs.classslick.goTo(i);
             }
@@ -104,7 +113,7 @@
             
           }
         }
-      }, 2000),
+      }, 200, { 'leading': false }),
     },
   };
 </script>
@@ -113,39 +122,12 @@
 
 @import '~stylus/shared'
 
-$media-height = 220px
-
 #media-wrapper
-  padding 0 8px
   position relative
   height $media-height
   overflow hidden
   &.youtube-mode
     padding-left (188px / 0.5625) + 16px
-  #images-wrapper
-    background white
-    height ($media-height - 16px)
-    overflow hidden
-    padding 0
-    position relative    
-    img#current-image, img#next-image
-      height 204px
-      margin-right 20px
-      &:hover
-        cursor pointer
-    .image-thumbnails
-      overflow scroll
-      height ($media-height - 16px)
-      padding-left 280px
-      .image-tile
-        background-image()
-        background-color $color-lightest-grey
-        float left 
-        margin 4px
-        height calc(200px / 2)
-        width calc(200px / 2)
-        &:hover
-          cursor pointer
 
   #stream-wrapper
     top 0
@@ -177,10 +159,10 @@ $media-height = 220px
     opacity 0.5
     outline 0
     img
-      height 204px
-      max-height 204px
+      height ($media-height - 15px)
+      max-height ($media-height - 15px)
       max-width 100%
-      margin 0 10px
+      margin 5px 5px 10px 5px
     &:hover
       cursor pointer
     &.slick-current

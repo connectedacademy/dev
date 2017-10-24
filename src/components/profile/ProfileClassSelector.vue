@@ -3,7 +3,7 @@
   .profile-class-selector
     h3 Select a class
 
-    ul.profile-class-selector(v-if="classes.length > 0" v-bind:class="{ selecting: selecting }")
+    ul.profile-class-selector(v-bind:class="{ selecting: selecting }")
       li.profile-class-selector--item(v-if="showAll && (classActive(undefined) || selecting)" v-bind:class="{'active': !activeClass }" @click="setClass(undefined)")
         | All
         .toggle(v-bind:class="{ active: !activeClass }")
@@ -72,6 +72,7 @@ ul.profile-class-selector
   cleanlist()
   border $color-border 1px solid
   margin 20px 0
+  min-height 64px
   max-width 400px
   li.profile-class-selector--item
     cleanlist()

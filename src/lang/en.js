@@ -45,6 +45,7 @@ export default {
 
     register: 'Register',
     welcome_to_registration: 'Welcome to registration',
+    registration_message: 'Please fill in the fields below to register for Connected Academy, don\'t forget to select your hub',
     attempt_registration: 'Register',
     read_the_following: 'Please read the following',
     answer_the_following: 'Please answer the following',

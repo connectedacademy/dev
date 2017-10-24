@@ -68,18 +68,6 @@ const getters = {
 
     return undefined;
   },
-  currentSectionScrollPosition() {
-    if (!store.state.currentSection) { return 0; }
-    return store.state.offsetScrollPosition - store.state.currentSection.top;
-  },
-  currentSegmentGroup() {
-    if (!store.state.currentSection) { return -1; }
-    return math.floor(store.getters.currentSectionScrollPosition / app.segmentHeight);
-  },
-  currentSegment() {
-    if (!store.state.currentSection) { return 0; }
-    return math.floor(store.getters.currentSectionScrollPosition / (app.segmentHeight * 0.2));
-  },
 };
 
 // actions

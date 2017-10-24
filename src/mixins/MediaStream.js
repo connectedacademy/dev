@@ -1,8 +1,10 @@
-const SYNC_THRESHOLD = 1.0;
+const SYNC_THRESHOLD = 2.0;
 
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 
-import throttle from 'lodash/throttle';
+import _throttle from 'lodash/throttle';
+import _find from 'lodash/find';
 
 require('howler');
 
@@ -26,25 +28,15 @@ var sound = new Howl({
 
 export default {
   mounted() {
+    EventBus.$on('scrollStatus', (scrollStatus) => {
+      this.scrollStatus = scrollStatus;
+    });
     sound.on('seek', () => {
-
      this.checkBufferStatus();
     });
   },
   watch: {
-    pendingScrollPosition(nV) {
-      if (nV === 0) return;
-
-      const scrollPoint = this.$store.state.scrollPoints[this.content.slug];
-      this.$store.commit('setPendingScrollPosition', 0);
-
-      window.scroll(0, scrollPoint.top + ((nV * 0.2) * this.$app.segmentHeight));
-
-      sound.seek(nV);
-     
-    },
-    currentTime(nV) {
-
+    scrollStatus(nV) {
       this.performSync(this);
     },
     mediaPlaying(nV, oV) {
@@ -72,17 +64,20 @@ export default {
   },
   data() {
     return {
+      scrollStatus: undefined,
       mediaBuffering: false,
       bufferInterval: false,
     }
   },
   computed: {
     ...mapGetters([
-      'currentTime', 'mediaPlaying', 'pendingScrollPosition'
+      'mediaPlaying'
     ]),
   },
   methods: {
     checkBufferStatus() {
+
+      if (!self.scrollStatus) return;
 
       let bufferingCount = 0;
 
@@ -91,10 +86,9 @@ export default {
         const start = sound._sounds[0]._node.buffered.start(index);
         const end = sound._sounds[0]._node.buffered.end(index);
 
-        const inBufferedZone = ((this.currentTime > start) && (this.currentTime < end));
+        const inBufferedZone = ((this.scrollStatus.currentTime > start) && (this.scrollStatus.currentTime < end));
 
         if (inBufferedZone) {
-          this.$log.info('all good');
           this.bufferInterval = false;
           this.mediaBuffering = false;
           return;
@@ -110,17 +104,14 @@ export default {
       }
       
     },
-    performSync: throttle(function (self) {
+    performSync: _throttle(function (self) {
 
       const playerTime = sound.seek();
-      const outOfSync = ((self.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.currentTime > (playerTime + SYNC_THRESHOLD)));
-
-      self.$log.info(playerTime);
-      self.$log.info(self.currentTime);
+      const outOfSync = ((self.scrollStatus.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.scrollStatus.currentTime > (playerTime + SYNC_THRESHOLD)));
 
       if (outOfSync) {
         self.$log.info('OUTOFSYNC');
-        sound.seek(self.currentTime);
+        sound.seek(self.scrollStatus.currentTime);
       }
     }, 500),
   },

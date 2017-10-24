@@ -4,7 +4,6 @@ import API from '@/api';
 
 // initial state
 const state = {
-  visible: true,
   hidden: false,
 };
 
@@ -20,15 +19,12 @@ const actions = {
 // mutations
 const mutations = {
   [types.SHOW_MEDIA](initialState) {
-    state.visible = true;
     state.hidden = false;
   },  
   [types.PEEK_MEDIA](initialState) {
-    state.visible = false;
     state.hidden = false;
   },
   [types.HIDE_MEDIA](initialState) {
-    state.visible = false;
     state.hidden = true;
   },
   [types.SEND_MESSAGE_SUCCESS](initialState, {
