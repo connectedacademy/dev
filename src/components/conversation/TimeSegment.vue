@@ -317,7 +317,7 @@
     
   .subscribed-status
     radius(4px)
-    background-color $color-danger
+    background-color $color-border
     right auto
     left 10px
     top 10px
