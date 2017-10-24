@@ -6,10 +6,10 @@
       //- youtube#video-container(v-if="src && (playerType === 'youtube')" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="youtubeReady" @playing="youtubePlaying" @paused="youtubePaused" @ended="youtubeEnded" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="{ height: `${pHeight}px`, width: `${pWidth}px` }")
     
     #images-wrapper
+      .pure-button(@click="reslick") reslick
       //- img#current-image(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
       //- img#next-image(v-if="!slickMode && nextIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[nextIndex].text}`" @click="setLightboxMedia(media[nextIndex].text)")
       slick#image-swiper(v-if="slickMode" ref="classslick" v-bind:options="slickOptions")
-        pre(style="display: none") {{ media }}
         .img-wrapper(v-for="(item, index) in media" v-bind:key="index" )
           img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
@@ -44,6 +44,8 @@
         handler: function(nV, oV) {
           if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
             this.$refs.classslick.reSlick();
+          } else {
+            console.log('media: Either slick ref does not exist or not in slick mode');
           }
         },
         deep: true,
@@ -54,6 +56,8 @@
       videoIsActive(nV) {
         if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
           this.$refs.classslick.reSlick();
+        } else {
+          console.log('videoIsActive: Either slick ref does not exist or not in slick mode');
         }
       },
     },
@@ -96,6 +100,9 @@
       },
     },
     methods: {
+      reslick() {
+        this.$refs.classslick.reSlick();
+      },
       setLightboxMedia(media) {
         this.$store.commit('SET_LIGHTBOX_MEDIA', media);
       },
