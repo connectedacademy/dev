@@ -23,22 +23,37 @@ describe('Authentication', function() {
     browser.saveScreenshot('./test/screenshots/auth/close-sidebar.png');
   });
 
-  it('Does click all hints', function () {
-    browser.refresh().pause(4000);
-    let markdownlinks = $$('.onnboarding-prompt > .dismiss-button');
-    // console.log(markdownlinks);
-    for (let i = 0; i < markdownlinks.length; i++) {
-        let block = $$('.onnboarding-prompt > .dismiss-button')[0];
+  // it('Does click all hints', function () {
+  //   browser.refresh().pause(4000);
+  //   // let markdownlinks = $$('.onnboarding-prompt > .dismiss-button');
 
-        // console.log(block);
+    
 
-        browser.scroll(0, browser.elementIdLocation(block.ELEMENT).value.y-50).pause(500);
+  //   dismissPrompt('onnboarding-prompt');
+  //   // dismissPrompt('onnboarding-prompt');
 
-        browser.elementIdClick(block.ELEMENT).pause(500);
-        // assert(!browser.elementIdDisplayed(block.ELEMENT));
-    }
 
-    browser.saveScreenshot('./test/screenshots/auth/dismiss-onboarding.png');
-  });
+
+  //   // // console.log(markdownlinks);
+  //   // for (let i = 0; i < markdownlinks.length; i++) {
+  //   //     let block = $$('.onnboarding-prompt > .dismiss-button')[0];
+
+  //   //     // console.log(block);
+
+  //   //     browser.scroll(0, browser.elementIdLocation(block.ELEMENT).value.y-50).pause(500);
+
+  //   //     browser.elementIdClick(block.ELEMENT).pause(500);
+  //   //     // assert(!browser.elementIdDisplayed(block.ELEMENT));
+  //   // }
+
+  //   browser.saveScreenshot('./test/screenshots/auth/dismiss-onboarding.png');
+  // });
 
 });
+
+function dismissPrompt(selector)
+{
+  let link = $(selector + ' > .dismiss-button');
+  browser.scroll(0, browser.elementIdLocation(lik.ELEMENT).value.y-50).pause(500);
+  browser.elementIdClick(link.ELEMENT).pause(500);
+}

@@ -12,6 +12,8 @@
 
         markdown-renderer
 
+    previous-button
+
 </template>
 
 <script>

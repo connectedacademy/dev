@@ -1,6 +1,10 @@
 # Connected Academy - Elevator
 
 > A front-end interface for interacting with the Connected Academy platform
+ 
+We use [BrowserStack](https://browserstack.com) to test Connected Academy.
+
+<img style="height:30px" src="browserstack-logo.svg"/>
 
 ## Build Setup
 
