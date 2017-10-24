@@ -49,8 +49,10 @@ export default {
     Auth,
   ],
   mounted() {
-    // Auto focus textarea
-    this.$refs.textarea.$el.focus();
+    if (!this.static) {
+      // Auto focus textarea
+      this.$refs.textarea.$el.focus();
+    }
   },
   data() {
     return {
