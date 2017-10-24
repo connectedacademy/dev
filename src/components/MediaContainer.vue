@@ -9,8 +9,8 @@
       .pure-button(@click="reslick") reslick
       //- img#current-image(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
       //- img#next-image(v-if="!slickMode && nextIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[nextIndex].text}`" @click="setLightboxMedia(media[nextIndex].text)")
-      slick#image-swiper(v-if="slickMode && media" ref="classslick" v-bind:options="slickOptions")
-        .img-wrapper(v-for="(item, index) in media" v-bind:key="index" )
+      slick#image-swiper(v-if="slickMode && liveclassMedia" ref="classslick" v-bind:options="slickOptions")
+        .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
           img(v-bind:data-lazy="`https://researchmethods.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
           //- img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
@@ -39,10 +39,15 @@
       EventBus.$on('scrollStatus', (scrollStatus) => {
         this.scrollStatus = scrollStatus;
       });
+      this.$refs.classslick.on('lazyLoadError', (e) => {
+        console.log(e);
+      });
     },
     watch: {
-      'media': {
+      'liveclassMedia': {
         handler: function(nV, oV) {
+          if (typeof nV === 'undefined') return;
+          
           if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
             this.$refs.classslick.reSlick();
           } else {
@@ -92,7 +97,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'media'
+        'course', 'liveclassMedia'
       ]),
       src() {
         if (this.playerType === 'soundcloud') {
@@ -111,15 +116,15 @@
       updateCarousel: throttle(function (self) {
         if (!self.scrollStatus) return;
         
-        for (let i = 0; i < self.media.length; i++) {
-          const image = self.media[i];
+        for (let i = 0; i < self.liveclassMedia.length; i++) {
+          const image = self.liveclassMedia[i];
   
           if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
             if (self.slickMode) {
               self.$refs.classslick.goTo(i);
             }
             self.currentIndex = i;
-            self.nextIndex = (i < self.media.length) ? (i + 1) : undefined;
+            self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined;
             
           }
         }
