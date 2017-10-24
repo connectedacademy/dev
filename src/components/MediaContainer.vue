@@ -11,7 +11,8 @@
       //- img#next-image(v-if="!slickMode && nextIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[nextIndex].text}`" @click="setLightboxMedia(media[nextIndex].text)")
       slick#image-swiper(v-if="slickMode" ref="classslick" v-bind:options="slickOptions")
         .img-wrapper(v-for="(item, index) in media" v-bind:key="index" )
-          img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+          img(v-bind:data-lazy="`https://researchmethods.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+          //- img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
 
@@ -101,6 +102,7 @@
     },
     methods: {
       reslick() {
+        alert('reslicking..');
         this.$refs.classslick.reSlick();
       },
       setLightboxMedia(media) {
