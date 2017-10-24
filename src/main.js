@@ -22,6 +22,7 @@ import Lang from '@/Lang';
 import Sockets from '@/Sockets';
 
 import OnboardingPrompt from '@/components/OnboardingPrompt';
+import { VueMasonryPlugin } from 'vue-masonry';
 
 import app from '@/config';
 import store from '@/store';
@@ -38,6 +39,7 @@ Vue.use(VueResource);
 Vue.use(Vuex);
 
 Vue.use(VueConfig, Vue.config);
+Vue.use(VueMasonryPlugin);
 
 const options = {
   logLevel: 'info',
@@ -66,14 +68,14 @@ Vue.config.productionTip = false;
 
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json' };
-Vue.http.interceptors.push((request, next) => {
-  next((response) => {
-    if (response.status === 403) {
-      this.$log.info('Session invalid');
-      store.dispatch('logout');
-    }
-  });
-});
+// Vue.http.interceptors.push((request, next) => {
+//   next((response) => {
+//     if (response.status === 403) {
+//       Vue.$log.info('Session invalid');
+//       store.dispatch('logout');
+//     }
+//   });
+// });
 
 // I18n config
 Vue.config.lang = 'en';

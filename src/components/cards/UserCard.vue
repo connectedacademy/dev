@@ -7,7 +7,7 @@
   h1.user-name {{ user.name }}
   h2.user-account {{ user.account }}
 
-  .pure-button.pure-button-action(@click="navigateToAdmin") My Profile
+  .pure-button.pure-button-action(@click="navigateToAdmin") View Dashboard
   .pure-button.pure-button-action(@click="showHints") Show Hints
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 

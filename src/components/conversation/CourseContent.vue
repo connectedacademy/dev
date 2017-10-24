@@ -36,7 +36,7 @@
 
         video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
         
-        soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud")
+        soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud" v-bind:auto-load="true")
 
         webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClass.slug" v-bind:content-slug="content.slug")
 
@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     viewCurrentClass() {
-      if (!this.course || !this.course.classes) { return; }
+      if (!this.course || !this.course.classes) return;
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           this.$store.dispatch('getSpec', theClass.slug);

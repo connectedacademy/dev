@@ -6,16 +6,17 @@
       //- youtube#video-container(v-if="src && (playerType === 'youtube')" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="youtubeReady" @playing="youtubePlaying" @paused="youtubePaused" @ended="youtubeEnded" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="{ height: `${pHeight}px`, width: `${pWidth}px` }")
     
     #images-wrapper
-      img#current-image(v-if="!slickMode && currentIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
+      //- img#current-image(v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[currentIndex].text}`" @click="setLightboxMedia(media[currentIndex].text)")
       //- img#next-image(v-if="!slickMode && nextIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[nextIndex].text}`" @click="setLightboxMedia(media[nextIndex].text)")
-      slick#image-swiper(v-if="slickMode" ref="classslick" v-bind:options="slickOptions")
-        .img-wrapper(v-for="(item, key) in media" v-bind:key="key" )
+      slick#image-swiper(v-if="slickMode && liveclassMedia" ref="classslick" v-bind:options="slickOptions")
+        .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
           img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
+  import { EventBus } from '@/event-bus.js';
 
   import throttle from 'lodash/throttle';
   import inRange from 'lodash/inRange';
@@ -32,26 +33,38 @@
       Slick,
       // VueYouTubeEmbed
     },
+    mounted() {
+      EventBus.$on('scrollStatus', (scrollStatus) => {
+        this.scrollStatus = scrollStatus;
+      });
+    },
     watch: {
-      'media': {
+      'liveclassMedia': {
         handler: function(nV, oV) {
-          if (this.slickMode) {
+          if (typeof nV === 'undefined') return;
+
+          if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
             this.$refs.classslick.reSlick();
+          } else {
+            console.log('media: Either slick ref does not exist or not in slick mode');
           }
         },
         deep: true,
       },
-      currentTime(nV, oV) {
+      scrollStatus(nV, oV) {
         this.updateCarousel(this);
       },
       videoIsActive(nV) {
-        if (this.slickMode) {
+        if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
           this.$refs.classslick.reSlick();
+        } else {
+          console.log('videoIsActive: Either slick ref does not exist or not in slick mode');
         }
       },
     },
     data() {
       return {
+        scrollStatus: undefined,
         slickMode: true,
         currentIndex: 0,
         nextIndex: 1,
@@ -63,7 +76,7 @@
           initialSlide: 0,
           arrows: false,
           centerMode: false,
-          slidesToShow: 3,
+          slidesToShow: 5,
           slidesToScroll: 1,
           variableWidth: true,
           infinite: false,
@@ -79,7 +92,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'currentTime', 'media'
+        'course', 'liveclassMedia'
       ]),
       src() {
         if (this.playerType === 'soundcloud') {
@@ -88,23 +101,30 @@
       },
     },
     methods: {
+      reslick() {
+        this.$nextTick(() => {
+          this.$refs.classslick.reSlick();
+        });
+      },
       setLightboxMedia(media) {
         this.$store.commit('SET_LIGHTBOX_MEDIA', media);
       },
-      updateCarousel: throttle(function(self) {
-        for (let i = 0; i < self.media.length; i++) {
-          const image = self.media[i];
+      updateCarousel: throttle(function (self) {
+        if (!self.scrollStatus) return;
+        
+        for (let i = 0; i < self.liveclassMedia.length; i++) {
+          const image = self.liveclassMedia[i];
   
-          if (inRange(self.currentTime, image.start, image.end)) {
+          if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
             if (self.slickMode) {
               self.$refs.classslick.goTo(i);
             }
             self.currentIndex = i;
-            self.nextIndex = (i < self.media.length) ? (i + 1) : undefined;
+            self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined;
             
           }
         }
-      }, 2000),
+      }, 200, { 'leading': false }),
     },
   };
 </script>
@@ -113,39 +133,12 @@
 
 @import '~stylus/shared'
 
-$media-height = 220px
-
 #media-wrapper
-  padding 0 8px
   position relative
   height $media-height
   overflow hidden
   &.youtube-mode
     padding-left (188px / 0.5625) + 16px
-  #images-wrapper
-    background white
-    height ($media-height - 16px)
-    overflow hidden
-    padding 0
-    position relative    
-    img#current-image, img#next-image
-      height 204px
-      margin-right 20px
-      &:hover
-        cursor pointer
-    .image-thumbnails
-      overflow scroll
-      height ($media-height - 16px)
-      padding-left 280px
-      .image-tile
-        background-image()
-        background-color $color-lightest-grey
-        float left 
-        margin 4px
-        height calc(200px / 2)
-        width calc(200px / 2)
-        &:hover
-          cursor pointer
 
   #stream-wrapper
     top 0
@@ -177,10 +170,10 @@ $media-height = 220px
     opacity 0.5
     outline 0
     img
-      height 204px
-      max-height 204px
+      height ($media-height - 15px)
+      max-height ($media-height - 15px)
       max-width 100%
-      margin 0 10px
+      margin 5px 5px 10px 5px
     &:hover
       cursor pointer
     &.slick-current

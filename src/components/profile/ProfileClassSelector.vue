@@ -1,21 +1,17 @@
 <template lang="pug">
 
   .profile-class-selector
-    h3 Select a class
-
-    ul.profile-class-selector(v-if="classes.length > 0" v-bind:class="{ selecting: selecting }")
-      li.profile-class-selector--item(v-if="showAll && (classActive(undefined) || selecting)" v-bind:class="{'active': !activeClass }" @click="setClass(undefined)")
-        | All
-        .toggle(v-bind:class="{ active: !activeClass }")
-      li.profile-class-selector--item(v-for="(theClass, index) in classes" v-bind:key="index" v-if="classActive(theClass) || selecting" v-bind:class="{'active': classActive(theClass) }" @click="setClass(theClass)")
+    ul.profile-class-selector(v-bind:class="{ selecting: selecting }" @click="expand")
+      li.profile-class-selector--item(v-for="(theClass, index) in classes" v-bind:key="index" v-bind:class="{ active: (this.profileClassSlug === theClass.slug) }" @click="setClass(theClass)")
         | {{ theClass.title }}
-        .toggle(v-bind:class="{ active: classActive(theClass) }")
+        .toggle
 
 </template>
 
 <script>
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 import _get from 'lodash/get';
 
 export default {
@@ -23,10 +19,20 @@ export default {
   props: ['activeClass', 'showAll', 'classes'],
   mounted() {
     this.getClasses();
+    EventBus.$on('updateClasses', () => {
+      this.getClasses();
+    });
+  },
+  watch: {
+    classes(nV, oV) {
+      if (nV && (typeof nV !== 'undefined') && nV.length > 0) {
+        this.setClass(nV[0]);
+      }
+    }
   },
   data() {
     return {
-      selecting: false,
+      selecting: true,
     }
   },
   computed: {
@@ -49,15 +55,18 @@ export default {
         },
       );
     },
-    classActive(theClass) {
-      return this.profileClassSlug === _get(theClass, 'slug');
+    expand() {
+      if (!this.selecting) {
+        this.selecting = true;
+      }
     },
     setClass(theClass) {
 
-      if (this.selecting) {
+      if (this.selecting && (theClass !== this.profileClass)) {
         this.$store.commit('updateProfileClass', theClass);
+        this.selecting = false;
+        EventBus.$emit('profileClassUpdated');
       }
-      this.selecting = !this.selecting;
     },
   },
 }
@@ -68,24 +77,31 @@ export default {
 
 @import '~stylus/shared'
 
+$selector-height = 40px
+
 ul.profile-class-selector
   cleanlist()
-  border $color-border 1px solid
-  margin 20px 0
-  max-width 400px
+  radius(4px)
+  box-shadow()
+  margin 30px 10px
+  min-height $selector-height
+  max-width 280px
+  min-width 160px
+  overflow hidden
   li.profile-class-selector--item
     cleanlist()
+    animate()
     background-color white
     border-bottom $color-border 1px solid
-    padding 20px
-    padding-right 30px
+    padding 0 20px
+    line-height $selector-height
     position relative
     &:hover
       cursor pointer
       background-color $color-lightest-grey
     .toggle
       radius(50%)
-      background-color $color-danger
+      background-color $color-success
       height 10px
       width 10px
       margin-top -(10px / 2)
@@ -93,8 +109,6 @@ ul.profile-class-selector
       right 10px
       top 50%
       bottom 0
-      &.active
-        background-color $color-success
     &:last-child
       border-bottom none
 

@@ -1,12 +1,8 @@
 <template lang="pug">
 
-.profile-panel
+.profile-panel(v-bind:class="{ limited: limitHeight }")
 
-  .profile-panel--header
-    h1 Question responses
-
-    .reload-button(@click="loadData")
-      icon(name="refresh")
+  profile-panel-header(v-bind:label="label" v-on:refresh="loadData" can-refresh)
 
   .profile-panel--content
     ul
@@ -28,27 +24,23 @@
 
 <script>
 import API from '@/api';
+import { EventBus } from '@/event-bus.js';
+
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
 
 import 'vue-awesome/icons/refresh';
 
 export default {
   name: 'question-responses',
+  props: ['label', 'role', 'limitHeight', 'expandedView'],
   components: {
+    ProfilePanelHeader,
   },
   mounted() {
-    this.loadData();
-  },
-  watch: {
-    classSlug(nV, oV) {
-      if (nV !== oV) {
-        this.loadData();
-      }
-    },
-    contentSlug(nV, oV) {
-      if (nV !== oV) {
-        this.loadData();
-      }
-    },
+    if (this.expandedView) { this.loadData(); }
+    EventBus.$on('profileClassUpdated', () => {
+      this.loadData();
+    });
   },
   data() {
     return {
@@ -86,20 +78,24 @@ export default {
 .profile-panel
 
   .profile-panel--content
+    padding 15px
     ul
       cleanlist()
       li
         cleanlist()
-        border-bottom $color-border 1px solid
-        padding 10px 0
+        margin-bottom 30px
+        &:last-child
+          margin-bottom 0
         h3
           reset()
           color $color-text-dark-grey
-          font-size 1em
+          font-size 0.9em
+          font-weight normal
           margin-bottom 10px
         p
           reset()
-          color $color-text-dark-grey
-          font-size 1em
+          color $color-text-grey
+          font-size 0.9em
+          font-weight bold
 
 </style>

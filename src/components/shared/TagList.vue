@@ -28,6 +28,7 @@ export default {
 
 ul.tag-list
   cleanlist()
+  display inline-block
   li
     cleanlist()
     radius(4px)

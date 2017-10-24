@@ -12,14 +12,6 @@
     pre {{ scrollPoints }}
 
   p {{ `subscribedTo - ${subscribedTo}` }}
-  p {{ `scrollPosition - ${scrollPosition}` }}
-  p {{ `offsetScrollPosition - ${offsetScrollPosition}` }}
-
-  p {{ `autoPlaying - ${autoPlaying}` }}
-  p {{ `currentTime - ${currentTime}` }}
-  p {{ `currentSectionScrollPosition - ${currentSectionScrollPosition}` }}
-  p {{ `currentSegmentGroup - ${currentSegmentGroup}` }}
-  p {{ `currentSegment - ${currentSegment}` }}
 
   p {{ `mediaPlaying - ${mediaPlaying}` }}
 
@@ -39,16 +31,6 @@ export default {
       'currentActiveSection',
       'scrollPoints',
       'subscribedTo',
-
-      'scrollPosition',
-      'offsetScrollPosition',
-
-      'autoPlaying',
-      'currentTime',
-      'currentSectionScrollPosition',
-      'currentSegmentGroup',
-      'currentSegment',
-
       'mediaPlaying',
     ]),
   },

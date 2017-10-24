@@ -3,6 +3,7 @@
 .course-content(name="section-liveclass")
 
   .course-content--header.block
+    icon(name="twitter")
     h1.content-title {{ content.title }}
     p.content-description(v-if="content.description") {{ content.description }}
 
@@ -23,7 +24,8 @@ import { mapGetters } from 'vuex';
 import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
 
-import find from 'lodash/find';
+import _find from 'lodash/find';
+import twitter from 'vue-awesome/icons/twitter';
 
 export default {
   name: 'live-class',
@@ -38,9 +40,8 @@ export default {
   methods: {
     continueListening() {
       this.$store.commit('EXPAND_CONVERSATION');
-      const scrollPoint = find(this.$store.state.scrollPoints, {
-        content_type: 'class'
-      });
+
+      const scrollPoint = _find(this.$store.state.scrollPoints, { content_type: 'class' });
       this.$store.commit('setCurrentSection', scrollPoint);
     }
   }
@@ -60,6 +61,13 @@ export default {
     background-color $color-darkest-grey
     border-top-left-radius 6px
     border-top-right-radius 6px
+
+    .fa-icon
+      color white
+      height 20px
+      position absolute
+      top 10px
+      right 10px
 
     .pure-button
       background-color transparent

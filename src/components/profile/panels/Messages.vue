@@ -1,17 +1,18 @@
 <template lang="pug">
 
-.profile-panel
+.profile-panel(v-bind:class="{ limited: limitHeight }")
 
-  profile-panel-header(label="Messages" v-on:refresh="loadData")
-
+  profile-panel-header(v-bind:label="`${panel.label} (${messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
   .profile-panel--content.no-padding
-    //- pre {{ messages }}
-    message(v-for="(message, index) in messages" v-bind:key="index" v-bind:message="message" v-bind:truncate="false")
+    .no-results(v-if="messages.length === 0")
+      | No Results
+    message(v-for="(message, index) in messages" v-bind:key="index" v-bind:message="message" v-bind:truncate="false" v-if="(limitHeight && (index < 4)) || !limitHeight")
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 import API from '@/api';
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
@@ -21,14 +22,17 @@ import Message from '@/components/conversation/Message';
 
 export default {
   name: 'messages',
-  props: ['role'],
+  props: ['panel', 'limitHeight', 'canExpand', 'expandedView'],
   components: {
     ProfilePanelHeader,
     StudentTile,
     Message,
   },
   mounted() {
-    this.loadData();
+    if (this.expandedView) { this.loadData(); }
+    EventBus.$on('profileClassUpdated', () => {
+      this.loadData();
+    });
   },
   data() {
     return {
@@ -36,18 +40,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['profileClass', 'profileClassSlug']),
+    ...mapGetters(['user', 'profileClassSlug']),
   },
   methods: {
+    expand() {
+      this.$store.commit('updateProfileAction', this.panel);
+    },
     loadData() {
       this.messages = [];
 
       let request = {
-        theClass: undefined,
-        userId: undefined,
-      }
-      if (this.role === 'user') {
-        request.userId = this.user.id;
+        theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
+        userId: (this.panel.role === 'user') ? this.user.id : undefined,
+        teacher: (this.panel.role === 'teacher') ? true : undefined,
       }
 
       API.profile.getMessages(
@@ -66,3 +71,9 @@ export default {
 };
 
 </script>
+
+<style lang="stylus" scoped>
+
+@import '~stylus/profile'
+  
+</style>

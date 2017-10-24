@@ -14,33 +14,21 @@
 
         hr
 
-        p 
-          strong Four Corners 
-          span is simple way of representing context information about photographs. It enables the reader to see what is happening in the photograph, why the photographer made it and under what conditions.
+        p FourCorners is simple way of representing context information about photographs. It enables the reader to see what is happening in the photograph, why the photographer made it and under what conditions.
 
-        p Ex-New York Times Photo Editor 
-          a(href="http://www.americanphotomag.com/interview-fred-ritchin-establishing-standards-digital-manipulation") Fred Ritchin
-          span , proposed the idea in his book `After Photography`. He envisaged each corner of an image providing access to extra information; top left would be the frames before and after, top right would be links to further, related information. Bottom left would be the background-story of the image and bottom right would be the photographer’s name, copyright terms and, their code of ethics.
+        p Ex-New York Times Photo Editor [Fred Ritchin], proposed the idea in his book `After Photography`. He envisaged each corner of an image providing access to extra information; top left would be the frames before and after, top right would be links to further, related information. Bottom left would be the background-story of the image and bottom right would be the photographer’s name, copyright terms and, their code of ethics.
 
-        p We’re using Four Corners because it shifts the role of the photographer from being suppliers of content to becoming publishers, and allows the reader to interregate the photograph in a richer way.
+        p We’re using 4C because it shifts the role of the photographer from being suppliers of content to becoming publishers, and allows the reader to interregate the photograph in a richer way.**
 
       .main-container.main-container-padded.background-white
       
         four-corners-interaction
 
-      .main-container.main-container-padded.background-white#blog
+      .main-container.main-container-padded.background-white#get-started
+      
+        h1.content-title Get Started
 
-        h1.content-title Getting Your Work Online
-
-        p During this course You will be asked to produce Four Corners images from Your own content.
-
-        p To best represent Your work, we ask that you maintain a portfolio of these pieces throughout the duration of the course. If you do not have a website, portfolio or other online presense that supports the use of Four Corners (most do), then have a look at our suggested list of providers that we know will work:
-
-        p Using Four Corners on your site involves 3 simple steps:
-        ol
-          li Preparing your site for Four Corners
-          li Creating the Metadata for an image
-          li Putting it on your site
+        p We have worked to make the experience of adding FourCorners images to your website as easy as possible. To get started select your platform from the list below.
 
         .platform-tiles-wrapper
           ul.platform-tiles

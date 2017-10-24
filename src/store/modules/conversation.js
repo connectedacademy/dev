@@ -13,7 +13,7 @@ import findIndex from 'lodash/findIndex';
 const state = {
   isCollapsed: true,
   visualisation: [],
-  media: [],
+  liveclassMedia: undefined,
   activeSegment: undefined,
   peekSegment: undefined,
   activeSegmentMessages: [],
@@ -45,7 +45,7 @@ const getters = {
   infoModal: (initialState) => initialState.infoModal,
   questionModalVisible: (initialState) => initialState.questionModalVisible,
   questionModal: (initialState) => initialState.questionModal,
-  media: (initialState) => initialState.media,
+  liveclassMedia: (initialState) => initialState.liveclassMedia,
   visualisation: (initialState) => initialState.visualisation,
   modalVisible() {
     return state.infoModalVisible || state.questionModalVisible;
@@ -67,18 +67,6 @@ const getters = {
     });    
 
     return undefined;
-  },
-  currentSectionScrollPosition() {
-    if (!store.state.currentSection) { return 0; }
-    return store.state.offsetScrollPosition - store.state.currentSection.top;
-  },
-  currentSegmentGroup() {
-    if (!store.state.currentSection) { return -1; }
-    return math.floor(store.getters.currentSectionScrollPosition / app.segmentHeight);
-  },
-  currentSegment() {
-    if (!store.state.currentSection) { return 0; }
-    return math.floor(store.getters.currentSectionScrollPosition / (app.segmentHeight * 0.2));
   },
 };
 
@@ -117,13 +105,13 @@ const mutations = {
   ['GET_MEDIA_SUCCESS'](initialState, {
     response,
   }) {
-    state.media = response.response;
+    state.liveclassMedia = response.response;
   },
   ['GET_MEDIA_FAILURE'](initialState, {
     response,
   }) {
     Vue.$log.info('error');
-    state.media = [];
+    state.liveclassMedia = [];
     // error in response
   },
   ['GET_MESSAGES_SUCCESS'](initialState, {

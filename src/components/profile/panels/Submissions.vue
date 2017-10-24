@@ -2,22 +2,29 @@
 
 .profile-panel
 
-  profile-panel-header(v-bind:label="label" v-on:refresh="loadData")
+  profile-panel-header(v-bind:label="panel.label" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
 
   .profile-panel--content
 
-      .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug" v-bind:class="{ 'active': (contentSlug === content.slug) }") {{ content.title }}
+    .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug" v-bind:class="{ 'active': (contentSlug === content.slug) }") {{ content.title }}
 
-      ul
-        li(v-for="submission in submissions")
-          a(v-bind:href="submission.original" target="_blank")
-            img(v-bind:src="submission.thumbnail")
-          p {{ timeStamp(submission.createdAt) }}
+    .no-results(v-if="submissions.length === 0")
+      | No Results
+    
+    //- pre {{ submissions }}
+
+    .submission(v-for="(submission, index) in submissions" v-if="(limitHeight && (index < 3)) || !limitHeight")
+      img(v-if="expandedView" v-bind:src="submission.thumbnail" width="100%")
+      .submission--thumbnail(v-else v-bind:style="{ 'background-image': `url(${submission.thumbnail})` }")
+      
+      a(v-bind:href="submission.original" target="_blank")
+      p {{ submission.user }} - Submitted {{ timeStamp(submission.createdAt) }}
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 import API from '@/api';
 import filter from 'lodash/filter';
 
@@ -30,13 +37,16 @@ import 'vue-awesome/icons/refresh';
 
 export default {
   name: 'submissions',
-  props: ['classSlug', 'label'],
+  props: ['classSlug', 'limitHeight', 'canExpand', 'panel', 'expandedView'],
   components: {
     ProfilePanelHeader,
     ContentFilter,
   },
   mounted() {
-    this.loadData();
+    if (this.expandedView) { this.loadData(); }
+    EventBus.$on('profileClassUpdated', () => {
+      this.loadData();
+    });
   },
   data() {
     return {
@@ -47,23 +57,32 @@ export default {
   computed: {
     ...mapGetters(['profileClass', 'profileClassSlug']),
     contentSlugs() {
-      if (!this.profileClass) return [];
+      if (typeof this.profileClassSlug === 'undefined') return [];
       return filter(this.profileClass.content, (obj) => {
         return obj.homework;
       })
     },
   },
   methods: {
+    expand() {
+      this.$store.commit('updateProfileAction', this.panel);
+    },
     timeStamp(timestamp) {
-      return Moment(timestamp).format('LTS - ddd M YYYY');
+      // return Moment(timestamp).format('LTS - ddd M YYYY');
       return Moment(timestamp).fromNow();
     },
     loadData() {
 
       this.submissions = [];
 
+      let request = {
+        theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
+        // userId: (this.panel.role === 'user') ? this.user.id : undefined,
+        teacher: (this.panel.role === 'teacher') ? true : undefined,
+      };
+
       API.profile.getSubmissions(
-        this.profileClassSlug,
+        request,
         (response) => {
           this.submissions = response;
         },
@@ -87,6 +106,7 @@ export default {
 .profile-panel
 
   .profile-panel--content
+    padding 15px
 
     .pure-button.pure-button-subtle
       display block
@@ -94,28 +114,26 @@ export default {
       &.active
         background $color-border
         color $color-text-dark-grey
-    ul
-      cleanlist()
-      li
-        cleanlist()
-        border-bottom $color-border 1px solid
-        color $color-text-light-grey
-        padding 20px 0
-        &:first-child
-          padding-top 10px
-        &:last-child
-          border-bottom none
-          padding-bottom 0
-        p
-          reset()
-          color $color-text-dark-grey
-          font-size .9em
-          margin-top 10px
-        a
+
+    .submission
+      color $color-text-light-grey
+      margin-bottom 10px
+      width 100%
+      &:last-child
+        margin-bottom 0
+      .submission--thumbnail
+        background-image()
+        height 160px
+      p
+        reset()
+        color $color-text-dark-grey
+        font-size .9em
+        margin-top 10px
+      a
+        display block
+        text-decoration none
+        img
           display block
-          text-decoration none
-          img
-            display block
-            width 100%
+          width 100%
 
 </style>

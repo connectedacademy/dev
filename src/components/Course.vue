@@ -33,7 +33,7 @@ export default {
     });
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.dispatch('saveScrollPosition');
+    this.$store.dispatch('saveScrollPosition', window.scrollY);
     this.$store.dispatch('resetState');
     next();
   },

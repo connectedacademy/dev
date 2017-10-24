@@ -48,7 +48,7 @@ export default {
 @import '~stylus/shared'
 
 .media-carousel-wrapper
-  background-color $color-darkest-grey
+  // background-color $color-darkest-grey
   .slick-slider
     button.slick-arrow
       animate()

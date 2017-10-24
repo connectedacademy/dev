@@ -1,10 +1,15 @@
 import Vue from 'vue';
+import app from '@/config';
 import { mapGetters } from 'vuex';
-import throttle from 'lodash/throttle';
+import _throttle from 'lodash/throttle';
+import _find from 'lodash/find';
+import _clamp from 'lodash/clamp';
+
+import { EventBus } from '@/event-bus.js';
 
 const AUTOSCROLL_ATTEMPT = 1000; // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000; // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 500;//750; // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 50;//750; // Interval at which scroll position should be updated
 
 export default {
   mounted() {
@@ -14,6 +19,7 @@ export default {
 
       // Listen for scroll events
       window.addEventListener('scroll', () => {
+        // Scroll update
         this.onScroll(this);
       }, { passive: true });
 
@@ -27,7 +33,7 @@ export default {
       // Listen for mouseup events
       // window.addEventListener('mouseup', this.onMouseup, { passive: true }); // Passive to improve mobile performance
       // window.addEventListener('touchend', this.onMouseup, { passive: true }); // Passive to improve mobile performance
-    }, 2500);
+    }, 50);
   },
   destroyed () {
     // Remove event listeners
@@ -38,6 +44,8 @@ export default {
   },
   data() {
     return {
+      scrollStatus: undefined,
+      currenSection: undefined,
       wheeling: false,
       canAutoScroll: false,
       isAutoScrolling: false,
@@ -59,13 +67,13 @@ export default {
     currentSection(nV) {
       this.checkIfCanAutoScroll();
     },
-    scrollPosition(nV) {
-      this.$store.dispatch('setScrollPosition', nV);
-    }
+    // scrollPosition(nV) {
+    //   this.$store.dispatch('setScrollPosition', nV);
+    // }
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'mediaPlaying', 'currentSectionScrollPosition', 'activeSegment', 'peekSegment',
+      'currentSection', 'mediaPlaying', 'activeSegment', 'peekSegment',
     ]),
   },
   methods: {
@@ -93,7 +101,7 @@ export default {
       window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
         function(fn) { window.setTimeout(fn, 15); };
 
-      var start = this.scrollPosition;
+      var start = this.scrollStatus.scrollPos;
       const durationRate = 5000;
       let end = this.currentSection.bottom;
 
@@ -133,24 +141,63 @@ export default {
       clearTimeout(this.wheeling);
 
       this.wheeling = setTimeout(() => {
-
-        // Wheeling stopped - fire events
-        this.scrollPosition = window.scrollY;
-      
         this.wheeling = undefined;
         this.preventScroll = false;
-          
-        // if (this.currentSection) {
-        //   this.$store.commit('PLAY_MEDIA');
-        // }
       }, WHEEL_TIMEOUT);
     },
-    onScroll: throttle(function (self) {
-      if (Math.abs(self.scrollPosition - window.scrollY) > 50) {
-        console.log(Math.abs(self.scrollPosition - window.scrollY));
-        self.scrollPosition = window.scrollY;
+    onScroll: _throttle(function (self) {
+    // onScroll(self) {
+
+      // Calculate
+      let scrollPos = window.scrollY;
+
+      // Offset
+      let offsetScrollPos = scrollPos + window.innerHeight;
+
+      // Get class
+      const scrollPoint = _find(self.$store.state.scrollPoints, { content_type: 'class' });
+      
+      if (!scrollPoint) return;
+
+      // Check if current
+      let currenSection = undefined;
+      if ((offsetScrollPos > scrollPoint.top) && (offsetScrollPos < scrollPoint.bottom)) {
+        offsetScrollPos = offsetScrollPos - scrollPoint.top;
+        currenSection = scrollPoint;
       }
+      if (self.currenSection != currenSection) {
+        self.$store.commit('setCurrentSection', currenSection);
+      }
+      
+      offsetScrollPos = offsetScrollPos - _clamp(((offsetScrollPos / (app.segmentHeight * 0.2)) * 50), 0, 200);
+
+      // Time
+      const currentTime = (offsetScrollPos / (app.segmentHeight * 0.2));
+
+      // Segment group
+      let currentSegmentGroup = Math.floor(offsetScrollPos / app.segmentHeight);
+
+      // Segment
+      let currentSegment = Math.floor(currentTime);
+
+      // Create object
+      const scrollStatus = {
+        scrollPos,
+        offsetScrollPos,
+        currentTime,
+        currentSegmentGroup,
+        currentSegment,
+      };
+
+      // Emit position
+      EventBus.$emit('scrollStatus', scrollStatus);
+
+      // Update local objects
+      self.scrollStatus = scrollStatus;
+      self.currenSection = currenSection;
+
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false }),
+    // },
     onWheel() {
       if (!this.activeSegment) {
         this.wheelMovement(this);

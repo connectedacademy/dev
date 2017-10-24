@@ -6,7 +6,6 @@ import * as actions from './actions';
 import * as getters from './getters';
 import * as mutations from './mutations';
 
-import layout from './modules/layout';
 import navigation from './modules/navigation';
 import auth from './modules/auth';
 import composer from './modules/composer';
@@ -22,7 +21,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   actions,
   modules: {
-    layout,
     navigation,
     auth,
     composer,
@@ -35,12 +33,7 @@ export default new Vuex.Store({
   },
   state: {
     debug: false,
-    timetravel: false,
-    scrollPosition: 0.0,
     savedScrollPosition: 0.0,
-    pendingScrollPosition: 0,
-    offsetScrollPosition: 0.0,
-    autoPlaying: false,
     scrollPoints: {},
     currentSection: undefined,
   },

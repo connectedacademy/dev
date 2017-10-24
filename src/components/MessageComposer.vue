@@ -14,7 +14,7 @@
         .message-composer--footer(v-if="isRegistered")
           .textarea-wrapper
             .textarea-inner-wrapper(v-bind:class="{ focussed: (composerFocussed || showAction) }")
-              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @blur.native="composerFocussed = false" @keydown.enter.prevent.stop="sendMessage" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
+              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @keydown.native.enter.prevent.stop="sendMessage" @blur.native="composerFocussed = false" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
               .appended-contents(v-if="showAction") {{ hashtags }} {{ shortenedUrl }}
 
           .composer-actions(v-if="showAction" ref="composeractions")
@@ -32,6 +32,7 @@
 import Vue from 'vue';
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 import VueTextareaAutosize from 'vue-textarea-autosize'
 
 import Auth from '@/mixins/Auth';
@@ -47,10 +48,16 @@ export default {
   mixins: [
     Auth,
   ],
+  mounted() {
+    if (!this.static) {
+      // Auto focus textarea
+      this.$refs.textarea.$el.focus();
+    }
+  },
   data() {
     return {
       composerFocussed: false,
-      minCharacterCount: 10,
+      minCharacterCount: 5,
       maxCharacterCount: 140,
       infoLabel: '',
       message: {
@@ -109,6 +116,7 @@ export default {
           setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
           this.$store.commit('SET_REPLYING_TO', undefined);
+          EventBus.$emit('messagePosted', response);
         },
         (response, postData) => {
           this.$store.commit('SEND_MESSAGE_FAILURE', { response })
@@ -226,6 +234,7 @@ export default {
         background-color white
         .textarea-wrapper
           .textarea-inner-wrapper
+            animate()
             radius(10px)
             margin 10px
             overflow hidden
@@ -247,7 +256,7 @@ export default {
               padding 0 10px 10px 10px
               white-space nowrap
             &.focussed
-              background-color $color-lightest-grey
+              background-color $color-lighter-grey
               .appended-contents
                 display block
         
@@ -264,7 +273,7 @@ export default {
               color $color-danger
 
           button#send-button
-            radius(10px)
+            radius(13px)
             line-height 26px
             margin 0
             padding 0 15px

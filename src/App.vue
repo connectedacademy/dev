@@ -142,7 +142,7 @@ body.disable-scroll
     radius(4px)
     margin 0 auto 60px auto
     max-width 780px
-    padding-top 80px
+    padding-top $navigation-height + 20px
     position relative
     &.narrow
       max-width 640px    
@@ -188,17 +188,15 @@ body.disable-scroll
     height 0px
 
 #app
-  &.chat
+  &.homework
     .page-header
       background-color $color-homework
-
-  &.admin
-    .page-header
-      background-color $color-darkest-grey
-
   &.fourcorners
     .page-header
-      background-color $color-darkest-grey
+      background-color $color-fourcorners
+  &.profile
+    .page-header
+      background-color $color-profile
 
 // Hide page header on colourful pages
 html.colourful
