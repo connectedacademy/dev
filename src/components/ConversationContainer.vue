@@ -99,6 +99,11 @@ export default {
         this.messagePriority = (nV) ? false : this.messagePriority;
       }, 300);
     },
+    peekSegment(nV) {
+      if (typeof nV !== 'undefined') {
+        this.loadSegmentSummary(nV, true);
+      }
+    },
     scrollStatus(nV, oV) {
       if (typeof nV !== 'undefined') {
         if (typeof oV === 'undefined') {

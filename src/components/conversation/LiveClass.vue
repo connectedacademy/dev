@@ -43,6 +43,9 @@ export default {
 
       const scrollPoint = _find(this.$store.state.scrollPoints, { content_type: 'class' });
       this.$store.commit('setCurrentSection', scrollPoint);
+      setTimeout(() => {
+        this.$store.commit('PLAY_MEDIA');
+      }, 100);
     }
   }
 };
