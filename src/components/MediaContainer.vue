@@ -37,9 +37,6 @@
       EventBus.$on('scrollStatus', (scrollStatus) => {
         this.scrollStatus = scrollStatus;
       });
-      this.$refs.classslick.on('lazyLoadError', (e) => {
-        console.log(e);
-      });
     },
     watch: {
       'liveclassMedia': {
