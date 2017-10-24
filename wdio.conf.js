@@ -1,3 +1,5 @@
+global._ = require('lodash');
+
 exports.config = {
     
     //
@@ -10,11 +12,11 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     // services: ['selenium-standalone'],
-    // user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
-    // key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+    user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+    key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
   
-    services: ['selenium-standalone'],
-    // services: ['browserstack'],
+    // services: ['selenium-standalone'],
+    services: ['browserstack'],
     
 
     specs: [
@@ -53,15 +55,25 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
-    capabilities: [{
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instances available you can make sure that not more than
-        // 5 instances get started at a time.
-        maxInstances: 5,
-        //
-        // os
-        browserName: 'Chrome'
-    }],
+    capabilities: [
+    //     {
+    //     // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+    //     // grid with only 5 firefox instances available you can make sure that not more than
+    //     // 5 instances get started at a time.
+    //     maxInstances: 5,
+    //     //
+    //     // os
+    //     browserName: 'Chrome'
+    // }
+    {
+        'browserName': 'Chrome',
+        'browser_version': '60.0',
+        'os': 'OS X',
+        'os_version': 'Sierra',
+        'resolution': '1280x1024',
+        'browserstack.networkLogs':true
+      },
+],
     //
     // ===================
     // Test Configurations
@@ -141,7 +153,7 @@ exports.config = {
     //
     mochaOpts: {
         ui: 'bdd',
-        timeout: 30000
+        timeout: 300000
     },
     // =====
     // Hooks

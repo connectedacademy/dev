@@ -11,7 +11,6 @@ describe('Content', function () {
 
   it('Opens and closes each content block', () => {
 
-
     let markdownlinks = $$('.markdown-link > .pure-button');
 
     for (let i = 0; i < markdownlinks.length; i++) {
@@ -64,20 +63,5 @@ describe('Content', function () {
   });
 
 
-  // it('opens additional content', () => {
-  //   browser.pause(2000);
-  //   // Scroll to intro
-  //   browser.scroll('[name="section-intro"]').pause(1000);
-  //   // Save screenshot
-  //   browser.saveScreenshot('./test/screenshots/intro-top.png');
-  //   // Pause
-  //   browser.pause(2000);
-  //   // Assert section is visible
-  //   browser.isVisible('[name="section-intro"]');
-  //   // Click feedback button
-  //   browser.click('[name="intro-markdown-link"]').pause(1000);
-  //   // Check page loaded
-  //   assert(browser.isVisible('[name="markdown-page"]'));
-  // });
-
+  
 });
