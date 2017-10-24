@@ -65,11 +65,30 @@ exports.config = {
     //     // os
     //     browserName: 'Chrome'
     // }
-    {
-        'browserName': 'Chrome',
-        'browser_version': '60.0',
-        'os': 'OS X',
-        'os_version': 'Sierra',
+    // {
+    //     'browserName': 'Firefox',
+    //     'os': 'OS X',
+    //     'os_version': 'Sierra',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   }
+    // {
+    //     'browserName': 'Safari',
+    //     'os': 'OS X',
+    //     'os_version': 'Sierra',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   },
+    // {
+    //     'browserName': 'Chrome',
+    //     'browser_version': '60.0',
+    //     'os': 'OS X',
+    //     'os_version': 'Sierra',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   },
+      {
+        'browserName': 'chrome',
         'resolution': '1280x1024',
         'browserstack.networkLogs':true
       },
