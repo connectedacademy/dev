@@ -11,7 +11,8 @@
       //- img#next-image(v-if="!slickMode && nextIndex" v-bind:src="`https://${course.slug}.connectedacademy.io/course/content/media/small/${media[nextIndex].text}`" @click="setLightboxMedia(media[nextIndex].text)")
       slick#image-swiper(v-if="slickMode && liveclassMedia" ref="classslick" v-bind:options="slickOptions")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
-          img(v-bind:data-lazy="`https://researchmethods.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+          img(v-bind:src="`https://researchmethods.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+          //- img(v-bind:data-lazy="`https://researchmethods.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
           //- img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.text}`" @click="setLightboxMedia(item.text)")
 
 </template>
@@ -47,7 +48,7 @@
       'liveclassMedia': {
         handler: function(nV, oV) {
           if (typeof nV === 'undefined') return;
-          
+
           if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
             this.$refs.classslick.reSlick();
           } else {
