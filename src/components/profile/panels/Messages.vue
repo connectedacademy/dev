@@ -2,7 +2,7 @@
 
 .profile-panel(v-bind:class="{ limited: limitHeight }")
 
-  profile-panel-header(v-bind:label="`${label} (${messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
+  profile-panel-header(v-bind:label="`${panel.label} (${messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
   .profile-panel--content.no-padding
     .no-results(v-if="messages.length === 0")
       | No Results
@@ -22,7 +22,7 @@ import Message from '@/components/conversation/Message';
 
 export default {
   name: 'messages',
-  props: ['label', 'role', 'limitHeight', 'panel', 'canExpand', 'expandedView'],
+  props: ['panel', 'limitHeight', 'canExpand', 'expandedView'],
   components: {
     ProfilePanelHeader,
     StudentTile,
@@ -51,8 +51,8 @@ export default {
 
       let request = {
         theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
-        userId: (this.role === 'user') ? this.user.id : undefined,
-        teacher: (this.role === 'teacher') ? true : undefined,
+        userId: (this.panel.role === 'user') ? this.user.id : undefined,
+        teacher: (this.panel.role === 'teacher') ? true : undefined,
       }
 
       API.profile.getMessages(

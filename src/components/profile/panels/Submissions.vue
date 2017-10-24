@@ -2,7 +2,7 @@
 
 .profile-panel
 
-  profile-panel-header(v-bind:label="label" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
+  profile-panel-header(v-bind:label="panel.label" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
 
   .profile-panel--content
 
@@ -37,7 +37,7 @@ import 'vue-awesome/icons/refresh';
 
 export default {
   name: 'submissions',
-  props: ['classSlug', 'label', 'limitHeight', 'canExpand', 'panel', 'expandedView'],
+  props: ['classSlug', 'limitHeight', 'canExpand', 'panel', 'expandedView'],
   components: {
     ProfilePanelHeader,
     ContentFilter,
@@ -57,7 +57,7 @@ export default {
   computed: {
     ...mapGetters(['profileClass', 'profileClassSlug']),
     contentSlugs() {
-      if (!this.profileClass) return [];
+      if (typeof this.profileClassSlug === 'undefined') return [];
       return filter(this.profileClass.content, (obj) => {
         return obj.homework;
       })
@@ -75,8 +75,14 @@ export default {
 
       this.submissions = [];
 
+      let request = {
+        theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
+        // userId: (this.panel.role === 'user') ? this.user.id : undefined,
+        teacher: (this.panel.role === 'teacher') ? true : undefined,
+      };
+
       API.profile.getSubmissions(
-        this.profileClassSlug,
+        request,
         (response) => {
           this.submissions = response;
         },

@@ -22,11 +22,12 @@ export default {
       errorCb(response);
     });
   },
-  getSubmissions(theClass, cb, errorCb) {
+  getSubmissions(request, cb, errorCb) {
     let url = `${config.WATERCOOLER_API}/profile/content`;
-    if (typeof theClass !== 'undefined') {
-      url = `${config.WATERCOOLER_API}/profile/content/${theClass}`
-    }
+    url = (typeof request.userId === 'undefined') ? url : `${config.WATERCOOLER_API}/profile/mycontent`;
+    url = (typeof request.theClass === 'undefined') ? url : url + `/${request.theClass}`;
+    url = (typeof request.teacher === 'undefined') ? url : url + `?teacher=true`;
+
     Vue.http.get(url).then((response) => {
       cb(response.body);
     }, (response) => {

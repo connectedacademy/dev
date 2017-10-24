@@ -15,7 +15,7 @@
 
     h3 Classroom Codes
     .pure-button.pure-button-primary.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
-      | Generate Code
+      | Generate Teacher Code
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
       .code {{ classroom.code }}
       .teacher(v-if="classroom.teacher") {{ classroom.teacher.name }}
