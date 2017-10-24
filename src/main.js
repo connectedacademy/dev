@@ -22,6 +22,7 @@ import Lang from '@/Lang';
 import Sockets from '@/Sockets';
 
 import OnboardingPrompt from '@/components/OnboardingPrompt';
+import { VueMasonryPlugin } from 'vue-masonry';
 
 import app from '@/config';
 import store from '@/store';
@@ -38,6 +39,7 @@ Vue.use(VueResource);
 Vue.use(Vuex);
 
 Vue.use(VueConfig, Vue.config);
+Vue.use(VueMasonryPlugin);
 
 const options = {
   logLevel: 'info',

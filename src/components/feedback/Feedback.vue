@@ -156,7 +156,7 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'chat', minimized: true },
+      pageStyle: { type: 'homework', minimized: true },
       navTitle: 'Connected Academy - Feedback',
       myFeedbackItems: [],
       feedbackItems: [],

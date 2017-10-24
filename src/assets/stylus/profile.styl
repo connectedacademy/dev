@@ -3,73 +3,17 @@
 $panel-width = 340px
 
 .profile-page
-  .profile-panels
-
-    .profile-column
-      animate()
-      pinned()
-      box-sizing()
-      background-color white
-      overflow-y scroll
-      top $navigation-height
-      bottom 0
-      left 0
-      right 0
-      position fixed
       
-      .profile-panel
-        background-color white
-        padding-top 60px
-        .profile-panel--content
-          padding 20px
-          
-      &#primary-panel
-        .profile-tab-bar
-          border-bottom $color-lightest-grey 3px solid
-          ul.profile-tab-bar-items
-            cleanlist()
-            li
-              cleanlist()
-              animate()
-              float left
-              line-height 60px
-              padding 0
-              position relative 
-              width calc(100% / 3)
-              text-align center
-              text-decoration line-through
-              &:after
-                animate()
-                content ''
-                position absolute
-                height 3px
-                bottom -3px
-                left 0
-                right 0
-                opacity 0
-              &:hover
-                cursor pointer
-                &:after
-                  background-color darken($color-lightest-grey, 10%)
-                  opacity 1
-              &.active
-                &:after
-                  background-color $color-primary
-                  opacity 1
-              &.enabled
-                color $color-text-dark-grey
-                text-decoration none
+  .profile-panel
+    background-color white
+    padding-top 60px
+    &.no-header
+      padding-top 0
 
+    .profile-panel--content
+      .no-results
+        color $color-text-grey
+        padding 50px 20px
+        text-align center
 
-      &#content-panel
-        animate()
-        pinned()
-        border-left $color-border 1px solid
-        top $navigation-height
-        left auto
-        position fixed
-        right - $panel-width
-        width $panel-width
-        z-index 10
-        &.visible
-          right 0
+    // &.limited  

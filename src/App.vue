@@ -187,6 +187,17 @@ body.disable-scroll
   &.minimized
     height 0px
 
+#app
+  &.homework
+    .page-header
+      background-color $color-homework
+  &.fourcorners
+    .page-header
+      background-color $color-fourcorners
+  &.profile
+    .page-header
+      background-color $color-profile
+
 // Hide page header on colourful pages
 html.colourful
   .page-header

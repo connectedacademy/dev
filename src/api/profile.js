@@ -12,8 +12,10 @@ export default {
   },
   getMessages(request, cb, errorCb) {
     let url = `${config.WATERCOOLER_API}/profile/messages`;
-    url = (request.theClass) ? url + `/${theClass}` : url;
-    url = (request.userId) ? url + `/${userId}` : url;
+    url = (typeof request.userId === 'undefined') ? url : `${config.WATERCOOLER_API}/profile/mymessages`;
+    url = (typeof request.theClass === 'undefined') ? url : url + `/${request.theClass}`;
+    url = (typeof request.teacher === 'undefined') ? url : url + `?teacher=true`;
+    
     Vue.http.get(url).then((response) => {
       cb(response.body);
     }, (response) => {
@@ -21,15 +23,21 @@ export default {
     });
   },
   getSubmissions(theClass, cb, errorCb) {
-    const url = (theClass) ? `${config.WATERCOOLER_API}/profile/content/${theClass}` : `${config.WATERCOOLER_API}/profile/content`;
+    let url = `${config.WATERCOOLER_API}/profile/content`;
+    if (typeof theClass !== 'undefined') {
+      url = `${config.WATERCOOLER_API}/profile/content/${theClass}`
+    }
     Vue.http.get(url).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
-  getStudents(theClass, cb, errorCb) {
-    const url = (theClass) ? `${config.WATERCOOLER_API}/profile/users/${theClass}` : `${config.WATERCOOLER_API}/profile/users`;
+  getStudents(request, cb, errorCb) {
+    let url = `${config.WATERCOOLER_API}/profile/users`;
+    if (typeof request.theClass !== 'undefined') {
+      url = `${config.WATERCOOLER_API}/profile/users/${request.theClass}?teacher=true`
+    }
     Vue.http.get(url).then((response) => {
       cb(response.body);
     }, (response) => {

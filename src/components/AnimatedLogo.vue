@@ -45,13 +45,13 @@ export default {
       cursor pointer
 
 #app
-  &.chat .animated-logo
+  &.homework .animated-logo
     background-color $color-homework
 
-  &.admin .animated-logo
-    background-color $color-darkest-grey
+  &.profile .animated-logo
+    background-color $color-profile
 
   &.fourcorners .animated-logo
-    background-color $color-darkest-grey
+    background-color $color-fourcorners
 
 </style>

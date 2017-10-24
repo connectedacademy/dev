@@ -1,32 +1,36 @@
 <template lang="pug">
 
-.profile-panel
+.profile-panel(v-bind:class="{ limited: limitHeight }")
 
-  profile-panel-header(label="Students in Class" v-on:refresh="loadData")
+  profile-panel-header(v-bind:label="label" v-on:refresh="loadData" can-refresh)
 
   .profile-panel--content.no-padding
-    //- pre {{ profileClass }}
-    //- pre {{ students }}
-    student-tile(v-for="(student, index) in students" v-bind:key="index" v-bind:student="student")
+    .no-results(v-if="students.length === 0")
+      | No Results
+    student-tile(v-for="(student, index) in students" v-bind:key="index" v-bind:student="student" v-if="(limitHeight && (index < 4)) || !limitHeight")
 
 </template>
 
 <script>
 import API from '@/api';
 import { mapGetters } from 'vuex';
+import { EventBus } from '@/event-bus.js';
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
 import StudentTile from '@/components/profile/tiles/StudentTile';
 
 export default {
   name: 'students',
-  props: ['classSlug'],
+  props: ['label', 'classSlug', 'limitHeight', 'role'],
   components: {
     ProfilePanelHeader,
     StudentTile,
   },
   mounted() {
-    this.loadData();
+    if (this.expandedView) { this.loadData(); }
+    EventBus.$on('profileClassUpdated', () => {
+      this.loadData();
+    });
   },
   data() {
     return {
@@ -39,9 +43,17 @@ export default {
   methods: {
     loadData() {
       this.students = [];
+
+      let request = {
+        theClass: undefined,
+      }
+      
+      if (this.role === 'teacher') {
+        request.theClass = this.profileClassSlug;
+      }
       
       API.profile.getStudents(
-        this.profileClassSlug,
+        request,
         (response) => {
           this.students = response;
         },

@@ -30,7 +30,10 @@ const mutations = {
     state.profileClass = newClass;
   },
   ['updateProfileAction'](initialState, newAction) {
-    state.profileAction = newAction;
+    state.profileAction = (state.profileAction === newAction) ? undefined : newAction;
+  },
+  ['DISMISS_PROFILE_ACTION'](initialState) {
+    state.profileAction = undefined;
   },
 };
 

@@ -31,13 +31,12 @@ export default {
 @import '~stylus/shared'
 
 .student-tile
-  border-bottom $color-border 1px solid
-  padding 10px 20px 10px 80px
+  padding 10px 20px 10px 60px
   position relative
   img.student--profile
     radius(50%)
-    height 50px
-    width 50px
+    height 40px
+    width 40px
     position absolute
     top 10px
     left 10px
