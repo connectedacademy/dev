@@ -106,8 +106,7 @@ export default {
         }
         else if (oV.currentSegmentGroup !== nV.currentSegmentGroup) {
           this.$log.info(`Getting messages for segment ${nV.currentSegmentGroup}`);
-          const force = (Math.abs(nV.currentSegmentGroup - oV.currentSegmentGroup) > 2);
-          this.loadSegmentSummary(nV.currentSegmentGroup, force);
+          this.loadSegmentSummary(nV.currentSegmentGroup, true);
         }
       }
     },
