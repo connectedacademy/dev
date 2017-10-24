@@ -107,7 +107,7 @@ describe('Live Class', function () {
       //let the media play for a bit:
       browser.click('[name="play-pause-button"]');
 
-      browser.pause(5000);
+      browser.pause(3000);
 
       browser.click('[name="play-pause-button"]');
 
@@ -121,11 +121,13 @@ describe('Live Class', function () {
 
       let txt = 'This is a #test message from Selenium at ' + moment();
 
-      $('textarea[name="name"]').click().keys(txt);
+      $('textarea[name="composer-textarea"]').click().keys(txt);
 
-      $('.message-composer--footer > button').click().pause(2000);
+      $('.message-composer--footer > .composer-actions > button').click();
+      
+      browser.pause(500);
 
-      assert($('.time-segment.peek .single-message-wrapper .message-content').getText() == txt + ' #cainterpretation');
+      assert($('.time-segment.peek .single-message-wrapper .message-content').getText() == txt + ' #nclresearchmethods');
 
       // Save screenshot
       browser.saveScreenshot('./test/screenshots/liveclass/liveclass-testmessage-'+i+'.png');

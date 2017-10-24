@@ -121,7 +121,7 @@ export default {
         (response, postData) => {
           this.$store.commit('SEND_MESSAGE_FAILURE', { response })
           alert('Failed to send message');
-          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Replie to note';
+          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Failed to post';
           setTimeout(() => { this.infoLabel = ""}, 2000);
           this.sending = false;
           this.$store.commit('SET_REPLYING_TO', undefined);
@@ -150,7 +150,7 @@ export default {
       return url;
     },
     shortenedUrl() {
-      return `${this.url.substring(0, 30)}...`;
+      return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`;
     },
     hidden() {
       return (this.currentSection === undefined) ||

@@ -86,6 +86,17 @@ export default {
         startSegment: startSegment,
         endSegment: endSegment
       };
+
+      API.message.getSegmentSummarySocket(
+        theRequest,
+        response => {
+          Vue.$log.info('Subscribed to messages summary');
+          Vue.$log.info(theRequest);
+        },
+        response => {
+          Vue.$log.info('Failed to subscribe to messages summary');
+        },
+      );
       
       if (((endSegment % (endSegment - startSegment)) === 0) || force) {
 
@@ -111,17 +122,6 @@ export default {
           },
           response => {
             Vue.$log.info('Failed to get messages summary');
-          },
-        );
-
-        API.message.getSegmentSummarySocket(
-          theRequest,
-          response => {
-            Vue.$log.info('Subscribed to messages summary');
-            Vue.$log.info(theRequest);
-          },
-          response => {
-            Vue.$log.info('Failed to subscribe to messages summary');
           },
         );
       }

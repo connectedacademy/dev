@@ -7,6 +7,9 @@ import vueSails from 'vue-sails';
 const io = sailsIOClient(socketIOClient);
 
 io.sails.url = config.SOCKET_API;
+io.sails.afterDisconnect = function() {
+  alert('disconnect!');
+};
 Vue.io = io;
 Vue.use(vueSails, io);
 
