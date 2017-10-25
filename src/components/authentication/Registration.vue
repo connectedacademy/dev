@@ -58,7 +58,7 @@
           hr
 
           .pure-button(@click="previousPage") {{ $t('common.previous_page') }}
-          .pure-button.pure-button-primary.pull-right(v-bind:disabled="!response.consent" @click="nextPage") {{ $t('common.continue') }}
+          .pure-button.pure-button-primary.pull-right(v-if="response.consent" @click="nextPage") {{ $t('common.continue') }}
           .clearfix
 
       .registration-page(v-if="currentPage === 3")
