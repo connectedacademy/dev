@@ -2,7 +2,7 @@
 
 .profile-panel
 
-  profile-panel-header(label="Storify" can-refresh)
+  profile-panel-header(label="Storify")
 
   .profile-panel--content
 
@@ -11,7 +11,7 @@
     img.storify-gif(src="../../../assets/gifs/storify.gif" width="100%")
 
     h5 The following link will make your class content accessible from the Storify editor.
-    input(v-model="rssLink" placeholder="RSS Link")
+    input(v-model="storifyLink" placeholder="RSS Link")
 
     a#storify-button(href="https://storify.com/" target="_blank") Open Storify
 
@@ -22,14 +22,14 @@ import { mapGetters } from 'vuex';
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
 
+import _filter from 'lodash/filter';
+import _find from 'lodash/find';
+
 export default {
   name: 'storify',
-  props: ['classSlug', 'expandedView'],
+  props: ['classSlug', 'expandedView', 'classes'],
   components: {
     ProfilePanelHeader,
-  },
-  mounted() {
-    this.loadLink();
   },
   data() {
     return {
@@ -37,12 +37,22 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profileClass', 'profileClassSlug']),
-  },
-  methods: {
-    loadLink() {
-      const classroomCode = 'undefined';
-      this.rssLink = `https://api.connectedacademy.io/v1/classroom/rss/${classroomCode}`;
+    ...mapGetters(['user', 'profileClass', 'profileClassSlug']),
+    classrooms() {
+      const currentClass = _find(this.classes, { slug: this.profileClassSlug });
+      let classrooms = (currentClass) ? currentClass.codes : [];
+
+      // Just for current user
+      const teachersOnly = true;
+      if (teachersOnly) {
+        classrooms = _filter(classrooms, (classroom) => {
+          return classroom.teacher && (classroom.teacher.account === this.user.account);
+        });
+      }
+      return classrooms;
+    },
+    storifyLink() {
+      return (this.classrooms.length > 0) ? `https://api.connectedacademy.io/v1/classroom/rss/${this.classrooms[0].code}` : 'undefined';
     }
   },
 };
