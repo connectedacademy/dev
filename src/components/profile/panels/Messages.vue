@@ -30,7 +30,7 @@ export default {
   },
   mounted() {
     if (this.expandedView) { this.loadData(); }
-    this.autoUpdateInterval = setInterval(() => { this.loadData() }, 5000);
+    this.autoUpdateInterval = setInterval(() => { this.loadData() }, 20000);
     EventBus.$on('profileClassUpdated', () => {
       this.loadData();
     });
