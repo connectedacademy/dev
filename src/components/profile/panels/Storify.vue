@@ -11,9 +11,11 @@
     img.storify-gif(src="../../../assets/gifs/storify.gif" width="100%")
 
     h5 The following link will make your class content accessible from the Storify editor.
-    input(v-model="storifyLink" placeholder="RSS Link")
+    input(ref="inputfield" v-model="storifyLink" placeholder="RSS Link")
 
-    a#storify-button(href="https://storify.com/" target="_blank") Open Storify
+    #copy-button(@click="copyLink") {{ copyText }}
+
+    a#storify-button(v-if="openVisible" href="https://storify.com/" target="_blank") Open Storify
 
 </template>
 
@@ -33,7 +35,9 @@ export default {
   },
   data() {
     return {
-      rssLink: undefined
+      rssLink: undefined,
+      openVisible: false,
+      copyText: 'Copy Link',
     }
   },
   computed: {
@@ -54,6 +58,20 @@ export default {
     storifyLink() {
       return (this.classrooms.length > 0) ? `https://api.connectedacademy.io/v1/classroom/rss/${this.classrooms[0].code}` : 'undefined';
     }
+  },
+  methods: {
+    copyLink() {
+      this.$refs.inputfield.focus();
+      this.$refs.inputfield.select();
+      this.$refs.inputfield.setSelectionRange(0, this.$refs.inputfield.value.length);
+      document.execCommand("copy");
+      this.copyText = 'Link Copied!';
+      this.openVisible = true;
+      setTimeout(() => {
+        this.copyText = 'Copy Link';
+        this.openVisible = false;
+      }, 20000);
+    },
   },
 };
 
@@ -81,11 +99,16 @@ export default {
       border $color-border 1px solid
       margin 10px auto 30px auto
 
-    a#storify-button
-      background-color $color-storify
+    #copy-button, a#storify-button
       color white
+      cursor pointer
       display block
       line-height 50px
       text-align center
       text-decoration none
+      &#copy-button
+        background-color $color-success
+        margin-bottom 10px
+      &#storify-button
+        background-color $color-storify
 </style>
