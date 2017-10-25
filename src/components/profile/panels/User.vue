@@ -3,9 +3,12 @@
 .profile-panel.no-header
 
   .profile-panel--content
-    img#user-avatar(v-bind:src="user.profile" height="50px")
+    img#user-avatar(v-bind:src="profileImage" height="50px")
 
     h3 Hi {{ user.name }}
+
+    //- Hub
+    //- p Hub - {{ user.registration.hub_id }}
     
     //- Roles
     tag-list(v-bind:tags="userRoles")
@@ -47,6 +50,9 @@ export default {
     ...mapGetters(['user', 'profileClassSlug']),
     userRoles() {
       return this.user.roles;
+    },
+    profileImage() {
+      return this.user.profile.replace('_normal', '');
     },
     proseLink() {
       return 'http://prose.io/#connectedacademy';

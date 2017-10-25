@@ -150,6 +150,7 @@ export default {
       return url;
     },
     shortenedUrl() {
+      return this.url;
       return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`;
     },
     hidden() {

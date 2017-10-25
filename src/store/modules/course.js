@@ -131,7 +131,7 @@ const mutations = {
   [types.GET_SPEC_FAILURE](initialState, {
     response,
   }) {
-    state.current_class = {};
+    state.current_class = undefined;
     // error in response
   },
   [types.GET_HUBS_SUCCESS](initialState, {

@@ -48,7 +48,7 @@
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'subtitle', 'contentSlug', 'classSlug', 'isCurrent'],
+    props: ['index', 'message', 'subtitle', 'classSlug', 'contentSlug', 'isCurrent'],
     components: {
       MessageComposer,
       Message,
@@ -159,7 +159,8 @@
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return;
         
-        this.$router.push({ query: { segment: this.message.segmentGroup } });
+        // Update url
+        this.$router.replace({ path: `/course/${this.classSlug}/${this.contentSlug}/${(this.message.segmentGroup / 0.2)}` });
 
         if (!this.segmentOpened) {
   
@@ -186,7 +187,7 @@
           this.$store.commit('SET_PEEK_SEGMENT', undefined);
           this.$store.commit('SET_REPLYING_TO', undefined);
 
-          this.$router.push({ query: { segment: undefined } });
+          this.$router.replace({ path: `/course/${this.classSlug}` });
 
         }, 300); // Timeout equal to time for overlay to fade
       },

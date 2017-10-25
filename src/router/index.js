@@ -22,24 +22,10 @@ Vue.use(Router);
 
 export default new Router({
   // mode: 'history',
-  // scrollBehavior: function (to, from, savedPosition) {
-  //   return savedPosition || { x: 0, y: 0 }
-  // },
   routes: [
     {
-      name: 'course-redirect',
+      name: 'segment',
       path: '/course/:classSlug/:contentSlug/:segmentId',
-      redirect: (to) => {
-        const { hash, params, query } = to;
-        if ((params.classSlug === 'undefined') || (params.contentSlug === 'undefined') || (params.segmentId === 'undefined')) {
-          return { path: '/' };
-        }
-        return { path: '/', query: { class: params.classSlug, content: params.contentSlug, segment: params.segmentId } };
-      },
-    },
-    {
-      name: 'course',
-      path: '/',
       component: Course,
     },
     {
@@ -92,6 +78,15 @@ export default new Router({
       path: '/auth/github',
       redirect: (to) => {
         window.location = 'https://api.connectedacademy.io/v1/admin/login';
+      }
+    },
+    {
+      name: 'course',
+      path: '/',
+      component: Course,
+      redirect: (to) => {
+        const { hash, params, query } = to;
+        return { path: `/course/intro` };
       }
     },
     {

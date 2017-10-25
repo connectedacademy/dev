@@ -119,12 +119,12 @@ export default {
   },
   methods: {
     viewCurrentClass() {
-      if (!this.course || !this.course.classes) return;
-      for (const theClass of this.course.classes) {
-        if (theClass.status === 'CURRENT') {
-          this.$store.dispatch('getSpec', theClass.slug);
-        }
-      }
+      // if (!this.course || !this.course.classes) return;
+      // for (const theClass of this.course.classes) {
+      //   if (theClass.status === 'CURRENT') {
+      //     this.$store.dispatch('getSpec', theClass.slug);
+      //   }
+      // }
     }
   },
 };

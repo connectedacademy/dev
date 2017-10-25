@@ -86,14 +86,21 @@ export default {
       deep: true,
     },
     currentClass(nV, oV) {
+      
       this.activeClass = nV.slug;
-      this.$router.push(`/course/${nV.slug}`);
+      if (typeof this.$route.params !== 'undefined') {
+        if (typeof this.$route.params.classSlug === 'undefined') {
+          this.$router.push(`/course/${this.activeClass}`);
+        }
+      }
     },
   },
   mounted() {
     window.addEventListener("resize", () => {
       this.windowResized(this);
     }, { passive: true });
+
+    this.setInitalClass();
   },
   data() {
     return {
@@ -137,10 +144,16 @@ export default {
       this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - position.scrollLeft);
     },
     setInitalClass() {
-      if (this.isRegistered) {
-        this.viewCurrentClass();
+      console.log('this.$route.params');
+      console.log(this.$route.params);
+      if (typeof this.$route.params !== 'undefined') {
+        this.setCurrentClass(this.$route.params.classSlug);
       } else {
-        this.viewIntroClass();
+        if (this.isRegistered) {
+          this.viewCurrentClass();
+        } else {
+          this.viewIntroClass();
+        }
       }
     },
     viewIntroClass() {

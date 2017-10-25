@@ -40,7 +40,9 @@ export default {
   activated() {
     this.setScrollPoints();    
     window.scrollTo(0, this.$store.state.savedScrollPosition);
-    // this.toMessage();
+  },
+  mounted() {
+    this.toMessage();
   },
   data() {
     return {
@@ -52,20 +54,25 @@ export default {
     CourseContent,
     SectionNavigator,
   },
-  // methods: {
-  //   toMessage() {
-  //     if (this.$route.query.segment) {
-  //       const segmentGroup = parseInt(this.$route.query.segment)
-  //       setTimeout(() => {
-  //         this.$store.commit('SET_PEEK_SEGMENT', segmentGroup);
-  //         setTimeout(() => {
-  //           var el = document.querySelector(".peek");
-  //           window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')));
-  //         }, 1000);
-  //       }, 2000);
-  //     }
-  //   },
-  // },
+  methods: {
+    toMessage() {
+      const classSlug = this.$route.params.classSlug;
+      const contentSlug = this.$route.params.contentSlug;
+      const segmentId = this.$route.params.segmentId;
+      if (segmentId) {
+        this.$store.commit('EXPAND_CONVERSATION');
+        const segmentGroup = parseInt(segmentId * 0.2);
+        setTimeout(() => {
+          this.$store.commit('SET_PEEK_SEGMENT', segmentGroup);
+          this.$router.replace({ path: `/course/${classSlug}/${contentSlug}/${segmentId}` });
+          setTimeout(() => {
+            var el = document.querySelector(".peek");
+            window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')));
+          }, 1000);
+        }, 2000);
+      }
+    },
+  },
 };
 </script>
 
