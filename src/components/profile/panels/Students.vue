@@ -2,7 +2,7 @@
 
 .profile-panel(v-bind:class="{ limited: limitHeight }")
 
-  profile-panel-header(v-bind:label="label" v-on:refresh="loadData" can-refresh)
+  profile-panel-header(v-bind:label="`${panel.label} (${students.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh  can-expand)
 
   .profile-panel--content.no-padding
     .no-results(v-if="students.length === 0")
@@ -21,7 +21,7 @@ import StudentTile from '@/components/profile/tiles/StudentTile';
 
 export default {
   name: 'students',
-  props: ['label', 'classSlug', 'limitHeight', 'role'],
+  props: ['classSlug', 'limitHeight', 'panel', 'expandedView'],
   components: {
     ProfilePanelHeader,
     StudentTile,
@@ -41,6 +41,9 @@ export default {
     ...mapGetters(['profileClass', 'profileClassSlug']),
   },
   methods: {
+    expand() {
+      this.$store.commit('updateProfileAction', this.panel);
+    },
     loadData() {
       this.students = [];
 
@@ -48,7 +51,7 @@ export default {
         theClass: undefined,
       }
       
-      if (this.role === 'teacher') {
+      if (this.panel.role === 'teacher') {
         request.theClass = this.profileClassSlug;
       }
       
