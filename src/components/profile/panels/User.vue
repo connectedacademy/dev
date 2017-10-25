@@ -18,7 +18,7 @@
       | Generate Teacher Code
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
       .code {{ classroom.code }}
-      .teacher(v-if="classroom.teacher") {{ classroom.teacher.name }}
+      .teacher(v-if="classroom.teacher && classroom.teacher.name") {{ classroom.teacher.name }}
       //- pre {{ classroom }}
 
 </template>

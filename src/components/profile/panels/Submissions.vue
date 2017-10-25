@@ -18,7 +18,8 @@
       .submission--thumbnail(v-else v-bind:style="{ 'background-image': `url(${submission.thumbnail})` }")
       
       a(v-bind:href="submission.original" target="_blank")
-      p {{ submission.user }} - Submitted {{ timeStamp(submission.createdAt) }}
+      p {{ submission.user.name }} ({{ submission.user.account }})
+      p Submitted {{ timeStamp(submission.createdAt) }}
 
 </template>
 
@@ -77,7 +78,7 @@ export default {
 
       let request = {
         theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
-        // userId: (this.panel.role === 'user') ? this.user.id : undefined,
+        userId: (this.panel.role === 'user') ? this.user.id : undefined,
         teacher: (this.panel.role === 'teacher') ? true : undefined,
       };
 
@@ -117,7 +118,7 @@ export default {
 
     .submission
       color $color-text-light-grey
-      margin-bottom 10px
+      margin-bottom 20px
       width 100%
       &:last-child
         margin-bottom 0
@@ -128,7 +129,11 @@ export default {
         reset()
         color $color-text-dark-grey
         font-size .9em
-        margin-top 10px
+        margin-top 5px
+        &:last-child
+          color $color-text-light-grey
+          margin-top 0
+
       a
         display block
         text-decoration none

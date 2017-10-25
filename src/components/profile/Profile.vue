@@ -64,6 +64,9 @@ export default {
       this.$redrawVueMasonry();
     }, 2000);
   },
+  beforeUpdate() {
+    this.$redrawVueMasonry();
+  },
   data() {
     return {
       classes: [],

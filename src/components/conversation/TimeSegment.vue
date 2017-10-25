@@ -3,7 +3,7 @@
   .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
 
     .message-count(v-if="messageCount") {{ messageCount }}
-    .subscribed-status(v-if="(((index * 5) >= subscribedTo.start) && ((index * 5) <= subscribedTo.end))")
+    .subscribed-status(v-if="subscribedTo && (((index * 5) >= subscribedTo.start) && ((index * 5) <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 

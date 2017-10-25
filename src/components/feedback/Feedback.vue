@@ -114,6 +114,8 @@ export default {
   },
   mounted() {
     Vue.$log.info('Feedback view mounted');
+    
+    this.ensureAuthenticated();
 
     if (this.$route.params.id) {
       this.currentFeedbackId = this.$route.params.id.replace('%23', '#');
@@ -181,7 +183,8 @@ export default {
   },
   methods: {
     previous() {
-      return this.$router.go(-1);
+      this.$router.push({ name: 'course' });
+      // return this.$router.go(-1);
     },
     encodedId(id) {
       return id.replace('#','%23');

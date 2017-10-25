@@ -48,7 +48,7 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 1,
+    maxInstances: 2,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -71,13 +71,13 @@ exports.config = {
     //     'resolution': '1280x1024',
     //     'browserstack.networkLogs':true
     //   }
-    // {
-    //     'browserName': 'Safari',
-    //     'os': 'OS X',
-    //     'os_version': 'Sierra',
-    //     'resolution': '1280x1024',
-    //     'browserstack.networkLogs':true
-    //   },
+    {
+        'browserName': 'safari',
+        'os': 'OS X',
+        'os_version': 'Sierra',
+        'resolution': '1280x1024',
+        'browserstack.networkLogs':true
+      },
     // {
     //     'browserName': 'Chrome',
     //     'browser_version': '60.0',
@@ -86,11 +86,11 @@ exports.config = {
     //     'resolution': '1280x1024',
     //     'browserstack.networkLogs':true
     //   },
-      {
-        'browserName': 'chrome',
-        'resolution': '1280x1024',
-        'browserstack.networkLogs':true
-      },
+    //   {
+    //     'browserName': 'chrome',
+    //     'resolution': '1280x1024',
+    //     'browserstack.networkLogs':true
+    //   },
 ],
     //
     // ===================

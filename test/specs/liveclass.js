@@ -95,6 +95,8 @@ describe('Live Class', function () {
     $('[name="continue-listening"]').scroll(0,300);
     $('[name="continue-listening"]').click();
 
+    browser.pause(2000);
+
     for (let i = 0; i < 5; i++) {
 
       //pick one randomly:

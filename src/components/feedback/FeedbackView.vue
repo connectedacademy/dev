@@ -11,7 +11,8 @@
         four-corners(v-bind:html="feedbackItem.html")
         .clearfix
         br
-        a.pure-button.pure-button-subtle.pull-left(v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original submission
+        //- a.pure-button.pure-button-subtle.pull-left(v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original submission
+        .pure-button.pure-button-subtle.pull-left(@click="navigateTo(feedbackItem.original)" alt="View original submission") View original submission
         .pure-button.pure-button-subtle.pull-right(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
         .clearfix
 
@@ -103,6 +104,9 @@ export default {
   methods: {
     previous() {
       this.$router.go(-1);
+    },
+    navigateTo(location) {
+      document.location = location;
     },
     removeSubmission() {
       const postData = {

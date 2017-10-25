@@ -123,11 +123,17 @@
           staticRenderFns: res.staticRenderFns,
         }).$mount();
   
-        this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
+        if (typeof this.$refs.renderedmarkdown !== 'undefined') {
+          this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
+        }
   
-        setTimeout(() => {
+        // setTimeout(() => {
+        //   FourCornersLib.init();
+        // }, 1000);
+        
+        this.$nextTick(() => {
           FourCornersLib.init();
-        }, 1000);
+        });
       },
     },
     computed: {

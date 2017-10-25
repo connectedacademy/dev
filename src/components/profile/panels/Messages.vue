@@ -30,13 +30,18 @@ export default {
   },
   mounted() {
     if (this.expandedView) { this.loadData(); }
+    this.autoUpdateInterval = setInterval(() => { this.loadData() }, 5000);
     EventBus.$on('profileClassUpdated', () => {
       this.loadData();
     });
   },
+  beforeDestroy() {
+    clearInterval(this.autoUpdateInterval);
+  },
   data() {
     return {
       messages: [],
+      autoUpdateInterval: undefined,
     };
   },
   computed: {
@@ -47,7 +52,7 @@ export default {
       this.$store.commit('updateProfileAction', this.panel);
     },
     loadData() {
-      this.messages = [];
+      // this.messages = [];
 
       let request = {
         theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,

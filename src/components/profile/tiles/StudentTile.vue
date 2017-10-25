@@ -3,15 +3,16 @@
 .student-tile
   img.student--profile(v-bind:src="student.profile")
   a.student--name(v-bind:href="student.link") {{ student.name }}
-  .student--email {{ `@${student.account}` }}
-  //- p {{ (student.admin) ? 'Administrator' : 'Standard User' }}
+  .student--account {{ `@${student.account}` }}
+  //- pre {{ student }}
   ul.labels
     li.label
       icon(name="comment")
       | {{ student.messages }}
-    li.label
-      icon(name="graduation-cap")
-      | {{ student.homework }}
+    //-
+      li.label
+        icon(name="graduation-cap")
+        | {{ student.homework }}
     .clearfix
 
 </template>
@@ -43,7 +44,7 @@ export default {
   .student--name
     color $color-text-dark-grey
     line-height 25px
-  .student--email
+  .student--account
     color $color-text-light-grey
     line-height 15px
   ul.labels
