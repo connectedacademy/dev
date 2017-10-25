@@ -6,7 +6,8 @@
 
       img.profile-image(v-if="message.author" v-bind:src="message.author.profile")
 
-      a.author-label(v-if="message.author" v-bind:href="authorLink" target="_blank")
+      //- a.author-label(v-if="message.author" v-bind:href="authorLink" target="_blank")
+      .author-label(v-if="message.author")
         | {{ message.author.account }}
         icon(v-if="message.replyto" name="reply")
 
@@ -109,7 +110,7 @@ export default {
       a, a:active
         color $color-text-dark-grey
 
-    a.author-label
+    .author-label
       color $color-text-dark-grey
       font-weight bold
       text-decoration none

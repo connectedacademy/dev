@@ -13,7 +13,7 @@
         br
         //- a.pure-button.pure-button-subtle.pull-left(v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original submission
         .pure-button.pure-button-subtle.pull-left(@click="navigateTo(feedbackItem.original)" alt="View original submission") View original submission
-        .pure-button.pure-button-subtle.pull-right(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
+        //- .pure-button.pure-button-subtle.pull-right(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
         .clearfix
 
     .feedback-conversation

@@ -56,7 +56,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['profileClass', 'profileClassSlug']),
+    ...mapGetters(['user', 'profileClass', 'profileClassSlug']),
     contentSlugs() {
       if (typeof this.profileClassSlug === 'undefined') return [];
       return filter(this.profileClass.content, (obj) => {
