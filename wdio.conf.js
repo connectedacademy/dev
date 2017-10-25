@@ -12,10 +12,10 @@ exports.config = {
     // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
-    user: testEnv.BROWSERSTACK_USERNAME || process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
-    key: testEnv.BROWSERSTACK_ACCESS_KEY || process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
-    services: ['browserstack'],
-    // services: ['selenium-standalone'],
+    // user: testEnv.BROWSERSTACK_USERNAME || process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+    // key: testEnv.BROWSERSTACK_ACCESS_KEY || process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+    // services: ['browserstack'],
+    services: ['selenium-standalone'],
     
 
     specs: [
@@ -64,20 +64,20 @@ exports.config = {
     //     // os
     //     browserName: 'Chrome'
     // }
+    {
+        'browserName': 'firefox',
+        // 'os': 'OS X',
+        // 'os_version': 'Sierra',
+        'resolution': '1280x1024',
+        'browserstack.networkLogs':true
+      }
     // {
-    //     'browserName': 'Firefox',
+    //     'browserName': 'safari',
     //     'os': 'OS X',
     //     'os_version': 'Sierra',
     //     'resolution': '1280x1024',
     //     'browserstack.networkLogs':true
-    //   }
-    {
-        'browserName': 'safari',
-        'os': 'OS X',
-        'os_version': 'Sierra',
-        'resolution': '1280x1024',
-        'browserstack.networkLogs':true
-      },
+    //   },
     // {
     //     'browserName': 'Chrome',
     //     'browser_version': '60.0',

@@ -62,7 +62,7 @@ export default {
       const teachersOnly = true;
       if (teachersOnly) {
         classrooms = _filter(classrooms, (classroom) => {
-          return classroom.teacher && (classroom.teacher.account === this.user.account);
+          return (classroom.teacher && (classroom.teacher.account === this.user.account) || (classroom.teacher === this.user.id));
         });
       }
       return classrooms;

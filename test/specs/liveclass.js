@@ -107,9 +107,11 @@ describe('Live Class', function () {
 
       //scroll to it:
       browser.scroll(0, browser.elementIdLocation(sblock.ELEMENT).value.y - 50).pause(1000);
-
+      browser.pause(500);
+      browser.scroll(0, browser.elementIdLocation(sblock.ELEMENT).value.y - 30).pause(1000);
+      browser.debug();
       //let the media play for a bit:
-      browser.click('[name="play-pause-button"]');
+      // browser.click('[name="play-pause-button"]');
 
       browser.pause(5000);
 
@@ -158,11 +160,14 @@ function pickMessageVisibleBlock(sblock) {
       inviewport.push('[data-top="'+(time + (i*158))+'"]');
   }
 
-  // console.log(inviewport);
+  console.log('inviewport');
+  console.log(inviewport);
+  console.log('inviewport');
+  // browser.debug();
 
   //158px
 
-  let block = $(_.sample(inviewport));
+  let block = $(`${_.sample(inviewport)}`);
   return block;
 }
 
