@@ -88,10 +88,9 @@ export default {
     currentClass(nV, oV) {
       
       this.activeClass = nV.slug;
-      if (typeof this.$route.params !== 'undefined') {
-        if (typeof this.$route.params.classSlug === 'undefined') {
-          this.$router.push(`/course/${this.activeClass}`);
-        }
+      const segmentId = this.$route.params.segmentId;
+      if ((this.$route.params.classSlug !== nV) && (typeof segmentId === 'undefined')) {
+        this.$router.push(`/course/${this.activeClass}`);
       }
     },
   },
@@ -144,8 +143,6 @@ export default {
       this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - position.scrollLeft);
     },
     setInitalClass() {
-      console.log('this.$route.params');
-      console.log(this.$route.params);
       if (typeof this.$route.params !== 'undefined') {
         this.setCurrentClass(this.$route.params.classSlug);
       } else {
