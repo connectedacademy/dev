@@ -52,11 +52,11 @@
         return {
           hub_id: !Validator.isEmpty(this.response.hub_id),
           email: Validator.isEmail(this.response.email),
-          age: Validator.isInt(this.response.age, {
-            min: 1,
-            max: 150
-          }),
-          lang: !Validator.isEmpty(this.response.lang),
+          // age: Validator.isInt(this.response.age, {
+          //   min: 1,
+          //   max: 150
+          // }),
+          // lang: !Validator.isEmpty(this.response.lang),
         };
       },
       canContinue() {

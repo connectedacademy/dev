@@ -10,9 +10,9 @@
 
       p The next live discussion will take place at the following times. Pick one that suits you to be notified just before the class starts.
 
-      liveclass-selector
+      liveclass-selector(v-model="response.hub_id")
 
-      .pure-button.pure-button-info.rounded-short(v-bind:disabled="!formIsValid" @click="$emit('attemptRegistration')") {{ $t('auth.attempt_registration') }}
+      .pure-button.pure-button-info.rounded-short(v-bind:disabled="!allowSubmission" @click="$emit('attemptRegistration')") {{ $t('auth.attempt_registration') }}
       
       .clearfix
 
@@ -24,10 +24,20 @@ import LiveclassSelector from '@/components/LiveclassSelector'
 
 export default {
   name: 'schedule-step',
-  props: ['response', 'formIsValid'],
+  props: ['response'],
   components: {
     PreviousButton,
     LiveclassSelector
+  },
+  computed: {
+    allowSubmission() {
+      return this.response.hub_id
+    }
+  },
+  methods: {
+    hubSelected(hub) {
+      response.hub
+    }
   }
 }
 </script>

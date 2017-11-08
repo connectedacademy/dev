@@ -13,8 +13,6 @@
         input#consent-cb(type="checkbox" v-model="response.consent")
         | {{ $t('auth.i_agree_to_terms_and_conditions') }}
 
-      .pure-button.pure-button-primary(v-bind:disabled="!formIsValid || !response.consent" @click="attemptRegistration") {{ $t('auth.attempt_registration') }}
-      
       .clearfix
 
 </template>
@@ -25,7 +23,7 @@ import MarkdownIt from 'markdown-it';
 
 export default {
   name: 'terms-step',
-  props: ['response', 'formIsValid'],
+  props: ['response'],
   components: {
     MarkdownRenderer,
     MarkdownIt

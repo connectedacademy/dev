@@ -46,9 +46,8 @@
     },
     mounted() {
 
-      // this.ensureNotRegistered();
-      this.checkingAuthentication = false
-
+      this.ensureNotRegistered();
+      // this.checkingAuthentication = false
 
       this.$store.dispatch('getHubs');
   
@@ -76,7 +75,7 @@
           consent: true,
           hub_id: '',
           email: '',
-          age: '',
+          age: '0',
           lang: 'en',
           registration_info: {
             answers: {},

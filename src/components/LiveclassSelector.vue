@@ -1,14 +1,13 @@
 <template lang="pug">
   .liveclass-selector
     ul.liveclass-list
-      li.liveclass-list-item(v-for="(hub, index) in hubs" v-bind:key="index" v-bind:class="{ selected: (index === selectedIndex) }" @click="selectedIndex = index")
+      li.liveclass-list-item(v-for="(hub, index) in hubs" v-bind:key="index" v-bind:class="{ selected: currentValue && (hub.id === currentValue.id) }" @click="selectHub(hub)")
         .liveclass-list-item--location
           | {{ `Held in ${hub.name}` }}
         .liveclass-list-item--time
           | {{ releaseTime(hub.liveclass_release) }}
         .liveclass-list-item--date
           | {{ releaseDate(hub.liveclass_release) }}
-          //-(${hub.lang}
       .clearfix
 
 </template>
@@ -19,12 +18,13 @@ import Moment from 'moment-mini';
 
 export default {
   name: 'liveclass-selector',
+  props: ['value'],
   mounted() {
     this.$store.dispatch('getHubs');
   },
   data() {
     return {
-      selectedIndex: undefined
+      currentValue: this.value
     }
   },
   computed: {
@@ -36,6 +36,10 @@ export default {
     },
     releaseTime(date) {
       return Moment(date).format('HH:mm')
+    },
+    selectHub(hub) {
+      this.currentValue = hub
+      this.$emit('input', hub.id)
     }
   }
 }
