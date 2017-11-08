@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .profile-icon(@click="showProfile")
+  .profile-icon(v-if="!isRegistering" @click="showProfile")
     onboarding-prompt(identifier="profile-button" prompt="click for profile actions" top="55" left="-210" position="top-right" z-index="50")
     .profile-image(v-bind:style="{ 'background-image': profile }")
 
@@ -12,6 +12,9 @@ export default {
   computed: {
     profile() {
       return `url('${this.$store.state.auth.user.profile}')`;
+    },
+    isRegistering() {
+      return this.$route.name === 'registration';
     },
   },
   methods: {

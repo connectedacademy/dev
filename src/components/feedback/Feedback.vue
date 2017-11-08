@@ -2,7 +2,7 @@
 
 .feedback-page(name="feedback-page")
 
-  .chat-panel#chat-list-container
+  #chat-list-container
     .navigation-button#previous-button(@click="previous")
       icon(name="angle-left")
     .navigation-button#info-button(@click="currentFeedbackId = undefined")
@@ -33,7 +33,7 @@
         h1 Want more feedback?
         .pure-button.pure-button-homework Add another student
 
-  .chat-panel#conversation-container
+  #conversation-container
 
     .main-container.main-container-padded.background-white
 
@@ -252,20 +252,15 @@ $chat-list-width = 320px
   overflow-y scroll
   position fixed
 
-.chat-panel
-  float left
-  min-height 100%
-  overflow-x none
-  overflow-y auto
-
 #chat-list-container
+  box-sizing()
   pinned()
   background-color $color-lightest-grey
   border-right $color-lighter-grey 1px solid
-  box-sizing()
-  overflow scroll
-  position absolute
+  overflow-y scroll
+  position fixed
   right auto
+  top $navigation-height
   width $chat-list-width
   @media(max-width: 600px)
     width 75px
@@ -355,14 +350,14 @@ $chat-list-width = 320px
           font-size 1em
 
 #conversation-container
-  pinned()
   background-color white
   border-right $color-lighter-grey 1px solid
-  left $chat-list-width
-  position absolute
-  max-width 780px
+  min-height 100%
+  padding-left $chat-list-width
   @media(max-width: 600px)
-    left 75px
+    padding-left 75px
+  .main-container
+    max-width 800px
 
 .feedback-section
   margin-bottom 30px

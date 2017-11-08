@@ -9,8 +9,8 @@
 
     profile-icon(v-if="isRegistered")
 
-    #login-button(v-if="!isRegistered && !isRegistering" name="nav-login-button" @click="showAuth")
-      icon(name="user")
+    #login-button(v-if="!isRegistered" name="nav-login-button" @click="showAuth")
+      | Login
 
 </template>
 
@@ -84,15 +84,14 @@ export default {
 
 #login-button
   animate()
-  radius(50%)
-  position absolute
-  top 7px
-  right 7px
-  z-index 52
-  height $navigation-height - 14px
-  line-height $navigation-height - 14px
-  width $navigation-height - 14px
   color white
+  height $navigation-height
+  line-height $navigation-height
+  padding 0 15px
+  position absolute
+  top 0
+  right 0
+  z-index 52
   .fa-icon
     height $navigation-height - -14px 20px
     margin 10px auto
@@ -114,7 +113,8 @@ export default {
 
 /* App states */
 
-#app.authenticating
-  .navigation
-    display none
+html
+  &.registration
+    .navigation
+      display none
 </style>

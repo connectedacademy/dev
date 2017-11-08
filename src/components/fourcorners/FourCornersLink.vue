@@ -24,7 +24,7 @@ export default {
 
 .four-corners-link
   radius(6px)
-  background-color $color-lightest-grey
+  background-color white
   border $color-border 1px solid
   overflow hidden
   margin 20px 0

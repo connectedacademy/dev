@@ -4,7 +4,7 @@
 
       .col#col-main
 
-        //- hub-selector
+        hub-selector
 
         .main-container.main-container-padded.background-white
           h3 Course Schedule

@@ -28,6 +28,71 @@ export default {
 
 @import '~stylus/shared'
 
+// ul.hub-selector
+//   cleanlist()
+//   display none
+//   margin 0 -10px
+//   li.hub-selector--tile
+//     cleanlist()
+//     animate()
+//     background-color white
+//     box-sizing()
+//     border $color-border 1px solid
+//     float left
+//     height 100px
+//     overflow hidden
+//     text-align center
+//     position relative
+
+//     margin 10px
+//     padding 10px 0px
+
+//     width calc((calc(100% - 0px) / 3) - 20px)
+//     @media(max-width: 600px)
+//       width calc(50% - 20px)
+
+//     h1.hub-title
+//       animate()
+//       reset()
+//       color $color-text-dark-grey
+//       font-size 1.2em
+//       line-height 30px
+//       padding 15px 0
+//       position absolute
+//       top 50%
+//       margin-top -30px
+//       text-align center
+//       width 100%
+//     h2.hub-timezone
+//       animate()
+//       reset()
+//       color $color-text-light-grey
+//       font-size 1em
+//       line-height 20px
+//       opacity 0
+//       position absolute
+//       left 0
+//       right 0
+//       top 50%
+//       margin-top 5px
+
+//     &:hover
+//       cursor pointer
+//       border-color $color-primary
+//       background-color darken($color-primary, 10%)
+//       h1.hub-title, h2.hub-timezone
+//         color white
+//       h1.hub-title
+//         margin-top -45px
+//       h2.hub-timezone
+//         opacity 1
+
+//     &.selected
+//       background-color $color-success
+//       border-color $color-success
+//       h1.hub-title, h2.hub-timezone
+//         color white
+
 ul.hub-selector
   cleanlist()
   margin 10px -10px

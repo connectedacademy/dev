@@ -24,16 +24,33 @@
     display block
     margin-bottom 10px
 
+  &[disabled]
+    background-color $color-light-grey !important
+    border-color $color-light-grey !important
+    color $color-text-darkest-grey !important
+    opacity 0.5
+    pointer-events none
+
+  &.outline
+    border transparent 1px solid
+    background-color transparent
+
   &.pure-button-primary
     background-color $color-primary
     color white
+    &.outline
+      background-color transparent
+      border-color $color-primary
+      color $color-primary
     &:hover
       background-color darken($color-primary, 10%)
+      color white
 
   &.pure-button-info
     background-color $color-info
     border-color $color-info
     color white
+    
     &:hover
       background-color darken($color-info, 10%)
 
@@ -46,19 +63,20 @@
 
   &.pure-button-success
     background-color $color-success
+    border-color $color-success
     color white
     &:hover
       background-color darken($color-success, 10%)
 
   &.pure-button-continue
     radius(25px)
-    background-color $color-primary
+    background-color $color-info
     border none
     color white
     line-height 50px
     padding 0 30px
     &:hover
-      background-color darken($color-primary, 10%)
+      background-color darken($color-info, 10%)
 
   &.pure-button-youtube
     radius(25px)
@@ -98,6 +116,13 @@
       background-color $color-light-grey
       color $color-text-dark-grey
 
+  &.pure-button-dark
+    background-color $color-darkest-grey
+    border-color $color-darkest-grey
+    color white
+    &:hover
+      background-color lighten($color-darkest-grey, 10%)
+
   &.pure-button-text
     border-color transparent
 
@@ -108,3 +133,22 @@
     &:hover
       background-color $color-homework
       color white
+  
+  &.rounded-short
+    radius(25px)
+    line-height 44px
+    padding 0 30px
+  
+  &.rounded-tall
+    radius(25px)
+    line-height 50px
+    padding 0 30px
+
+
+//  apply(props)
+//    props = arguments if length(arguments) > 1
+//    for prop in props
+//      {prop[0]} prop[1]
+
+//  .pure-button
+//    apply(primary $color-primary, info $color-info, danger $color-danger)

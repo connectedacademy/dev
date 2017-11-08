@@ -38,9 +38,6 @@
         .course-content--footer(v-if="currentExists")
           .pure-button.pure-button-continue(@click="viewCurrentClass") Continue to class
 
-    .course-content-group
-      join-banner
-
 </template>
 
 <script>
@@ -241,7 +238,6 @@ $selector-height = 44px
         height $selector-height
         white-space nowrap
         li.class-selector--item
-          animate()
           box-sizing()
           cleanlist()
           radius(22px)
@@ -319,7 +315,6 @@ $selector-height = 44px
     color $color-text-dark-grey
     line-height 40px
   .fa-icon
-    color $color-purple
     height 40px
 
 .course-content--footer

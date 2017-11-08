@@ -32,7 +32,7 @@ ul.tag-list
   li
     cleanlist()
     radius(4px)
-    background-color $color-primary
+    background-color $color-info
     color white
     float left
     line-height 30px

@@ -45,6 +45,9 @@ export default {
       cursor pointer
 
 #app
+  &.registration .animated-logo
+    background-color transparent
+
   &.homework .animated-logo
     background-color $color-homework
 

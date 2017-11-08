@@ -25,7 +25,7 @@
   .main-page
     navigation
 
-    .page-header(v-bind:class="{ minimized: navigation.minimized }")
+    #page-header(v-bind:class="{ minimized: navigation.minimized }")
 
     transition(name="fade" appear mode="out-in")
       keep-alive(include="course")
@@ -50,6 +50,9 @@
   import DebugPanel from '@/components/DebugPanel';
   // import Lock from '@/components/authentication/Lock';
   
+  require('particles.js');
+
+
   // Mixins
   import Overlay from '@/mixins/Overlay';
 
@@ -70,6 +73,11 @@
     },
     mounted() {
       this.$store.dispatch('checkAuth');
+
+      /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+      particlesJS.load('page-header', '../../../static/particles.json', function () {
+        console.log('callback - particles.js config loaded');
+      })
     },
     data() {
       return {
@@ -106,6 +114,8 @@ html
     display none
   &.colourful
     background-color $color-primary
+  &.registration
+    background-color $color-darkest-grey
 
 html, body
   font-family 'Avenir', Helvetica, Arial, sans-serif
@@ -171,35 +181,39 @@ body.disable-scroll
 
 // Page header
 
-.page-header
+#page-header
   transition(all 0.2s ease)
   background-color $color-primary
-  height 160px
+  height 160px + $navigation-height
+  overflow hidden
   position absolute
   left 0
   right 0
-  top $navigation-height
+  // top $navigation-height
+  top 0
   text-align center
   z-index -1
   @media(max-width: 800px)
-    height 84px
+    height 84px + $navigation-height
 
   &.minimized
     height 0px
 
 #app
+  &.colourful
+    #page-header
+      display none
+  &.registration
+    #page-header
+      background-color darken($color-registration, 10%)
   &.homework
-    .page-header
+    #page-header
       background-color $color-homework
   &.fourcorners
-    .page-header
+    #page-header
       background-color $color-fourcorners
   &.profile
-    .page-header
+    #page-header
       background-color $color-profile
 
-// Hide page header on colourful pages
-html.colourful
-  .page-header
-    display none
 </style>

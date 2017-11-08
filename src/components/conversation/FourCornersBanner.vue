@@ -30,7 +30,7 @@ export default {
     return {
       expanded: false,
       tease: false,
-      bannerText: 'Tap the bottom right corner to learn how FourCorners offers a new way of enriching photographs with rich metadata',
+      bannerText: 'Click explore to learn how FourCorners offers a new way of enriching photographs with rich metadata.',
       corners: {
         default: {
           icon: 'picture-o',

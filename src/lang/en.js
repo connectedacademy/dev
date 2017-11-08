@@ -17,6 +17,7 @@ export default {
     current_hub: 'Current hub',
 
     continue: 'Continue',
+    next: 'Next',
     next_page: 'Next Page',
     previous_page: 'Previous Page',
     choose_one: 'Choose one',
@@ -46,11 +47,11 @@ export default {
     register: 'Register',
     welcome_to_registration: 'Welcome to registration',
     registration_message: 'Please fill in the fields below to register for Connected Academy, don\'t forget to select your hub',
-    attempt_registration: 'Register',
+    attempt_registration: 'Complete Registration',
     read_the_following: 'Please read the following',
     answer_the_following: 'Please answer the following',
 
-    enter_your_email: 'Your email',
+    enter_your_email: 'What\'s your email?',
     enter_your_age: 'Your age',
     select_your_language: 'Select your language',
 

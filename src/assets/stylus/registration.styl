@@ -1,0 +1,29 @@
+@import '~stylus/shared'
+@import '~stylus/buttons'
+@import '~stylus/forms'
+
+.container.registration-container
+  padding 0 20px !important
+
+.content-block.white-block
+  radius(6px)
+  padding 30px
+
+fieldset
+
+  label
+    color $color-text-dark-grey
+    font-size 1.3em
+    font-weight bold
+    
+  input, textarea, select
+    margin 20px auto !important
+    text-align center
+    &.large
+      font-size 1.2em
+    &.full-width
+      width calc(100% - 40px)
+
+  &.validate.valid
+    input
+      border-color $color-success
