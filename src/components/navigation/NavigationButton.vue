@@ -84,7 +84,7 @@ export default {
       position absolute
       .bar
         pinned()
-        transition-delay 1s
+        transition-delay 0.5s
         background-color white
         height 2px
         left 12px 

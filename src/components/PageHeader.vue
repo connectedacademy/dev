@@ -20,7 +20,6 @@
 
   .page-header
     pinned()
-    border-top alpha(white, .1) 1px solid
     background-color $color-profile
     height $page-header-height
     padding 0 10px

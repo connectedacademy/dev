@@ -47,10 +47,14 @@
   .course-content-group.course-content-group--future(v-if="futureContent" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
 
     //- FUTURE CONTENT
-    future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
+    //- future-content(v-if="content.content_type !== 'nextclass'" v-bind:content="content")
     
     //- NEXT CLASS
     next-class(v-if="content.content_type === 'nextclass'" v-bind:content="content")
+    
+    //- CERTIFICATE
+    div(v-if="content.content_type === 'certificate'" v-bind:content="content")
+      p certificate
 
 </template>
 

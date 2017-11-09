@@ -199,10 +199,10 @@ $selector-height = 44px
 .class-selector-wrapper
   radius(22px)
   height $selector-height
-  margin 0 0 20px 0
+  margin 20px 0
   position relative
   @media(max-width: 800px)
-    margin 0 10px 20px 10px
+    margin 20px 10px
   .skip-button
     radius(22px)
     background-color alpha(white, 0.5)

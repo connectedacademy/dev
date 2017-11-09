@@ -139,8 +139,6 @@ body.disable-scroll
   .col
     box-sizing()
     padding 0
-    /*top 60px*/
-
     .container
       padding 20px
       h1
@@ -148,19 +146,19 @@ body.disable-scroll
         color $color-text-dark-grey
         margin-bottom 5px
 
-  .col#col-main
-    radius(4px)
-    margin 0 auto 60px auto
-    max-width 780px
-    padding-top $navigation-height + 20px
-    position relative
-    &.narrow
-      max-width 640px    
-
-    @media(max-width: 800px)
-      max-width 100%
-      margin 0 0px
+    &#col-main
+      radius(4px)
+      margin 0 auto 60px auto
+      max-width 780px
       padding-top $navigation-height
+      position relative
+      &.narrow
+        max-width 640px    
+
+      @media(max-width: 800px)
+        max-width 100%
+        margin 0 0px
+        padding-top $navigation-height
 
 /* App states */
 

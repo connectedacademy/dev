@@ -5,12 +5,6 @@
   page-header(title="Homework Area" identifier="homework")
 
   #chat-list-container
-    //- .navigation-button#previous-button(@click="previous")
-      icon(name="angle-left")
-    //- .navigation-button#info-button(@click="currentFeedbackId = undefined")
-      | About the homework
-    //- .clearfix
-
     ul
       li.list-header My submissions
       li.no-content(v-if="!myFeedbackItems.length") Your conversations will appear here when you submit homework.
@@ -29,20 +23,11 @@
       router-link(v-for="(feedbackItem, index) in availableFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
-    //- ul
-      li#random-row
-        h1 Want more feedback?
-        .pure-button.pure-button-homework Add another student
-
   #conversation-container
 
     .main-container.main-container-padded.background-white
 
       .homework-details(v-if="!currentFeedbackId")
-        //- .homework-banner
-          h2 Welcome
-          p Think of this as a group chat application where each conversation is with other student and conversations are driven by images submitted as homework.
-
         .markdown-wrapper
           markdown-renderer(v-bind:markdown-url="markdownUrl")
 
@@ -75,7 +60,6 @@ import _filter from 'lodash/filter'
 import PageHeader from '@/components/PageHeader'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import FourCornersLink from '@/components/fourcorners/FourCornersLink'
-import PreviousButton from '@/components/PreviousButton'
 import FeedbackSubmission from '@/components/feedback/FeedbackSubmission'
 import FeedbackTile from '@/components/feedback/FeedbackTile'
 import FeedbackRow from '@/components/feedback/FeedbackRow'
@@ -98,7 +82,6 @@ export default {
     MarkdownRenderer,
     FeedbackSubmission,
     FourCornersLink,
-    PreviousButton,
     InfoDialogue,
     FeedbackTile,
     FeedbackRow,
@@ -186,10 +169,6 @@ export default {
     },
   },
   methods: {
-    previous() {
-      this.$router.push({ name: 'course' })
-      // return this.$router.go(-1)
-    },
     encodedId(id) {
       return id.replace('#','%23')
     },
@@ -290,51 +269,6 @@ $chat-list-width = 320px
   width $chat-list-width
   @media(max-width: 600px)
     width 75px
-
-  .navigation-button
-    animate()
-    box-sizing()
-    background-color white
-    border-bottom $color-light-grey 1px solid
-    float left
-    font-size 0.9em
-    line-height 54px
-    height 50px
-    position relative
-    &:hover
-      background-color $color-lightest-grey
-      cursor pointer
-
-    .fa-icon
-      color $color-text-dark-grey
-      height 50px
-      position absolute
-      margin 0 20px
-
-    &#info-button
-      border-left $color-light-grey 1px solid
-      padding 0 15px
-      width calc(100% - 50px)
-    &#previous-button
-      padding-left 50px
-      width 50px
-      .fa-icon
-        left 0
-        width 10px
-
-    @media(max-width: 600px)
-      max-width 100% !important
-      width 100% !important
-      padding 0 !important
-      .fa-icon
-        display block
-        margin 0 auto
-        position relative
-        left auto
-      p
-        display none
-
-
   ul
     cleanlist()
     border-bottom $color-lighter-grey 1px solid
@@ -354,16 +288,8 @@ $chat-list-width = 320px
         border-top none
         color $color-text-light-grey
         line-height 20px
-        padding 10px 10px 50px 10px
+        padding 10px 10px 20px 10px
         text-align left
-      &#random-row
-        /*background-color white*/
-        border-top $color-lighter-grey 1px solid
-        padding 10px 20px
-        text-align center
-        h1
-          color $color-text-dark-grey
-          font-size 1em
 
 #conversation-container
   background-color white
@@ -375,6 +301,9 @@ $chat-list-width = 320px
     padding-left 75px
   .main-container
     max-width 800px
+    h2
+      color $color-text-dark-grey
+      font-size 1.3em
 
 .feedback-section
   margin-bottom 30px
