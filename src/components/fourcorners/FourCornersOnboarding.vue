@@ -4,10 +4,9 @@
     
     .col#col-main
 
-      previous-button
+      //- previous-button
 
       .main-container.main-container-padded.background-white
-
 
         a(href="https://fourcorners.io" target="_blank")
           img(src="../../assets/logos/fourcorners/black.svg" height="40")

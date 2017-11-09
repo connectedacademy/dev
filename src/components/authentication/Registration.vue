@@ -47,7 +47,6 @@
     mounted() {
 
       this.ensureNotRegistered();
-      // this.checkingAuthentication = false
 
       this.$store.dispatch('getHubs');
   

@@ -1,18 +1,19 @@
 <template lang="pug">
 
 .feedback-page(name="feedback-page")
+  
+  page-header(title="Homework Area" identifier="homework")
 
   #chat-list-container
-    .navigation-button#previous-button(@click="previous")
+    //- .navigation-button#previous-button(@click="previous")
       icon(name="angle-left")
-    .navigation-button#info-button(@click="currentFeedbackId = undefined")
-      icon(name="info")
-      p About the homework
-    .clearfix
+    //- .navigation-button#info-button(@click="currentFeedbackId = undefined")
+      | About the homework
+    //- .clearfix
 
-    ul(v-if="myFeedbackItems.length !== 0")
+    ul
       li.list-header My submissions
-      li.no-content(v-if="!myFeedbackItems.length") You have no submissions
+      li.no-content(v-if="!myFeedbackItems.length") Your conversations will appear here when you submit homework.
       router-link(v-for="(feedbackItem, index) in myFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
@@ -38,49 +39,51 @@
     .main-container.main-container-padded.background-white
 
       .homework-details(v-if="!currentFeedbackId")
-        .homework-banner
-          h2 Homework
-          p Welcome to the homework area. Think of this as a chat application where each conversation is with another student and conversations are driven by images submitted as homework. Select another student from the list to start a conversation.
+        //- .homework-banner
+          h2 Welcome
+          p Think of this as a group chat application where each conversation is with other student and conversations are driven by images submitted as homework.
 
         .markdown-wrapper
           markdown-renderer(v-bind:markdown-url="markdownUrl")
 
         four-corners-link(message="This homework requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
 
-        four-corners-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug")
+        h2 Submit Homework
+        feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
 
         #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
 
       transition(name="fade" type="in out")
-        feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug")
+        feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug" v-on:reloadchats="reloadChats")
 
   .clearfix
 
 </template>
 
 <script>
-import Vue from 'vue';
+import Vue from 'vue'
 
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
-import API from '@/api';
-import Auth from '@/mixins/Auth';
-import PageStyle from '@/mixins/PageStyle';
-import Messages from '@/mixins/Messages';
+import API from '@/api'
+import Auth from '@/mixins/Auth'
+import PageStyle from '@/mixins/PageStyle'
+import Messages from '@/mixins/Messages'
 
-import filter from 'lodash/filter';
+import _filter from 'lodash/filter'
 
-import MarkdownRenderer from '@/components/MarkdownRenderer';
-import FourCornersSubmission from '@/components/fourcorners/FourCornersSubmission';
-import FourCornersLink from '@/components/fourcorners/FourCornersLink';
-import PreviousButton from '@/components/PreviousButton';
-import FeedbackTile from '@/components/feedback/FeedbackTile';
-import FeedbackRow from '@/components/feedback/FeedbackRow';
-import FeedbackView from '@/components/feedback/FeedbackView';
-import InfoDialogue from '@/components/InfoDialogue';
+import PageHeader from '@/components/PageHeader'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
+import FourCornersLink from '@/components/fourcorners/FourCornersLink'
+import PreviousButton from '@/components/PreviousButton'
+import FeedbackSubmission from '@/components/feedback/FeedbackSubmission'
+import FeedbackTile from '@/components/feedback/FeedbackTile'
+import FeedbackRow from '@/components/feedback/FeedbackRow'
+import FeedbackView from '@/components/feedback/FeedbackView'
+import InfoDialogue from '@/components/InfoDialogue'
 
-import 'vue-awesome/icons/angle-left';
-import 'vue-awesome/icons/info';
+import 'vue-awesome/icons/angle-left'
+import 'vue-awesome/icons/arrow-right'
 
 
 export default {
@@ -91,8 +94,9 @@ export default {
     Messages,
   ],
   components: {
+    PageHeader,
     MarkdownRenderer,
-    FourCornersSubmission,
+    FeedbackSubmission,
     FourCornersLink,
     PreviousButton,
     InfoDialogue,
@@ -103,54 +107,54 @@ export default {
   activated() {
     // Check if user has registered
     if (this.isAuthenticated && !this.isRegistered) {
-      this.$router.push('/registration');
+      this.$router.push('/registration')
     } else if (this.isAuthenticated) {
-      this.$router.push('/');
+      this.$router.push('/')
     } else {
       // Fetch feedback items
-      this.getFeedbackItems();
-      this.getAvailableFeedbackItems();
+      this.getFeedbackItems()
+      this.getAvailableFeedbackItems()
     }
   },
   mounted() {
-    Vue.$log.info('Feedback view mounted');
+    Vue.$log.info('Feedback view mounted')
     
-    this.ensureAuthenticated();
+    this.ensureAuthenticated()
 
     if (this.$route.params.id) {
-      this.currentFeedbackId = this.$route.params.id.replace('%23', '#');
+      this.currentFeedbackId = this.$route.params.id.replace('%23', '#')
     }
 
-    this.getFeedbackItems();
-    this.getAvailableFeedbackItems();
+    this.getFeedbackItems()
+    this.getAvailableFeedbackItems()
     
     Vue.io.socket.on('user', (obj) => {
-      this.$log.info('Submission message received');
-      this.$log.info(obj);
+      this.$log.info('Submission message received')
+      this.$log.info(obj)
       switch (obj.data.msgtype) {
         case 'submission':
 
-          this.getFeedbackItems();
-          this.getAvailableFeedbackItems();
+          this.getFeedbackItems()
+          this.getAvailableFeedbackItems()
 
-          break;
+          break
         case 'discussion':
 
           if (this.currentFeedbackId === obj.data.msg.relates_to) {
-            this.discussion.push(obj.data.msg);
+            this.discussion.push(obj.data.msg)
           }
 
-          break;
+          break
         default:
       }
-    });
+    })
   },
   watch: {
     '$route.params.id': {
       handler: function(nV, oV) {
-        console.log('$route.params.id');
+        console.log('$route.params.id')
         if (nV) {
-          this.currentFeedbackId = nV.replace('%23', '#');
+          this.currentFeedbackId = nV.replace('%23', '#')
         }
       },
       deep: true,
@@ -165,76 +169,80 @@ export default {
       availableFeedbackItems: [],
       currentFeedbackId: '',
       discussion: [],
-    };
+    }
   },
   computed: {
     ...mapGetters([
       'isAuthenticated', 'isRegistered', 'user', 'currentClass', 'course',
     ]),
     classSlug() {
-      return this.$route.params.classSlug;
+      return this.$route.params.classSlug
     },
     contentSlug() {
-      return this.$route.params.contentSlug;
+      return this.$route.params.contentSlug
     },
     markdownUrl() {
-      return `${this.course.baseUri}class1/${this.contentSlug}.md`;
+      return `${this.course.baseUri}class1/${this.contentSlug}.md`
     },
   },
   methods: {
     previous() {
-      this.$router.push({ name: 'course' });
-      // return this.$router.go(-1);
+      this.$router.push({ name: 'course' })
+      // return this.$router.go(-1)
     },
     encodedId(id) {
-      return id.replace('#','%23');
+      return id.replace('#','%23')
+    },
+    reloadChats() {
+      this.getFeedbackItems()
+      this.getAvailableFeedbackItems()
     },
     getFeedbackItems() {
       
       if (!this.classSlug || !this.contentSlug) {
-        Vue.$log.info('No class or content slug so returning');
-        return;
+        Vue.$log.info('No class or content slug so returning')
+        return
       }
 
-      const request = { class: this.classSlug, content: this.contentSlug };
+      const request = { class: this.classSlug, content: this.contentSlug }
 
-      Vue.$log.info('No class or content slug so returning');
+      Vue.$log.info('No class or content slug so returning')
 
       API.feedback.getFeedbackItems(
         request,
         (response) => {
-          this.$log.info('Response from feedback request');
-          this.$log.info(response);
-          this.myFeedbackItems = filter(response.data, (item) => {
-            return item.user && (item.user.account_number === this.user.account_number);
-          });
-          this.feedbackItems = filter(response.data, (item) => {
-            return item.user && (item.user.account_number !== this.user.account_number);
-          });
+          this.$log.info('Response from feedback request')
+          this.$log.info(response)
+          this.myFeedbackItems = _filter(response.data, (item) => {
+            return item.user && (item.user.account_number === this.user.account_number)
+          })
+          this.feedbackItems = _filter(response.data, (item) => {
+            return item.user && (item.user.account_number !== this.user.account_number)
+          })
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback')
         },
-      );
+      )
     },
     getAvailableFeedbackItems() {
-      const request = { class: this.classSlug, content: this.contentSlug };
+      const request = { class: this.classSlug, content: this.contentSlug }
       API.feedback.getAvailableFeedbackItems(
         request,
         (response) => {
-          this.$log.info('Response from feedback request (available)');
-          this.$log.info(response);
-          this.availableFeedbackItems = response.data;
+          this.$log.info('Response from feedback request (available)')
+          this.$log.info(response)
+          this.availableFeedbackItems = response.data
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve feedback');
+          this.$log.info('Failed to retrieve feedback')
         },
-      );
+      )
     },
   },
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -251,16 +259,34 @@ $chat-list-width = 320px
   overflow-x none
   overflow-y scroll
   position fixed
+  
+  .feedback-page--header
+    pinned()
+    border-top alpha(white, .1) 1px solid
+    background-color $color-homework
+    height $page-header-height
+    padding 20px
+    position fixed
+    top $navigation-height
+    bottom auto
+    z-index 2
+
+    h3
+      reset()
+      color white
+      line-height $page-header-height
+      padding 0 10px
+      whitespace nowrap
 
 #chat-list-container
   box-sizing()
   pinned()
-  background-color $color-lightest-grey
+  background-color white
   border-right $color-lighter-grey 1px solid
   overflow-y scroll
   position fixed
   right auto
-  top $navigation-height
+  top $navigation-height + $page-header-height
   width $chat-list-width
   @media(max-width: 600px)
     width 75px
@@ -271,16 +297,13 @@ $chat-list-width = 320px
     background-color white
     border-bottom $color-light-grey 1px solid
     float left
+    font-size 0.9em
+    line-height 54px
     height 50px
     position relative
     &:hover
       background-color $color-lightest-grey
       cursor pointer
-
-    p
-      reset()
-      font-size 0.9em
-      line-height 54px
 
     .fa-icon
       color $color-text-dark-grey
@@ -291,12 +314,7 @@ $chat-list-width = 320px
     &#info-button
       border-left $color-light-grey 1px solid
       padding 0 15px
-      padding-left 44px
       width calc(100% - 50px)
-      .fa-icon
-        // display none
-        left 0
-        width 6px
     &#previous-button
       padding-left 50px
       width 50px
@@ -313,8 +331,6 @@ $chat-list-width = 320px
         margin 0 auto
         position relative
         left auto
-      // &:nth-child(2)
-      //   border-top $color-border 1px solid
       p
         display none
 
@@ -354,6 +370,7 @@ $chat-list-width = 320px
   border-right $color-lighter-grey 1px solid
   min-height 100%
   padding-left $chat-list-width
+  padding-top $page-header-height
   @media(max-width: 600px)
     padding-left 75px
   .main-container

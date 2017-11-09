@@ -2,11 +2,11 @@
 
   .card#classroom-card(v-if="user" v-bind:class="{ visible: visible, active: currentClassroom }")
 
-    h3 Classroom
+    h3 Join Classroom
 
-    p Enter code to join teacher's class
+    p Enter teacher code below
 
-    input#classroom-input(v-model="classroomCode" placeholder="XXXX")
+    input#classroom-input(v-model="classroomCode" placeholder="")
 
     a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") Leave Classroom
     a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2)" v-on:click="joinClassroom") Join Classroom
@@ -40,7 +40,7 @@ export default {
   methods: {
     registerAttendance() {
 
-      const postData = { theClass: this.currentClass.slug, slug: 'undefined', code: this.classroomCode };
+      const postData = { code: this.classroomCode };
 
       API.classroom.registerAttendance(
         postData,

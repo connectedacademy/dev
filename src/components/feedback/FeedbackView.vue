@@ -2,19 +2,19 @@
 
   .feedback-view(v-if="currentFeedbackId && feedbackItem")
 
-    .feedback-header
-      p {{ feedbackItem.user.name }} - {{ currentFeedbackId }}
-
     .feedback-section
 
       .feedback-tile(v-if="feedbackItem && feedbackItem.html")
-        four-corners(v-bind:html="feedbackItem.html")
+        //- a.pure-button.pure-button-subtle.pull-left(v-if="feedbackItem.original" v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original
+        .pure-button.pure-button-subtle.pull-left(@click="navigateTo(feedbackItem.original)" alt="View original submission") View submission
+        .pure-button.pure-button-subtle.pull-left(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
+        .pure-button.pure-button-subtle.pull-right(@click="closeSubmission" alt="Close") Close
+        //- pre {{ feedbackItem }}
         .clearfix
+
         br
-        //- a.pure-button.pure-button-subtle.pull-left(v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original submission
-        .pure-button.pure-button-subtle.pull-left(@click="navigateTo(feedbackItem.original)" alt="View original submission") View original submission
-        //- .pure-button.pure-button-subtle.pull-right(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
-        .clearfix
+
+        four-corners(v-bind:html="feedbackItem.html")
 
     .feedback-conversation
       .feedback-message-wrapper(v-for="message in feedbackMessages")
@@ -102,11 +102,11 @@ export default {
     },
   },
   methods: {
-    previous() {
-      this.$router.go(-1);
-    },
     navigateTo(location) {
       document.location = location;
+    },
+    closeSubmission() {
+      this.$emit('update:currentFeedbackId', undefined)
     },
     removeSubmission() {
       const postData = {
@@ -118,6 +118,7 @@ export default {
           this.$log.info('Response from remove submission request');
           this.$log.info(response);
           this.$emit('update:currentFeedbackId', undefined)
+          this.$emit('reloadchats')
         },
         (response) => {
           // TODO: Handle failed request
@@ -218,22 +219,6 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/buttons'
 
-.feedback-view
-  padding-top 50px
-
-  .feedback-header
-    pinned()
-    background-color white
-    border-bottom $color-border 1px solid
-    height 50px
-    position absolute
-    text-align center
-    bottom auto
-    p
-      reset()
-      font-size 0.9em
-      line-height 54px
-
 .feedback-section
   h1.feedback-section-title
     reset()
@@ -271,7 +256,7 @@ export default {
 
 .feedback-conversation
   padding-top 20px
-  padding-bottom 60px
+  padding-bottom 50px
 
   .feedback-message-wrapper
     .feedback-message
@@ -340,7 +325,6 @@ export default {
     .feedback-submission--footer
       pinned()
       background white
-      border-top $color-border 1px solid
       height 60px
       position absolute
       top auto

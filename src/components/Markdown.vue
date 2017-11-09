@@ -4,7 +4,7 @@
 
   .col#col-main
 
-    previous-button
+    //- previous-button
 
     .main-container.background-white
 

@@ -2,11 +2,10 @@
 
 .profile-page
   
-  .profile-page--header
-    h3 Your Dashboard
+  page-header(title="Your Dashboard" identifier="profile")
 
     //- Class Selector
-    profile-class-selector(v-bind:show-all="true" v-bind:classes.sync="classes")
+    profile-class-selector(v-bind:classes.sync="classes")
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")
     component(v-bind:is="profileAction.component" v-bind:label="profileAction.label" v-bind:role="profileAction.role" v-bind:panel="profileAction" v-bind:classes="classes" v-bind:limitHeight="false" v-bind:can-expand="false" v-bind:expanded-view="true")
@@ -31,6 +30,7 @@ import Auth from '@/mixins/Auth';
 import PageStyle from '@/mixins/PageStyle';
 
 // Components
+import PageHeader from '@/components/PageHeader'
 import ProfileClassSelector from '@/components/profile/ProfileClassSelector';
 
 // Panels
@@ -45,6 +45,7 @@ export default {
   name: 'profile-main',
   mixins: [ Auth, PageStyle ],
   components: {
+    PageHeader,
     ProfileClassSelector,
     User,
     Students,
@@ -149,6 +150,7 @@ export default {
 @import '~stylus/profile'
 
 $action-expanded-max-width = 500px
+
 .profile-page
   padding-top $navigation-height
 
@@ -173,35 +175,10 @@ $action-expanded-max-width = 500px
     left 0
     bottom 0
       
-
-// Profile
-.profile-page--header
-  pinned()
-  border-top alpha(white, .1) 1px solid
-  background-color $color-profile
-  height $profile-header-height
-  padding 20px
-  position fixed
-  top $navigation-height
-  bottom auto
-  z-index 2
-
-  h3
-    reset()
-    color white
-    line-height $profile-header-height
-    padding 0 10px
-    whitespace nowrap
-  .profile-class-selector
-    position absolute
-    top 0px
-    right 15px
-    z-index 10
-
 // Dashboard
 .dashboard
   padding 20px
-  padding-top $navigation-height + $profile-header-height + 10px
+  padding-top $page-header-height + 20px
   .gutter-block-selector
     width 20px
   .dashboard--item

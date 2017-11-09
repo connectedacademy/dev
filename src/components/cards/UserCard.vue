@@ -3,11 +3,12 @@
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
   
   img.user-profile(:src="user.profile" @click="showUser = !showUser")
-  //- pre(v-if="showUser") {{ user }}
+  
   h1.user-name {{ user.name }}
-  h2.user-account {{ user.account }}
+  //- h2.user-account {{ user.account }}
+  //- pre(v-if="showUser") {{ user }}
 
-  .pure-button.pure-button-action(@click="navigateToAdmin") View Dashboard
+  .pure-button.pure-button-action(@click="navigateToAdmin") Dashboard
   .pure-button.pure-button-action(@click="showHints") Show Hints
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 

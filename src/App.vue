@@ -18,7 +18,7 @@
   //- lock(passcode="76234")
 
   //- Navigaiton
-  burger-menu
+  navigation-button
   left-drawer
   right-drawer
 
@@ -40,7 +40,7 @@
   
   // Components
   import Navigation from '@/components/navigation/Navigation';
-  import BurgerMenu from '@/components/navigation/BurgerMenu';
+  import NavigationButton from '@/components/navigation/NavigationButton';
   import LeftDrawer from '@/components/navigation/drawers/LeftDrawer';
   import RightDrawer from '@/components/navigation/drawers/RightDrawer';
   import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
@@ -92,7 +92,7 @@
     components: {
       DebugPanel,
       Navigation,
-      BurgerMenu,
+      NavigationButton,
       LeftDrawer,
       RightDrawer,
       AuthenticationFlow,
@@ -160,6 +160,7 @@ body.disable-scroll
     @media(max-width: 800px)
       max-width 100%
       margin 0 0px
+      padding-top $navigation-height
 
 /* App states */
 

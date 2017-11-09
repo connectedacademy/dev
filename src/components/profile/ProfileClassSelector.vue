@@ -2,7 +2,11 @@
 
   .profile-class-selector
     ul.profile-class-selector(v-bind:class="{ selecting: selecting }" @click="expand")
-      li.profile-class-selector--item(v-for="(theClass, index) in classes" v-bind:key="index" v-bind:class="{ active: (this.profileClassSlug === theClass.slug) }" @click="setClass(theClass)")
+    
+      li.profile-class-selector--item.active(v-if="!selecting" @click="setClass(theClass)")
+        | {{ profileClass.title }}
+        .toggle
+      li.profile-class-selector--item(v-else v-for="(theClass, index) in classes" v-bind:key="index" v-bind:class="{ active: (profileClassSlug === theClass.slug) }" @click="setClass(theClass)")
         | {{ theClass.title }}
         .toggle
 
@@ -16,7 +20,7 @@ import _get from 'lodash/get';
 
 export default {
   name: 'profile-class-selector',
-  props: ['activeClass', 'showAll', 'classes'],
+  props: ['activeClass', 'classes'],
   mounted() {
     this.getClasses();
     EventBus.$on('updateClasses', () => {
@@ -64,7 +68,9 @@ export default {
 
       if (this.selecting && (theClass !== this.profileClass)) {
         this.$store.commit('updateProfileClass', theClass);
-        this.selecting = false;
+        setTimeout(() => {
+          this.selecting = false;
+        }, 200)
         EventBus.$emit('profileClassUpdated');
       }
     },
@@ -83,11 +89,13 @@ ul.profile-class-selector
   cleanlist()
   radius(4px)
   box-shadow()
-  margin 30px 10px
-  min-height $selector-height
+  margin 15px 5px
+  height $selector-height
   max-width 280px
   min-width 160px
   overflow hidden
+  &.selecting
+    height auto
   li.profile-class-selector--item
     cleanlist()
     animate()
@@ -101,7 +109,8 @@ ul.profile-class-selector
       background-color $color-lightest-grey
     .toggle
       radius(50%)
-      background-color $color-success
+      background-color $color-border
+
       height 10px
       width 10px
       margin-top -(10px / 2)
@@ -109,6 +118,9 @@ ul.profile-class-selector
       right 10px
       top 50%
       bottom 0
+    &.active
+      .toggle
+        background-color $color-success
     &:last-child
       border-bottom none
 
