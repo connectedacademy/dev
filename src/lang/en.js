@@ -60,6 +60,9 @@ export default {
 
     i_agree_to_terms_and_conditions: 'I agree with the terms & conditions',
 
+    show_hints: 'Show Hints',
+    dashboard: 'Dashboard',
+
     form: {
       your_name: 'Your Name',
       name_placeholder: 'e.g. John Smith',
@@ -97,4 +100,10 @@ export default {
     unavailable_title: 'Unavailable',
     unavailable_description: 'You are in a demo mode so this is not available right now.',
   },
+  classroom: {
+    join_classroom: 'Join Classroom',
+    leave_classroom: 'Leave Classroom',
+    enter_code: 'Enter teacher code below',
+    failed_to_register: 'Failed to register attendance',
+  }
 };

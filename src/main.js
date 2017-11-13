@@ -42,7 +42,7 @@ Vue.use(VueConfig, Vue.config);
 Vue.use(VueMasonryPlugin);
 
 const options = {
-  logLevel: 'info',
+  logLevel: 'info', // error
   stringifyArguments: false,
   showLogLevel: false,
   dev: true

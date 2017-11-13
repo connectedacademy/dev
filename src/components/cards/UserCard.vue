@@ -2,22 +2,22 @@
 
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
   
-  img.user-profile(:src="user.profile" @click="showUser = !showUser")
+  img.user-profile(v-bind:src="profileImage" @click="showUser = !showUser")
   
   h1.user-name {{ user.name }}
   //- h2.user-account {{ user.account }}
   //- pre(v-if="showUser") {{ user }}
 
-  .pure-button.pure-button-action(@click="navigateToAdmin") Dashboard
-  .pure-button.pure-button-action(@click="showHints") Show Hints
+  .pure-button.pure-button-action(@click="navigateToAdmin") {{ $t('auth.dashboard') }}
+  .pure-button.pure-button-action(@click="showHints") {{ $t('auth.show_hints') }}
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters} from 'vuex'
 
-import 'vue-awesome/icons/cog';
+import 'vue-awesome/icons/cog'
 
 export default {
   name: 'user-card',
@@ -25,35 +25,35 @@ export default {
   data() {
     return {
       showUser: false,
-    };
+    }
   },
   methods: {
     navigateToAdmin() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER');
-      this.$router.push('/profile');
+      this.$store.commit('TOGGLE_RIGHT_DRAWER')
+      this.$router.push('/profile')
     },
     logout() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER');
-      this.$store.dispatch('logout');
+      this.$store.commit('TOGGLE_RIGHT_DRAWER')
+      this.$store.dispatch('logout')
     },
     showHints() {
-      this.$cookie.delete('profile-button');
-      this.$cookie.delete('intro-button');
-      this.$cookie.delete('section-navigator');
-      this.$cookie.delete('media-toggle');
-      this.$cookie.delete('play-pause-toggle');
-      this.$cookie.delete('view-toggle');
-      
-      location.reload();
+      const hints = ['profile-button', 'intro-button', 'section-navigator', 'media-toggle', 'play-pause-toggle', 'view-toggle']
+      for (const hint in hints) {
+        this.$cookie.delete(hints[hint])
+      }
+      location.reload()
     },
   },
   computed: {
     ...mapGetters(['user', 'admin']),
     authenticatedAsAdmin() {
-      return false;
+      return false
     },
+    profileImage() {
+      return this.user.profile.replace('_normal', '')
+    }
   },
-};
+}
 </script>
 
 <style lang="stylus" scoped>

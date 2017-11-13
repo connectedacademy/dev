@@ -56,7 +56,6 @@ export default {
     li.liveclass-list-item
       cleanlist()
       box-sizing()
-      animate()
       background-color $color-lighter-grey
       border-left darken($color-lighter-grey, 10%) 5px solid
       color $color-darkest-grey
@@ -68,37 +67,29 @@ export default {
       padding 30px 30px
       position relative
       text-align left
+      > div
+        color inherit
       &:hover
         cursor pointer
         background-color lighten($color-lighter-grey, 5%)
       .liveclass-list-item--location
-        animate()
-        color inherit
         font-size 0.9em
         font-weight bold
-        opacity 0
         position absolute
         top 10px
         right 10px
+        opacity 0.5
       .liveclass-list-item--time
-        animate()
-        color inherit
         font-size 2.2em
         font-weight bold
       .liveclass-list-item--date
-        animate()
-        color inherit
         font-size 1.3em
         font-weight bold
         margin-top -5px
         opacity 0.5
       &.selected
         background-color $color-info
-        color white
         border-left-color darken($color-info, 10%)
-        .liveclass-list-item--location
-          opacity 1.0
-        .liveclass-list-item--date
-          opacity 1.0
+        color white
   
 </style>

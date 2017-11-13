@@ -13,22 +13,23 @@
 <script>
 import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex'
+
+// Mixins
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+
+// Components
+import PageStyle from '@/mixins/PageStyle';
 
 export default {
   name: 'about',
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.$store.commit(types.SET_NAV_STATE, { minimized: false });
-      vm.$store.commit(types.SET_PAGE_STYLE, undefined);
-    });
-  },
+  mixins: [ PageStyle ],
   components: {
     MarkdownRenderer,
   },
   data() {
     return {
       navTitle: 'About - Connected Academy',
+      pageStyle: { type: undefined, minimized: false }
     };
   },
   computed: {

@@ -16,9 +16,7 @@ export default {
   props: ['contentType', 'videoSrc', 'autoLoad'],
   mounted() {
     if (this.autoLoad) {
-      setTimeout(() => {
-        this.theSrc = this.src;
-      }, 1000);
+      this.theSrc = this.src;
     }
   },
   data() {

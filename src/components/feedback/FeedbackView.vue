@@ -6,8 +6,8 @@
 
       .feedback-tile(v-if="feedbackItem && feedbackItem.html")
         //- a.pure-button.pure-button-subtle.pull-left(v-if="feedbackItem.original" v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original
-        .pure-button.pure-button-subtle.pull-left(@click="navigateTo(feedbackItem.original)" alt="View original submission") View submission
-        .pure-button.pure-button-subtle.pull-left(v-if="isOwner" @click="removeSubmission" alt="Remove submission") Remove submission
+        .pure-button.pure-button-subtle.pull-left(v-if="isOwner" @click="removeSubmission" alt="Delete submission") Delete
+        .pure-button.pure-button-subtle.pull-left(v-else @click="navigateTo(feedbackItem.original)" alt="View original submission") View submission
         .pure-button.pure-button-subtle.pull-right(@click="closeSubmission" alt="Close") Close
         //- pre {{ feedbackItem }}
         .clearfix
@@ -256,7 +256,8 @@ export default {
 
 .feedback-conversation
   padding-top 20px
-  padding-bottom 50px
+  padding-bottom 60px
+  position relative
 
   .feedback-message-wrapper
     .feedback-message
@@ -335,14 +336,14 @@ export default {
         float left
         font-size 0.9em
         line-height 20px
-        padding 20px 20px
-        width calc(100% - 12gc ''0px)
+        padding 20px 0
+        width calc(100% - 120px)
       .pure-button
         background-color $color-homework
         border-color $color-homework
         color white
         float right
-        margin 10px 20px
+        margin 10px 0
         &:hover
           background-color darken($color-homework, 10%)
 </style>

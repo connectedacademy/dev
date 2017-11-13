@@ -8,30 +8,29 @@ import _find from 'lodash/find';
 
 require('howler');
 
-var sound = new Howl({
-  // src: ['https://interpretation.connectedacademy.io/course/content/audio/CA_TL_1_v4_56.mp3'],
-  // format: ['mp3'],
-  src: [
-    // 'https://interpretation.connectedacademy.io/course/content/audio/CA_TL_1_v4_32.webm',
-    'https://interpretation.connectedacademy.io/course/content/audio/CA_TL_1_v4_32.mp3',
-    'https://interpretation.connectedacademy.io/course/content/audio/CA_TL_1_v4_32.ogg'
-  ],
-  format: [
-    // 'webm',
-    'mp3',
-    'ogg'
-  ],
-  preload: true,
-  html5: true,
-  buffer: true
-});
-
 export default {
   mounted() {
+    let src = []
+    for (const index in this.content.audio) {
+      src.push(`https://${this.course.slug}.connectedacademy.io/course/content/audio/${this.content.audio[index]}`,)
+    }
+    
+    this.sound = new Howl({
+      src: src,
+      // format: [
+      //   'mp3',
+      //   'ogg'
+      //   // 'webm'
+      // ],
+      preload: true,
+      html5: true,
+      buffer: true
+    });
+
     EventBus.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus;
     });
-    sound.on('seek', () => {
+    this.sound.on('seek', () => {
      this.checkBufferStatus();
     });
   },
@@ -41,9 +40,9 @@ export default {
     },
     mediaPlaying(nV, oV) {
       if (nV) {
-        sound.play();
+        this.sound.play();
       } else {
-        sound.pause();
+        this.sound.pause();
       }
     },
     videoIsActive(nV) {
@@ -64,6 +63,7 @@ export default {
   },
   data() {
     return {
+      sound: undefined,
       scrollStatus: undefined,
       mediaBuffering: false,
       bufferInterval: false,
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mediaPlaying'
+      'course', 'mediaPlaying'
     ]),
   },
   methods: {
@@ -81,10 +81,10 @@ export default {
 
       let bufferingCount = 0;
 
-      for (var index = 0; index < sound._sounds[0]._node.buffered.length; index++) {
+      for (var index = 0; index < this.sound._sounds[0]._node.buffered.length; index++) {
 
-        const start = sound._sounds[0]._node.buffered.start(index);
-        const end = sound._sounds[0]._node.buffered.end(index);
+        const start = this.sound._sounds[0]._node.buffered.start(index);
+        const end = this.sound._sounds[0]._node.buffered.end(index);
 
         const inBufferedZone = ((this.scrollStatus.currentTime > start) && (this.scrollStatus.currentTime < end));
 
@@ -106,13 +106,13 @@ export default {
     },
     performSync: _throttle(function (self) {
 
-      const playerTime = sound.seek();
+      const playerTime = this.sound.seek();
       const outOfSync = ((self.scrollStatus.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.scrollStatus.currentTime > (playerTime + SYNC_THRESHOLD)));
 
       if (outOfSync) {
         self.$log.info('OUTOFSYNC');
-        sound.seek(self.scrollStatus.currentTime);
+        this.sound.seek(self.scrollStatus.currentTime);
       }
-    }, 500),
-  },
+    }, 500)
+  }
 }

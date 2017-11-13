@@ -2,67 +2,80 @@
 
   .card#classroom-card(v-if="user" v-bind:class="{ visible: visible, active: currentClassroom }")
 
-    h3 Join Classroom
+    h3 {{ $t('classroom.join_classroom') }}
+    p {{ $t('classroom.enter_code') }}
 
-    p Enter teacher code below
+    input#classroom-input(v-model="classroomCode" placeholder="CODE")
 
-    input#classroom-input(v-model="classroomCode" placeholder="")
-
-    a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") Leave Classroom
-    a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2)" v-on:click="joinClassroom") Join Classroom
+    a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") {{ $t('classroom.leave_classroom') }}
+    a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2)" v-on:click="joinClassroom") {{ $t('classroom.join_classroom') }}
 
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-import API from '@/api';
+import { mapGetters } from 'vuex'
+import API from '@/api'
 
-import find from 'lodash/find';
+import find from 'lodash/find'
 
 export default {
   name: 'classroom-card',
   props: ['visible'],
+  mounted() {
+    this.checkForExistingClassroom()
+  },
   data() {
     return {
       currentClassroom: false,
       classroomCode: '',
-    };
+    }
   },
   computed: {
-    ...mapGetters(['currentClass']),
-    user() {
-      return this.$store.state.auth.user;
-    },
-    user() {
-      return this.$store.state.auth.user;
-    },
+    ...mapGetters(['currentClass', 'user'])
   },
   methods: {
+    checkForExistingClassroom() {
+      const request = {
+        theClass: this.$route.params.classSlug
+      }
+      
+      API.classroom.getClassroomStatus(
+        request,
+        (response) => {
+          console.log(response)
+          this.currentClassroom = true
+          this.classroomCode = response.code
+        },
+        (response) => {
+          // TODO: Better handle failed request
+        }
+      )
+    },
     registerAttendance() {
 
-      const postData = { code: this.classroomCode };
+      const postData = { code: this.classroomCode }
 
       API.classroom.registerAttendance(
         postData,
         (response) => {
-          this.$log.info(response);
-          this.currentClassroom = true;
+          this.$log.info(response)
+          this.currentClassroom = true
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to register attendance');
-          alert(`Failed to register attendance - ${response.body.data}`);
-        },
-      );
+          this.$log.info('Failed to register attendance')
+          alert(`${$t('classroom.failed_to_register')} - ${response.body.data}`)
+        }
+      )
     },
     joinClassroom() {
-      this.registerAttendance();
+      this.registerAttendance()
     },
     leaveClassroom() {
-      this.currentClassroom = false;
+      this.currentClassroom = false
     },
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -76,7 +89,7 @@ export default {
   padding 0
   text-align center
   &.active
-    background-color $color-success
+    background-color $color-primary
 
   .pure-button
     radius(0)

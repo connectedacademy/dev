@@ -1,6 +1,6 @@
 <template lang="pug">
   .page-header(v-bind:class="identifier")
-    h3.page-title(@click="previous")
+    h3.page-title
       | {{ title }}
     slot
 </template>

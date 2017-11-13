@@ -25,7 +25,7 @@ export default {
     });
   },
   getClassroomStatus(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/classroom/getclass/${request.theClass}/${request.slug}`).then((response) => {
+    Vue.http.get(`${config.WATERCOOLER_API}/classroom/getclass/${request.theClass}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);

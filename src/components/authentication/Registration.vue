@@ -6,11 +6,8 @@
 
     profile-step(v-if="currentStep === 1" v-bind:response.sync="response" v-on:nextStep="nextStep" v-on:previousStep="previousStep")
 
-    .questions-wrapper(v-if="paged" v-for="(question, index) in questions" v-bind:key="index")
-      question-step(v-if="currentStep === (index + 2)" v-bind:response.sync="response" v-bind:question.sync="question" v-on:nextStep="nextStep" v-on:previousStep="previousStep")
-    
-    .questions-wrapper(v-else)
-      question-step(v-if="currentStep === 2" v-bind:response.sync="response" v-bind:questions.sync="questions" v-on:nextStep="nextStep" v-on:previousStep="previousStep")
+    .registration-page(v-for="(question, index) in questions" v-bind:key="index")
+      question-step(v-if="currentStep === (index + 2)" v-bind:answers.sync="response.registration_info.answers" v-bind:question.sync="question" v-on:nextStep="nextStep" v-on:previousStep="previousStep")
 
     schedule-step(v-if="currentStep === (questions.length + 2)" v-bind:form-is-valid="true" v-bind:response.sync="response" v-on:attemptRegistration="attemptRegistration" v-on:previousStep="previousStep")
 
@@ -45,7 +42,6 @@
       ScheduleStep
     },
     mounted() {
-
       this.ensureNotRegistered();
 
       this.$store.dispatch('getHubs');
@@ -65,7 +61,6 @@
     data() {
       return {
         pageStyle: { type: 'registration', minimized: false },
-        paged: true,
         currentStep: 1,
         loadingQuestions: true,
         release: '',

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .registration-page.question-step
+  .question-step
 
     .content-block.white-block.question-block(v-for="(question, index) in theQuestions")
 
@@ -8,23 +8,26 @@
 
       form.pure-form.pure-form-stacked
         
+        //- p {{ question.id }}
+        //- pre {{ answers[question.id] }}
+
         //- Scale response
         scale-response(v-if="question.response_type === 'scale'"
           v-bind:label="question.text"
-          v-model="response.registration_info.answers[question.id]"
+          v-model="answers[question.id]"
           v-bind:min="question.response_min"
           v-bind:max="question.response_max")
 
         //- Text response
         text-response(v-if="question.response_type === 'text'"
           v-bind:label="question.text"
-          v-model="response.registration_info.answers[question.id]"
+          v-model="answers[question.id]"
           v-bind:placeholder="question.response_placeholder ? question.response_placeholder : 'Please answer here...'")
 
         //- Multi response
         multi-response(v-if="question.response_type === 'multi'"
           v-bind:label="question.text"
-          v-model="response.registration_info.answers[question.id]"
+          v-model="answers[question.id]"
           v-bind:options="question.response_options"
           v-on:answered="$emit('nextStep')")
 
@@ -42,7 +45,7 @@
 
   export default {
     name: 'question-step',
-    props: ['question', 'questions', 'response'],
+    props: ['question', 'questions', 'answers'],
     components: {
       PreviousButton,
       ScaleResponse,
@@ -61,7 +64,7 @@
 
 @import '~stylus/registration'
 
-.registration-page.question-step
+.question-step
   margin 0 auto
   max-width 400px
   position relative

@@ -1,8 +1,8 @@
 <template lang="pug">
 
-  .navigation(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
+  #navigation(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
 
-    animated-logo(@click="scrollTop")
+    #logo-text(@click="goHome") {{ $app.name }}
 
     #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
       icon(name="wrench")
@@ -18,7 +18,6 @@
 import {mapGetters} from 'vuex';
 
 import * as types from '@/store/mutation-types';
-import AnimatedLogo from '@/components/AnimatedLogo';
 import ProfileIcon from './ProfileIcon';
 import Auth from '@/mixins/Auth';
 
@@ -31,8 +30,7 @@ export default {
     Auth,
   ],
   components: {
-    AnimatedLogo,
-    ProfileIcon,
+    ProfileIcon
   },
   computed: {
     ...mapGetters([
@@ -44,9 +42,6 @@ export default {
     hidden() {
       return !this.$store.state.navigation.visible;
     },
-    navTitle() {
-      return (this.$store.getters.currentClass && this.$store.getters.currentClass.title && this.navigation.minimized) ? `${this.$store.getters.currentClass.title}` : 'Connected Academy';
-    },
     showDebugToggle() {
       return this.$route.query.debug;
     },
@@ -55,8 +50,12 @@ export default {
     toggleDebugMode() {
       this.$store.commit(types.TOGGLE_DEBUG_MODE);
     },
-    scrollTop() {
-      window.scroll(0, 0);
+    goHome() {
+      this.$router.push({ name: 'course' });
+      this.$store.commit('PAUSE_MEDIA');
+      setTimeout(() => {
+        window.scroll(0, 0);
+      }, 500);
     },
   },
 };
@@ -99,9 +98,10 @@ export default {
     background-color alpha(black, 0.1)
     cursor pointer
 
-.navigation
+#navigation
   animate()
   background-color $color-primary
+  border-bottom alpha(black, 0.1) 1px solid
   height 50px
   position fixed
   top 0
@@ -110,11 +110,20 @@ export default {
   width 100%
   &.hidden
     display none
+  &:hover
+    cursor pointer
+
+  #logo-text
+    color white
+    font-size 1em
+    font-weight bold
+    line-height $navigation-height
+    margin 0 10px
 
 /* App states */
 
 html
   &.registration
-    .navigation
+    #navigation
       display none
 </style>

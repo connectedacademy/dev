@@ -105,15 +105,10 @@ export default {
       }
     },
     scrollStatus(nV, oV) {
-      if (typeof nV !== 'undefined') {
-        if (typeof oV === 'undefined') {
-          this.loadSegmentSummary(nV.currentSegmentGroup, true);
-        }
-        else if (oV.currentSegmentGroup !== nV.currentSegmentGroup) {
-          this.$log.info(`Getting messages for segment ${nV.currentSegmentGroup}`);
-          this.loadSegmentSummary(nV.currentSegmentGroup, true);
-        }
-      }
+      if ((typeof nV === 'undefined') || (typeof oV === 'undefined') || (nV.currentSegmentGroup === oV.currentSegmentGroup) || (typeof this.currentSection === 'undefined')) return
+
+      this.$log.info(`Getting messages for segment ${nV.currentSegmentGroup}`);
+      this.loadSegmentSummary(nV.currentSegmentGroup, true);
     },
   },
   methods: {

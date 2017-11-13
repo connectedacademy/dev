@@ -75,9 +75,9 @@
       this.$store.dispatch('checkAuth');
 
       /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-      particlesJS.load('page-header', '../../../static/particles.json', function () {
-        console.log('callback - particles.js config loaded');
-      })
+      // particlesJS.load('page-header', '../../../static/particles.json', function () {
+      //   console.log('callback - particles.js config loaded');
+      // })
     },
     data() {
       return {
@@ -112,10 +112,6 @@ html
   transition background-color 0.6s
   &::-webkit-scrollbar
     display none
-  &.colourful
-    background-color $color-primary
-  &.registration
-    background-color $color-darkest-grey
 
 html, body
   font-family 'Avenir', Helvetica, Arial, sans-serif
@@ -198,21 +194,32 @@ body.disable-scroll
   &.minimized
     height 0px
 
-#app
-  &.colourful
-    #page-header
-      display none
+#app, html
+  &.primary
+    #page-header, #navigation
+      background-color $color-primary
   &.registration
-    #page-header
-      background-color darken($color-registration, 10%)
+    #page-header, #navigation
+      background-color $color-registration
+  &.survey
+    #page-header, #navigation
+      background-color $color-survey
+
   &.homework
-    #page-header
+    #page-header, #navigation
       background-color $color-homework
   &.fourcorners
-    #page-header
+    #page-header, #navigation
       background-color $color-fourcorners
   &.profile
-    #page-header
+    #page-header, #navigation
       background-color $color-profile
 
+html
+  &.primary
+    background-color $color-primary
+  &.registration
+    background-color $color-darkest-grey
+  &.survey
+    background-color $color-survey
 </style>

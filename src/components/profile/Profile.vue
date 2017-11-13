@@ -18,28 +18,28 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
 
-import _each from 'lodash/each';
-import _filter from 'lodash/filter';
-import _indexOf from 'lodash/indexOf';
+import _each from 'lodash/each'
+import _filter from 'lodash/filter'
+import _indexOf from 'lodash/indexOf'
 
 // Mixins
-import Auth from '@/mixins/Auth';
-import PageStyle from '@/mixins/PageStyle';
+import Auth from '@/mixins/Auth'
+import PageStyle from '@/mixins/PageStyle'
 
 // Components
 import PageHeader from '@/components/PageHeader'
-import ProfileClassSelector from '@/components/profile/ProfileClassSelector';
+import ProfileClassSelector from '@/components/profile/ProfileClassSelector'
 
 // Panels
-import User from '@/components/profile/panels/User';
-import Students from '@/components/profile/panels/Students';
-import Submissions from '@/components/profile/panels/Submissions';
-import Messages from '@/components/profile/panels/Messages';
-import QuestionResponses from '@/components/profile/panels/QuestionResponses';
-import Storify from '@/components/profile/panels/Storify';
+import User from '@/components/profile/panels/User'
+import Students from '@/components/profile/panels/Students'
+import Submissions from '@/components/profile/panels/Submissions'
+import Messages from '@/components/profile/panels/Messages'
+import QuestionResponses from '@/components/profile/panels/QuestionResponses'
+import Storify from '@/components/profile/panels/Storify'
 
 export default {
   name: 'profile-main',
@@ -55,15 +55,13 @@ export default {
     Storify,
   },
   mounted() {
-    this.ensureAuthenticated();
-    
-    // this.user.roles = ['user'];
-    // this.user.roles = ['user', 'teacher'];
-    // this.user.roles = ['user', 'teacher', 'admin'];
-
-    setInterval(() => {
-      this.$redrawVueMasonry();
-    }, 2000);
+    this.ensureAuthenticated()
+    this.redrawInterval = setInterval(() => {
+      this.$redrawVueMasonry()
+    }, 2000)
+  },
+  unmounted() {
+    clearInterval(this.redrawInterval)
   },
   data() {
     return {
@@ -119,29 +117,29 @@ export default {
           component: 'messages',
         },
       ],
-    };
+    }
   },
   computed: {
     ...mapGetters(['user', 'profileAction', 'profileClass']),
     panelCount() {
-      return _filter(this.panels, { visible: true }).length;
+      return _filter(this.panels, { visible: true }).length
     },
   },
   methods: {
     isVisible(panel) {
-      if (!this.user) return false;
-      return (_indexOf(this.user.roles, panel.role) >= 0);
+      if (!this.user) return false
+      return (_indexOf(this.user.roles, panel.role) >= 0)
     },
     panelStyle(index) {
       return {
         width: `${this.panelWidth - this.panelMargin}px`
-      };
+      }
     },
     togglePanel(panel) {
       panel.visible = !panel.visible
     },
   },
-};
+}
 
 </script>
 

@@ -15,25 +15,27 @@
 </template>
 
 <script>
+  // Mixins
+  import PageStyle from '@/mixins/PageStyle';
+  
+  // Components
   import MarkdownRenderer from '@/components/MarkdownRenderer';
   import PreviousButton from '@/components/PreviousButton';
   
   export default {
     name: 'markdown',
-    beforeRouteEnter(to, from, next) {
-      next((vm) => {
-        vm.$store.commit('SET_NAV_STATE', {
-          minimized: false
-        });
-        vm.$store.commit('SET_PAGE_STYLE', undefined);
-      });
-    },
+    mixins: [ PageStyle ],
     components: {
       MarkdownRenderer,
       PreviousButton,
     },
     mounted() {
       this.$ga.event('markdown', 'rendered', window.location.href);
+    },
+    data() {
+      return {
+        pageStyle: { type: undefined, minimized: false }
+      }
     }
   };
 </script>

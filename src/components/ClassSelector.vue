@@ -2,7 +2,7 @@
 
 .class-selector
   transition(name="fade")
-    .class-selector-wrapper(v-if="activeClass && course && course.classes")
+    .class-selector-wrapper(v-if="course && course.classes")
       .skip-button.skip-button--left(@click="scrollLeft" v-if="offset > 0")
         icon(name="angle-left")
       .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
@@ -11,20 +11,20 @@
         .class-selector-container(ref="classselector" v-scroll="onScroll")
           ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
-            li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: (activeClass === 'intro') }")
+            li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: currentClassSlug === 'intro' }")
               h1.class-selector--item--header
                 icon(name="info")
 
-            li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (activeClass === theClass.slug) }" ref="class")
+            li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (currentClassSlug === theClass.slug) }" ref="class")
               h1.class-selector--item--header {{ theClass.title }}
               icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
               icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
 
             .clearfix
       
-  .course-content-wrapper
+  .course-content-wrapper(v-if="currentClassSlug === 'intro'")
 
-    .course-content-group(v-if="activeClass === 'intro'")
+    .course-content-group
       //- ABOUT
       .course-content
         .course-content--header
@@ -35,7 +35,7 @@
 
           four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
         
-        .course-content--footer(v-if="currentExists")
+        .course-content--footer
           .pure-button.pure-button-continue(@click="viewCurrentClass") Continue to class
 
 </template>
@@ -48,6 +48,7 @@ import API from '@/api';
 import VueScroll from 'vue-scroll';
 
 import throttle from 'lodash/throttle';
+import _get from 'lodash/get';
 
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersLink from '@/components/fourcorners/FourCornersLink';
@@ -72,8 +73,6 @@ export default {
   watch: {
     '$route.params.classSlug': {
       handler: function(nV, oV) {
-        console.log('$route.params.classSlug');
-        
         if (nV) {
           if (nV !== oV) {
             this.activeClass = nV;
@@ -84,14 +83,16 @@ export default {
     },
     currentClass(nV, oV) {
       
-      this.activeClass = nV.slug;
-      const segmentId = this.$route.params.segmentId;
-      if ((this.$route.params.classSlug !== nV) && (typeof segmentId === 'undefined')) {
-        this.$router.push(`/course/${this.activeClass}`);
+      if (nV) {
+        const segmentId = this.$route.params.segmentId;
+        if ((this.$route.params.classSlug !== nV) && (typeof segmentId === 'undefined')) {
+          this.$router.push(`/course/${this.currentClassSlug}`);
+        }
       }
     },
   },
   mounted() {
+    this.windowResized(this);
     window.addEventListener("resize", () => {
       this.windowResized(this);
     }, { passive: true });
@@ -100,7 +101,6 @@ export default {
   },
   data() {
     return {
-      activeClass: undefined,
       offset: 0,
       remainingOffset: 0,
       leftPos: 0,
@@ -111,11 +111,14 @@ export default {
   },
   computed: {
     ...mapGetters(['course', 'currentClass', 'isRegistered']),
+    currentClassSlug() {
+      return _get(this.currentClass, 'slug', 'intro')
+    },
     infoMarkdown() {
       return `${this.course.baseUri}info.md`;
     },
     theWidth() {
-      return (this.course && this.course.classes) ? (((this.course.classes.length) * 190.0) - 10) + 190.0 : 190.0;
+      return ((this.course.classes.length) * 190.0) + 44
     },
     currentExists() {
       if (!(this.course && this.course.classes)) {
@@ -156,24 +159,23 @@ export default {
       this.$ga.event('class-selector', 'class-switched', 'class-intro');
     },
     viewCurrentClass() {
-      if (!this.currentExists) {
-        this.viewIntroClass();
-      }
       if (!(this.course && this.course.classes)) {
         return false;
       }
+      let currentExists = false
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
+          currentExists = true
           this.$store.dispatch('getSpec', theClass.slug);
         }
       }
+      if (!currentExists) this.$store.dispatch('getSpec', this.course.classes[0].slug);
     },
     setCurrentClass(newClass) {
       
       if (newClass === undefined) {
         this.setInitalClass();
       } else {
-        this.activeClass = newClass;
         this.$store.dispatch('getSpec', newClass);
       }
       this.$store.dispatch('resetState');
@@ -204,8 +206,10 @@ $selector-height = 44px
   @media(max-width: 800px)
     margin 20px 10px
   .skip-button
-    radius(22px)
-    background-color alpha(white, 0.5)
+    animate()
+    box-shadow()
+    radius(50%)
+    background-color white
     height $selector-height
     width $selector-height
     position absolute
@@ -214,7 +218,6 @@ $selector-height = 44px
     bottom 0
     z-index 1
     &:hover
-      background-color white
       cursor pointer
     &.skip-button--left
       left 0px
@@ -241,7 +244,7 @@ $selector-height = 44px
           box-sizing()
           cleanlist()
           radius(22px)
-          background-color alpha(black, 0.1)
+          background-color darken($color-primary, 10%)
           border transparent 1px solid
           float left
           overflow hidden
@@ -276,19 +279,19 @@ $selector-height = 44px
 
           /* Released styles */
           &.released
-            background-color alpha(black, 0.1)
+            background-color darken($color-primary, 10%)
             h1.class-selector--item--header, .status-indicator
               color white
 
           /* Current styles */
           &.current
-            background-color alpha(black, 0.1)
+            background-color darken($color-primary, 10%)
             h1.class-selector--item--header, .status-indicator
               color white
 
           /* Future styles */
           &.future
-            background-color alpha(white, 0.3)
+            background-color darken($color-primary, 10%)
             pointer-events none
             .status-indicator
               color $color-primary

@@ -2,6 +2,13 @@ import Vue from 'vue';
 import * as config from './config';
 
 export default {
+  getPostCourseQuestions(cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/analytics/postquestions`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
   getQuestion(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/analytics/question/${request.theClass}/${request.slug}`).then((response) => {
       cb(response.body);

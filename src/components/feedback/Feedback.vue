@@ -23,23 +23,21 @@
       router-link(v-for="(feedbackItem, index) in availableFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
-  #conversation-container
+  #conversation-container.background-white
 
-    .main-container.main-container-padded.background-white
+    .homework-details(v-if="!currentFeedbackId")
+      .markdown-wrapper
+        markdown-renderer(v-bind:markdown-url="markdownUrl")
 
-      .homework-details(v-if="!currentFeedbackId")
-        .markdown-wrapper
-          markdown-renderer(v-bind:markdown-url="markdownUrl")
+      four-corners-link(message="This homework requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
 
-        four-corners-link(message="This homework requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
+      h2 Submit Homework
+      feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
 
-        h2 Submit Homework
-        feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
+      #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
 
-        #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
-
-      transition(name="fade" type="in out")
-        feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug" v-on:reloadchats="reloadChats")
+    transition(name="fade" type="in out")
+      feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug" v-on:reloadchats="reloadChats")
 
   .clearfix
 
@@ -135,9 +133,10 @@ export default {
   watch: {
     '$route.params.id': {
       handler: function(nV, oV) {
-        console.log('$route.params.id')
         if (nV) {
           this.currentFeedbackId = nV.replace('%23', '#')
+        } else {
+          this.currentFeedbackId = undefined
         }
       },
       deep: true,
@@ -147,10 +146,10 @@ export default {
     return {
       pageStyle: { type: 'homework', minimized: true },
       navTitle: 'Connected Academy - Feedback',
+      currentFeedbackId: '',
       myFeedbackItems: [],
       feedbackItems: [],
       availableFeedbackItems: [],
-      currentFeedbackId: '',
       discussion: [],
     }
   },
@@ -262,18 +261,17 @@ $chat-list-width = 320px
   pinned()
   background-color white
   border-right $color-lighter-grey 1px solid
-  overflow-y scroll
+  overflow-y auto
   position fixed
   right auto
   top $navigation-height + $page-header-height
   width $chat-list-width
+  z-index 1
   @media(max-width: 600px)
     width 75px
   ul
     cleanlist()
     border-bottom $color-lighter-grey 1px solid
-    @media(max-width: 600px)
-      margin-top 10px
     li
       cleanlist()
       border-top $color-lighter-grey 1px solid
@@ -295,15 +293,17 @@ $chat-list-width = 320px
   background-color white
   border-right $color-lighter-grey 1px solid
   min-height 100%
-  padding-left $chat-list-width
-  padding-top $page-header-height
+  padding 20px
+  padding-left $chat-list-width + 20px
+  padding-top $page-header-height + 20px
+  position relative
+  max-width 800px
+  z-index 0
   @media(max-width: 600px)
-    padding-left 75px
-  .main-container
-    max-width 800px
-    h2
-      color $color-text-dark-grey
-      font-size 1.3em
+    padding-left 75px + 20px
+  h2
+    color $color-text-dark-grey
+    font-size 1.3em
 
 .feedback-section
   margin-bottom 30px

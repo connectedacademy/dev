@@ -2,26 +2,16 @@
 
 .feedback-submission-wrapper(v-if="isRegistered")
 
-  //- .feedback-submission.feedback-submission-checking(v-if="checkingSubmissions")
-  //-   h2 Checking submissions...
-
-  //- .feedback-submission.feedback-submission-submitting(v-if="submitting")
-  //-   h2 Submitting...
-
-  //- .feedback-submission.feedback-submission-submitted(v-if="submitted")
-  //-   h2 Thank you for your submission!
-
   .feedback-submission.feedback-submission-submit
     label
-      | Paste a link to your FourCorners image - https://demo.fourcorners.io
+      | Search a website for your homework
     input(type="text" name="text" placeholder="E.g. https://example.com/page" v-model="submissionLink")
+    p.pull-left {{ resultsText }}
     .pure-button.pure-button-primary.pull-right(v-on:click="postSubmission") Find Images
     .clearfix
-
-  ul.submission-selector
-    li(v-for="(submission, index) in submissions" v-bind:key="index" @click="verifySubmission(submission.id)")
-      img(v-bind:src="submissionSrc(submission.id)" height="100")
-      p {{ submission.id }}
+  
+  ul.submission-selector(v-if="submissions.length > 0")
+    li(v-for="(submission, index) in submissions" v-bind:key="index" @click="verifySubmission(submission.id)" v-bind:style="{ 'background-image': submissionSrc(submission.id) }")
     .clearfix
 
 </template>
@@ -37,9 +27,7 @@ export default {
   data() {
     return {
       submissionLink: '',
-      checkingSubmissions: true,
-      submitting: false,
-      submitted: false,
+      resultsText: '',
       submissions: []
     };
   },
@@ -50,7 +38,7 @@ export default {
   },
   methods: {
     submissionSrc(submissionId) {
-      return `https://api.connectedacademy.io/v1/discussion/thumbnail/${submissionId.replace('#','%23')}`
+      return `url(https://api.connectedacademy.io/v1/discussion/thumbnail/${submissionId.replace('#','%23')})`
     },
     showAuth() {
       this.$store.commit(types.SHOW_AUTH);
@@ -66,7 +54,7 @@ export default {
       API.feedback.verifySubmission(
         postData,
         (response) => {
-          alert('Submission verified.')
+          console.log(response)
           this.$emit('reloadchats')
         },
         (response) => {
@@ -76,8 +64,8 @@ export default {
     },
     postSubmission() {
       // Submit
-      this.submitting = true;
-      this.submitted = false;
+
+      this.resultsText = 'Searhing...';
 
       const postData = {
         class: this.theClass,
@@ -88,14 +76,12 @@ export default {
       API.feedback.postSubmission(
         postData,
         (response) => {
-          this.submitting = false;
-          this.submitted = true;
           this.submissions = response.body.submissions;
+          this.resultsText = (this.submissions.length) ? `${this.submissions.length} Images Found` : 'No Images Found';
         },
         (response) => {
           alert('Submission failed, please try again.');
-          this.submitting = false;
-          this.submitted = false;
+          this.resultsText = '';
           this.submissions = [];
         }
       )
@@ -109,59 +95,59 @@ export default {
 @import '~stylus/shared'
 @import '~stylus/buttons'
 
-.feedback-submission
+.feedback-submission-wrapper
   radius(6px)
   box-sizing()
   background-color $color-homework
   overflow hidden
-  padding 15px
   width 100%
-  &.feedback-submission-submit
-    label
-      color white
-      .fa-icon
-        margin 0 5px
-    p
-      reset()
-      color white
-    input[type="text"]
-      radius(6px)
-      box-sizing()
-      border none
-      box-shadow none
-      line-height 40px
-      margin 10px 0
-      padding 0 10px
-      outline 0
-      resize none
-      width 100%
-    .pure-button
-      background-color transparent
-      border white 1px solid
-      color white
-      margin-top 10px
-      &:hover
-        background-color white
-        border-color white
-        color $color-darkest-grey
-  &.feedback-submission-submitted, &.feedback-submission-submitting, &.feedback-submission-checking
-    text-align center
-    h2
-      reset()
-      color white !important
-      padding 40px
-  &.feedback-submission-submitting, &.feedback-submission-checking
-    background-color $color-light-grey
-    h2
-      color $color-text-dark-grey !important
-  &.feedback-submission-submitted
-    background-color $color-success
+  .feedback-submission
+    padding 15px
+    &.feedback-submission-submit
+      label
+        color white
+        .fa-icon
+          margin 0 5px
+      p
+        reset()
+        color white
+        line-height 40px
+        margin-top 10px
+      input[type="text"]
+        radius(6px)
+        box-sizing()
+        border none
+        box-shadow none
+        line-height 40px
+        margin 10px 0
+        padding 0 10px
+        outline 0
+        resize none
+        width 100%
+      .pure-button
+        background-color transparent
+        border white 1px solid
+        color white
+        margin-top 10px
+        &:hover
+          background-color white
+          border-color white
+          color $color-darkest-grey
 
-ul.submission-selector
-  cleanlist()
-  li
+  ul.submission-selector
     cleanlist()
-    float left
-    margin 10px
+    background-color alpha(black, 0.2)
+    margin-top 5px
+    padding 10px
+    li
+      cleanlist()
+      background-image()
+      float left
+      height 140px
+      margin 10px
+      width 200px
+      &:hover
+        cursor pointer
+
 
 </style>

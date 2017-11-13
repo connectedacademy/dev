@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 const Profile = () => import('@/components/profile/Profile');
+const Survey = () => import('@/components/survey/Survey');
 
 const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow');
 const Registration = () => import('@/components/authentication/Registration');
@@ -72,6 +73,11 @@ export default new Router({
       name: 'profile',
       path: '/profile',
       component: Profile,
+    },
+    {
+      name: 'survey',
+      path: '/survey',
+      component: Survey,
     },
     {
       name: 'githubauth',
