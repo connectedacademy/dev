@@ -3,7 +3,7 @@
   .profile-class-selector
     ul.profile-class-selector(v-bind:class="{ selecting: selecting }" @click="expand")
     
-      li.profile-class-selector--item.active(v-if="!selecting" @click="setClass(theClass)")
+      li.profile-class-selector--item.active(v-if="!selecting" @click="setClass(profileClass)")
         | {{ profileClass.title }}
         .toggle
       li.profile-class-selector--item(v-else v-for="(theClass, index) in classes" v-bind:key="index" v-bind:class="{ active: (profileClassSlug === theClass.slug) }" @click="setClass(theClass)")

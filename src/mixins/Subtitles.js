@@ -14,6 +14,8 @@ export default {
   },
   methods: {
     loadSubtitles(content) {
+      if (typeof content.transcript === 'undefined') return
+      
       Vue.$log.info('Getting subtitles...');
 
       this.subtitles = []; // Clear existing subtitles

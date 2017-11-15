@@ -62,6 +62,16 @@
       Overlay,
     ],
     watch: {
+      '$route.params.classSlug': {
+        handler: function(nV, oV) {
+          if (nV) {
+            if (nV !== oV) {
+              this.$store.dispatch('getSpec', nV);
+            }
+          }
+        },
+        deep: true
+      },
       activeSegment(nV) {
         if (nV) {
           // Segment visible, disable scroll on window
@@ -73,6 +83,8 @@
     },
     mounted() {
       this.$store.dispatch('checkAuth');
+
+      this.$store.dispatch('getSpec', this.$route.params.classSlug);
 
       /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
       // particlesJS.load('page-header', '../../../static/particles.json', function () {

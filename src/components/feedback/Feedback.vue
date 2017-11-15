@@ -164,7 +164,7 @@ export default {
       return this.$route.params.contentSlug
     },
     markdownUrl() {
-      return `${this.course.baseUri}class1/${this.contentSlug}.md`
+      return `${this.course.baseUri}${this.currentClass.dir}/${this.contentSlug}.md`
     },
   },
   methods: {

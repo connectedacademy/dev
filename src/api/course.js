@@ -10,6 +10,7 @@ export default {
     });
   },
   getSpecPreload(classSlug, cb, errorCb) {
+    if (classSlug === 'intro') return
     Vue.http.get(`${config.WATERCOOLER_API}/course/specpreload/${classSlug}/2`).then((response) => {
       cb(response.body);
     }, (response) => {
@@ -17,6 +18,7 @@ export default {
     });
   },
   getSpec(classSlug, cb, errorCb) {
+    if (classSlug === 'intro') return
     Vue.http.get(`${config.WATERCOOLER_API}/course/spec/${classSlug}`).then((response) => {
       cb(response.body);
     }, (response) => {

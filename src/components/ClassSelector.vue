@@ -11,18 +11,18 @@
         .class-selector-container(ref="classselector" v-scroll="onScroll")
           ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
-            li.class-selector--item.released#intro-item(@click="viewIntroClass()" v-bind:class="{ active: currentClassSlug === 'intro' }")
+            router-link.class-selector--item.released#intro-item(tag="li" v-bind:to="{ name: 'class', params: { classSlug: 'intro' } }")
               h1.class-selector--item--header
                 icon(name="info")
 
-            li.class-selector--item(v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" @click="setCurrentClass(theClass.slug)" v-bind:class="{ [theClass.status.toLowerCase()]: true, active: (currentClassSlug === theClass.slug) }" ref="class")
+            router-link.class-selector--item(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ [theClass.status.toLowerCase()]: true }" ref="class" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }")
               h1.class-selector--item--header {{ theClass.title }}
               icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
               icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
 
             .clearfix
       
-  .course-content-wrapper(v-if="currentClassSlug === 'intro'")
+  .course-content-wrapper(v-if="course && currentClassSlug === 'intro'")
 
     .course-content-group
       //- ABOUT
@@ -31,7 +31,7 @@
           h1.content-title About the course
 
         .course-content--body
-          markdown-renderer(v-bind:markdown-url="infoMarkdown")
+          markdown-renderer(v-if="course && course.baseUri" v-bind:markdown-url="infoMarkdown")
 
           four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
         
@@ -70,34 +70,11 @@ export default {
     FourCornersLink,
     JoinBanner,
   },
-  watch: {
-    '$route.params.classSlug': {
-      handler: function(nV, oV) {
-        if (nV) {
-          if (nV !== oV) {
-            this.activeClass = nV;
-          }
-        }
-      },
-      deep: true,
-    },
-    currentClass(nV, oV) {
-      
-      if (nV) {
-        const segmentId = this.$route.params.segmentId;
-        if ((this.$route.params.classSlug !== nV) && (typeof segmentId === 'undefined')) {
-          this.$router.push(`/course/${this.currentClassSlug}`);
-        }
-      }
-    },
-  },
   mounted() {
     this.windowResized(this);
     window.addEventListener("resize", () => {
       this.windowResized(this);
     }, { passive: true });
-
-    this.setInitalClass();
   },
   data() {
     return {
@@ -135,23 +112,13 @@ export default {
   },
   methods: {
     windowResized: throttle(function(self) {
+      if (!this.$refs.classselector) return
       this.offset = this.$refs.classselector.offsetLeft;
       this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - this.$refs.classselector.offsetLeft);
     }, 200, { 'leading': false }),
     onScroll(e, position) {
       this.offset = position.scrollLeft;
       this.remainingOffset = (this.$refs.classselector.scrollWidth - this.$refs.classselector.offsetWidth - position.scrollLeft);
-    },
-    setInitalClass() {
-      if (typeof this.$route.params !== 'undefined') {
-        this.setCurrentClass(this.$route.params.classSlug);
-      } else {
-        if (this.isRegistered) {
-          this.viewCurrentClass();
-        } else {
-          this.viewIntroClass();
-        }
-      }
     },
     viewIntroClass() {
       this.$store.commit('SET_CURRENT_CLASS', this.introClass);
@@ -170,16 +137,6 @@ export default {
         }
       }
       if (!currentExists) this.$store.dispatch('getSpec', this.course.classes[0].slug);
-    },
-    setCurrentClass(newClass) {
-      
-      if (newClass === undefined) {
-        this.setInitalClass();
-      } else {
-        this.$store.dispatch('getSpec', newClass);
-      }
-      this.$store.dispatch('resetState');
-      this.$ga.event('class-selector', 'class-switched', newClass);
     },
     scrollLeft() {
       this.$refs.classselector.scrollLeft -= 80;
@@ -302,7 +259,7 @@ $selector-height = 44px
             background-color darken($color-primary, 10%)
             cursor pointer
 
-          &.active
+          &.router-link-active
             background-color white
             h1.class-selector--item--header, .status-indicator
               color $color-primary

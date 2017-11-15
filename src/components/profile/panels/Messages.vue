@@ -52,8 +52,6 @@ export default {
       this.$store.commit('updateProfileAction', this.panel);
     },
     loadData() {
-      // this.messages = [];
-
       let request = {
         theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
         userId: (this.panel.role === 'user') ? this.user.id : undefined,

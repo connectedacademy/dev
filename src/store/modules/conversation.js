@@ -50,12 +50,6 @@ const getters = {
   modalVisible() {
     return state.infoModalVisible || state.questionModalVisible;
   },
-  videoIsActive() {
-    if (store.state.currentSection === undefined) {
-      return false;
-    }
-    return (store.state.currentSection.duration !== undefined);
-  },
   currentActiveSection() {
     if (store.state.scrollPoints.length === 0) { return undefined; }
 

@@ -67,14 +67,11 @@ export default {
     },
     currentSection(nV) {
       this.checkIfCanAutoScroll()
-    },
-    // scrollPosition(nV) {
-    //   this.$store.dispatch('setScrollPosition', nV)
-    // }
+    }
   },
   computed: {
     ...mapGetters([
-      'currentSection', 'mediaPlaying', 'activeSegment', 'peekSegment',
+      'mediaPlaying', 'activeSegment', 'peekSegment',
     ]),
   },
   methods: {
@@ -90,11 +87,8 @@ export default {
 
       this.isAutoScrolling = true
 
-      // var easingFunction = function (t) { return t<.2 ? -Math.cos((t * 1) * (Math.PI/2)) + 1 : t }
-
-      var position = function(start, end, elapsed, duration) {
+      let position = function(start, end, elapsed, duration) {
         return start + (end - start) * (elapsed / duration) // Linear
-        // return start + (end - start) * easingFunction(elapsed / duration) // Easing
       }
 
       const clock = Date.now()
@@ -161,16 +155,16 @@ export default {
       if (!scrollPoint) return
 
       // Check if current
-      let currentSection = undefined
+      let newCurrentSection = undefined
       if ((offsetScrollPos > scrollPoint.top) && (offsetScrollPos < scrollPoint.bottom)) {
         offsetScrollPos = offsetScrollPos - scrollPoint.top
-        currentSection = scrollPoint
+        newCurrentSection = scrollPoint
       }
-      if (self.currentSection != currentSection) {
-        self.$store.commit('setCurrentSection', currentSection)
+      if (self.currentSection != newCurrentSection) {
+        self.$store.commit('setCurrentSection', newCurrentSection)
       }
 
-      if (this.currentSection === 'undefined') {
+      if (newCurrentSection === 'undefined') {
         EventBus.$emit('scrollStatus', undefined)
         return
       }
@@ -200,7 +194,7 @@ export default {
 
       // Update local objects
       self.scrollStatus = scrollStatus
-      self.currentSection = currentSection
+      self.currentSection = newCurrentSection
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true }),
     // },

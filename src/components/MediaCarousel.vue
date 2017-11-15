@@ -2,7 +2,7 @@
 .media-carousel-wrapper
   slick#image-swiper(ref="slick" v-bind:options="slickOptions")
     .img-wrapper(v-for="(item, key) in media" v-bind:key="key" )
-      img(v-bind:data-lazy="`https://${course.slug}.connectedacademy.io/course/content/media/small/${item.image}`")
+      img(v-bind:data-lazy="`${course.baseUri}../media/small/${item.image}`")
       
 </template>
 

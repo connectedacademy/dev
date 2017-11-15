@@ -23,7 +23,7 @@
 
       .clearfix
 
-    media-container(v-bind:player-type="playerType" v-bind:content="content" v-bind:video-is-active="videoIsActive")
+    media-container(v-bind:player-type="playerType" v-bind:content="content")
 
 </template>
 
@@ -79,7 +79,7 @@
       };
     },
     computed: {
-      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection', 'videoIsActive']),
+      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection']),
       end() {
         return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss');
       },

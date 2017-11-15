@@ -1,64 +1,56 @@
-const SYNC_THRESHOLD = 2.0;
+const SYNC_THRESHOLD = 2.0
 
-import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus.js';
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
-import _throttle from 'lodash/throttle';
-import _find from 'lodash/find';
+import _inRange from 'lodash/inRange'
+import _throttle from 'lodash/throttle'
+import _find from 'lodash/find'
 
-require('howler');
+require('howler')
 
 export default {
   mounted() {
+    if (typeof this.content.audio === 'undefined') return
+    
     let src = []
+
+    // Grab audio files for class
     for (const index in this.content.audio) {
-      src.push(`https://${this.course.slug}.connectedacademy.io/course/content/audio/${this.content.audio[index]}`,)
+      src.push(`${this.course.baseUri}../audio/${this.content.audio[index]}`,)
     }
     
+    // Initialise Howler
     this.sound = new Howl({
       src: src,
-      // format: [
-      //   'mp3',
-      //   'ogg'
-      //   // 'webm'
-      // ],
       preload: true,
       html5: true,
       buffer: true
-    });
+    })
 
+    // Update scroll status and keep audio in sync
     EventBus.$on('scrollStatus', (scrollStatus) => {
-      this.scrollStatus = scrollStatus;
-    });
+      this.scrollStatus = scrollStatus
+      this.attempSync(this)
+    })
+
+    // If the audio seeks then check it is buffered
     this.sound.on('seek', () => {
-     this.checkBufferStatus();
-    });
+     this.checkBufferStatus()
+    })
   },
   watch: {
-    scrollStatus(nV) {
-      this.performSync(this);
-    },
     mediaPlaying(nV, oV) {
       if (nV) {
-        this.sound.play();
-      } else {
-        this.sound.pause();
+        this.sound.play()
       }
-    },
-    videoIsActive(nV) {
-      if (!nV) {
-        this.$store.commit('PAUSE_MEDIA');
-      }
-    },
-    activeSegment(nV) {
-      if (nV) {
-        this.$store.commit('PAUSE_MEDIA');
+      else {
+        this.sound.pause()
       }
     },
     peekSegment(nV) {
-      if (nV) {
-        this.$store.commit('PAUSE_MEDIA');
-      }
+      if (!nV) return
+      this.$store.commit('PAUSE_MEDIA')
     },
   },
   data() {
@@ -77,41 +69,34 @@ export default {
   methods: {
     checkBufferStatus() {
 
-      if (!self.scrollStatus) return;
+      if (!self.scrollStatus) return
 
-      let bufferingCount = 0;
+      // Get buffered blocks
+      const buffered = this.sound._sounds[0]._node.buffered
 
-      for (var index = 0; index < this.sound._sounds[0]._node.buffered.length; index++) {
+      // Loop through buffered blocks
+      for (var index = 0; index < buffered.length; index++) {
 
-        const start = this.sound._sounds[0]._node.buffered.start(index);
-        const end = this.sound._sounds[0]._node.buffered.end(index);
-
-        const inBufferedZone = ((this.scrollStatus.currentTime > start) && (this.scrollStatus.currentTime < end));
-
-        if (inBufferedZone) {
-          this.bufferInterval = false;
-          this.mediaBuffering = false;
-          return;
+        // Check if current time in audio has been buffered
+        if (_inRange(this.scrollStatus.currentTime, buffered.start(index), buffered.end(index))) {
+          this.bufferInterval = false
+          this.mediaBuffering = false
+          return
         }
       }
 
-      if (this.mediaBuffering) {
-        this.$log.info('BUFFERING');
-        this.mediaBuffering = true;
-        setTimeout(() => {
-          this.checkBufferStatus();
-        }, 500);
-      }
-      
+      // Media is buffering so wait and check again
+      this.mediaBuffering = true
+      setTimeout(() => { this.checkBufferStatus() }, 500)
     },
-    performSync: _throttle(function (self) {
+    attempSync: _throttle(function (self) {
 
-      const playerTime = this.sound.seek();
-      const outOfSync = ((self.scrollStatus.currentTime < (playerTime - SYNC_THRESHOLD)) || (self.scrollStatus.currentTime > (playerTime + SYNC_THRESHOLD)));
+      const playerTime = this.sound.seek()
+      const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 
-      if (outOfSync) {
-        self.$log.info('OUTOFSYNC');
-        this.sound.seek(self.scrollStatus.currentTime);
+      if (!inSync) {
+        self.$log.info('Audio not in sync')
+        this.sound.seek(self.scrollStatus.currentTime)
       }
     }, 500)
   }
