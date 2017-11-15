@@ -191,7 +191,7 @@ $selector-height = 44px
       overflow hidden
     .class-selector-container
       height ($selector-height + 20px)
-      overflow-x scroll
+      overflow-x auto
       overflow-y hidden
       ul.class-selector
         cleanlist()
