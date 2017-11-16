@@ -35,8 +35,8 @@
 
           four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
         
-        .course-content--footer
-          .pure-button.pure-button-continue(@click="viewCurrentClass") Continue to class
+        .course-content--footer(v-if="firstClassSlug")
+          router-link.pure-button.pure-button-continue(v-bind:to="{ name: 'class', params: { classSlug: firstClassSlug } }") Continue to class
 
 </template>
 
@@ -88,6 +88,13 @@ export default {
   },
   computed: {
     ...mapGetters(['course', 'currentClass', 'isRegistered']),
+    firstClassSlug() {
+      if (!(this.course && this.course.classes && (this.course.classes.length > 0))) {
+        return undefined
+      } else {
+        return this.course.classes[0].slug
+      }
+    },
     currentClassSlug() {
       return _get(this.currentClass, 'slug', 'intro')
     },
