@@ -61,6 +61,17 @@
     mixins: [
       Overlay,
     ],
+    components: {
+      DebugPanel,
+      Navigation,
+      NavigationButton,
+      LeftDrawer,
+      RightDrawer,
+      AuthenticationFlow,
+      MediaLightbox,
+      InfoModal,
+      QuestionModal,
+    },
     watch: {
       '$route.params.classSlug': {
         handler: function(nV, oV) {
@@ -100,19 +111,8 @@
       ...mapGetters([
         'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
       ]),
-    },
-    components: {
-      DebugPanel,
-      Navigation,
-      NavigationButton,
-      LeftDrawer,
-      RightDrawer,
-      AuthenticationFlow,
-      MediaLightbox,
-      InfoModal,
-      QuestionModal,
-    },
-  };
+    }
+  }
 </script>
 
 <style lang="stylus">
