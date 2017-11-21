@@ -2,7 +2,7 @@
   
 .survey-page(name="markdown-page")
 
-  .col#col-main.narrow
+  .col#col-main
 
     .main-container
 
@@ -117,6 +117,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
 .survey-page
   text-align center

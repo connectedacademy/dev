@@ -150,8 +150,6 @@ body.disable-scroll
       max-width 780px
       padding-top $navigation-height
       position relative
-      &.narrow
-        max-width 640px    
 
       @media(max-width: 800px)
         max-width 100%

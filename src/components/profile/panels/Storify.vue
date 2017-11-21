@@ -80,6 +80,7 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/profile'
+@import '~stylus/buttons'
 
 .profile-panel
   .profile-panel--content
