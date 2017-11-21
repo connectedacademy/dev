@@ -10,31 +10,18 @@
 
     <style type="text/css">
       html {
-        background-color: #e9e9e9;
+        /* background-color: white; */
       }
       html, body {
         margin: 0;
         padding: 0;
       }
-      .preload-header {
-        background-color: #222;
-        height: 210px;
-        width: 100%;
-      }
-      .preload-nav {
-        border-bottom: rgba(0, 0, 0, 0.1) 1px solid;
-        color: white;
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        font-size: 1em;
-        font-weight: 500;
-        line-height: 50px;
-        text-align: center;
-      }
       .preload-spinner {
         position: fixed;
-        top: 120px;
+        top: 50%;
         left: 50%;
         margin-left: -25px;
+        margin-top: -9px;
         
         -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
         animation: sk-rotateplane 1.2s infinite ease-in-out;
@@ -42,7 +29,7 @@
       .preload-spinner > div {
         width: 18px;
         height: 18px;
-        background-color: white;
+        background-color: #ddd;
 
         border-radius: 100%;
         display: inline-block;
@@ -50,12 +37,12 @@
         animation: sk-bouncedelay 1.4s infinite ease-in-out both;
       }
 
-      .preload-spinner .bounce1 {
+      .preload-spinner .b1 {
         -webkit-animation-delay: -0.32s;
         animation-delay: -0.32s;
       }
 
-      .preload-spinner .bounce2 {
+      .preload-spinner .b2 {
         -webkit-animation-delay: -0.16s;
         animation-delay: -0.16s;
       }
@@ -77,19 +64,10 @@
     </style>
   </head>
   <body>
+    <!-- Spinner -->
+    <div class="preload-spinner" v-cloak><div class="b1"></div><div class="b2"></div><div class="b3"></div></div>
+    <!-- App -->
     <div id="app"></div>
-
-    
-    <div class="preload-header" v-cloak>
-      <div class="preload-nav">
-        Connected Academy
-      </div>
-    </div>
-    <div class="preload-spinner" v-cloak>
-      <div class="bounce1" v-cloak></div>
-      <div class="bounce2" v-cloak></div>
-      <div class="bounce3" v-cloak></div>
-    </div>
-    <!-- built files will be auto injected -->
+    <!-- Built files will be auto injected -->
   </body>
 </html>

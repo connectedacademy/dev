@@ -15,7 +15,7 @@
 
         p FourCorners is simple way of representing context information about photographs. It enables the reader to see what is happening in the photograph, why the photographer made it and under what conditions.
 
-        p Ex-New York Times Photo Editor [Fred Ritchin], proposed the idea in his book `After Photography`. He envisaged each corner of an image providing access to extra information; top left would be the frames before and after, top right would be links to further, related information. Bottom left would be the background-story of the image and bottom right would be the photographer’s name, copyright terms and, their code of ethics.
+        p Ex-New York Times Photo Editor [Fred Ritchin], proposed the idea in his book `After Photography`. He envisaged each corner of an image providing access to extra information top left would be the frames before and after, top right would be links to further, related information. Bottom left would be the background-story of the image and bottom right would be the photographer’s name, copyright terms and, their code of ethics.
 
         p We’re using 4C because it shifts the role of the photographer from being suppliers of content to becoming publishers, and allows the reader to interregate the photograph in a richer way.**
 
@@ -47,31 +47,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
-import PageStyle from '@/mixins/PageStyle';
+// Mixins
+import PageStyle from '@/mixins/PageStyle'
 
-import PreviousButton from '@/components/PreviousButton';
-import MarkdownRenderer from '@/components/MarkdownRenderer';
-import VideoEmbed from '@/components/VideoEmbed';
-
-import FourCornersInteraction from '@/components/fourcorners/FourCornersInteraction';
+// Components
+import MarkdownRenderer from '@/components/MarkdownRenderer'
+import VideoEmbed from '@/components/VideoEmbed'
+import FourCornersInteraction from '@/components/fourcorners/FourCornersInteraction'
 
 export default {
   name: 'four-corners-onboarding',
   mixins: [ PageStyle ],
   activated() {
-    window.scroll(0, 0);
+    window.scroll(0, 0)
   },
   components: {
-    PreviousButton,
     FourCornersInteraction,
     MarkdownRenderer,
-    VideoEmbed,
+    VideoEmbed
   },
   data() {
     return {
-      pageStyle: { type: 'fourcorners', minimized: false },
+      pageStyle: { type: 'fourcorners', visible: true, minimized: false },
       navTitle: 'Connected Academy - FourCorners',
       currentProvider: undefined,
       providers: [
@@ -95,20 +94,20 @@ export default {
           link: 'https://cdn.fourcorners.io/howto/generic.md',
           video: undefined,
         },
-      ],
-    };
+      ]
+    }
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered',
-    ]),
+      'isAuthenticated', 'isRegistered'
+    ])
   },
   methods: {
     previous() {
-      this.$router.go(-1);
-    },
-  },
-};
+      this.$router.go(-1)
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>

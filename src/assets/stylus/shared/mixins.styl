@@ -50,6 +50,12 @@ cleanlist()
   nopadding()
   list-style none
 
+hover(background, color = inherit)
+  &:hover
+    background-color darken(background, 10%)
+    color color
+    cursor pointer
+
 radius()
   -webkit-border-radius: arguments;
   -moz-border-radius: arguments;

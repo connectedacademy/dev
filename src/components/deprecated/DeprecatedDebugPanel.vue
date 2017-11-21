@@ -5,9 +5,6 @@
     p currentSection
     pre {{ currentSection }}
   span
-    p currentActiveSection
-    pre {{ currentActiveSection }}
-  span
     p scrollPoints
     pre {{ scrollPoints }}
 
@@ -18,25 +15,24 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'debug-panel',
   data() {
-    return {};
+    return {}
   },
   computed: {
     ...mapGetters([
       'currentSection',
-      'currentActiveSection',
       'scrollPoints',
       'subscribedTo',
-      'mediaPlaying',
-    ]),
+      'mediaPlaying'
+    ])
   },
   components: {},
-  methods: {},
-};
+  methods: {}
+}
 </script>
 
 <style lang="stylus" scoped>

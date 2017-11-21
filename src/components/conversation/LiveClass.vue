@@ -9,12 +9,12 @@
 
   .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
 
-    action-panel(v-bind:content="content")
+    action-panel(v-bind:content="content" v-bind:current-class="currentClass")
 
     conversation-container(v-bind:content="content" v-bind:collapsed="isCollapsed")
 
   #continue-listening(v-if="isCollapsed" name="continue-listening")
-    .pure-button.pure-button-continue(@click="continueListening()") Continue Listening
+    .pure-button.pure-button-info.rounded-tall(@click="continueListening()") Continue Listening
 
 </template>
 
@@ -29,7 +29,7 @@ import twitter from 'vue-awesome/icons/twitter';
 
 export default {
   name: 'live-class',
-  props: ['content'],
+  props: ['content', 'currentClass'],
   components: {
     ActionPanel,
     ConversationContainer,
@@ -42,7 +42,7 @@ export default {
       this.$store.commit('EXPAND_CONVERSATION');
 
       const scrollPoint = _find(this.$store.state.scrollPoints, { content_type: 'class' });
-      this.$store.commit('setCurrentSection', scrollPoint);
+      this.$store.commit('SET_CURRENT_SECTION', scrollPoint);
       setTimeout(() => {
         this.$store.commit('PLAY_MEDIA');
       }, 100);

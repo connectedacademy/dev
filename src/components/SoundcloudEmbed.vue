@@ -2,7 +2,7 @@
 
 .soundcloud-wrapper
   .loading-wrapper(v-if="!theSrc")
-    .pure-button.pure-button-soundcloud(@click="loadEmbed") Click to listen to audio
+    .pure-button.pure-button-soundcloud.rounded-tall(@click="loadEmbed") Click to listen to audio
   .soundcloud-container(v-if="theSrc")
     iframe(v-once v-bind:src="theSrc" width="100%" height="166" scrolling="no" frameborder="no")
 

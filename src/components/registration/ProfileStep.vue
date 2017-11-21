@@ -24,7 +24,9 @@
         .clearfix
 
         .terms-message
-          | By continuing you are agreeing to our terms and conditions and understand that you are partaking in a research study.
+          span By continuing you are agreeing to our 
+          a(href="/#/terms" target="_blank") terms and conditions
+          span {{ ` and understand that you are partaking in a research study.` }}
         
         br
 
@@ -35,7 +37,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import Validator from 'validator';
+  import Validator from 'validator'
 
   export default {
     name: 'profile-step',
@@ -43,10 +45,11 @@
     computed: {
       ...mapGetters(['user', 'course']),
       profile() {
-        return `url('${this.$store.state.auth.user.profile}')`;
+        return `url('${this.$store.state.auth.user.profile}')`
       },
       profileImage() {
-        return this.user.profile.replace('_normal', '');
+        if (!(this.user && this.user.profile)) return
+        return this.user.profile.replace('_normal', '')
       },
       validatedResponse() {
         return {
@@ -57,10 +60,10 @@
           //   max: 150
           // }),
           // lang: !Validator.isEmpty(this.response.lang),
-        };
+        }
       },
       canContinue() {
-        return this.validatedResponse.email;
+        return this.validatedResponse.email
       }
     }
   }
@@ -80,5 +83,8 @@
     height 100px
     margin 20px auto
     width 100px
+  .terms-message
+    a
+      color $color-text-grey
 
 </style>

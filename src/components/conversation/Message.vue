@@ -3,15 +3,15 @@
   .single-message-wrapper
 
     .message
-
       img.profile-image(v-if="message.author" v-bind:src="message.author.profile")
 
-      //- a.author-label(v-if="message.author" v-bind:href="authorLink" target="_blank")
       .author-label(v-if="message.author")
         | {{ message.author.account }}
         icon(v-if="message.replyto" name="reply")
 
       p.message-content(v-html="parseText()")
+
+      router-link(v-if="canJump" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }") Jump to message
 
       .message--footer
 
@@ -37,17 +37,17 @@
 </template>
 
 <script>
-import TweetPatch from 'tweet-patch';
-import Moment from 'moment-mini';
+import TweetPatch from 'tweet-patch'
+import Moment from 'moment-mini'
 
-import 'vue-awesome/icons/heart';
-import 'vue-awesome/icons/retweet';
-import 'vue-awesome/icons/reply';
-import 'vue-awesome/icons/star';
+import 'vue-awesome/icons/heart'
+import 'vue-awesome/icons/retweet'
+import 'vue-awesome/icons/reply'
+import 'vue-awesome/icons/star'
 
 export default {
   name: 'message',
-  props: ['message', 'truncate'],
+  props: ['message', 'truncate', 'canJump'],
   computed: {
     authorLink() { return `https://twitter.com/${this.message.author.account}` },
     tweetLink() { return `https://twitter.com/statuses/${this.message.message_id}` },
@@ -59,19 +59,19 @@ export default {
   methods: {
     parseText() {
       // Remove links
-      var urlRegex = /(https?:\/\/[^\s]+)/g;
-      let html = this.message.text.replace(urlRegex, '');
-      // html = (this.truncate && html.length > 110) ? `${html.substring(0, 110)}...` : html;
-      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } });
+      var urlRegex = /(https?:\/\/[^\s]+)/g
+      let html = this.message.text.replace(urlRegex, '')
+      // html = (this.truncate && html.length > 110) ? `${html.substring(0, 110)}...` : html
+      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } })
     },
     showInfoModal() {
-      this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') });
+      this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') })
     },
     replyToMessage(message) {
-      this.$store.commit('SET_REPLYING_TO', message);
+      this.$store.commit('SET_REPLYING_TO', message)
     }
   },
-};
+}
 </script>
 
 <style lang="stylus">

@@ -1,45 +1,45 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import Vuex from 'vuex';
-import VueConfig from 'vue-config';
-import VueI18n from 'vue-i18n';
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import Vuex from 'vuex'
+import VueConfig from 'vue-config'
+import VueI18n from 'vue-i18n'
 import VueLogger from 'vuejs-logger'
-import VueCookie from 'vue-cookie';
+import VueCookie from 'vue-cookie'
 import VueAnalytics from 'vue-analytics'
-import VueAutosize from 'vue-autosize';
-// import Raven from 'raven-js';
-// import RavenVue from 'raven-js/plugins/vue';
+import VueAutosize from 'vue-autosize'
+// import Raven from 'raven-js'
+// import RavenVue from 'raven-js/plugins/vue'
 
-import { sync } from 'vuex-router-sync';
+import { sync } from 'vuex-router-sync'
 
-import Icon from 'vue-awesome/components/Icon';
+import Icon from 'vue-awesome/components/Icon'
 
-import App from '@/App';
-import Lang from '@/Lang';
-import Sockets from '@/Sockets';
+import App from '@/App'
+import Lang from '@/Lang'
+import Sockets from '@/Sockets'
 
-import OnboardingPrompt from '@/components/OnboardingPrompt';
-import { VueMasonryPlugin } from 'vue-masonry';
+import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
+import { VueMasonryPlugin } from 'vue-masonry'
 
-import app from '@/config';
-import store from '@/store';
-import router from '@/router';
+import app from '@/config'
+import store from '@/store'
+import router from '@/router'
 
-Vue.prototype.$app = app;
+Vue.prototype.$app = app
 
-sync(store, router);
+sync(store, router)
 
-Vue.component('icon', Icon);
-Vue.component('onboarding-prompt', OnboardingPrompt);
+Vue.component('icon', Icon)
+Vue.component('onboarding-prompt', OnboardingPrompt)
 
-Vue.use(VueResource);
-Vue.use(Vuex);
+Vue.use(VueResource)
+Vue.use(Vuex)
 
-Vue.use(VueConfig, Vue.config);
-Vue.use(VueMasonryPlugin);
+Vue.use(VueConfig, Vue.config)
+Vue.use(VueMasonryPlugin)
 
 const options = {
   logLevel: 'info', // error
@@ -49,39 +49,39 @@ const options = {
 }
 
 Vue.use(VueLogger, options)
-Vue.use(VueCookie);
-Vue.use(VueAutosize);
+Vue.use(VueCookie)
+Vue.use(VueAutosize)
 
 Vue.use(VueAnalytics, {
   id: 'UA-44963053-16',
   router,
   autoTracking: {
-    exception: true,
-  },
-});
+    exception: true
+  }
+})
 
 // TODO: Enabled for production
-// Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install();
+// Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install()
 
 // General config
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 // Http config
-Vue.http.options = { credentials: true, responseType: 'json' };
+Vue.http.options = { credentials: true, responseType: 'json' }
 // Vue.http.interceptors.push((request, next) => {
 //   next((response) => {
 //     if (response.status === 403) {
-//       Vue.$log.info('Session invalid');
-//       store.dispatch('logout');
+//       Vue.$log.info('Session invalid')
+//       store.dispatch('logout')
 //     }
-//   });
-// });
+//   })
+// })
 
 // I18n config
-Vue.config.lang = 'en';
-Vue.config.fallbackLang = 'en';
+Vue.config.lang = 'en'
+Vue.config.fallbackLang = 'en'
 
-store.dispatch('getCourse');
+store.dispatch('getCourse')
 
 /* eslint-disable no-new */
 new Vue({
@@ -92,6 +92,6 @@ new Vue({
   components: {
     App,
     Lang,
-    Sockets,
-  },
-});
+    Sockets
+  }
+})

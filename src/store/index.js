@@ -1,42 +1,26 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import Moment from 'moment-mini';
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-import * as actions from './actions';
-import * as getters from './getters';
-import * as mutations from './mutations';
+import auth from './modules/auth'
+import conversation from './modules/conversation'
+import course from './modules/course'
+import lightbox from './modules/lightbox'
+import media from './modules/media'
+import navigation from './modules/navigation'
+import profile from './modules/profile'
+import scroll from './modules/scroll'
 
-import navigation from './modules/navigation';
-import auth from './modules/auth';
-import composer from './modules/composer';
-
-import course from './modules/course';
-import conversation from './modules/conversation';
-import lightbox from './modules/lightbox';
-import video from './modules/video';
-import profile from './modules/profile';
-
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
-  actions,
   modules: {
-    navigation,
     auth,
-    composer,
-
-    course,
     conversation,
+    course,
     lightbox,
-    video,
+    media,
+    navigation,
     profile,
-  },
-  state: {
-    debug: false,
-    savedScrollPosition: 0.0,
-    scrollPoints: {},
-    currentSection: undefined,
-  },
-  getters,
-  mutations,
-});
+    scroll
+  }
+})

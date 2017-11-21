@@ -6,7 +6,7 @@
 
     homework(v-if="content.expectsubmission" v-bind:content="content")
     four-corners-banner(v-else-if="content.fourcornersintro")
-    live-class(v-else-if="content.content_type === 'class'" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+    live-class(v-else-if="content.content_type === 'class'" v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
     deep-dive(v-else v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
   .course-content-group.course-content-group--future(v-if="futureContent" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
@@ -22,6 +22,7 @@ import { mapGetters } from 'vuex'
 import Auth from '@/mixins/Auth'
 
 import _filter from 'lodash/filter'
+import _includes from 'lodash/includes'
 
 import LiveClass from '@/components/conversation/LiveClass'
 import DeepDive from '@/components/conversation/DeepDive'
@@ -34,6 +35,7 @@ import FutureContent from '@/components/conversation/FutureContent'
 export default {
   name: 'course-content',
   mixins: [ Auth ],
+  props: [ 'currentClass' ],
   components: {
     LiveClass,
     DeepDive,
@@ -44,9 +46,12 @@ export default {
     FutureContent,
   },
   computed: {
-    ...mapGetters([
-      'currentClass', 'courseContent'
-    ]),
+    courseContent() {
+      return _filter(this.currentClass.content, item => {
+        // Exclude titles from course content
+        return !_includes(['title'], item.content_type)
+      })
+    },
     releasedContent() {
       return _filter(this.courseContent, { status: 'RELEASED' })
     },

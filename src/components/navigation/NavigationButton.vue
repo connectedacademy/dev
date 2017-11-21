@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .navigation-button(v-if="!isRegistering" name="navigation-button" v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), back: ($route.name !== 'class') }")
+  .navigation-button(v-if="isVisible" name="navigation-button" v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), back: !isRoot }")
     .bar-wrapper(v-bind:class="{cross: (state === 'close') }")
       .bar.top-bar
       .bar.middle-bar
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'navigation-button',
@@ -20,24 +20,28 @@ export default {
   },
   methods: {
     toggleLeftDrawer() {
-      if (this.$route.name !== 'class') {
-        this.$router.go(-1);
+      if (this.isRoot) {
+        this.$ga.event('navigation-button', 'clicked', 1)
+        this.$store.commit('TOGGLE_LEFT_DRAWER')
       }
       else {
-        this.$ga.event('navigation-button', 'clicked', 1);
-        this.$store.commit('TOGGLE_LEFT_DRAWER');
+        this.$router.go(-1)
       }
-    },
+    }
   },
   computed: {
     state() {
-      return this.$store.state.navigation.burger.state;
+      return this.$store.state.navigation.burger.state
     },
-    isRegistering() {
-      return this.$route.name === 'registration';
+    isVisible() {
+      return this.$store.state.navigation.visible
     },
-  },
-};
+    isRoot() {
+      const paths = ['class', 'schedule', 'home', 'about']
+      return paths.indexOf(this.$route.name) !== -1
+    }
+  }
+}
 
 </script>
 
@@ -46,6 +50,7 @@ export default {
 @import '~stylus/shared'
 
 .navigation-button
+  animate()
   radius(50%)
   height 50px
   width 52px

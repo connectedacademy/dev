@@ -2,22 +2,26 @@
 
 .profile-panel(v-bind:class="{ limited: limitHeight }")
 
-  profile-panel-header(v-bind:label="label" v-on:refresh="loadData" can-refresh)
+  profile-panel-header(v-bind:label="label" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
 
   .profile-panel--content
+    .no-results(v-if="responses.length === 0") {{ $t('common.no_results') }}
     ul
-      li(v-for="response in responses.during")
-        h3 {{ response.question.text }}
-        div(v-if="response.question.response_type === 'text'")
-          p(v-for="answer in response.answers")
-            | {{ answer }}
-        div(v-else-if="response.question.response_type === 'boolean'")
-          p True : {{ response.totals.true ? response.totals.true : 0 }}
-          p False : {{ response.totals.false ? response.totals.false : 0 }}
-        div(v-else-if="response.question.response_type === 'scale'")
-          p Average : {{ response.mean ? response.mean : 'N/A' }}
-        div(v-else)
-          pre {{ response }}
+      li(v-for="(response, index) in responses" v-bind:key="index" v-if="(limitHeight && (index < 4)) || !limitHeight")
+        //- pre {{ response }}
+        h3 Q: {{ response.text }}
+        p(v-for="(answer, key) in response.answers") {{ key }} - {{ answer }}
+        //- p A: {{ response.answers.length }}
+        //- div(v-if="response.question.response_type === 'text'")
+        //-   p(v-for="answer in response.answers")
+        //-     | {{ answer }}
+        //- div(v-else-if="response.question.response_type === 'boolean'")
+        //-   p True : {{ response.totals.true ? response.totals.true : 0 }}
+        //-   p False : {{ response.totals.false ? response.totals.false : 0 }}
+        //- div(v-else-if="response.question.response_type === 'scale'")
+        //-   p Average : {{ response.mean ? response.mean : 'N/A' }}
+        //- div(v-else)
+        //-   pre {{ response }}
 
 
 </template>
@@ -32,7 +36,7 @@ import 'vue-awesome/icons/refresh';
 
 export default {
   name: 'question-responses',
-  props: ['label', 'role', 'limitHeight', 'expandedView'],
+  props: ['label', 'role', 'limitHeight', 'canExpand', 'expandedView'],
   components: {
     ProfilePanelHeader,
   },
@@ -48,6 +52,9 @@ export default {
     };
   },
   methods: {
+    expand() {
+      this.$store.commit('updateProfileAction', this.panel);
+    },
     loadData() {
 
       this.responses = [];

@@ -43,9 +43,9 @@ describe('Drawer tests', function() {
     // Click drawer navigation item
     browser.click('[name="course-drawer-item"]').pause(1000);
     // Save screenshot
-    browser.saveScreenshot('./test/screenshots/course-page.png');
+    browser.saveScreenshot('./test/screenshots/class-page.png');
     // Assert page is visible
-    browser.isVisible('[name="course-page"]');
+    browser.isVisible('[name="class-page"]');
   });
 
 });

@@ -16,7 +16,7 @@
     input.full-width(v-model="answer" v-if="question.response_type === 'boolean'" type="checkbox")
 
   .course-content--footer
-    .pure-button.pure-button-subtle.pure-button-text(@click="hidden = true") Maybe later
+    .pure-button.pure-button-subtle(@click="hidden = true") Maybe later
     .pure-button.pull-right(@click="postAnswer") Answer
 
 </template>

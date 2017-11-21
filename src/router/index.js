@@ -1,38 +1,38 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import Router from 'vue-router'
 
-const Profile = () => import('@/components/profile/Profile');
-const Survey = () => import('@/components/survey/Survey');
+const Profile = () => import('@/components/profile/Profile')
+const Survey = () => import('@/components/survey/Survey')
 
-const AuthenticationFlow = () => import('@/components/authentication/AuthenticationFlow');
-const Registration = () => import('@/components/authentication/Registration');
+const Registration = () => import('@/components/authentication/Registration')
 
-// const Course = () => import('@/components/Course');
-import Course from '@/components/Course';
-const Markdown = () => import('@/components/Markdown');
+const Class = () => import('@/components/Class')
+const Markdown = () => import('@/components/Markdown')
 
-const Feedback = () => import('@/components/feedback/Feedback');
-const FeedbackView = () => import('@/components/feedback/FeedbackView');
+const Feedback = () => import('@/components/feedback/Feedback')
+const FeedbackView = () => import('@/components/feedback/FeedbackView')
 
-const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding');;
+const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding')
 
-const About = () => import('@/components/pages/About');;
-const Schedule = () => import('@/components/pages/Schedule');;
+const Home = () => import('@/components/deployment/Home')
+const About = () => import('@/components/pages/About')
+const Schedule = () => import('@/components/pages/Schedule')
+const Terms = () => import('@/components/pages/Terms')
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   // mode: 'history',
   routes: [
     {
-      name: 'segment',
-      path: '/course/:classSlug/:contentSlug/:segmentId',
-      component: Course,
+      name: 'class',
+      path: '/class/:classSlug/:contentSlug?/:segmentId?',
+      component: Class,
     },
     {
-      name: 'class',
-      path: '/course/:classSlug',
-      component: Course,
+      name: 'course',
+      path: '/course/:classSlug/:contentSlug?/:segmentId?',
+      component: Class,
     },
     {
       name: 'registration',
@@ -83,21 +83,26 @@ export default new Router({
       name: 'githubauth',
       path: '/auth/github',
       redirect: (to) => {
-        window.location = 'https://api.connectedacademy.io/v1/admin/login';
+        window.location = 'https://api.connectedacademy.io/v1/admin/login'
       }
     },
     {
-      name: 'course',
+      name: 'home',
       path: '/',
-      component: Course,
-      redirect: (to) => {
-        const { hash, params, query } = to;
-        return { path: `/course/intro` };
-      }
+      component: Home
+      // redirect: (to) => {
+      //   const { hash, params, query } = to
+      //   return { path: `/course/intro` }
+      // }
+    },
+    {
+      name: 'terms',
+      path: '/terms',
+      component: Terms,
     },
     {
       path: '*',
       redirect: '/',
     },
   ],
-});
+})

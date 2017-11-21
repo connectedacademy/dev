@@ -5,8 +5,7 @@
   profile-panel-header(v-bind:label="`${panel.label} (${students.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh  can-expand)
 
   .profile-panel--content.no-padding
-    .no-results(v-if="students.length === 0")
-      | No Results
+    .no-results(v-if="students.length === 0") {{ $t('common.no_results') }}
     student-tile(v-for="(student, index) in students" v-bind:key="index" v-bind:student="student" v-if="(limitHeight && (index < 4)) || !limitHeight")
 
 </template>

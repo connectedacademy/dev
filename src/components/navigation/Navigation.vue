@@ -1,11 +1,8 @@
 <template lang="pug">
 
-  #navigation(v-bind:class="{ registered: isRegistered, hidden: hidden, minimized: navigation.minimized }")
+  #navigation(v-bind:class="{ registered: isRegistered, visible: visible, minimized: navigation.minimized }")
 
     #logo-text(@click="goHome") {{ $app.name }}
-
-    #debug-button(v-if="showDebugToggle" @click="toggleDebugMode")
-      icon(name="wrench")
 
     profile-icon(v-if="isRegistered")
 
@@ -39,19 +36,13 @@ export default {
     isRegistering() {
       return this.$route.name === 'registration';
     },
-    hidden() {
-      return !this.$store.state.navigation.visible;
-    },
-    showDebugToggle() {
-      return this.$route.query.debug;
-    },
+    visible() {
+      return this.$store.state.navigation.visible;
+    }
   },
   methods: {
-    toggleDebugMode() {
-      this.$store.commit(types.TOGGLE_DEBUG_MODE);
-    },
     goHome() {
-      this.$router.push({ name: 'course' });
+      this.$router.push({ name: 'schedule' });
       this.$store.commit('PAUSE_MEDIA');
       setTimeout(() => {
         window.scroll(0, 0);
@@ -65,25 +56,10 @@ export default {
 
 @import '~stylus/shared'
 
-#debug-button
-  radius(50%)
-  background-color red
-  height 40px
-  width 40px
-  position fixed
-  bottom 10px
-  left 10px
-  z-index 100
-  .fa-icon
-    reset()
-    color white
-    height 20px
-    width 20px
-    margin 10px
-
 #login-button
   animate()
   color white
+  font-weight bold
   height $navigation-height
   line-height $navigation-height
   padding 0 15px
@@ -102,14 +78,15 @@ export default {
   animate()
   background-color $color-primary
   border-bottom alpha(black, 0.1) 1px solid
+  display none
   height 50px
   position fixed
   top 0
   text-align center
   z-index 2
   width 100%
-  &.hidden
-    display none
+  &.visible
+    display block
   &:hover
     cursor pointer
 
@@ -120,10 +97,4 @@ export default {
     line-height $navigation-height
     margin 0 10px
 
-/* App states */
-
-html
-  &.registration
-    #navigation
-      display none
 </style>

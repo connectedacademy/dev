@@ -1,7 +1,7 @@
 {
-  "name": "my-project",
+  "name": "elevator",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "A Vue.js frontend for Connected Academy",
   "author": "Edward Jenkins <edward.jenkins@newcastle.ac.uk>",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
+    "ui-test": "./node_modules/webdriverio/bin/wdio",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {

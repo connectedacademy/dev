@@ -160,7 +160,8 @@
         if (typeof this.peekSegment !== 'undefined') return;
         
         // Update url
-        this.$router.replace({ path: `/course/${this.classSlug}/${this.contentSlug}/${(this.message.segmentGroup / 0.2)}` });
+        const segmentId = (this.message.segmentGroup / 0.2)
+        this.$router.replace({ name: 'class', params: { classSlug: this.classSlug, contentSlug: this.contentSlug, segmentId: segmentId } });
 
         if (!this.segmentOpened) {
   
@@ -187,7 +188,7 @@
           this.$store.commit('SET_PEEK_SEGMENT', undefined);
           this.$store.commit('SET_REPLYING_TO', undefined);
 
-          this.$router.replace({ path: `/course/${this.classSlug}` });
+          this.$router.replace({ name: 'class', params: { classSlug: this.classSlug } });
 
         }, 300); // Timeout equal to time for overlay to fade
       },

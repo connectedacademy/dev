@@ -7,8 +7,8 @@ const BURGER_CLOSE = 'close';
 // initial state
 const state = {
   overlayVisible: false,
-  visible: true,
-  minimized: false,
+  visible: false,
+  minimized: true,
   burger: {
     state: BURGER_DEFAULT,
   },
@@ -25,9 +25,6 @@ const state = {
 const getters = {
   navigation() {
     return state;
-  },
-  navigationVisible() {
-    return state.visible;
   },
   pageStyles() {
     return state.pageStyles;
@@ -60,6 +57,12 @@ const mutations = {
     state.rightDrawer.visible = !state.rightDrawer.visible;
     state.overlayVisible = state.rightDrawer.visible;
   },
+  [types.DISMISS_DRAWERS](initialState) {
+    state.leftDrawer.visible = false;
+    state.rightDrawer.visible = false;
+    state.overlayVisible = false;
+    state.burger.state = BURGER_DEFAULT;
+  },
   [types.DISMISS_LEFT_DRAWER](initialState) {
     state.leftDrawer.visible = false;
     state.overlayVisible = false;
@@ -75,5 +78,5 @@ export default {
   state,
   getters,
   actions,
-  mutations,
-};
+  mutations
+}

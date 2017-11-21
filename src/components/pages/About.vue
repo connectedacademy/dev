@@ -1,36 +1,41 @@
 <template lang="pug">
 
-    .about-page(name="about-page")
+.about-page(name="about-page")
 
-      .col#col-main
+  .col#col-main
+    
+    .main-container
 
-        .main-container.main-container-padded.background-white
+      narrow-page-header(title="About" subtitle="Learn about Connected Academy")
 
-          markdown-renderer(v-bind:markdown-url="markdownUrl")
+      .content-block.padded-block.header-block.white-block
+
+        markdown-renderer(v-bind:markdown-url="markdownUrl")
 
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
 import { mapGetters } from 'vuex'
 
 // Mixins
-import MarkdownRenderer from '@/components/MarkdownRenderer';
+import PageStyle from '@/mixins/PageStyle'
 
 // Components
-import PageStyle from '@/mixins/PageStyle';
+import NarrowPageHeader from '@/components/NarrowPageHeader'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 export default {
   name: 'about',
   mixins: [ PageStyle ],
   components: {
-    MarkdownRenderer,
+    NarrowPageHeader,
+    MarkdownRenderer
   },
   data() {
     return {
       navTitle: 'About - Connected Academy',
-      pageStyle: { type: undefined, minimized: false }
-    };
+      pageStyle: { type: undefined, visible: true, minimized: false }
+    }
   },
   computed: {
     ...mapGetters(['course']),
@@ -38,6 +43,6 @@ export default {
       return `${this.course.baseUri}about.md`
     }
   }
-};
+}
 
 </script>

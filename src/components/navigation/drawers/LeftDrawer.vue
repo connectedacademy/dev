@@ -7,39 +7,41 @@ transition(name="slide-left")
 
       ul.drawer-list
 
-        li.drawer-list-item(name="course-drawer-item" @click="navigateTo('/')")
-          h1.drawer-list-item--header {{ $t('nav.take_part') }}
-          h2.drawer-list-item--body {{ $t('nav.take_part_description') }}
+        router-link.drawer-list-item(tag="li" name="home-drawer-item" v-bind:to="{ name: 'home' }")
+          h1.drawer-list-item--header {{ $t('nav.home') }}
+          h2.drawer-list-item--body {{ $t('nav.home_description') }}
 
-        li.drawer-list-item(name="schedule-drawer-item" @click="navigateTo('/schedule')")
+        router-link.drawer-list-item(tag="li" name="schedule-drawer-item" v-bind:to="{ name: 'schedule' }")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
           h2.drawer-list-item--body {{ $t('nav.schedule_description') }}
 
-        li.drawer-list-item(name="about-drawer-item" @click="navigateTo('/about')")
+        router-link.drawer-list-item(tag="li" name="about-drawer-item" v-bind:to="{ name: 'about' }")
           h1.drawer-list-item--header {{ $t('nav.about') }}
           h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
-    #app-version V{{ $app.version }}
+        //- router-link.drawer-list-item(tag="li" name="terms-drawer-item" to="terms")
+        //-   h1.drawer-list-item--header {{ $t('nav.terms') }}
+        //-   h2.drawer-list-item--body {{ $t('nav.terms_description') }}
+
+    ul.drawer-links
+      li
+        router-link(v-bind:to="{ name: 'terms' }") Terms & Conditions
+      li
+        span {{ `V${$app.version}` }}
 
 </template>
 
 <script>
 export default {
   name: 'left-drawer',
-  methods: {
-    navigateTo(toLink) {
-      this.toggleLeftDrawer();
-      this.$router.push(toLink);
-    },
-    toggleLeftDrawer() {
-      this.$store.commit('TOGGLE_LEFT_DRAWER');
-    },
+  beforeRouteUpdate(to, from, next) {
+    this.$store.commit('TOGGLE_LEFT_DRAWER')
   },
   computed: {
     isVisible() {
       return this.$store.state.navigation.leftDrawer.visible;
-    },
-  },
+    }
+  }
 };
 </script>
 

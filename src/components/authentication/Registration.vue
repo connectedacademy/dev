@@ -60,7 +60,7 @@
     },
     data() {
       return {
-        pageStyle: { type: 'registration', minimized: false },
+        pageStyle: { type: 'registration', visible: false, minimized: false },
         currentStep: 1,
         loadingQuestions: true,
         release: '',
@@ -103,16 +103,7 @@
           }),
           lang: !Validator.isEmpty(this.response.lang),
         };
-      },
-      termsMarkdown() {
-  
-        const md = new MarkdownIt({
-          html: true,
-          linkify: true,
-        });
-  
-        return `<div>${md.render(this.release)}</div>`;
-      },
+      }
     },
     methods: {
       nextStep() {
@@ -126,12 +117,12 @@
           this.sanitizedResponse,
           (response) => {
             this.$store.dispatch('checkAuth');
-            this.$router.push('course');
+            this.$router.push('class');
           },
           (response) => {
             this.$log.info('Registration failed');
             this.$store.dispatch('checkAuth');
-            this.$router.push('course');
+            this.$router.push('class');
           },
         );
       },

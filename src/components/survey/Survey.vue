@@ -21,7 +21,7 @@
           h1 Thanks for answering!
           p Your interest in certification has been recorded. We will contact you shortly on the following email:
           p {{ user.email }}
-          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'course' }") Return to Course
+          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'class' }") Return to Course
 </template>
 
 <script>
@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'survey', minimized: true },
+      pageStyle: { type: 'survey', visible: true, minimized: true },
       currentStep: 0,
       answers: {},
       questions: [],

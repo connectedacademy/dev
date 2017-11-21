@@ -13,6 +13,9 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
+  watchOptions: {
+    ignore: /node_modules/
+  },
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },

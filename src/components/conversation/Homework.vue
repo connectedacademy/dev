@@ -20,8 +20,6 @@
       .pure-button(name="feedback-button" v-if="content.url" @click="openHomework")
         | {{ $t('common.participate') }}
 
-  submission-grid(v-bind:content="content")
-
 </template>
 
 <script>
@@ -29,14 +27,9 @@ import * as config from '@/api/config';
 import {mapGetters} from 'vuex';
 import Moment from 'moment-mini';
 
-import SubmissionGrid from '@/components/SubmissionGrid';
-
 export default {
   name: 'homework',
   props: ['content'],
-  components: {
-    SubmissionGrid,
-  },
   methods: {
     openHomework() {
       this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`);

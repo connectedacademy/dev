@@ -2,7 +2,7 @@
 
 .video-wrapper
   .loading-wrapper(v-if="!theSrc")
-    .pure-button.pure-button-youtube(@click="loadEmbed") Click to watch video
+    .pure-button.pure-button-youtube.rounded-tall(@click="loadEmbed") Click to watch video
   .video-container(v-if="theSrc")
     iframe(v-bind:src="theSrc" frameborder='0' allowfullscreen)
 

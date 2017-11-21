@@ -10,6 +10,7 @@ export default {
     cancel: 'Cancel',
     read_more: 'Read More',
     explore_content: 'Continue reading',
+    no_results: 'No Results',
 
     age: 'Your age',
     current_language: 'Current language',
@@ -27,13 +28,11 @@ export default {
   },
   nav: {
     home: 'Home',
-    home_description: 'Just go back to the home page.',
-    take_part: 'Take Part',
-    take_part_description: 'Take part in the course, experience the \'Live class\' and join the conversation as it unfolds.',
+    home_description: 'Learn about the course and what it has to offer.',
     schedule: 'Schedule',
-    schedule_description: 'View the schedule for upcoming content and when it will be relased by your hub.',
+    schedule_description: 'Switch classes and find out when new content will be released.',
     about: 'About',
-    about_description: 'Learn more about the Connected Academy platform and how we are changing how education is delivered.',
+    about_description: 'Learn about Connected Academy and how we are changing how education.',
     terms: 'Terms',
     terms_description: 'Read the terms an conditions of using the Connected Academy platform.',
   },
@@ -56,12 +55,11 @@ export default {
     select_your_language: 'Select your language',
 
     authenticate: 'Authenticate',
-    authenticating: 'Authenticating...',
 
     i_agree_to_terms_and_conditions: 'I agree with the terms & conditions',
 
     show_hints: 'Show Hints',
-    dashboard: 'Dashboard',
+    dashboard: 'View Dashboard',
 
     form: {
       your_name: 'Your Name',
@@ -101,6 +99,7 @@ export default {
     unavailable_description: 'You are in a demo mode so this is not available right now.',
   },
   classroom: {
+    classroom: 'Classroom',
     join_classroom: 'Join Classroom',
     leave_classroom: 'Leave Classroom',
     enter_code: 'Enter teacher code below',

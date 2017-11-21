@@ -1,17 +1,26 @@
+import { clearInterval } from "timers";
+
 export default {
   data() {
     return {
-      documentHeight: 0
+      documentHeight: 0,
+      updateDocumentHeightInterval: undefined
     }
   },
   mounted() {
     // Periodically update document height variable
-    setInterval(this.updateDocumentHeight, 2000);
+    this.updateDocumentHeightInterval = setInterval(() => { this.updateDocumentHeight() }, 2000);
+  },
+  beforeDestroy() {
+    if (this.autoUpdateInterval) {
+      clearInterval(this.updateDocumentHeightInterval)
+    }
   },
   methods: {
     updateDocumentHeight() {
       // Check if document height has changed
       if (this.documentHeight !== document.documentElement.scrollHeight) {
+        this.documentHeight = document.documentElement.scrollHeight
         this.setScrollPoints();
       }
     },
@@ -31,7 +40,7 @@ export default {
 
             let additionalOffset = 380;
 
-            this.$store.commit('setScrollPoint', {
+            this.$store.commit('SET_SCROLL_POINT', {
               title: content.title,
               slug: content.slug,
               content_type: content.content_type,

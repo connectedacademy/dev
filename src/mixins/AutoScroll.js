@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import app from '@/config'
 import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
 import _throttle from 'lodash/throttle'
 import _find from 'lodash/find'
 import _clamp from 'lodash/clamp'
 
-import { EventBus } from '@/event-bus.js'
 
 const AUTOSCROLL_ATTEMPT = 1500 // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000 // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 200 //50//750 // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 500 // Interval at which scroll position should be updated
 
 export default {
   mounted() {
@@ -50,8 +50,7 @@ export default {
       wheeling: false,
       canAutoScroll: false,
       isAutoScrolling: false,
-      preventScroll: false,
-      scrollPosition: 0,
+      preventScroll: false
     }
   },
   watch: {
@@ -140,8 +139,22 @@ export default {
         this.preventScroll = false
       }, WHEEL_TIMEOUT)
     },
+    onWheel() {
+      if (!this.activeSegment) {
+        this.wheelMovement(this)
+      }
+    },
+    onMousedown() {
+      Vue.$log.debug('MOUSEDOWN')
+      this.preventScroll = true
+      this.isAutoScrolling = false
+    },
+    onMouseup() {
+      Vue.$log.debug('MOUSEUP')
+      this.preventScroll = false
+      this.isAutoScrolling = false
+    },
     onScroll: _throttle(function (self) {
-    // onScroll(self) {
 
       // Calculate
       let scrollPos = window.scrollY
@@ -150,7 +163,7 @@ export default {
       let offsetScrollPos = scrollPos + window.innerHeight
 
       // Get class
-      const scrollPoint = _find(self.$store.state.scrollPoints, { content_type: 'class' })
+      const scrollPoint = _find(self.$store.state.scroll.scrollPoints, { content_type: 'class' })
       
       if (!scrollPoint) return
 
@@ -161,7 +174,7 @@ export default {
         newCurrentSection = scrollPoint
       }
       if (self.currentSection != newCurrentSection) {
-        self.$store.commit('setCurrentSection', newCurrentSection)
+        self.$store.commit('SET_CURRENT_SECTION', newCurrentSection)
       }
 
       if (newCurrentSection === 'undefined') {
@@ -196,24 +209,6 @@ export default {
       self.scrollStatus = scrollStatus
       self.currentSection = newCurrentSection
 
-    }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true }),
-    // },
-    onWheel() {
-      if (!this.activeSegment) {
-        this.wheelMovement(this)
-      }
-    },
-    onMousedown() {
-      Vue.$log.debug('MOUSEDOWN')
-      // this.$store.commit('PAUSE_MEDIA')
-      this.preventScroll = true
-      this.isAutoScrolling = false
-    },
-    onMouseup() {
-      Vue.$log.debug('MOUSEUP')
-      // this.$store.commit('PLAY_MEDIA')
-      this.preventScroll = false
-      this.isAutoScrolling = false
-    },
-  },
+    }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true })
+  }
 }

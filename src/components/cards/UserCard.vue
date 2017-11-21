@@ -2,14 +2,12 @@
 
 .card#user-card(v-if="user" v-bind:class="{ visible: visible }")
   
-  img.user-profile(v-bind:src="profileImage" @click="showUser = !showUser")
+  img.user-profile(v-bind:src="profileImage")
   
   h1.user-name {{ user.name }}
-  //- h2.user-account {{ user.account }}
-  //- pre(v-if="showUser") {{ user }}
 
-  .pure-button.pure-button-action(@click="navigateToAdmin") {{ $t('auth.dashboard') }}
-  .pure-button.pure-button-action(@click="showHints") {{ $t('auth.show_hints') }}
+  router-link.pure-button.pure-button-action(v-bind:to="{ name: 'profile' }") {{ $t('auth.dashboard') }}
+  .pure-button.pure-button-action(v-if="false" @click="showHints") {{ $t('auth.show_hints') }}
   .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 
 </template>
@@ -22,16 +20,7 @@ import 'vue-awesome/icons/cog'
 export default {
   name: 'user-card',
   props: ['visible'],
-  data() {
-    return {
-      showUser: false,
-    }
-  },
   methods: {
-    navigateToAdmin() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER')
-      this.$router.push('/profile')
-    },
     logout() {
       this.$store.commit('TOGGLE_RIGHT_DRAWER')
       this.$store.dispatch('logout')
@@ -46,9 +35,6 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'admin']),
-    authenticatedAsAdmin() {
-      return false
-    },
     profileImage() {
       return this.user.profile.replace('_normal', '')
     }

@@ -4,10 +4,6 @@
 
 #app(v-bind:class="pageStyles")
 
-
-  //- Debug
-  debug-panel(v-if="this.$store.state.debug" @click="this.$store.commit('TOGGLE_DEBUG_MODE')")
-
   //- Modals
   info-modal
   question-modal
@@ -47,7 +43,6 @@
   import MediaLightbox from '@/components/modals/MediaLightbox';
   import InfoModal from '@/components/modals/InfoModal';
   import QuestionModal from '@/components/modals/QuestionModal';
-  import DebugPanel from '@/components/DebugPanel';
   // import Lock from '@/components/authentication/Lock';
   
   require('particles.js');
@@ -62,7 +57,6 @@
       Overlay,
     ],
     components: {
-      DebugPanel,
       Navigation,
       NavigationButton,
       LeftDrawer,
@@ -70,9 +64,15 @@
       AuthenticationFlow,
       MediaLightbox,
       InfoModal,
-      QuestionModal,
+      QuestionModal
     },
     watch: {
+      '$route': {
+        handler: function(nV, oV) {
+          this.$store.commit('DISMISS_DRAWERS')
+        },
+        deep: true
+      },
       '$route.params.classSlug': {
         handler: function(nV, oV) {
           if (nV) {
@@ -97,10 +97,7 @@
 
       this.$store.dispatch('getSpec', this.$route.params.classSlug);
 
-      /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-      // particlesJS.load('page-header', '../../../static/particles.json', function () {
-      //   console.log('callback - particles.js config loaded');
-      // })
+      particlesJS.load('page-header', '../../../static/particles.json')
     },
     data() {
       return {
@@ -161,13 +158,6 @@ body.disable-scroll
         margin 0 0px
         padding-top $navigation-height
 
-/* App states */
-
-#app.authenticating
-  .main-page
-    .col
-      top 0
-
 #content-overlay
   pinned()
   background-color alpha(black, 0)
@@ -194,37 +184,20 @@ body.disable-scroll
   text-align center
   z-index -1
   @media(max-width: 800px)
-    height 84px + $navigation-height
+    height 104px + $navigation-height
 
   &.minimized
     height 0px
 
-#app, html
-  &.primary
-    #page-header, #navigation
-      background-color $color-primary
-  &.registration
-    #page-header, #navigation
-      background-color $color-registration
-  &.survey
-    #page-header, #navigation
-      background-color $color-survey
+// Page background colors
+html.primary, html.primary #page-header, html.primary #navigation { background-color: $color-primary; }
+html.home, html.home #page-header, html.home #navigation { background-color: $color-home; }
+html.registration, html.registration #page-header, html.registration #navigation { background-color: $color-registration; }
+html.survey, html.survey #page-header, html.survey #navigation { background-color: $color-survey; }
+html.schedule, html.schedule #page-header, html.schedule #navigation { background-color: $color-schedule; }
 
-  &.homework
-    #page-header, #navigation
-      background-color $color-homework
-  &.fourcorners
-    #page-header, #navigation
-      background-color $color-fourcorners
-  &.profile
-    #page-header, #navigation
-      background-color $color-profile
-
-html
-  &.primary
-    background-color $color-primary
-  &.registration
-    background-color $color-darkest-grey
-  &.survey
-    background-color $color-survey
+// Just header and nav colors
+html.homework #page-header, html.homework #navigation { background-color: $color-homework; }
+html.fourcorners #page-header, html.fourcorners #navigation { background-color: $color-fourcorners; }
+html.profile #page-header, html.profile #navigation { background-color: $color-profile; }
 </style>

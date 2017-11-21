@@ -20,7 +20,7 @@
 
   .page-header
     pinned()
-    background-color $color-profile
+    background-color $color-primary
     height $page-header-height
     padding 0 10px
     position fixed

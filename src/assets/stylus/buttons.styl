@@ -2,9 +2,16 @@
 
 @import '~stylus/shared'
 
+button()
+  hover(arguments[0], white)
+  background-color arguments[0]
+  color arguments[1]
+  border-color arguments[2]
+
 .pure-button
   animate()
   radius(4px)
+  hover($color-primary, white)
   background-color transparent
   border $color-primary 1px solid
   color $color-primary
@@ -15,10 +22,6 @@
   padding 0.5em 1em
   text-align center
   text-decoration none
-  &:hover
-    background-color $color-primary
-    color white
-    cursor pointer
 
   &.full-width
     display block
@@ -31,111 +34,32 @@
     opacity 0.5
     pointer-events none
 
-  &.outline
-    border transparent 1px solid
-    background-color transparent
-
   &.pure-button-primary
-    background-color $color-primary
-    color white
-    &.outline
-      background-color transparent
-      border-color $color-primary
-      color $color-primary
-    &:hover
-      background-color darken($color-primary, 10%)
-      color white
+    button($color-primary, white, $color-primary)
 
   &.pure-button-info
-    background-color $color-info
-    border-color $color-info
-    color white
-    
-    &:hover
-      background-color darken($color-info, 10%)
-
-  &.pure-button-white
-    background-color transparent
-    border-color white
-    color white
-    &:hover
-      background-color alpha(black, 0.1)
+    button($color-info, white, $color-info)
 
   &.pure-button-success
-    background-color $color-success
-    border-color $color-success
-    color white
-    &:hover
-      background-color darken($color-success, 10%)
-
-  &.pure-button-continue
-    radius(25px)
-    background-color $color-info
-    border none
-    color white
-    line-height 50px
-    padding 0 30px
-    &:hover
-      background-color darken($color-info, 10%)
-
-  &.pure-button-youtube
-    radius(25px)
-    background-color $color-youtube
-    border none
-    color white
-    line-height 50px
-    padding 0 30px
-    &:hover
-      background-color darken($color-youtube, 10%)
-
-  &.pure-button-soundcloud
-    radius(25px)
-    background-color $color-soundcloud
-    border none
-    color white
-    line-height 50px
-    padding 0 30px
-    &:hover
-      background-color darken($color-soundcloud, 10%)
-
-  &.pure-button-twitter
-    radius(25px)
-    background-color $color-twitter
-    border none
-    color white
-    line-height 50px
-    padding 0 30px
-    &:hover
-      background-color darken($color-twitter, 10%)
+    button($color-success, white, $color-success)
 
   &.pure-button-subtle
+    hover($color-light-grey, $color-text-dark-grey)
     background-color transparent
     border-color $color-grey
     color $color-text-grey
-    &:hover
-      background-color $color-light-grey
-      color $color-text-dark-grey
-
-  &.pure-button-dark
-    background-color $color-darkest-grey
-    border-color $color-darkest-grey
-    color white
-    &:hover
-      background-color lighten($color-darkest-grey, 10%)
-
-  &.pure-button-text
-    border-color transparent
-
-  &.pure-button-homework
-    background-color transparent
-    border-color $color-homework
-    color $color-homework
-    &:hover
-      background-color $color-homework
-      color white
   
+  // Branded
+  &.pure-button-youtube
+    button($color-youtube, white, $color-youtube)
+  &.pure-button-soundcloud
+    button($color-soundcloud, white, $color-soundcloud)
+  &.pure-button-twitter
+    button($color-twitter, white, $color-twitter)
+  
+  // Rounded
   &.rounded-short
-    radius(25px)
+    radius(22px)
     line-height 44px
     padding 0 30px
   
@@ -143,12 +67,4 @@
     radius(25px)
     line-height 50px
     padding 0 30px
-
-
-//  apply(props)
-//    props = arguments if length(arguments) > 1
-//    for prop in props
-//      {prop[0]} prop[1]
-
-//  .pure-button
-//    apply(primary $color-primary, info $color-info, danger $color-danger)
+  

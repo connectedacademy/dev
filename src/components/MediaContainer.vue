@@ -13,111 +13,128 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import { EventBus } from '@/event-bus.js';
+import Vue from 'vue'
+import API from '@/api'
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
-  import throttle from 'lodash/throttle';
-  import inRange from 'lodash/inRange';
+import throttle from 'lodash/throttle'
+import inRange from 'lodash/inRange'
 
-  // import VueYouTubeEmbed from 'vue-youtube-embed';
-  import Slick from 'vue-slick';
-  
-  require('slick-carousel/slick/slick.css');
-  
-  export default {
-    name: 'media-container',
-    props: ['playerType', 'content'],
-    components: {
-      Slick,
-      // VueYouTubeEmbed
-    },
-    mounted() {
-      EventBus.$on('scrollStatus', (scrollStatus) => {
-        this.scrollStatus = scrollStatus;
-      });
-    },
-    watch: {
-      'liveclassMedia': {
-        handler: function(nV, oV) {
-          if (typeof nV === 'undefined') return;
+// import VueYouTubeEmbed from 'vue-youtube-embed'
+import Slick from 'vue-slick'
 
-          if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
-            this.$refs.classslick.reSlick();
-          } else {
-            console.log('media: Either slick ref does not exist or not in slick mode');
-          }
-        },
-        deep: true,
+require('slick-carousel/slick/slick.css')
+
+export default {
+  name: 'media-container',
+  props: ['currentClass', 'playerType', 'content'],
+  components: {
+    Slick
+    // VueYouTubeEmbed
+  },
+  mounted() {
+    EventBus.$on('scrollStatus', (scrollStatus) => {
+      this.scrollStatus = scrollStatus
+    })
+
+    if (typeof this.content.images === 'undefined') return
+    Vue.$log.info('Getting media...')
+    const mediaPath = `${this.course.baseUri}${this.currentClass.dir}/${this.content.images}`
+
+    API.message.getMedia(
+      this.content.slug,
+      mediaPath,
+      (response) => {
+        this.liveclassMedia = response.response
       },
-      scrollStatus(nV, oV) {
-        this.updateCarousel(this);
+      (response) => {
+        this.liveclassMedia = undefined
+      }
+    )
+  },
+  watch: {
+    'liveclassMedia': {
+      handler: function(nV, oV) {
+        if (typeof nV === 'undefined') return
+
+        if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
+          this.$refs.classslick.reSlick()
+        }
+        else {
+          console.log('media: Either slick ref does not exist or not in slick mode')
+        }
+      },
+      deep: true,
+    },
+    scrollStatus(nV, oV) {
+      this.updateCarousel(this)
+    }
+  },
+  data() {
+    return {
+      liveclassMedia: undefined,
+      scrollStatus: undefined,
+      slickMode: true,
+      currentIndex: 0,
+      nextIndex: 1,
+      lightboxVisible: false,
+      lightboxImage: undefined,
+      pHeight: 188,
+      pWidth: (188 / 0.5625),
+      slickOptions: {
+        initialSlide: 0,
+        arrows: false,
+        centerMode: false,
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        variableWidth: true,
+        infinite: false,
+        swipe: false,
+        swipeToSlide: false,
+        touchMove: false,
+        draggable: false,
+        useTransform: true,
+        useCSS: true,
+        lazyLoad: 'ondemand'
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['course']),
+    src() {
+      if (this.playerType === 'soundcloud') {
+        return (this.content) ? this.content.videoId : ''
       }
     },
-    data() {
-      return {
-        scrollStatus: undefined,
-        slickMode: true,
-        currentIndex: 0,
-        nextIndex: 1,
-        lightboxVisible: false,
-        lightboxImage: undefined,
-        pHeight: 188,
-        pWidth: (188 / 0.5625),
-        slickOptions: {
-          initialSlide: 0,
-          arrows: false,
-          centerMode: false,
-          slidesToShow: 5,
-          slidesToScroll: 1,
-          variableWidth: true,
-          infinite: false,
-          swipe: false,
-          swipeToSlide: false,
-          touchMove: false,
-          draggable: false,
-          useTransform: true,
-          useCSS: true,
-          lazyLoad: 'ondemand',
-        },
-      };
+  },
+  methods: {
+    reslick() {
+      this.$nextTick(() => {
+        this.$refs.classslick.reSlick()
+      })
     },
-    computed: {
-      ...mapGetters([
-        'course', 'liveclassMedia'
-      ]),
-      src() {
-        if (this.playerType === 'soundcloud') {
-          return (this.content) ? this.content.videoId : '';
-        }
-      },
+    setLightboxMedia(media) {
+      this.$store.commit('SET_LIGHTBOX_MEDIA', media)
     },
-    methods: {
-      reslick() {
-        this.$nextTick(() => {
-          this.$refs.classslick.reSlick();
-        });
-      },
-      setLightboxMedia(media) {
-        this.$store.commit('SET_LIGHTBOX_MEDIA', media);
-      },
-      updateCarousel: throttle(function (self) {
-        if (!self.scrollStatus) return;
-        
-        for (let i = 0; i < self.liveclassMedia.length; i++) {
-          const image = self.liveclassMedia[i];
-  
-          if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
-            if (self.slickMode) {
-              self.$refs.classslick.goTo(i);
-            }
-            self.currentIndex = i;
-            self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined;
-            
+    updateCarousel: throttle(function (self) {
+      if (!self.scrollStatus) return
+      
+      for (let i = 0; i < self.liveclassMedia.length; i++) {
+        const image = self.liveclassMedia[i]
+
+        if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
+          if (self.slickMode) {
+            self.$refs.classslick.goTo(i)
           }
+          self.currentIndex = i
+          self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined
+          
         }
-      }, 200, { 'leading': false }),
-    },
-  };
+      }
+    }, 200, { 'leading': false })
+  }
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -1,7 +1,7 @@
 <template lang="pug">
 .loading
   .loading-wrapper(v-for="n in 5")
-      .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 100}px` }")
+      .padded-container.mock-container(v-bind:style="{ height: `${(5 - n) * 80}px` }")
 </template>
 
 <script>
@@ -17,8 +17,7 @@ export default {
 
 .padded-container.mock-container
   radius(6px)
-  background-color alpha(white, 0.8)
-  margin-bottom 10px
-
+  background-color alpha(white, 1)
+  margin-top 20px
 
 </style>

@@ -8,10 +8,7 @@
 
     .pure-button.pure-button-subtle(v-for="(content, index) in contentSlugs" @click="contentSlug = content.slug" v-bind:class="{ 'active': (contentSlug === content.slug) }") {{ content.title }}
 
-    .no-results(v-if="submissions.length === 0")
-      | No Results
-    
-    //- pre {{ submissions }}
+    .no-results(v-if="submissions.length === 0") {{ $t('common.no_results') }}
 
     .submission(v-for="(submission, index) in submissions" v-if="(limitHeight && (index < 3)) || !limitHeight")
       img(v-if="expandedView" v-bind:src="submission.thumbnail" width="100%")

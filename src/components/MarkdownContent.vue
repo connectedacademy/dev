@@ -14,8 +14,21 @@ import * as types from '@/store/mutation-types';
 export default {
   name: 'markdown-content',
   props: ['markdown'],
-  computed: {
-    renderedMarkdown() {
+  data() {
+    return {
+      renderedMarkdown: ''
+    }
+  },
+  watch: {
+    markdown() {
+      this.renderMarkdown()
+    }
+  },
+  mounted() {
+    this.renderMarkdown()
+  },
+  methods: {
+    renderMarkdown() {
 
       const md = new MarkdownIt()
         .use(MarkdownItCustomBlock, {
@@ -55,7 +68,7 @@ export default {
           },
       });
 
-      return md.render(this.markdown.replace("@","\n\n@"));
+      this.renderedMarkdown = md.render(this.markdown.replace("@","\n\n@"));
     },
   },
 };

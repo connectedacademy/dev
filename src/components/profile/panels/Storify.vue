@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.profile-panel
+.profile-panel(v-if="storifyLink")
 
   profile-panel-header(label="Storify")
 
@@ -56,7 +56,7 @@ export default {
       return classrooms;
     },
     storifyLink() {
-      return (this.classrooms.length > 0) ? `https://api.connectedacademy.io/v1/classroom/rss/${this.classrooms[0].code}` : 'undefined';
+      return (this.classrooms.length > 0) ? `https://api.connectedacademy.io/v1/classroom/rss/${this.classrooms[0].code}` : undefined;
     }
   },
   methods: {

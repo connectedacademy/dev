@@ -1,37 +1,33 @@
-/* eslint-disable */
-import Vue from 'vue';
-import API from '@/api';
-import app from '@/config';
-import store from '@/store';
+import Vue from 'vue'
+import * as types from '@/store/mutation-types'
 
-import math from 'lodash/math';
-import inRange from 'lodash/inRange';
-import forEach from 'lodash/forEach';
-import findIndex from 'lodash/findIndex';
+import findIndex from 'lodash/findIndex'
 
 // initial state
 const state = {
   isCollapsed: true,
-  visualisation: [],
-  liveclassMedia: undefined,
   activeSegment: undefined,
   peekSegment: undefined,
   activeSegmentMessages: [],
   replyingTo: undefined,
   subscribedTo: undefined,
-  infoModalVisible: false,
   infoModal: {
-    title: undefined,
-    body: undefined,
-    action: undefined,
+    visible: false,
+    content: {
+      title: undefined,
+      body: undefined,
+      action: undefined
+    }
   },
-  questionModalVisible: false,
   questionModal: {
-    title: undefined,
-    body: undefined,
-    action: undefined,
-  },
-};
+    visible: false,
+    content: {
+      title: undefined,
+      body: undefined,
+      action: undefined
+    }
+  }
+}
 
 // getters
 const getters = {
@@ -41,138 +37,95 @@ const getters = {
   peekSegment: (initialState) => initialState.peekSegment,
   activeSegmentMessages: (initialState) => initialState.activeSegmentMessages,
   replyingTo: (initialState) => initialState.replyingTo,
-  infoModalVisible: (initialState) => initialState.infoModalVisible,
-  infoModal: (initialState) => initialState.infoModal,
-  questionModalVisible: (initialState) => initialState.questionModalVisible,
-  questionModal: (initialState) => initialState.questionModal,
-  liveclassMedia: (initialState) => initialState.liveclassMedia,
-  visualisation: (initialState) => initialState.visualisation,
+  infoModalVisible: (initialState) => initialState.infoModal.visible,
+  infoModal: (initialState) => initialState.infoModal.content,
+  questionModalVisible: (initialState) => initialState.questionModal.visible,
+  questionModal: (initialState) => initialState.questionModal.content,
   modalVisible() {
-    return state.infoModalVisible || state.questionModalVisible;
-  },
-  currentActiveSection() {
-    if (store.state.scrollPoints.length === 0) { return undefined; }
-
-    forEach(store.state.scrollPoints, function (scrollPoint, key) {
-      
-      if (inRange(store.state.scrollPosition, scrollPoint.sectionTop, scrollPoint.bottom)) { // (store.state.scrollPosition > scrollPoint.sectionTop) && (store.state.scrollPosition < scrollPoint.bottom)
-        return scrollPoint;
-      }
-    });    
-
-    return undefined;
-  },
-};
+    return state.infoModal.visible || state.questionModal.visible
+  }
+}
 
 // actions
 const actions = {
-  getMedia({
-    commit,
-  }, request) {
-    API.message.getMedia(
-      request.slug,
-      request.path,
-      response => commit('GET_MEDIA_SUCCESS', {
-        response,
-      }),
-      response => commit('GET_MEDIA_FAILURE', {
-        response,
-      }),
-    );
-  },
-};
+  showQuestionModal({ commit }, request) {
+    commit('SHOW_QUESTION_MODAL', request)
+  }
+}
 
 // mutations
 const mutations = {
-  ['GET_VISUALISATION_SUCCESS'](initialState, {
-    response,
-  }) {
-    state.visualisation = response.data;
+  [types.GET_VISUALISATION_SUCCESS](initialState, { response }) {
+    state.visualisation = response.data
   },
-  ['GET_VISUALISATION_FAILURE'](initialState, {
-    response,
-  }) {
-    Vue.$log.info('error');
-    state.visualisation = [];
+  [types.GET_VISUALISATION_FAILURE](initialState, { response }) {
+    Vue.$log.info('error')
+    state.visualisation = []
     // error in response
   },
-  ['GET_MEDIA_SUCCESS'](initialState, {
-    response,
-  }) {
-    state.liveclassMedia = response.response;
-  },
-  ['GET_MEDIA_FAILURE'](initialState, {
-    response,
-  }) {
-    Vue.$log.info('error');
-    state.liveclassMedia = [];
-    // error in response
-  },
-  ['GET_MESSAGES_SUCCESS'](initialState, {
-    response,
-  }) {
-    const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2);
-    const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2);
+  [types.GET_MESSAGES_SUCCESS](initialState, { response }) {
+    const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2)
+    const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2)
 
     for (var group in response.data) {
 
-      const segmentGroup = parseInt(parseInt(group) * 0.2);
-      let newMessage = response.data[group];
-      newMessage.segmentGroup = segmentGroup;
+      const segmentGroup = parseInt(parseInt(group) * 0.2)
+      let newMessage = response.data[group]
+      newMessage.segmentGroup = segmentGroup
 
-      Vue.set(state.messages, segmentGroup, newMessage);
+      Vue.set(state.messages, segmentGroup, newMessage)
     }
   },
-  ['SET_ACTIVE_SEGMENT'](initialState, activeSegment) {
-    state.activeSegment = activeSegment;
+  [types.SET_ACTIVE_SEGMENT](initialState, activeSegment) {
+    state.activeSegment = activeSegment
   },
-  ['SET_PEEK_SEGMENT'](initialState, peekSegment) {
-    state.peekSegment = peekSegment;
+  [types.SET_PEEK_SEGMENT](initialState, peekSegment) {
+    state.peekSegment = peekSegment
   },
-  ['SET_SUBSCRIBED_TO'](initialState, subscribedTo) {
-    state.subscribedTo = subscribedTo;
+  [types.SET_SUBSCRIBED_TO](initialState, subscribedTo) {
+    state.subscribedTo = subscribedTo
   },
-  ['SET_SEGMENT_MESSAGES'](initialState, messages) {
-    state.activeSegmentMessages = messages;
+  [types.SET_SEGMENT_MESSAGES](initialState, messages) {
+    state.activeSegmentMessages = messages
   },
-  ['PUSH_SEGMENT_MESSAGE'](initialState, newMessage) {
+  [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
     if (newMessage.replyto) {
       // A reply so push to message replies
       const index = findIndex(state.activeSegmentMessages, function (message) { return message.message_id == newMessage.replyto.message_id })
-      state.activeSegmentMessages[index].in_reply.push(newMessage);
+      state.activeSegmentMessages[index].in_reply.push(newMessage)
     } else {
       // Not a reply so just push onto array
-      state.activeSegmentMessages.push(newMessage);
+      state.activeSegmentMessages.push(newMessage)
     }
   },
-  ['SET_REPLYING_TO'](initialState, message) {
-    state.replyingTo = message;
+  [types.SET_REPLYING_TO](initialState, message) {
+    state.replyingTo = message
   },
-  ['SHOW_INFO_MODAL'](initialState, params) {
-    state.infoModal = params;
-    state.infoModalVisible = true;
+  [types.SHOW_INFO_MODAL](initialState, params) {
+    state.infoModal.content = params
+    state.infoModal.visible = true
   },
-  ['DISMISS_INFO_MODAL'](initialState) {
-    state.infoModalVisible = false;
+  [types.DISMISS_INFO_MODAL](initialState) {
+    state.infoModal.visible = false
   },
-  ['SHOW_QUESTION_MODAL'](initialState, params) {
-    state.questionModal = params;
-    state.questionModalVisible = true;
+  [types.SHOW_QUESTION_MODAL](initialState, params) {
+    state.questionModal.content = params
+    state.questionModal.visible = true
   },
-  ['DISMISS_QUESTION_MODAL'](initialState) {
-    state.questionModalVisible = false;
+  [types.DISMISS_QUESTION_MODAL](initialState) {
+    state.questionModal.visible = false
   },
-  ['EXPAND_CONVERSATION'](initialState) {
-    state.isCollapsed = false;
+  [types.EXPAND_CONVERSATION](initialState) {
+    state.isCollapsed = false
   },
-  ['COLLAPSE_CONVERSATION'](initialState) {
-    state.isCollapsed = true;
-  },
-};
+  [types.COLLAPSE_CONVERSATION](initialState) {
+    state.isCollapsed = true
+  }
+}
 
 export default {
   state,
   getters,
   actions,
-  mutations,
-};
+  mutations
+}

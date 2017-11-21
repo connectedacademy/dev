@@ -27,7 +27,6 @@ import { EventBus } from '@/event-bus.js';
 
 // Mixins
 import Messages from '@/mixins/Messages';
-import Media from '@/mixins/Media';
 import Subtitles from '@/mixins/Subtitles';
 
 import TimeSegment from '@/components/conversation/TimeSegment';
@@ -39,7 +38,6 @@ export default {
   name: 'conversation-container',
   mixins: [
     Messages,
-    Media,
     Subtitles,
   ],
   components: {
@@ -48,7 +46,6 @@ export default {
   props: ['content', 'collapsed'],
   mounted() {
     this.loadSubtitles(this.content);
-    this.loadMedia(this.content);
     this.loadSegmentSummary(0, true);
 
     // Fill with blank messages

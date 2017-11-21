@@ -1,5 +1,4 @@
 var testEnv = require('./test/test.env.js');
-global._ = require('lodash');
 
 exports.config = {
     
@@ -118,7 +117,8 @@ exports.config = {
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", then the base url gets prepended.
-    baseUrl: 'https://researchmethods.connectedacademy.io',
+    // baseUrl: 'https://researchmethods.connectedacademy.io',
+    baseUrl: 'http://localhost:8080/#/class/evidence',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 50000,

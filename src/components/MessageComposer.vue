@@ -2,7 +2,7 @@
 
   .message-composer-wrapper(v-bind:class="{ static: static }")
 
-    .message-composer(v-bind:class="{ unactive: hidden }")
+    .message-composer
 
       .message-composer--body
       
@@ -51,7 +51,7 @@ export default {
   mounted() {
     if (!this.static) {
       // Auto focus textarea
-      this.$refs.textarea.$el.focus();
+      if (this.$refs.textarea) this.$refs.textarea.$el.focus()
     }
   },
   data() {
@@ -89,7 +89,8 @@ export default {
       const appendedHeight = (this.showAction) ? 30 : 0;
       const footerHeight = (this.$refs.composeractions) ? this.$refs.composeractions.clientHeight : 0;
       const notAuthed = this.isRegistered ? 0 : 50;
-      this.$emit('update:quickNoteHeight', (this.$refs.textarea.$el.clientHeight + textareaPadding + footerHeight + appendedHeight + notAuthed));
+      const textareaHeight = (this.$refs.textarea) ? this.$refs.textarea.$el.clientHeight : 0;
+      this.$emit('update:quickNoteHeight', (textareaHeight + textareaPadding + footerHeight + appendedHeight + notAuthed));
     },
     cancelReply() {
       this.$store.commit('SET_REPLYING_TO', undefined);
@@ -110,7 +111,6 @@ export default {
       API.message.sendMessage(
         postData,
         (response, postData) => {
-          this.$store.commit('SEND_MESSAGE_SUCCESS', { response, postData })
           this.message.text = '';
           this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Posted note';
           setTimeout(() => { this.infoLabel = ""}, 2000);
@@ -119,7 +119,6 @@ export default {
           EventBus.$emit('messagePosted', response);
         },
         (response, postData) => {
-          this.$store.commit('SEND_MESSAGE_FAILURE', { response })
           alert('Failed to send message');
           this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Failed to post';
           setTimeout(() => { this.infoLabel = ""}, 2000);
@@ -131,11 +130,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered',
       'peekSegment',
       'isRegistered',
       'course',
-      'currentClass',
       'currentSection',
       'replyingTo'
     ]),
@@ -151,15 +148,6 @@ export default {
     },
     shortenedUrl() {
       return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`;
-    },
-    hidden() {
-      return (this.currentSection === undefined) ||
-        !this.isRegistered ||
-        this.$store.state.composer.hidden ||
-        this.$store.state.auth.visible ||
-        this.$store.state.navigation.leftDrawer.visible ||
-        this.$store.state.navigation.rightDrawer.visible ||
-        this.$store.state.route.name !== 'main';
     },
     submitText() {
       if (this.sending) return 'Sending..';

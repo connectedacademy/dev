@@ -6,7 +6,7 @@
     h1.content-title
       | Ready to join the class?
     .auth-button-wrapper
-      .pure-button.pure-button-twitter(@click="attemptAuth") Login with Twitter
+      .pure-button.pure-button-twitter.rounded-tall(@click="attemptAuth") Login with Twitter
 
 </template>
 

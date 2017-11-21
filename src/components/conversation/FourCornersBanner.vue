@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       expanded: false,
-      tease: false,
       bannerText: 'Click explore to learn how FourCorners offers a new way of enriching photographs with rich metadata.',
       corners: {
         default: {
@@ -58,26 +57,28 @@ export default {
           text: 'Here you can specify how you want to protect the copyright of your image, asserting a copyright for yourself or another entity. Alternatively you could add a Creative Commons license.',
         },
       },
-      currentCorner: 'default',
-    };
+      currentCorner: 'default'
+    }
   },
   methods: {
     toggleCorner(corner) {
       if (this.expanded) {
         if (corner === this.currentCorner) {
-          this.expanded = false;
-          this.currentCorner = 'default';
-        } else {
-          this.currentCorner = corner;
+          this.expanded = false
+          this.currentCorner = 'default'
         }
-      } else {
-        // this.$store.commit('SHOW_QUESTION_MODAL', { title: 'Question', body: 'Have you used FourCorners before?', action: 'Yes' });
-        this.currentCorner = 'bottomRight';
-        this.expanded = true;
+        else {
+          this.currentCorner = corner
+        }
       }
-    },
-  },
-};
+      else {
+        // this.$store.dispatch('showQuestionModal', { title: 'Question', body: 'Have you used FourCorners before?', action: 'Yes' })
+        this.currentCorner = 'bottomRight'
+        this.expanded = true
+      }
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -103,7 +104,6 @@ $corner-width = 8px
 
   @media(max-width: 800px)
     radius(0)
-    margin 20px 0 0 0
 
   &:after
     animate()

@@ -6,7 +6,7 @@ transition(name="slide-up")
     .auth-modal--container
       p Click the button below to authenticate with Twitter, this will give you full access to the course.
 
-      button.pure-button.pure-button-twitter(name="twitter-login-button" v-on:click.once="attemptAuth")
+      button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
         | {{ $t('auth.login_with_twitter') }}
 
 </template>

@@ -65,7 +65,7 @@ export default {
     postSubmission() {
       // Submit
 
-      this.resultsText = 'Searhing...';
+      this.resultsText = 'Searching...';
 
       const postData = {
         class: this.theClass,

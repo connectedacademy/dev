@@ -47,11 +47,24 @@ $drawer-width = 320px
       &:hover
         background-color alpha(black, 0.2)
 
-  #app-version
-    color white
-    font-size 0.7em
-    padding 5px
+  ul.drawer-links
+    cleanlist()
     text-align center
+    li
+      cleanlist()
+      color white
+      display inline-block
+      font-size 0.7em
+      text-align center
+      &:not(:last-child)
+        &:after
+          content '-'
+          padding 0 10px
+      a
+        color white
+        text-decoration none
+        &:hover
+          text-decoration underline
 
   /* Drawer List */
   ul.drawer-list

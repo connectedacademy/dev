@@ -4,8 +4,6 @@
 
   .col#col-main
 
-    //- previous-button
-
     .main-container.background-white
 
       .container
@@ -16,26 +14,24 @@
 
 <script>
   // Mixins
-  import PageStyle from '@/mixins/PageStyle';
+  import PageStyle from '@/mixins/PageStyle'
   
   // Components
-  import MarkdownRenderer from '@/components/MarkdownRenderer';
-  import PreviousButton from '@/components/PreviousButton';
+  import MarkdownRenderer from '@/components/MarkdownRenderer'
   
   export default {
     name: 'markdown',
     mixins: [ PageStyle ],
     components: {
-      MarkdownRenderer,
-      PreviousButton,
+      MarkdownRenderer
     },
     mounted() {
-      this.$ga.event('markdown', 'rendered', window.location.href);
+      this.$ga.event('markdown', 'rendered', window.location.href)
     },
     data() {
       return {
-        pageStyle: { type: undefined, minimized: false }
+        pageStyle: { type: undefined, visible: true, minimized: false }
       }
     }
-  };
+  }
 </script>

@@ -36,7 +36,7 @@
           four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
         
         .course-content--footer(v-if="firstClassSlug")
-          router-link.pure-button.pure-button-continue(v-bind:to="{ name: 'class', params: { classSlug: firstClassSlug } }") Continue to class
+          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'class', params: { classSlug: firstClassSlug } }") Continue to class
 
 </template>
 
@@ -287,8 +287,7 @@ $selector-height = 44px
 .course-content--footer
   border-top $color-border 1px solid
   text-align center
-  .pure-button-continue
+  .pure-button-info
     margin 20px auto
-
 
 </style>

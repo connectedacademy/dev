@@ -54,7 +54,7 @@ export default {
     QuestionResponses,
     Storify,
   },
-  mounted() {
+  activated() {
     this.ensureAuthenticated()
     this.redrawInterval = setInterval(() => {
       this.$redrawVueMasonry()
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       classes: [],
-      pageStyle: { type: 'profile', minimized: true },
+      pageStyle: { type: 'profile', visible: true, minimized: true },
       contentPanelVisible: false,
       panelMargin: 10,
       panelWidth: 340,
@@ -108,7 +108,7 @@ export default {
         },
         {
           role: 'admin',
-          label: 'Registration Responses',
+          label: 'Question Responses',
           component: 'question-responses',
         },
         {

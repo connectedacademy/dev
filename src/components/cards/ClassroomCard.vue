@@ -2,10 +2,10 @@
 
   .card#classroom-card(v-if="user" v-bind:class="{ visible: visible, active: currentClassroom }")
 
-    h3 {{ $t('classroom.join_classroom') }}
-    p {{ $t('classroom.enter_code') }}
+    h3 {{ $t('classroom.classroom') }}
+    p.hidden {{ $t('classroom.enter_code') }}
 
-    input#classroom-input(v-model="classroomCode" placeholder="CODE")
+    input#classroom-input(v-model="classroomCode" placeholder="CODE" v-bind:disabled="currentClassroom")
 
     a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") {{ $t('classroom.leave_classroom') }}
     a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2)" v-on:click="joinClassroom") {{ $t('classroom.join_classroom') }}
@@ -85,11 +85,13 @@ export default {
 @import '~stylus/drawer'
 
 .card#classroom-card
-  background-color #4590D8
+  background-color $color-info
+  color white
   padding 0
   text-align center
   &.active
-    background-color $color-primary
+    background-color $color-success
+    color white
 
   .pure-button
     radius(0)
@@ -100,14 +102,14 @@ export default {
     cleanlist()
     background-color transparent
     border alpha(black, 0.1) 1px solid
-    color white
+    color inherit
     cursor default
     font-weight bold
     line-height 50px
 
   p
     reset()
-    color white
+    color inherit
     padding 20px 10px 0px 10px
 
   input#classroom-input
@@ -117,7 +119,7 @@ export default {
     placeholderColor(alpha(white, 0.5))
     background-color alpha(black, 0.0)
     border alpha(black, 0.1) 2px dashed
-    color white
+    color inherit
     display inline-block
     font-size 1.6em
     padding 10px
@@ -128,5 +130,8 @@ export default {
     /*text-transform uppercase*/
     &.disabled
       background-color transparent
+
+  a.pure-button.pure-button-action
+    color inherit
 
 </style>

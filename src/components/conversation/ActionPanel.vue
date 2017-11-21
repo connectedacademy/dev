@@ -23,7 +23,7 @@
 
       .clearfix
 
-    media-container(v-bind:player-type="playerType" v-bind:content="content")
+    media-container(v-bind:player-type="playerType" v-bind:content="content" v-bind:current-class="currentClass")
 
 </template>
 
@@ -50,7 +50,7 @@
   
   export default {
     name: 'action-panel',
-    props: ['content'],
+    props: ['currentClass', 'content'],
     components: {
       MessageComposer,
       MediaContainer,

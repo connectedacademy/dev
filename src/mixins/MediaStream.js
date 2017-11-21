@@ -62,9 +62,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'course', 'mediaPlaying'
-    ]),
+    ...mapGetters(['course', 'mediaPlaying'])
   },
   methods: {
     checkBufferStatus() {
