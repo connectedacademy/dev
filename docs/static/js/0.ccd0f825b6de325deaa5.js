@@ -23499,8 +23499,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['course', 'currentClass']), {
-    releasedAt: function releasedAt() {
-      return 'Released ' + __WEBPACK_IMPORTED_MODULE_2_moment_mini___default()(this.currentClass.release_at).fromNow();
+    releaseLabel: function releaseLabel() {
+      var label = this.currentClass.status === 'FUTURE' ? 'Will be released' : 'Released';
+      return label + ' ' + __WEBPACK_IMPORTED_MODULE_2_moment_mini___default()(this.currentClass.release_at).fromNow();
     }
   }),
   methods: {
@@ -23582,13 +23583,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     });
 
     window.addEventListener('keydown', function (event) {
-      if (event.keyCode === 32) {
-        if (typeof _this.peekSegment !== 'undefined') return;
-        if (typeof _this.currentSection === 'undefined') return;
-        event.preventDefault();
-        _this.$store.commit(_this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
-      }
-
       if (event.keyCode === 27) {
         _this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
         _this.$store.commit('SET_PEEK_SEGMENT', undefined);
@@ -24360,24 +24354,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_Auth__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_filter__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_filter__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_includes__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_includes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_includes__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_conversation_LiveClass__ = __webpack_require__(916);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_conversation_LiveClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_conversation_LiveClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_conversation_DeepDive__ = __webpack_require__(912);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_conversation_DeepDive___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_conversation_DeepDive__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_conversation_Homework__ = __webpack_require__(915);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_conversation_Homework___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_conversation_Homework__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_conversation_FourCornersBanner__ = __webpack_require__(913);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_conversation_FourCornersBanner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_conversation_FourCornersBanner__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_conversation_NextClass__ = __webpack_require__(918);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_conversation_NextClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_conversation_NextClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_conversation_Survey__ = __webpack_require__(920);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_conversation_Survey___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_conversation_Survey__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_conversation_FutureContent__ = __webpack_require__(914);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_conversation_FutureContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_conversation_FutureContent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment_mini__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment_mini___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment_mini__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_filter__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_filter__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_includes__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_includes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_includes__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_conversation_LiveClass__ = __webpack_require__(916);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_conversation_LiveClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_conversation_LiveClass__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_conversation_DeepDive__ = __webpack_require__(912);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_conversation_DeepDive___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_conversation_DeepDive__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_conversation_Homework__ = __webpack_require__(915);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_conversation_Homework___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_conversation_Homework__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_conversation_FourCornersBanner__ = __webpack_require__(913);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_conversation_FourCornersBanner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_conversation_FourCornersBanner__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_conversation_NextClass__ = __webpack_require__(918);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_conversation_NextClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_conversation_NextClass__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_conversation_Survey__ = __webpack_require__(920);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_conversation_Survey___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_conversation_Survey__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_conversation_FutureContent__ = __webpack_require__(914);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_conversation_FutureContent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__components_conversation_FutureContent__);
+
 
 
 
@@ -24399,25 +24396,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_Auth__["a" /* default */]],
   props: ['currentClass'],
   components: {
-    LiveClass: __WEBPACK_IMPORTED_MODULE_4__components_conversation_LiveClass___default.a,
-    DeepDive: __WEBPACK_IMPORTED_MODULE_5__components_conversation_DeepDive___default.a,
-    Homework: __WEBPACK_IMPORTED_MODULE_6__components_conversation_Homework___default.a,
-    FourCornersBanner: __WEBPACK_IMPORTED_MODULE_7__components_conversation_FourCornersBanner___default.a,
-    NextClass: __WEBPACK_IMPORTED_MODULE_8__components_conversation_NextClass___default.a,
-    Survey: __WEBPACK_IMPORTED_MODULE_9__components_conversation_Survey___default.a,
-    FutureContent: __WEBPACK_IMPORTED_MODULE_10__components_conversation_FutureContent___default.a
+    LiveClass: __WEBPACK_IMPORTED_MODULE_5__components_conversation_LiveClass___default.a,
+    DeepDive: __WEBPACK_IMPORTED_MODULE_6__components_conversation_DeepDive___default.a,
+    Homework: __WEBPACK_IMPORTED_MODULE_7__components_conversation_Homework___default.a,
+    FourCornersBanner: __WEBPACK_IMPORTED_MODULE_8__components_conversation_FourCornersBanner___default.a,
+    NextClass: __WEBPACK_IMPORTED_MODULE_9__components_conversation_NextClass___default.a,
+    Survey: __WEBPACK_IMPORTED_MODULE_10__components_conversation_Survey___default.a,
+    FutureContent: __WEBPACK_IMPORTED_MODULE_11__components_conversation_FutureContent___default.a
   },
   computed: {
+    classReleased: function classReleased() {
+      return this.currentClass.status !== 'FUTURE';
+    },
     courseContent: function courseContent() {
-      return __WEBPACK_IMPORTED_MODULE_2_lodash_filter___default()(this.currentClass.content, function (item) {
-        return !__WEBPACK_IMPORTED_MODULE_3_lodash_includes___default()(['title'], item.content_type);
+      return __WEBPACK_IMPORTED_MODULE_3_lodash_filter___default()(this.currentClass.content, function (item) {
+        return !__WEBPACK_IMPORTED_MODULE_4_lodash_includes___default()(['title'], item.content_type);
       });
     },
     releasedContent: function releasedContent() {
-      return __WEBPACK_IMPORTED_MODULE_2_lodash_filter___default()(this.courseContent, { status: 'RELEASED' });
+      return __WEBPACK_IMPORTED_MODULE_3_lodash_filter___default()(this.courseContent, { status: 'RELEASED' });
     },
     futureContent: function futureContent() {
-      return __WEBPACK_IMPORTED_MODULE_2_lodash_filter___default()(this.courseContent, { status: 'FUTURE' });
+      return __WEBPACK_IMPORTED_MODULE_3_lodash_filter___default()(this.courseContent, { status: 'FUTURE' });
+    }
+  },
+  methods: {
+    fromNow: function fromNow(date) {
+      return __WEBPACK_IMPORTED_MODULE_2_moment_mini___default()(date).fromNow();
     }
   }
 });
@@ -24552,12 +24557,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'future-content',
-  props: ['content'],
-  computed: {
-    releaseAt: function releaseAt() {
-      return __WEBPACK_IMPORTED_MODULE_0_moment_mini___default()(this.content.release_at).format('MMMM Do YYYY, HH:mm');
-    }
-  }
+  props: ['title', 'subtitle']
 });
 
 /***/ }),
@@ -24570,6 +24570,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment_mini__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment_mini___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment_mini__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_Auth__ = __webpack_require__(107);
+
+
 
 
 
@@ -24579,9 +24582,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'homework',
   props: ['content'],
+  mxins: [__WEBPACK_IMPORTED_MODULE_3__mixins_Auth__["a" /* default */]],
   methods: {
     openHomework: function openHomework() {
-      this.$router.push('/feedback/browse/' + this.$store.getters.currentClass.slug + '/' + this.content.slug);
+      if (!this.isAuthenticated) {
+        this.$router.push('/feedback/browse/' + this.$store.getters.currentClass.slug + '/' + this.content.slug);
+      } else {
+        this.showAuth();
+      }
     }
   }
 });
@@ -33894,28 +33902,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "course-content--header block"
   }, [_c('svg', {
     staticStyle: {
-      "overflow": "visible",
-      "height": "60px",
-      "width": "60px"
+      "overflow": "visibleheight:60pxwidth:60px"
     },
     attrs: {
       "viewBox": "0,0,320,320"
     }
   }, [_c('polyline', {
     staticStyle: {
-      "fill": "none",
-      "stroke": "#fff",
-      "stroke-linecap": "round",
-      "stroke-linejoin": "round",
-      "stroke-width": "10px"
+      "fill": "nonestroke:#fffstroke-linecap:roundstroke-linejoin:roundstroke-width:10px"
     },
     attrs: {
       "points": "160 30 0 0 0 290 160 260"
     }
   }), _c('polyline', {
     staticStyle: {
-      "fill": "none",
-      "stroke": "#fff",
+      "fill": "nonestroke:#fff",
       "stroke-linecap": "round",
       "stroke-linejoin": "round",
       "stroke-width": "10px"
@@ -34364,9 +34365,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "course-content--header block"
   }, [_c('h1', {
     staticClass: "content-title"
-  }, [_vm._v(_vm._s(((_vm.content.slug) + " coming soon")))]), _c('h2', {
+  }, [_vm._v(_vm._s(_vm.title))]), _c('h2', {
     staticClass: "content-subtitle"
-  }, [_vm._v(_vm._s(_vm.releaseAt))])])])
+  }, [_vm._v(_vm._s(_vm.subtitle))])])])
 },staticRenderFns: []}
 
 /***/ }),
@@ -35023,15 +35024,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }],
     attrs: {
       "title": _vm.currentClass.title,
-      "subtitle": _vm.releasedAt,
-      "link": ("1 of " + (_vm.course.classes.length) + " classes"),
+      "subtitle": _vm.releaseLabel,
+      "link": "Course schedule",
       "route": "schedule"
     }
-  }), _c('section-navigator'), (_vm.currentClass.loading) ? _c('loading') : _c('course-content', {
+  }), _c('section-navigator'), (_vm.currentClass && _vm.currentClass.loading) ? _c('loading') : (_vm.currentClass) ? _c('course-content', {
     attrs: {
       "current-class": _vm.currentClass
     }
-  })], 1)])])
+  }) : _vm._e()], 1)])])
 },staticRenderFns: []}
 
 /***/ }),
@@ -35097,7 +35098,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })], 1) : _vm._e()
     var _obj;
   }), _vm._l((_vm.futureContent), function(content, index) {
-    return (_vm.futureContent) ? _c('div', {
+    return (_vm.futureContent && _vm.classReleased) ? _c('div', {
       directives: [{
         name: "show",
         rawName: "v-show",
@@ -35118,13 +35119,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }) : _c('future-content', {
       attrs: {
-        "content": content
+        "title": ("" + (content.slug)),
+        "subtitle": ("Will release at " + (content.release_at))
       }
     })], 1) : _vm._e()
     var _obj;
-  })], 2)
+  }), (!_vm.classReleased) ? _c('div', {
+    staticClass: "course-content-group course-content-group--future"
+  }, [_c('future-content', {
+    attrs: {
+      "title": "Coming Soon",
+      "subtitle": ("Will be released " + (_vm.fromNow(_vm.currentClass.release_at)))
+    }
+  })], 1) : _vm._e()], 2)
 },staticRenderFns: []}
 
 /***/ })
 ]));
-//# sourceMappingURL=0.e55c5fc04cadfe0772cf.js.map
+//# sourceMappingURL=0.ccd0f825b6de325deaa5.js.map
