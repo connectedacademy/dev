@@ -3,8 +3,8 @@
 .course-content
 
   .course-content--header.block
-    h1.content-title {{ `${content.slug} coming soon` }}
-    h2.content-subtitle {{ releaseAt }}
+    h1.content-title {{ title }}
+    h2.content-subtitle {{ subtitle }}
 
 </template>
 
@@ -13,12 +13,7 @@ import Moment from 'moment-mini';
 
 export default {
   name: 'future-content',
-  props: ['content'],
-  computed: {
-    releaseAt() {
-      return Moment(this.content.release_at).format('MMMM Do YYYY, HH:mm');
-    },
-  },
+  props: ['title', 'subtitle']
 };
 </script>
 

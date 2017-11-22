@@ -8,7 +8,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'isAuthenticated']),
     isAdmin() {
       return this.user && this.user.admin
     }

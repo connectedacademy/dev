@@ -3,10 +3,10 @@
   .class-page(name="class-page")
     .col#col-main
       .main-container
-        narrow-page-header(v-show="!currentClass.loading" v-bind:title="currentClass.title" v-bind:subtitle="releasedAt" v-bind:link="`1 of ${course.classes.length} classes`" route="schedule")
+        narrow-page-header(v-show="!currentClass.loading" v-bind:title="currentClass.title" v-bind:subtitle="releaseLabel" link="Course schedule" route="schedule")
         section-navigator
-        loading(v-if="currentClass.loading")
-        course-content(v-else v-bind:current-class="currentClass")
+        loading(v-if="currentClass && currentClass.loading")
+        course-content(v-else-if="currentClass" v-bind:current-class="currentClass")
 
 </template>
 
@@ -52,8 +52,9 @@ export default {
   },
   computed: {
     ...mapGetters(['course', 'currentClass']),
-    releasedAt() {
-      return `Released ${Moment(this.currentClass.release_at).fromNow()}`
+    releaseLabel() {
+      const label = (this.currentClass.status === 'FUTURE') ? 'Will be released' : 'Released'
+      return `${label} ${Moment(this.currentClass.release_at).fromNow()}`
     },
   },
   methods: {

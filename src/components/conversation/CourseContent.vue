@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .course-content-wrapper
-
+  
   .course-content-group(v-if="releasedContent" v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     homework(v-if="content.expectsubmission" v-bind:content="content")
@@ -9,17 +9,21 @@
     live-class(v-else-if="content.content_type === 'class'" v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
     deep-dive(v-else v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
-  .course-content-group.course-content-group--future(v-if="futureContent" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
+  .course-content-group.course-content-group--future(v-if="futureContent && classReleased" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
     
     next-class(v-if="content.content_type === 'nextclass'" v-bind:content="content")
     survey(v-else-if="content.content_type === 'survey'" v-bind:content="content")
-    future-content(v-else v-bind:content="content")
+    future-content(v-else v-bind:title="`${content.slug}`" v-bind:subtitle="`Will release at ${content.release_at}`")
+
+  .course-content-group.course-content-group--future(v-if="!classReleased")
+    future-content(title="Coming Soon" v-bind:subtitle="`Will be released ${fromNow(currentClass.release_at)}`")
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Auth from '@/mixins/Auth'
+import Moment from 'moment-mini'
 
 import _filter from 'lodash/filter'
 import _includes from 'lodash/includes'
@@ -46,6 +50,9 @@ export default {
     FutureContent,
   },
   computed: {
+    classReleased() {
+      return (this.currentClass.status !== 'FUTURE')
+    },
     courseContent() {
       return _filter(this.currentClass.content, item => {
         // Exclude titles from course content
@@ -57,6 +64,11 @@ export default {
     },
     futureContent() {
       return _filter(this.courseContent, { status: 'FUTURE' })
+    }
+  },
+  methods: {
+    fromNow(date) {
+      return Moment(date).fromNow()
     }
   }
 }

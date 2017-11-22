@@ -6,7 +6,7 @@
       narrow-page-header(title="Schedule" subtitle="Browse upcoming classes" route="schedule")
       .content-block.header-block.unpadded-block.white-block
         ul
-          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }")
+          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }" v-bind:class="{ released: isReleased(theClass) }")
             .calendar-tile
               .day-label
                 | {{ releaseDay(theClass) }}
@@ -89,11 +89,14 @@ export default {
         cleanlist()
         box-shadow()
         border-box()
+        background-color $color-lightest-grey
         border-bottom $color-border 1px solid
         min-height 92px
         padding 30px
         padding-left 160px
         position relative
+        &.released
+          background-color white
         &:hover
           cursor pointer
           background-color $color-lightest-grey

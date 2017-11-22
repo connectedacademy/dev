@@ -3,11 +3,11 @@
 .course-content(name="section-feedback")
 
   .course-content--header.block
-    svg(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
+    svg(viewBox="0,0,320,320" style="overflow:visibleheight:60pxwidth:60px")
 
-      polyline(points="160 30 0 0 0 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
+      polyline(points="160 30 0 0 0 290 160 260" style="fill:nonestroke:#fffstroke-linecap:roundstroke-linejoin:roundstroke-width:10px")
 
-      polyline(points="160 30 320 0 320 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
+      polyline(points="160 30 320 0 320 290 160 260" style="fill:nonestroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
       path(d="M160,30 l0,80Z" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
@@ -23,19 +23,28 @@
 </template>
 
 <script>
-import * as config from '@/api/config';
-import {mapGetters} from 'vuex';
-import Moment from 'moment-mini';
+import * as config from '@/api/config'
+import { mapGetters } from 'vuex'
+import Moment from 'moment-mini'
+
+import Auth from '@/mixins/Auth'
 
 export default {
   name: 'homework',
   props: ['content'],
+  mxins: [ Auth ],
   methods: {
     openHomework() {
-      this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`);
-    },
-  },
-};
+      // Check if authenticated
+      if (!this.isAuthenticated) {
+        this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`)
+      }
+      else {
+        this.showAuth()
+      }
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>

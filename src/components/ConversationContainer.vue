@@ -63,12 +63,12 @@ export default {
 
     window.addEventListener('keydown', (event) => {
       // SPACE
-      if (event.keyCode === 32) { 
-        if (typeof this.peekSegment !== 'undefined') return;
-        if (typeof this.currentSection === 'undefined') return;
-        event.preventDefault();
-        this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
-      }
+      // if (event.keyCode === 32) { 
+      //   if (typeof this.peekSegment !== 'undefined') return;
+      //   if (typeof this.currentSection === 'undefined') return;
+      //   event.preventDefault();
+      //   this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
+      // }
       // ESC
       if (event.keyCode === 27) {
         this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
