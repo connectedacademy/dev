@@ -13,6 +13,10 @@
     //- Roles
     tag-list(v-bind:tags="userRoles")
 
+    .clearfix
+    
+    .admin-view.pure-button.pure-button-subtle(@click="toggleAdminView") {{ adminView ? 'Admin: On' : 'Admin: Off' }}
+
     h3 Your Linked Accounts
     tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
 
@@ -42,7 +46,7 @@ import 'vue-awesome/icons/angle-right'
 
 export default {
   name: 'user',
-  props: ['label', 'classes'],
+  props: ['label', 'adminView'],
   components: {
     ActionSelector,
     TagList,
@@ -65,7 +69,7 @@ export default {
       return this.user.roles
     },
     profileImage() {
-      return this.user.profile.replace('_normal', '')
+      return (this.user && this.user.profile) ? this.user.profile.replace('_normal', '') : ''
     },
     proseLink() {
       return 'http://prose.io/#connectedacademy'
@@ -75,29 +79,31 @@ export default {
     }
   },
   methods: {
+    toggleAdminView() {
+      this.$emit('update:adminView', !this.adminView)
+    },
     getClassrooms() {
       this.classrooms = []
 
-      setTimeout(() => {
-        const currentClass = _find(this.classes, { slug: this.profileClassSlug })
-        let classrooms = (currentClass) ? currentClass.codes : []
-
-        // Just for current user
-        const teachersOnly = true
-        if (teachersOnly) {
-          classrooms = _filter(classrooms, (classroom) => {
-            return (classroom.teacher && (classroom.teacher.account === this.user.account) || (classroom.teacher === this.user.id))
-          })
+      API.teacher.getClassrooms(
+        this.profileClassSlug,
+        (response) => {
+          this.$log.info(response)
+          this.classrooms = response
+        },
+        (response) => {
+          // TODO: Handle failed request
+          this.classrooms = []
+          this.$log.info('Failed to retrieve classrooms')
         }
-        this.classrooms = classrooms
-      }, 5000)
+      )
     },
     generateCode() {
       API.classroom.getTeacherCode(
         this.profileClassSlug,
         (response) => {
           this.$log.info(response)
-          EventBus.$emit('updateClasses')
+          this.getClassrooms()
         },
         (response) => {
           // TODO: Handle failed request

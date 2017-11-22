@@ -12,7 +12,7 @@
         icon(name="step-forward")
       
       li.experience-control#progress-bar(ref="progressbar" @click="trackClicked" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
-        visualisation(v-bind:content="content")
+        visualisation(v-bind:content="content" v-bind:current-class="currentClass")
       
       li.experience-control.pull-right(@click="toggleComposer")
         onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")

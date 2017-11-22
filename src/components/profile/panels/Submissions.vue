@@ -73,14 +73,8 @@ export default {
 
       this.submissions = [];
 
-      let request = {
-        theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
-        userId: (this.panel.role === 'user') ? this.user.id : undefined,
-        teacher: (this.panel.role === 'teacher') ? true : undefined,
-      };
-
-      API.profile.getSubmissions(
-        request,
+      API[this.panel.role].getHomework(
+        this.profileClassSlug,
         (response) => {
           this.submissions = response;
         },

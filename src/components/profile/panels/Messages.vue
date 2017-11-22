@@ -15,10 +15,13 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 import API from '@/api'
+
 import _filter from 'lodash/filter'
+import _orderBy from 'lodash/orderBy'
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 import StudentTile from '@/components/profile/tiles/StudentTile'
@@ -35,27 +38,35 @@ export default {
   },
   mounted() {
     if (this.expandedView) { this.loadData() }
-    this.autoUpdateInterval = setInterval(() => { this.loadData() }, 20000)
     EventBus.$on('profileClassUpdated', () => {
       this.loadData()
     })
-  },
-  beforeDestroy() {
-    if (this.autoUpdateInterval) {
-      clearInterval(this.autoUpdateInterval)
-    }
+
+    // New message added, push to list    
+    Vue.io.socket.on('message', (obj) => {
+      Vue.$log.info('socket - message')
+      Vue.$log.info(obj)
+      // TODO: Make conditional
+      if (this.panel.role === 'user') {
+        if (obj.msg.user.id === this.user.id) {
+          this.messages.push(obj.msg)
+        }
+      }
+      else {
+        this.messages.push(obj.msg)
+      }
+    })
   },
   data() {
     return {
       messages: [],
-      filterTerm: '',
-      autoUpdateInterval: undefined
+      filterTerm: ''
     }
   },
   computed: {
     ...mapGetters(['user', 'profileClassSlug']),
     filteredMessages() {
-      return this.messages
+      return _orderBy(this.messages, ['createdAt'], ['desc'])
       // _filter(this.messages, (message) => {
       //   return true
       //   // return message.account.profile === this.filterTerm
@@ -67,14 +78,8 @@ export default {
       this.$store.commit('updateProfileAction', this.panel)
     },
     loadData() {
-      let request = {
-        theClass: (typeof this.profileClassSlug !== 'undefined') ? this.profileClassSlug : undefined,
-        userId: (this.panel.role === 'user') ? this.user.id : undefined,
-        teacher: (this.panel.role === 'teacher') ? true : undefined
-      }
-
-      API.profile.getMessages(
-        request,
+      API[this.panel.role].getMessages(
+        this.profileClassSlug,
         (response) => {
           this.messages = response.data
         },

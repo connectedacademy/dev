@@ -5,21 +5,24 @@
   page-header(title="Your Dashboard" identifier="profile")
 
     //- Class Selector
-    profile-class-selector(v-bind:classes.sync="classes")
+    profile-class-selector
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")
-    component(v-bind:is="profileAction.component" v-bind:label="profileAction.label" v-bind:role="profileAction.role" v-bind:panel="profileAction" v-bind:classes="classes" v-bind:limitHeight="false" v-bind:can-expand="false" v-bind:expanded-view="true")
+    component(v-bind:is="profileAction.component" v-bind:label="profileAction.label" v-bind:role="profileAction.role" v-bind:panel="profileAction" v-bind:limitHeight="false" v-bind:can-expand="false" v-bind:expanded-view="true")
   
   .dashboard(transition-duration="0.3s" item-selector=".dashboard--item" gutter=".gutter-block-selector")&attributes({'v-masonry': 'true'})
     .gutter-block-selector
+    .dashboard--item()&attributes({'v-masonry-tile': 'true'})
+      user(v-bind:style="panelStyle()" label="Profile" role="user" v-bind:admin-view.sync="adminView")
     .dashboard--item(v-for="(panel, index) in panels" v-bind:key="index" v-if="isVisible(panel)")&attributes({'v-masonry-tile': 'true'})
-      component(v-bind:is="panel.component" v-bind:style="panelStyle(index)" v-bind:label="panel.label" v-bind:role="panel.role" v-bind:panel="panel" v-bind:classes="classes" v-bind:limitHeight="true" v-bind:can-expand="true")
+      component(v-bind:is="panel.component" v-bind:style="panelStyle()" v-bind:label="panel.label" v-bind:role="panel.role" v-bind:panel="panel" v-bind:limitHeight="true" v-bind:can-expand="true")
 
 </template>
 
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
 import _each from 'lodash/each'
 import _filter from 'lodash/filter'
@@ -59,23 +62,24 @@ export default {
     this.redrawInterval = setInterval(() => {
       this.$redrawVueMasonry()
     }, 2000)
+
+    // Subscribe to sockets
+    this.subscribeToSocketEvents()
+    EventBus.$on('profileClassUpdated', () => {
+      this.subscribeToSocketEvents()
+    })
   },
   unmounted() {
     clearInterval(this.redrawInterval)
   },
   data() {
     return {
-      classes: [],
       pageStyle: { type: 'profile', visible: true, minimized: true },
+      adminView: false,
       contentPanelVisible: false,
       panelMargin: 10,
       panelWidth: 340,
       panels: [
-        {
-          role: 'user',
-          label: 'Profile',
-          component: 'user',
-        },
         {
           role: 'user',
           label: 'Your Notes',
@@ -106,15 +110,25 @@ export default {
           label: 'Class Students',
           component: 'students',
         },
-        {
-          role: 'admin',
-          label: 'Question Responses',
-          component: 'question-responses',
-        },
+        // {
+        //   role: 'admin',
+        //   label: 'Question Responses',
+        //   component: 'question-responses',
+        // },
         {
           role: 'admin',
           label: 'All Notes',
           component: 'messages',
+        },
+        {
+          role: 'admin',
+          label: 'All Students',
+          component: 'students',
+        },
+        {
+          role: 'admin',
+          label: 'All Homework',
+          component: 'submissions',
         },
       ],
     }
@@ -126,19 +140,28 @@ export default {
     },
   },
   methods: {
+    subscribeToSocketEvents() {
+      Vue.io.socket.get(`/v1/classroom/mycode/${this.profileClass.slug}`, function (resData, jwres) {
+        Vue.$log.info('SOCKET RESPONSE - profile')
+        Vue.$log.info(resData)
+      })
+    },
     isVisible(panel) {
       if (!this.user) return false
+      if (panel.role === 'admin' && !this.adminView) return false
+      if (panel.role !== 'admin' && this.adminView) return false
+
       return (_indexOf(this.user.roles, panel.role) >= 0)
     },
-    panelStyle(index) {
+    panelStyle() {
       return {
         width: `${this.panelWidth - this.panelMargin}px`
       }
     },
     togglePanel(panel) {
       panel.visible = !panel.visible
-    },
-  },
+    }
+  }
 }
 
 </script>

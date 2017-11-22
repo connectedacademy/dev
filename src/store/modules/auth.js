@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
+import * as config from '@/api/config'
 
 // initial state
 const state = {
@@ -72,7 +73,7 @@ const mutations = {
   },
   attemptAuth({ commit }, user) {
     state.user = user
-    document.location = 'https://api.connectedacademy.io/v1/auth/login'
+    document.location = config.AUTH_URL
   },
 }
 

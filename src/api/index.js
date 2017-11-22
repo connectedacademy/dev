@@ -1,28 +1,32 @@
-import Vue from 'vue';
-import * as config from './config';
+import Vue from 'vue'
+import * as config from '@/api/config'
 
-import auth from './auth';
-import profile from './profile';
-import analytics from './analytics';
-import like from './like';
-import markdown from './markdown';
-import course from './course';
-import message from './message';
-import visualisation from './visualisation';
-import feedback from './feedback';
-import question from './question';
-import classroom from './classroom';
+import admin from './admin'
+import auth from './auth'
+import analytics from './analytics'
+import classroom from './classroom'
+import course from './course'
+import feedback from './feedback'
+import like from './like'
+import markdown from './markdown'
+import message from './message'
+import question from './question'
+import teacher from './teacher'
+import user from './user'
+import visualisation from './visualisation'
 
 export default {
+  admin,
   auth,
-  profile,
   analytics,
+  classroom,
+  course,
+  feedback,
   like,
   markdown,
-  course,
   message,
-  visualisation,
-  feedback,
   question,
-  classroom,
-};
+  teacher,
+  user,
+  visualisation
+}

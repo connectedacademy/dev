@@ -18,7 +18,7 @@ export default {
 
 .narrow-page-header
   color white
-  padding 0 10px
+  padding 0 20px
   position relative
   @media(max-width: 800px)
     padding 20px 20px 0 20px

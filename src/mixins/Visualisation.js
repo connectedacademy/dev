@@ -8,13 +8,10 @@ export default {
       visualisation: undefined,
     };
   },
-  computed: {
-    ...mapGetters(['currentClass']),
-  },
   methods: {
     loadVisualisation() {
 
-      const request = { class: this.currentClass.slug, content: this.content.slug };
+      const request = { class: this.currentClass.slug, content: this.content.slug, duration: this.content.duration };
 
       API.visualisation.getVisualisation(
         request,

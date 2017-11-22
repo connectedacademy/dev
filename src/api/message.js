@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import * as config from './config';
+import * as config from '@/api/config';
 import store from '@/store';
 
 export default {

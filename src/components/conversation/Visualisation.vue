@@ -15,6 +15,7 @@ import { EventBus } from '@/event-bus.js'
 
 export default {
   name: 'visualisation',
+  props: ['currentClass'],
   mixins: [
     Visualisation,
   ],

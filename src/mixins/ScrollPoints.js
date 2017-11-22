@@ -9,7 +9,7 @@ export default {
   },
   mounted() {
     // Periodically update document height variable
-    this.updateDocumentHeightInterval = setInterval(() => { this.updateDocumentHeight() }, 2000);
+    this.updateDocumentHeightInterval = setInterval(() => { this.updateDocumentHeight() }, 5000);
   },
   beforeDestroy() {
     if (this.autoUpdateInterval) {

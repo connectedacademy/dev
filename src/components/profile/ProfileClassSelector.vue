@@ -20,18 +20,10 @@ import _get from 'lodash/get'
 
 export default {
   name: 'profile-class-selector',
-  props: ['activeClass', 'classes'],
+  props: ['activeClass'],
   mounted() {
-    this.getClasses()
-    EventBus.$on('updateClasses', () => {
-      this.getClasses()
-    })
-  },
-  watch: {
-    classes(nV, oV) {
-      if (nV && (typeof nV !== 'undefined') && nV.length > 0) {
-        this.setClass(nV[0])
-      }
+    if (this.classes.length > 0) {
+      this.setClass(this.classes[0])
     }
   },
   data() {
@@ -40,25 +32,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['profileClass']),
+    ...mapGetters(['course', 'profileClass']),
     profileClassSlug() {
       return _get(this.profileClass, 'slug')
+    },
+    classes() {
+      return this.course.classes
     }
   },
   methods: {
-    getClasses() {
-
-      API.profile.getClasses(
-        (response) => {
-          this.$emit('update:classes', response)
-        },
-        (response) => {
-          // TODO: Handle failed request
-          this.$log.info('Failed to retrieve classes list')
-          this.$emit('update:classes', [])
-        }
-      )
-    },
     expand() {
       if (!this.selecting) {
         this.selecting = true

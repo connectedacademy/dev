@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.profile-panel(v-if="storifyLink")
+.profile-panel(v-if="classroom")
 
   profile-panel-header(label="Storify")
 
@@ -16,25 +16,35 @@
     #copy-button(@click="copyLink") {{ copyText }}
 
     a#storify-button(v-if="openVisible" href="https://storify.com/" target="_blank") Open Storify
-
+    
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import API from '@/api'
+import * as config from '@/api/config'
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
-import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 
-import _filter from 'lodash/filter';
-import _find from 'lodash/find';
+import _filter from 'lodash/filter'
+import _find from 'lodash/find'
 
 export default {
   name: 'storify',
-  props: ['classSlug', 'expandedView', 'classes'],
+  props: ['classSlug', 'expandedView'],
   components: {
     ProfilePanelHeader,
   },
+  mounted() {
+    this.getClassrooms()
+    EventBus.$on('profileClassUpdated', () => {
+      this.getClassrooms()
+    })
+  },
   data() {
     return {
+      classroom: undefined,
       rssLink: undefined,
       openVisible: false,
       copyText: 'Copy Link',
@@ -42,38 +52,39 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'profileClass', 'profileClassSlug']),
-    classrooms() {
-      const currentClass = _find(this.classes, { slug: this.profileClassSlug });
-      let classrooms = (currentClass) ? currentClass.codes : [];
-
-      // Just for current user
-      const teachersOnly = true;
-      if (teachersOnly) {
-        classrooms = _filter(classrooms, (classroom) => {
-          return classroom.teacher && (classroom.teacher.account === this.user.account);
-        });
-      }
-      return classrooms;
-    },
     storifyLink() {
-      return (this.classrooms.length > 0) ? `https://api.connectedacademy.io/v1/classroom/rss/${this.classrooms[0].code}` : undefined;
+      return this.classroom ? `${config.WATERCOOLER_API}/classroom/rss/${this.classroom.code}` : 'Not available'
     }
   },
   methods: {
-    copyLink() {
-      this.$refs.inputfield.focus();
-      this.$refs.inputfield.select();
-      this.$refs.inputfield.setSelectionRange(0, this.$refs.inputfield.value.length);
-      document.execCommand("copy");
-      this.copyText = 'Link Copied!';
-      this.openVisible = true;
-      setTimeout(() => {
-        this.copyText = 'Copy Link';
-        this.openVisible = false;
-      }, 20000);
+    getClassrooms() {
+      API.teacher.getClassrooms(
+        this.profileClassSlug,
+        (response) => {
+          this.$log.info(response)
+          this.classroom = response[0]
+        },
+        (response) => {
+          // TODO: Handle failed request
+          this.classroom = undefined
+          this.$log.info('Failed to retrieve classrooms')
+        }
+      )
     },
-  },
-};
+    copyLink() {
+      this.$refs.inputfield.focus()
+      this.$refs.inputfield.select()
+      this.$refs.inputfield.setSelectionRange(0, this.$refs.inputfield.value.length)
+      document.execCommand('copy')
+      this.copyText = 'Link Copied!'
+      this.openVisible = true
+      setTimeout(() => {
+        this.copyText = 'Copy Link'
+        this.openVisible = false
+      }, 20000)
+    }
+  }
+}
 
 </script>
 

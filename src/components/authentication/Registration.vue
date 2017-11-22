@@ -14,23 +14,23 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import API from '@/api';
+  import { mapGetters } from 'vuex'
+  import API from '@/api'
 
   // Lodash
-  import every from 'lodash/every';
-  import values from 'lodash/values';
+  import every from 'lodash/every'
+  import values from 'lodash/values'
 
-  import Auth from '@/mixins/Auth';
-  import PageStyle from '@/mixins/PageStyle';
+  import Auth from '@/mixins/Auth'
+  import PageStyle from '@/mixins/PageStyle'
   
   // Registration Steps
-  import ProfileStep from '@/components/registration/ProfileStep';
-  import QuestionStep from '@/components/registration/QuestionStep';
-  import TermsStep from '@/components/registration/TermsStep';
-  import ScheduleStep from '@/components/registration/ScheduleStep';
+  import ProfileStep from '@/components/registration/ProfileStep'
+  import QuestionStep from '@/components/registration/QuestionStep'
+  import TermsStep from '@/components/registration/TermsStep'
+  import ScheduleStep from '@/components/registration/ScheduleStep'
 
-  import Validator from 'validator';
+  import Validator from 'validator'
 
   export default {
     name: 'registration',
@@ -42,21 +42,22 @@
       ScheduleStep
     },
     mounted() {
-      this.ensureNotRegistered();
+      // this.ensureAuthenticated()
+      this.ensureNotRegistered()
 
-      this.$store.dispatch('getHubs');
+      this.$store.dispatch('getHubs')
   
       API.auth.fetchQuestions(
         (response) => {
-          this.release = response.release;
-          this.questions = response.questions;
-          this.loadingQuestions = false;
+          this.release = response.release
+          this.questions = response.questions
+          this.loadingQuestions = false
         },
         (response) => {
           // TODO: Better handle failed request
-          this.loadingQuestions = false;
-        },
-      );
+          this.loadingQuestions = false
+        }
+      )
     },
     data() {
       return {
@@ -72,14 +73,14 @@
           age: '0',
           lang: 'en',
           registration_info: {
-            answers: {},
-          },
-        },
-      };
+            answers: {}
+          }
+        }
+      }
     },
     computed: {
       ...mapGetters([
-        'course', 'hubs', 'user', 'isRegistered',
+        'course', 'hubs', 'user', 'isRegistered'
       ]),
       sanitizedResponse() {
         return {
@@ -89,9 +90,9 @@
           age: Validator.toInt(this.response.age),
           lang: this.response.lang,
           registration_info: {
-            answers: this.response.registration_info.answers,
-          },
-        };
+            answers: this.response.registration_info.answers
+          }
+        }
       },
       validatedResponse() {
         return {
@@ -101,34 +102,34 @@
             min: 1,
             max: 150
           }),
-          lang: !Validator.isEmpty(this.response.lang),
-        };
+          lang: !Validator.isEmpty(this.response.lang)
+        }
       }
     },
     methods: {
       nextStep() {
-        this.currentStep += 1;
+        this.currentStep += 1
       },
       previousStep() {
-        this.currentStep -= 1;
+        this.currentStep -= 1
       },
       attemptRegistration() {
         API.auth.register(
           this.sanitizedResponse,
           (response) => {
-            this.$store.dispatch('checkAuth');
-            this.$router.push('class');
+            this.$store.dispatch('checkAuth')
+            this.$router.push('class')
           },
           (response) => {
-            this.$log.info('Registration failed');
-            this.$store.dispatch('checkAuth');
-            this.$router.push('class');
+            this.$log.info('Registration failed')
+            this.$store.dispatch('checkAuth')
+            this.$router.push('class')
           },
-        );
+        )
       },
       getCountryName(lang) {
-        return lang;
-      },
-    },
-  };
+        return lang
+      }
+    }
+  }
 </script>

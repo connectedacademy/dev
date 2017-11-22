@@ -69,7 +69,8 @@
     watch: {
       '$route': {
         handler: function(nV, oV) {
-          this.$store.commit('DISMISS_DRAWERS')
+          this.$store.dispatch('dismissDrawers')
+          this.$store.dispatch('dismissOverlay')
         },
         deep: true
       },
@@ -97,7 +98,9 @@
 
       this.$store.dispatch('getSpec', this.$route.params.classSlug);
 
-      particlesJS.load('page-header', '../../../static/particles.json')
+      setTimeout(() => {
+        particlesJS.load('page-header', '../../../static/particles.json')
+      }, 500)
     },
     data() {
       return {
