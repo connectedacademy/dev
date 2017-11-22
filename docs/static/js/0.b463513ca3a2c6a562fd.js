@@ -33902,14 +33902,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "course-content--header block"
   }, [_c('svg', {
     staticStyle: {
-      "overflow": "visibleheight:60pxwidth:60px"
+      "overflow": "visible",
+      "height": "60px",
+      "width": "60px"
     },
     attrs: {
       "viewBox": "0,0,320,320"
     }
   }, [_c('polyline', {
     staticStyle: {
-      "fill": "nonestroke:#fffstroke-linecap:roundstroke-linejoin:roundstroke-width:10px"
+      "fill": "none",
+      "stroke": "#fff",
+      "stroke-linecap": "round",
+      "join": "round",
+      "stroke-width": "10px"
     },
     attrs: {
       "points": "160 30 0 0 0 290 160 260"
@@ -35136,4 +35142,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=0.ccd0f825b6de325deaa5.js.map
+//# sourceMappingURL=0.b463513ca3a2c6a562fd.js.map
