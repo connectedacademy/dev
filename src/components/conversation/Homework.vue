@@ -3,9 +3,9 @@
 .course-content(name="section-feedback")
 
   .course-content--header.block
-    svg(viewBox="0,0,320,320" style="overflow:visibleheight:60pxwidth:60px")
+    svg(viewBox="0,0,320,320" style="overflow:visible;height:60px;width:60px")
 
-      polyline(points="160 30 0 0 0 290 160 260" style="fill:nonestroke:#fffstroke-linecap:roundstroke-linejoin:roundstroke-width:10px")
+      polyline(points="160 30 0 0 0 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-line;join:round;stroke-width:10px")
 
       polyline(points="160 30 320 0 320 290 160 260" style="fill:nonestroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
