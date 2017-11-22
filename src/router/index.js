@@ -14,7 +14,7 @@ const FeedbackView = () => import('@/components/feedback/FeedbackView')
 
 const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding')
 
-const Home = () => import('@/components/deployment/Home')
+const Home = () => import('@/components/pages/Home')
 const About = () => import('@/components/pages/About')
 const Schedule = () => import('@/components/pages/Schedule')
 const Terms = () => import('@/components/pages/Terms')

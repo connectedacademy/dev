@@ -13,24 +13,24 @@
 </template>
 
 <script>
-import API from '@/api';
-import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus.js';
-import _get from 'lodash/get';
+import API from '@/api'
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
+import _get from 'lodash/get'
 
 export default {
   name: 'profile-class-selector',
   props: ['activeClass', 'classes'],
   mounted() {
-    this.getClasses();
+    this.getClasses()
     EventBus.$on('updateClasses', () => {
-      this.getClasses();
-    });
+      this.getClasses()
+    })
   },
   watch: {
     classes(nV, oV) {
       if (nV && (typeof nV !== 'undefined') && nV.length > 0) {
-        this.setClass(nV[0]);
+        this.setClass(nV[0])
       }
     }
   },
@@ -42,39 +42,39 @@ export default {
   computed: {
     ...mapGetters(['profileClass']),
     profileClassSlug() {
-      return _get(this.profileClass, 'slug');
-    },
+      return _get(this.profileClass, 'slug')
+    }
   },
   methods: {
     getClasses() {
 
       API.profile.getClasses(
         (response) => {
-          this.$emit('update:classes', response);
+          this.$emit('update:classes', response)
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve classes list');
-          this.$emit('update:classes', []);
-        },
-      );
+          this.$log.info('Failed to retrieve classes list')
+          this.$emit('update:classes', [])
+        }
+      )
     },
     expand() {
       if (!this.selecting) {
-        this.selecting = true;
+        this.selecting = true
       }
     },
     setClass(theClass) {
 
-      if (this.selecting && (theClass !== this.profileClass)) {
-        this.$store.commit('updateProfileClass', theClass);
+      if (theClass !== this.profileClass) {
+        this.$store.commit('updateProfileClass', theClass)
         setTimeout(() => {
-          this.selecting = false;
+          this.selecting = false
         }, 200)
-        EventBus.$emit('profileClassUpdated');
+        EventBus.$emit('profileClassUpdated')
       }
-    },
-  },
+    }
+  }
 }
 
 </script>

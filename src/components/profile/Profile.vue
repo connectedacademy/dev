@@ -54,7 +54,7 @@ export default {
     QuestionResponses,
     Storify,
   },
-  activated() {
+  mounted() {
     this.ensureAuthenticated()
     this.redrawInterval = setInterval(() => {
       this.$redrawVueMasonry()

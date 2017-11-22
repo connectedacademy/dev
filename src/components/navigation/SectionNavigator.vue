@@ -1,6 +1,6 @@
 <template lang="pug">
 #section-navigator-wrapper
-  onboarding-prompt(identifier="section-navigator" prompt="click to navigate class" top="-45" left="-200" position="bottom-right" z-index="1")
+  onboarding-prompt(identifier="section-navigator" prompt="navigate class" top="-45" left="-150" position="bottom-right" z-index="1")
   transition(name="fade")
     #section-navigator(v-if="isVisible")
       section-navigator-item(v-for="item in items" v-bind:key="item.slug" v-bind:scroll-point="item")

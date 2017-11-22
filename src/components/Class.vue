@@ -3,7 +3,7 @@
   .class-page(name="class-page")
     .col#col-main
       .main-container
-        narrow-page-header(v-show="!currentClass.loading" v-bind:title="currentClass.title" v-bind:subtitle="`Released ${releaseAt(currentClass.release_at)}`" v-bind:link="`1 of ${course.classes.length} classes`" route="schedule")
+        narrow-page-header(v-show="!currentClass.loading" v-bind:title="currentClass.title" v-bind:subtitle="releasedAt" v-bind:link="`1 of ${course.classes.length} classes`" route="schedule")
         section-navigator
         loading(v-if="currentClass.loading")
         course-content(v-else v-bind:current-class="currentClass")
@@ -51,13 +51,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course', 'currentClass'])
+    ...mapGetters(['course', 'currentClass']),
+    releasedAt() {
+      return `Released ${Moment(this.currentClass.release_at).fromNow()}`
+    },
   },
   methods: {
-    releaseAt(date) {
-      // return Moment(date).format('ddd d MMMM YYYY hh:MM:SS')
-      return Moment(date).fromNow()
-    },
     toMessage() {
       const segmentId = this.$route.params.segmentId
       if (segmentId) {

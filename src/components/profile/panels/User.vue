@@ -7,19 +7,20 @@
 
     h3 Hi {{ user.name }}
 
-    //- Hub
-    //- p Hub - {{ user.registration.hub_id }}
+    //- h3 Hub
+    //- pre {{ user }}
     
     //- Roles
     tag-list(v-bind:tags="userRoles")
 
-    //-h3 Your Linked Accounts
-    //-tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
+    h3 Your Linked Accounts
+    tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
 
     h3 Classroom Codes
     .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
       | Generate Teacher Code
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
+      //- pre {{ classroom }}
       .code {{ classroom.code }}
       .teacher(v-if="classroom.teacher && classroom.teacher.name") {{ classroom.teacher.name }}
       //- pre {{ classroom }}
@@ -27,17 +28,17 @@
 </template>
 
 <script>
-import API from '@/api';
-import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus.js';
+import API from '@/api'
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
-import ActionSelector from '@/components/profile/ActionSelector';
+import ActionSelector from '@/components/profile/ActionSelector'
 import TagList from '@/components/shared/TagList'
 
-import _find from 'lodash/find';
-import _filter from 'lodash/filter';
+import _find from 'lodash/find'
+import _filter from 'lodash/filter'
 
-import 'vue-awesome/icons/angle-right';
+import 'vue-awesome/icons/angle-right'
 
 export default {
   name: 'user',
@@ -46,49 +47,65 @@ export default {
     ActionSelector,
     TagList,
   },
+  mounted() {
+    this.getClassrooms()
+    EventBus.$on('profileClassUpdated', () => {
+      // alert(this.profileClassSlug)
+      this.getClassrooms()
+    })
+  },
+  data() {
+    return {
+      classrooms: []
+    }
+  },
   computed: {
     ...mapGetters(['user', 'profileClassSlug']),
     userRoles() {
-      return this.user.roles;
+      return this.user.roles
     },
     profileImage() {
-      return this.user.profile.replace('_normal', '');
+      return this.user.profile.replace('_normal', '')
     },
     proseLink() {
-      return 'http://prose.io/#connectedacademy';
+      return 'http://prose.io/#connectedacademy'
     },
     storifyLink() {
-      return 'https://storify.com';
-    },
-    classrooms() {
-      const currentClass = _find(this.classes, { slug: this.profileClassSlug });
-      let classrooms = (currentClass) ? currentClass.codes : [];
-
-      // Just for current user
-      const teachersOnly = true;
-      if (teachersOnly) {
-        classrooms = _filter(classrooms, (classroom) => {
-          return (classroom.teacher && (classroom.teacher.account === this.user.account) || (classroom.teacher === this.user.id));
-        });
-      }
-      return classrooms;
-    },
+      return 'https://storify.com'
+    }
   },
   methods: {
+    getClassrooms() {
+      this.classrooms = []
+
+      setTimeout(() => {
+        const currentClass = _find(this.classes, { slug: this.profileClassSlug })
+        let classrooms = (currentClass) ? currentClass.codes : []
+
+        // Just for current user
+        const teachersOnly = true
+        if (teachersOnly) {
+          classrooms = _filter(classrooms, (classroom) => {
+            return (classroom.teacher && (classroom.teacher.account === this.user.account) || (classroom.teacher === this.user.id))
+          })
+        }
+        this.classrooms = classrooms
+      }, 5000)
+    },
     generateCode() {
       API.classroom.getTeacherCode(
         this.profileClassSlug,
         (response) => {
-          this.$log.info(response);
-          EventBus.$emit('updateClasses');
+          this.$log.info(response)
+          EventBus.$emit('updateClasses')
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve teacher code');
-        },
-      );
-    },
-  },
+          this.$log.info('Failed to retrieve teacher code')
+        }
+      )
+    }
+  }
 }
 </script>
 
