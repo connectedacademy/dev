@@ -13,14 +13,6 @@ export default {
       errorCb(response);
     });
   },
-  getSegmentSummarySocket(request, cb, errorCb) {
-    Vue.io.socket.get(`/v1/messages/subscribe/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`, function (resData, jwres) {
-      cb(resData);
-      store.commit('SET_SUBSCRIBED_TO', { start: request.startSegment, end: request.endSegment })
-      Vue.$log.info('SOCKET RESPONSE - subscribe');
-      Vue.$log.info(resData);
-    });
-  },
   getContentMessages(request, cb, errorCb) {
     Vue.io.socket.get(`/v1/messages/content/${request.theClass}/${request.theContent}?whitelist=true&limit=100`, function (resData, jwres) {
       cb(resData);

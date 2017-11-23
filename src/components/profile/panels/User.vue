@@ -54,7 +54,6 @@ export default {
   mounted() {
     this.getClassrooms()
     EventBus.$on('profileClassUpdated', () => {
-      // alert(this.profileClassSlug)
       this.getClassrooms()
     })
   },

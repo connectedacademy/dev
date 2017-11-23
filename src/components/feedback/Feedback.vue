@@ -47,11 +47,12 @@
 import Vue from 'vue'
 
 import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
 import API from '@/api'
 import Auth from '@/mixins/Auth'
 import PageStyle from '@/mixins/PageStyle'
-import Messages from '@/mixins/Messages'
+// import Messages from '@/mixins/Messages'
 
 import _filter from 'lodash/filter'
 
@@ -73,7 +74,7 @@ export default {
   mixins: [
     Auth,
     PageStyle,
-    Messages,
+    // Messages,
   ],
   components: {
     PageHeader,
@@ -102,33 +103,14 @@ export default {
     
     this.ensureAuthenticated()
 
+    this.subscribeToSocketEvents()
+
     if (this.$route.params.id) {
       this.currentFeedbackId = this.$route.params.id.replace('%23', '#')
     }
 
     this.getFeedbackItems()
     this.getAvailableFeedbackItems()
-    
-    Vue.io.socket.on('user', (obj) => {
-      this.$log.info('Submission message received')
-      this.$log.info(obj)
-      switch (obj.data.msgtype) {
-        case 'submission':
-
-          this.getFeedbackItems()
-          this.getAvailableFeedbackItems()
-
-          break
-        case 'discussion':
-
-          if (this.currentFeedbackId === obj.data.msg.relates_to) {
-            this.discussion.push(obj.data.msg)
-          }
-
-          break
-        default:
-      }
-    })
   },
   watch: {
     '$route.params.id': {
@@ -168,6 +150,37 @@ export default {
     },
   },
   methods: {
+    subscribeToSocketEvents() {
+      // Get user socket (for submissions and feedback messages)
+      Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
+        Vue.$log.info('SOCKET RESPONSE - me')
+        Vue.$log.info(resData)
+      })
+    
+      EventBus.$on('socketUser', (obj) => {
+        console.log('socketUser')
+
+        this.$log.info('Submission message received')
+        this.$log.info(obj)
+
+        switch (obj.data.msgtype) {
+          case 'submission':
+
+            this.getFeedbackItems()
+            this.getAvailableFeedbackItems()
+
+            break
+          case 'discussion':
+
+            if (this.currentFeedbackId === obj.data.msg.relates_to) {
+              this.discussion.push(obj.data.msg)
+            }
+
+            break
+          default:
+        }
+      })
+    },
     encodedId(id) {
       return id.replace('#','%23')
     },

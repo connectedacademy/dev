@@ -68,6 +68,7 @@ export default {
           this.$router.replace({ name: 'class', params: { classSlug: this.$route.params.classSlug, contentSlug: this.$route.params.contentSlug, segmentId: segmentId } });
           setTimeout(() => {
             var el = document.querySelector(".peek")
+            if (typeof this.$refs.innerwrapper === 'undefined') return
             window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
           }, 1000)
         }, 2000)

@@ -15,28 +15,28 @@ import VueAutosize from 'vue-autosize'
 
 import { sync } from 'vuex-router-sync'
 
-import Icon from 'vue-awesome/components/Icon'
 
-import App from '@/App'
-import Lang from '@/Lang'
-require('@/Sockets')
-// import Sockets from '@/Sockets'
-
-
-
-import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
 import { VueMasonryPlugin } from 'vue-masonry'
 
 import app from '@/config'
 import store from '@/store'
 import router from '@/router'
 
+import App from '@/App'
+import Lang from '@/Lang'
+import Sockets from '@/Sockets'
+
+import { EventBus } from '@/event-bus.js'
+
+// Global components
+import Icon from 'vue-awesome/components/Icon'
+import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
+Vue.component('icon', Icon)
+Vue.component('onboarding-prompt', OnboardingPrompt)
+
 Vue.prototype.$app = app
 
 sync(store, router)
-
-Vue.component('icon', Icon)
-Vue.component('onboarding-prompt', OnboardingPrompt)
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -94,6 +94,7 @@ new Vue({
   template: '<App/>',
   components: {
     App,
-    Lang
+    Lang,
+    Sockets
   }
 })

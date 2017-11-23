@@ -35,6 +35,8 @@ export default {
   },
   methods: {
     checkForExistingClassroom() {
+      if (typeof this.$route.params.classSlug === 'undefined') return
+      
       const request = {
         theClass: this.$route.params.classSlug
       }

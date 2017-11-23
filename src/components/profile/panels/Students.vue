@@ -33,12 +33,9 @@ export default {
     })
 
     // New student added, push to list
-    Vue.io.socket.on('classroom', (obj) => {
-      Vue.$log.info('socket - classroom')
-      Vue.$log.info(obj.data)
-      // if (obj.data.msgtype === 'classroom') {
-        //   Vue.$log.info('"classroom" socket')
-      // }
+    EventBus.$on('profileClassroomReceived', (student) => {
+      Vue.$log.info(student)
+      this.students.push(student)
     })
   },
   data() {

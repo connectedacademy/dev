@@ -42,18 +42,16 @@ export default {
       this.loadData()
     })
 
-    // New message added, push to list    
-    Vue.io.socket.on('message', (obj) => {
-      Vue.$log.info('socket - message')
-      Vue.$log.info(obj)
-      // TODO: Make conditional
+    // New message added, push to list
+    EventBus.$on('profileMessageReceived', (profileMessage) => {
+      Vue.$log.info(profileMessage)
       if (this.panel.role === 'user') {
-        if (obj.msg.user.id === this.user.id) {
-          this.messages.push(obj.msg)
+        if (profileMessage.msg.user.id === this.user.id) {
+          this.messages.push(profileMessage.msg)
         }
       }
       else {
-        this.messages.push(obj.msg)
+        this.messages.push(profileMessage.msg)
       }
     })
   },
