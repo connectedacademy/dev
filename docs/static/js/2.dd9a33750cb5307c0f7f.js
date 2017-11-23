@@ -10319,7 +10319,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       this.$io.socket.get('/v1/auth/me', function (resData, jwres) {
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.info('SOCKET RESPONSE - me');
-        alert('SOCKET RESPONSE - me');
+
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.info(resData);
       });
 
@@ -10500,12 +10500,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   props: ['content'],
   methods: {
     viewFeedback: function viewFeedback() {
-      this.$router.push(this.url);
-    }
-  },
-  computed: {
-    url: function url() {
-      return '/feedback/' + this.content.id.replace('#', '%23');
+      this.$router.replace('/feedback/' + this.content.id.replace('#', '%23'));
     }
   }
 });
@@ -11075,4 +11070,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=2.dea7519fff16609c732a.js.map
+//# sourceMappingURL=2.dd9a33750cb5307c0f7f.js.map

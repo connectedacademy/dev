@@ -22853,7 +22853,7 @@ __webpack_require__(809);
       this.$io.socket.get('/v1/messages/subscribe/' + theRequest.theClass + '/' + theRequest.theContent + '/' + theRequest.startSegment + '/' + theRequest.endSegment + '?whitelist=true', function (resData, jwres) {
         __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('SET_SUBSCRIBED_TO', { start: theRequest.startSegment, end: theRequest.endSegment });
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.info('SOCKET RESPONSE - subscribe');
-        alert('SOCKET RESPONSE - subscribe');
+
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.info(resData);
       });
 
@@ -35150,4 +35150,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=0.a3c7ff115728da8a4946.js.map
+//# sourceMappingURL=0.5ff2554d0ffd888115c0.js.map
