@@ -7,7 +7,7 @@
 
       polyline(points="160 30 0 0 0 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-line;join:round;stroke-width:10px")
 
-      polyline(points="160 30 320 0 320 290 160 260" style="fill:nonestroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
+      polyline(points="160 30 320 0 320 290 160 260" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-line;join:round;stroke-width:10px")
 
       path(d="M160,30 l0,80Z" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:10px")
 
