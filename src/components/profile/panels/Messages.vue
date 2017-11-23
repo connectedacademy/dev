@@ -37,7 +37,7 @@ export default {
     Message
   },
   mounted() {
-    if (this.expandedView) { this.loadData() }
+    this.loadData()
     EventBus.$on('profileClassUpdated', () => {
       this.loadData()
     })
@@ -80,6 +80,7 @@ export default {
         this.profileClassSlug,
         (response) => {
           this.messages = response.data
+          EventBus.$emit('redrawMasonry')
         },
         (response) => {
           // TODO: Handle failed request

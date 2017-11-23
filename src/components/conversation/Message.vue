@@ -11,11 +11,13 @@
 
       p.message-content(v-html="parseText()")
 
-      router-link(v-if="canJump" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }") Jump to message
-
       .message--footer
 
-        ul.tweet-actions
+        ul.tweet-actions(v-if="canJump")
+          router-link.jump-action(tag="li" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
+            //- icon(name="link")
+            | View in context
+        ul.tweet-actions(v-else)
           li.like-action(@click="showInfoModal()")
             //-  v-bind:href="likeLink" target="_blank"
             icon(name="heart")
@@ -44,6 +46,7 @@ import 'vue-awesome/icons/heart'
 import 'vue-awesome/icons/retweet'
 import 'vue-awesome/icons/reply'
 import 'vue-awesome/icons/star'
+import 'vue-awesome/icons/link'
 
 export default {
   name: 'message',
@@ -151,6 +154,9 @@ export default {
             color $color-twitter
           &.reply-action:hover, &.reply-action.active
             color $color-primary
+          &.jump-action
+            max-width 100%
+            line-height 30px
 
           &.message-timestamp
             color #CCC

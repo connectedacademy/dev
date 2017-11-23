@@ -61,7 +61,15 @@ export default {
     this.ensureAuthenticated()
     this.redrawInterval = setInterval(() => {
       this.$redrawVueMasonry()
-    }, 2000)
+    }, 10000)
+
+    // Listen for redraw event
+    EventBus.$on('redrawMasonry', () => {
+      this.$redrawVueMasonry()
+      setTimeout(() => {
+        this.$redrawVueMasonry()
+      }, 1000);
+    })
 
     // Subscribe to sockets
     this.subscribeToSocketEvents()

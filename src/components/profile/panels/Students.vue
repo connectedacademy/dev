@@ -27,7 +27,7 @@ export default {
     StudentTile
   },
   mounted() {
-    if (this.expandedView) { this.loadData() }
+    this.loadData()
     EventBus.$on('profileClassUpdated', () => {
       this.loadData()
     })
@@ -57,6 +57,7 @@ export default {
         this.profileClassSlug,
         (response) => {
           this.students = response
+          EventBus.$emit('redrawMasonry')
         },
         (response) => {
           // TODO: Handle failed request

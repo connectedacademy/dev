@@ -77,6 +77,7 @@ export default {
         this.profileClassSlug,
         (response) => {
           this.submissions = response;
+          EventBus.$emit('redrawMasonry')
         },
         (response) => {
           // TODO: Handle failed request
