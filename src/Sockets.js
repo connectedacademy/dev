@@ -26,6 +26,7 @@ Vue.io.socket.on('message', (obj) => {
   }
   else {
     EventBus.$emit('socketConversationMessage', obj)
+    EventBus.$emit('profileMessageReceived', obj)
   }
 })
 
