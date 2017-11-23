@@ -78,7 +78,7 @@ export default {
       this.$io.socket.get(`/v1/messages/subscribe/${theRequest.theClass}/${theRequest.theContent}/${theRequest.startSegment}/${theRequest.endSegment}?whitelist=true`, function (resData, jwres) {
         store.commit('SET_SUBSCRIBED_TO', { start: theRequest.startSegment, end: theRequest.endSegment })
         Vue.$log.info('SOCKET RESPONSE - subscribe');
-        alert('SOCKET RESPONSE - subscribe');
+        // alert('SOCKET RESPONSE - subscribe');
         Vue.$log.info(resData);
       })
       

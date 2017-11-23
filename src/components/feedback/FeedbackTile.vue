@@ -20,15 +20,10 @@ export default {
   props: ['content'],
   methods: {
     viewFeedback() {
-      this.$router.push(this.url);
-    },
-  },
-  computed: {
-    url() {
-      return `/feedback/${this.content.id.replace('#', '%23')}`;
+      this.$router.replace(`/feedback/${this.content.id.replace('#', '%23')}`)
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
