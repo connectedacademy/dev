@@ -14,9 +14,9 @@ export default {
     });
   },
   getContentMessages(request, cb, errorCb) {
-    Vue.io.socket.get(`/v1/messages/content/${request.theClass}/${request.theContent}?whitelist=true&limit=100`, function (resData, jwres) {
-      cb(resData);
-    });
+    // Vue.io.socket.get(`/v1/messages/content/${request.theClass}/${request.theContent}?whitelist=true&limit=100`, function (resData, jwres) {
+    //   cb(resData);
+    // });
   },
   getMessages(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true`).then((response) => {
