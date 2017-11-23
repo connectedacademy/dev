@@ -1,13 +1,13 @@
-webpackJsonp([7],{
+webpackJsonp([5],{
 
-/***/ 365:
+/***/ 373:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(3)(
   /* script */
-  __webpack_require__(616),
+  __webpack_require__(652),
   /* template */
-  __webpack_require__(997),
+  __webpack_require__(965),
   /* scopeId */
   null,
   /* cssModules */
@@ -19,7 +19,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 375:
+/***/ 376:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,7 +102,7 @@ var UNESCAPE_ALL_RE = new RegExp(UNESCAPE_MD_RE.source + '|' + ENTITY_RE.source,
 
 var DIGITAL_ENTITY_TEST_RE = /^#((?:x[a-f0-9]{1,8}|[0-9]{1,8}))/i;
 
-var entities = __webpack_require__(382);
+var entities = __webpack_require__(383);
 
 function replaceEntityPattern(match, name) {
   var code = 0;
@@ -208,7 +208,7 @@ function isWhiteSpace(code) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /*eslint-disable max-len*/
-var UNICODE_PUNCT_RE = __webpack_require__(379);
+var UNICODE_PUNCT_RE = __webpack_require__(380);
 
 // Currently without astral characters support.
 function isPunctChar(ch) {
@@ -279,8 +279,8 @@ function normalizeReference(str) {
 // bundled size (e.g. a browser build).
 //
 exports.lib                 = {};
-exports.lib.mdurl           = __webpack_require__(386);
-exports.lib.ucmicro         = __webpack_require__(447);
+exports.lib.mdurl           = __webpack_require__(387);
+exports.lib.ucmicro         = __webpack_require__(448);
 
 exports.assign              = assign;
 exports.isString            = isString;
@@ -302,7 +302,7 @@ exports.normalizeReference  = normalizeReference;
 
 /***/ }),
 
-/***/ 377:
+/***/ 378:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -662,7 +662,7 @@ module.exports = Ruler;
 
 /***/ }),
 
-/***/ 378:
+/***/ 379:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -867,34 +867,10 @@ module.exports = Token;
 
 /***/ }),
 
-/***/ 379:
+/***/ 380:
 /***/ (function(module, exports) {
 
 module.exports=/[!-#%-\*,-/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E44\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC9\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDF3C-\uDF3E]|\uD807[\uDC41-\uDC45\uDC70\uDC71]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/
-
-/***/ }),
-
-/***/ 380:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    next(function (vm) {
-      var root = document.getElementsByTagName('html')[0];
-      root.setAttribute('class', vm.pageStyle.type);
-      vm.$store.commit('SET_NAV_STATE', { visible: vm.pageStyle.visible, minimized: vm.pageStyle.minimized });
-      vm.$store.commit('SET_PAGE_STYLE', vm.pageStyle.type);
-    });
-  },
-  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
-    var root = document.getElementsByTagName('html')[0];
-    root.setAttribute('class', '');
-
-    this.$store.commit('SET_PAGE_STYLE', undefined);
-    next();
-  }
-});
 
 /***/ }),
 
@@ -928,6 +904,30 @@ module.exports = baseClamp;
 /***/ }),
 
 /***/ 382:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      var root = document.getElementsByTagName('html')[0];
+      root.setAttribute('class', vm.pageStyle.type);
+      vm.$store.commit('SET_NAV_STATE', { visible: vm.pageStyle.visible, minimized: vm.pageStyle.minimized });
+      vm.$store.commit('SET_PAGE_STYLE', vm.pageStyle.type);
+    });
+  },
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    var root = document.getElementsByTagName('html')[0];
+    root.setAttribute('class', '');
+
+    this.$store.commit('SET_PAGE_STYLE', undefined);
+    next();
+  }
+});
+
+/***/ }),
+
+/***/ 383:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -936,12 +936,12 @@ module.exports = baseClamp;
 
 
 /*eslint quotes:0*/
-module.exports = __webpack_require__(394);
+module.exports = __webpack_require__(395);
 
 
 /***/ }),
 
-/***/ 383:
+/***/ 384:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -977,7 +977,7 @@ module.exports.HTML_OPEN_CLOSE_TAG_RE = HTML_OPEN_CLOSE_TAG_RE;
 
 /***/ }),
 
-/***/ 384:
+/***/ 385:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1112,7 +1112,7 @@ module.exports.postProcess = function emphasis(state) {
 
 /***/ }),
 
-/***/ 385:
+/***/ 386:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1237,43 +1237,43 @@ module.exports.postProcess = function strikethrough(state) {
 
 /***/ }),
 
-/***/ 386:
+/***/ 387:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 
-module.exports.encode = __webpack_require__(443);
-module.exports.decode = __webpack_require__(442);
-module.exports.format = __webpack_require__(444);
-module.exports.parse  = __webpack_require__(445);
+module.exports.encode = __webpack_require__(444);
+module.exports.decode = __webpack_require__(443);
+module.exports.format = __webpack_require__(445);
+module.exports.parse  = __webpack_require__(446);
 
-
-/***/ }),
-
-/***/ 387:
-/***/ (function(module, exports) {
-
-module.exports=/[\0-\x1F\x7F-\x9F]/
 
 /***/ }),
 
 /***/ 388:
 /***/ (function(module, exports) {
 
-module.exports=/[ \xA0\u1680\u2000-\u200A\u202F\u205F\u3000]/
+module.exports=/[\0-\x1F\x7F-\x9F]/
 
 /***/ }),
 
 /***/ 389:
 /***/ (function(module, exports) {
 
-module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
+module.exports=/[ \xA0\u1680\u2000-\u200A\u202F\u205F\u3000]/
 
 /***/ }),
 
 /***/ 390:
+/***/ (function(module, exports) {
+
+module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
+
+/***/ }),
+
+/***/ 391:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -1813,19 +1813,19 @@ module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-
 
 /***/ }),
 
-/***/ 391:
+/***/ 392:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 
-module.exports = __webpack_require__(403);
+module.exports = __webpack_require__(404);
 
 
 /***/ }),
 
-/***/ 392:
+/***/ 393:
 /***/ (function(module, exports, __webpack_require__) {
 
 var require;var require;/*! fourcorners 28-09-2017 */
@@ -1836,7 +1836,7 @@ b.exports='body {\n  margin: 0;\n  overflow: hidden; }\n\nul {\n  margin-top: 0;
 
 /***/ }),
 
-/***/ 393:
+/***/ 394:
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseClamp = __webpack_require__(381),
@@ -1882,14 +1882,14 @@ module.exports = startsWith;
 
 /***/ }),
 
-/***/ 394:
+/***/ 395:
 /***/ (function(module, exports) {
 
 module.exports = {"Aacute":"Á","aacute":"á","Abreve":"Ă","abreve":"ă","ac":"∾","acd":"∿","acE":"∾̳","Acirc":"Â","acirc":"â","acute":"´","Acy":"А","acy":"а","AElig":"Æ","aelig":"æ","af":"⁡","Afr":"𝔄","afr":"𝔞","Agrave":"À","agrave":"à","alefsym":"ℵ","aleph":"ℵ","Alpha":"Α","alpha":"α","Amacr":"Ā","amacr":"ā","amalg":"⨿","amp":"&","AMP":"&","andand":"⩕","And":"⩓","and":"∧","andd":"⩜","andslope":"⩘","andv":"⩚","ang":"∠","ange":"⦤","angle":"∠","angmsdaa":"⦨","angmsdab":"⦩","angmsdac":"⦪","angmsdad":"⦫","angmsdae":"⦬","angmsdaf":"⦭","angmsdag":"⦮","angmsdah":"⦯","angmsd":"∡","angrt":"∟","angrtvb":"⊾","angrtvbd":"⦝","angsph":"∢","angst":"Å","angzarr":"⍼","Aogon":"Ą","aogon":"ą","Aopf":"𝔸","aopf":"𝕒","apacir":"⩯","ap":"≈","apE":"⩰","ape":"≊","apid":"≋","apos":"'","ApplyFunction":"⁡","approx":"≈","approxeq":"≊","Aring":"Å","aring":"å","Ascr":"𝒜","ascr":"𝒶","Assign":"≔","ast":"*","asymp":"≈","asympeq":"≍","Atilde":"Ã","atilde":"ã","Auml":"Ä","auml":"ä","awconint":"∳","awint":"⨑","backcong":"≌","backepsilon":"϶","backprime":"‵","backsim":"∽","backsimeq":"⋍","Backslash":"∖","Barv":"⫧","barvee":"⊽","barwed":"⌅","Barwed":"⌆","barwedge":"⌅","bbrk":"⎵","bbrktbrk":"⎶","bcong":"≌","Bcy":"Б","bcy":"б","bdquo":"„","becaus":"∵","because":"∵","Because":"∵","bemptyv":"⦰","bepsi":"϶","bernou":"ℬ","Bernoullis":"ℬ","Beta":"Β","beta":"β","beth":"ℶ","between":"≬","Bfr":"𝔅","bfr":"𝔟","bigcap":"⋂","bigcirc":"◯","bigcup":"⋃","bigodot":"⨀","bigoplus":"⨁","bigotimes":"⨂","bigsqcup":"⨆","bigstar":"★","bigtriangledown":"▽","bigtriangleup":"△","biguplus":"⨄","bigvee":"⋁","bigwedge":"⋀","bkarow":"⤍","blacklozenge":"⧫","blacksquare":"▪","blacktriangle":"▴","blacktriangledown":"▾","blacktriangleleft":"◂","blacktriangleright":"▸","blank":"␣","blk12":"▒","blk14":"░","blk34":"▓","block":"█","bne":"=⃥","bnequiv":"≡⃥","bNot":"⫭","bnot":"⌐","Bopf":"𝔹","bopf":"𝕓","bot":"⊥","bottom":"⊥","bowtie":"⋈","boxbox":"⧉","boxdl":"┐","boxdL":"╕","boxDl":"╖","boxDL":"╗","boxdr":"┌","boxdR":"╒","boxDr":"╓","boxDR":"╔","boxh":"─","boxH":"═","boxhd":"┬","boxHd":"╤","boxhD":"╥","boxHD":"╦","boxhu":"┴","boxHu":"╧","boxhU":"╨","boxHU":"╩","boxminus":"⊟","boxplus":"⊞","boxtimes":"⊠","boxul":"┘","boxuL":"╛","boxUl":"╜","boxUL":"╝","boxur":"└","boxuR":"╘","boxUr":"╙","boxUR":"╚","boxv":"│","boxV":"║","boxvh":"┼","boxvH":"╪","boxVh":"╫","boxVH":"╬","boxvl":"┤","boxvL":"╡","boxVl":"╢","boxVL":"╣","boxvr":"├","boxvR":"╞","boxVr":"╟","boxVR":"╠","bprime":"‵","breve":"˘","Breve":"˘","brvbar":"¦","bscr":"𝒷","Bscr":"ℬ","bsemi":"⁏","bsim":"∽","bsime":"⋍","bsolb":"⧅","bsol":"\\","bsolhsub":"⟈","bull":"•","bullet":"•","bump":"≎","bumpE":"⪮","bumpe":"≏","Bumpeq":"≎","bumpeq":"≏","Cacute":"Ć","cacute":"ć","capand":"⩄","capbrcup":"⩉","capcap":"⩋","cap":"∩","Cap":"⋒","capcup":"⩇","capdot":"⩀","CapitalDifferentialD":"ⅅ","caps":"∩︀","caret":"⁁","caron":"ˇ","Cayleys":"ℭ","ccaps":"⩍","Ccaron":"Č","ccaron":"č","Ccedil":"Ç","ccedil":"ç","Ccirc":"Ĉ","ccirc":"ĉ","Cconint":"∰","ccups":"⩌","ccupssm":"⩐","Cdot":"Ċ","cdot":"ċ","cedil":"¸","Cedilla":"¸","cemptyv":"⦲","cent":"¢","centerdot":"·","CenterDot":"·","cfr":"𝔠","Cfr":"ℭ","CHcy":"Ч","chcy":"ч","check":"✓","checkmark":"✓","Chi":"Χ","chi":"χ","circ":"ˆ","circeq":"≗","circlearrowleft":"↺","circlearrowright":"↻","circledast":"⊛","circledcirc":"⊚","circleddash":"⊝","CircleDot":"⊙","circledR":"®","circledS":"Ⓢ","CircleMinus":"⊖","CirclePlus":"⊕","CircleTimes":"⊗","cir":"○","cirE":"⧃","cire":"≗","cirfnint":"⨐","cirmid":"⫯","cirscir":"⧂","ClockwiseContourIntegral":"∲","CloseCurlyDoubleQuote":"”","CloseCurlyQuote":"’","clubs":"♣","clubsuit":"♣","colon":":","Colon":"∷","Colone":"⩴","colone":"≔","coloneq":"≔","comma":",","commat":"@","comp":"∁","compfn":"∘","complement":"∁","complexes":"ℂ","cong":"≅","congdot":"⩭","Congruent":"≡","conint":"∮","Conint":"∯","ContourIntegral":"∮","copf":"𝕔","Copf":"ℂ","coprod":"∐","Coproduct":"∐","copy":"©","COPY":"©","copysr":"℗","CounterClockwiseContourIntegral":"∳","crarr":"↵","cross":"✗","Cross":"⨯","Cscr":"𝒞","cscr":"𝒸","csub":"⫏","csube":"⫑","csup":"⫐","csupe":"⫒","ctdot":"⋯","cudarrl":"⤸","cudarrr":"⤵","cuepr":"⋞","cuesc":"⋟","cularr":"↶","cularrp":"⤽","cupbrcap":"⩈","cupcap":"⩆","CupCap":"≍","cup":"∪","Cup":"⋓","cupcup":"⩊","cupdot":"⊍","cupor":"⩅","cups":"∪︀","curarr":"↷","curarrm":"⤼","curlyeqprec":"⋞","curlyeqsucc":"⋟","curlyvee":"⋎","curlywedge":"⋏","curren":"¤","curvearrowleft":"↶","curvearrowright":"↷","cuvee":"⋎","cuwed":"⋏","cwconint":"∲","cwint":"∱","cylcty":"⌭","dagger":"†","Dagger":"‡","daleth":"ℸ","darr":"↓","Darr":"↡","dArr":"⇓","dash":"‐","Dashv":"⫤","dashv":"⊣","dbkarow":"⤏","dblac":"˝","Dcaron":"Ď","dcaron":"ď","Dcy":"Д","dcy":"д","ddagger":"‡","ddarr":"⇊","DD":"ⅅ","dd":"ⅆ","DDotrahd":"⤑","ddotseq":"⩷","deg":"°","Del":"∇","Delta":"Δ","delta":"δ","demptyv":"⦱","dfisht":"⥿","Dfr":"𝔇","dfr":"𝔡","dHar":"⥥","dharl":"⇃","dharr":"⇂","DiacriticalAcute":"´","DiacriticalDot":"˙","DiacriticalDoubleAcute":"˝","DiacriticalGrave":"`","DiacriticalTilde":"˜","diam":"⋄","diamond":"⋄","Diamond":"⋄","diamondsuit":"♦","diams":"♦","die":"¨","DifferentialD":"ⅆ","digamma":"ϝ","disin":"⋲","div":"÷","divide":"÷","divideontimes":"⋇","divonx":"⋇","DJcy":"Ђ","djcy":"ђ","dlcorn":"⌞","dlcrop":"⌍","dollar":"$","Dopf":"𝔻","dopf":"𝕕","Dot":"¨","dot":"˙","DotDot":"⃜","doteq":"≐","doteqdot":"≑","DotEqual":"≐","dotminus":"∸","dotplus":"∔","dotsquare":"⊡","doublebarwedge":"⌆","DoubleContourIntegral":"∯","DoubleDot":"¨","DoubleDownArrow":"⇓","DoubleLeftArrow":"⇐","DoubleLeftRightArrow":"⇔","DoubleLeftTee":"⫤","DoubleLongLeftArrow":"⟸","DoubleLongLeftRightArrow":"⟺","DoubleLongRightArrow":"⟹","DoubleRightArrow":"⇒","DoubleRightTee":"⊨","DoubleUpArrow":"⇑","DoubleUpDownArrow":"⇕","DoubleVerticalBar":"∥","DownArrowBar":"⤓","downarrow":"↓","DownArrow":"↓","Downarrow":"⇓","DownArrowUpArrow":"⇵","DownBreve":"̑","downdownarrows":"⇊","downharpoonleft":"⇃","downharpoonright":"⇂","DownLeftRightVector":"⥐","DownLeftTeeVector":"⥞","DownLeftVectorBar":"⥖","DownLeftVector":"↽","DownRightTeeVector":"⥟","DownRightVectorBar":"⥗","DownRightVector":"⇁","DownTeeArrow":"↧","DownTee":"⊤","drbkarow":"⤐","drcorn":"⌟","drcrop":"⌌","Dscr":"𝒟","dscr":"𝒹","DScy":"Ѕ","dscy":"ѕ","dsol":"⧶","Dstrok":"Đ","dstrok":"đ","dtdot":"⋱","dtri":"▿","dtrif":"▾","duarr":"⇵","duhar":"⥯","dwangle":"⦦","DZcy":"Џ","dzcy":"џ","dzigrarr":"⟿","Eacute":"É","eacute":"é","easter":"⩮","Ecaron":"Ě","ecaron":"ě","Ecirc":"Ê","ecirc":"ê","ecir":"≖","ecolon":"≕","Ecy":"Э","ecy":"э","eDDot":"⩷","Edot":"Ė","edot":"ė","eDot":"≑","ee":"ⅇ","efDot":"≒","Efr":"𝔈","efr":"𝔢","eg":"⪚","Egrave":"È","egrave":"è","egs":"⪖","egsdot":"⪘","el":"⪙","Element":"∈","elinters":"⏧","ell":"ℓ","els":"⪕","elsdot":"⪗","Emacr":"Ē","emacr":"ē","empty":"∅","emptyset":"∅","EmptySmallSquare":"◻","emptyv":"∅","EmptyVerySmallSquare":"▫","emsp13":" ","emsp14":" ","emsp":" ","ENG":"Ŋ","eng":"ŋ","ensp":" ","Eogon":"Ę","eogon":"ę","Eopf":"𝔼","eopf":"𝕖","epar":"⋕","eparsl":"⧣","eplus":"⩱","epsi":"ε","Epsilon":"Ε","epsilon":"ε","epsiv":"ϵ","eqcirc":"≖","eqcolon":"≕","eqsim":"≂","eqslantgtr":"⪖","eqslantless":"⪕","Equal":"⩵","equals":"=","EqualTilde":"≂","equest":"≟","Equilibrium":"⇌","equiv":"≡","equivDD":"⩸","eqvparsl":"⧥","erarr":"⥱","erDot":"≓","escr":"ℯ","Escr":"ℰ","esdot":"≐","Esim":"⩳","esim":"≂","Eta":"Η","eta":"η","ETH":"Ð","eth":"ð","Euml":"Ë","euml":"ë","euro":"€","excl":"!","exist":"∃","Exists":"∃","expectation":"ℰ","exponentiale":"ⅇ","ExponentialE":"ⅇ","fallingdotseq":"≒","Fcy":"Ф","fcy":"ф","female":"♀","ffilig":"ﬃ","fflig":"ﬀ","ffllig":"ﬄ","Ffr":"𝔉","ffr":"𝔣","filig":"ﬁ","FilledSmallSquare":"◼","FilledVerySmallSquare":"▪","fjlig":"fj","flat":"♭","fllig":"ﬂ","fltns":"▱","fnof":"ƒ","Fopf":"𝔽","fopf":"𝕗","forall":"∀","ForAll":"∀","fork":"⋔","forkv":"⫙","Fouriertrf":"ℱ","fpartint":"⨍","frac12":"½","frac13":"⅓","frac14":"¼","frac15":"⅕","frac16":"⅙","frac18":"⅛","frac23":"⅔","frac25":"⅖","frac34":"¾","frac35":"⅗","frac38":"⅜","frac45":"⅘","frac56":"⅚","frac58":"⅝","frac78":"⅞","frasl":"⁄","frown":"⌢","fscr":"𝒻","Fscr":"ℱ","gacute":"ǵ","Gamma":"Γ","gamma":"γ","Gammad":"Ϝ","gammad":"ϝ","gap":"⪆","Gbreve":"Ğ","gbreve":"ğ","Gcedil":"Ģ","Gcirc":"Ĝ","gcirc":"ĝ","Gcy":"Г","gcy":"г","Gdot":"Ġ","gdot":"ġ","ge":"≥","gE":"≧","gEl":"⪌","gel":"⋛","geq":"≥","geqq":"≧","geqslant":"⩾","gescc":"⪩","ges":"⩾","gesdot":"⪀","gesdoto":"⪂","gesdotol":"⪄","gesl":"⋛︀","gesles":"⪔","Gfr":"𝔊","gfr":"𝔤","gg":"≫","Gg":"⋙","ggg":"⋙","gimel":"ℷ","GJcy":"Ѓ","gjcy":"ѓ","gla":"⪥","gl":"≷","glE":"⪒","glj":"⪤","gnap":"⪊","gnapprox":"⪊","gne":"⪈","gnE":"≩","gneq":"⪈","gneqq":"≩","gnsim":"⋧","Gopf":"𝔾","gopf":"𝕘","grave":"`","GreaterEqual":"≥","GreaterEqualLess":"⋛","GreaterFullEqual":"≧","GreaterGreater":"⪢","GreaterLess":"≷","GreaterSlantEqual":"⩾","GreaterTilde":"≳","Gscr":"𝒢","gscr":"ℊ","gsim":"≳","gsime":"⪎","gsiml":"⪐","gtcc":"⪧","gtcir":"⩺","gt":">","GT":">","Gt":"≫","gtdot":"⋗","gtlPar":"⦕","gtquest":"⩼","gtrapprox":"⪆","gtrarr":"⥸","gtrdot":"⋗","gtreqless":"⋛","gtreqqless":"⪌","gtrless":"≷","gtrsim":"≳","gvertneqq":"≩︀","gvnE":"≩︀","Hacek":"ˇ","hairsp":" ","half":"½","hamilt":"ℋ","HARDcy":"Ъ","hardcy":"ъ","harrcir":"⥈","harr":"↔","hArr":"⇔","harrw":"↭","Hat":"^","hbar":"ℏ","Hcirc":"Ĥ","hcirc":"ĥ","hearts":"♥","heartsuit":"♥","hellip":"…","hercon":"⊹","hfr":"𝔥","Hfr":"ℌ","HilbertSpace":"ℋ","hksearow":"⤥","hkswarow":"⤦","hoarr":"⇿","homtht":"∻","hookleftarrow":"↩","hookrightarrow":"↪","hopf":"𝕙","Hopf":"ℍ","horbar":"―","HorizontalLine":"─","hscr":"𝒽","Hscr":"ℋ","hslash":"ℏ","Hstrok":"Ħ","hstrok":"ħ","HumpDownHump":"≎","HumpEqual":"≏","hybull":"⁃","hyphen":"‐","Iacute":"Í","iacute":"í","ic":"⁣","Icirc":"Î","icirc":"î","Icy":"И","icy":"и","Idot":"İ","IEcy":"Е","iecy":"е","iexcl":"¡","iff":"⇔","ifr":"𝔦","Ifr":"ℑ","Igrave":"Ì","igrave":"ì","ii":"ⅈ","iiiint":"⨌","iiint":"∭","iinfin":"⧜","iiota":"℩","IJlig":"Ĳ","ijlig":"ĳ","Imacr":"Ī","imacr":"ī","image":"ℑ","ImaginaryI":"ⅈ","imagline":"ℐ","imagpart":"ℑ","imath":"ı","Im":"ℑ","imof":"⊷","imped":"Ƶ","Implies":"⇒","incare":"℅","in":"∈","infin":"∞","infintie":"⧝","inodot":"ı","intcal":"⊺","int":"∫","Int":"∬","integers":"ℤ","Integral":"∫","intercal":"⊺","Intersection":"⋂","intlarhk":"⨗","intprod":"⨼","InvisibleComma":"⁣","InvisibleTimes":"⁢","IOcy":"Ё","iocy":"ё","Iogon":"Į","iogon":"į","Iopf":"𝕀","iopf":"𝕚","Iota":"Ι","iota":"ι","iprod":"⨼","iquest":"¿","iscr":"𝒾","Iscr":"ℐ","isin":"∈","isindot":"⋵","isinE":"⋹","isins":"⋴","isinsv":"⋳","isinv":"∈","it":"⁢","Itilde":"Ĩ","itilde":"ĩ","Iukcy":"І","iukcy":"і","Iuml":"Ï","iuml":"ï","Jcirc":"Ĵ","jcirc":"ĵ","Jcy":"Й","jcy":"й","Jfr":"𝔍","jfr":"𝔧","jmath":"ȷ","Jopf":"𝕁","jopf":"𝕛","Jscr":"𝒥","jscr":"𝒿","Jsercy":"Ј","jsercy":"ј","Jukcy":"Є","jukcy":"є","Kappa":"Κ","kappa":"κ","kappav":"ϰ","Kcedil":"Ķ","kcedil":"ķ","Kcy":"К","kcy":"к","Kfr":"𝔎","kfr":"𝔨","kgreen":"ĸ","KHcy":"Х","khcy":"х","KJcy":"Ќ","kjcy":"ќ","Kopf":"𝕂","kopf":"𝕜","Kscr":"𝒦","kscr":"𝓀","lAarr":"⇚","Lacute":"Ĺ","lacute":"ĺ","laemptyv":"⦴","lagran":"ℒ","Lambda":"Λ","lambda":"λ","lang":"⟨","Lang":"⟪","langd":"⦑","langle":"⟨","lap":"⪅","Laplacetrf":"ℒ","laquo":"«","larrb":"⇤","larrbfs":"⤟","larr":"←","Larr":"↞","lArr":"⇐","larrfs":"⤝","larrhk":"↩","larrlp":"↫","larrpl":"⤹","larrsim":"⥳","larrtl":"↢","latail":"⤙","lAtail":"⤛","lat":"⪫","late":"⪭","lates":"⪭︀","lbarr":"⤌","lBarr":"⤎","lbbrk":"❲","lbrace":"{","lbrack":"[","lbrke":"⦋","lbrksld":"⦏","lbrkslu":"⦍","Lcaron":"Ľ","lcaron":"ľ","Lcedil":"Ļ","lcedil":"ļ","lceil":"⌈","lcub":"{","Lcy":"Л","lcy":"л","ldca":"⤶","ldquo":"“","ldquor":"„","ldrdhar":"⥧","ldrushar":"⥋","ldsh":"↲","le":"≤","lE":"≦","LeftAngleBracket":"⟨","LeftArrowBar":"⇤","leftarrow":"←","LeftArrow":"←","Leftarrow":"⇐","LeftArrowRightArrow":"⇆","leftarrowtail":"↢","LeftCeiling":"⌈","LeftDoubleBracket":"⟦","LeftDownTeeVector":"⥡","LeftDownVectorBar":"⥙","LeftDownVector":"⇃","LeftFloor":"⌊","leftharpoondown":"↽","leftharpoonup":"↼","leftleftarrows":"⇇","leftrightarrow":"↔","LeftRightArrow":"↔","Leftrightarrow":"⇔","leftrightarrows":"⇆","leftrightharpoons":"⇋","leftrightsquigarrow":"↭","LeftRightVector":"⥎","LeftTeeArrow":"↤","LeftTee":"⊣","LeftTeeVector":"⥚","leftthreetimes":"⋋","LeftTriangleBar":"⧏","LeftTriangle":"⊲","LeftTriangleEqual":"⊴","LeftUpDownVector":"⥑","LeftUpTeeVector":"⥠","LeftUpVectorBar":"⥘","LeftUpVector":"↿","LeftVectorBar":"⥒","LeftVector":"↼","lEg":"⪋","leg":"⋚","leq":"≤","leqq":"≦","leqslant":"⩽","lescc":"⪨","les":"⩽","lesdot":"⩿","lesdoto":"⪁","lesdotor":"⪃","lesg":"⋚︀","lesges":"⪓","lessapprox":"⪅","lessdot":"⋖","lesseqgtr":"⋚","lesseqqgtr":"⪋","LessEqualGreater":"⋚","LessFullEqual":"≦","LessGreater":"≶","lessgtr":"≶","LessLess":"⪡","lesssim":"≲","LessSlantEqual":"⩽","LessTilde":"≲","lfisht":"⥼","lfloor":"⌊","Lfr":"𝔏","lfr":"𝔩","lg":"≶","lgE":"⪑","lHar":"⥢","lhard":"↽","lharu":"↼","lharul":"⥪","lhblk":"▄","LJcy":"Љ","ljcy":"љ","llarr":"⇇","ll":"≪","Ll":"⋘","llcorner":"⌞","Lleftarrow":"⇚","llhard":"⥫","lltri":"◺","Lmidot":"Ŀ","lmidot":"ŀ","lmoustache":"⎰","lmoust":"⎰","lnap":"⪉","lnapprox":"⪉","lne":"⪇","lnE":"≨","lneq":"⪇","lneqq":"≨","lnsim":"⋦","loang":"⟬","loarr":"⇽","lobrk":"⟦","longleftarrow":"⟵","LongLeftArrow":"⟵","Longleftarrow":"⟸","longleftrightarrow":"⟷","LongLeftRightArrow":"⟷","Longleftrightarrow":"⟺","longmapsto":"⟼","longrightarrow":"⟶","LongRightArrow":"⟶","Longrightarrow":"⟹","looparrowleft":"↫","looparrowright":"↬","lopar":"⦅","Lopf":"𝕃","lopf":"𝕝","loplus":"⨭","lotimes":"⨴","lowast":"∗","lowbar":"_","LowerLeftArrow":"↙","LowerRightArrow":"↘","loz":"◊","lozenge":"◊","lozf":"⧫","lpar":"(","lparlt":"⦓","lrarr":"⇆","lrcorner":"⌟","lrhar":"⇋","lrhard":"⥭","lrm":"‎","lrtri":"⊿","lsaquo":"‹","lscr":"𝓁","Lscr":"ℒ","lsh":"↰","Lsh":"↰","lsim":"≲","lsime":"⪍","lsimg":"⪏","lsqb":"[","lsquo":"‘","lsquor":"‚","Lstrok":"Ł","lstrok":"ł","ltcc":"⪦","ltcir":"⩹","lt":"<","LT":"<","Lt":"≪","ltdot":"⋖","lthree":"⋋","ltimes":"⋉","ltlarr":"⥶","ltquest":"⩻","ltri":"◃","ltrie":"⊴","ltrif":"◂","ltrPar":"⦖","lurdshar":"⥊","luruhar":"⥦","lvertneqq":"≨︀","lvnE":"≨︀","macr":"¯","male":"♂","malt":"✠","maltese":"✠","Map":"⤅","map":"↦","mapsto":"↦","mapstodown":"↧","mapstoleft":"↤","mapstoup":"↥","marker":"▮","mcomma":"⨩","Mcy":"М","mcy":"м","mdash":"—","mDDot":"∺","measuredangle":"∡","MediumSpace":" ","Mellintrf":"ℳ","Mfr":"𝔐","mfr":"𝔪","mho":"℧","micro":"µ","midast":"*","midcir":"⫰","mid":"∣","middot":"·","minusb":"⊟","minus":"−","minusd":"∸","minusdu":"⨪","MinusPlus":"∓","mlcp":"⫛","mldr":"…","mnplus":"∓","models":"⊧","Mopf":"𝕄","mopf":"𝕞","mp":"∓","mscr":"𝓂","Mscr":"ℳ","mstpos":"∾","Mu":"Μ","mu":"μ","multimap":"⊸","mumap":"⊸","nabla":"∇","Nacute":"Ń","nacute":"ń","nang":"∠⃒","nap":"≉","napE":"⩰̸","napid":"≋̸","napos":"ŉ","napprox":"≉","natural":"♮","naturals":"ℕ","natur":"♮","nbsp":" ","nbump":"≎̸","nbumpe":"≏̸","ncap":"⩃","Ncaron":"Ň","ncaron":"ň","Ncedil":"Ņ","ncedil":"ņ","ncong":"≇","ncongdot":"⩭̸","ncup":"⩂","Ncy":"Н","ncy":"н","ndash":"–","nearhk":"⤤","nearr":"↗","neArr":"⇗","nearrow":"↗","ne":"≠","nedot":"≐̸","NegativeMediumSpace":"​","NegativeThickSpace":"​","NegativeThinSpace":"​","NegativeVeryThinSpace":"​","nequiv":"≢","nesear":"⤨","nesim":"≂̸","NestedGreaterGreater":"≫","NestedLessLess":"≪","NewLine":"\n","nexist":"∄","nexists":"∄","Nfr":"𝔑","nfr":"𝔫","ngE":"≧̸","nge":"≱","ngeq":"≱","ngeqq":"≧̸","ngeqslant":"⩾̸","nges":"⩾̸","nGg":"⋙̸","ngsim":"≵","nGt":"≫⃒","ngt":"≯","ngtr":"≯","nGtv":"≫̸","nharr":"↮","nhArr":"⇎","nhpar":"⫲","ni":"∋","nis":"⋼","nisd":"⋺","niv":"∋","NJcy":"Њ","njcy":"њ","nlarr":"↚","nlArr":"⇍","nldr":"‥","nlE":"≦̸","nle":"≰","nleftarrow":"↚","nLeftarrow":"⇍","nleftrightarrow":"↮","nLeftrightarrow":"⇎","nleq":"≰","nleqq":"≦̸","nleqslant":"⩽̸","nles":"⩽̸","nless":"≮","nLl":"⋘̸","nlsim":"≴","nLt":"≪⃒","nlt":"≮","nltri":"⋪","nltrie":"⋬","nLtv":"≪̸","nmid":"∤","NoBreak":"⁠","NonBreakingSpace":" ","nopf":"𝕟","Nopf":"ℕ","Not":"⫬","not":"¬","NotCongruent":"≢","NotCupCap":"≭","NotDoubleVerticalBar":"∦","NotElement":"∉","NotEqual":"≠","NotEqualTilde":"≂̸","NotExists":"∄","NotGreater":"≯","NotGreaterEqual":"≱","NotGreaterFullEqual":"≧̸","NotGreaterGreater":"≫̸","NotGreaterLess":"≹","NotGreaterSlantEqual":"⩾̸","NotGreaterTilde":"≵","NotHumpDownHump":"≎̸","NotHumpEqual":"≏̸","notin":"∉","notindot":"⋵̸","notinE":"⋹̸","notinva":"∉","notinvb":"⋷","notinvc":"⋶","NotLeftTriangleBar":"⧏̸","NotLeftTriangle":"⋪","NotLeftTriangleEqual":"⋬","NotLess":"≮","NotLessEqual":"≰","NotLessGreater":"≸","NotLessLess":"≪̸","NotLessSlantEqual":"⩽̸","NotLessTilde":"≴","NotNestedGreaterGreater":"⪢̸","NotNestedLessLess":"⪡̸","notni":"∌","notniva":"∌","notnivb":"⋾","notnivc":"⋽","NotPrecedes":"⊀","NotPrecedesEqual":"⪯̸","NotPrecedesSlantEqual":"⋠","NotReverseElement":"∌","NotRightTriangleBar":"⧐̸","NotRightTriangle":"⋫","NotRightTriangleEqual":"⋭","NotSquareSubset":"⊏̸","NotSquareSubsetEqual":"⋢","NotSquareSuperset":"⊐̸","NotSquareSupersetEqual":"⋣","NotSubset":"⊂⃒","NotSubsetEqual":"⊈","NotSucceeds":"⊁","NotSucceedsEqual":"⪰̸","NotSucceedsSlantEqual":"⋡","NotSucceedsTilde":"≿̸","NotSuperset":"⊃⃒","NotSupersetEqual":"⊉","NotTilde":"≁","NotTildeEqual":"≄","NotTildeFullEqual":"≇","NotTildeTilde":"≉","NotVerticalBar":"∤","nparallel":"∦","npar":"∦","nparsl":"⫽⃥","npart":"∂̸","npolint":"⨔","npr":"⊀","nprcue":"⋠","nprec":"⊀","npreceq":"⪯̸","npre":"⪯̸","nrarrc":"⤳̸","nrarr":"↛","nrArr":"⇏","nrarrw":"↝̸","nrightarrow":"↛","nRightarrow":"⇏","nrtri":"⋫","nrtrie":"⋭","nsc":"⊁","nsccue":"⋡","nsce":"⪰̸","Nscr":"𝒩","nscr":"𝓃","nshortmid":"∤","nshortparallel":"∦","nsim":"≁","nsime":"≄","nsimeq":"≄","nsmid":"∤","nspar":"∦","nsqsube":"⋢","nsqsupe":"⋣","nsub":"⊄","nsubE":"⫅̸","nsube":"⊈","nsubset":"⊂⃒","nsubseteq":"⊈","nsubseteqq":"⫅̸","nsucc":"⊁","nsucceq":"⪰̸","nsup":"⊅","nsupE":"⫆̸","nsupe":"⊉","nsupset":"⊃⃒","nsupseteq":"⊉","nsupseteqq":"⫆̸","ntgl":"≹","Ntilde":"Ñ","ntilde":"ñ","ntlg":"≸","ntriangleleft":"⋪","ntrianglelefteq":"⋬","ntriangleright":"⋫","ntrianglerighteq":"⋭","Nu":"Ν","nu":"ν","num":"#","numero":"№","numsp":" ","nvap":"≍⃒","nvdash":"⊬","nvDash":"⊭","nVdash":"⊮","nVDash":"⊯","nvge":"≥⃒","nvgt":">⃒","nvHarr":"⤄","nvinfin":"⧞","nvlArr":"⤂","nvle":"≤⃒","nvlt":"<⃒","nvltrie":"⊴⃒","nvrArr":"⤃","nvrtrie":"⊵⃒","nvsim":"∼⃒","nwarhk":"⤣","nwarr":"↖","nwArr":"⇖","nwarrow":"↖","nwnear":"⤧","Oacute":"Ó","oacute":"ó","oast":"⊛","Ocirc":"Ô","ocirc":"ô","ocir":"⊚","Ocy":"О","ocy":"о","odash":"⊝","Odblac":"Ő","odblac":"ő","odiv":"⨸","odot":"⊙","odsold":"⦼","OElig":"Œ","oelig":"œ","ofcir":"⦿","Ofr":"𝔒","ofr":"𝔬","ogon":"˛","Ograve":"Ò","ograve":"ò","ogt":"⧁","ohbar":"⦵","ohm":"Ω","oint":"∮","olarr":"↺","olcir":"⦾","olcross":"⦻","oline":"‾","olt":"⧀","Omacr":"Ō","omacr":"ō","Omega":"Ω","omega":"ω","Omicron":"Ο","omicron":"ο","omid":"⦶","ominus":"⊖","Oopf":"𝕆","oopf":"𝕠","opar":"⦷","OpenCurlyDoubleQuote":"“","OpenCurlyQuote":"‘","operp":"⦹","oplus":"⊕","orarr":"↻","Or":"⩔","or":"∨","ord":"⩝","order":"ℴ","orderof":"ℴ","ordf":"ª","ordm":"º","origof":"⊶","oror":"⩖","orslope":"⩗","orv":"⩛","oS":"Ⓢ","Oscr":"𝒪","oscr":"ℴ","Oslash":"Ø","oslash":"ø","osol":"⊘","Otilde":"Õ","otilde":"õ","otimesas":"⨶","Otimes":"⨷","otimes":"⊗","Ouml":"Ö","ouml":"ö","ovbar":"⌽","OverBar":"‾","OverBrace":"⏞","OverBracket":"⎴","OverParenthesis":"⏜","para":"¶","parallel":"∥","par":"∥","parsim":"⫳","parsl":"⫽","part":"∂","PartialD":"∂","Pcy":"П","pcy":"п","percnt":"%","period":".","permil":"‰","perp":"⊥","pertenk":"‱","Pfr":"𝔓","pfr":"𝔭","Phi":"Φ","phi":"φ","phiv":"ϕ","phmmat":"ℳ","phone":"☎","Pi":"Π","pi":"π","pitchfork":"⋔","piv":"ϖ","planck":"ℏ","planckh":"ℎ","plankv":"ℏ","plusacir":"⨣","plusb":"⊞","pluscir":"⨢","plus":"+","plusdo":"∔","plusdu":"⨥","pluse":"⩲","PlusMinus":"±","plusmn":"±","plussim":"⨦","plustwo":"⨧","pm":"±","Poincareplane":"ℌ","pointint":"⨕","popf":"𝕡","Popf":"ℙ","pound":"£","prap":"⪷","Pr":"⪻","pr":"≺","prcue":"≼","precapprox":"⪷","prec":"≺","preccurlyeq":"≼","Precedes":"≺","PrecedesEqual":"⪯","PrecedesSlantEqual":"≼","PrecedesTilde":"≾","preceq":"⪯","precnapprox":"⪹","precneqq":"⪵","precnsim":"⋨","pre":"⪯","prE":"⪳","precsim":"≾","prime":"′","Prime":"″","primes":"ℙ","prnap":"⪹","prnE":"⪵","prnsim":"⋨","prod":"∏","Product":"∏","profalar":"⌮","profline":"⌒","profsurf":"⌓","prop":"∝","Proportional":"∝","Proportion":"∷","propto":"∝","prsim":"≾","prurel":"⊰","Pscr":"𝒫","pscr":"𝓅","Psi":"Ψ","psi":"ψ","puncsp":" ","Qfr":"𝔔","qfr":"𝔮","qint":"⨌","qopf":"𝕢","Qopf":"ℚ","qprime":"⁗","Qscr":"𝒬","qscr":"𝓆","quaternions":"ℍ","quatint":"⨖","quest":"?","questeq":"≟","quot":"\"","QUOT":"\"","rAarr":"⇛","race":"∽̱","Racute":"Ŕ","racute":"ŕ","radic":"√","raemptyv":"⦳","rang":"⟩","Rang":"⟫","rangd":"⦒","range":"⦥","rangle":"⟩","raquo":"»","rarrap":"⥵","rarrb":"⇥","rarrbfs":"⤠","rarrc":"⤳","rarr":"→","Rarr":"↠","rArr":"⇒","rarrfs":"⤞","rarrhk":"↪","rarrlp":"↬","rarrpl":"⥅","rarrsim":"⥴","Rarrtl":"⤖","rarrtl":"↣","rarrw":"↝","ratail":"⤚","rAtail":"⤜","ratio":"∶","rationals":"ℚ","rbarr":"⤍","rBarr":"⤏","RBarr":"⤐","rbbrk":"❳","rbrace":"}","rbrack":"]","rbrke":"⦌","rbrksld":"⦎","rbrkslu":"⦐","Rcaron":"Ř","rcaron":"ř","Rcedil":"Ŗ","rcedil":"ŗ","rceil":"⌉","rcub":"}","Rcy":"Р","rcy":"р","rdca":"⤷","rdldhar":"⥩","rdquo":"”","rdquor":"”","rdsh":"↳","real":"ℜ","realine":"ℛ","realpart":"ℜ","reals":"ℝ","Re":"ℜ","rect":"▭","reg":"®","REG":"®","ReverseElement":"∋","ReverseEquilibrium":"⇋","ReverseUpEquilibrium":"⥯","rfisht":"⥽","rfloor":"⌋","rfr":"𝔯","Rfr":"ℜ","rHar":"⥤","rhard":"⇁","rharu":"⇀","rharul":"⥬","Rho":"Ρ","rho":"ρ","rhov":"ϱ","RightAngleBracket":"⟩","RightArrowBar":"⇥","rightarrow":"→","RightArrow":"→","Rightarrow":"⇒","RightArrowLeftArrow":"⇄","rightarrowtail":"↣","RightCeiling":"⌉","RightDoubleBracket":"⟧","RightDownTeeVector":"⥝","RightDownVectorBar":"⥕","RightDownVector":"⇂","RightFloor":"⌋","rightharpoondown":"⇁","rightharpoonup":"⇀","rightleftarrows":"⇄","rightleftharpoons":"⇌","rightrightarrows":"⇉","rightsquigarrow":"↝","RightTeeArrow":"↦","RightTee":"⊢","RightTeeVector":"⥛","rightthreetimes":"⋌","RightTriangleBar":"⧐","RightTriangle":"⊳","RightTriangleEqual":"⊵","RightUpDownVector":"⥏","RightUpTeeVector":"⥜","RightUpVectorBar":"⥔","RightUpVector":"↾","RightVectorBar":"⥓","RightVector":"⇀","ring":"˚","risingdotseq":"≓","rlarr":"⇄","rlhar":"⇌","rlm":"‏","rmoustache":"⎱","rmoust":"⎱","rnmid":"⫮","roang":"⟭","roarr":"⇾","robrk":"⟧","ropar":"⦆","ropf":"𝕣","Ropf":"ℝ","roplus":"⨮","rotimes":"⨵","RoundImplies":"⥰","rpar":")","rpargt":"⦔","rppolint":"⨒","rrarr":"⇉","Rrightarrow":"⇛","rsaquo":"›","rscr":"𝓇","Rscr":"ℛ","rsh":"↱","Rsh":"↱","rsqb":"]","rsquo":"’","rsquor":"’","rthree":"⋌","rtimes":"⋊","rtri":"▹","rtrie":"⊵","rtrif":"▸","rtriltri":"⧎","RuleDelayed":"⧴","ruluhar":"⥨","rx":"℞","Sacute":"Ś","sacute":"ś","sbquo":"‚","scap":"⪸","Scaron":"Š","scaron":"š","Sc":"⪼","sc":"≻","sccue":"≽","sce":"⪰","scE":"⪴","Scedil":"Ş","scedil":"ş","Scirc":"Ŝ","scirc":"ŝ","scnap":"⪺","scnE":"⪶","scnsim":"⋩","scpolint":"⨓","scsim":"≿","Scy":"С","scy":"с","sdotb":"⊡","sdot":"⋅","sdote":"⩦","searhk":"⤥","searr":"↘","seArr":"⇘","searrow":"↘","sect":"§","semi":";","seswar":"⤩","setminus":"∖","setmn":"∖","sext":"✶","Sfr":"𝔖","sfr":"𝔰","sfrown":"⌢","sharp":"♯","SHCHcy":"Щ","shchcy":"щ","SHcy":"Ш","shcy":"ш","ShortDownArrow":"↓","ShortLeftArrow":"←","shortmid":"∣","shortparallel":"∥","ShortRightArrow":"→","ShortUpArrow":"↑","shy":"­","Sigma":"Σ","sigma":"σ","sigmaf":"ς","sigmav":"ς","sim":"∼","simdot":"⩪","sime":"≃","simeq":"≃","simg":"⪞","simgE":"⪠","siml":"⪝","simlE":"⪟","simne":"≆","simplus":"⨤","simrarr":"⥲","slarr":"←","SmallCircle":"∘","smallsetminus":"∖","smashp":"⨳","smeparsl":"⧤","smid":"∣","smile":"⌣","smt":"⪪","smte":"⪬","smtes":"⪬︀","SOFTcy":"Ь","softcy":"ь","solbar":"⌿","solb":"⧄","sol":"/","Sopf":"𝕊","sopf":"𝕤","spades":"♠","spadesuit":"♠","spar":"∥","sqcap":"⊓","sqcaps":"⊓︀","sqcup":"⊔","sqcups":"⊔︀","Sqrt":"√","sqsub":"⊏","sqsube":"⊑","sqsubset":"⊏","sqsubseteq":"⊑","sqsup":"⊐","sqsupe":"⊒","sqsupset":"⊐","sqsupseteq":"⊒","square":"□","Square":"□","SquareIntersection":"⊓","SquareSubset":"⊏","SquareSubsetEqual":"⊑","SquareSuperset":"⊐","SquareSupersetEqual":"⊒","SquareUnion":"⊔","squarf":"▪","squ":"□","squf":"▪","srarr":"→","Sscr":"𝒮","sscr":"𝓈","ssetmn":"∖","ssmile":"⌣","sstarf":"⋆","Star":"⋆","star":"☆","starf":"★","straightepsilon":"ϵ","straightphi":"ϕ","strns":"¯","sub":"⊂","Sub":"⋐","subdot":"⪽","subE":"⫅","sube":"⊆","subedot":"⫃","submult":"⫁","subnE":"⫋","subne":"⊊","subplus":"⪿","subrarr":"⥹","subset":"⊂","Subset":"⋐","subseteq":"⊆","subseteqq":"⫅","SubsetEqual":"⊆","subsetneq":"⊊","subsetneqq":"⫋","subsim":"⫇","subsub":"⫕","subsup":"⫓","succapprox":"⪸","succ":"≻","succcurlyeq":"≽","Succeeds":"≻","SucceedsEqual":"⪰","SucceedsSlantEqual":"≽","SucceedsTilde":"≿","succeq":"⪰","succnapprox":"⪺","succneqq":"⪶","succnsim":"⋩","succsim":"≿","SuchThat":"∋","sum":"∑","Sum":"∑","sung":"♪","sup1":"¹","sup2":"²","sup3":"³","sup":"⊃","Sup":"⋑","supdot":"⪾","supdsub":"⫘","supE":"⫆","supe":"⊇","supedot":"⫄","Superset":"⊃","SupersetEqual":"⊇","suphsol":"⟉","suphsub":"⫗","suplarr":"⥻","supmult":"⫂","supnE":"⫌","supne":"⊋","supplus":"⫀","supset":"⊃","Supset":"⋑","supseteq":"⊇","supseteqq":"⫆","supsetneq":"⊋","supsetneqq":"⫌","supsim":"⫈","supsub":"⫔","supsup":"⫖","swarhk":"⤦","swarr":"↙","swArr":"⇙","swarrow":"↙","swnwar":"⤪","szlig":"ß","Tab":"\t","target":"⌖","Tau":"Τ","tau":"τ","tbrk":"⎴","Tcaron":"Ť","tcaron":"ť","Tcedil":"Ţ","tcedil":"ţ","Tcy":"Т","tcy":"т","tdot":"⃛","telrec":"⌕","Tfr":"𝔗","tfr":"𝔱","there4":"∴","therefore":"∴","Therefore":"∴","Theta":"Θ","theta":"θ","thetasym":"ϑ","thetav":"ϑ","thickapprox":"≈","thicksim":"∼","ThickSpace":"  ","ThinSpace":" ","thinsp":" ","thkap":"≈","thksim":"∼","THORN":"Þ","thorn":"þ","tilde":"˜","Tilde":"∼","TildeEqual":"≃","TildeFullEqual":"≅","TildeTilde":"≈","timesbar":"⨱","timesb":"⊠","times":"×","timesd":"⨰","tint":"∭","toea":"⤨","topbot":"⌶","topcir":"⫱","top":"⊤","Topf":"𝕋","topf":"𝕥","topfork":"⫚","tosa":"⤩","tprime":"‴","trade":"™","TRADE":"™","triangle":"▵","triangledown":"▿","triangleleft":"◃","trianglelefteq":"⊴","triangleq":"≜","triangleright":"▹","trianglerighteq":"⊵","tridot":"◬","trie":"≜","triminus":"⨺","TripleDot":"⃛","triplus":"⨹","trisb":"⧍","tritime":"⨻","trpezium":"⏢","Tscr":"𝒯","tscr":"𝓉","TScy":"Ц","tscy":"ц","TSHcy":"Ћ","tshcy":"ћ","Tstrok":"Ŧ","tstrok":"ŧ","twixt":"≬","twoheadleftarrow":"↞","twoheadrightarrow":"↠","Uacute":"Ú","uacute":"ú","uarr":"↑","Uarr":"↟","uArr":"⇑","Uarrocir":"⥉","Ubrcy":"Ў","ubrcy":"ў","Ubreve":"Ŭ","ubreve":"ŭ","Ucirc":"Û","ucirc":"û","Ucy":"У","ucy":"у","udarr":"⇅","Udblac":"Ű","udblac":"ű","udhar":"⥮","ufisht":"⥾","Ufr":"𝔘","ufr":"𝔲","Ugrave":"Ù","ugrave":"ù","uHar":"⥣","uharl":"↿","uharr":"↾","uhblk":"▀","ulcorn":"⌜","ulcorner":"⌜","ulcrop":"⌏","ultri":"◸","Umacr":"Ū","umacr":"ū","uml":"¨","UnderBar":"_","UnderBrace":"⏟","UnderBracket":"⎵","UnderParenthesis":"⏝","Union":"⋃","UnionPlus":"⊎","Uogon":"Ų","uogon":"ų","Uopf":"𝕌","uopf":"𝕦","UpArrowBar":"⤒","uparrow":"↑","UpArrow":"↑","Uparrow":"⇑","UpArrowDownArrow":"⇅","updownarrow":"↕","UpDownArrow":"↕","Updownarrow":"⇕","UpEquilibrium":"⥮","upharpoonleft":"↿","upharpoonright":"↾","uplus":"⊎","UpperLeftArrow":"↖","UpperRightArrow":"↗","upsi":"υ","Upsi":"ϒ","upsih":"ϒ","Upsilon":"Υ","upsilon":"υ","UpTeeArrow":"↥","UpTee":"⊥","upuparrows":"⇈","urcorn":"⌝","urcorner":"⌝","urcrop":"⌎","Uring":"Ů","uring":"ů","urtri":"◹","Uscr":"𝒰","uscr":"𝓊","utdot":"⋰","Utilde":"Ũ","utilde":"ũ","utri":"▵","utrif":"▴","uuarr":"⇈","Uuml":"Ü","uuml":"ü","uwangle":"⦧","vangrt":"⦜","varepsilon":"ϵ","varkappa":"ϰ","varnothing":"∅","varphi":"ϕ","varpi":"ϖ","varpropto":"∝","varr":"↕","vArr":"⇕","varrho":"ϱ","varsigma":"ς","varsubsetneq":"⊊︀","varsubsetneqq":"⫋︀","varsupsetneq":"⊋︀","varsupsetneqq":"⫌︀","vartheta":"ϑ","vartriangleleft":"⊲","vartriangleright":"⊳","vBar":"⫨","Vbar":"⫫","vBarv":"⫩","Vcy":"В","vcy":"в","vdash":"⊢","vDash":"⊨","Vdash":"⊩","VDash":"⊫","Vdashl":"⫦","veebar":"⊻","vee":"∨","Vee":"⋁","veeeq":"≚","vellip":"⋮","verbar":"|","Verbar":"‖","vert":"|","Vert":"‖","VerticalBar":"∣","VerticalLine":"|","VerticalSeparator":"❘","VerticalTilde":"≀","VeryThinSpace":" ","Vfr":"𝔙","vfr":"𝔳","vltri":"⊲","vnsub":"⊂⃒","vnsup":"⊃⃒","Vopf":"𝕍","vopf":"𝕧","vprop":"∝","vrtri":"⊳","Vscr":"𝒱","vscr":"𝓋","vsubnE":"⫋︀","vsubne":"⊊︀","vsupnE":"⫌︀","vsupne":"⊋︀","Vvdash":"⊪","vzigzag":"⦚","Wcirc":"Ŵ","wcirc":"ŵ","wedbar":"⩟","wedge":"∧","Wedge":"⋀","wedgeq":"≙","weierp":"℘","Wfr":"𝔚","wfr":"𝔴","Wopf":"𝕎","wopf":"𝕨","wp":"℘","wr":"≀","wreath":"≀","Wscr":"𝒲","wscr":"𝓌","xcap":"⋂","xcirc":"◯","xcup":"⋃","xdtri":"▽","Xfr":"𝔛","xfr":"𝔵","xharr":"⟷","xhArr":"⟺","Xi":"Ξ","xi":"ξ","xlarr":"⟵","xlArr":"⟸","xmap":"⟼","xnis":"⋻","xodot":"⨀","Xopf":"𝕏","xopf":"𝕩","xoplus":"⨁","xotime":"⨂","xrarr":"⟶","xrArr":"⟹","Xscr":"𝒳","xscr":"𝓍","xsqcup":"⨆","xuplus":"⨄","xutri":"△","xvee":"⋁","xwedge":"⋀","Yacute":"Ý","yacute":"ý","YAcy":"Я","yacy":"я","Ycirc":"Ŷ","ycirc":"ŷ","Ycy":"Ы","ycy":"ы","yen":"¥","Yfr":"𝔜","yfr":"𝔶","YIcy":"Ї","yicy":"ї","Yopf":"𝕐","yopf":"𝕪","Yscr":"𝒴","yscr":"𝓎","YUcy":"Ю","yucy":"ю","yuml":"ÿ","Yuml":"Ÿ","Zacute":"Ź","zacute":"ź","Zcaron":"Ž","zcaron":"ž","Zcy":"З","zcy":"з","Zdot":"Ż","zdot":"ż","zeetrf":"ℨ","ZeroWidthSpace":"​","Zeta":"Ζ","zeta":"ζ","zfr":"𝔷","Zfr":"ℨ","ZHcy":"Ж","zhcy":"ж","zigrarr":"⇝","zopf":"𝕫","Zopf":"ℤ","Zscr":"𝒵","zscr":"𝓏","zwj":"‍","zwnj":"‌"}
 
 /***/ }),
 
-/***/ 395:
+/***/ 396:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2045,7 +2045,7 @@ function createNormalizer() {
 function compile(self) {
 
   // Load & clone RE patterns.
-  var re = self.re = __webpack_require__(396)(self.__opts__);
+  var re = self.re = __webpack_require__(397)(self.__opts__);
 
   // Define dynamic patterns
   var tlds = self.__tlds__.slice();
@@ -2534,7 +2534,7 @@ module.exports = LinkifyIt;
 
 /***/ }),
 
-/***/ 396:
+/***/ 397:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2545,10 +2545,10 @@ module.exports = function (opts) {
   var re = {};
 
   // Use direct extract instead of `regenerate` to reduse browserified size
-  re.src_Any = __webpack_require__(389).source;
-  re.src_Cc  = __webpack_require__(387).source;
-  re.src_Z   = __webpack_require__(388).source;
-  re.src_P   = __webpack_require__(379).source;
+  re.src_Any = __webpack_require__(390).source;
+  re.src_Cc  = __webpack_require__(388).source;
+  re.src_Z   = __webpack_require__(389).source;
+  re.src_P   = __webpack_require__(380).source;
 
   // \p{\Z\P\Cc\CF} (white spaces + control + format + punctuation)
   re.src_ZPCc = [ re.src_Z, re.src_P, re.src_Cc ].join('|');
@@ -2719,7 +2719,7 @@ module.exports = function (opts) {
 
 /***/ }),
 
-/***/ 397:
+/***/ 398:
 /***/ (function(module, exports) {
 
 const embedRE = /@\[([\w-]+)\]\((.+)\)/im
@@ -2792,7 +2792,7 @@ module.exports = function plugin (md, options) {
 
 /***/ }),
 
-/***/ 398:
+/***/ 399:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2871,7 +2871,7 @@ module.exports = [
 
 /***/ }),
 
-/***/ 399:
+/***/ 400:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2879,14 +2879,14 @@ module.exports = [
 
 
 
-exports.parseLinkLabel       = __webpack_require__(401);
-exports.parseLinkDestination = __webpack_require__(400);
-exports.parseLinkTitle       = __webpack_require__(402);
+exports.parseLinkLabel       = __webpack_require__(402);
+exports.parseLinkDestination = __webpack_require__(401);
+exports.parseLinkTitle       = __webpack_require__(403);
 
 
 /***/ }),
 
-/***/ 400:
+/***/ 401:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2895,8 +2895,8 @@ exports.parseLinkTitle       = __webpack_require__(402);
 
 
 
-var isSpace     = __webpack_require__(375).isSpace;
-var unescapeAll = __webpack_require__(375).unescapeAll;
+var isSpace     = __webpack_require__(376).isSpace;
+var unescapeAll = __webpack_require__(376).unescapeAll;
 
 
 module.exports = function parseLinkDestination(str, pos, max) {
@@ -2974,7 +2974,7 @@ module.exports = function parseLinkDestination(str, pos, max) {
 
 /***/ }),
 
-/***/ 401:
+/***/ 402:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3030,7 +3030,7 @@ module.exports = function parseLinkLabel(state, start, disableNested) {
 
 /***/ }),
 
-/***/ 402:
+/***/ 403:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3039,7 +3039,7 @@ module.exports = function parseLinkLabel(state, start, disableNested) {
 
 
 
-var unescapeAll = __webpack_require__(375).unescapeAll;
+var unescapeAll = __webpack_require__(376).unescapeAll;
 
 
 module.exports = function parseLinkTitle(str, pos, max) {
@@ -3091,7 +3091,7 @@ module.exports = function parseLinkTitle(str, pos, max) {
 
 /***/ }),
 
-/***/ 403:
+/***/ 404:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3100,21 +3100,21 @@ module.exports = function parseLinkTitle(str, pos, max) {
 
 
 
-var utils        = __webpack_require__(375);
-var helpers      = __webpack_require__(399);
-var Renderer     = __webpack_require__(410);
-var ParserCore   = __webpack_require__(405);
-var ParserBlock  = __webpack_require__(404);
-var ParserInline = __webpack_require__(406);
-var LinkifyIt    = __webpack_require__(395);
-var mdurl        = __webpack_require__(386);
-var punycode     = __webpack_require__(390);
+var utils        = __webpack_require__(376);
+var helpers      = __webpack_require__(400);
+var Renderer     = __webpack_require__(411);
+var ParserCore   = __webpack_require__(406);
+var ParserBlock  = __webpack_require__(405);
+var ParserInline = __webpack_require__(407);
+var LinkifyIt    = __webpack_require__(396);
+var mdurl        = __webpack_require__(387);
+var punycode     = __webpack_require__(391);
 
 
 var config = {
-  'default': __webpack_require__(408),
-  zero: __webpack_require__(409),
-  commonmark: __webpack_require__(407)
+  'default': __webpack_require__(409),
+  zero: __webpack_require__(410),
+  commonmark: __webpack_require__(408)
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3680,7 +3680,7 @@ module.exports = MarkdownIt;
 
 /***/ }),
 
-/***/ 404:
+/***/ 405:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3692,23 +3692,23 @@ module.exports = MarkdownIt;
 
 
 
-var Ruler           = __webpack_require__(377);
+var Ruler           = __webpack_require__(378);
 
 
 var _rules = [
   // First 2 params - rule name & source. Secondary array - list of rules,
   // which can be terminated by this one.
-  [ 'table',      __webpack_require__(422),      [ 'paragraph', 'reference' ] ],
-  [ 'code',       __webpack_require__(412) ],
-  [ 'fence',      __webpack_require__(413),      [ 'paragraph', 'reference', 'blockquote', 'list' ] ],
-  [ 'blockquote', __webpack_require__(411), [ 'paragraph', 'reference', 'blockquote', 'list' ] ],
-  [ 'hr',         __webpack_require__(415),         [ 'paragraph', 'reference', 'blockquote', 'list' ] ],
-  [ 'list',       __webpack_require__(418),       [ 'paragraph', 'reference', 'blockquote' ] ],
-  [ 'reference',  __webpack_require__(420) ],
-  [ 'heading',    __webpack_require__(414),    [ 'paragraph', 'reference', 'blockquote' ] ],
-  [ 'lheading',   __webpack_require__(417) ],
-  [ 'html_block', __webpack_require__(416), [ 'paragraph', 'reference', 'blockquote' ] ],
-  [ 'paragraph',  __webpack_require__(419) ]
+  [ 'table',      __webpack_require__(423),      [ 'paragraph', 'reference' ] ],
+  [ 'code',       __webpack_require__(413) ],
+  [ 'fence',      __webpack_require__(414),      [ 'paragraph', 'reference', 'blockquote', 'list' ] ],
+  [ 'blockquote', __webpack_require__(412), [ 'paragraph', 'reference', 'blockquote', 'list' ] ],
+  [ 'hr',         __webpack_require__(416),         [ 'paragraph', 'reference', 'blockquote', 'list' ] ],
+  [ 'list',       __webpack_require__(419),       [ 'paragraph', 'reference', 'blockquote' ] ],
+  [ 'reference',  __webpack_require__(421) ],
+  [ 'heading',    __webpack_require__(415),    [ 'paragraph', 'reference', 'blockquote' ] ],
+  [ 'lheading',   __webpack_require__(418) ],
+  [ 'html_block', __webpack_require__(417), [ 'paragraph', 'reference', 'blockquote' ] ],
+  [ 'paragraph',  __webpack_require__(420) ]
 ];
 
 
@@ -3802,7 +3802,7 @@ ParserBlock.prototype.parse = function (src, md, env, outTokens) {
 };
 
 
-ParserBlock.prototype.State = __webpack_require__(421);
+ParserBlock.prototype.State = __webpack_require__(422);
 
 
 module.exports = ParserBlock;
@@ -3810,7 +3810,7 @@ module.exports = ParserBlock;
 
 /***/ }),
 
-/***/ 405:
+/***/ 406:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3823,16 +3823,16 @@ module.exports = ParserBlock;
 
 
 
-var Ruler  = __webpack_require__(377);
+var Ruler  = __webpack_require__(378);
 
 
 var _rules = [
-  [ 'normalize',      __webpack_require__(426)      ],
-  [ 'block',          __webpack_require__(423)          ],
-  [ 'inline',         __webpack_require__(424)         ],
-  [ 'linkify',        __webpack_require__(425)        ],
-  [ 'replacements',   __webpack_require__(427)   ],
-  [ 'smartquotes',    __webpack_require__(428)    ]
+  [ 'normalize',      __webpack_require__(427)      ],
+  [ 'block',          __webpack_require__(424)          ],
+  [ 'inline',         __webpack_require__(425)         ],
+  [ 'linkify',        __webpack_require__(426)        ],
+  [ 'replacements',   __webpack_require__(428)   ],
+  [ 'smartquotes',    __webpack_require__(429)    ]
 ];
 
 
@@ -3868,7 +3868,7 @@ Core.prototype.process = function (state) {
   }
 };
 
-Core.prototype.State = __webpack_require__(429);
+Core.prototype.State = __webpack_require__(430);
 
 
 module.exports = Core;
@@ -3876,7 +3876,7 @@ module.exports = Core;
 
 /***/ }),
 
-/***/ 406:
+/***/ 407:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3888,31 +3888,31 @@ module.exports = Core;
 
 
 
-var Ruler           = __webpack_require__(377);
+var Ruler           = __webpack_require__(378);
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Parser rules
 
 var _rules = [
-  [ 'text',            __webpack_require__(440) ],
-  [ 'newline',         __webpack_require__(438) ],
-  [ 'escape',          __webpack_require__(434) ],
-  [ 'backticks',       __webpack_require__(431) ],
-  [ 'strikethrough',   __webpack_require__(385).tokenize ],
-  [ 'emphasis',        __webpack_require__(384).tokenize ],
-  [ 'link',            __webpack_require__(437) ],
-  [ 'image',           __webpack_require__(436) ],
-  [ 'autolink',        __webpack_require__(430) ],
-  [ 'html_inline',     __webpack_require__(435) ],
-  [ 'entity',          __webpack_require__(433) ]
+  [ 'text',            __webpack_require__(441) ],
+  [ 'newline',         __webpack_require__(439) ],
+  [ 'escape',          __webpack_require__(435) ],
+  [ 'backticks',       __webpack_require__(432) ],
+  [ 'strikethrough',   __webpack_require__(386).tokenize ],
+  [ 'emphasis',        __webpack_require__(385).tokenize ],
+  [ 'link',            __webpack_require__(438) ],
+  [ 'image',           __webpack_require__(437) ],
+  [ 'autolink',        __webpack_require__(431) ],
+  [ 'html_inline',     __webpack_require__(436) ],
+  [ 'entity',          __webpack_require__(434) ]
 ];
 
 var _rules2 = [
-  [ 'balance_pairs',   __webpack_require__(432) ],
-  [ 'strikethrough',   __webpack_require__(385).postProcess ],
-  [ 'emphasis',        __webpack_require__(384).postProcess ],
-  [ 'text_collapse',   __webpack_require__(441) ]
+  [ 'balance_pairs',   __webpack_require__(433) ],
+  [ 'strikethrough',   __webpack_require__(386).postProcess ],
+  [ 'emphasis',        __webpack_require__(385).postProcess ],
+  [ 'text_collapse',   __webpack_require__(442) ]
 ];
 
 
@@ -4053,7 +4053,7 @@ ParserInline.prototype.parse = function (str, md, env, outTokens) {
 };
 
 
-ParserInline.prototype.State = __webpack_require__(439);
+ParserInline.prototype.State = __webpack_require__(440);
 
 
 module.exports = ParserInline;
@@ -4061,7 +4061,7 @@ module.exports = ParserInline;
 
 /***/ }),
 
-/***/ 407:
+/***/ 408:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4149,7 +4149,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 408:
+/***/ 409:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4198,7 +4198,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 409:
+/***/ 410:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4268,7 +4268,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 410:
+/***/ 411:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4282,9 +4282,9 @@ module.exports = {
 
 
 
-var assign          = __webpack_require__(375).assign;
-var unescapeAll     = __webpack_require__(375).unescapeAll;
-var escapeHtml      = __webpack_require__(375).escapeHtml;
+var assign          = __webpack_require__(376).assign;
+var unescapeAll     = __webpack_require__(376).unescapeAll;
+var escapeHtml      = __webpack_require__(376).escapeHtml;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4611,7 +4611,7 @@ module.exports = Renderer;
 
 /***/ }),
 
-/***/ 411:
+/***/ 412:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4619,7 +4619,7 @@ module.exports = Renderer;
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 
 module.exports = function blockquote(state, startLine, endLine, silent) {
@@ -4904,7 +4904,7 @@ module.exports = function blockquote(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 412:
+/***/ 413:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4946,7 +4946,7 @@ module.exports = function code(state, startLine, endLine/*, silent*/) {
 
 /***/ }),
 
-/***/ 413:
+/***/ 414:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5048,7 +5048,7 @@ module.exports = function fence(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 414:
+/***/ 415:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5056,7 +5056,7 @@ module.exports = function fence(state, startLine, endLine, silent) {
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 
 module.exports = function heading(state, startLine, endLine, silent) {
@@ -5111,7 +5111,7 @@ module.exports = function heading(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 415:
+/***/ 416:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5119,7 +5119,7 @@ module.exports = function heading(state, startLine, endLine, silent) {
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 
 module.exports = function hr(state, startLine, endLine, silent) {
@@ -5164,7 +5164,7 @@ module.exports = function hr(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 416:
+/***/ 417:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5173,8 +5173,8 @@ module.exports = function hr(state, startLine, endLine, silent) {
 
 
 
-var block_names = __webpack_require__(398);
-var HTML_OPEN_CLOSE_TAG_RE = __webpack_require__(383).HTML_OPEN_CLOSE_TAG_RE;
+var block_names = __webpack_require__(399);
+var HTML_OPEN_CLOSE_TAG_RE = __webpack_require__(384).HTML_OPEN_CLOSE_TAG_RE;
 
 // An array of opening and corresponding closing sequences for html tags,
 // last argument defines whether it can terminate a paragraph or not
@@ -5246,7 +5246,7 @@ module.exports = function html_block(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 417:
+/***/ 418:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5337,7 +5337,7 @@ module.exports = function lheading(state, startLine, endLine/*, silent*/) {
 
 /***/ }),
 
-/***/ 418:
+/***/ 419:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5345,7 +5345,7 @@ module.exports = function lheading(state, startLine, endLine/*, silent*/) {
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 
 // Search `[-+*][\n ]`, returns next pos after marker on success
@@ -5681,7 +5681,7 @@ module.exports = function list(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 419:
+/***/ 420:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5741,15 +5741,15 @@ module.exports = function paragraph(state, startLine/*, endLine*/) {
 
 /***/ }),
 
-/***/ 420:
+/***/ 421:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 
-var normalizeReference   = __webpack_require__(375).normalizeReference;
-var isSpace              = __webpack_require__(375).isSpace;
+var normalizeReference   = __webpack_require__(376).normalizeReference;
+var isSpace              = __webpack_require__(376).isSpace;
 
 
 module.exports = function reference(state, startLine, _endLine, silent) {
@@ -5947,7 +5947,7 @@ module.exports = function reference(state, startLine, _endLine, silent) {
 
 /***/ }),
 
-/***/ 421:
+/***/ 422:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5955,8 +5955,8 @@ module.exports = function reference(state, startLine, _endLine, silent) {
 
 
 
-var Token = __webpack_require__(378);
-var isSpace = __webpack_require__(375).isSpace;
+var Token = __webpack_require__(379);
+var isSpace = __webpack_require__(376).isSpace;
 
 
 function StateBlock(src, md, env, tokens) {
@@ -6185,7 +6185,7 @@ module.exports = StateBlock;
 
 /***/ }),
 
-/***/ 422:
+/***/ 423:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6193,7 +6193,7 @@ module.exports = StateBlock;
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 
 function getLine(state, line) {
@@ -6389,7 +6389,7 @@ module.exports = function table(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 423:
+/***/ 424:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6413,7 +6413,7 @@ module.exports = function block(state) {
 
 /***/ }),
 
-/***/ 424:
+/***/ 425:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6434,7 +6434,7 @@ module.exports = function inline(state) {
 
 /***/ }),
 
-/***/ 425:
+/***/ 426:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6445,7 +6445,7 @@ module.exports = function inline(state) {
 
 
 
-var arrayReplaceAt = __webpack_require__(375).arrayReplaceAt;
+var arrayReplaceAt = __webpack_require__(376).arrayReplaceAt;
 
 
 function isLinkOpen(str) {
@@ -6575,7 +6575,7 @@ module.exports = function linkify(state) {
 
 /***/ }),
 
-/***/ 426:
+/***/ 427:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6603,7 +6603,7 @@ module.exports = function inline(state) {
 
 /***/ }),
 
-/***/ 427:
+/***/ 428:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6718,7 +6718,7 @@ module.exports = function replace(state) {
 
 /***/ }),
 
-/***/ 428:
+/***/ 429:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6727,9 +6727,9 @@ module.exports = function replace(state) {
 
 
 
-var isWhiteSpace   = __webpack_require__(375).isWhiteSpace;
-var isPunctChar    = __webpack_require__(375).isPunctChar;
-var isMdAsciiPunct = __webpack_require__(375).isMdAsciiPunct;
+var isWhiteSpace   = __webpack_require__(376).isWhiteSpace;
+var isPunctChar    = __webpack_require__(376).isPunctChar;
+var isMdAsciiPunct = __webpack_require__(376).isMdAsciiPunct;
 
 var QUOTE_TEST_RE = /['"]/;
 var QUOTE_RE = /['"]/g;
@@ -6919,7 +6919,7 @@ module.exports = function smartquotes(state) {
 
 /***/ }),
 
-/***/ 429:
+/***/ 430:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6927,7 +6927,7 @@ module.exports = function smartquotes(state) {
 //
 
 
-var Token = __webpack_require__(378);
+var Token = __webpack_require__(379);
 
 
 function StateCore(src, md, env) {
@@ -6947,7 +6947,7 @@ module.exports = StateCore;
 
 /***/ }),
 
-/***/ 430:
+/***/ 431:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7027,7 +7027,7 @@ module.exports = function autolink(state, silent) {
 
 /***/ }),
 
-/***/ 431:
+/***/ 432:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7078,7 +7078,7 @@ module.exports = function backtick(state, silent) {
 
 /***/ }),
 
-/***/ 432:
+/***/ 433:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7130,7 +7130,7 @@ module.exports = function link_pairs(state) {
 
 /***/ }),
 
-/***/ 433:
+/***/ 434:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7138,10 +7138,10 @@ module.exports = function link_pairs(state) {
 
 
 
-var entities          = __webpack_require__(382);
-var has               = __webpack_require__(375).has;
-var isValidEntityCode = __webpack_require__(375).isValidEntityCode;
-var fromCodePoint     = __webpack_require__(375).fromCodePoint;
+var entities          = __webpack_require__(383);
+var has               = __webpack_require__(376).has;
+var isValidEntityCode = __webpack_require__(376).isValidEntityCode;
+var fromCodePoint     = __webpack_require__(376).fromCodePoint;
 
 
 var DIGITAL_RE = /^&#((?:x[a-f0-9]{1,8}|[0-9]{1,8}));/i;
@@ -7186,7 +7186,7 @@ module.exports = function entity(state, silent) {
 
 /***/ }),
 
-/***/ 434:
+/***/ 435:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7194,7 +7194,7 @@ module.exports = function entity(state, silent) {
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 var ESCAPED = [];
 
@@ -7246,7 +7246,7 @@ module.exports = function escape(state, silent) {
 
 /***/ }),
 
-/***/ 435:
+/***/ 436:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7255,7 +7255,7 @@ module.exports = function escape(state, silent) {
 
 
 
-var HTML_TAG_RE = __webpack_require__(383).HTML_TAG_RE;
+var HTML_TAG_RE = __webpack_require__(384).HTML_TAG_RE;
 
 
 function isLetter(ch) {
@@ -7301,7 +7301,7 @@ module.exports = function html_inline(state, silent) {
 
 /***/ }),
 
-/***/ 436:
+/***/ 437:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7309,8 +7309,8 @@ module.exports = function html_inline(state, silent) {
 
 
 
-var normalizeReference   = __webpack_require__(375).normalizeReference;
-var isSpace              = __webpack_require__(375).isSpace;
+var normalizeReference   = __webpack_require__(376).normalizeReference;
+var isSpace              = __webpack_require__(376).isSpace;
 
 
 module.exports = function image(state, silent) {
@@ -7461,7 +7461,7 @@ module.exports = function image(state, silent) {
 
 /***/ }),
 
-/***/ 437:
+/***/ 438:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7469,8 +7469,8 @@ module.exports = function image(state, silent) {
 
 
 
-var normalizeReference   = __webpack_require__(375).normalizeReference;
-var isSpace              = __webpack_require__(375).isSpace;
+var normalizeReference   = __webpack_require__(376).normalizeReference;
+var isSpace              = __webpack_require__(376).isSpace;
 
 
 module.exports = function link(state, silent) {
@@ -7619,7 +7619,7 @@ module.exports = function link(state, silent) {
 
 /***/ }),
 
-/***/ 438:
+/***/ 439:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7627,7 +7627,7 @@ module.exports = function link(state, silent) {
 
 
 
-var isSpace = __webpack_require__(375).isSpace;
+var isSpace = __webpack_require__(376).isSpace;
 
 
 module.exports = function newline(state, silent) {
@@ -7669,7 +7669,7 @@ module.exports = function newline(state, silent) {
 
 /***/ }),
 
-/***/ 439:
+/***/ 440:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7678,10 +7678,10 @@ module.exports = function newline(state, silent) {
 
 
 
-var Token          = __webpack_require__(378);
-var isWhiteSpace   = __webpack_require__(375).isWhiteSpace;
-var isPunctChar    = __webpack_require__(375).isPunctChar;
-var isMdAsciiPunct = __webpack_require__(375).isMdAsciiPunct;
+var Token          = __webpack_require__(379);
+var isWhiteSpace   = __webpack_require__(376).isWhiteSpace;
+var isPunctChar    = __webpack_require__(376).isPunctChar;
+var isMdAsciiPunct = __webpack_require__(376).isMdAsciiPunct;
 
 
 function StateInline(src, md, env, outTokens) {
@@ -7807,7 +7807,7 @@ module.exports = StateInline;
 
 /***/ }),
 
-/***/ 440:
+/***/ 441:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7904,7 +7904,7 @@ module.exports = function text(state, silent) {
 
 /***/ }),
 
-/***/ 441:
+/***/ 442:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7945,7 +7945,7 @@ module.exports = function text_collapse(state) {
 
 /***/ }),
 
-/***/ 442:
+/***/ 443:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8075,7 +8075,7 @@ module.exports = decode;
 
 /***/ }),
 
-/***/ 443:
+/***/ 444:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8181,7 +8181,7 @@ module.exports = encode;
 
 /***/ }),
 
-/***/ 444:
+/***/ 445:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8214,7 +8214,7 @@ module.exports = function format(url) {
 
 /***/ }),
 
-/***/ 445:
+/***/ 446:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8534,49 +8534,49 @@ module.exports = urlParse;
 
 /***/ }),
 
-/***/ 446:
+/***/ 447:
 /***/ (function(module, exports) {
 
 module.exports=/[\xAD\u0600-\u0605\u061C\u06DD\u070F\u08E2\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF\uFFF9-\uFFFB]|\uD804\uDCBD|\uD82F[\uDCA0-\uDCA3]|\uD834[\uDD73-\uDD7A]|\uDB40[\uDC01\uDC20-\uDC7F]/
 
 /***/ }),
 
-/***/ 447:
+/***/ 448:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.Any = __webpack_require__(389);
-exports.Cc  = __webpack_require__(387);
-exports.Cf  = __webpack_require__(446);
-exports.P   = __webpack_require__(379);
-exports.Z   = __webpack_require__(388);
+exports.Any = __webpack_require__(390);
+exports.Cc  = __webpack_require__(388);
+exports.Cf  = __webpack_require__(447);
+exports.P   = __webpack_require__(380);
+exports.Z   = __webpack_require__(389);
 
 
 /***/ }),
 
-/***/ 448:
+/***/ 449:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_Auth__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it__ = __webpack_require__(392);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_markdown_it__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__ = __webpack_require__(451);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__ = __webpack_require__(452);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it_video__ = __webpack_require__(452);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it_video__ = __webpack_require__(453);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it_video___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_markdown_it_video__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter__ = __webpack_require__(450);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter__ = __webpack_require__(451);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_markdown_it_front_matter__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block__ = __webpack_require__(398);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_markdown_it_custom_block__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_startsWith__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_startsWith__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_lodash_startsWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_lodash_startsWith__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_endsWith__ = __webpack_require__(449);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_endsWith__ = __webpack_require__(450);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_lodash_endsWith___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_lodash_endsWith__);
 
 
@@ -8594,7 +8594,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var FourCornersLib = __webpack_require__(392);
+var FourCornersLib = __webpack_require__(393);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'markdown-renderer',
@@ -8777,7 +8777,7 @@ var FourCornersLib = __webpack_require__(392);
 
 /***/ }),
 
-/***/ 449:
+/***/ 450:
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseClamp = __webpack_require__(381),
@@ -8827,7 +8827,7 @@ module.exports = endsWith;
 
 /***/ }),
 
-/***/ 450:
+/***/ 451:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8949,7 +8949,7 @@ module.exports = function front_matter_plugin(md, cb) {
 
 /***/ }),
 
-/***/ 451:
+/***/ 452:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8990,7 +8990,7 @@ module.exports = function (md) {
 
 /***/ }),
 
-/***/ 452:
+/***/ 453:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9153,14 +9153,14 @@ module.exports = function video_plugin(md, options) {
 
 /***/ }),
 
-/***/ 453:
+/***/ 454:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(3)(
   /* script */
-  __webpack_require__(448),
+  __webpack_require__(449),
   /* template */
-  __webpack_require__(454),
+  __webpack_require__(455),
   /* scopeId */
   null,
   /* cssModules */
@@ -9172,7 +9172,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 454:
+/***/ 455:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -9186,45 +9186,172 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ }),
 
-/***/ 616:
+/***/ 456:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_PageStyle__ = __webpack_require__(380);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer__ = __webpack_require__(453);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'narrow-page-header',
+  props: ['title', 'subtitle', 'link', 'route']
+});
+
+/***/ }),
+
+/***/ 457:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(361)();
+// imports
+
+
+// module
+exports.push([module.i, "body[data-v-f8fc8472],html[data-v-f8fc8472]{font-family:Avenir,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0}.hidden[data-v-f8fc8472],[v-cloak][data-v-f8fc8472]{display:none}.pull-left[data-v-f8fc8472]{float:left}.pull-right[data-v-f8fc8472]{float:right}.clearfix[data-v-f8fc8472]{clear:both;float:none}.fa-icon[data-v-f8fc8472]{width:auto;height:1em}.no-margin[data-v-f8fc8472]{margin:0!important}.no-padding[data-v-f8fc8472]{padding:0!important}.background-white[data-v-f8fc8472]{background-color:#fff!important}.main-container[data-v-f8fc8472]{border-radius:4px;margin-top:20px;position:relative}@media (max-width:800px){.main-container[data-v-f8fc8472]{border-radius:0;margin-top:0}}.main-container.main-container-padded[data-v-f8fc8472]{padding:20px}.content-block[data-v-f8fc8472]{border-radius:4px;padding:20px;margin:0 0 20px}@media (max-width:800px){.content-block[data-v-f8fc8472]{border-radius:0}}.content-block.white-block[data-v-f8fc8472]{background-color:#fff}.content-block.padded-block[data-v-f8fc8472]{padding:40px}.content-block.unpadded-block[data-v-f8fc8472]{padding:0}.content-block.header-block[data-v-f8fc8472]{margin-top:20px;overflow:hidden}.fade-enter-active[data-v-f8fc8472],.fade-leave-active[data-v-f8fc8472]{transition:all .3s ease}.fade-enter[data-v-f8fc8472],.fade-leave-to[data-v-f8fc8472]{opacity:0}.particles-js-canvas-el[data-v-f8fc8472]{top:0;bottom:0;left:0;right:0;position:absolute;pointer-events:none;z-index:-1}.rendered-markdown[data-v-f8fc8472]{white-space:normal;word-wrap:break-word}.rendered-markdown h1[data-v-f8fc8472]{margin:0;padding:0;color:#444;margin-bottom:5px}.rendered-markdown a[data-v-f8fc8472],.rendered-markdown h1[data-v-f8fc8472],.rendered-markdown h2[data-v-f8fc8472],.rendered-markdown h3[data-v-f8fc8472],.rendered-markdown h4[data-v-f8fc8472],.rendered-markdown h5[data-v-f8fc8472],.rendered-markdown li[data-v-f8fc8472],.rendered-markdown p[data-v-f8fc8472]{color:#444}.rendered-markdown a[data-v-f8fc8472]:first-child,.rendered-markdown h1[data-v-f8fc8472]:first-child,.rendered-markdown h2[data-v-f8fc8472]:first-child,.rendered-markdown h3[data-v-f8fc8472]:first-child,.rendered-markdown h4[data-v-f8fc8472]:first-child,.rendered-markdown h5[data-v-f8fc8472]:first-child,.rendered-markdown li[data-v-f8fc8472]:first-child,.rendered-markdown p[data-v-f8fc8472]:first-child{margin-top:0}.rendered-markdown h1[data-v-f8fc8472],.rendered-markdown h2[data-v-f8fc8472],.rendered-markdown h3[data-v-f8fc8472],.rendered-markdown h4[data-v-f8fc8472],.rendered-markdown h5[data-v-f8fc8472]{font-weight:300}.rendered-markdown h2[data-v-f8fc8472]{color:#444;font-size:1.3em;font-weight:700}.rendered-markdown p[data-v-f8fc8472]{margin:10px 0}.rendered-markdown a[data-v-f8fc8472]{color:#29b474!important;text-decoration:underline}.rendered-markdown a[data-v-f8fc8472]:hover{color:#29b474;cursor:pointer}.rendered-markdown blockquote[data-v-f8fc8472]{border-left:3px solid #29b474;color:#ccc;margin:30px 20px 30px 0;padding-left:20px;font-style:italic}.rendered-markdown pre[data-v-f8fc8472]{border-radius:6px;background-color:#e9e9e9;max-width:100%;padding:20px;white-space:normal;word-wrap:break-word}.rendered-markdown img[data-v-f8fc8472]{display:inline-block;margin:10px;width:100%;max-width:160px}.rendered-markdown .fc-image>img[data-v-f8fc8472],.rendered-markdown .fc-image img[data-v-f8fc8472],.rendered-markdown img[data-4c][data-v-f8fc8472]{display:block;margin:0;max-width:100%;padding:0;width:100%}.rendered-markdown .md-bio[data-v-f8fc8472]{display:inline-block;min-height:100px;overflow:hidden;padding:10px;position:relative;width:160px}.rendered-markdown .md-bio img.md-bio--image[data-v-f8fc8472]{border-radius:50%;margin:0;padding:0;margin:0 20px;height:120px;width:120px}.rendered-markdown .md-bio .md-bio--content[data-v-f8fc8472]{border-left:1px solid #e9e9e9;padding:10px}.rendered-markdown .md-bio h5.md-bio--caption[data-v-f8fc8472]{margin:0;padding:0;font-size:1em;font-weight:700;height:20px;line-height:20px;margin:5px 0;max-width:160px;overflow:hidden;text-align:center}.rendered-markdown .md-bio.md-bio--with-bio[data-v-f8fc8472]{border-radius:6px;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;padding:10px;padding-left:100px;max-width:100%;width:100%}.rendered-markdown .md-bio.md-bio--with-bio img.md-bio--image[data-v-f8fc8472]{margin:0;padding:0;position:absolute;top:10px;left:10px;height:80px;width:80px}.rendered-markdown .md-bio.md-bio--with-bio h5.md-bio--caption[data-v-f8fc8472]{margin:0;padding:0;height:20px;max-width:100%;text-align:left;width:100%}.rendered-markdown .md-bio.md-bio--with-bio p.md-bio--bio[data-v-f8fc8472]{margin:0;padding:0;color:#666;text-align:left}.narrow-page-header[data-v-f8fc8472]{color:#fff;padding:0 20px;position:relative}@media (max-width:800px){.narrow-page-header[data-v-f8fc8472]{padding:20px 20px 0}}.narrow-page-header h1.page-title[data-v-f8fc8472]{margin:0;padding:0;font-size:1.8em}.narrow-page-header a.page-link[data-v-f8fc8472],.narrow-page-header h2.page-subtitle[data-v-f8fc8472]{margin:0;padding:0;color:#fff;font-size:1em;font-weight:700;text-decoration:none}.narrow-page-header a.page-link[data-v-f8fc8472]{position:absolute;right:20px;bottom:0}.narrow-page-header a.page-link[data-v-f8fc8472]:hover{cursor:pointer;text-decoration:underline}", "", {"version":3,"sources":["/root/connectedacademy/src/components/NarrowPageHeader.vue"],"names":[],"mappings":"AACA,4CAEE,8CAAoD,AACpD,mCAAoC,AACpC,kCAAmC,AACnC,SAAU,AACV,SAAW,CACZ,AACD,oDAEE,YAAc,CACf,AACD,4BACE,UAAY,CACb,AACD,6BACE,WAAa,CACd,AACD,2BACE,WAAY,AACZ,UAAY,CACb,AACD,0BACE,WAAY,AACZ,UAAY,CACb,AACD,4BACE,kBAAqB,CACtB,AACD,6BACE,mBAAsB,CACvB,AACD,mCACE,+BAAkC,CACnC,AACD,iCACE,kBAAmB,AACnB,gBAAiB,AACjB,iBAAmB,CACpB,AACD,yBACA,iCACI,gBAAiB,AACjB,YAAc,CACjB,CACA,AACD,uDACE,YAAc,CACf,AACD,gCACE,kBAAmB,AACnB,aAAc,AACd,eAAmB,CACpB,AACD,yBACA,gCACI,eAAiB,CACpB,CACA,AACD,4CACE,qBAAuB,CACxB,AACD,6CACE,YAAc,CACf,AACD,+CACE,SAAW,CACZ,AACD,6CACE,gBAAiB,AACjB,eAAiB,CAClB,AACD,wEAEE,uBAA0B,CAC3B,AACD,6DAEE,SAAW,CACZ,AACD,yCACE,MAAO,AACP,SAAU,AACV,OAAQ,AACR,QAAS,AACT,kBAAmB,AACnB,oBAAqB,AACrB,UAAY,CACb,AACD,oCACE,mBAAqB,AACrB,oBAAsB,CACvB,AACD,uCACE,SAAU,AACV,UAAW,AACX,WAAY,AACZ,iBAAmB,CACpB,AACD,sTAQE,UAAY,CACb,AACD,sZAQE,YAAc,CACf,AACD,mMAKE,eAAiB,CAClB,AACD,uCACE,WAAY,AACZ,gBAAiB,AACjB,eAAkB,CACnB,AACD,sCACE,aAAe,CAChB,AACD,sCACE,wBAA0B,AAC1B,yBAA2B,CAC5B,AACD,4CACE,cAAe,AACf,cAAgB,CACjB,AACD,+CACE,8BAA+B,AAC/B,WAAY,AACZ,wBAA2B,AAC3B,kBAAmB,AACnB,iBAAmB,CACpB,AACD,wCACE,kBAAmB,AACnB,yBAA0B,AAC1B,eAAgB,AAChB,aAAc,AACd,mBAAqB,AACrB,oBAAsB,CACvB,AACD,wCACE,qBAAsB,AACtB,YAAa,AACb,WAAY,AACZ,eAAiB,CAClB,AACD,qJAGE,cAAe,AACf,SAAU,AACV,eAAgB,AAChB,UAAW,AACX,UAAY,CACb,AACD,4CACE,qBAAsB,AACtB,iBAAkB,AAClB,gBAAiB,AACjB,aAAc,AACd,kBAAmB,AACnB,WAAa,CACd,AACD,8DACE,kBAAmB,AACnB,SAAU,AACV,UAAW,AACX,cAAe,AACf,aAAc,AACd,WAAa,CACd,AACD,6DACE,8BAA+B,AAC/B,YAAc,CACf,AACD,+DACE,SAAU,AACV,UAAW,AACX,cAAe,AACf,gBAAkB,AAClB,YAAa,AACb,iBAAkB,AAClB,aAAc,AACd,gBAAiB,AACjB,gBAAiB,AACjB,iBAAmB,CACpB,AACD,6DACE,kBAAmB,AACnB,sBAAuB,AACvB,2BAA4B,AAC5B,8BAA+B,AAC/B,aAAc,AACd,mBAAoB,AACpB,eAAgB,AAChB,UAAY,CACb,AACD,+EACE,SAAU,AACV,UAAW,AACX,kBAAmB,AACnB,SAAU,AACV,UAAW,AACX,YAAa,AACb,UAAY,CACb,AACD,gFACE,SAAU,AACV,UAAW,AACX,YAAa,AACb,eAAgB,AAChB,gBAAiB,AACjB,UAAY,CACb,AACD,2EACE,SAAU,AACV,UAAW,AACX,WAAY,AACZ,eAAiB,CAClB,AACD,qCACE,WAAY,AACZ,eAAgB,AAChB,iBAAmB,CACpB,AACD,yBACA,qCACI,mBAA0B,CAC7B,CACA,AACD,mDACE,SAAU,AACV,UAAW,AACX,eAAiB,CAClB,AACD,uGAEE,SAAU,AACV,UAAW,AACX,WAAY,AACZ,cAAe,AACf,gBAAkB,AAClB,oBAAsB,CACvB,AACD,iDACE,kBAAmB,AACnB,WAAY,AACZ,QAAU,CACX,AACD,uDACE,eAAgB,AAChB,yBAA2B,CAC5B","file":"NarrowPageHeader.vue","sourcesContent":["\nhtml[data-v-f8fc8472],\nbody[data-v-f8fc8472] {\n  font-family: 'Avenir', Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  margin: 0;\n  padding: 0;\n}\n.hidden[data-v-f8fc8472],\n[v-cloak][data-v-f8fc8472] {\n  display: none;\n}\n.pull-left[data-v-f8fc8472] {\n  float: left;\n}\n.pull-right[data-v-f8fc8472] {\n  float: right;\n}\n.clearfix[data-v-f8fc8472] {\n  clear: both;\n  float: none;\n}\n.fa-icon[data-v-f8fc8472] {\n  width: auto;\n  height: 1em;\n}\n.no-margin[data-v-f8fc8472] {\n  margin: 0 !important;\n}\n.no-padding[data-v-f8fc8472] {\n  padding: 0 !important;\n}\n.background-white[data-v-f8fc8472] {\n  background-color: #fff !important;\n}\n.main-container[data-v-f8fc8472] {\n  border-radius: 4px;\n  margin-top: 20px;\n  position: relative;\n}\n@media (max-width: 800px) {\n.main-container[data-v-f8fc8472] {\n    border-radius: 0;\n    margin-top: 0;\n}\n}\n.main-container.main-container-padded[data-v-f8fc8472] {\n  padding: 20px;\n}\n.content-block[data-v-f8fc8472] {\n  border-radius: 4px;\n  padding: 20px;\n  margin: 0 0 20px 0;\n}\n@media (max-width: 800px) {\n.content-block[data-v-f8fc8472] {\n    border-radius: 0;\n}\n}\n.content-block.white-block[data-v-f8fc8472] {\n  background-color: #fff;\n}\n.content-block.padded-block[data-v-f8fc8472] {\n  padding: 40px;\n}\n.content-block.unpadded-block[data-v-f8fc8472] {\n  padding: 0;\n}\n.content-block.header-block[data-v-f8fc8472] {\n  margin-top: 20px;\n  overflow: hidden;\n}\n.fade-enter-active[data-v-f8fc8472],\n.fade-leave-active[data-v-f8fc8472] {\n  transition: all 0.3s ease;\n}\n.fade-enter[data-v-f8fc8472],\n.fade-leave-to[data-v-f8fc8472] {\n  opacity: 0;\n}\n.particles-js-canvas-el[data-v-f8fc8472] {\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  position: absolute;\n  pointer-events: none;\n  z-index: -1;\n}\n.rendered-markdown[data-v-f8fc8472] {\n  white-space: initial;\n  word-wrap: break-word;\n}\n.rendered-markdown h1[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  color: #444;\n  margin-bottom: 5px;\n}\n.rendered-markdown h1[data-v-f8fc8472],\n.rendered-markdown h2[data-v-f8fc8472],\n.rendered-markdown h3[data-v-f8fc8472],\n.rendered-markdown h4[data-v-f8fc8472],\n.rendered-markdown h5[data-v-f8fc8472],\n.rendered-markdown p[data-v-f8fc8472],\n.rendered-markdown a[data-v-f8fc8472],\n.rendered-markdown li[data-v-f8fc8472] {\n  color: #444;\n}\n.rendered-markdown h1[data-v-f8fc8472]:first-child,\n.rendered-markdown h2[data-v-f8fc8472]:first-child,\n.rendered-markdown h3[data-v-f8fc8472]:first-child,\n.rendered-markdown h4[data-v-f8fc8472]:first-child,\n.rendered-markdown h5[data-v-f8fc8472]:first-child,\n.rendered-markdown p[data-v-f8fc8472]:first-child,\n.rendered-markdown a[data-v-f8fc8472]:first-child,\n.rendered-markdown li[data-v-f8fc8472]:first-child {\n  margin-top: 0;\n}\n.rendered-markdown h1[data-v-f8fc8472],\n.rendered-markdown h2[data-v-f8fc8472],\n.rendered-markdown h3[data-v-f8fc8472],\n.rendered-markdown h4[data-v-f8fc8472],\n.rendered-markdown h5[data-v-f8fc8472] {\n  font-weight: 300;\n}\n.rendered-markdown h2[data-v-f8fc8472] {\n  color: #444;\n  font-size: 1.3em;\n  font-weight: bold;\n}\n.rendered-markdown p[data-v-f8fc8472] {\n  margin: 10px 0;\n}\n.rendered-markdown a[data-v-f8fc8472] {\n  color: #29b474 !important;\n  text-decoration: underline;\n}\n.rendered-markdown a[data-v-f8fc8472]:hover {\n  color: #29b474;\n  cursor: pointer;\n}\n.rendered-markdown blockquote[data-v-f8fc8472] {\n  border-left: #29b474 3px solid;\n  color: #ccc;\n  margin: 30px 20px 30px 0px;\n  padding-left: 20px;\n  font-style: italic;\n}\n.rendered-markdown pre[data-v-f8fc8472] {\n  border-radius: 6px;\n  background-color: #e9e9e9;\n  max-width: 100%;\n  padding: 20px;\n  white-space: initial;\n  word-wrap: break-word;\n}\n.rendered-markdown img[data-v-f8fc8472] {\n  display: inline-block;\n  margin: 10px;\n  width: 100%;\n  max-width: 160px;\n}\n.rendered-markdown img[data-4c][data-v-f8fc8472],\n.rendered-markdown .fc-image img[data-v-f8fc8472],\n.rendered-markdown .fc-image > img[data-v-f8fc8472] {\n  display: block;\n  margin: 0;\n  max-width: 100%;\n  padding: 0;\n  width: 100%;\n}\n.rendered-markdown .md-bio[data-v-f8fc8472] {\n  display: inline-block;\n  min-height: 100px;\n  overflow: hidden;\n  padding: 10px;\n  position: relative;\n  width: 160px;\n}\n.rendered-markdown .md-bio img.md-bio--image[data-v-f8fc8472] {\n  border-radius: 50%;\n  margin: 0;\n  padding: 0;\n  margin: 0 20px;\n  height: 120px;\n  width: 120px;\n}\n.rendered-markdown .md-bio .md-bio--content[data-v-f8fc8472] {\n  border-left: #e9e9e9 1px solid;\n  padding: 10px;\n}\n.rendered-markdown .md-bio h5.md-bio--caption[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  font-size: 1em;\n  font-weight: bold;\n  height: 20px;\n  line-height: 20px;\n  margin: 5px 0;\n  max-width: 160px;\n  overflow: hidden;\n  text-align: center;\n}\n.rendered-markdown .md-bio.md-bio--with-bio[data-v-f8fc8472] {\n  border-radius: 6px;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n  padding: 10px;\n  padding-left: 100px;\n  max-width: 100%;\n  width: 100%;\n}\n.rendered-markdown .md-bio.md-bio--with-bio img.md-bio--image[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  height: 80px;\n  width: 80px;\n}\n.rendered-markdown .md-bio.md-bio--with-bio h5.md-bio--caption[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  height: 20px;\n  max-width: 100%;\n  text-align: left;\n  width: 100%;\n}\n.rendered-markdown .md-bio.md-bio--with-bio p.md-bio--bio[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  color: #666;\n  text-align: left;\n}\n.narrow-page-header[data-v-f8fc8472] {\n  color: #fff;\n  padding: 0 20px;\n  position: relative;\n}\n@media (max-width: 800px) {\n.narrow-page-header[data-v-f8fc8472] {\n    padding: 20px 20px 0 20px;\n}\n}\n.narrow-page-header h1.page-title[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  font-size: 1.8em;\n}\n.narrow-page-header a.page-link[data-v-f8fc8472],\n.narrow-page-header h2.page-subtitle[data-v-f8fc8472] {\n  margin: 0;\n  padding: 0;\n  color: #fff;\n  font-size: 1em;\n  font-weight: bold;\n  text-decoration: none;\n}\n.narrow-page-header a.page-link[data-v-f8fc8472] {\n  position: absolute;\n  right: 20px;\n  bottom: 0;\n}\n.narrow-page-header a.page-link[data-v-f8fc8472]:hover {\n  cursor: pointer;\n  text-decoration: underline;\n}"],"sourceRoot":""}]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 458:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(457);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(362)("6b24832d", content, true);
+
+/***/ }),
+
+/***/ 460:
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(458)
+
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(456),
+  /* template */
+  __webpack_require__(461),
+  /* scopeId */
+  "data-v-f8fc8472",
+  /* cssModules */
+  null
+)
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 461:
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "narrow-page-header"
+  }, [_c('h1', {
+    staticClass: "page-title"
+  }, [_vm._v(_vm._s(_vm.title))]), _c('h2', {
+    staticClass: "page-subtitle"
+  }, [_vm._v(_vm._s(_vm.subtitle))]), _c('router-link', {
+    staticClass: "page-link",
+    attrs: {
+      "to": {
+        name: _vm.route
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.link))])], 1)
+},staticRenderFns: []}
+
+/***/ }),
+
+/***/ 652:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_markdown_it__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer__ = __webpack_require__(454);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader__ = __webpack_require__(460);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins_PageStyle__ = __webpack_require__(382);
+
+
+
+
+
+
+
+
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'markdown',
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_PageStyle__["a" /* default */]],
+  name: 'terms',
+  mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins_PageStyle__["a" /* default */]],
   components: {
-    MarkdownRenderer: __WEBPACK_IMPORTED_MODULE_1__components_MarkdownRenderer___default.a
+    NarrowPageHeader: __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader___default.a,
+    MarkdownRenderer: __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer___default.a
   },
   mounted: function mounted() {
-    this.$ga.event('markdown', 'rendered', window.location.href);
+    this.loadTerms();
   },
   data: function data() {
     return {
-      pageStyle: { type: undefined, visible: true, minimized: false }
+      pageStyle: { type: undefined, visible: true, minimized: false },
+      release: ''
     };
+  },
+
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['course']), {
+    termsMarkdown: function termsMarkdown() {
+
+      var md = new __WEBPACK_IMPORTED_MODULE_3_markdown_it___default.a({
+        html: true,
+        linkify: true
+      });
+
+      return '<div>' + md.render(this.release) + '</div>';
+    }
+  }),
+  methods: {
+    loadTerms: function loadTerms() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].auth.fetchQuestions(function (response) {
+        _this.release = response.release;
+      }, function (response) {});
+    }
   }
 });
 
 /***/ }),
 
-/***/ 997:
+/***/ 965:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "markdown-page",
+    staticClass: "terms-page",
     attrs: {
-      "name": "markdown-page"
+      "name": "terms-page"
     }
   }, [_c('div', {
     staticClass: "col",
@@ -9232,13 +9359,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": "col-main"
     }
   }, [_c('div', {
-    staticClass: "main-container background-white"
+    staticClass: "main-container"
+  }, [_c('narrow-page-header', {
+    attrs: {
+      "title": "Terms",
+      "subtitle": "Our terms and conditions"
+    }
+  }), _c('div', {
+    staticClass: "content-block padded-block header-block white-block"
   }, [_c('div', {
-    staticClass: "container"
-  }, [_c('markdown-renderer')], 1)])])])
+    staticClass: "terms",
+    domProps: {
+      "innerHTML": _vm._s(_vm.termsMarkdown)
+    }
+  })])], 1)])])
 },staticRenderFns: []}
 
 /***/ })
 
 });
-//# sourceMappingURL=7.31ee951fea95603a9b67.js.map
+//# sourceMappingURL=5.387d08b45a5820b437f1.js.map
