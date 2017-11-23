@@ -1,13 +1,13 @@
-webpackJsonp([5],{
+webpackJsonp([6],{
 
-/***/ 372:
+/***/ 369:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(3)(
   /* script */
-  __webpack_require__(651),
+  __webpack_require__(647),
   /* template */
-  __webpack_require__(963),
+  __webpack_require__(957),
   /* scopeId */
   null,
   /* cssModules */
@@ -9274,25 +9274,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ }),
 
-/***/ 651:
+/***/ 647:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_markdown_it__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_PageStyle__ = __webpack_require__(380);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader__ = __webpack_require__(467);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer__ = __webpack_require__(453);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader__ = __webpack_require__(467);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins_PageStyle__ = __webpack_require__(380);
-
-
-
 
 
 
@@ -9304,54 +9298,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'terms',
-  mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins_PageStyle__["a" /* default */]],
+  name: 'about',
+  mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins_PageStyle__["a" /* default */]],
   components: {
-    NarrowPageHeader: __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader___default.a,
+    NarrowPageHeader: __WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader___default.a,
     MarkdownRenderer: __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer___default.a
-  },
-  mounted: function mounted() {
-    this.loadTerms();
   },
   data: function data() {
     return {
-      pageStyle: { type: undefined, visible: true, minimized: false },
-      release: ''
+      navTitle: 'About - Connected Academy',
+      pageStyle: { type: undefined, visible: true, minimized: false }
     };
   },
 
-  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['course']), {
-    termsMarkdown: function termsMarkdown() {
-
-      var md = new __WEBPACK_IMPORTED_MODULE_3_markdown_it___default.a({
-        html: true,
-        linkify: true
-      });
-
-      return '<div>' + md.render(this.release) + '</div>';
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['course']), {
+    markdownUrl: function markdownUrl() {
+      return this.course.baseUri + 'about.md';
     }
-  }),
-  methods: {
-    loadTerms: function loadTerms() {
-      var _this = this;
-
-      __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].auth.fetchQuestions(function (response) {
-        _this.release = response.release;
-      }, function (response) {});
-    }
-  }
+  })
 });
 
 /***/ }),
 
-/***/ 963:
+/***/ 957:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "terms-page",
+    staticClass: "about-page",
     attrs: {
-      "name": "terms-page"
+      "name": "about-page"
     }
   }, [_c('div', {
     staticClass: "col",
@@ -9362,20 +9338,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "main-container"
   }, [_c('narrow-page-header', {
     attrs: {
-      "title": "Terms",
-      "subtitle": "Our terms and conditions"
+      "title": "About",
+      "subtitle": "Learn about Connected Academy"
     }
   }), _c('div', {
     staticClass: "content-block padded-block header-block white-block"
-  }, [_c('div', {
-    staticClass: "terms",
-    domProps: {
-      "innerHTML": _vm._s(_vm.termsMarkdown)
+  }, [_c('markdown-renderer', {
+    attrs: {
+      "markdown-url": _vm.markdownUrl
     }
-  })])], 1)])])
+  })], 1)], 1)])])
 },staticRenderFns: []}
 
 /***/ })
 
 });
-//# sourceMappingURL=5.6bff5e6c8d65f7958a73.js.map
+//# sourceMappingURL=6.3712152f44c9b322d65f.js.map
