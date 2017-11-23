@@ -2,8 +2,8 @@ import Vue from 'vue'
 import * as config from '@/api/config'
 
 export default {
-  getMessages(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/profile/messages/${request.theClass}`).then((response) => {
+  getMessages(theClass, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/profile/messages/${theClass}`).then((response) => {
       cb(response.body)
     }, (response) => {
       errorCb(response)

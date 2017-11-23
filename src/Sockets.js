@@ -35,3 +35,15 @@ Vue.io.socket.on('onDisconnect', function () {
 Vue.io.socket.on('afterDisconnect', function () {
   console.log('Lost connection to server - afterDisconnect (SOCKET)')
 })
+
+Vue.io.socket.on('user', (obj) => {
+  console.log('SOCKET MESSAGE RECEIVED - user')
+})
+
+Vue.io.socket.on('classroom', (obj) => {
+  console.log('SOCKET MESSAGE RECEIVED - classroom')
+})
+
+Vue.io.socket.on('message', (obj) => {
+  console.log('SOCKET MESSAGE RECEIVED - message')
+})

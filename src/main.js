@@ -19,7 +19,10 @@ import Icon from 'vue-awesome/components/Icon'
 
 import App from '@/App'
 import Lang from '@/Lang'
-import Sockets from '@/Sockets'
+require('@/Sockets')
+// import Sockets from '@/Sockets'
+
+
 
 import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
 import { VueMasonryPlugin } from 'vue-masonry'
@@ -91,7 +94,6 @@ new Vue({
   template: '<App/>',
   components: {
     App,
-    Lang,
-    Sockets
+    Lang
   }
 })
