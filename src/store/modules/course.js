@@ -44,6 +44,7 @@ const actions = {
   getSpec({
     commit,
   }, classSlug) {
+    if (typeof classSlug === 'undefined') return
     state.current_class = {
       slug: classSlug,
       title: classSlug.charAt(0).toUpperCase() + classSlug.slice(1),
