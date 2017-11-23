@@ -4,10 +4,10 @@
 
   .feedback-submission.feedback-submission-submit
     label
-      | Search a website for your homework
+      | Search your site for a FourCorners image
     input(type="text" name="text" placeholder="E.g. https://example.com/page" v-model="submissionLink")
     p.pull-left {{ resultsText }}
-    .pure-button.pure-button-primary.pull-right(v-on:click="postSubmission") Find Images
+    .pure-button.pure-button-primary.pull-right(v-on:click="postSubmission") Begin Search
     .clearfix
   
   ul.submission-selector(v-if="submissions.length > 0")
@@ -77,7 +77,7 @@ export default {
         postData,
         (response) => {
           this.submissions = response.body.submissions;
-          this.resultsText = (this.submissions.length) ? `${this.submissions.length} Images Found` : 'No Images Found';
+          this.resultsText = (this.submissions.length) ? `Select an Image` : 'No Images Found';
         },
         (response) => {
           alert('Submission failed, please try again.');
@@ -145,9 +145,12 @@ export default {
       float left
       height 140px
       margin 10px
+      opacity 0.8
       width 200px
       &:hover
         cursor pointer
+        opacity 1.0
+        outline white 3px solid
 
 
 </style>

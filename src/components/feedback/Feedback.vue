@@ -2,12 +2,12 @@
 
 .feedback-page(name="feedback-page")
   
-  page-header(title="Homework Area" identifier="homework")
+  page-header(title="Response Area" identifier="homework")
 
   #chat-list-container
     ul
-      li.list-header My submissions
-      li.no-content(v-if="!myFeedbackItems.length") Your conversations will appear here when you submit homework.
+      li.list-header Your Responses
+      li.no-content(v-if="!myFeedbackItems.length") Submit a response
       router-link(v-for="(feedbackItem, index) in myFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
         feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
 
@@ -29,12 +29,12 @@
       .markdown-wrapper
         markdown-renderer(v-bind:markdown-url="markdownUrl")
 
-      four-corners-link(message="This homework requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
+      four-corners-link(message="This task requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
 
-      h2 Submit Homework
+      h2 Submit Response
       feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
 
-      #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit homework
+      #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit a response
 
     transition(name="fade" type="in out")
       feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug" v-on:reloadchats="reloadChats")

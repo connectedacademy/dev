@@ -87,7 +87,7 @@ export default {
         },
         {
           role: 'user',
-          label: 'Your Homework',
+          label: 'Your Responses',
           component: 'submissions',
         },
         {
@@ -97,7 +97,7 @@ export default {
         },
         {
           role: 'teacher',
-          label: 'Class Homework',
+          label: 'Class Responses',
           component: 'submissions',
         },
         {
@@ -127,7 +127,7 @@ export default {
         },
         {
           role: 'admin',
-          label: 'All Homework',
+          label: 'All Responses',
           component: 'submissions',
         },
       ],

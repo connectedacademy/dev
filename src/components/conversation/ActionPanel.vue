@@ -5,11 +5,14 @@
     ul#experience-controls
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
-        onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
+        //- onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
         icon(v-bind:name="mediaPlaying ? 'pause' : 'play'")
       
       li.experience-control(@click="skipToEnd")
         icon(name="step-forward")
+      
+      li.experience-control
+        p {{ currentTime }}
       
       li.experience-control#progress-bar(ref="progressbar" @click="trackClicked" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
         visualisation(v-bind:content="content" v-bind:current-class="currentClass")
@@ -28,6 +31,7 @@
 </template>
 
 <script>
+  import { EventBus } from '@/event-bus.js';
   import { mapGetters } from 'vuex';
   import Moment from 'moment-mini';
   
@@ -35,7 +39,7 @@
   import MediaContainer from '@/components/MediaContainer';
   import Visualisation from '@/components/conversation/Visualisation';
 
-  import clamp from 'lodash/clamp';
+  import _round from 'lodash/round';
 
   import MediaStream from '@/mixins/MediaStream';
 
@@ -60,6 +64,15 @@
       MediaStream,
     ],
     mounted() {
+      EventBus.$on('scrollStatus', (scrollStatus) => {
+        if (scrollStatus.currentTime < 0) {
+          this.currentTime = '0:00'
+        } else {
+          let time = _round(scrollStatus.currentTime);
+          this.currentTime = `${Math.floor(time / 60)}:${(time % 60).toString().padStart(2, '0')}`
+        }
+      })
+
       this.availablePlayerTypes = []; // Remove all available player types
       if (this.content.videoId) {
         // If a videoId is set on the content then add YouTube as an available type
@@ -72,6 +85,7 @@
     },
     data() {
       return {
+        currentTime: 0,
         playerTypeIndex: 0,
         availablePlayerTypes: [],
         mouseOffsetStart: 0,
@@ -191,12 +205,18 @@ $controls-height = 60px
       animate()
       float left
       position relative
+      text-align center
       @media(max-width: 568px)        
         &#twitter-control
           display none
       &.pull-right
         float right
         border none
+      p
+        reset()
+        font-size 0.8em
+        font-weight bold
+        line-height $controls-height
       .fa-icon
         animate()
         color $color-text-dark-grey
@@ -214,7 +234,7 @@ $controls-height = 60px
       pinned()
       margin 0
       position absolute
-      left (38px * 2) + 20px
+      left (38px * 3) + 20px
       right (38px * 1) + 20px
 
 </style>
