@@ -46,17 +46,20 @@ const actions = {
   }, classSlug) {
     state.current_class = {
       slug: classSlug,
+      title: classSlug.charAt(0).toUpperCase() + classSlug.slice(1),
       loading: true,
     }
-    API.course.getSpec(
-      classSlug,
-      response => commit(types.GET_SPEC_SUCCESS, {
-        response,
-      }),
-      response => commit(types.GET_SPEC_FAILURE, {
-        response,
-      }),
-    )
+    setTimeout(() => {
+      API.course.getSpec(
+        classSlug,
+        response => commit(types.GET_SPEC_SUCCESS, {
+          response,
+        }),
+        response => commit(types.GET_SPEC_FAILURE, {
+          response,
+        }),
+      )
+    }, 100)
   },
   getHubs({
     commit,

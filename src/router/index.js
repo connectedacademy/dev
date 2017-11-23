@@ -16,6 +16,7 @@ const FourCornersOnboarding = () => import('@/components/fourcorners/FourCorners
 
 const Home = () => import('@/components/pages/Home')
 const About = () => import('@/components/pages/About')
+const Faq = () => import('@/components/pages/Faq')
 const Schedule = () => import('@/components/pages/Schedule')
 const Terms = () => import('@/components/pages/Terms')
 
@@ -68,6 +69,11 @@ export default new Router({
       name: 'about',
       path: '/about',
       component: About,
+    },
+    {
+      name: 'faq',
+      path: '/faq',
+      component: Faq,
     },
     {
       name: 'profile',

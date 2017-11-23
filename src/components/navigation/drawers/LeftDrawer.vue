@@ -19,6 +19,10 @@ transition(name="slide-left")
           h1.drawer-list-item--header {{ $t('nav.about') }}
           h2.drawer-list-item--body {{ $t('nav.about_description') }}
 
+        router-link.drawer-list-item(tag="li" name="faq-drawer-item" v-bind:to="{ name: 'faq' }")
+          h1.drawer-list-item--header {{ $t('nav.faq') }}
+          h2.drawer-list-item--body {{ $t('nav.faq_description') }}
+
         //- router-link.drawer-list-item(tag="li" name="terms-drawer-item" to="terms")
         //-   h1.drawer-list-item--header {{ $t('nav.terms') }}
         //-   h2.drawer-list-item--body {{ $t('nav.terms_description') }}

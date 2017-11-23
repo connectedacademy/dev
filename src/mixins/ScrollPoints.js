@@ -1,4 +1,4 @@
-import { clearInterval } from "timers";
+import { clearInterval, setTimeout } from "timers";
 
 export default {
   data() {
@@ -9,6 +9,7 @@ export default {
   },
   mounted() {
     // Periodically update document height variable
+    this.setScrollPoints()
     this.updateDocumentHeightInterval = setInterval(() => { this.updateDocumentHeight() }, 5000);
   },
   beforeDestroy() {

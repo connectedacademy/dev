@@ -33,6 +33,8 @@ export default {
     schedule_description: 'Switch classes and find out when new content will be released.',
     about: 'About',
     about_description: 'Learn about Connected Academy and how we are changing how education.',
+    faq: 'FAQ',
+    faq_description: 'Frequently asked questions about Connected Academy.',
     terms: 'Terms',
     terms_description: 'Read the terms an conditions of using the Connected Academy platform.',
   },

@@ -126,10 +126,6 @@
         if (typeof this.$refs.renderedmarkdown !== 'undefined') {
           this.$refs.renderedmarkdown.replaceChild(RenderedMarkdown.$el, this.$refs.renderedmarkdown.childNodes[0]);
         }
-  
-        // setTimeout(() => {
-        //   FourCornersLib.init();
-        // }, 1000);
         
         this.$nextTick(() => {
           FourCornersLib.init();

@@ -76,10 +76,8 @@
       },
       '$route.params.classSlug': {
         handler: function(nV, oV) {
-          if (nV) {
-            if (nV !== oV) {
-              this.$store.dispatch('getSpec', nV);
-            }
+          if (nV && nV !== oV) {
+            this.$store.dispatch('getSpec', nV);
           }
         },
         deep: true

@@ -3,7 +3,8 @@
   .class-page(name="class-page")
     .col#col-main
       .main-container
-        narrow-page-header(v-show="!currentClass.loading" v-bind:title="currentClass.title" v-bind:subtitle="releaseLabel" link="Course schedule" route="schedule")
+        narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="Loading content..." link="Course schedule" route="schedule")
+        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="releaseLabel" link="Course schedule" route="schedule")
         section-navigator
         loading(v-if="currentClass && currentClass.loading")
         course-content(v-else-if="currentClass" v-bind:current-class="currentClass")
