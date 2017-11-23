@@ -1,13 +1,13 @@
-webpackJsonp([5],{
+webpackJsonp([6],{
 
-/***/ 371:
+/***/ 369:
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(3)(
   /* script */
-  __webpack_require__(654),
+  __webpack_require__(648),
   /* template */
-  __webpack_require__(963),
+  __webpack_require__(957),
   /* scopeId */
   null,
   /* cssModules */
@@ -19,7 +19,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 374:
+/***/ 375:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,7 +102,7 @@ var UNESCAPE_ALL_RE = new RegExp(UNESCAPE_MD_RE.source + '|' + ENTITY_RE.source,
 
 var DIGITAL_ENTITY_TEST_RE = /^#((?:x[a-f0-9]{1,8}|[0-9]{1,8}))/i;
 
-var entities = __webpack_require__(381);
+var entities = __webpack_require__(382);
 
 function replaceEntityPattern(match, name) {
   var code = 0;
@@ -208,7 +208,7 @@ function isWhiteSpace(code) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /*eslint-disable max-len*/
-var UNICODE_PUNCT_RE = __webpack_require__(378);
+var UNICODE_PUNCT_RE = __webpack_require__(379);
 
 // Currently without astral characters support.
 function isPunctChar(ch) {
@@ -279,7 +279,7 @@ function normalizeReference(str) {
 // bundled size (e.g. a browser build).
 //
 exports.lib                 = {};
-exports.lib.mdurl           = __webpack_require__(385);
+exports.lib.mdurl           = __webpack_require__(386);
 exports.lib.ucmicro         = __webpack_require__(447);
 
 exports.assign              = assign;
@@ -302,7 +302,7 @@ exports.normalizeReference  = normalizeReference;
 
 /***/ }),
 
-/***/ 376:
+/***/ 377:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -662,7 +662,7 @@ module.exports = Ruler;
 
 /***/ }),
 
-/***/ 377:
+/***/ 378:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -867,39 +867,10 @@ module.exports = Token;
 
 /***/ }),
 
-/***/ 378:
-/***/ (function(module, exports) {
-
-module.exports=/[!-#%-\*,-/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E44\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC9\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDF3C-\uDF3E]|\uD807[\uDC41-\uDC45\uDC70\uDC71]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/
-
-/***/ }),
-
 /***/ 379:
 /***/ (function(module, exports) {
 
-/**
- * The base implementation of `_.clamp` which doesn't coerce arguments.
- *
- * @private
- * @param {number} number The number to clamp.
- * @param {number} [lower] The lower bound.
- * @param {number} upper The upper bound.
- * @returns {number} Returns the clamped number.
- */
-function baseClamp(number, lower, upper) {
-  if (number === number) {
-    if (upper !== undefined) {
-      number = number <= upper ? number : upper;
-    }
-    if (lower !== undefined) {
-      number = number >= lower ? number : lower;
-    }
-  }
-  return number;
-}
-
-module.exports = baseClamp;
-
+module.exports=/[!-#%-\*,-/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E44\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC9\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDF3C-\uDF3E]|\uD807[\uDC41-\uDC45\uDC70\uDC71]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/
 
 /***/ }),
 
@@ -928,6 +899,35 @@ module.exports = baseClamp;
 /***/ }),
 
 /***/ 381:
+/***/ (function(module, exports) {
+
+/**
+ * The base implementation of `_.clamp` which doesn't coerce arguments.
+ *
+ * @private
+ * @param {number} number The number to clamp.
+ * @param {number} [lower] The lower bound.
+ * @param {number} upper The upper bound.
+ * @returns {number} Returns the clamped number.
+ */
+function baseClamp(number, lower, upper) {
+  if (number === number) {
+    if (upper !== undefined) {
+      number = number <= upper ? number : upper;
+    }
+    if (lower !== undefined) {
+      number = number >= lower ? number : lower;
+    }
+  }
+  return number;
+}
+
+module.exports = baseClamp;
+
+
+/***/ }),
+
+/***/ 382:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -941,7 +941,7 @@ module.exports = __webpack_require__(394);
 
 /***/ }),
 
-/***/ 382:
+/***/ 383:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -977,7 +977,7 @@ module.exports.HTML_OPEN_CLOSE_TAG_RE = HTML_OPEN_CLOSE_TAG_RE;
 
 /***/ }),
 
-/***/ 383:
+/***/ 384:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1112,7 +1112,7 @@ module.exports.postProcess = function emphasis(state) {
 
 /***/ }),
 
-/***/ 384:
+/***/ 385:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1237,7 +1237,7 @@ module.exports.postProcess = function strikethrough(state) {
 
 /***/ }),
 
-/***/ 385:
+/***/ 386:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1252,28 +1252,28 @@ module.exports.parse  = __webpack_require__(445);
 
 /***/ }),
 
-/***/ 386:
+/***/ 387:
 /***/ (function(module, exports) {
 
 module.exports=/[\0-\x1F\x7F-\x9F]/
 
 /***/ }),
 
-/***/ 387:
+/***/ 388:
 /***/ (function(module, exports) {
 
 module.exports=/[ \xA0\u1680\u2000-\u200A\u202F\u205F\u3000]/
 
 /***/ }),
 
-/***/ 388:
+/***/ 389:
 /***/ (function(module, exports) {
 
 module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
 
 /***/ }),
 
-/***/ 389:
+/***/ 390:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.4.1 by @mathias */
@@ -1839,10 +1839,10 @@ b.exports='body {\n  margin: 0;\n  overflow: hidden; }\n\nul {\n  margin-top: 0;
 /***/ 393:
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseClamp = __webpack_require__(379),
+var baseClamp = __webpack_require__(381),
     baseToString = __webpack_require__(106),
-    toInteger = __webpack_require__(48),
-    toString = __webpack_require__(105);
+    toInteger = __webpack_require__(49),
+    toString = __webpack_require__(107);
 
 /**
  * Checks if `string` starts with the given target string.
@@ -2545,10 +2545,10 @@ module.exports = function (opts) {
   var re = {};
 
   // Use direct extract instead of `regenerate` to reduse browserified size
-  re.src_Any = __webpack_require__(388).source;
-  re.src_Cc  = __webpack_require__(386).source;
-  re.src_Z   = __webpack_require__(387).source;
-  re.src_P   = __webpack_require__(378).source;
+  re.src_Any = __webpack_require__(389).source;
+  re.src_Cc  = __webpack_require__(387).source;
+  re.src_Z   = __webpack_require__(388).source;
+  re.src_P   = __webpack_require__(379).source;
 
   // \p{\Z\P\Cc\CF} (white spaces + control + format + punctuation)
   re.src_ZPCc = [ re.src_Z, re.src_P, re.src_Cc ].join('|');
@@ -2895,8 +2895,8 @@ exports.parseLinkTitle       = __webpack_require__(402);
 
 
 
-var isSpace     = __webpack_require__(374).isSpace;
-var unescapeAll = __webpack_require__(374).unescapeAll;
+var isSpace     = __webpack_require__(375).isSpace;
+var unescapeAll = __webpack_require__(375).unescapeAll;
 
 
 module.exports = function parseLinkDestination(str, pos, max) {
@@ -3039,7 +3039,7 @@ module.exports = function parseLinkLabel(state, start, disableNested) {
 
 
 
-var unescapeAll = __webpack_require__(374).unescapeAll;
+var unescapeAll = __webpack_require__(375).unescapeAll;
 
 
 module.exports = function parseLinkTitle(str, pos, max) {
@@ -3100,15 +3100,15 @@ module.exports = function parseLinkTitle(str, pos, max) {
 
 
 
-var utils        = __webpack_require__(374);
+var utils        = __webpack_require__(375);
 var helpers      = __webpack_require__(399);
 var Renderer     = __webpack_require__(410);
 var ParserCore   = __webpack_require__(405);
 var ParserBlock  = __webpack_require__(404);
 var ParserInline = __webpack_require__(406);
 var LinkifyIt    = __webpack_require__(395);
-var mdurl        = __webpack_require__(385);
-var punycode     = __webpack_require__(389);
+var mdurl        = __webpack_require__(386);
+var punycode     = __webpack_require__(390);
 
 
 var config = {
@@ -3692,7 +3692,7 @@ module.exports = MarkdownIt;
 
 
 
-var Ruler           = __webpack_require__(376);
+var Ruler           = __webpack_require__(377);
 
 
 var _rules = [
@@ -3823,7 +3823,7 @@ module.exports = ParserBlock;
 
 
 
-var Ruler  = __webpack_require__(376);
+var Ruler  = __webpack_require__(377);
 
 
 var _rules = [
@@ -3888,7 +3888,7 @@ module.exports = Core;
 
 
 
-var Ruler           = __webpack_require__(376);
+var Ruler           = __webpack_require__(377);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3899,8 +3899,8 @@ var _rules = [
   [ 'newline',         __webpack_require__(438) ],
   [ 'escape',          __webpack_require__(434) ],
   [ 'backticks',       __webpack_require__(431) ],
-  [ 'strikethrough',   __webpack_require__(384).tokenize ],
-  [ 'emphasis',        __webpack_require__(383).tokenize ],
+  [ 'strikethrough',   __webpack_require__(385).tokenize ],
+  [ 'emphasis',        __webpack_require__(384).tokenize ],
   [ 'link',            __webpack_require__(437) ],
   [ 'image',           __webpack_require__(436) ],
   [ 'autolink',        __webpack_require__(430) ],
@@ -3910,8 +3910,8 @@ var _rules = [
 
 var _rules2 = [
   [ 'balance_pairs',   __webpack_require__(432) ],
-  [ 'strikethrough',   __webpack_require__(384).postProcess ],
-  [ 'emphasis',        __webpack_require__(383).postProcess ],
+  [ 'strikethrough',   __webpack_require__(385).postProcess ],
+  [ 'emphasis',        __webpack_require__(384).postProcess ],
   [ 'text_collapse',   __webpack_require__(441) ]
 ];
 
@@ -4282,9 +4282,9 @@ module.exports = {
 
 
 
-var assign          = __webpack_require__(374).assign;
-var unescapeAll     = __webpack_require__(374).unescapeAll;
-var escapeHtml      = __webpack_require__(374).escapeHtml;
+var assign          = __webpack_require__(375).assign;
+var unescapeAll     = __webpack_require__(375).unescapeAll;
+var escapeHtml      = __webpack_require__(375).escapeHtml;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4619,7 +4619,7 @@ module.exports = Renderer;
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 
 module.exports = function blockquote(state, startLine, endLine, silent) {
@@ -5056,7 +5056,7 @@ module.exports = function fence(state, startLine, endLine, silent) {
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 
 module.exports = function heading(state, startLine, endLine, silent) {
@@ -5119,7 +5119,7 @@ module.exports = function heading(state, startLine, endLine, silent) {
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 
 module.exports = function hr(state, startLine, endLine, silent) {
@@ -5174,7 +5174,7 @@ module.exports = function hr(state, startLine, endLine, silent) {
 
 
 var block_names = __webpack_require__(398);
-var HTML_OPEN_CLOSE_TAG_RE = __webpack_require__(382).HTML_OPEN_CLOSE_TAG_RE;
+var HTML_OPEN_CLOSE_TAG_RE = __webpack_require__(383).HTML_OPEN_CLOSE_TAG_RE;
 
 // An array of opening and corresponding closing sequences for html tags,
 // last argument defines whether it can terminate a paragraph or not
@@ -5345,7 +5345,7 @@ module.exports = function lheading(state, startLine, endLine/*, silent*/) {
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 
 // Search `[-+*][\n ]`, returns next pos after marker on success
@@ -5748,8 +5748,8 @@ module.exports = function paragraph(state, startLine/*, endLine*/) {
 
 
 
-var normalizeReference   = __webpack_require__(374).normalizeReference;
-var isSpace              = __webpack_require__(374).isSpace;
+var normalizeReference   = __webpack_require__(375).normalizeReference;
+var isSpace              = __webpack_require__(375).isSpace;
 
 
 module.exports = function reference(state, startLine, _endLine, silent) {
@@ -5955,8 +5955,8 @@ module.exports = function reference(state, startLine, _endLine, silent) {
 
 
 
-var Token = __webpack_require__(377);
-var isSpace = __webpack_require__(374).isSpace;
+var Token = __webpack_require__(378);
+var isSpace = __webpack_require__(375).isSpace;
 
 
 function StateBlock(src, md, env, tokens) {
@@ -6193,7 +6193,7 @@ module.exports = StateBlock;
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 
 function getLine(state, line) {
@@ -6445,7 +6445,7 @@ module.exports = function inline(state) {
 
 
 
-var arrayReplaceAt = __webpack_require__(374).arrayReplaceAt;
+var arrayReplaceAt = __webpack_require__(375).arrayReplaceAt;
 
 
 function isLinkOpen(str) {
@@ -6727,9 +6727,9 @@ module.exports = function replace(state) {
 
 
 
-var isWhiteSpace   = __webpack_require__(374).isWhiteSpace;
-var isPunctChar    = __webpack_require__(374).isPunctChar;
-var isMdAsciiPunct = __webpack_require__(374).isMdAsciiPunct;
+var isWhiteSpace   = __webpack_require__(375).isWhiteSpace;
+var isPunctChar    = __webpack_require__(375).isPunctChar;
+var isMdAsciiPunct = __webpack_require__(375).isMdAsciiPunct;
 
 var QUOTE_TEST_RE = /['"]/;
 var QUOTE_RE = /['"]/g;
@@ -6927,7 +6927,7 @@ module.exports = function smartquotes(state) {
 //
 
 
-var Token = __webpack_require__(377);
+var Token = __webpack_require__(378);
 
 
 function StateCore(src, md, env) {
@@ -7138,10 +7138,10 @@ module.exports = function link_pairs(state) {
 
 
 
-var entities          = __webpack_require__(381);
-var has               = __webpack_require__(374).has;
-var isValidEntityCode = __webpack_require__(374).isValidEntityCode;
-var fromCodePoint     = __webpack_require__(374).fromCodePoint;
+var entities          = __webpack_require__(382);
+var has               = __webpack_require__(375).has;
+var isValidEntityCode = __webpack_require__(375).isValidEntityCode;
+var fromCodePoint     = __webpack_require__(375).fromCodePoint;
 
 
 var DIGITAL_RE = /^&#((?:x[a-f0-9]{1,8}|[0-9]{1,8}));/i;
@@ -7194,7 +7194,7 @@ module.exports = function entity(state, silent) {
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 var ESCAPED = [];
 
@@ -7255,7 +7255,7 @@ module.exports = function escape(state, silent) {
 
 
 
-var HTML_TAG_RE = __webpack_require__(382).HTML_TAG_RE;
+var HTML_TAG_RE = __webpack_require__(383).HTML_TAG_RE;
 
 
 function isLetter(ch) {
@@ -7309,8 +7309,8 @@ module.exports = function html_inline(state, silent) {
 
 
 
-var normalizeReference   = __webpack_require__(374).normalizeReference;
-var isSpace              = __webpack_require__(374).isSpace;
+var normalizeReference   = __webpack_require__(375).normalizeReference;
+var isSpace              = __webpack_require__(375).isSpace;
 
 
 module.exports = function image(state, silent) {
@@ -7469,8 +7469,8 @@ module.exports = function image(state, silent) {
 
 
 
-var normalizeReference   = __webpack_require__(374).normalizeReference;
-var isSpace              = __webpack_require__(374).isSpace;
+var normalizeReference   = __webpack_require__(375).normalizeReference;
+var isSpace              = __webpack_require__(375).isSpace;
 
 
 module.exports = function link(state, silent) {
@@ -7627,7 +7627,7 @@ module.exports = function link(state, silent) {
 
 
 
-var isSpace = __webpack_require__(374).isSpace;
+var isSpace = __webpack_require__(375).isSpace;
 
 
 module.exports = function newline(state, silent) {
@@ -7678,10 +7678,10 @@ module.exports = function newline(state, silent) {
 
 
 
-var Token          = __webpack_require__(377);
-var isWhiteSpace   = __webpack_require__(374).isWhiteSpace;
-var isPunctChar    = __webpack_require__(374).isPunctChar;
-var isMdAsciiPunct = __webpack_require__(374).isMdAsciiPunct;
+var Token          = __webpack_require__(378);
+var isWhiteSpace   = __webpack_require__(375).isWhiteSpace;
+var isPunctChar    = __webpack_require__(375).isPunctChar;
+var isMdAsciiPunct = __webpack_require__(375).isMdAsciiPunct;
 
 
 function StateInline(src, md, env, outTokens) {
@@ -8547,11 +8547,11 @@ module.exports=/[\xAD\u0600-\u0605\u061C\u06DD\u070F\u08E2\u180E\u200B-\u200F\u2
 "use strict";
 
 
-exports.Any = __webpack_require__(388);
-exports.Cc  = __webpack_require__(386);
+exports.Any = __webpack_require__(389);
+exports.Cc  = __webpack_require__(387);
 exports.Cf  = __webpack_require__(446);
-exports.P   = __webpack_require__(378);
-exports.Z   = __webpack_require__(387);
+exports.P   = __webpack_require__(379);
+exports.Z   = __webpack_require__(388);
 
 
 /***/ }),
@@ -8561,7 +8561,7 @@ exports.Z   = __webpack_require__(387);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_Auth__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_Auth__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it__ = __webpack_require__(391);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_markdown_it___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_markdown_it__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown_it_replace_link__ = __webpack_require__(451);
@@ -8780,10 +8780,10 @@ var FourCornersLib = __webpack_require__(392);
 /***/ 449:
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseClamp = __webpack_require__(379),
+var baseClamp = __webpack_require__(381),
     baseToString = __webpack_require__(106),
-    toInteger = __webpack_require__(48),
-    toString = __webpack_require__(105);
+    toInteger = __webpack_require__(49),
+    toString = __webpack_require__(107);
 
 /**
  * Checks if `string` ends with the given target string.
@@ -9203,7 +9203,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ 459:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(360)();
+exports = module.exports = __webpack_require__(361)();
 // imports
 
 
@@ -9225,7 +9225,7 @@ var content = __webpack_require__(459);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(361)("6b24832d", content, true);
+var update = __webpack_require__(362)("6b24832d", content, true);
 
 /***/ }),
 
@@ -9274,25 +9274,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ }),
 
-/***/ 654:
+/***/ 648:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_markdown_it___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_markdown_it__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_PageStyle__ = __webpack_require__(380);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader__ = __webpack_require__(467);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer__ = __webpack_require__(453);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader__ = __webpack_require__(467);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mixins_PageStyle__ = __webpack_require__(380);
-
-
-
 
 
 
@@ -9304,54 +9298,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'terms',
-  mixins: [__WEBPACK_IMPORTED_MODULE_6__mixins_PageStyle__["a" /* default */]],
+  name: 'about',
+  mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins_PageStyle__["a" /* default */]],
   components: {
-    NarrowPageHeader: __WEBPACK_IMPORTED_MODULE_5__components_NarrowPageHeader___default.a,
+    NarrowPageHeader: __WEBPACK_IMPORTED_MODULE_3__components_NarrowPageHeader___default.a,
     MarkdownRenderer: __WEBPACK_IMPORTED_MODULE_4__components_MarkdownRenderer___default.a
-  },
-  mounted: function mounted() {
-    this.loadTerms();
   },
   data: function data() {
     return {
-      pageStyle: { type: undefined, visible: true, minimized: false },
-      release: ''
+      navTitle: 'About - Connected Academy',
+      pageStyle: { type: undefined, visible: true, minimized: false }
     };
   },
 
-  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['course']), {
-    termsMarkdown: function termsMarkdown() {
-
-      var md = new __WEBPACK_IMPORTED_MODULE_3_markdown_it___default.a({
-        html: true,
-        linkify: true
-      });
-
-      return '<div>' + md.render(this.release) + '</div>';
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['course']), {
+    markdownUrl: function markdownUrl() {
+      return this.course.baseUri + 'about.md';
     }
-  }),
-  methods: {
-    loadTerms: function loadTerms() {
-      var _this = this;
-
-      __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].auth.fetchQuestions(function (response) {
-        _this.release = response.release;
-      }, function (response) {});
-    }
-  }
+  })
 });
 
 /***/ }),
 
-/***/ 963:
+/***/ 957:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "terms-page",
+    staticClass: "about-page",
     attrs: {
-      "name": "terms-page"
+      "name": "about-page"
     }
   }, [_c('div', {
     staticClass: "col",
@@ -9362,20 +9338,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "main-container"
   }, [_c('narrow-page-header', {
     attrs: {
-      "title": "Terms",
-      "subtitle": "Our terms and conditions"
+      "title": "About",
+      "subtitle": "Learn about Connected Academy"
     }
   }), _c('div', {
     staticClass: "content-block padded-block header-block white-block"
-  }, [_c('div', {
-    staticClass: "terms",
-    domProps: {
-      "innerHTML": _vm._s(_vm.termsMarkdown)
+  }, [_c('markdown-renderer', {
+    attrs: {
+      "markdown-url": _vm.markdownUrl
     }
-  })])], 1)])])
+  })], 1)], 1)])])
 },staticRenderFns: []}
 
 /***/ })
 
 });
-//# sourceMappingURL=5.aa4fdcd9a2ed1794cd01.js.map
+//# sourceMappingURL=6.64aa08eb98cdd5631645.js.map
