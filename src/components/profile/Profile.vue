@@ -141,8 +141,9 @@ export default {
   },
   methods: {
     subscribeToSocketEvents() {
-      Vue.io.socket.get(`/v1/classroom/mycode/${this.profileClass.slug}`, function (resData, jwres) {
+      this.$io.socket.get(`/v1/classroom/mycode/${this.profileClass.slug}`, function (resData, jwres) {
         Vue.$log.info('SOCKET RESPONSE - profile')
+        alert('SOCKET RESPONSE - profile')
         Vue.$log.info(resData)
       })
     },

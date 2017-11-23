@@ -152,8 +152,9 @@ export default {
   methods: {
     subscribeToSocketEvents() {
       // Get user socket (for submissions and feedback messages)
-      Vue.io.socket.get(`/v1/auth/me`, function (resData, jwres) {
+      this.$io.socket.get(`/v1/auth/me`, function (resData, jwres) {
         Vue.$log.info('SOCKET RESPONSE - me')
+        alert('SOCKET RESPONSE - me')
         Vue.$log.info(resData)
       })
     
