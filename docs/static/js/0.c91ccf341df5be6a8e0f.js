@@ -33922,9 +33922,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _c('polyline', {
     staticStyle: {
-      "fill": "nonestroke:#fff",
+      "fill": "none",
+      "stroke": "#fff",
       "stroke-linecap": "round",
-      "stroke-linejoin": "round",
+      "join": "round",
       "stroke-width": "10px"
     },
     attrs: {
@@ -35142,4 +35143,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=0.b463513ca3a2c6a562fd.js.map
+//# sourceMappingURL=0.c91ccf341df5be6a8e0f.js.map
