@@ -59,7 +59,7 @@ const actions = {
           response,
         }),
       )
-    }, 100)
+    }, 500)
   },
   getHubs({
     commit,
