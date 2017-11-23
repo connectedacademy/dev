@@ -10317,8 +10317,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     subscribeToSocketEvents: function subscribeToSocketEvents() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].io.socket.get('/v1/auth/me', function (resData, jwres) {
+      this.$io.socket.get('/v1/auth/me', function (resData, jwres) {
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.info('SOCKET RESPONSE - me');
+        alert('SOCKET RESPONSE - me');
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.info(resData);
       });
 
@@ -11074,4 +11075,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=2.1fdb68b442d80c474b8c.js.map
+//# sourceMappingURL=2.dea7519fff16609c732a.js.map
