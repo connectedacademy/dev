@@ -24,7 +24,7 @@
     #page-header(v-bind:class="{ minimized: navigation.minimized }")
 
     transition(name="fade" appear mode="out-in")
-      keep-alive(include="class")
+      keep-alive(v-bind:include="['class', 'course']")
         router-view
 
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")

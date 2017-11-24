@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mediaPlaying', 'activeSegment', 'peekSegment',
+      'mediaPlaying', 'activeSegment', 'peekSegment', 'scrollPoints',
     ]),
   },
   methods: {
@@ -163,7 +163,7 @@ export default {
       let offsetScrollPos = scrollPos + window.innerHeight
 
       // Get class
-      const scrollPoint = _find(self.$store.state.scroll.scrollPoints, { content_type: 'class' })
+      const scrollPoint = _find(self.scrollPoints, { content_type: 'class' })
       
       if (!scrollPoint) return
 

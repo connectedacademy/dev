@@ -31,6 +31,7 @@ const mutations = {
   },
   [types.RESET_SCROLL_POINTS](initialState) {
     state.scrollPoints = {}
+    state.currentSection = undefined
   },
   [types.SET_SCROLL_POINT](initialState, scrollPoint) {
     Vue.set(state.scrollPoints, scrollPoint.slug, scrollPoint)

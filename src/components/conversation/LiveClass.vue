@@ -35,13 +35,13 @@ export default {
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['isCollapsed'])
+    ...mapGetters(['isCollapsed', 'scrollPoints'])
   },
   methods: {
     continueListening() {
       this.$store.commit('EXPAND_CONVERSATION');
 
-      const scrollPoint = _find(this.$store.state.scrollPoints, { content_type: 'class' });
+      const scrollPoint = _find(this.scrollPoints, { content_type: 'class' });
       this.$store.commit('SET_CURRENT_SECTION', scrollPoint);
       setTimeout(() => {
         this.$store.commit('PLAY_MEDIA');

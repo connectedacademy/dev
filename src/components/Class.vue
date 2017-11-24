@@ -44,7 +44,7 @@ export default {
     this.toMessage()
   },
   activated() {
-    window.scrollTo(0, this.$store.state.savedScrollPosition)
+    window.scrollTo(0, this.$store.state.scroll.savedScrollPosition)
   },
   data() {
     return {
