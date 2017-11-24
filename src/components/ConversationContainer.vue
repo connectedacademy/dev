@@ -87,7 +87,7 @@ export default {
       'currentSection', 'peekSegment', 'activeSegment', 'course', 'mediaPlaying',
     ]),
     containerHeight() {
-      return `${((this.content.duration * 0.2) + 1) * this.$app.segmentHeight}px`;
+      return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight}px`;
     },
   },
   watch: {

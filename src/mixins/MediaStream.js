@@ -10,6 +10,9 @@ import _find from 'lodash/find'
 require('howler')
 
 export default {
+  beforeDestroy() {
+    this.sound = undefined
+  },
   mounted() {
     if (typeof this.content.audio === 'undefined') return
     

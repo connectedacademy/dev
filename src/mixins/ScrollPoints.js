@@ -1,4 +1,4 @@
-import { clearInterval, setTimeout } from "timers";
+// import { clearInterval, setTimeout } from "timers";
 
 export default {
   data() {

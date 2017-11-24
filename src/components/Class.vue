@@ -36,6 +36,7 @@ export default {
     CourseContent
   },
   beforeRouteLeave (to, from, next) {
+    this.$store.commit('PAUSE_MEDIA')
     this.$store.dispatch('saveScrollPosition', window.scrollY)
     this.$store.dispatch('resetState')
     next()

@@ -16,9 +16,10 @@ export default {
   mounted() {
     setTimeout(() => {
       // Attempt auto scroll every second
-      window.setInterval(this.attemptAutoScroll, AUTOSCROLL_ATTEMPT)
+      this.intervals.attemptAutoScroll = setInterval(() => { this.attemptAutoScroll() }, AUTOSCROLL_ATTEMPT)
 
       // Listen for scroll events
+      this.onScroll(this)
       window.addEventListener('scroll', () => {
         // Scroll update
         this.onScroll(this)
@@ -34,9 +35,12 @@ export default {
       // Listen for mouseup events
       // window.addEventListener('mouseup', this.onMouseup, { passive: true }) // Passive to improve mobile performance
       // window.addEventListener('touchend', this.onMouseup, { passive: true }) // Passive to improve mobile performance
-    }, 50)
+    }, 100)
   },
-  destroyed () {
+  beforeDestroy() {
+    // Clear intervals
+    clearInterval(this.intervals.attemptAutoScroll)
+    
     // Remove event listeners
     window.removeEventListener('scroll', this.onScroll)
     window.removeEventListener('wheel', this.onWheel)
@@ -48,40 +52,37 @@ export default {
       scrollStatus: undefined,
       currentSection: undefined,
       wheeling: false,
-      canAutoScroll: false,
       isAutoScrolling: false,
-      preventScroll: false
+      preventScroll: false,
+      intervals: {
+        attemptAutoScroll: undefined
+      }
     }
   },
   watch: {
-    peekSegment(nV) {
-      this.checkIfCanAutoScroll()
-    },
-    preventScroll(nV) {
-      this.checkIfCanAutoScroll()
-    },
     mediaPlaying(nV) {
-      this.checkIfCanAutoScroll()
       if (nV) { this.attemptAutoScroll() }
     },
-    currentSection(nV) {
-      this.checkIfCanAutoScroll()
+    currentSection(nV, oV) {
+      if (typeof nV === 'undefined') {
+        this.$store.commit('PAUSE_MEDIA')
+      }
     }
   },
   computed: {
     ...mapGetters([
       'mediaPlaying', 'activeSegment', 'peekSegment', 'scrollPoints',
     ]),
+    canAutoScroll() {
+      return (!this.peekSegment && !this.preventScroll && this.mediaPlaying && (typeof this.scrollStatus !== 'undefined') && (typeof this.currentSection !== 'undefined'))
+    }
   },
   methods: {
-    checkIfCanAutoScroll() {
-      this.canAutoScroll = (!this.peekSegment && !this.preventScroll && this.mediaPlaying && (this.currentSection !== undefined))
-    },
     attemptAutoScroll() {
-
+      console.log('attemptAutoScroll')
       Vue.$log.debug('Attempting auto scroll')
 
-      if (!this.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); this.isAutoScrolling = false; return }
+      if (!this.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); this.isAutoScrolling = false; this.onScroll(this); return }
       if (this.isAutoScrolling) { Vue.$log.debug('Already auto scrolling'); return }
 
       this.isAutoScrolling = true
@@ -95,7 +96,7 @@ export default {
       window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
         function(fn) { window.setTimeout(fn, 15) }
 
-      var start = this.scrollStatus.scrollPos
+      var start = (this.scrollStatus && this.scrollStatus.scrollPos) ? this.scrollStatus.scrollPos : 0
       const durationRate = 5000
       let end = this.currentSection.bottom
 
@@ -173,37 +174,38 @@ export default {
         offsetScrollPos = offsetScrollPos - scrollPoint.top
         newCurrentSection = scrollPoint
       }
+      
+      let scrollStatus = undefined
+
       if (self.currentSection != newCurrentSection) {
         self.$store.commit('SET_CURRENT_SECTION', newCurrentSection)
       }
 
-      if (newCurrentSection === 'undefined') {
-        EventBus.$emit('scrollStatus', undefined)
-        return
+      if (typeof newCurrentSection !== 'undefined') {
+        
+        offsetScrollPos = offsetScrollPos - _clamp(((offsetScrollPos / (app.segmentHeight * 0.2)) * 50), 0, 200)
+
+        // Time
+        const currentTime = (offsetScrollPos / (app.segmentHeight * 0.2))
+
+        // Segment group
+        let currentSegmentGroup = Math.floor(offsetScrollPos / app.segmentHeight)
+
+        // Segment
+        let currentSegment = Math.floor(currentTime)
+
+        // Create object
+        scrollStatus = {
+          scrollPos,
+          offsetScrollPos,
+          currentTime,
+          currentSegmentGroup,
+          currentSegment,
+        }
+
+        // Emit position
+        EventBus.$emit('scrollStatus', scrollStatus)
       }
-      
-      offsetScrollPos = offsetScrollPos - _clamp(((offsetScrollPos / (app.segmentHeight * 0.2)) * 50), 0, 200)
-
-      // Time
-      const currentTime = (offsetScrollPos / (app.segmentHeight * 0.2))
-
-      // Segment group
-      let currentSegmentGroup = Math.floor(offsetScrollPos / app.segmentHeight)
-
-      // Segment
-      let currentSegment = Math.floor(currentTime)
-
-      // Create object
-      const scrollStatus = {
-        scrollPos,
-        offsetScrollPos,
-        currentTime,
-        currentSegmentGroup,
-        currentSegment,
-      }
-
-      // Emit position
-      EventBus.$emit('scrollStatus', scrollStatus)
 
       // Update local objects
       self.scrollStatus = scrollStatus
