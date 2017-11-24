@@ -22479,16 +22479,21 @@ var SCROLL_UPDATE_INTERVAL = 500;
     var _this = this;
 
     setTimeout(function () {
-      window.setInterval(_this.attemptAutoScroll, AUTOSCROLL_ATTEMPT);
+      _this.intervals.attemptAutoScroll = setInterval(function () {
+        _this.attemptAutoScroll();
+      }, AUTOSCROLL_ATTEMPT);
 
+      _this.onScroll(_this);
       window.addEventListener('scroll', function () {
         _this.onScroll(_this);
       }, { passive: true });
 
       window.addEventListener('wheel', _this.onWheel, { passive: true });
-    }, 50);
+    }, 100);
   },
-  destroyed: function destroyed() {
+  beforeDestroy: function beforeDestroy() {
+    clearInterval(this.intervals.attemptAutoScroll);
+
     window.removeEventListener('scroll', this.onScroll);
     window.removeEventListener('wheel', this.onWheel);
   },
@@ -22497,41 +22502,40 @@ var SCROLL_UPDATE_INTERVAL = 500;
       scrollStatus: undefined,
       currentSection: undefined,
       wheeling: false,
-      canAutoScroll: false,
       isAutoScrolling: false,
-      preventScroll: false
+      preventScroll: false,
+      intervals: {
+        attemptAutoScroll: undefined
+      }
     };
   },
 
   watch: {
-    peekSegment: function peekSegment(nV) {
-      this.checkIfCanAutoScroll();
-    },
-    preventScroll: function preventScroll(nV) {
-      this.checkIfCanAutoScroll();
-    },
     mediaPlaying: function mediaPlaying(nV) {
-      this.checkIfCanAutoScroll();
       if (nV) {
         this.attemptAutoScroll();
       }
     },
-    currentSection: function currentSection(nV) {
-      this.checkIfCanAutoScroll();
+    currentSection: function currentSection(nV, oV) {
+      if (typeof nV === 'undefined') {
+        this.$store.commit('PAUSE_MEDIA');
+      }
     }
   },
-  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_vuex__["b" /* mapGetters */])(['mediaPlaying', 'activeSegment', 'peekSegment'])),
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_vuex__["b" /* mapGetters */])(['mediaPlaying', 'activeSegment', 'peekSegment', 'scrollPoints']), {
+    canAutoScroll: function canAutoScroll() {
+      return !this.peekSegment && !this.preventScroll && this.mediaPlaying && typeof this.scrollStatus !== 'undefined' && typeof this.currentSection !== 'undefined';
+    }
+  }),
   methods: {
-    checkIfCanAutoScroll: function checkIfCanAutoScroll() {
-      this.canAutoScroll = !this.peekSegment && !this.preventScroll && this.mediaPlaying && this.currentSection !== undefined;
-    },
     attemptAutoScroll: function attemptAutoScroll() {
       var _this2 = this;
 
+      console.log('attemptAutoScroll');
       __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.debug('Attempting auto scroll');
 
       if (!this.canAutoScroll) {
-        __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.debug('Cannot auto scroll');this.isAutoScrolling = false;return;
+        __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.debug('Cannot auto scroll');this.isAutoScrolling = false;this.onScroll(this);return;
       }
       if (this.isAutoScrolling) {
         __WEBPACK_IMPORTED_MODULE_1_vue__["a" /* default */].$log.debug('Already auto scrolling');return;
@@ -22548,7 +22552,7 @@ var SCROLL_UPDATE_INTERVAL = 500;
         window.setTimeout(fn, 15);
       };
 
-      var start = this.scrollStatus.scrollPos;
+      var start = this.scrollStatus && this.scrollStatus.scrollPos ? this.scrollStatus.scrollPos : 0;
       var durationRate = 5000;
       var end = this.currentSection.bottom;
 
@@ -22613,7 +22617,7 @@ var SCROLL_UPDATE_INTERVAL = 500;
 
       var offsetScrollPos = scrollPos + window.innerHeight;
 
-      var scrollPoint = __WEBPACK_IMPORTED_MODULE_6_lodash_find___default()(self.$store.state.scroll.scrollPoints, { content_type: 'class' });
+      var scrollPoint = __WEBPACK_IMPORTED_MODULE_6_lodash_find___default()(self.scrollPoints, { content_type: 'class' });
 
       if (!scrollPoint) return;
 
@@ -22622,32 +22626,33 @@ var SCROLL_UPDATE_INTERVAL = 500;
         offsetScrollPos = offsetScrollPos - scrollPoint.top;
         newCurrentSection = scrollPoint;
       }
+
+      var scrollStatus = undefined;
+
       if (self.currentSection != newCurrentSection) {
         self.$store.commit('SET_CURRENT_SECTION', newCurrentSection);
       }
 
-      if (newCurrentSection === 'undefined') {
-        __WEBPACK_IMPORTED_MODULE_4__event_bus_js__["a" /* EventBus */].$emit('scrollStatus', undefined);
-        return;
+      if (typeof newCurrentSection !== 'undefined') {
+
+        offsetScrollPos = offsetScrollPos - __WEBPACK_IMPORTED_MODULE_7_lodash_clamp___default()(offsetScrollPos / (__WEBPACK_IMPORTED_MODULE_2__config__["a" /* default */].segmentHeight * 0.2) * 50, 0, 200);
+
+        var currentTime = offsetScrollPos / (__WEBPACK_IMPORTED_MODULE_2__config__["a" /* default */].segmentHeight * 0.2);
+
+        var currentSegmentGroup = Math.floor(offsetScrollPos / __WEBPACK_IMPORTED_MODULE_2__config__["a" /* default */].segmentHeight);
+
+        var currentSegment = Math.floor(currentTime);
+
+        scrollStatus = {
+          scrollPos: scrollPos,
+          offsetScrollPos: offsetScrollPos,
+          currentTime: currentTime,
+          currentSegmentGroup: currentSegmentGroup,
+          currentSegment: currentSegment
+        };
+
+        __WEBPACK_IMPORTED_MODULE_4__event_bus_js__["a" /* EventBus */].$emit('scrollStatus', scrollStatus);
       }
-
-      offsetScrollPos = offsetScrollPos - __WEBPACK_IMPORTED_MODULE_7_lodash_clamp___default()(offsetScrollPos / (__WEBPACK_IMPORTED_MODULE_2__config__["a" /* default */].segmentHeight * 0.2) * 50, 0, 200);
-
-      var currentTime = offsetScrollPos / (__WEBPACK_IMPORTED_MODULE_2__config__["a" /* default */].segmentHeight * 0.2);
-
-      var currentSegmentGroup = Math.floor(offsetScrollPos / __WEBPACK_IMPORTED_MODULE_2__config__["a" /* default */].segmentHeight);
-
-      var currentSegment = Math.floor(currentTime);
-
-      var scrollStatus = {
-        scrollPos: scrollPos,
-        offsetScrollPos: offsetScrollPos,
-        currentTime: currentTime,
-        currentSegmentGroup: currentSegmentGroup,
-        currentSegment: currentSegment
-      };
-
-      __WEBPACK_IMPORTED_MODULE_4__event_bus_js__["a" /* EventBus */].$emit('scrollStatus', scrollStatus);
 
       self.scrollStatus = scrollStatus;
       self.currentSection = newCurrentSection;
@@ -22683,6 +22688,9 @@ var SYNC_THRESHOLD = 2.0;
 __webpack_require__(810);
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+  beforeDestroy: function beforeDestroy() {
+    this.sound = undefined;
+  },
   mounted: function mounted() {
     var _this = this;
 
@@ -22903,8 +22911,6 @@ __webpack_require__(810);
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_get_iterator__ = __webpack_require__(580);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_get_iterator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_get_iterator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_timers__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_timers___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_timers__);
 
 
 
@@ -22918,14 +22924,17 @@ __webpack_require__(810);
   mounted: function mounted() {
     var _this = this;
 
-    this.setScrollPoints();
+    setTimeout(function () {
+      _this.setScrollPoints();
+    }, 750);
+
     this.updateDocumentHeightInterval = setInterval(function () {
       _this.updateDocumentHeight();
     }, 5000);
   },
   beforeDestroy: function beforeDestroy() {
     if (this.autoUpdateInterval) {
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_timers__["clearInterval"])(this.updateDocumentHeightInterval);
+      clearInterval(this.updateDocumentHeightInterval);
     }
   },
 
@@ -23305,6 +23314,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     CourseContent: __WEBPACK_IMPORTED_MODULE_9__components_conversation_CourseContent___default.a
   },
   beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    this.$store.commit('PAUSE_MEDIA');
     this.$store.dispatch('saveScrollPosition', window.scrollY);
     this.$store.dispatch('resetState');
     next();
@@ -23313,7 +23323,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     this.toMessage();
   },
   activated: function activated() {
-    window.scrollTo(0, this.$store.state.savedScrollPosition);
+    window.scrollTo(0, this.$store.state.scroll.savedScrollPosition);
   },
   data: function data() {
     return {
@@ -23422,7 +23432,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['currentSection', 'peekSegment', 'activeSegment', 'course', 'mediaPlaying']), {
     containerHeight: function containerHeight() {
-      return (this.content.duration * 0.2 + 1) * this.$app.segmentHeight + 'px';
+      return (this.content.duration * 0.2 + 3) * this.$app.segmentHeight + 'px';
     }
   }),
   watch: {
@@ -24466,14 +24476,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     ActionPanel: __WEBPACK_IMPORTED_MODULE_2__components_conversation_ActionPanel___default.a,
     ConversationContainer: __WEBPACK_IMPORTED_MODULE_3__components_ConversationContainer___default.a
   },
-  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isCollapsed'])),
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isCollapsed', 'scrollPoints'])),
   methods: {
     continueListening: function continueListening() {
       var _this = this;
 
       this.$store.commit('EXPAND_CONVERSATION');
 
-      var scrollPoint = __WEBPACK_IMPORTED_MODULE_4_lodash_find___default()(this.$store.state.scrollPoints, { content_type: 'class' });
+      var scrollPoint = __WEBPACK_IMPORTED_MODULE_4_lodash_find___default()(this.scrollPoints, { content_type: 'class' });
       this.$store.commit('SET_CURRENT_SECTION', scrollPoint);
       setTimeout(function () {
         _this.$store.commit('PLAY_MEDIA');
@@ -35168,4 +35178,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=0.643719f45e1b4c76bb65.js.map
+//# sourceMappingURL=0.ea07b52da7bb3ca73cf5.js.map
