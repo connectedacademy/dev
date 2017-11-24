@@ -24430,10 +24430,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'homework',
   props: ['content'],
-  mxins: [__WEBPACK_IMPORTED_MODULE_3__mixins_Auth__["a" /* default */]],
+  mixins: [__WEBPACK_IMPORTED_MODULE_3__mixins_Auth__["a" /* default */]],
   methods: {
     openHomework: function openHomework() {
-      if (!this.isAuthenticated) {
+      if (this.isAuthenticated) {
         this.$router.push('/feedback/browse/' + this.$store.getters.currentClass.slug + '/' + this.content.slug);
       } else {
         this.showAuth();
@@ -35178,4 +35178,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=0.ea07b52da7bb3ca73cf5.js.map
+//# sourceMappingURL=0.31b3bb5ef415b507df3d.js.map
