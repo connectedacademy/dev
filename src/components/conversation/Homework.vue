@@ -32,11 +32,11 @@ import Auth from '@/mixins/Auth'
 export default {
   name: 'homework',
   props: ['content'],
-  mxins: [ Auth ],
+  mixins: [ Auth ],
   methods: {
     openHomework() {
       // Check if authenticated
-      if (!this.isAuthenticated) {
+      if (this.isAuthenticated) {
         this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`)
       }
       else {
