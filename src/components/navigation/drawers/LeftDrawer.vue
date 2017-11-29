@@ -30,8 +30,11 @@ transition(name="slide-left")
     ul.drawer-links
       li
         router-link(v-bind:to="{ name: 'terms' }") Terms & Conditions
+    ul.drawer-links
       li
-        span {{ `V${$app.version}` }}
+        span {{ `v${$app.version}` }}
+      li
+        span {{ `built at ${$app.built}` }}
 
 </template>
 
