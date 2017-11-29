@@ -33,8 +33,9 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run: npm install
-      - run: npm run dev && wdio
+      - run: npm i--silent
+      - run: npm i -g serve
+      - run: npm run build && serve docs && wdio
 
 workflows:
   version: 2
