@@ -1,6 +1,6 @@
 {
   "name": "elevator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Vue.js frontend for Connected Academy",
   "author": "Edward Jenkins <edward.jenkins@newcastle.ac.uk>",
   "private": true,
