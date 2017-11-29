@@ -24,3 +24,14 @@ jobs:
       - run: git add docs
       - run: git commit -am"[skip CI] AUTOBUILD"
       - run: git push -u -f origin master
+
+  test:
+    docker:
+      - image: node:7.4.0
+    working_directory: ~/connectedacademy
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: npm install
+      - run: npm run dev && wdio
