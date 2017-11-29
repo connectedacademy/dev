@@ -71,6 +71,7 @@ Vue.config.productionTip = false
 
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json' }
+Vue.http.headers.common['elevator-version'] = `${app.version}`
 // Vue.http.interceptors.push((request, next) => {
 //   next((response) => {
 //     if (response.status === 403) {
