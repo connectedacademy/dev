@@ -7,9 +7,9 @@ transition(name="slide-left")
 
       ul.drawer-list
 
-        router-link.drawer-list-item(tag="li" name="home-drawer-item" v-bind:to="{ name: 'home' }")
-          h1.drawer-list-item--header {{ $t('nav.home') }}
-          h2.drawer-list-item--body {{ $t('nav.home_description') }}
+        //- router-link.drawer-list-item(tag="li" name="home-drawer-item" v-bind:to="{ name: 'home' }")
+        //-   h1.drawer-list-item--header {{ $t('nav.home') }}
+        //-   h2.drawer-list-item--body {{ $t('nav.home_description') }}
 
         router-link.drawer-list-item(tag="li" name="schedule-drawer-item" v-bind:to="{ name: 'schedule' }")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}

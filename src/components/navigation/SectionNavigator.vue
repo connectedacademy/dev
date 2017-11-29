@@ -1,5 +1,5 @@
 <template lang="pug">
-#section-navigator-wrapper
+#section-navigator-wrapper(v-if="scrollPoints.length > 3")
   onboarding-prompt(identifier="section-navigator" prompt="navigate class" top="-45" left="-150" position="bottom-right" z-index="1")
   transition(name="fade")
     #section-navigator(v-if="isVisible")
@@ -8,26 +8,28 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
-import SectionNavigatorItem from './SectionNavigatorItem';
-import size from 'lodash/size';
-import orderBy from 'lodash/orderBy';
+import { mapGetters } from 'vuex'
+
+import SectionNavigatorItem from '@/components/navigation/SectionNavigatorItem'
+
+import _size from 'lodash/size'
+import _orderBy from 'lodash/orderBy'
 
 export default {
   name: 'section-navigator',
   computed: {
     ...mapGetters(['scrollPoints']),
     isVisible() {
-      return size(this.scrollPoints)
+      return _size(this.scrollPoints)
     },
     items() {
-      return orderBy(this.scrollPoints, ['sectionTop'])
+      return _orderBy(this.scrollPoints, ['sectionTop'])
     }
   },
   components: {
-    SectionNavigatorItem,
-  },
-};
+    SectionNavigatorItem
+  }
+}
 </script>
 
 <style lang="stylus" scoped>

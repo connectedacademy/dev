@@ -16,8 +16,10 @@ export default {
 @import '~stylus/shared'
 
 .padded-container.mock-container
-  radius(6px)
   background-color white
   margin-top 20px
+  @media(min-width: 800px)
+    box-shadow()
+    radius(4px)
 
 </style>

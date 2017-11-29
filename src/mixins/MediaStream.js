@@ -92,12 +92,12 @@ export default {
     },
     attempSync: _throttle(function (self) {
 
-      const playerTime = this.sound.seek()
+      const playerTime = self.sound.seek()
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 
       if (!inSync) {
         self.$log.info('Audio not in sync')
-        this.sound.seek(self.scrollStatus.currentTime)
+        self.sound.seek(self.scrollStatus.currentTime)
       }
     }, 500)
   }
