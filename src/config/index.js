@@ -1,5 +1,6 @@
 export default {
   name: 'Connected Academy',
-    version: '1.1',
-      segmentHeight: 158
+  version: '0.0.3',
+  built: '11/29/2017, 4:15:58 PM',
+  segmentHeight: 158
 };

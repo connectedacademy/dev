@@ -8,10 +8,27 @@ var path = require('path')
 var chalk = require('chalk')
 var webpack = require('webpack')
 var config = require('../config')
-var webpackConfig = require('./webpack.prod.conf')
+var webpackConfig = require('./webpack.prod.conf');
+var fs = require('fs');
 
 var spinner = ora('building for production...')
 spinner.start()
+
+//processing version into correct file:
+
+let package_version = require('../package.json');
+
+console.log(`SETTING VERSION TO ${package_version.version}\n`);
+
+let settings = fs.readFileSync('src/config/index.js').toString();
+let vpattern = /version: '(.*)'/;
+let bpattern = /built: '(.*)'/;
+
+
+settings = settings.replace(vpattern, `version: '${package_version.version}'`);
+settings = settings.replace(bpattern, `built: '${new Date().toLocaleString()}'`);
+
+fs.writeFileSync('src/config/index.js', settings);
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
