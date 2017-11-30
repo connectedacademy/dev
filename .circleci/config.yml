@@ -43,7 +43,7 @@ jobs:
           background: true
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run: npm i --silent
+      - run: npm i --silent && npm i -g serve
       - run: npm run build
       - run: 
           name: Server
