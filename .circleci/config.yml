@@ -36,9 +36,9 @@ jobs:
       - run: unzip BrowserStackLocal-linux-x64.zip
       # Run the file with your access key
       - run:
-        name: Browserstack Local
-        command: ./BrowserStackLocal $BROWSERSTACK_KEY
-        background: true
+          name: Browserstack Local
+          command: ./BrowserStackLocal $BROWSERSTACK_KEY
+          background: true
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
