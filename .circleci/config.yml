@@ -30,12 +30,29 @@ jobs:
       - image: node:7.4.0
     working_directory: ~/connectedacademy
     steps:
+      # Download the browserstack binary file
+      - wget "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
+      # Unzip the browserstack binary file
+      - unzip BrowserStackLocal-linux-x64.zip
+      # Run the file with your access key
+      - ./BrowserStackLocal $BROWSERSTACK_KEY:
+          background: true
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run: npm i --silent
-      - run: npm i -g --silent serve
-      - run: npm run build && serve docs && wdio
+      - run: wdio
+
+    # docker:
+    #   - image: node:7.4.0
+    # working_directory: ~/connectedacademy
+    # steps:
+    #   - checkout
+    #   - restore_cache:
+    #       key: dependency-cache-{{ checksum "package.json" }}
+    #   - run: npm i --silent
+    #   - run: npm i -g --silent serve
+    #   - run: npm run build && serve docs && wdio
 
 workflows:
   version: 2
