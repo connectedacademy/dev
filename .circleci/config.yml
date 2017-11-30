@@ -33,6 +33,7 @@ jobs:
       # Download the browserstack binary file
       - run: wget "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
       # Unzip the browserstack binary file
+      - run: apt-get update && apt-get install unzip
       - run: unzip BrowserStackLocal-linux-x64.zip
       # Run the file with your access key
       - run:
