@@ -66,7 +66,6 @@ Mobile (20 min)
 
 Nice to have
 - Latest tweets against webinar
-+ Switch to Axios (cancel old requests)
 
 
 
@@ -76,7 +75,7 @@ Nice to have
 + Registration loop
 + Replace iframe controls with custom controls
   + Play/pause
-  - Scrub
+  + Scrub
 + Scroll out of section
   + Click/touch events for scrollbar based navigation
 + Section navigation
@@ -91,10 +90,10 @@ Admin Panel
 Admin Requirements
 - Question responses
 - Link to prose content editor
-- List submissions
-- List registered users for course
++ List submissions
++ List registered users for course
 - Registration question responses (needs endpoint)
 
 Teacher Requirements
-- List student in classroom
-- List submissions
++ List student in classroom
++ List submissions
