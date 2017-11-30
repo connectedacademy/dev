@@ -7,5 +7,5 @@ test/unit/coverage
 examples/
 test/screenshots/
 test/errorShots/
-test/test.env.js
+test/test.env.old.js
 src/components/pages/deployments
