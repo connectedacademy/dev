@@ -49,7 +49,7 @@ jobs:
           name: Server
           command: serve docs
           background: true
-      - run: wdio
+      - run: node_modules/.bin/wdio
 
     # docker:
     #   - image: node:7.4.0
