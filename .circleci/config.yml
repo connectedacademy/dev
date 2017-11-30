@@ -30,6 +30,7 @@ jobs:
       - image: node:7.4.0
     working_directory: ~/connectedacademy
     steps:
+      - checkout
       # Download the browserstack binary file
       - run: wget "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
       # Unzip the browserstack binary file
@@ -40,7 +41,6 @@ jobs:
           name: Browserstack Local
           command: ./BrowserStackLocal $BROWSERSTACK_KEY
           background: true
-      - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run: npm i --silent
