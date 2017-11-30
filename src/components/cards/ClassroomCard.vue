@@ -44,11 +44,12 @@ export default {
       API.classroom.getClassroomStatus(
         request,
         (response) => {
-          console.log(response)
+          this.$log.info(response)
           this.currentClassroom = true
           this.classroomCode = response.code
         },
         (response) => {
+          this.$log.error(response)
           // TODO: Better handle failed request
         }
       )
@@ -65,6 +66,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
+          this.$log.error(response)
           this.$log.info('Failed to register attendance')
           alert(`${$t('classroom.failed_to_register')} - ${response.body.data}`)
         }

@@ -19,7 +19,7 @@ export default {
   props: ['scrollPoint'],
   methods: {
     jumpToContent(slug) {
-      this.$ga.event('section-navigator', 'navigated-to', slug)
+      this.$logging.logEvent('section-navigator', 'navigated-to', slug)
 
       const segmentPosition = this.scrollPoint.sectionTop + 1
 

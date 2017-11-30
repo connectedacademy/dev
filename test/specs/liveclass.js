@@ -2,21 +2,31 @@ const fs = require('fs-extra')
 const assert = require('assert')
 const Moment = require('moment-mini')
 const _sample = require('lodash/sample')
+const chai = require('chai')
+const chaiWebdriver = require('chai-webdriverio').default
 
 const testEnv = require('../test.env.js')
 
+const LandingPageObject = require("../objects/LandingPageObject.js")
+const SchedulePageObject = require("../objects/SchedulePageObject.js")
 const ClassPageObject = require("../objects/ClassPageObject.js")
 
-const CREATE_MESSAGE_COUNT = 5
+const CREATE_MESSAGE_COUNT = 20
 
 fs.ensureDirSync('./test/screenshots/liveclass/')
 
+chai.use(chaiWebdriver(browser))
+
 describe('Live Class', function () {
 
+  var landingPage;
   var classPage;
+  var schedulePage;
   
   before(function () {
+    landingPage = new LandingPageObject()
     classPage = new ClassPageObject()
+    schedulePage = new SchedulePageObject()
   })
 
   it('Nagivates to it as logged in user', function () {
@@ -24,8 +34,16 @@ describe('Live Class', function () {
     browser.url('https://api.connectedacademy.io/v1/auth/loginexistinguser/?account=' + testEnv.USER_ACCOUNT + '&psk=' + testEnv.PSK + '&callback=' + testEnv.APP_URL)
     browser.url(testEnv.APP_URL)
     assert(browser.getTitle().match(/Connected Academy/i))
-    browser.waitForExist(classPage.continueListeningButton)
-    // browser.pause(3000)
+  })
+
+  it('Views first class from the schedule', () => {
+
+    $(landingPage.getStartedButton).click()
+
+    browser.pause(1000)
+
+    browser.click(schedulePage.firstClass)
+
   })
 
   // it('Scrolls liveclass', () => {
@@ -103,6 +121,8 @@ describe('Live Class', function () {
   // })
 
   it('Scrolls up and down a lot then makes another message', () => {
+    
+    $(classPage.continueListeningButton).waitForExist(5000)
 
     $(classPage.continueListeningButton).scroll(0, 300)
     $(classPage.continueListeningButton).click()
@@ -132,7 +152,10 @@ describe('Live Class', function () {
       $(classPage.activeComposerButton).click()
       browser.pause(2000)
       
-      assert($(classPage.peekSegmentMessageText).getText() === `${txt } ${testEnv.HASHTAG}`)
+      console.log($(classPage.peekSegmentMessageText).getText())
+      console.log(`${txt} ${testEnv.HASHTAG}`)
+
+      chai.expect(classPage.peekSegmentMessageText).to.have.text(`${txt} ${testEnv.HASHTAG}`)
 
       // Save screenshot
       browser.saveScreenshot(`./test/screenshots/liveclass/liveclass-testmessage-${i}.png`)

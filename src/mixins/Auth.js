@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import API from '@/api'
 import { mapGetters } from 'vuex'
 
@@ -26,6 +27,8 @@ export default {
         },
         (response) => {
           // TODO: Better handle failed request
+          Vue.$log.error(response)
+          Vue.$log.info('Failed to check auth')
           this.checkingAuthentication = false
           this.$router.replace({ name: 'home' })
         }
@@ -43,6 +46,8 @@ export default {
         },
         (response) => {
           // TODO: Better handle failed request
+          Vue.$log.error(response)
+          Vue.$log.info('Failed to check auth')
           this.checkingAuthentication = false
         }
       )

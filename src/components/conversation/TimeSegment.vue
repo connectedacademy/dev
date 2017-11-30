@@ -58,7 +58,7 @@
     watch: {
       // '$route.query.segment': {
       //   handler: function(nV, oV) {
-      //   console.log('$route.query.segment');
+      //     this.$log.debug('$route.query.segment');
       //     if (nV !== oV) {
       //       if ((oV) && (this.message.segmentGroup === oV)) {
       //         if (this.activeSegment) {

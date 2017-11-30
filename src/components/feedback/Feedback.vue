@@ -99,7 +99,7 @@ export default {
     }
   },
   mounted() {
-    Vue.$log.info('Feedback view mounted')
+    Vue.$log.debug('Feedback view mounted')
     
     this.ensureAuthenticated()
 
@@ -153,16 +153,16 @@ export default {
     subscribeToSocketEvents() {
       // Get user socket (for submissions and feedback messages)
       this.$io.socket.get(`/v1/auth/me`, function (resData, jwres) {
-        Vue.$log.info('SOCKET RESPONSE - me')
+        Vue.$log.debug('SOCKET RESPONSE - me')
         // alert('SOCKET RESPONSE - me')
-        Vue.$log.info(resData)
+        Vue.$log.debug(resData)
       })
     
       EventBus.$on('socketUser', (obj) => {
-        console.log('socketUser')
+        this.$log.debug('socketUser')
 
-        this.$log.info('Submission message received')
-        this.$log.info(obj)
+        this.$log.debug('Submission message received')
+        this.$log.debug(obj)
 
         switch (obj.data.msgtype) {
           case 'submission':
@@ -192,19 +192,19 @@ export default {
     getFeedbackItems() {
       
       if (!this.classSlug || !this.contentSlug) {
-        Vue.$log.info('No class or content slug so returning')
+        Vue.$log.debug('No class or content slug so returning')
         return
       }
 
       const request = { class: this.classSlug, content: this.contentSlug }
 
-      Vue.$log.info('No class or content slug so returning')
+      Vue.$log.debug('No class or content slug so returning')
 
       API.feedback.getFeedbackItems(
         request,
         (response) => {
-          this.$log.info('Response from feedback request')
-          this.$log.info(response)
+          this.$log.debug('Response from feedback request')
+          this.$log.debug(response)
           this.myFeedbackItems = _filter(response.data, (item) => {
             return item.user && (item.user.account_number === this.user.account_number)
           })
@@ -214,6 +214,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
+          this.$log.error(response)
           this.$log.info('Failed to retrieve feedback')
         },
       )
@@ -223,12 +224,13 @@ export default {
       API.feedback.getAvailableFeedbackItems(
         request,
         (response) => {
-          this.$log.info('Response from feedback request (available)')
-          this.$log.info(response)
+          this.$log.debug('Response from feedback request (available)')
+          this.$log.debug(response)
           this.availableFeedbackItems = response.data
         },
         (response) => {
           // TODO: Handle failed request
+          this.$log.error(response)
           this.$log.info('Failed to retrieve feedback')
         },
       )

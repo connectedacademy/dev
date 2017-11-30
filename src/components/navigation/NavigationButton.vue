@@ -9,19 +9,19 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'navigation-button',
   computed: {
     ...mapGetters([
-      'navigation',
+      'navigation'
     ]),
   },
   methods: {
     toggleLeftDrawer() {
+      this.$logging.logEvent('navigation-button', 'clicked', 1)
       if (this.isRoot) {
-        this.$ga.event('navigation-button', 'clicked', 1)
         this.$store.commit('TOGGLE_LEFT_DRAWER')
       }
       else {

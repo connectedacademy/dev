@@ -66,8 +66,9 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.classroom = undefined
+          this.$log.error(response)
           this.$log.info('Failed to retrieve classrooms')
+          this.classroom = undefined
         }
       )
     },

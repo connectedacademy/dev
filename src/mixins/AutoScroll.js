@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     attemptAutoScroll() {
-      console.log('attemptAutoScroll')
+
       Vue.$log.debug('Attempting auto scroll')
 
       if (!this.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); this.isAutoScrolling = false; this.onScroll(this); return }

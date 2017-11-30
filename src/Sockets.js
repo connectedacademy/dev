@@ -11,6 +11,7 @@ let io = sailsIOClient(socketIOClient)
 
 io.sails.url = config.SOCKET_API
 io.sails.autoConnect = true
+io.sails.reconnection = true
 
 Vue.io = io
 

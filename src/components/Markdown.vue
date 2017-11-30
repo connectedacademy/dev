@@ -26,7 +26,7 @@
       MarkdownRenderer
     },
     mounted() {
-      this.$ga.event('markdown', 'rendered', window.location.href)
+      this.$logging.logEvent('markdown', 'rendered', window.location.href)
     },
     data() {
       return {

@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import API from '@/api'
 import { mapGetters } from 'vuex'
 import _take from 'lodash/take'
@@ -84,6 +85,8 @@ export default {
         },
         (response) => {
           // TODO: Better handle failed request
+          this.$log.error(response)
+          this.$log.info('Failed to het post courese questions')
           this.loadingQuestions = false;
         }
       )
@@ -100,12 +103,13 @@ export default {
         API.question.postAnswer(
           postData,
           (response) => {
-            console.log(response)
+            Vue.$log.debug(response)
           },
           (response) => {
             // TODO: Better handle failed request
+            this.$log.error(response)
+            this.$log.info('Failed to post answer')
             this.savingAnswers = false
-            console.log(response)
           }
         )
       }

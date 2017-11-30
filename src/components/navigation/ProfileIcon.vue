@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     showProfile() {
-      this.$ga.event('profile-button', 'clicked', 1);
+      this.$logging.logEvent('profile-button', 'clicked', 1);
       this.$store.commit('TOGGLE_RIGHT_DRAWER');
     },
   },

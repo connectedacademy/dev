@@ -84,6 +84,7 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
+          this.$log.error(response)
           this.$log.info('Failed to retrieve messages')
           this.messages = []
         }

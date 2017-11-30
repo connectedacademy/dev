@@ -92,8 +92,9 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
+          this.$log.error(response)
+          this.$log.info('Failed to get classrooms')
           this.classrooms = []
-          this.$log.info('Failed to retrieve classrooms')
         }
       )
     },
@@ -106,7 +107,8 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve teacher code')
+          this.$log.error(response)
+          this.$log.info('Failed to get teacher code')
         }
       )
     }

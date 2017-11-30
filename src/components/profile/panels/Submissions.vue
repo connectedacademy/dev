@@ -21,17 +21,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus.js';
-import API from '@/api';
-import filter from 'lodash/filter';
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
+import API from '@/api'
+import filter from 'lodash/filter'
 
-import Moment from 'moment-mini';
+import Moment from 'moment-mini'
 
-import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
-import ContentFilter from '@/components/profile/ContentFilter';
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
+import ContentFilter from '@/components/profile/ContentFilter'
 
-import 'vue-awesome/icons/refresh';
+import 'vue-awesome/icons/refresh'
 
 export default {
   name: 'submissions',
@@ -41,53 +41,54 @@ export default {
     ContentFilter,
   },
   mounted() {
-    if (this.expandedView) { this.loadData(); }
+    if (this.expandedView) { this.loadData() }
     EventBus.$on('profileClassUpdated', () => {
-      this.loadData();
-    });
+      this.loadData()
+    })
   },
   data() {
     return {
       submissions: [],
       contentSlug: 'homework', //TODO make dynamic
-    };
+    }
   },
   computed: {
     ...mapGetters(['user', 'profileClass', 'profileClassSlug']),
     contentSlugs() {
-      if (typeof this.profileClassSlug === 'undefined') return [];
+      if (typeof this.profileClassSlug === 'undefined') return []
       return filter(this.profileClass.content, (obj) => {
-        return obj.homework;
+        return obj.homework
       })
     },
   },
   methods: {
     expand() {
-      this.$store.commit('updateProfileAction', this.panel);
+      this.$store.commit('updateProfileAction', this.panel)
     },
     timeStamp(timestamp) {
-      // return Moment(timestamp).format('LTS - ddd M YYYY');
-      return Moment(timestamp).fromNow();
+      // return Moment(timestamp).format('LTS - ddd M YYYY')
+      return Moment(timestamp).fromNow()
     },
     loadData() {
 
-      this.submissions = [];
+      this.submissions = []
 
       API[this.panel.role].getHomework(
         this.profileClassSlug,
         (response) => {
-          this.submissions = response;
+          this.submissions = response
           EventBus.$emit('redrawMasonry')
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve student list');
-          this.submissions = [];
+          this.$log.error(response)
+          this.$log.info('Failed to retrieve student list')
+          this.submissions = []
         },
-      );
+      )
     },
   },
-};
+}
 
 </script>
 

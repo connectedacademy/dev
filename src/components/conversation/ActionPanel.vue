@@ -131,7 +131,7 @@
         //   this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft);
         // }
         // const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration);
-        // console.log(newPos);
+        // this.$log.debug(newPos);
         // window.scroll(0, (newPos + this.currentSection.top));
 
         // this.mouseOffsetStart = 0;

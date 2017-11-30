@@ -91,7 +91,8 @@ export default {
       setTimeout(() => { this.checkBufferStatus() }, 500)
     },
     attempSync: _throttle(function (self) {
-
+      
+      if (typeof self.sound === undefined) return
       const playerTime = self.sound.seek()
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 

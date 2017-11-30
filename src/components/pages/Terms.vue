@@ -64,6 +64,8 @@ export default {
         },
         (response) => {
           // TODO: Better handle failed request
+          this.$log.error(response)
+          this.$log.info('Failed to fetch questions')
         }
       )
     }

@@ -122,7 +122,8 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to remove submission');
+          this.$log.error(response)
+          this.$log.info('Failed to remove submission')
         },
       );
     },
@@ -149,9 +150,10 @@ export default {
           },
           (response) => {
             // TODO: Handle failed request
-            this.$log.info('Failed to user submissions');
-          },
-        );
+            this.$log.error(response)
+            this.$log.info('Failed to user submissions')
+          }
+        )
       }
     },
     postFeedbackComment() {
@@ -169,7 +171,8 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve feedback');
+          this.$log.error(response)
+          this.$log.info('Failed to retrieve feedback')
         },
       );
     },
@@ -187,7 +190,8 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve feedback');
+          this.$log.error(response)
+          this.$log.info('Failed to retrieve feedback')
           // Set loading state
           this.loading = false;
         },
@@ -206,7 +210,8 @@ export default {
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve feedback');
+          this.$log.error(response)
+          this.$log.info('Failed to retrieve feedback')
         },
       );
     },

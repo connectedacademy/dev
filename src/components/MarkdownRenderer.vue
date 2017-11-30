@@ -87,6 +87,8 @@
             this.renderMarkdown();
           },
           (response) => {
+            this.$log.error(response)
+            this.$log.info('Failed to fetch markdown')
             this.renderedMarkdown = '';
           },
         );

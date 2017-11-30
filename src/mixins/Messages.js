@@ -18,7 +18,7 @@ export default {
   },
   mounted() {
     EventBus.$on('socketConversationMessage', (obj) => {
-      console.log('socketConversationMessage')
+      Vue.$log.debug('socketConversationMessage')
 
       const key = `${_round(parseInt(obj.msg.segment) * 0.2)}`
       let updateMessage = this.conversationMessages[key]
@@ -39,7 +39,7 @@ export default {
 
         // Update active segment messages
         if (this.peekSegment === _round(parseInt(obj.msg.segment) * 0.2)) {
-          Vue.$log.info('Pushing message')
+          Vue.$log.debug('Pushing message')
           store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg)
         }
       }
@@ -52,10 +52,10 @@ export default {
   },
   methods: {
     loadSegmentSummary(segmentGroup, force) {
-      Vue.$log.info(`Getting message summary for - ${segmentGroup}`)
+      Vue.$log.debug(`Getting message summary for - ${segmentGroup}`)
 
-      if (this.content === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return }
-      if (this.currentClass === undefined) { Vue.$log.info('loadSegmentSummary aborted'); return }
+      if (this.content === undefined) { Vue.$log.debug('loadSegmentSummary aborted'); return }
+      if (this.currentClass === undefined) { Vue.$log.debug('loadSegmentSummary aborted'); return }
 
       let thinkAhead = 5 // Think ahead
       let thinkBehind = 5 // Think behind
@@ -77,9 +77,9 @@ export default {
 
       this.$io.socket.get(`/v1/messages/subscribe/${theRequest.theClass}/${theRequest.theContent}/${theRequest.startSegment}/${theRequest.endSegment}?whitelist=true`, function (resData, jwres) {
         store.commit('SET_SUBSCRIBED_TO', { start: theRequest.startSegment, end: theRequest.endSegment })
-        Vue.$log.info('SOCKET RESPONSE - subscribe');
+        Vue.$log.debug('SOCKET RESPONSE - subscribe');
         // alert('SOCKET RESPONSE - subscribe');
-        Vue.$log.info(resData);
+        Vue.$log.debug(resData);
       })
       
       if (((endSegment % (endSegment - startSegment)) === 0) || force) {
@@ -106,7 +106,7 @@ export default {
             }
           },
           response => {
-            Vue.$log.info('Failed to get messages summary')
+            Vue.$log.debug('Failed to get messages summary')
           },
         )
       }

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import API from '@/api';
 import * as types from '@/store/mutation-types';
 
@@ -54,10 +54,12 @@ export default {
       API.feedback.verifySubmission(
         postData,
         (response) => {
-          console.log(response)
+          this.$log.debug(response)
           this.$emit('reloadchats')
         },
         (response) => {
+          this.$log.error(response)
+          this.$log.info('Submission verification failed')
           alert('Submission verification failed, please try again.')
         }
       )
@@ -80,6 +82,8 @@ export default {
           this.resultsText = (this.submissions.length) ? `Select an Image` : 'No Images Found';
         },
         (response) => {
+          this.$log.error(response)
+          this.$log.info('Submission failed')
           alert('Submission failed, please try again.');
           this.resultsText = '';
           this.submissions = [];

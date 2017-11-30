@@ -34,14 +34,14 @@ export default {
     }, 2500)
 
     EventBus.$on('socketWebinarMessage', (obj) => {
-      console.log('socketWebinarMessage')
+      Vue.$log.debug('socketWebinarMessage')
 
       if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {
 
-        Vue.$log.info('Webinar message received')
-        Vue.$log.info(obj)
+        Vue.$log.debug('Webinar message received')
+        Vue.$log.debug(obj)
 
-        Vue.$log.info('Pushing message to webinar ticker')
+        Vue.$log.debug('Pushing message to webinar ticker')
         this.webinarMessages.push(obj.msg)
       }
     })

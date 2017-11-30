@@ -2,23 +2,26 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 import Vuex from 'vuex'
-import VueConfig from 'vue-config'
-import VueI18n from 'vue-i18n'
-import VueLogger from 'vuejs-logger'
-import VueCookie from 'vue-cookie'
 import VueAnalytics from 'vue-analytics'
 import VueAutosize from 'vue-autosize'
-// import Raven from 'raven-js'
-// import RavenVue from 'raven-js/plugins/vue'
+import VueConfig from 'vue-config'
+import VueCookie from 'vue-cookie'
+import VueI18n from 'vue-i18n'
+import VueLogger from 'vuejs-logger'
+import { VueMasonryPlugin } from 'vue-masonry'
+import VueResource from 'vue-resource'
+
+import Raven from 'raven-js'
+import RavenVue from 'raven-js/plugins/vue'
 
 import { sync } from 'vuex-router-sync'
 
 
-import { VueMasonryPlugin } from 'vue-masonry'
+import app_config from '@/config'
+import * as api_config from '@/api/config'
 
-import app from '@/config'
+import logging from '@/logging'
 import store from '@/store'
 import router from '@/router'
 
@@ -28,13 +31,15 @@ import Sockets from '@/Sockets'
 
 import { EventBus } from '@/event-bus.js'
 
-// Global components
 import Icon from 'vue-awesome/components/Icon'
 import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
+
+// Global components
 Vue.component('icon', Icon)
 Vue.component('onboarding-prompt', OnboardingPrompt)
 
-Vue.prototype.$app = app
+Vue.prototype.$app = app_config
+Vue.prototype.$logging = logging
 
 sync(store, router)
 
@@ -56,7 +61,7 @@ Vue.use(VueCookie)
 Vue.use(VueAutosize)
 
 Vue.use(VueAnalytics, {
-  id: 'UA-44963053-16',
+  id: app_config.ga_id,
   router,
   autoTracking: {
     exception: true
@@ -64,7 +69,7 @@ Vue.use(VueAnalytics, {
 })
 
 // TODO: Enabled for production
-// Raven.config('https://cd5136ba6a3b46a79ade2112cb23d036@sentry.io/176250').addPlugin(RavenVue, Vue).install()
+Raven.config(app_config.sentry).addPlugin(RavenVue, Vue).install()
 
 // General config
 Vue.config.productionTip = false
@@ -72,17 +77,13 @@ Vue.config.productionTip = false
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json' }
 
-// Add elevator version to every request
-Vue.http.headers.common['elevator-version'] = `${app.version}`
-
-// Vue.http.interceptors.push((request, next) => {
-//   next((response) => {
-//     if (response.status === 403) {
-//       Vue.$log.info('Session invalid')
-//       store.dispatch('logout')
-//     }
-//   })
-// })
+Vue.http.interceptors.push((request, next) => {
+  if (request.url.startsWith(api_config.WATERCOOLER_API)) {
+    // Add elevator version to every request
+    request.headers.set('elevator-version', `${app_config.version}`)
+  }
+  next()
+})
 
 // I18n config
 Vue.config.lang = 'en'

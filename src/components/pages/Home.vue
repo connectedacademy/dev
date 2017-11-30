@@ -40,7 +40,7 @@
         .tile.padded-tile.primary-tile
           h2 Join the Course
           p The course is now available, dive in by clicking the button below.
-          router-link.button(v-bind:to="{ name: 'schedule' }") Get Started
+          router-link.button(name="get-started-button" v-bind:to="{ name: 'schedule' }") Get Started
 
 </template>
 

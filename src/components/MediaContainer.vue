@@ -49,6 +49,8 @@ export default {
         this.liveclassMedia = response.response
       },
       (response) => {
+        this.$log.error(response)
+        this.$log.info('Failed to get media')
         this.liveclassMedia = undefined
       }
     )
@@ -62,7 +64,7 @@ export default {
           this.$refs.classslick.reSlick()
         }
         else {
-          console.log('media: Either slick ref does not exist or not in slick mode')
+          this.$log.info('Either slick ref does not exist or not in slick mode')
         }
       },
       deep: true,

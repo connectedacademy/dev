@@ -29,7 +29,7 @@
     methods: {
       loadEmbed() {
         this.theSrc = this.src;
-        this.$ga.event('soundcloud-embed', 'embed-loaded', this.src);
+        this.$logging.logEvent('soundcloud-embed', 'embed-loaded', this.src);
       },
     },
   };

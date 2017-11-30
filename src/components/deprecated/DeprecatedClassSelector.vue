@@ -130,7 +130,7 @@ export default {
     viewIntroClass() {
       this.$store.commit('SET_CURRENT_CLASS', this.introClass);
       this.$store.dispatch('resetState');
-      this.$ga.event('class-selector', 'class-switched', 'class-intro');
+      this.$logging.logEvent('class-selector', 'class-switched', 'class-intro');
     },
     viewCurrentClass() {
       if (!(this.course && this.course.classes)) {

@@ -55,6 +55,7 @@
         },
         (response) => {
           // TODO: Better handle failed request
+          this.$log.error(response)
           this.loadingQuestions = false
         }
       )
@@ -121,6 +122,7 @@
             this.$router.push('class')
           },
           (response) => {
+            this.$log.error(response)
             this.$log.info('Registration failed')
             this.$store.dispatch('checkAuth')
             this.$router.push('class')

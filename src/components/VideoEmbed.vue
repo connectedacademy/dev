@@ -38,7 +38,7 @@ export default {
   methods: {
     loadEmbed() {
       this.theSrc = this.src;
-      this.$ga.event('video-embed', 'embed-loaded', this.src);
+      this.$logging.logEvent('video-embed', 'embed-loaded', this.src);
     },
   },
 };
