@@ -27,12 +27,12 @@
 </template>
 
 <script>
-import API from '@/api';
-import { EventBus } from '@/event-bus.js';
+import API from '@/api'
+import { EventBus } from '@/event-bus.js'
 
-import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader';
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 
-import 'vue-awesome/icons/refresh';
+import 'vue-awesome/icons/refresh'
 
 export default {
   name: 'question-responses',
@@ -41,40 +41,40 @@ export default {
     ProfilePanelHeader,
   },
   mounted() {
-    if (this.expandedView) { this.loadData(); }
+    if (this.expandedView) { this.loadData() }
     EventBus.$on('profileClassUpdated', () => {
-      this.loadData();
-    });
+      this.loadData()
+    })
   },
   data() {
     return {
-      responses: [],
-    };
+      responses: []
+    }
   },
   methods: {
     expand() {
-      this.$store.commit('updateProfileAction', this.panel);
+      this.$store.commit('updateProfileAction', this.panel)
     },
     loadData() {
 
-      this.responses = [];
+      this.responses = []
 
-      const request = {};
+      const request = {}
 
-      API.analytics.getQuestionResponses(
+      API.question.getQuestionResponses(
         request,
         (response) => {
-          this.responses = response;
+          this.responses = response
         },
         (response) => {
           // TODO: Handle failed request
-          this.$log.info('Failed to retrieve question responses');
-          this.responses = [];
-        },
-      );
-    },
-  },
-};
+          this.$log.info('Failed to retrieve question responses')
+          this.responses = []
+        }
+      )
+    }
+  }
+}
 
 </script>
 
