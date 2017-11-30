@@ -31,12 +31,14 @@ jobs:
     working_directory: ~/connectedacademy
     steps:
       # Download the browserstack binary file
-      - wget "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
+      - run: wget "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
       # Unzip the browserstack binary file
-      - unzip BrowserStackLocal-linux-x64.zip
+      - run: unzip BrowserStackLocal-linux-x64.zip
       # Run the file with your access key
-      - ./BrowserStackLocal $BROWSERSTACK_KEY:
-          background: true
+      - run:
+        name: Browserstack Local
+        command: ./BrowserStackLocal $BROWSERSTACK_KEY
+        background: true
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
