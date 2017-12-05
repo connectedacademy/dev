@@ -225,14 +225,6 @@ export default {
 @import '~stylus/buttons'
 
 .feedback-section
-  h1.feedback-section-title
-    reset()
-    padding 0 10px
-  h5.feedback-section-subtitle
-    reset()
-    color $color-text-grey
-    padding 0 10px
-    margin-bottom 10px
 
   .feedback-tile
     cleanlist()

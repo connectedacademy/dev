@@ -5,24 +5,10 @@
   page-header(title="Response Area" identifier="homework")
 
   #chat-list-container
-    ul
-      li.list-header Your Responses
-      li.no-content(v-if="!myFeedbackItems.length") Submit a response
-      router-link(v-for="(feedbackItem, index) in myFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
-        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
-
-    ul(v-if="feedbackItems.length !== 0")
-      li.list-header Current conversations
-      li.no-content(v-if="feedbackItems.length === 0") You are not in any conversations
-      router-link(v-for="(feedbackItem, index) in feedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
-        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
-
-    ul(v-if="availableFeedbackItems.length !== 0")
-      li.list-header Suggested conversations
-      li.no-content(v-if="availableFeedbackItems.length === 0") You have no suggestions
-      router-link(v-for="(feedbackItem, index) in availableFeedbackItems" v-bind:key="index" @click="currentFeedbackId = feedbackItem.id" v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
-        feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
-
+    feedback-list(header="Your Responses" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="myFeedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")
+    feedback-list(header="Current conversations" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="feedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")    
+    feedback-list(header="Suggested conversations" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="availableFeedbackItems" noContent="No suggestions available" v-bind:currentFeedbackId="currentFeedbackId")
+    
   #conversation-container.background-white
 
     .homework-details(v-if="!currentFeedbackId")
@@ -52,29 +38,23 @@ import { EventBus } from '@/event-bus.js'
 import API from '@/api'
 import Auth from '@/mixins/Auth'
 import PageStyle from '@/mixins/PageStyle'
-// import Messages from '@/mixins/Messages'
 
+import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 
 import PageHeader from '@/components/PageHeader'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import FourCornersLink from '@/components/fourcorners/FourCornersLink'
 import FeedbackSubmission from '@/components/feedback/FeedbackSubmission'
-import FeedbackTile from '@/components/feedback/FeedbackTile'
-import FeedbackRow from '@/components/feedback/FeedbackRow'
+import FeedbackList from '@/components/feedback/FeedbackList'
 import FeedbackView from '@/components/feedback/FeedbackView'
 import InfoDialogue from '@/components/InfoDialogue'
-
-import 'vue-awesome/icons/angle-left'
-import 'vue-awesome/icons/arrow-right'
-
 
 export default {
   name: 'feedback',
   mixins: [
     Auth,
-    PageStyle,
-    // Messages,
+    PageStyle
   ],
   components: {
     PageHeader,
@@ -82,8 +62,7 @@ export default {
     FeedbackSubmission,
     FourCornersLink,
     InfoDialogue,
-    FeedbackTile,
-    FeedbackRow,
+    FeedbackList,
     FeedbackView,
   },
   activated() {
@@ -182,9 +161,6 @@ export default {
         }
       })
     },
-    encodedId(id) {
-      return id.replace('#','%23')
-    },
     reloadChats() {
       this.getFeedbackItems()
       this.getAvailableFeedbackItems()
@@ -226,7 +202,9 @@ export default {
         (response) => {
           this.$log.debug('Response from feedback request (available)')
           this.$log.debug(response)
-          this.availableFeedbackItems = response.data
+          this.availableFeedbackItems = _filter(response.data, (o) => {
+            return _get(o, 'user.profile', false)
+          })
         },
         (response) => {
           // TODO: Handle failed request
@@ -285,25 +263,6 @@ $chat-list-width = 320px
   z-index 1
   @media(max-width: 600px)
     width 75px
-  ul
-    cleanlist()
-    border-bottom $color-lighter-grey 1px solid
-    li
-      cleanlist()
-      border-top $color-lighter-grey 1px solid
-      &.list-header
-        border-top none
-        color $color-text-grey
-        font-size 0.9em
-        padding 20px 10px 5px 10px
-        @media(max-width: 600px)
-          display none
-      &.no-content
-        border-top none
-        color $color-text-light-grey
-        line-height 20px
-        padding 10px 10px 20px 10px
-        text-align left
 
 #conversation-container
   background-color white
@@ -320,17 +279,6 @@ $chat-list-width = 320px
   h2
     color $color-text-dark-grey
     font-size 1.3em
-
-.feedback-section
-  margin-bottom 30px
-  h1.feedback-section-title
-    reset()
-    padding 0 10px
-  h5.feedback-section-subtitle
-    reset()
-    color $color-text-grey
-    padding 0 10px
-    margin-bottom 10px
 
 .homework-details
 

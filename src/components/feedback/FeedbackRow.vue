@@ -1,7 +1,6 @@
 <template lang="pug">
 
 .feedback-row(v-bind:class="{ active: active }")
-
   .user-strip
     img.user-profile-image(v-bind:src="content.user.profile")
     h5.user-profile-name {{ content.user.name }}
