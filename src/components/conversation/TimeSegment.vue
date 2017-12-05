@@ -13,7 +13,7 @@
       .message-wrapper
 
         .suggestion(v-if="isSuggestion") "{{ message.message.text }}"
-        message(v-else-if="isMessage" v-bind:message="message.message" v-bind:truncate="true")
+        message(v-else-if="isMessage" v-bind:message="message.message" v-bind:truncate="true" v-bind:segment-opened="segmentOpened")
         mock-message(v-else-if="isMock" v-bind:loading="message.loading")
 
       .clearfix
@@ -56,21 +56,6 @@
       Subtitle,
     },
     watch: {
-      // '$route.query.segment': {
-      //   handler: function(nV, oV) {
-      //     this.$log.debug('$route.query.segment');
-      //     if (nV !== oV) {
-      //       if ((oV) && (this.message.segmentGroup === oV)) {
-      //         if (this.activeSegment) {
-      //           this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
-      //         } else {
-      //           this.unpeek()
-      //         }
-      //       }
-      //     }
-      //   },
-      //   deep: true,
-      // },
       'activeSegment': {
         handler: function(nV, oV) {
           if (oV === this.message.segmentGroup) {
@@ -104,7 +89,6 @@
     },
     data() {
       return {
-        segmentExpanded: false,
         segmentOpened: false,
         segmentPeeking: false,
         loadingMessages: false,
@@ -300,23 +284,29 @@
   width 780px
 
   .message-count
+    transition(right 0.2s ease)
     box-sizing()
-    border-top-left-radius 4px
-    border-bottom-left-radius 4px
+    radius(4px)
     background-color $color-primary
     color white
     font-size 0.8em
     line-height 20px
-    padding 0 8px
+    padding 0 12px 0 8px
     position absolute
     top 10px
-    right 0
+    right -4px
     min-width 20px
     text-align center
     z-index 51
     @media(max-width: 800px)
-      radius(4px)
-    
+      padding 0 8px
+      right 0
+  
+  &.peek
+    .message-count
+      @media(max-width: 800px)
+        right 10px
+
   .subscribed-status
     radius(4px)
     background-color $color-border
