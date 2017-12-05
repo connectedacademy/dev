@@ -9,7 +9,7 @@ export default {
     loading: 'Loading',
     cancel: 'Cancel',
     read_more: 'Read More',
-    explore_content: 'Continue reading',
+    explore_content: 'Read more',
     no_results: 'No Results',
 
     age: 'Your age',
