@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .single-message-wrapper
+  .single-message-wrapper(v-bind:class="{ opened: segmentOpened }")
 
     .message
       img.profile-image(v-if="message.author" v-bind:src="message.author.profile")
@@ -50,7 +50,7 @@ import 'vue-awesome/icons/link'
 
 export default {
   name: 'message',
-  props: ['message', 'truncate', 'canJump'],
+  props: ['message', 'truncate', 'canJump', 'segmentOpened'],
   computed: {
     authorLink() { return `https://twitter.com/${this.message.author.account}` },
     tweetLink() { return `https://twitter.com/statuses/${this.message.message_id}` },
@@ -62,10 +62,13 @@ export default {
   methods: {
     parseText() {
       // Remove links
-      var urlRegex = /(https?:\/\/[^\s]+)/g
-      let html = this.message.text.replace(urlRegex, '')
-      // html = (this.truncate && html.length > 110) ? `${html.substring(0, 110)}...` : html
-      return TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } })
+      let html = this.message.text.replace(/(https?:\/\/[^\s]+)/g, '')
+      // Add linked hashtags
+      html = TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } })
+      // Open hashtag links in new tab
+      html = html.replace(/(">)/g, '" target="_blank">')
+      // Return formatted message text
+      return html;
     },
     showInfoModal() {
       this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') })
@@ -106,6 +109,7 @@ export default {
       max-height 70px
       display -webkit-box
       overflow hidden
+      pointer-events none
       text-overflow ellipsis
       word-wrap break-word
       -webkit-line-clamp 3
@@ -164,6 +168,12 @@ export default {
             float right
             max-width 55%
 
+  &.opened
+    .message
+      p.message-content
+        pointer-events all
+
   .replies-wrapper
     margin-left 20px
+
 </style>
