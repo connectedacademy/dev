@@ -3,8 +3,8 @@
   .class-page(name="class-page")
     .col#col-main
       .main-container
-        narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="Loading content..." link="Course schedule" route="schedule")
-        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="releaseLabel" link="Course schedule" route="schedule")
+        narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="Loading content..." link="View schedule" route="schedule")
+        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="classPosition" link="View schedule" route="schedule")
         section-navigator
         loading(v-if="currentClass && currentClass.loading")
         course-content(v-else-if="currentClass" v-bind:current-class="currentClass")
@@ -12,8 +12,12 @@
 </template>
 
 <script>
+const numberToWords = require('number-to-words')
+
 import { mapGetters } from 'vuex'
 import Moment from 'moment-mini'
+
+import _findIndex from 'lodash/findIndex'
 
 // Mixins
 import AutoScroll from '@/mixins/AutoScroll'
@@ -58,8 +62,21 @@ export default {
       const label = (this.currentClass.status === 'FUTURE') ? 'Will be released' : 'Released'
       return `${label} ${Moment(this.currentClass.release_at).fromNow()}`
     },
+    classPosition() {
+      const classPosition = _findIndex(this.course.classes, { 'slug': this.currentClass.slug }) + 1
+      const numberOfClasses = this.course.classes.length
+      return `
+        <a href="/#/schedule" style="color: white; text-decoration: none">
+          ${this.jsUcfirst(numberToWords.toWordsOrdinal(classPosition))}
+          of
+          ${numberToWords.toWords(numberOfClasses)} classes
+        </a>`
+    },
   },
   methods: {
+    jsUcfirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
     toMessage() {
       const segmentId = this.$route.params.segmentId
       if (segmentId) {

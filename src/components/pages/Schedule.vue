@@ -89,6 +89,7 @@ export default {
         cleanlist()
         box-shadow()
         border-box()
+        animate()
         background-color $color-lightest-grey
         border-bottom $color-border 1px solid
         min-height 92px

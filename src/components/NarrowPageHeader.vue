@@ -1,7 +1,7 @@
 <template lang="pug">
   .narrow-page-header
     h1.page-title {{ title }}
-    h2.page-subtitle {{ subtitle }}
+    h2.page-subtitle(v-html="subtitle")
     router-link.page-link(v-bind:to="{ name: route }") {{ link }}
 </template>
 
