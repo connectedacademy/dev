@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import API from '@/api'
-
-import { mapGetters } from 'vuex'
-
-import _filter from 'lodash/filter'
+import * as config from '@/api/config'
 
 export default {
   props: ['content'],
@@ -18,6 +15,12 @@ export default {
 
       const request = { class: this.currentClass.slug, content: this.content.slug, duration: this.content.duration }
 
+      // Subscribe to visualisation socket
+      this.$io.socket.get(`${config.WATERCOOLER_API}/messages/visualisation/${request.class}/${request.content}/5/${request.duration}?whitelist=true&clearcache=false&scale=log`, (resData, jwres) => {
+        this.visualisation = resData.data
+      })
+
+      // Standard request for visualisation
       API.visualisation.getVisualisation(
         request,
         (response) => {

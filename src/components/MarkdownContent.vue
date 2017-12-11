@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it';
-import MarkdownItCustomBlock from 'markdown-it-custom-block';
+import MarkdownIt from 'markdown-it'
+import MarkdownItCustomBlock from 'markdown-it-custom-block'
 
-import API from '@/api';
-import * as types from '@/store/mutation-types';
+import API from '@/api'
+import * as types from '@/store/mutation-types'
 
 export default {
   name: 'markdown-content',
@@ -33,16 +33,16 @@ export default {
       const md = new MarkdownIt()
         .use(MarkdownItCustomBlock, {
           bio(arg) {
-            if (!arg) { return 'loading...'; }
+            if (!arg) return 'loading...'
 
-            const parts = arg.split('|');
+            const parts = arg.split('|')
 
-            const caption = parts[0].trim();
-            const image = parts[1].trim();
+            const caption = parts[0] ? parts[0].trim() : ''
+            const image = parts[1] ? parts[1].trim() : ''
 
             if (parts.length > 2) {
-              const bio = parts[2].trim();
-              const link = parts[3].trim();
+              const bio = parts[2] ? parts[2].trim() : ''
+              const link = parts[3] ? parts[3].trim() : ''
 
               return `
               <div class="md-bio md-bio--with-bio">
@@ -53,7 +53,7 @@ export default {
                   <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
                 </div>
               </div>
-              `;
+              `
 
             } else {
 
@@ -62,16 +62,16 @@ export default {
                 <img class="md-bio--image" src="${image}" />
                 <h5 class="md-bio--caption">${caption}</h5>
               </div>
-              `;
+              `
 
             }
           },
-      });
+      })
 
-      this.renderedMarkdown = md.render(this.markdown.replace("@","\n\n@"));
+      this.renderedMarkdown = md.render(this.markdown.replace("@","\n\n@"))
     },
   },
-};
+}
 </script>
 
 <style lang="stylus" scoped>

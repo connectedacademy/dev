@@ -47,7 +47,8 @@ export default {
     this.loadVisualisation()
 
     EventBus.$on('messagePosted', (message) => {
-      this.loadVisualisation()
+      // TODO: Reload vis
+      // this.loadVisualisation()
     })
 
     EventBus.$on('scrollStatus', (scrollStatus) => {
@@ -71,6 +72,9 @@ export default {
   computed: {
     buffered() {
       let buffered = []
+      
+      if (typeof this.bufferedSegments === 'undefined') return buffered
+
       for (let index = 0; index < this.bufferedSegments.length; index++) {
         const element = {
           start: _clamp(this.bufferedSegments.start(index) * (100 / this.content.duration), 0, 100),
