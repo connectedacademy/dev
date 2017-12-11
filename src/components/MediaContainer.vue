@@ -121,7 +121,8 @@ export default {
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
-      
+      if (!self.liveclassMedia) return
+
       for (let i = 0; i < self.liveclassMedia.length; i++) {
         const image = self.liveclassMedia[i]
 
@@ -134,7 +135,7 @@ export default {
           
         }
       }
-    }, 200, { 'leading': false })
+    }, 300, { 'leading': false })
   }
 }
 </script>

@@ -12,10 +12,10 @@
         icon(name="step-forward")
       
       li.experience-control
-        p {{ currentTime }}
+        p {{ mediaBuffering ? 'BUFF' : currentTime }}
       
       li.experience-control#progress-bar(ref="progressbar" @click="trackClicked" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
-        visualisation(v-bind:content="content" v-bind:current-class="currentClass")
+        visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:content="content" v-bind:current-class="currentClass")
       
       li.experience-control.pull-right(@click="toggleComposer")
         onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
@@ -145,6 +145,7 @@
       },
       toggleMediaPlayback() {
         this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
+        this.$store.commit(this.mediaPlaying ? 'SHOW_MEDIA' : 'HIDE_MEDIA');
       },
       togglePlayerType() {
         this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1);

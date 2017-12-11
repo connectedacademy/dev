@@ -12,8 +12,8 @@ import VueLogger from 'vuejs-logger'
 import { VueMasonryPlugin } from 'vue-masonry'
 import VueResource from 'vue-resource'
 
-import Raven from 'raven-js'
-import RavenVue from 'raven-js/plugins/vue'
+// import Raven from 'raven-js'
+// import RavenVue from 'raven-js/plugins/vue'
 
 import { sync } from 'vuex-router-sync'
 
@@ -69,7 +69,7 @@ Vue.use(VueAnalytics, {
 })
 
 // TODO: Enabled for production
-Raven.config(app_config.sentry).addPlugin(RavenVue, Vue).install()
+// Raven.config(app_config.sentry).addPlugin(RavenVue, Vue).install()
 
 // General config
 Vue.config.productionTip = false

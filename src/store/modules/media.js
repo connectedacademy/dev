@@ -2,7 +2,7 @@ import * as types from '@/store/mutation-types'
 
 // initial state
 const state = {
-  hidden: false,
+  hidden: true,
   playing: false
 }
 

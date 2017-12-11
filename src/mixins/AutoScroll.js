@@ -10,7 +10,7 @@ import _clamp from 'lodash/clamp'
 
 const AUTOSCROLL_ATTEMPT = 1500 // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000 // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 500 // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 200 // Interval at which scroll position should be updated
 
 export default {
   mounted() {

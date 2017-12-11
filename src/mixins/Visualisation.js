@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import API from '@/api'
+
 import { mapGetters } from 'vuex'
+
+import _filter from 'lodash/filter'
 
 export default {
   props: ['content'],
   data() {
     return {
-      visualisation: undefined
+      visualisation: undefined,
+      newVisualisation: undefined
     }
   },
   methods: {
@@ -19,7 +23,7 @@ export default {
         (response) => {
           this.visualisation = response.data
         },
-        response => (response) => {
+        (response) => {
           Vue.$log.error(response)
           Vue.$log.info('Failed to check auth')
           this.visualisation = undefined

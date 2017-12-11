@@ -1,7 +1,26 @@
 <template lang="pug">
   
-  .visualisation
-    canvas(ref="canvas" width="588" height="50")
+  .visualisation(v-if="content.duration")
+    
+    #vis-container(v-if="renderType === 'dom'")
+      
+      #vis(v-if="visualisation")
+        .vis-point(v-for="(val, key) in visualisation" v-bind:key="key" v-bind:style="{ left: `${parseFloat(key) * 100}%`, height: `${parseFloat(val) * 50}px`, 'margin-top': (`${parseFloat(-val) * (50 / 2)}px`) }" v-bind:class="{ active: (parseInt(key * 100) < parseInt(playheadPos)) }")
+      
+      #track
+      
+      #progress(v-bind:style="{ width: `${playheadPos}%` }")
+
+      //- #buffer
+        .buffer-element(v-for="(segment, index) in buffered" v-bind:key="index" v-bind:style="{ left: `${segment.start}%`, right: `${100 - segment.end}%` }")
+      
+      //- #animation(v-bind:style="{ left: animPos }")
+      
+      #playhead(v-bind:style="{ left: `${playheadPos}%` }")
+    
+    #canvas-visualisation(v-if="renderType === 'canvas'")
+      canvas(ref="canvas" width="588" height="50")
+      canvas(ref="animationcanvas" width="588" height="50")
 
 </template>
 
@@ -9,15 +28,20 @@
 import { mapGetters } from 'vuex'
 
 import Visualisation from '@/mixins/Visualisation'
+// import CanvasVisualisation from '@/mixins/CanvasVisualisation'
+
+import _clamp from 'lodash/clamp'
 import _each from 'lodash/each'
+import _round from 'lodash/round'
 
 import { EventBus } from '@/event-bus.js'
 
 export default {
   name: 'visualisation',
-  props: ['currentClass'],
+  props: ['currentClass', 'bufferedSegments', 'content'],
   mixins: [
-    Visualisation,
+    Visualisation
+    // CanvasVisualisation
   ],
   mounted() {
     this.loadVisualisation()
@@ -29,72 +53,42 @@ export default {
     EventBus.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
     })
-  },
-  watch: {
-    scrollStatus(nV, oV) {
-      if (typeof nV === 'undefined') { return }
-      this.drawVis()
-    },
-    visualisation(nV, oV) {
-      if (typeof nV === 'undefined') { return }
-      this.drawVis()
-    },
+
+    EventBus.$on('socketConversationMessage', (obj) => {
+      
+      const animPos = (100 / parseInt(this.content.duration)) * obj.msg.segment
+      this.animPos = `${animPos}%`
+    })
   },
   data() {
     return {
+      renderType: 'dom', // canvas
+      animPos: '0%',
       theData: [],
       scrollStatus: undefined,
     }
   },
-  methods: {
-    drawVis() {
-
-      if (!this.scrollStatus) return
-
-      const visWidth = 588
-      const visHeight = 50
-
-      var canvas = this.$refs.canvas
-      var context = canvas.getContext("2d")
-
-      // Clear the canvas
-      context.clearRect(0, 0, visWidth, visHeight)
-
-      // Gradient background
-      // var grd = context.createLinearGradient(0,0,170,0)
-      // grd.addColorStop(0,"#DCD8DF")
-      // grd.addColorStop(1,"#A08F90")
-
-      // context.fillStyle = grd
-
-      // context.fillRect(0, 0, visWidth, visHeight)
-
-      const playheadPos = ((1 / this.content.duration) * this.scrollStatus.currentTime) * visWidth
-      
-      // Draw visualisation
-      _each(this.visualisation, (value, position) => {
-        let width = 2
-        let fill = '#ddd'
-        if (value < 0.02) {
-          value = 0.04
-          width = 2
-          fill = '#ddd'
+  computed: {
+    buffered() {
+      let buffered = []
+      for (let index = 0; index < this.bufferedSegments.length; index++) {
+        const element = {
+          start: _clamp(this.bufferedSegments.start(index) * (100 / this.content.duration), 0, 100),
+          end: _clamp(this.bufferedSegments.end(index) * (100 / this.content.duration), 0, 100)
         }
-        fill = (parseFloat(position) * visWidth < playheadPos) ? '#33B376' : fill
-        context.beginPath()
-        context.rect(parseFloat(position) * visWidth, ((1.0 - value) * (visHeight / 2)), width, (value * visHeight))
-        // if (value > 0.04) {
-        //   context.rect(parseFloat(position) * visWidth, 50, width, (value * 20))
-        // }
-        context.fillStyle = fill
-        context.fill()
-      })
-      
-      // Draw playhead
-      // context.beginPath()
-      // context.arc(playheadPos, 25, 5, 0, 2 * Math.PI, false)
-      // context.fillStyle = '#33B376'
-      // context.fill()
+        buffered.push(element)
+      }
+      return buffered
+    },
+    playheadPos() {
+      // If no scrollStatus assume start
+      if (typeof this.scrollStatus === 'undefined') {
+        return 0
+      }
+
+      // Set playhead position relative to vis width
+      let playheadPos = ((100 / parseInt(this.content.duration)) * this.scrollStatus.currentTime)
+      return playheadPos
     }
   }
 }
@@ -104,11 +98,90 @@ export default {
 
 @import '~stylus/shared'
 
+$color-v = transparent // $color-lightest-grey
+$color-v-track = lighten($color-lighter-grey, 40%)
+$color-v-playhead = darken($color-primary, 10%)
+$color-v-point = $color-lighter-grey
+$color-v-point-active = $color-primary
+$color-v-progress = $color-primary
+
+$v-height = 60px
+$v-track-height = 4px
+$v-point-width = 3px
+$v-playhead-size = 12px
+
 .visualisation
   margin 0
   pointer-events none
   canvas
+    pinned()
     height 50px
     margin 5px 0
     width 100%
+    position absolute
+
+  #vis-container
+    pinned()    
+    background-color $color-v
+    // padding 0 5px
+    position absolute
+    width 100%
+    #track
+      radius($v-track-height / 2)
+      background-color $color-v-track
+      height $v-track-height
+      margin-top ( ( $v-height - $v-track-height ) / 2 )
+      width 100%
+    #progress
+      radius($v-track-height / 2)
+      background-color $color-v-progress
+      height $v-track-height
+      position absolute
+      top ( $v-height / 2 ) - ( $v-track-height / 2 )
+      left 0
+    #buffer
+      pinned()
+      position absolute
+      .buffer-element
+        background-color alpha(black, 0.2)
+        height $v-track-height
+        position absolute
+        top ( $v-height / 2 ) - ( $v-track-height / 2 )
+    #playhead
+      radius(50%)
+      background-color $color-v-playhead
+      border white 2px solid
+      cursor pointer
+      height $v-playhead-size
+      margin-left -($v-playhead-size / 2)
+      top ( $v-height / 2 ) - ( $v-playhead-size / 2 ) - 2
+      position absolute
+      width $v-playhead-size
+      pointer-events all
+    #animation
+      radius(50%)
+      box-sizing()
+      border $color-info 3px solid
+      height 20px
+      width 20px
+      margin-left -(20px / 2)
+      top ( $v-height / 2 ) - ( 20px / 2 )
+      position absolute
+      pointer-events all
+      z-index 2
+      &:hover
+        transform scale(1.5)
+    #vis
+      pinned()
+      position absolute
+      .vis-point
+        pinned()
+        radius($v-point-width / 2)
+        position absolute
+        top 50%
+        right auto
+        background-color $color-v-point
+        width $v-point-width
+        &.active
+          background-color $color-v-point-active
 </style>

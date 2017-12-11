@@ -11,7 +11,7 @@ require('howler')
 
 export default {
   beforeDestroy() {
-    this.sound = undefined
+    this.sound.unload()
   },
   mounted() {
     if (typeof this.content.audio === 'undefined') return
@@ -62,6 +62,7 @@ export default {
       scrollStatus: undefined,
       mediaBuffering: false,
       bufferInterval: false,
+      bufferedSegments: undefined
     }
   },
   computed: {
@@ -70,10 +71,15 @@ export default {
   methods: {
     checkBufferStatus() {
 
-      if (!self.scrollStatus) return
-
+      if (!this.scrollStatus) return
+      if (!this.sound) return
+      
       // Get buffered blocks
       const buffered = this.sound._sounds[0]._node.buffered
+
+      // alert(`${JSON.stringify(this.sound)}`)
+      
+      this.bufferedSegments = buffered
 
       // Loop through buffered blocks
       for (var index = 0; index < buffered.length; index++) {
@@ -82,6 +88,7 @@ export default {
         if (_inRange(this.scrollStatus.currentTime, buffered.start(index), buffered.end(index))) {
           this.bufferInterval = false
           this.mediaBuffering = false
+          setTimeout(() => { this.checkBufferStatus() }, 500)
           return
         }
       }
