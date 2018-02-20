@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.profile-panel(v-if="classroom")
+.profile-panel(v-if="classroom" v-bind:class="{ collapsed: false, expanded: expandedView }")
 
   profile-panel-header(label="Storify")
 

@@ -6,7 +6,7 @@ import { EventBus } from '@/event-bus.js'
 import _throttle from 'lodash/throttle'
 import _find from 'lodash/find'
 import _clamp from 'lodash/clamp'
-
+import _round from 'lodash/round'
 
 const AUTOSCROLL_ATTEMPT = 1500 // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000 // Interval before assumed no longer manually scrolling
@@ -183,25 +183,25 @@ export default {
 
       if (typeof newCurrentSection !== 'undefined') {
         
-        offsetScrollPos = offsetScrollPos - _clamp(((offsetScrollPos / (app.segmentHeight * 0.2)) * 50), 0, 200)
+        // TODO
+        // offsetScrollPos = offsetScrollPos - _clamp(((offsetScrollPos / (app.segmentHeight * 0.2)) * 50), 0, 200)
 
         // Time
-        const currentTime = (offsetScrollPos / (app.segmentHeight * 0.2))
+        const currentTime = _round(offsetScrollPos / (app.segmentHeight * 0.2))
 
         // Segment group
-        let currentSegmentGroup = Math.floor(offsetScrollPos / app.segmentHeight)
-
-        // Segment
-        let currentSegment = Math.floor(currentTime)
+        let currentSegmentGroup = Math.floor(currentTime * 0.2)
 
         // Create object
         scrollStatus = {
           scrollPos,
           offsetScrollPos,
           currentTime,
-          currentSegmentGroup,
-          currentSegment,
+          currentSegmentGroup
         }
+
+        // console.log('scrollStatus')
+        // console.log(scrollStatus)
 
         // Emit position
         EventBus.$emit('scrollStatus', scrollStatus)

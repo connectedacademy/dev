@@ -64,12 +64,12 @@ const mutations = {
     // error in response
   },
   [types.GET_MESSAGES_SUCCESS](initialState, { response }) {
-    const startSegmentGroup = parseInt(parseInt(response.scope.startsegment) * 0.2)
-    const endSegmentGroup = parseInt(parseInt(response.scope.endsegment) * 0.2)
+    const startSegmentGroup = parseInt(response.scope.startsegment)
+    const endSegmentGroup = parseInt(response.scope.endsegment)
 
     for (var group in response.data) {
 
-      const segmentGroup = parseInt(parseInt(group) * 0.2)
+      const segmentGroup = parseInt(group)
       let newMessage = response.data[group]
       newMessage.segmentGroup = segmentGroup
 
@@ -89,9 +89,9 @@ const mutations = {
     state.activeSegmentMessages = messages
   },
   [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
-    if (newMessage.replyto) {
+    if (newMessage.in_reply_to) {
       // A reply so push to message replies
-      const index = findIndex(state.activeSegmentMessages, function (message) { return message.message_id == newMessage.replyto.message_id })
+      const index = findIndex(state.activeSegmentMessages, function (message) { return message.id == newMessage.in_reply_to })
       state.activeSegmentMessages[index].in_reply.push(newMessage)
     } else {
       // Not a reply so just push onto array

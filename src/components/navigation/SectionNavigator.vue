@@ -1,5 +1,5 @@
 <template lang="pug">
-#section-navigator-wrapper(v-if="scrollPoints.length > 3")
+#section-navigator-wrapper(v-if="true || scrollPoints.length > 3")
   onboarding-prompt(identifier="section-navigator" prompt="navigate class" top="-45" left="-150" position="bottom-right" z-index="1")
   transition(name="fade")
     #section-navigator(v-if="isVisible")

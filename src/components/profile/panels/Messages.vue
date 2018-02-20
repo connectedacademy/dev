@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.profile-panel(v-bind:class="{ limited: limitHeight }")
+.profile-panel(v-bind:class="{ limited: limitHeight, collapsed: false, expanded: expandedView }")
 
   profile-panel-header(v-bind:label="`${panel.label} (${messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
   

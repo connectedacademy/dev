@@ -7,13 +7,17 @@
 
       .author-label(v-if="message.author")
         | {{ message.author.account }}
-        icon(v-if="message.replyto" name="reply")
+        icon(v-if="message.in_reply_to" name="reply")
 
       p.message-content(v-html="parseText()")
 
       .message--footer
 
-        ul.tweet-actions(v-if="canJump")
+        ul.tweet-actions(v-if="moderate")
+          li Allow
+          li Deny
+
+        ul.tweet-actions(v-else-if="canJump")
           router-link.jump-action(tag="li" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
             //- icon(name="link")
             | View in context
@@ -27,6 +31,8 @@
           li.reply-action(@click="replyToMessage(message)")
             //-  v-bind:href="replyLink" target="_blank"
             icon(name="reply")
+          li.moderate-action(@click="reportItem(message.id)")
+            icon(name="ellipsis-h")
           li.message-timestamp
             | {{ timeStamp }}
 
@@ -39,8 +45,11 @@
 </template>
 
 <script>
+import API from '@/api'
 import TweetPatch from 'tweet-patch'
 import Moment from 'moment-mini'
+
+import Report from '@/mixins/Report'
 
 import 'vue-awesome/icons/heart'
 import 'vue-awesome/icons/retweet'
@@ -50,7 +59,8 @@ import 'vue-awesome/icons/link'
 
 export default {
   name: 'message',
-  props: ['message', 'truncate', 'canJump', 'segmentOpened'],
+  props: ['message', 'truncate', 'canJump', 'segmentOpened', 'moderate'],
+  mixins: [Report],
   computed: {
     authorLink() { return `https://twitter.com/${this.message.author.account}` },
     tweetLink() { return `https://twitter.com/statuses/${this.message.message_id}` },

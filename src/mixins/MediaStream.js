@@ -22,8 +22,7 @@ export default {
     for (const index in this.content.audio) {
       src.push(`${this.course.baseUri}../audio/${this.content.audio[index]}`,)
     }
-    
-    // Initialise Howler
+
     this.sound = new Howl({
       src: src,
       preload: true,
@@ -39,7 +38,7 @@ export default {
 
     // If the audio seeks then check it is buffered
     this.sound.on('seek', () => {
-     this.checkBufferStatus()
+      this.checkBufferStatus(this)
     })
   },
   watch: {
@@ -69,34 +68,36 @@ export default {
     ...mapGetters(['course', 'mediaPlaying'])
   },
   methods: {
-    checkBufferStatus() {
+    checkBufferStatus: _throttle(function (self) {    
 
-      if (!this.scrollStatus) return
-      if (!this.sound) return
+      if (!self.scrollStatus) return
+      if (!self.sound) return
+      if (!self.sound._sounds) return
+      if (!self.sound._sounds.length === 0) return
       
       // Get buffered blocks
-      const buffered = this.sound._sounds[0]._node.buffered
+      const buffered = self.sound._sounds[0]._node.buffered
 
-      // alert(`${JSON.stringify(this.sound)}`)
+      // alert(`${JSON.stringify(self.sound)}`)
       
-      this.bufferedSegments = buffered
+      self.bufferedSegments = buffered
 
       // Loop through buffered blocks
       for (var index = 0; index < buffered.length; index++) {
 
         // Check if current time in audio has been buffered
-        if (_inRange(this.scrollStatus.currentTime, buffered.start(index), buffered.end(index))) {
-          this.bufferInterval = false
-          this.mediaBuffering = false
-          setTimeout(() => { this.checkBufferStatus() }, 500)
+        if (_inRange(self.scrollStatus.currentTime, buffered.start(index), buffered.end(index))) {
+          self.bufferInterval = false
+          self.mediaBuffering = false
+          self.checkBufferStatus(self)
           return
         }
       }
 
       // Media is buffering so wait and check again
-      this.mediaBuffering = true
-      setTimeout(() => { this.checkBufferStatus() }, 500)
-    },
+      self.mediaBuffering = true
+      self.checkBufferStatus(self)
+    }, 2000),
     attempSync: _throttle(function (self) {
       
       if (typeof self.sound === undefined) return

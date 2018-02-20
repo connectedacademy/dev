@@ -87,7 +87,7 @@ export default {
       'currentSection', 'peekSegment', 'activeSegment', 'course', 'mediaPlaying',
     ]),
     containerHeight() {
-      return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight}px`;
+      return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`;
     },
   },
   watch: {
@@ -104,7 +104,7 @@ export default {
     scrollStatus(nV, oV) {
       if ((typeof nV === 'undefined') || (typeof oV === 'undefined') || (nV.currentSegmentGroup === oV.currentSegmentGroup) || (typeof this.currentSection === 'undefined')) return
 
-      this.$log.info(`Getting messages for segment ${nV.currentSegmentGroup}`);
+      this.$log.info(`Fetching segment: ${nV.currentSegmentGroup}`);
       this.loadSegmentSummary(nV.currentSegmentGroup, true);
     },
   },

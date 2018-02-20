@@ -29,22 +29,22 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import API from '@/api';
-import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus.js';
+import Vue from 'vue'
+import API from '@/api'
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 import VueTextareaAutosize from 'vue-textarea-autosize'
 
-import Auth from '@/mixins/Auth';
+import Auth from '@/mixins/Auth'
 
-import info from 'vue-awesome/icons/info';
-import times from 'vue-awesome/icons/times';
+import info from 'vue-awesome/icons/info'
+import times from 'vue-awesome/icons/times'
 
 Vue.use(VueTextareaAutosize)
 
 export default {
   name: 'message-composer',
-  props: ['static', 'classSlug', 'contentSlug', 'currentSegment'],
+  props: ['static', 'classSlug', 'contentSlug', 'currentSegmentGroup'],
   mixins: [
     Auth,
   ],
@@ -65,67 +65,67 @@ export default {
       },
       windowWidth: 0,
       sending: false,
-    };
+    }
   },
   watch: {
     composerFocussed() {
-      this.calculateHeight();
+      this.calculateHeight()
     },
     'message': {
       handler: function(nV, oV) {
         this.$nextTick(() => {
-          this.calculateHeight();
-        });
+          this.calculateHeight()
+        })
       },
       deep: true,
     },
   },
   methods: {
     inputChanged() {
-      this.calculateHeight();
+      this.calculateHeight()
     },
     calculateHeight() {
-      const textareaPadding = 20;
-      const appendedHeight = (this.showAction) ? 30 : 0;
-      const footerHeight = (this.$refs.composeractions) ? this.$refs.composeractions.clientHeight : 0;
-      const notAuthed = this.isRegistered ? 0 : 50;
-      const textareaHeight = (this.$refs.textarea) ? this.$refs.textarea.$el.clientHeight : 0;
-      this.$emit('update:quickNoteHeight', (textareaHeight + textareaPadding + footerHeight + appendedHeight + notAuthed));
+      const textareaPadding = 20
+      const appendedHeight = (this.showAction) ? 30 : 0
+      const footerHeight = (this.$refs.composeractions) ? this.$refs.composeractions.clientHeight : 0
+      const notAuthed = this.isRegistered ? 0 : 50
+      const textareaHeight = (this.$refs.textarea) ? this.$refs.textarea.$el.clientHeight : 0
+      this.$emit('update:quickNoteHeight', (textareaHeight + textareaPadding + footerHeight + appendedHeight + notAuthed))
     },
     cancelReply() {
-      this.$store.commit('SET_REPLYING_TO', undefined);
+      this.$store.commit('SET_REPLYING_TO', undefined)
     },
     sendMessage() {
       let postData = {
         text: `${this.message.text} ${this.hashtags} ${this.url}`,
         currentClass: this.classSlug,
         currentSection: this.contentSlug,
-        currentSegment: (this.currentSegment / 0.2),
-      };
+        currentSegmentGroup: this.currentSegmentGroup,
+      }
 
       // If this is a reply then append message id
-      if (this.replyingTo) { postData.replyto = this.replyingTo.message_id; }
+      if (this.replyingTo) { postData.in_reply_to = this.replyingTo.id }
 
-      this.sending = true;
+      this.sending = true
 
       API.message.sendMessage(
         postData,
         (response, postData) => {
-          this.message.text = '';
-          this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Posted note';
-          setTimeout(() => { this.infoLabel = ""}, 2000);
-          this.sending = false;
-          this.$store.commit('SET_REPLYING_TO', undefined);
-          EventBus.$emit('messagePosted', response);
+          this.message.text = ''
+          this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Posted note'
+          setTimeout(() => { this.infoLabel = ""}, 2000)
+          this.sending = false
+          this.$store.commit('SET_REPLYING_TO', undefined)
+          // EventBus.$emit('socketConversationMessage', { msgtype: 'message', msg: response.body })
         },
         (response, postData) => {
-          alert('Failed to send message');
-          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Failed to post';
-          setTimeout(() => { this.infoLabel = ""}, 2000);
-          this.sending = false;
-          this.$store.commit('SET_REPLYING_TO', undefined);
+          alert('Failed to send message')
+          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Failed to post'
+          setTimeout(() => { this.infoLabel = ""}, 2000)
+          this.sending = false
+          this.$store.commit('SET_REPLYING_TO', undefined)
         },
-      );
+      )
     },
   },
   computed: {
@@ -137,31 +137,31 @@ export default {
       'replyingTo'
     ]),
     hashtags() {
-      return this.course.hashtag;
+      return this.course.hashtag
     },
     url() {
-      let url = `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}`;
+      let url = `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}`
       if (!this.static){
-        return `${url}/${(this.currentSegment / 0.2)}`;
+        return `${url}/${this.currentSegmentGroup}`
       }
-      return url;
+      return url
     },
     shortenedUrl() {
-      return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`;
+      return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`
     },
     submitText() {
-      if (this.sending) return 'Sending..';
-      return (this.replyingTo) ? 'Reply' : 'Post';
+      if (this.sending) return 'Sending..'
+      return (this.replyingTo) ? 'Reply' : 'Post'
     },
     showAction() {
-      // return true; // TODO // Remove this line
-      return (this.messageLength > this.minCharacterCount);
+      // return true // TODO // Remove this line
+      return (this.messageLength > this.minCharacterCount)
     },
     messageLength() {
-      return this.message.text.length;
+      return this.message.text.length
     },
   },
-};
+}
 </script>
 
 <style lang="stylus" scoped>

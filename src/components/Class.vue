@@ -81,7 +81,7 @@ export default {
       const segmentId = this.$route.params.segmentId
       if (segmentId) {
         this.$store.commit('EXPAND_CONVERSATION')
-        const segmentGroup = parseInt(segmentId * 0.2)
+        const segmentGroup = parseInt(segmentId)
         setTimeout(() => {
           this.$store.commit('SET_PEEK_SEGMENT', segmentGroup)
           this.$router.replace({ name: 'class', params: { classSlug: this.$route.params.classSlug, contentSlug: this.$route.params.contentSlug, segmentId: segmentId } });

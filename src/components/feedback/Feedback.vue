@@ -66,22 +66,11 @@ export default {
     FeedbackView,
   },
   activated() {
-    // Check if user has registered
-    if (this.isAuthenticated && !this.isRegistered) {
-      this.$router.push('/registration')
-    } else if (this.isAuthenticated) {
-      this.$router.push('/')
-    } else {
-      // Fetch feedback items
-      this.getFeedbackItems()
-      this.getAvailableFeedbackItems()
-    }
+    // Fetch feedback items
+    this.getFeedbackItems()
+    this.getAvailableFeedbackItems()
   },
   mounted() {
-    Vue.$log.debug('Feedback view mounted')
-    
-    this.ensureAuthenticated()
-
     this.subscribeToSocketEvents()
 
     if (this.$route.params.id) {
@@ -100,8 +89,8 @@ export default {
           this.currentFeedbackId = undefined
         }
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   data() {
     return {
@@ -111,12 +100,12 @@ export default {
       myFeedbackItems: [],
       feedbackItems: [],
       availableFeedbackItems: [],
-      discussion: [],
+      discussion: []
     }
   },
   computed: {
     ...mapGetters([
-      'isAuthenticated', 'isRegistered', 'user', 'currentClass', 'course',
+      'isRegistered', 'user', 'currentClass', 'course'
     ]),
     classSlug() {
       return this.$route.params.classSlug

@@ -3,7 +3,7 @@
   .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
 
     .message-count(v-if="messageCount") {{ messageCount }}
-    .subscribed-status(v-if="subscribedTo && (((index * 5) >= subscribedTo.start) && ((index * 5) <= subscribedTo.end))")
+    .subscribed-status(v-if="subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
@@ -29,7 +29,7 @@
         message(v-bind:message="segmentMessage")
 
     .quick-note(v-if="segmentPeeking || segmentOpened" v-bind:class="{ replying: replyingTo }" v-bind:style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
-      message-composer(v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug" v-bind:currentSegment="index" v-bind:quick-note-height.sync="quickNoteHeight")
+      message-composer(v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug" v-bind:currentSegmentGroup="index" v-bind:quick-note-height.sync="quickNoteHeight")
     .clearfix
 
 </template>
@@ -144,8 +144,7 @@
         if (typeof this.peekSegment !== 'undefined') return;
         
         // Update url
-        const segmentId = (this.message.segmentGroup / 0.2)
-        this.$router.replace({ name: 'class', params: { classSlug: this.classSlug, contentSlug: this.contentSlug, segmentId: segmentId } });
+        this.$router.replace({ name: 'class', params: { classSlug: this.classSlug, contentSlug: this.contentSlug, segmentId: this.message.segmentGroup } });
 
         if (!this.segmentOpened) {
   
@@ -247,8 +246,8 @@
         const theRequest = {
           theClass: this.classSlug,
           theContent: this.contentSlug,
-          startSegment: `${parseInt(this.message.segmentGroup) / 0.2}`,
-          endSegment: `${parseInt(this.message.segmentGroup) / 0.2 + 4}`,
+          startSegment: `${this.message.segmentGroup}`,
+          endSegment: `${parseInt(this.message.segmentGroup) + 4}`,
         };
   
         API.message.getMessages(

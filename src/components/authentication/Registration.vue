@@ -2,7 +2,7 @@
 
 .col
 
-  .container.registration-container(v-if="!checkingAuthentication")
+  .container.registration-container
 
     profile-step(v-if="currentStep === 1" v-bind:response.sync="response" v-on:nextStep="nextStep" v-on:previousStep="previousStep")
 
@@ -17,10 +17,7 @@
   import { mapGetters } from 'vuex'
   import API from '@/api'
 
-  // Lodash
-  import every from 'lodash/every'
-  import values from 'lodash/values'
-
+  // Mixins
   import Auth from '@/mixins/Auth'
   import PageStyle from '@/mixins/PageStyle'
   
@@ -42,9 +39,6 @@
       ScheduleStep
     },
     mounted() {
-      // this.ensureAuthenticated()
-      this.ensureNotRegistered()
-
       this.$store.dispatch('getHubs')
   
       API.auth.fetchQuestions(
@@ -81,7 +75,7 @@
     },
     computed: {
       ...mapGetters([
-        'course', 'hubs', 'user', 'isRegistered'
+        'course', 'hubs', 'user'
       ]),
       sanitizedResponse() {
         return {
@@ -128,9 +122,6 @@
             this.$router.push('class')
           },
         )
-      },
-      getCountryName(lang) {
-        return lang
       }
     }
   }

@@ -12,15 +12,6 @@
           label(for="email") {{ $t('auth.enter_your_email') }}
           input.full-width.large(name="email" type="text" v-model="response.email" placeholder="name@example.com" required)
 
-        //- fieldset.validate(v-bind:class="{ valid: validatedResponse.age }")
-          label {{ $t('auth.enter_your_age') }}
-          input(type="text" v-model="response.age")
-
-        //- fieldset.validate(v-bind:class="{ valid: validatedResponse.lang }")
-          label {{ $t('auth.select_your_language') }}
-          select(v-model="response.lang")
-            option(v-for="(lang, index) in course.langs") {{ getCountryName(lang) }}
-        
         .clearfix
 
         .terms-message
@@ -54,12 +45,7 @@
       validatedResponse() {
         return {
           hub_id: !Validator.isEmpty(this.response.hub_id),
-          email: Validator.isEmail(this.response.email),
-          // age: Validator.isInt(this.response.age, {
-          //   min: 1,
-          //   max: 150
-          // }),
-          // lang: !Validator.isEmpty(this.response.lang),
+          email: Validator.isEmail(this.response.email)
         }
       },
       canContinue() {

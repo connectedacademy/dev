@@ -8,7 +8,6 @@ export default {
     return {
       visType: 'newform', // heatmap, waveform
       animPos: '0%',
-      theData: [],
       scrollStatus: undefined,
     }
   },
@@ -135,7 +134,7 @@ export default {
           }
           else if (this.visType = 'newform') {
             let fill = '#d9d9d9'
-            value = (value < 0.2) ? (value + 0.2) : value
+            // value = (value < 0.2) ? (value + 0.2) : value
             fill = (parseFloat(position) * visWidth < playheadPos) ? '#33B376' : fill
             let pointHeight = value * ((visHeight / 2) - (trackHeight / 2) + waveformOffset)
             // var time = new Date()
@@ -157,44 +156,9 @@ export default {
         if (drawPlayhead) {
           context.beginPath()
           context.arc((playheadPos + playheadSize), (visHeight / 2), playheadSize, 0, 2 * Math.PI, false)
-          context.fillStyle = '#222'
-          context.fillStyle = '#1864EF'
           context.fillStyle = '#33B376'
           context.fill()
         }
-
-        // Draw playhead
-        // if (drawPlayhead) {
-        //   animationContext.beginPath()
-        //   animationContext.arc((playheadPos + playheadSize), (visHeight / 2) - 10, playheadSize, 0, 2 * Math.PI, false)
-        //   animationContext.fillStyle = '#1864EF'
-        //   animationContext.fill()
-        // }
-
-        // Draw visualisation
-        _each(this.newVisualisation, (value, position) => {
-
-          if (visType = 'newform') {
-            let fill = '#d9d9d9'
-            value = (value < 0.2) ? (value + 0.2) : value
-            fill = (parseFloat(position) * visWidth < playheadPos) ? '#1864EF' : fill
-            let originalPointHeight = value * ((visHeight / 2) - (trackHeight / 2) + waveformOffset)
-            // var time = new Date()
-            // let pointHeight = originalPointHeight / ((60 / time.getSeconds()) / 10)
-            // pointHeight = _clamp(pointHeight, 0, originalPointHeight)
-            let pointHeight = originalPointHeight
-
-            animationContext.beginPath()
-            animationContext.roundRect((parseFloat(position) * visWidth) + playheadSize, (visHeight / 2) - pointHeight, waveformWidth, pointHeight, 1.5)
-            animationContext.fillStyle = fill
-            animationContext.fill()
-
-            animationContext.beginPath()
-            animationContext.roundRect((parseFloat(position) * visWidth) + playheadSize, (visHeight / 2), waveformWidth, pointHeight, 1.5)
-            animationContext.fillStyle = fill
-            animationContext.fill()
-          }
-        })
       }
 
       requestAnimationFrame(step)

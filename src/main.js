@@ -75,14 +75,24 @@ Vue.use(VueAnalytics, {
 Vue.config.productionTip = false
 
 // Http config
-Vue.http.options = { credentials: true, responseType: 'json' }
+Vue.http.options = { credentials: true, responseType: 'json', timeout: 5000 }
 
 Vue.http.interceptors.push((request, next) => {
   if (request.url.startsWith(api_config.WATERCOOLER_API)) {
     // Add elevator version to every request
     request.headers.set('elevator-version', `${app_config.version}`)
   }
-  next()
+
+  // continue to next interceptor
+  next(function (response) {
+
+    // modify response
+    if (response.status === 403) {
+      // Unauthorized
+      alert('Unauthorized')
+    }
+  })
+
 })
 
 // I18n config

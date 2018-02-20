@@ -7,16 +7,11 @@ export default {
     cancel();
   },
   getSegmentSummary(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/5?whitelist=true`).then((response) => {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/1?whitelist=true`).then((response) => {
       cb(response.data);
     }, (response) => {
       errorCb(response);
     });
-  },
-  getContentMessages(request, cb, errorCb) {
-    // Vue.io.socket.get(`/v1/messages/content/${request.theClass}/${request.theContent}?whitelist=true&limit=100`, function (resData, jwres) {
-    //   cb(resData);
-    // });
   },
   getMessages(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true&limit=200`).then((response) => {

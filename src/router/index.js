@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import Auth from '@/mixins/Auth'
+import API from '@/api'
+import store from '@/store'
+
 const Profile = () => import('@/components/profile/Profile')
 const Survey = () => import('@/components/survey/Survey')
 
@@ -22,7 +26,7 @@ const Terms = () => import('@/components/pages/Terms')
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   // mode: 'history',
   routes: [
     {
@@ -39,16 +43,19 @@ export default new Router({
       name: 'registration',
       path: '/registration',
       component: Registration,
+      meta: { ensureNotRegistered: true }
     },
     {
       name: 'feedback',
       path: '/feedback/browse/:classSlug/:contentSlug',
       component: Feedback,
+      meta: { ensureRegistered: true }
     },
     {
       name: 'feedback_view',
       path: '/feedback/browse/:classSlug/:contentSlug/:id',
       component: Feedback,
+      meta: { ensureRegistered: true }
     },
     {
       name: 'fourcorners',
@@ -79,11 +86,13 @@ export default new Router({
       name: 'profile',
       path: '/profile',
       component: Profile,
+      meta: { ensureRegistered: true }
     },
     {
       name: 'survey',
       path: '/survey',
       component: Survey,
+      meta: { ensureRegistered: true }
     },
     {
       name: 'githubauth',
@@ -96,10 +105,6 @@ export default new Router({
       name: 'home',
       path: '/',
       component: Home
-      // redirect: (to) => {
-      //   const { hash, params, query } = to
-      //   return { path: `/course/intro` }
-      // }
     },
     {
       name: 'terms',
@@ -112,3 +117,43 @@ export default new Router({
     },
   ],
 })
+
+router.beforeEach((to, from, next) => {
+
+  // Ensure authenticated
+  if (to.matched.some(record => record.meta.ensureAuthenticated)) {
+    if (typeof store.state.auth.user === 'undefined') {
+      next({ name: 'schedule', query: { flash: { msg: 'You are not authenticated', type: 'warn' } } })
+    }
+  }
+
+  // Ensure registered
+  if (to.matched.some(record => record.meta.ensureRegistered)) {
+    if (!(store.state.auth.user && store.state.auth.user.registration)) {
+      next({ name: 'schedule', query: { flash: { msg: 'You are not registered', type: 'warn' } } })
+    }
+  }
+
+  // Ensure not registered
+  if (to.matched.some(record => record.meta.ensureNotRegistered)) {
+
+    API.auth.checkAuth(
+      response => (response) => {
+        
+        if (!response.data.data.user || response.data.data.user && response.data.data.user.registration) {
+          next({ name: 'schedule', query: { flash: { msg: 'You are already registered', type: 'warn' } } })
+        }
+        next()
+      },
+      response => (response) => {
+        if (!response.data.data.user || response.data.data.user && response.data.data.user.registration) {
+          next({ name: 'schedule', query: { flash: { msg: 'You are already registered', type: 'warn' } } })
+        }
+        next()
+      }
+    )
+  }
+  next()
+})
+
+export default router

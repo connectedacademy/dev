@@ -2,10 +2,12 @@
 
 .profile-page
   
-  page-header(title="Your Dashboard" identifier="profile")
+  page-header(title="Dashboard" identifier="profile")
 
-    //- Class Selector
     profile-class-selector
+
+  //- .visualisation-container(v-if="profileClass")
+    visualisation(v-bind:contentDuration="1740" v-bind:classSlug="profileClass.slug" contentSlug="liveclass" v-bind:showReflections="true" v-bind:classView="false" visHeight="200px")
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")
     component(v-bind:is="profileAction.component" v-bind:label="profileAction.label" v-bind:role="profileAction.role" v-bind:panel="profileAction" v-bind:limitHeight="false" v-bind:can-expand="false" v-bind:expanded-view="true")
@@ -33,6 +35,7 @@ import Auth from '@/mixins/Auth'
 import PageStyle from '@/mixins/PageStyle'
 
 // Components
+import Visualisation from '@/components/conversation/Visualisation'
 import PageHeader from '@/components/PageHeader'
 import ProfileClassSelector from '@/components/profile/ProfileClassSelector'
 
@@ -43,6 +46,7 @@ import Submissions from '@/components/profile/panels/Submissions'
 import Messages from '@/components/profile/panels/Messages'
 import QuestionResponses from '@/components/profile/panels/QuestionResponses'
 import Storify from '@/components/profile/panels/Storify'
+import Moderation from '@/components/profile/panels/Moderation'
 
 export default {
   name: 'profile-main',
@@ -50,15 +54,16 @@ export default {
   components: {
     PageHeader,
     ProfileClassSelector,
+    Visualisation,
     User,
     Students,
     Submissions,
     Messages,
     QuestionResponses,
     Storify,
+    Moderation
   },
   mounted() {
-    this.ensureAuthenticated()
     this.redrawInterval = setInterval(() => {
       this.$redrawVueMasonry()
     }, 10000)
@@ -138,6 +143,11 @@ export default {
           label: 'All Responses',
           component: 'submissions',
         },
+        {
+          role: 'admin',
+          label: 'Moderate',
+          component: 'moderation',
+        },
       ],
     }
   },
@@ -183,6 +193,20 @@ $action-expanded-max-width = 500px
 
 .profile-page
   padding-top $navigation-height
+
+.visualisation-container
+  pinned()
+  background-color lighten($color-profile, 5%)
+  position fixed
+  top $navigation-height + $page-header-height
+  z-index 1
+  .visualisation
+    top 50%
+    transform translateY(-100px)
+    margin-left auto
+    margin-right auto
+    width 80%
+    position relative
 
 // Profile action
 .profile-action

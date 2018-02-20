@@ -36,7 +36,7 @@ export default {
   methods: {
     openHomework() {
       // Check if authenticated
-      if (this.isAuthenticated) {
+      if (this.user) {
         this.$router.push(`/feedback/browse/${this.$store.getters.currentClass.slug}/${this.content.slug}`)
       }
       else {

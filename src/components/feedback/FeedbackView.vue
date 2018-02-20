@@ -26,6 +26,9 @@
               icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
               | Message locked (click here)
             p(v-if="message.canview") {{ message.message }}
+            .feedback-message--action(@click="reportItem(message.id)")
+              icon(name="ellipsis-h")
+            .clearfix
           .feedback-message--author
             p by {{ message.fromuser.name }}
         .clearfix
@@ -52,11 +55,14 @@ import orderBy from 'lodash/orderBy';
 import FourCorners from '@/components/fourcorners/FourCorners';
 import InfoDialogue from '@/components/InfoDialogue';
 
+import Report from '@/mixins/Report'
+
 import 'vue-awesome/icons/lock';
 
 export default {
   name: 'feedback-view',
   props: ['currentFeedbackId', 'discussion', 'classSlug', 'contentSlug'],
+  mixins: [Report],
   components: {
     InfoDialogue,
     FourCorners,
@@ -274,10 +280,25 @@ export default {
         radius(17px)
         background-color $color-homework
         padding 6px 12px
+        padding-right 35px
         p
           animate()
           reset()
           color white
+
+        .feedback-message--action
+          opacity 0.0
+          padding 5px
+          position absolute
+          bottom 30px
+          left -30px
+          height 14px
+          .fa-icon
+            color grey
+            cursor pointer
+        &:hover
+          .feedback-message--action
+            opacity 1
       .feedback-message--author
         position relative
         text-align right

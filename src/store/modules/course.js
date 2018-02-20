@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
-import store from '@/store'
-import Moment from 'moment-mini'
-import includes from 'lodash/includes'
-import filter from 'lodash/filter'
 
 // initial state
 const state = {
@@ -95,13 +91,6 @@ const mutations = {
   }) {
     // Only update spec if not exists
     state.current_class = response.spec
-
-    // Add user if exists
-    // TODO: check the following logic
-    if (store.state.auth.user) {
-      store.state.auth.isAuthenticated = true
-      store.state.auth.user.registration = {}
-    }
   },
   [types.GET_SPEC_FAILURE](initialState, {
     response,

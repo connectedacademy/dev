@@ -18,9 +18,11 @@ export default {
   },
   mounted() {
     EventBus.$on('socketConversationMessage', (obj) => {
-      Vue.$log.debug('socketConversationMessage')
+      console.log('socketConversationMessage')
+      console.log(obj)
+      console.log(this.conversationMessages)
 
-      const key = `${_round(parseInt(obj.msg.segment) * 0.2)}`
+      const key = `${parseInt(obj.msg.segment)}`
       let updateMessage = this.conversationMessages[key]
 
       if (true || updateMessage) {
@@ -38,7 +40,7 @@ export default {
         Vue.set(this.conversationMessages, key, updateMessage)
 
         // Update active segment messages
-        if (this.peekSegment === _round(parseInt(obj.msg.segment) * 0.2)) {
+        if (this.peekSegment === parseInt(obj.msg.segment)) {
           Vue.$log.debug('Pushing message')
           store.commit(types.PUSH_SEGMENT_MESSAGE, obj.msg)
         }
@@ -62,8 +64,8 @@ export default {
 
       let segmentViewport = _floor(window.innerHeight / this.$app.segmentHeight) + thinkBehind
 
-      let endSegment = ((segmentGroup + thinkAhead) / 0.2)
-      let startSegment = endSegment - (segmentViewport / 0.2)
+      let endSegment = (segmentGroup + thinkAhead)
+      let startSegment = endSegment - segmentViewport
 
       startSegment = (startSegment < 0) ? 0 : startSegment
       endSegment = (endSegment < 5) ? 5 : endSegment
@@ -84,11 +86,6 @@ export default {
       
       if (((endSegment % (endSegment - startSegment)) === 0) || force) {
 
-        // Fill with blank messages
-        // for (var index = (startSegment * 0.2) index < (endSegment * 0.2) index++) {
-        //   if (this.conversationMessages[index]) continue
-        //   Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index })
-        // }
         API.message.getSegmentSummary(
           theRequest,
           response => {
@@ -96,7 +93,7 @@ export default {
             for (var group in response.data) {
 
               let newMessage = response.data[group]
-              newMessage.segmentGroup = (parseInt(group) * 0.2)
+              newMessage.segmentGroup = parseInt(group)
 
               // Check does not fall out of wrapper height
               if ((newMessage.segmentGroup * this.$app.segmentHeight) < (this.$refs.innerwrapper.offsetHeight - 200)) {

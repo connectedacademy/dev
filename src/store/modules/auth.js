@@ -6,14 +6,12 @@ import * as config from '@/api/config'
 // initial state
 const state = {
   visible: false,
-  isAuthenticated: false,
   user: undefined
 }
 
 // getters
 const getters = {
   user: (initialState) => initialState.user,
-  isAuthenticated: (initialState) => initialState.isAuthenticated,
   isRegistered: (initialState) => (initialState.user && initialState.user.registration)
 }
 
@@ -48,7 +46,6 @@ const mutations = {
   }) {
     Vue.$log.info('Auth success')
     Vue.$log.info(response)
-    state.isAuthenticated = true
     // Save user in session
     state.user = response.user
   },
@@ -56,14 +53,12 @@ const mutations = {
     response,
   }) {
     Vue.$log.info('Auth failure')
-    state.isAuthenticated = false
     // error in response
   },
   [types.LOGOUT_SUCCESS](initialState, {
     response,
   }) {
     state.visible = false
-    state.isAuthenticated = false
     state.user = undefined
   },
   [types.LOGOUT_FAILURE](initialState, {
@@ -71,8 +66,7 @@ const mutations = {
   }) {
     // error in response
   },
-  attemptAuth({ commit }, user) {
-    state.user = user
+  attemptAuth({ commit }) {
     document.location = config.AUTH_URL
   },
 }

@@ -7,6 +7,9 @@ $panel-width = 340px
   .profile-panel
     background-color white
     padding-top 60px
+    &.collapsed:not(.expanded)
+        height 0
+        overflow hidden
     &.no-header
       padding-top 0
 

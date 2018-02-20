@@ -9,11 +9,11 @@ import feedback from '@/api/feedback'
 import like from '@/api/like'
 import logging from '@/api/logging'
 import markdown from '@/api/markdown'
+import moderation from '@/api/moderation'
 import message from '@/api/message'
 import question from '@/api/question'
 import teacher from '@/api/teacher'
 import user from '@/api/user'
-import visualisation from '@/api/visualisation'
 
 export default {
   admin,
@@ -24,9 +24,9 @@ export default {
   like,
   logging,
   markdown,
+  moderation,
   message,
   question,
   teacher,
-  user,
-  visualisation
+  user
 }

@@ -5,22 +5,23 @@
   .profile-panel--content
     img#user-avatar(v-bind:src="profileImage" height="50px")
 
-    h3 Hi {{ user.name }}
+    h3 {{ user.name }}
 
-    //- h3 Hub
     //- pre {{ user }}
     
-    //- Roles
+    //- h3 Roles
     tag-list(v-bind:tags="userRoles")
 
     .clearfix
+
+    #admin-mode-button.pure-button.pure-button-subtle.pure-button-small(@click="toggleAdminView" v-bind:class="{ active: adminView }") Admin View
     
-    .admin-view.pure-button.pure-button-subtle(@click="toggleAdminView") {{ adminView ? 'Admin: On' : 'Admin: Off' }}
+    .clearfix
 
-    h3 Your Linked Accounts
-    tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
-
-    h3 Classroom Codes
+    //- h3 Linked Accounts
+    //- tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
+    
+    h3 Class Code
     .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
       | Generate Teacher Code
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
@@ -146,4 +147,10 @@ export default {
         font-weight normal
         margin 5px
 
+#admin-mode-button
+  margin-top 10px
+  &.active
+    background-color $color-success
+    border-color $color-success
+    color white
 </style>

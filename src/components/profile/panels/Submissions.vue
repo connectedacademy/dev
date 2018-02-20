@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.profile-panel
+.profile-panel(v-bind:class="{ collapsed: false, expanded: expandedView }")
 
   profile-panel-header(v-bind:label="panel.label" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
 

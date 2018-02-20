@@ -98,9 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'isAuthenticated', 'isRegistered'
-    ])
+    ...mapGetters(['isRegistered'])
   },
   methods: {
     previous() {

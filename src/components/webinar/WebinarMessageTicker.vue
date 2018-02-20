@@ -7,18 +7,15 @@
 
 <script>
 import Vue from 'vue'
-import API from '@/api'
 import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 
-import take from 'lodash/take'
-import reverse from 'lodash/reverse'
-import orderBy from 'lodash/orderBy'
+import _take from 'lodash/take'
+import _reverse from 'lodash/reverse'
+import _orderBy from 'lodash/orderBy'
 
 import Message from '@/components/conversation/Message'
 import MessageComposer from '@/components/MessageComposer'
-
-// import Messages from '@/mixins/Messages'
 
 export default {
   name: 'webinar-message-ticker',
@@ -55,7 +52,7 @@ export default {
     ...mapGetters(['isRegistered']),
     orderedMessages() {
       // Order messages
-      return reverse(take(orderBy(this.webinarMessages, ['createdAt'], ['desc']), 3))
+      return _reverse(_take(_orderBy(this.webinarMessages, ['createdAt'], ['asc']), 3))
     }
   },
   methods: {
@@ -65,17 +62,9 @@ export default {
         theContent: this.contentSlug,
       }
 
-      API.message.getContentMessages(
-        theRequest,
-        response => {
-          this.loadingMessages = false
-          this.webinarMessages = response.data
-        },
-        response => {
-          alert('There was an error')
-          this.loadingMessages = false
-        }
-      )
+      this.$io.socket.get(`/v1/messages/content/${theRequest.theClass}/${theRequest.theContent}?whitelist=true&limit=100`, (resData, jwres) => {
+        this.webinarMessages = resData.data
+      });
     }
   }
 }
