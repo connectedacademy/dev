@@ -4,7 +4,7 @@ transition(name="slide-up")
     .auth-modal--header
       h1 {{ $t('auth.authenticate') }}
     .auth-modal--container
-      p Click the button below to authenticate with Twitter, this will give you full access to the course.
+      p Sign in with Twitter to gain full access to Connected Academy.
 
       button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
         | {{ $t('auth.login_with_twitter') }}
@@ -63,7 +63,7 @@ export default {
       color white
       font-size 1.2em
   .auth-modal--container
-    radius(12px)
+    radius($corner-radius)
     background-color white
     padding 20px 30px
     text-align center

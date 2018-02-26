@@ -3,12 +3,11 @@
   .markdown-link
     router-link.pure-button(v-bind:name="`${mdContent.slug}-markdown-link`" v-bind:to="{ name: 'markdown', params: { url: markdownUrl }}")
       | {{ $t('common.explore_content') }}
-      icon.angle-icon(name="angle-right")
+      i.fas.fa-angle-right
 
 </template>
 
 <script>
-import 'vue-awesome/icons/angle-right';
 
 export default {
   name: 'markdown-link',
@@ -19,6 +18,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="stylus" scoped>

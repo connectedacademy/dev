@@ -3,15 +3,13 @@ import * as types from '@/store/mutation-types'
 
 // initial state
 const state = {
-  scrollPoints: {},
   savedScrollPosition: 0.0,
   currentSection: undefined
 }
 
 // getters
 const getters = {
-  scrollPoints: (initialState) => state.scrollPoints,
-  currentSection: (initialState) => state.currentSection
+  currentSection: (initialState) => initialState.currentSection
 }
 
 // actions
@@ -28,13 +26,6 @@ const actions = {
 const mutations = {
   [types.SAVE_SCROLL_POSITION](initialState, scrollPosition) {
     state.savedScrollPosition = scrollPosition
-  },
-  [types.RESET_SCROLL_POINTS](initialState) {
-    state.scrollPoints = {}
-    state.currentSection = undefined
-  },
-  [types.SET_SCROLL_POINT](initialState, scrollPoint) {
-    Vue.set(state.scrollPoints, scrollPoint.slug, scrollPoint)
   },
   [types.SET_CURRENT_SECTION](initialState, scrollPoint) {
     state.currentSection = scrollPoint

@@ -13,11 +13,13 @@ import _take from 'lodash/take'
 export default {
   data() {
     return {
-      visualisation: undefined
+      visualisation: undefined,
+      animations: []
     }
   },
   methods: {
     loadVisualisation(isSocket) {
+      this.animations = []
 
       const segmentSize = 5
       const request = { class: this.classSlug, content: this.contentSlug, duration: parseInt(this.contentDuration / segmentSize) }
@@ -52,7 +54,7 @@ export default {
       }
       result = _map(result, (r, key) => {
         const mean = (typeof key === 'number') ? _mean(r) : 0
-        return (mean === 0) ? 0.05 : mean
+        return mean
       })
       let newresult = {}
       _each(result, (r, index) => {
@@ -62,7 +64,7 @@ export default {
       if (tween) {
         TweenLite.to(
           this.$data.visualisation,
-          0.2,
+          0.5,
           newresult
         )
       }

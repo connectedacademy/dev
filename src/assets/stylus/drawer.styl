@@ -1,6 +1,5 @@
 $drawer-width = 320px
 
-
 // Transitions
 .slide-right-enter-active, .slide-left-enter-active
   animate()
@@ -17,6 +16,7 @@ $drawer-width = 320px
   left 0
 
 .drawer
+  background-color $color-drawer
   max-width $drawer-width
   overflow-y auto
   overflow-x hidden
@@ -33,19 +33,18 @@ $drawer-width = 320px
     left 0
 
   .card
-    radius(6px)
-    background-color darken($color-navigation-card, 0%)
-    margin 10px
+    background-color $color-navigation-card
+    margin 0
     position relative
 
     .pure-button.pure-button-action
-      background-color alpha(black, 0.1)
+      background-color alpha(white, 0.05)
       border-color transparent
       color white
       display block
       margin-top 10px
       &:hover
-        background-color alpha(black, 0.2)
+        background-color alpha(white, 0.1)
 
   ul.drawer-links
     cleanlist()
@@ -82,7 +81,7 @@ $drawer-width = 320px
         color white
         margin 0
         padding 0
-        font-size 1.6em
+        font-size 1.2em
 
       h2
         color alpha(white, 0.6)

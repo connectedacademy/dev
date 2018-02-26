@@ -51,13 +51,12 @@ export default {
 
 .navigation-button
   animate()
-  radius(50%)
   height 50px
   width 52px
 
   position fixed
-  top 0
-  left 0
+  top 5px
+  left 5px
   z-index 55
 
   .bar-wrapper
@@ -72,12 +71,13 @@ export default {
       right 12px
       position absolute
       &.top-bar
-        top 16px
+        top 18px
         bottom auto
       &.bottom-bar
-        bottom 16px
+        bottom 18px
         top auto
       &.middle-bar
+        opacity 0
         left 12px 
         right 16px
         bottom 24px
@@ -127,7 +127,7 @@ export default {
     left calc(100% - 60px)
     z-index 56
     @media(min-width: 360px)
-      left 310px
+      left 320px
   
   .bar-wrapper
     &.cross

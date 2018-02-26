@@ -35,7 +35,7 @@ export default {
       // Listen for mouseup events
       // window.addEventListener('mouseup', this.onMouseup, { passive: true }) // Passive to improve mobile performance
       // window.addEventListener('touchend', this.onMouseup, { passive: true }) // Passive to improve mobile performance
-    }, 100)
+    }, 2000)
   },
   beforeDestroy() {
     // Clear intervals
@@ -49,8 +49,8 @@ export default {
   },
   data() {
     return {
-      scrollStatus: undefined,
       currentSection: undefined,
+      scrollStatus: undefined,
       wheeling: false,
       isAutoScrolling: false,
       preventScroll: false,
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mediaPlaying', 'activeSegment', 'peekSegment', 'scrollPoints',
+      'mediaPlaying', 'activeSegment', 'peekSegment'
     ]),
     canAutoScroll() {
       return (!this.peekSegment && !this.preventScroll && this.mediaPlaying && (typeof this.scrollStatus !== 'undefined') && (typeof this.currentSection !== 'undefined'))
@@ -160,56 +160,57 @@ export default {
       // Calculate
       let scrollPos = window.scrollY
 
+      const element = document.getElementById('course-content-liveclass');
+      const content = _find(this.$store.getters.currentClass.content, { content_type: 'class' })
+      
       // Offset
-      let offsetScrollPos = scrollPos + window.innerHeight
-
-      // Get class
-      const scrollPoint = _find(self.scrollPoints, { content_type: 'class' })
+      const actionPanelHeight = 320
+      let offsetScrollPos = scrollPos + window.innerHeight - (element.offsetTop + actionPanelHeight)
       
-      if (!scrollPoint) return
+      if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return
 
-      // Check if current
-      let newCurrentSection = undefined
-      if ((offsetScrollPos > scrollPoint.top) && (offsetScrollPos < scrollPoint.bottom)) {
-        offsetScrollPos = offsetScrollPos - scrollPoint.top
-        newCurrentSection = scrollPoint
+      let additionalOffset = 0;
+
+      const currentSection = {
+        title: content.title,
+        slug: content.slug,
+        content_type: content.content_type,
+        sectionTop: element.offsetTop,
+        top: (additionalOffset + element.offsetTop),
+        bottom: element.offsetTop + element.offsetHeight,
+        duration: content.duration,
+        transcript: content.transcript,
+        prompts: content.prompts,
+        images: content.images,
+        videoId: content.video,
+        soundcloudId: content.soundcloudId
       }
       
-      let scrollStatus = undefined
+      self.$store.commit('SET_CURRENT_SECTION', currentSection)
 
-      if (self.currentSection != newCurrentSection) {
-        self.$store.commit('SET_CURRENT_SECTION', newCurrentSection)
+      // Time
+      const currentTime = _round(offsetScrollPos / (app.segmentHeight * 0.2))
+
+      // Segment group
+      let currentSegmentGroup = Math.floor(currentTime * 0.2)
+
+      // Create object
+      const scrollStatus = {
+        scrollPos,
+        offsetScrollPos,
+        currentTime,
+        currentSegmentGroup
       }
 
-      if (typeof newCurrentSection !== 'undefined') {
-        
-        // TODO
-        // offsetScrollPos = offsetScrollPos - _clamp(((offsetScrollPos / (app.segmentHeight * 0.2)) * 50), 0, 200)
+      // console.log('scrollStatus')
+      // console.log(scrollStatus)
 
-        // Time
-        const currentTime = _round(offsetScrollPos / (app.segmentHeight * 0.2))
-
-        // Segment group
-        let currentSegmentGroup = Math.floor(currentTime * 0.2)
-
-        // Create object
-        scrollStatus = {
-          scrollPos,
-          offsetScrollPos,
-          currentTime,
-          currentSegmentGroup
-        }
-
-        // console.log('scrollStatus')
-        // console.log(scrollStatus)
-
-        // Emit position
-        EventBus.$emit('scrollStatus', scrollStatus)
-      }
+      // Emit position
+      EventBus.$emit('scrollStatus', scrollStatus)
 
       // Update local objects
       self.scrollStatus = scrollStatus
-      self.currentSection = newCurrentSection
+      self.currentSection = currentSection
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true })
   }

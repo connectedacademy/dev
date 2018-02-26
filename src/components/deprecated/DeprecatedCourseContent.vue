@@ -2,12 +2,12 @@
 
 .course-content-wrapper
   
-  .course-content-group(v-if="releasedContent" v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .course-content-group(v-if="releasedContent && content.content_type === 'class'" v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
-    homework(v-if="content.expectsubmission" v-bind:content="content")
-    four-corners-banner(v-else-if="content.fourcornersintro")
-    live-class(v-else-if="content.content_type === 'class'" v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
-    deep-dive(v-else v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+    //- homework(v-if="content.expectsubmission" v-bind:content="content")
+    //- four-corners-banner(v-else-if="content.fourcornersintro")
+    live-class(v-if="content.content_type === 'class'" v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+    //- deep-dive(v-else v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
   .course-content-group.course-content-group--future(v-if="futureContent && classReleased" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
     

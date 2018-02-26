@@ -1,9 +1,9 @@
 <template lang="pug">
 
 li.navigation-item(v-bind:name="`navigator-${scrollPoint.slug}`" @click="jumpToContent(scrollPoint.slug)")
-  icon(v-if="scrollPoint.content_type === 'class'" name="play")
-  icon(v-else-if="scrollPoint.content_type === 'webinar'" name="play")
-  icon(v-else name="circle")
+  i.fas.fa-play(v-if="scrollPoint.content_type === 'class'")
+  i.fas.fa-play(v-else-if="scrollPoint.content_type === 'webinar'")
+  i.fas.fa-circle(v-else)
 
   .content-label {{ scrollPoint.title }}
   .clearfix
@@ -11,8 +11,6 @@ li.navigation-item(v-bind:name="`navigator-${scrollPoint.slug}`" @click="jumpToC
 </template>
 
 <script>
-import 'vue-awesome/icons/circle'
-import 'vue-awesome/icons/play'
 
 export default {
   name: 'section-navigator-item',
@@ -31,6 +29,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="stylus" scoped>
@@ -45,7 +44,7 @@ li.navigation-item
   position relative
   height calc(40px)
   overflow hidden
-  .fa-icon
+  svg
     color white
     float left
     padding 14px

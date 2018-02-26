@@ -23,11 +23,11 @@
             img.avatar(v-bind:src="message.fromuser.profile")
           .feedback-message--bubble
             p(v-if="!message.canview")
-              icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
+              i.fas.fa-lock(style="height: 12px;margin: 0 7px 0 0")
               | Message locked (click here)
             p(v-if="message.canview") {{ message.message }}
             .feedback-message--action(@click="reportItem(message.id)")
-              icon(name="ellipsis-h")
+              i.fas.fa-ellipsis-h
             .clearfix
           .feedback-message--author
             p by {{ message.fromuser.name }}
@@ -47,17 +47,15 @@
 </template>
 
 <script>
-import API from '@/api';
-import { mapGetters } from 'vuex';
+import API from '@/api'
+import { mapGetters } from 'vuex'
 
-import orderBy from 'lodash/orderBy';
+import orderBy from 'lodash/orderBy'
 
-import FourCorners from '@/components/fourcorners/FourCorners';
-import InfoDialogue from '@/components/InfoDialogue';
+import FourCorners from '@/components/fourcorners/FourCorners'
+import InfoDialogue from '@/components/InfoDialogue'
 
 import Report from '@/mixins/Report'
-
-import 'vue-awesome/icons/lock';
 
 export default {
   name: 'feedback-view',
@@ -70,15 +68,15 @@ export default {
   watch: {
     currentFeedbackId() {
       // Fetch feedback item
-      this.getFeedbackItem();
+      this.getFeedbackItem()
     },
     feedbackItem() {
       // Set loading state
-      this.loading = true;
+      this.loading = true
       // Clear discussion
-      this.$emit('update:discussion', []);
+      this.$emit('update:discussion', [])
       // Fetch discussion
-      this.getDiscussion();
+      this.getDiscussion()
     }
   },
   data() {
@@ -86,8 +84,8 @@ export default {
       navTitle: 'Connected Academy - View Feedback',
       loading: true,
       feedbackItem: undefined,
-      comment: '',
-    };
+      comment: ''
+    }
   },
   computed: {
     ...mapGetters([
@@ -97,19 +95,19 @@ export default {
       return (this.user && (this.user.account === this.feedbackItem.user.account))
     },
     feedbackMessages() {
-      return orderBy(this.discussion, ['createdAt'], ['asc']);
+      return orderBy(this.discussion, ['createdAt'], ['asc'])
     },
     encodedContentId() {
       if (!this.currentFeedbackId) {
-        return undefined;
+        return undefined
       } else {
-        return this.currentFeedbackId.replace('#','%23');
+        return this.currentFeedbackId.replace('#','%23')
       }
     },
   },
   methods: {
     navigateTo(location) {
-      document.location = location;
+      document.location = location
     },
     closeSubmission() {
       this.$emit('update:currentFeedbackId', undefined)
@@ -121,8 +119,8 @@ export default {
       API.feedback.removeSubmission(
         postData,
         (response) => {
-          this.$log.info('Response from remove submission request');
-          this.$log.info(response);
+          this.$log.info('Response from remove submission request')
+          this.$log.info(response)
           this.$emit('update:currentFeedbackId', undefined)
           this.$emit('reloadchats')
         },
@@ -131,12 +129,12 @@ export default {
           this.$log.error(response)
           this.$log.info('Failed to remove submission')
         },
-      );
+      )
     },
     unlockMessage(message) {
       if (!message.canview) {
         
-        this.$store.commit('SHOW_INFO_MODAL', { title: 'Locked', body: `Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`, action: this.$t('submission.view_submission') });
+        this.$store.commit('SHOW_INFO_MODAL', { title: 'Locked', body: `Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`, action: this.$t('submission.view_submission') })
 
         // Redirect to other user's feedback
 
@@ -144,13 +142,13 @@ export default {
           classSlug: this.classSlug,
           contentSlug: this.contentSlug,
           userId: message.fromuser.id.replace('#', '%23')
-        };
+        }
         API.feedback.getUserSubmissions(
           request,
           (response) => {
-            this.$log.info('Response from user submissions request');
-            this.$log.info(response);
-            const feedbackId = response.body[0].id;
+            this.$log.info('Response from user submissions request')
+            this.$log.info(response)
+            const feedbackId = response.body[0].id
             this.$emit('update:currentFeedbackId', feedbackId)
             
           },
@@ -164,65 +162,65 @@ export default {
     },
     postFeedbackComment() {
 
-      let message = { reply: false, text: this.comment, user: { name: 'You' } };
+      let message = { reply: false, text: this.comment, user: { name: 'You' } }
 
-      const request = { text: this.comment, id: this.encodedContentId };
+      const request = { text: this.comment, id: this.encodedContentId }
 
       API.feedback.postFeedbackMessage(
         request,
         (response) => {
-          this.$log.info('Response from feedback request');
-          this.$log.info(response);
-          this.comment = '';
+          this.$log.info('Response from feedback request')
+          this.$log.info(response)
+          this.comment = ''
         },
         (response) => {
           // TODO: Handle failed request
           this.$log.error(response)
           this.$log.info('Failed to retrieve feedback')
         },
-      );
+      )
     },
     getDiscussion() {
-      const request = { id: this.encodedContentId };
+      const request = { id: this.encodedContentId }
 
       API.feedback.getDiscussion(
         request,
         (response) => {
-          this.$log.info('Response from feedback request');
-          this.$log.info(response);
-          this.$emit('update:discussion', response);
+          this.$log.info('Response from feedback request')
+          this.$log.info(response)
+          this.$emit('update:discussion', response)
           // Set loading state
-          this.loading = false;
+          this.loading = false
         },
         (response) => {
           // TODO: Handle failed request
           this.$log.error(response)
           this.$log.info('Failed to retrieve feedback')
           // Set loading state
-          this.loading = false;
+          this.loading = false
         },
-      );
+      )
     },
     getFeedbackItem() {
 
-      const request = { id: this.encodedContentId };
+      const request = { id: this.encodedContentId }
 
       API.feedback.getFeedbackItem(
         request,
         (response) => {
-          this.$log.info('Response from feedback request');
-          this.$log.info(response);
-          this.feedbackItem = response;
+          this.$log.info('Response from feedback request')
+          this.$log.info(response)
+          this.feedbackItem = response
         },
         (response) => {
           // TODO: Handle failed request
           this.$log.error(response)
           this.$log.info('Failed to retrieve feedback')
         },
-      );
+      )
     },
   },
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -293,7 +291,7 @@ export default {
           bottom 30px
           left -30px
           height 14px
-          .fa-icon
+          svg
             color grey
             cursor pointer
         &:hover

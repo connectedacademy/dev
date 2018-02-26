@@ -4,7 +4,6 @@
   #tile-wrapper
 
     .tile#info-tile
-      //- icon(v-if="expanded && !(currentCorner === default)" v-bind:name="currentCorner.icon")
       h1(name="4c-banner-title" v-if="expanded && (currentCorner !== 'default')") {{ corners[currentCorner].title }}
       img(v-if="!expanded || (currentCorner === 'default')" src="../../assets/logos/fourcorners/white-text.svg" height="20")
 
@@ -155,7 +154,7 @@ $corner-width = 8px
           .pure-button
             display inline-block
             margin 0 5px
-        .fa-icon
+        svg
           color white
           font-size 3em
           margin 0 auto

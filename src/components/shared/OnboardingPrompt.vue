@@ -1,15 +1,16 @@
 <template lang="pug">
+
 transition(name="fade")
   .onnboarding-prompt(v-if="visible" @click.prevent.stop="hidePrompt()" v-bind:style="promptStyles" v-bind:class="[position]")
     .prompt--line
     .prompt--spot
     span {{ prompt }}
     .dismiss-button
-      icon(name="check")
+      i.fas.fa-check
+
 </template>
 
 <script>
-import check from 'vue-awesome/icons/check';
 
 export default {
   name: 'onnboarding-prompt',
@@ -17,7 +18,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.visible = !this.$cookie.get(this.identifier);
-    }, 1000);
+    }, 1000)
   },
   data() {
     return {
@@ -29,25 +30,26 @@ export default {
       let styles = {
         'z-index': `${this.zIndex}`,
         left: `${this.left}px`,
-        top: `${this.top}px`,
-      };
-      return styles;
+        top: `${this.top}px`
+      }
+      return styles
     }
   },
   methods: {
     hidePrompt() {
-      this.$cookie.set(this.identifier, 'hidden', 1);
-      this.visible = false;
+      this.$cookie.set(this.identifier, 'hidden', 1)
+      this.visible = false
     }
   }
 }
+
 </script>
 
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
 
-$color-prompt = #1b6ff1;
+$color-prompt = #1b6ff1
 
 .onnboarding-prompt
   radius(6px)
@@ -69,15 +71,16 @@ $color-prompt = #1b6ff1;
     border-left alpha(black, 0.2) 1px solid
     position absolute
     left auto
-    width 38px
-    .fa-icon
-      height 40px
-      width 12px
+    height 38px
+    width 44px
+
+    > svg
+      height 18px
+      padding 10px
+      width 24px
       position absolute
-      top 50%
-      left 50%
-      margin-top -20px
-      margin-left -6px
+      top 0
+      right 0
   .prompt--line
     content ''
     background-color $color-prompt

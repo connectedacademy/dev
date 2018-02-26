@@ -3,7 +3,7 @@
 .schedule-page(name="schedule-page")
   .col#col-main
     .main-container
-      narrow-page-header(title="Schedule" subtitle="Browse upcoming classes" route="schedule")
+      narrow-page-header(title="Participate" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
           router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }" v-bind:class="{ released: isReleased(theClass) }")
@@ -14,13 +14,13 @@
                 | {{ releaseMonth(theClass) }}
             .state-tags
               .state-tag.active(v-if="isActive(theClass)")
-                span Active
+                span Live
               .state-tag.released(v-if="isReleased(theClass)")
-                span Released
+                span Open
               .state-tag(v-if="!isReleased(theClass)")
-                span Not Released
+                span Closed
               .clearfix
-            h3 {{ `${theClass.title} (${(index + 1)}/${course.classes.length})` }}
+            h3 {{ `${(index + 1)} - ${theClass.title}` }}
             h5 {{ (!theClass.description) ? 'No description provided was for this class' : theClass.description }}
             .clearfix
 
@@ -46,6 +46,7 @@ export default {
   },
   data() {
     return {
+      navTitle: 'Course - Connected Academy',
       pageStyle: { type: undefined, visible: true, minimized: false }
     }
   },
@@ -94,7 +95,7 @@ export default {
         border-bottom $color-border 1px solid
         min-height 92px
         padding 30px
-        padding-left 160px
+        padding-left 140px
         position relative
         &.released
           background-color white
@@ -156,15 +157,16 @@ export default {
           left 30px
           top 30px
           text-align center
-          width 100px
+          width 80px
           .day-label
             color $color-text-darkest-grey
-            font-size 2em
+            font-size 1.8em
             font-weight bold
-            line-height 60px
+            line-height 50px
           .month-label
             background-color #BB0028
             color white
+            font-size .8em
             font-weight bold
-            line-height 30px
+            line-height 20px
 </style>

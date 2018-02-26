@@ -3,7 +3,7 @@
   .profile-icon(v-if="!isRegistering" @click="showProfile")
     onboarding-prompt(identifier="profile-button" prompt="click for profile actions" top="55" left="-210" position="top-right" z-index="50")
     .profile-image(v-bind:style="{ 'background-image': profile }")
-
+    
 </template>
 
 <script>
@@ -31,9 +31,9 @@ export default {
 @import '~stylus/shared'
 
 .profile-icon
-  position absolute
-  top 7px
-  right 7px
+  position fixed
+  top 8px
+  right 8px
   z-index 53
   &:hover
     cursor pointer
@@ -41,7 +41,7 @@ export default {
     radius(50%)
     background-image()
     background-color alpha(black, 0.1)
-    height 36px
-    width 36px
+    height 44px
+    width 44px
 
 </style>

@@ -32,8 +32,6 @@ import { EventBus } from '@/event-bus.js'
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 
-import 'vue-awesome/icons/refresh'
-
 export default {
   name: 'question-responses',
   props: ['label', 'role', 'limitHeight', 'canExpand', 'expandedView'],

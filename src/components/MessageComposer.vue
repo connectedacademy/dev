@@ -9,7 +9,7 @@
         .replying-to-banner(v-if="replyingTo")
           p {{ $t('composer.replying_to', { name: replyingTo.author.name }) }}
           .dismiss-replying-to.animated.fadeInRight(@click="cancelReply")
-            icon(name="times")
+            i.fas.fa-times
 
         .message-composer--footer(v-if="isRegistered")
           .textarea-wrapper
@@ -36,9 +36,6 @@ import { EventBus } from '@/event-bus.js'
 import VueTextareaAutosize from 'vue-textarea-autosize'
 
 import Auth from '@/mixins/Auth'
-
-import info from 'vue-awesome/icons/info'
-import times from 'vue-awesome/icons/times'
 
 Vue.use(VueTextareaAutosize)
 
@@ -116,6 +113,9 @@ export default {
           setTimeout(() => { this.infoLabel = ""}, 2000)
           this.sending = false
           this.$store.commit('SET_REPLYING_TO', undefined)
+          if (typeof this.activeSegment === 'undefined') {
+            this.$store.commit('SET_PEEK_SEGMENT', undefined)
+          }
           // EventBus.$emit('socketConversationMessage', { msgtype: 'message', msg: response.body })
         },
         (response, postData) => {
@@ -130,6 +130,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'activeSegment',
       'peekSegment',
       'isRegistered',
       'course',
@@ -189,7 +190,7 @@ export default {
         p
           reset()
           padding 0 15px
-        .fa-icon
+        svg
           height 40px
           margin 0 15px
           width 6px
@@ -200,7 +201,7 @@ export default {
           position absolute
           left auto
           min-width 40px
-          .fa-icon
+          svg
             margin 0 20px
             width 14px
           &:hover
@@ -223,19 +224,19 @@ export default {
         .textarea-wrapper
           .textarea-inner-wrapper
             animate()
-            radius(10px)
+            radius(19px)
             margin 10px
             overflow hidden
             textarea
               animate()
               box-sizing()
-              radius(10px)
+              radius(19px)
               background-color transparent
               border none
               display block
               font-size 0.9em
               outline 0
-              padding 10px
+              padding 10px 15px
               width 100%
             .appended-contents
               color alpha(black, 0.5)

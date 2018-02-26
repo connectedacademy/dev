@@ -3,6 +3,7 @@ const SYNC_THRESHOLD = 2.0
 import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 
+import _get from 'lodash/get'
 import _inRange from 'lodash/inRange'
 import _throttle from 'lodash/throttle'
 import _find from 'lodash/find'
@@ -11,35 +12,50 @@ require('howler')
 
 export default {
   beforeDestroy() {
-    this.sound.unload()
+    try {
+      this.sound.unload()
+    } catch (error) {
+      console.error(error);
+      
+    }
   },
   mounted() {
+    console.log('this.content.audio')
+    console.log(this.content.audio)
+    
     if (typeof this.content.audio === 'undefined') return
     
     let src = []
 
     // Grab audio files for class
     for (const index in this.content.audio) {
-      src.push(`${this.course.baseUri}../audio/${this.content.audio[index]}`,)
+      const url = `${this.course.baseUri}../audio/${this.content.audio[index]}`
+      if (this.fileExists(url)) {
+        src.push(url)
+      }
     }
 
-    this.sound = new Howl({
-      src: src,
-      preload: true,
-      html5: true,
-      buffer: true
-    })
+    if (src.length > 0) {
 
-    // Update scroll status and keep audio in sync
-    EventBus.$on('scrollStatus', (scrollStatus) => {
-      this.scrollStatus = scrollStatus
-      this.attempSync(this)
-    })
+      // Create Howl instance
+      this.sound = new Howl({
+        src: src,
+        preload: true,
+        html5: true,
+        buffer: true
+      })
 
-    // If the audio seeks then check it is buffered
-    this.sound.on('seek', () => {
-      this.checkBufferStatus(this)
-    })
+      // Update scroll status and keep audio in sync
+      EventBus.$on('scrollStatus', (scrollStatus) => {
+        this.scrollStatus = scrollStatus
+        this.attempSync(this)        
+      })
+
+      // If the audio seeks then check it is buffered
+      this.sound.on('seek', () => {
+        this.checkBufferStatus(this)
+      })
+    }
   },
   watch: {
     mediaPlaying(nV, oV) {
@@ -68,18 +84,21 @@ export default {
     ...mapGetters(['course', 'mediaPlaying'])
   },
   methods: {
+    fileExists (url) {
+      let http = new XMLHttpRequest()
+      http.open('HEAD', url, false)
+      http.send()
+      return http.status != 404
+    },
     checkBufferStatus: _throttle(function (self) {    
 
       if (!self.scrollStatus) return
-      if (!self.sound) return
-      if (!self.sound._sounds) return
-      if (!self.sound._sounds.length === 0) return
+      if (typeof _get(self.sound._sounds) === 'undefined') return
+      if (self.sound._sounds.length === 0) return
       
       // Get buffered blocks
       const buffered = self.sound._sounds[0]._node.buffered
 
-      // alert(`${JSON.stringify(self.sound)}`)
-      
       self.bufferedSegments = buffered
 
       // Loop through buffered blocks
@@ -99,13 +118,17 @@ export default {
       self.checkBufferStatus(self)
     }, 2000),
     attempSync: _throttle(function (self) {
-      
-      if (typeof self.sound === undefined) return
+
+      if (self.sound._sounds.length === 0) {
+        this.$log.error('No sound loaded')
+        return
+      }
+
       const playerTime = self.sound.seek()
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 
       if (!inSync) {
-        self.$log.info('Audio not in sync')
+        self.$log.info(`Audio not in sync, seeking to ${self.scrollStatus.currentTime}`)
         self.sound.seek(self.scrollStatus.currentTime)
       }
     }, 500)

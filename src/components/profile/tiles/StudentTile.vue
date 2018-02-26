@@ -7,24 +7,23 @@
   //- pre {{ student }}
   ul.labels
     li.label
-      icon(name="comment")
+      i.fas.fa-comment
       | {{ student.messages }}
     //-
       li.label
-        icon(name="graduation-cap")
+        i.fas.fa-graduation-cap
         | {{ student.homework }}
     .clearfix
 
 </template>
 
 <script>
-import 'vue-awesome/icons/comment';
-import 'vue-awesome/icons/graduation-cap';
 
 export default {
   name: 'student-tile',
-  props: ['student'],
-};
+  props: ['student']
+}
+
 </script>
 
 <style lang="stylus" scoped>
@@ -58,7 +57,7 @@ export default {
       float left
       margin-right 10px
       padding 0 10px
-      .fa-icon
+      svg
         margin-right 6px
 
 </style>

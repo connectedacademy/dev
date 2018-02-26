@@ -1,9 +1,6 @@
 <template lang="pug">
 
-  #media-wrapper(v-bind:class="{ 'youtube-mode': (src && playerType === 'youtube') }")
-    
-    #stream-wrapper
-      //- youtube#video-container(v-if="src && (playerType === 'youtube')" v-bind:video-id="src" v-bind:player-vars="{'autoplay': 1, 'controls': 0, 'playsinline': 1, 'rel': 0, 'showinfo': 0, 'modestbranding': 1}" @ready="youtubeReady" @playing="youtubePlaying" @paused="youtubePaused" @ended="youtubeEnded" v-bind:player-width="pWidth" v-bind:player-height="pHeight" v-bind:style="{ height: `${pHeight}px`, width: `${pWidth}px` }")
+  #media-wrapper
     
     #images-wrapper
       slick#image-swiper(v-if="slickMode && liveclassMedia" ref="classslick" v-bind:options="slickOptions")
@@ -18,6 +15,7 @@ import API from '@/api'
 import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 
+import _get from 'lodash/get'
 import throttle from 'lodash/throttle'
 import inRange from 'lodash/inRange'
 
@@ -28,7 +26,7 @@ require('slick-carousel/slick/slick.css')
 
 export default {
   name: 'media-container',
-  props: ['currentClass', 'playerType', 'content'],
+  props: ['currentClass', 'content'],
   components: {
     Slick
     // VueYouTubeEmbed
@@ -104,10 +102,8 @@ export default {
   },
   computed: {
     ...mapGetters(['course']),
-    src() {
-      if (this.playerType === 'soundcloud') {
-        return (this.content) ? this.content.videoId : ''
-      }
+    src () {
+      return _get(this.content.videoId)
     },
   },
   methods: {
@@ -145,6 +141,7 @@ export default {
 @import '~stylus/shared'
 
 #media-wrapper
+  background-color $color-lightest-grey
   position relative
   height $media-height
   overflow hidden
@@ -181,10 +178,10 @@ export default {
     opacity 0.5
     outline 0
     img
-      height ($media-height - 15px)
-      max-height ($media-height - 15px)
+      height ($media-height - $media-margin)
+      max-height ($media-height - $media-margin)
       max-width 100%
-      margin 5px 5px 10px 5px
+      // margin 5px 5px 10px 5px
     &:hover
       cursor pointer
     &.slick-current

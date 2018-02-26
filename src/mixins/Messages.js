@@ -19,8 +19,6 @@ export default {
   mounted() {
     EventBus.$on('socketConversationMessage', (obj) => {
       console.log('socketConversationMessage')
-      console.log(obj)
-      console.log(this.conversationMessages)
 
       const key = `${parseInt(obj.msg.segment)}`
       let updateMessage = this.conversationMessages[key]

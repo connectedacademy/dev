@@ -110,7 +110,7 @@ export default {
     &.feedback-submission-submit
       label
         color white
-        .fa-icon
+        svg
           margin 0 5px
       p
         reset()

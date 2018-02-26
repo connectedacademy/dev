@@ -1,32 +1,34 @@
 <template lang="pug">
 
-  #action-panel(name="action-panel" v-bind:class="{ hide: (!this.currentSection), 'hide-media': mediaHidden }" ref="actionpanel")
+  #action-panel(name="action-panel" v-bind:class="{ 'hide-media': mediaHidden }" ref="actionpanel")
 
     ul#experience-controls
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
-        //- onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
-        icon(v-bind:name="mediaPlaying ? 'pause' : 'play'")
+        
+        onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
+        
+        span(v-show="mediaPlaying")
+          i.fas.fa-pause
+        span(v-show="!mediaPlaying")
+          i.fas.fa-play
       
-      li.experience-control(@click="skipToEnd")
-        icon(name="step-forward")
-      
-      li.experience-control
+      li.experience-control#current-time
         p {{ currentTime }}
       
       li.experience-control#progress-bar(ref="progressbar" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
-        visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug" v-bind:contentDuration="content.duration" v-bind:showReflections="false" v-bind:classView="true" visHeight="80px")
+        visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug" v-bind:contentDuration="content.duration" v-bind:showReflections="false" v-bind:classView="true" visHeight="60px")
       
       li.experience-control.pull-right(@click="toggleComposer")
         onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
-        icon(v-bind:name="mediaHidden ? 'chevron-up' : 'chevron-down'")
-
-      //- li.experience-control.pull-right(@click="togglePlayerType" v-bind:class="{ unclickable: (availablePlayerTypes <= 1) }")
-        icon(v-bind:name="availablePlayerTypes[playerTypeIndex]")
+        span(v-show="mediaHidden")
+          i.fas.fa-caret-up.fa-2x
+        span(v-show="!mediaHidden")
+          i.fas.fa-caret-down.fa-2x
 
       .clearfix
 
-    media-container(v-bind:player-type="playerType" v-bind:content="content" v-bind:current-class="currentClass")
+    media-container#media-container(v-bind:content="content" v-bind:current-class="currentClass")
 
 </template>
 
@@ -42,12 +44,6 @@
   import _round from 'lodash/round'
 
   import MediaStream from '@/mixins/MediaStream'
-
-  import 'vue-awesome/icons/pause'
-  import 'vue-awesome/icons/play'
-  import 'vue-awesome/icons/step-forward'
-  import 'vue-awesome/icons/chevron-up'
-  import 'vue-awesome/icons/chevron-down'
   
   export default {
     name: 'action-panel',
@@ -62,48 +58,31 @@
     ],
     mounted() {
       EventBus.$on('scrollStatus', (scrollStatus) => {
-        if (scrollStatus.currentTime < 0) {
+        if (scrollStatus.currentTime <= 0) {
           this.currentTime = '0:00'
         } else {
           let time = _round(scrollStatus.currentTime)
           this.currentTime = `${Math.floor(time / 60)}:${(time % 60).toString().padStart(2, '0')}`
         }
       })
-
-      this.availablePlayerTypes = [] // Remove all available player types
-      if (this.content.videoId) {
-        // If a videoId is set on the content then add YouTube as an available type
-        this.availablePlayerTypes.push('youtube')
-      }
-      if (this.content.soundcloudId) {
-        // If a soundcloudId is set on the content then add SoundCloud as an available type
-        this.availablePlayerTypes.push('soundcloud')
-      }
     },
     data() {
       return {
-        currentTime: 0,
-        playerTypeIndex: 0,
-        availablePlayerTypes: [],
+        currentTime: '0:00',
         mouseOffsetStart: 0,
         trackOffset: 0
       }
     },
     computed: {
-      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection']),
-      end() {
-        return Moment().hour(0).minute(0).second(this.content.duration).format('mm:ss')
-      },
-      playerType() {
-        return this.availablePlayerTypes[this.playerTypeIndex]
-      },
+      ...mapGetters(['mediaHidden', 'mediaPlaying', 'currentSection'])
     },
     methods: {
       scrubMove(event) {
         if (this.mouseOffsetStart !== 0) {
           this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft)
           
-          const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration) + 24
+          const offset = -24
+          const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration) + offset
           const segmentSize = 5
           window.scroll(0, ((newPos / segmentSize) * 158.0))
         }
@@ -137,9 +116,6 @@
         // Expand conversation
         if (!this.mediaPlaying) { this.$store.commit('EXPAND_CONVERSATION') }
       },
-      togglePlayerType() {
-        this.playerTypeIndex = (this.playerTypeIndex === (this.availablePlayerTypes.length - 1)) ? 0 : (this.playerTypeIndex + 1)
-      },
       skipToEnd() {
         this.$store.commit('PAUSE_MEDIA')
         window.scroll(0, this.currentSection.bottom)
@@ -153,30 +129,35 @@
 @import '~stylus/shared'
 @import '~stylus/buttons'
 
-$controls-height = 80px
-
 #action-panel
   animate()
   pinned()
+  radius-top($corner-radius)
+  box-shadow-dark()
   background white
-  border-top $color-border 1px solid
   top auto
   height ($media-height + $controls-height)
   z-index 50
   position fixed
-  width 780px
+  width $col-width + 20px
   left 50%
-  margin-left -390px
+  margin-left -400px
+  #media-container
+    transition(opacity 0.1s ease-out)
+    opacity 1
   &.full-width
     width 100%
     left 0
     margin-left 0
   &.hide-media
     bottom -($media-height)
+    #media-container
+      opacity 0
   &.hide
     bottom -($media-height + 200px)
 
   @media(max-width: 800px)
+    radius(0)
     margin-left 0
     left 0
     width 100%
@@ -185,11 +166,13 @@ $controls-height = 80px
     cleanlist()
     box-sizing()
     height $controls-height
-    padding 0 10px 0 10px
+    padding 0
     position relative
     z-index 1
-    max-width 780px
+    max-width $col-width
     margin 0 auto
+    @media(max-width: 780px)
+      padding 0 10px
 
     li.experience-control
       cleanlist()
@@ -208,7 +191,7 @@ $controls-height = 80px
         font-size 0.8em
         font-weight bold
         line-height $controls-height
-      .fa-icon
+      svg
         animate()
         color $color-text-dark-grey
         display block
@@ -216,16 +199,18 @@ $controls-height = 80px
         width 18px
         margin (($controls-height - 18px) / 2) 10px
       &:hover
-        // background-color $color-lighter-grey
         cursor pointer
         &.unclickable
           cursor default
+
+    li#current-time
+      padding 0 5px
 
     li#progress-bar
       pinned()
       margin 0
       position absolute
-      left (38px * 3) + 20px
-      right (38px * 1) + 20px
+      left (38px * 2) + 10px
+      right (38px * 1) + 10px
 
 </style>

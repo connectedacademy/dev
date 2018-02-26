@@ -5,10 +5,10 @@
 
     .profile-panel--header--actions
       .action-button.reload-button(v-if="canRefresh" @click="refresh")
-        icon(name="refresh")
+        i.fas.fa-sync
 
       .action-button.expand-button(v-if="canExpand" @click="expand")
-        icon(name="expand")
+        i.fas.fa-expand-arrows-alt
 
       .clearfix
 
@@ -16,20 +16,17 @@
 
 <script>
 
-import 'vue-awesome/icons/refresh';
-import 'vue-awesome/icons/expand';
-
 export default {
   name: 'profile-panel-header',
   props: ['label', 'canRefresh', 'canExpand'],
   methods: {
     expand() {
-      this.$emit('expand');
+      this.$emit('expand')
     },
     refresh() {
-      this.$emit('refresh');
-    },
-  },
+      this.$emit('refresh')
+    }
+  }
 }
 
 </script>
@@ -52,7 +49,7 @@ export default {
     height 60px
     position absolute
     top 0
-    right 0
+    right 10px
     
     .action-button
       animate()
@@ -61,7 +58,7 @@ export default {
       height 60px
       width 40px
       text-align center
-      .fa-icon
+      svg
         height 60px
         width 15px
       &:hover

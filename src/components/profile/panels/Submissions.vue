@@ -31,8 +31,6 @@ import Moment from 'moment-mini'
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 import ContentFilter from '@/components/profile/ContentFilter'
 
-import 'vue-awesome/icons/refresh'
-
 export default {
   name: 'submissions',
   props: ['classSlug', 'limitHeight', 'canExpand', 'panel', 'expandedView'],

@@ -1,13 +1,16 @@
 <template lang="pug">
 
   .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
-
+    .associated-media
     .message-count(v-if="messageCount") {{ messageCount }}
-    .subscribed-status(v-if="subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
+    .message-count {{ (index * 5) }}
+    .subscribed-status(v-if="showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
-      .subtitle-wrapper
+      .avatar(v-bind:style="{ 'background-image': profile }")
+
+      .subtitle-wrapper(@click="openSegment()")
         subtitle(v-bind:subtitle="subtitle")
 
       .message-wrapper
@@ -19,11 +22,11 @@
       .clearfix
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
-      | Show all notes
+      | Show discussion
 
     .meta-container(v-if="segmentOpened" v-bind:class="{ active: segmentOpened }" v-bind:style="{ bottom: `${quickNoteHeight}px` }")
-      .status-indicator(v-if="loadingMessages") Looking for notes...
-      .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Be the first to make a note.
+      .status-indicator(v-if="loadingMessages") Fetching discussion...
+      .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Nothing here yet.
 
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages")
         message(v-bind:message="segmentMessage")
@@ -89,6 +92,7 @@
     },
     data() {
       return {
+        showSubscribedStatus: false,
         segmentOpened: false,
         segmentPeeking: false,
         loadingMessages: false,
@@ -107,13 +111,16 @@
         'replyingTo',
         'subscribedTo',
       ]),
-      quickNoteTop() {
+      profile () {
+        return `url('${this.$store.state.auth.user.profile}')`
+      },
+      quickNoteTop () {
         return `${158 + 32}px`;
       },
-      segmentPeekHeight() {
+      segmentPeekHeight () {
         return `${158 + 32 + this.quickNoteHeight}px`;
       },
-      segmentClasses() {
+      segmentClasses () {
         return {
           peek: this.segmentPeeking,
           opened: this.segmentOpened,
@@ -121,24 +128,24 @@
           current: this.isCurrent
         }
       },
-      isMessage() {
+      isMessage () {
         return this.messageCount
       },
-      isSuggestion() {
+      isSuggestion () {
         return _get(this.message, ['message', 'suggestion'], false);
       },
-      isMock() {
+      isMock () {
         return this.message.loading || !this.isMessage
       },
-      messageCount() {
+      messageCount () {
         return _get(this.message, ['info', 'total'], undefined);
       },
-      orderedMessages() {
+      orderedMessages () {
         return _orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
       }
     },
     methods: {
-      peek() {
+      peek () {
         
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return;
@@ -156,7 +163,7 @@
           this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
         }
       },
-      unpeek() {
+      unpeek () {
   
         this.segmentStyle = {
           position: 'absolute',
@@ -175,10 +182,11 @@
 
         }, 300); // Timeout equal to time for overlay to fade
       },
-      openSegment() {
+      openSegment () {
 
         // Cancel open if another segment is open
         if (typeof this.activeSegment !== 'undefined') return;
+        if (!this.segmentPeeking) return
   
         if (this.segmentOpened) return;
   
@@ -215,11 +223,9 @@
   
         }, 50);
       },
-      closeSegment() {
+      closeSegment () {
   
-        if (this.opened) {
-          return
-        }
+        if (this.opened) return
   
         // Remove segment messages
         this.$store.commit('SET_SEGMENT_MESSAGES', []);
@@ -233,9 +239,9 @@
   
         setTimeout(() => {
           this.unpeek()
-        }, 300);
+        }, 300)
       },
-      loadSegmentMessages() {
+      loadSegmentMessages () {
   
         this.$log.info('Loading segment messages');
   
@@ -280,25 +286,43 @@
   left 50%
   margin-left -390px
   z-index 0
-  width 780px
+  width $col-width
+
+  .associated-media
+    animate()
+    background-color alpha(white, 0.5)
+    height 158px
+    width 50px
+    position absolute
+    left 0
+    top 0
+    border-top-left-radius 10px
+    border-bottom-left-radius 10px
+    opacity 0
+    z-index -1
+  &:hover
+    .associated-media
+      opacity 1
+      left -30px
 
   .message-count
     transition(right 0.2s ease)
     box-sizing()
-    radius(4px)
-    background-color $color-primary
+    radius(50%)
+    background-color $color-pink
     color white
     font-size 0.8em
+    font-weight bold
     line-height 20px
-    padding 0 12px 0 8px
+    padding 0
     position absolute
     top 10px
-    right -4px
+    right 5px
     min-width 20px
+    pointer-events none
     text-align center
     z-index 51
     @media(max-width: 800px)
-      padding 0 8px
       right 0
   
   &.peek
@@ -322,27 +346,25 @@
     margin-left 0
     width calc(100% - 20px)
 
-  .primary-wrapper
-    
-    background-color white
+  &.peek
+    .subtitle-wrapper:hover
+      cursor pointer
+  &.opened
+    .subtitle-wrapper:hover
+      cursor default !important
+  &.peek, &.open
+    .primary-wrapper:hover
+      cursor default !important
 
+  .primary-wrapper
+    background-color white
     border-bottom $color-border 1px solid
     height 156px
     min-height 156px
     position relative
     z-index 2
-
-    .segment-label--group
-      radius(4px)
-      animate()
-      background $color-lightest-grey
-      font-size 0.8em
-      opacity 0.05
-      padding 6px 12px
-      position absolute
-      top 10px
-      left 10px
-      z-index 2
+    &:hover
+      cursor pointer
 
     .suggestion
       color $color-text-dark-grey
@@ -361,25 +383,38 @@
       position absolute
       top 50%
 
-    &:hover
-      cursor pointer
-      .segment-label--group
-        opacity 1
+  .primary-wrapper .avatar
+    radius(50%)
+    background-image()
+    display none
+    position absolute
+    bottom 10px
+    right 10px
+    height 20px
+    width 20px
 
-  &.current
-    .primary-wrapper
-      &:after
-        radius(50%)
-        background-color $color-primary
-        content ''
-        position absolute
-        top 10px
-        left 10px
-        height 10px
-        width 10px
+  @media(min-width: 800px)
+    .primary-wrapper:before
+      pinned()
+      transition(left .2s linear)
+      background-color $color-pink
+      content ''
+      left -3px
+      position absolute
+      right auto
+      z-index 2
+      pointer-events none
+      width 3px
+
+  &.current .primary-wrapper
+    .avatar
+      display block
+
+    &:before
+      left 0
 
   &.peek, &.active
-    radius(4px)
+    radius($corner-radius)
     z-index 56
     border none
 
@@ -401,6 +436,7 @@
   .meta-container
     box-sizing()
     background-color $color-lightest-grey
+    background-color white
     opacity 0
     padding 10px 0
     position absolute
@@ -410,11 +446,14 @@
     left 0
     overflow auto
     .message-wrapper
+      left 50%
       transform translate(0, 0) !important
       position relative
-      width 100%
+      width 50%
       @media(max-width: 600px)
         display block !important
+        left 0
+        width 100%
       .tweet-actions
         background-color inherit
     &.active
@@ -423,7 +462,7 @@
 
   .status-indicator
     background-color transparent
-    color $color-text-grey
+    color $color-text-light-grey
     padding 40px
     text-align center
 

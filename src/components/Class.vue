@@ -3,11 +3,10 @@
   .class-page(name="class-page")
     .col#col-main
       .main-container
-        narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="Loading content..." link="View schedule" route="schedule")
-        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="classPosition" link="View schedule" route="schedule")
-        section-navigator
+        narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="One moment.." link="" route="schedule")
+        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="classPosition" link="632 Live Listeners" route="schedule")
         loading(v-if="currentClass && currentClass.loading")
-        course-content(v-else-if="currentClass" v-bind:current-class="currentClass")
+        live-class(v-else v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
 </template>
 
@@ -18,26 +17,24 @@ import { mapGetters } from 'vuex'
 import Moment from 'moment-mini'
 
 import _findIndex from 'lodash/findIndex'
+import _find from 'lodash/find'
 
 // Mixins
 import AutoScroll from '@/mixins/AutoScroll'
 import PageStyle from '@/mixins/PageStyle'
-import ScrollPoints from '@/mixins/ScrollPoints'
 
 // Components
 import Loading from '@/components/Loading'
 import NarrowPageHeader from '@/components/NarrowPageHeader'
-import SectionNavigator from '@/components/navigation/SectionNavigator'
-import CourseContent from '@/components/conversation/CourseContent'
+import LiveClass from '@/components/conversation/LiveClass'
 
 export default {
   name: 'class',
-  mixins: [ AutoScroll, PageStyle, ScrollPoints ],
+  mixins: [ AutoScroll, PageStyle ],
   components: {
     Loading,
     NarrowPageHeader,
-    SectionNavigator,
-    CourseContent
+    LiveClass
   },
   beforeRouteLeave (to, from, next) {
     this.$store.commit('PAUSE_MEDIA')
@@ -58,11 +55,10 @@ export default {
   },
   computed: {
     ...mapGetters(['course', 'currentClass']),
-    releaseLabel() {
-      const label = (this.currentClass.status === 'FUTURE') ? 'Will be released' : 'Released'
-      return `${label} ${Moment(this.currentClass.release_at).fromNow()}`
+    content () {
+      return _find(this.currentClass.content, { content_type: 'class' })
     },
-    classPosition() {
+    classPosition () {
       const classPosition = _findIndex(this.course.classes, { 'slug': this.currentClass.slug }) + 1
       const numberOfClasses = this.course.classes.length
       return `

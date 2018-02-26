@@ -2,31 +2,32 @@
 
   #navigation(v-bind:class="{ registered: isRegistered, visible: visible, minimized: navigation.minimized }")
 
-    #logo-text(@click="goHome") {{ $app.name }}
+    #navigation-bar
+    
+    #login-button(v-if="!isRegistered" name="nav-login-button" @click="showAuth") Login
 
+    navigation-button
+    
     profile-icon(v-if="isRegistered")
 
-    #login-button(v-if="!isRegistered" name="nav-login-button" @click="showAuth")
-      | Login
 
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters} from 'vuex'
 
-import * as types from '@/store/mutation-types';
-import ProfileIcon from './ProfileIcon';
-import Auth from '@/mixins/Auth';
-
-import 'vue-awesome/icons/wrench';
-import 'vue-awesome/icons/user';
+import * as types from '@/store/mutation-types'
+import NavigationButton from '@/components/navigation/NavigationButton'
+import ProfileIcon from '@/components/navigation/ProfileIcon'
+import Auth from '@/mixins/Auth'
 
 export default {
   name: 'navigation',
   mixins: [
-    Auth,
+    Auth
   ],
   components: {
+    NavigationButton,
     ProfileIcon
   },
   computed: {
@@ -34,22 +35,22 @@ export default {
       'isRegistered', 'navigation'
     ]),
     isRegistering() {
-      return this.$route.name === 'registration';
+      return this.$route.name === 'registration'
     },
     visible() {
-      return this.$store.state.navigation.visible;
+      return this.$store.state.navigation.visible
     }
   },
   methods: {
     goHome() {
-      this.$router.push({ name: 'schedule' });
-      this.$store.commit('PAUSE_MEDIA');
+      this.$router.push({ name: 'schedule' })
+      this.$store.commit('PAUSE_MEDIA')
       setTimeout(() => {
-        window.scroll(0, 0);
-      }, 500);
-    },
-  },
-};
+        window.scroll(0, 0)
+      }, 500)
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -67,7 +68,7 @@ export default {
   top 0
   right 0
   z-index 52
-  .fa-icon
+  svg
     height $navigation-height - -14px 20px
     margin 10px auto
   &:hover
@@ -75,20 +76,22 @@ export default {
     cursor pointer
 
 #navigation
-  animate()
-  background-color $color-primary
-  border-bottom alpha(black, 0.1) 1px solid
   display none
-  height 50px
-  position fixed
-  top 0
-  text-align center
-  z-index 2
-  width 100%
   &.visible
     display block
-  &:hover
-    cursor pointer
+
+#navigation-bar
+  animate()
+  background-color darken($color-primary, 10%)
+  height $navigation-height
+  pointer-events none
+  position fixed
+  top - $navigation-height
+  z-index 2
+  width 100%
+
+  @media(max-width: ($col-width + 120px))
+    top 0
 
   #logo-text
     color white

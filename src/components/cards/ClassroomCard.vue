@@ -5,7 +5,7 @@
     h3 {{ $t('classroom.classroom') }}
     p.hidden {{ $t('classroom.enter_code') }}
 
-    input#classroom-input(v-model="classroomCode" placeholder="CODE" v-bind:disabled="currentClassroom")
+    input#classroom-input(v-model="classroomCode" placeholder="7342" v-bind:disabled="currentClassroom")
 
     a.pure-button.pure-button-action(v-if="currentClassroom" v-on:click="leaveClassroom") {{ $t('classroom.leave_classroom') }}
     a.pure-button.pure-button-action(v-if="!currentClassroom && (classroomCode.length > 2)" v-on:click="joinClassroom") {{ $t('classroom.join_classroom') }}
@@ -89,10 +89,16 @@ export default {
 @import '~stylus/drawer'
 
 .card#classroom-card
+  radius(6px)
   background-color $color-info
   color white
   padding 0
   text-align center
+  position absolute
+  bottom 15px
+  left 15px
+  right 15px
+  top auto
   &.active
     background-color $color-success
     color white

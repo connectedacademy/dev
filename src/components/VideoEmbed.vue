@@ -56,6 +56,7 @@ export default {
     padding 58px 20px
     text-align center
   .video-container
+    background-color black
     margin-bottom 20px
     position relative
     padding-bottom 56.25%

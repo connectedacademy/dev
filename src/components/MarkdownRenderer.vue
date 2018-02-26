@@ -3,7 +3,7 @@
 .markdown-wrapper
 
   .rendered-markdown(ref="renderedmarkdown")
-    p {{ $t('common.loading') }}
+    p(v-if="loading") {{ $t('common.loading') }}
 
 </template>
 
@@ -88,6 +88,7 @@
             this.$log.error(response)
             this.$log.info('Failed to fetch markdown')
             this.renderedMarkdown = '';
+            this.loading = false;
           },
         );
       },

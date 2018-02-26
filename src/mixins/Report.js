@@ -1,19 +1,14 @@
 import Vue from 'vue'
 import API from '@/api'
 
-import 'vue-awesome/icons/exclamation-circle'
-import 'vue-awesome/icons/ellipsis-h'
-
 export default {
   methods: {
     reportItem(itemId) {
       
-      alert(`Reporting item with id - ${itemId}`)
-
       API.moderation.reportItem(
         itemId,
         (response) => {
-          alert('Your report has been sent!')
+          alert('Reported!')
         },
         (response) => {
           // TODO: Handle failed request

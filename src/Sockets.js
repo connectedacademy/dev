@@ -35,6 +35,7 @@ Vue.io.socket.on('message', (obj) => {
   }
   
   // Vis update
+  Vue.$log.info('socketVisupdate')
   EventBus.$emit('socketVisupdate', obj)
 })
 

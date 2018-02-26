@@ -3,13 +3,16 @@
 transition(name="slide-left")
   .drawer#drawer-left(name="left-drawer" v-if="isVisible")
 
+    .brand-logo(v-bind:title="`${$app.version} - ${$app.built}`")
+      p Connected Academy
+
     .card
 
       ul.drawer-list
 
-        //- router-link.drawer-list-item(tag="li" name="home-drawer-item" v-bind:to="{ name: 'home' }")
-        //-   h1.drawer-list-item--header {{ $t('nav.home') }}
-        //-   h2.drawer-list-item--body {{ $t('nav.home_description') }}
+        router-link.drawer-list-item(tag="li" name="home-drawer-item" v-bind:to="{ name: 'home' }")
+          h1.drawer-list-item--header {{ $t('nav.home') }}
+          h2.drawer-list-item--body {{ $t('nav.home_description') }}
 
         router-link.drawer-list-item(tag="li" name="schedule-drawer-item" v-bind:to="{ name: 'schedule' }")
           h1.drawer-list-item--header {{ $t('nav.schedule') }}
@@ -30,9 +33,6 @@ transition(name="slide-left")
     ul.drawer-links
       li
         router-link(v-bind:to="{ name: 'terms' }") Terms & Conditions
-    ul.drawer-links
-      li
-        span {{ `${$app.version} - ${$app.built}` }}
 
 </template>
 
@@ -57,17 +57,17 @@ export default {
 
 /* Brand Logo */
 .brand-logo
+  background-color alpha(black, 0.05)
   display block
-  padding 15px 25px
+  padding 0 25px
   text-decoration none
   p
     reset()
     color white
     font-size 1em
-    font-weight normal
-    line-height 15px
-    &:last-child
-      padding-left 30px
+    font-weight bold
+    line-height $navigation-height
+    opacity 0.3
 
 </style>
   

@@ -18,15 +18,14 @@ html, body
   clear both
   float none
 
-.fa-icon
-  width auto
-  height 1em
-
 .no-margin
   margin 0 !important
 
 .no-padding
   padding 0 !important
+
+.padding
+  padding 20px !important
 
 .background-white
   background-color white !important
@@ -34,7 +33,7 @@ html, body
 // Content block
 
 .main-container
-  radius(4px)
+  radius($corner-radius)
   margin-top 20px
   position relative
   @media(max-width: 800px)
@@ -44,7 +43,7 @@ html, body
     padding 20px
 
 .content-block
-  radius(4px)
+  radius($corner-radius)
   padding 20px
   margin 0 0 20px 0
   @media(max-width: 800px)
@@ -68,6 +67,6 @@ html, body
 
 .particles-js-canvas-el
   pinned()
-  position absolute
+  position fixed
   pointer-events none
-  z-index -1
+  z-index 0

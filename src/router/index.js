@@ -30,6 +30,11 @@ const router = new Router({
   // mode: 'history',
   routes: [
     {
+      name: 'schedule',
+      path: '/schedule',
+      component: Schedule,
+    },
+    {
       name: 'class',
       path: '/class/:classSlug/:contentSlug?/:segmentId?',
       component: Class,
@@ -66,11 +71,6 @@ const router = new Router({
       name: 'markdown',
       path: '/markdown/:url',
       component: Markdown,
-    },
-    {
-      name: 'schedule',
-      path: '/schedule',
-      component: Schedule,
     },
     {
       name: 'about',

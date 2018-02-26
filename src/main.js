@@ -31,11 +31,9 @@ import Sockets from '@/Sockets'
 
 import { EventBus } from '@/event-bus.js'
 
-import Icon from 'vue-awesome/components/Icon'
 import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
 
 // Global components
-Vue.component('icon', Icon)
 Vue.component('onboarding-prompt', OnboardingPrompt)
 
 Vue.prototype.$app = app_config
@@ -89,7 +87,7 @@ Vue.http.interceptors.push((request, next) => {
     // modify response
     if (response.status === 403) {
       // Unauthorized
-      alert('Unauthorized')
+      // alert('Unauthorized')
     }
   })
 
@@ -100,6 +98,10 @@ Vue.config.lang = 'en'
 Vue.config.fallbackLang = 'en'
 
 store.dispatch('getCourse')
+
+// Particle effect
+require('particles.js')
+particlesJS.load('app', '/static/particles.json')
 
 /* eslint-disable no-new */
 new Vue({

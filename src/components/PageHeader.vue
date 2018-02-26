@@ -1,17 +1,19 @@
 <template lang="pug">
-  .page-header(v-bind:class="identifier")
-    h3.page-title
-      | {{ title }}
-    slot
+
+.page-header(v-bind:class="identifier")
+  h3.page-title
+    | {{ title }}
+  slot
+
 </template>
 
 <script>
-  import 'vue-awesome/icons/arrow-left'
 
-  export default {
-    name: 'page-header',
-    props: ['title', 'identifier']
-  }
+export default {
+  name: 'page-header',
+  props: ['title', 'identifier']
+}
+
 </script>
 
 <style lang="stylus" scoped>

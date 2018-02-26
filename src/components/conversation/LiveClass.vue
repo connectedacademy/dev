@@ -3,7 +3,7 @@
 .course-content(name="section-liveclass")
 
   .course-content--header.block
-    icon(name="twitter")
+    i.fab.fa-twitter.fa-lg
     h1.content-title {{ content.title }}
     p.content-description(v-if="content.description") {{ content.description }}
 
@@ -13,8 +13,12 @@
 
     conversation-container(v-bind:content="content" v-bind:collapsed="isCollapsed")
 
-  #continue-listening(v-if="isCollapsed" name="continue-listening")
+  #continue-listening(v-show="isCollapsed" name="continue-listening")
     .pure-button.pure-button-info.rounded-tall(@click="continueListening()") Continue Listening
+
+  .course-content--footer(v-show="!isCollapsed")
+    p {{ footerMessage }}
+    .clearfix
 
 </template>
 
@@ -25,7 +29,8 @@ import ActionPanel from '@/components/conversation/ActionPanel';
 import ConversationContainer from '@/components/ConversationContainer';
 
 import _find from 'lodash/find';
-import twitter from 'vue-awesome/icons/twitter';
+
+import emoji from 'node-emoji'
 
 export default {
   name: 'live-class',
@@ -35,14 +40,14 @@ export default {
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['isCollapsed', 'scrollPoints'])
+    ...mapGetters(['isCollapsed']),
+    footerMessage () {
+      return `Thanks for listening ${emoji.get('tada')}`
+    }
   },
   methods: {
     continueListening() {
       this.$store.commit('EXPAND_CONVERSATION');
-
-      const scrollPoint = _find(this.scrollPoints, { content_type: 'class' });
-      this.$store.commit('SET_CURRENT_SECTION', scrollPoint);
       setTimeout(() => {
         this.$store.commit('PLAY_MEDIA');
       }, 100);
@@ -57,17 +62,13 @@ export default {
 @import '~stylus/layout/course-content'
 
 .course-content#course-content-liveclass
-  background-color $color-darkest-grey !important
+  background-color white !important
   position relative
 
   .course-content--header.block
-    background-color $color-darkest-grey
-    border-top-left-radius 6px
-    border-top-right-radius 6px
 
-    .fa-icon
+    svg
       color white
-      height 20px
       position absolute
       top 10px
       right 10px
@@ -81,6 +82,9 @@ export default {
         background-color white
         color $color-warning
 
+  .course-content--footer
+    p
+      color $color-text-grey
   .course-content--container
     background-color white
     position relative
@@ -96,10 +100,11 @@ export default {
 
   #continue-listening
     pinned()
+    border-bottom-left-radius $corner-radius
+    border-bottom-right-radius $corner-radius
     background-color white
     height 160px
     position relative
-    // top auto
     text-align center
     .pure-button
       box-sizing()

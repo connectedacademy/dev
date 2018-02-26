@@ -2,25 +2,23 @@
   
   #media-lightbox.animated.fadeIn(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
     #lightbox--close(@click="toggleLightbox()")
-      icon(name="close" scale="2")
+      i.fas.fa-close.fa-2x
     .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${course.baseUri}../media/large/${currentLightboxMedia}')` }")
 
 </template>
 
 <script>
-import * as types from '@/store/mutation-types';
-import { mapGetters } from 'vuex';
-
-import 'vue-awesome/icons/close';
+import * as types from '@/store/mutation-types'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'media-lightbox',
   computed: {
-    ...mapGetters(['course', 'currentLightboxMedia', 'lightboxVisible']),
+    ...mapGetters(['course', 'currentLightboxMedia', 'lightboxVisible'])
   },
   methods: {
     toggleLightbox() {
-      this.$store.commit(types.SET_LIGHTBOX_MEDIA, undefined);
+      this.$store.commit(types.SET_LIGHTBOX_MEDIA, undefined)
     }
   }
 }

@@ -1,6 +1,6 @@
 <template lang="pug">
 .loading
-  .loading-wrapper(v-for="n in 5")
+  .loading-wrapper(v-for="n in 3")
       .padded-container.mock-container(v-bind:style="{ height: `${(6 - n) * 50}px`, opacity: `${(1.2 - (n / 5))}` }")
 </template>
 
@@ -20,6 +20,6 @@ export default {
   margin-top 20px
   @media(min-width: 800px)
     box-shadow()
-    radius(4px)
+    radius($corner-radius)
 
 </style>

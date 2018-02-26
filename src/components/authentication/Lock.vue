@@ -53,7 +53,7 @@ export default {
     margin-left -150px
     text-align center
     width 240px
-    .fa-icon
+    svg
       reset()
       color $color-light-grey
       height 40px

@@ -1,66 +1,72 @@
 @import '~stylus/shared'
 
-.course-content-wrapper
-  margin-bottom 10px
+.course-content
+  background-color white
+  margin $tile-spacing 0 0 0
+  min-height 100px
+  padding 0
+  position relative
   &:last-child
-    margin-bottom 0
-  .course-content-group
-    &:first-child
-      .course-content
-        margin-top 20px
-    .course-content
-      background-color white
-      margin $tile-spacing 0 0 0
-      min-height 100px
-      padding 0
-      position relative
-      @media(min-width: 800px)
-        box-shadow()
-        radius(4px)
-      @media(max-width: 800px)
-        margin $tile-spacing 0 0 0
+    margin-bottom 100px
+  @media(min-width: 800px)
+    box-shadow()
+    radius($corner-radius)
+  @media(max-width: 800px)
+    margin $tile-spacing 0 0 0
 
-      h5.content-subheader
-        reset()
-        color $color-text-dark-grey
-        font-weight 300
+  h5.content-subheader
+    reset()
+    color $color-text-dark-grey
+    font-weight 300
+  p.content-description
+    reset()
+    color $color-text-grey
+    font-size 1em
+  a
+    text-decoration none
+
+  .course-content--header
+    radius-top($corner-radius)
+    background-color transparent
+    overflow hidden
+    padding 20px 20px 10px 20px
+    @media(max-width: 800px)
+      radius-top(0)
+    h1.content-title
+      reset()
+      color $color-text-dark-grey
+      font-size 1.3em
+      font-weight bold
+    &.block
+      background-color $color-info
+      border-top-left-radius $corner-radius
+      border-top-right-radius $corner-radius
+      padding 30px
+      text-align center
+      h1.content-title
+        color white
+        font-size 2em
+        font-weight bold
+        margin-bottom 10px
       p.content-description
-        reset()
-        color $color-text-grey
-        font-size 1em
-      a
-        text-decoration none
+        color white
+        margin 0 auto
+      svg
+        color white
+      @media(max-width: 800px)
+        radius(0)
 
-      .course-content--header
-        background-color transparent
-        overflow hidden
-        padding 20px 20px 10px 20px
-        h1.content-title
-          reset()
-          color $color-text-dark-grey
-          font-size 1.3em
-          font-weight bold
-        &.block
-          background-color $color-primary
-          padding 30px
-          text-align center
-          h1.content-title
-            color white
-            font-size 2em
-            font-weight bold
-            margin-bottom 10px
-          p.content-description
-            color white
-            margin 0 auto
-
-      .course-content--body
-        overflow hidden
-        padding 0px 20px 10px 20px
-        h1, h2, h3, h4, h5
-          font-weight 300
-        h2
-          color $color-text-dark-grey
-          font-size 1.3em
-          font-weight bold
-      .course-content--footer
-        padding 20px
+  .course-content--body
+    overflow hidden
+    padding 0px 20px 10px 20px
+    h1, h2, h3, h4, h5
+      font-weight 300
+    h2
+      color $color-text-dark-grey
+      font-size 1.3em
+      font-weight bold
+  .course-content--footer
+    radius-bottom($corner-radius)
+    padding 20px
+    @media(max-width: 800px)
+      radius-bottom(0)

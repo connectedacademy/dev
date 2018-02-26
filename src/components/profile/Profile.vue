@@ -6,7 +6,7 @@
 
     profile-class-selector
 
-  //- .visualisation-container(v-if="profileClass")
+  .visualisation-container(v-if="profilespaClass")
     visualisation(v-bind:contentDuration="1740" v-bind:classSlug="profileClass.slug" contentSlug="liveclass" v-bind:showReflections="true" v-bind:classView="false" visHeight="200px")
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")

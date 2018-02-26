@@ -3,9 +3,9 @@
   .conversation-container(ref="conversationContainer")
 
     #view-toggle(v-if="currentSection && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
-      onboarding-prompt(identifier="view-toggle" prompt="subtitles/tweets" top="110" left="-140" position="top-right" z-index="1")
-      icon(name="twitter")
-      icon(name="quote-right")
+      onboarding-prompt(identifier="view-toggle" prompt="subtitles/tweets" top="50" left="-70" position="top-right" z-index="1")
+      i.fas.fa-bars
+      i.fab.fa-twitter
 
     .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
       time-segment(v-for="(message, index) in conversationMessages"
@@ -15,7 +15,7 @@
         v-bind:subtitle="subtitles[index]"
         v-bind:contentSlug="content.slug"
         v-bind:classSlug="currentClass.slug"
-        v-bind:isCurrent="false")
+        v-bind:isCurrent="isCurrent(index)")
         //- isCurrent(index)
 
 </template>
@@ -30,9 +30,6 @@ import Messages from '@/mixins/Messages';
 import Subtitles from '@/mixins/Subtitles';
 
 import TimeSegment from '@/components/conversation/TimeSegment';
-
-import 'vue-awesome/icons/twitter';
-import 'vue-awesome/icons/quote-right';
 
 export default {
   name: 'conversation-container',
@@ -165,34 +162,44 @@ export default {
 
 #view-toggle
   animate()
-  radius(4px)
-  background-color $color-primary
+  radius(22px)
+  background-color alpha(white, 0.1)
   color white
   display none
-  height 100px
-  width 60px
+  height 44px
+  width 100px
+  padding 0 10px
   position fixed
-  top 80px
-  right -10px
+  top 8px
+  left 50%
+  margin-left -60px
   z-index 55
-  &.peeking
-    z-index 57  
+  &:hover
+    cursor pointer
   @media(max-width: 600px)
     display block
-  > .fa-icon
-    display block
-    height 50px
+  > svg
+    animate()
+    display inline-block
+    height 44px
     padding 0 15px
     width 20px
-    &:first-child
-      opacity 0.5
-    &:last-child
-      border-top alpha(black, 0.1) 1px solid
-      opacity 1.0
+  > svg:first-child
+    opacity 1.0
+    transform scale(1)
+  > svg:last-child
+    opacity 0.5
+    transform scale(0.8)
+  &:hover
+    > svg
+      transform scale(1) !important
   &.message-priority
-    > .fa-icon:first-child
-      opacity 1.0
-    > .fa-icon:last-child
+    > svg:first-child
       opacity 0.5
+      transform scale(0.8)
+    > svg:last-child
+      opacity 1.0
+      transform scale(1)
+      
 
 </style>

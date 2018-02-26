@@ -1,14 +1,16 @@
 <template lang="pug">
+
 .previous-button(@click="$emit('previousStep')")
-  icon(name="arrow-left")
+  i.fas.fa-arrow-left
+
 </template>
 
 <script>
-import 'vue-awesome/icons/arrow-left'
 
 export default {
   name: 'previous-button'
 }
+
 </script>
 
 <style lang="stylus" scoped>
@@ -24,7 +26,7 @@ export default {
   top 0
   left 0
   z-index 2
-  .fa-icon
+  svg
     height 20px
   &:hover
     cursor pointer

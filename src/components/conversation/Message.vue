@@ -7,7 +7,7 @@
 
       .author-label(v-if="message.author")
         | {{ message.author.account }}
-        icon(v-if="message.in_reply_to" name="reply")
+        i.fas.fa-reply(v-if="message.in_reply_to")
 
       p.message-content(v-html="parseText()")
 
@@ -19,20 +19,18 @@
 
         ul.tweet-actions(v-else-if="canJump")
           router-link.jump-action(tag="li" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
-            //- icon(name="link")
+            i.fas.fa-link
             | View in context
+        
         ul.tweet-actions(v-else)
           li.like-action(@click="showInfoModal()")
-            //-  v-bind:href="likeLink" target="_blank"
-            icon(name="heart")
+            i.fas.fa-heart
           li.retweet-action(@click="showInfoModal()")
-            //-  v-bind:href="retweetLink" target="_blank"
-            icon(name="retweet")
+            i.fas.fa-retweet
           li.reply-action(@click="replyToMessage(message)")
-            //-  v-bind:href="replyLink" target="_blank"
-            icon(name="reply")
+            i.fas.fa-reply
           li.moderate-action(@click="reportItem(message.id)")
-            icon(name="ellipsis-h")
+            i.fas.fa-ellipsis-h
           li.message-timestamp
             | {{ timeStamp }}
 
@@ -50,12 +48,6 @@ import TweetPatch from 'tweet-patch'
 import Moment from 'moment-mini'
 
 import Report from '@/mixins/Report'
-
-import 'vue-awesome/icons/heart'
-import 'vue-awesome/icons/retweet'
-import 'vue-awesome/icons/reply'
-import 'vue-awesome/icons/star'
-import 'vue-awesome/icons/link'
 
 export default {
   name: 'message',
@@ -125,14 +117,15 @@ export default {
       -webkit-line-clamp 3
       -webkit-box-orient vertical
       a, a:active
-        color $color-text-dark-grey
+        color $color-text-light-grey
+        text-decoration none
 
     .author-label
       color $color-text-dark-grey
       font-weight bold
       text-decoration none
       font-size 0.9em
-      .fa-icon
+      svg
         color $color-primary
         height 12px
         margin 0 10px

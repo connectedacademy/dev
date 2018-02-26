@@ -43,8 +43,6 @@ import TagList from '@/components/shared/TagList'
 import _find from 'lodash/find'
 import _filter from 'lodash/filter'
 
-import 'vue-awesome/icons/angle-right'
-
 export default {
   name: 'user',
   props: ['label', 'adminView'],

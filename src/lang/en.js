@@ -27,10 +27,10 @@ export default {
     scroll_down_for_live_class: 'Scroll down for the live class',
   },
   nav: {
-    home: 'Home',
+    home: 'Introduction',
     home_description: 'Learn about the course and what it has to offer.',
-    schedule: 'Schedule',
-    schedule_description: 'Switch classes and find out when new content will be released.',
+    schedule: 'Participate',
+    schedule_description: 'Discover classes and participate in a new form of online learning.',
     about: 'About',
     about_description: 'Learn about Connected Academy and how we are changing how education.',
     faq: 'FAQ',
@@ -42,7 +42,7 @@ export default {
     login: 'Login',
     logout: 'Logout',
 
-    login_with_twitter: 'Login with Twitter',
+    login_with_twitter: 'Continue with Twitter',
     login_to_participate: 'Login to Participate',
 
     register: 'Register',
@@ -56,7 +56,7 @@ export default {
     enter_your_age: 'Your age',
     select_your_language: 'Select your language',
 
-    authenticate: 'Authenticate',
+    authenticate: 'Get Started',
 
     i_agree_to_terms_and_conditions: 'I agree with the terms & conditions',
 
@@ -101,10 +101,10 @@ export default {
     unavailable_description: 'You are in a demo mode so this is not available right now.',
   },
   classroom: {
-    classroom: 'Classroom',
-    join_classroom: 'Join Classroom',
-    leave_classroom: 'Leave Classroom',
-    enter_code: 'Enter teacher code below',
+    classroom: 'Join a Classroom',
+    join_classroom: 'Join',
+    leave_classroom: 'Leave',
+    enter_code: 'Enter classroom code',
     failed_to_register: 'Failed to register attendance',
   }
 };

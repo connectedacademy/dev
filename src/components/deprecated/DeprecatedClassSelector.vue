@@ -4,21 +4,21 @@
   transition(name="fade")
     .class-selector-wrapper(v-if="course && course.classes")
       .skip-button.skip-button--left(@click="scrollLeft" v-if="offset > 0")
-        icon(name="angle-left")
+        i.fas.fa-angle-left
       .skip-button.skip-button--right(@click="scrollRight" v-if="remainingOffset > 0")
-        icon(name="angle-right")
+        i.fas.fa-angle-right
       .class-selector-container-wrapper
         .class-selector-container(ref="classselector" v-scroll="onScroll")
           ul.class-selector(v-if="course && course.classes" v-bind:style="{ left: `${leftPos}px`, width: `${theWidth}px` }")
 
             router-link.class-selector--item.released#intro-item(tag="li" v-bind:to="{ name: 'class', params: { classSlug: 'intro' } }")
               h1.class-selector--item--header
-                icon(name="info")
+                i.fas.fa-info
 
             router-link.class-selector--item(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="theClass.name" v-bind:class="{ [theClass.status.toLowerCase()]: true }" ref="class" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }")
               h1.class-selector--item--header {{ theClass.title }}
-              icon.status-indicator(name="check-circle" v-if="theClass.status === 'CURRENT'")
-              icon.status-indicator(name="lock" v-if="theClass.status === 'FUTURE'")
+              i.fas.fa-check-circle.status-indicator(v-if="theClass.status === 'CURRENT'")
+              i.fas.fa-lock.status-indicator(v-if="theClass.status === 'FUTURE'")
 
             .clearfix
       
@@ -53,12 +53,6 @@ import _get from 'lodash/get';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 import JoinBanner from '@/components/banners/JoinBanner';
-
-import 'vue-awesome/icons/angle-left';
-import 'vue-awesome/icons/angle-right';
-import 'vue-awesome/icons/info';
-import 'vue-awesome/icons/check-circle';
-import 'vue-awesome/icons/lock';
 
 Vue.use(VueScroll);
 
@@ -187,7 +181,7 @@ $selector-height = 44px
       left 0px
     &.skip-button--right
       right 0px
-    .fa-icon
+    svg
       color $color-primary
       height 100%
       width 10px
@@ -222,7 +216,7 @@ $selector-height = 44px
           &#intro-item
             border none
             width 44px
-            .fa-icon
+            svg
               height 18px
               margin 14px 0
           &:first-child
@@ -281,7 +275,7 @@ $selector-height = 44px
     reset()
     color $color-text-dark-grey
     line-height 40px
-  .fa-icon
+  svg
     height 40px
 
 .course-content--footer

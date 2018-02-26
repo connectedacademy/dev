@@ -5,7 +5,6 @@
     .mock-message--body
       .mock-message--line
       .mock-message--line
-      .mock-message--line
 
 </template>
 
@@ -25,47 +24,49 @@ export default {
   padding-left 60px
   top 0
   left 0
-  right 30px
+  right 50px
   .mock-message--user
     radius(50%)
     height 40px
     width 40px
     position absolute
-    top 20px
+    top 40px
     left 15px
   .mock-message--body
     radius(6px)
-    height 100px
-    padding 10px
+    height 80px
+    padding 30px 10px
     .mock-message--line
-      radius(6px)
+      radius(10px)
       height 20px
-      margin-top 15px
+      margin 15px 0
       &:first-child
-        max-width 100px
+        max-width 50%
+      &:last-child
+        max-width 75%
   .mock-message--user, .mock-message--line
     animate()
-    background-color $color-lighter-grey
+    background-color $color-lightest-grey
 
   &.loading
     .mock-message--user, .mock-message--line
       // animation pulse 2s infinite
-      background-color lighten($color-lighter-grey, 70%)
+      background-color lighten($color-lightest-grey, 20%)
 
 @-webkit-keyframes pulse
   0%
-    background-color $color-lighter-grey
+    background-color lighten($color-lightest-grey, 20%)
   50%
-    background-color lighten($color-lighter-grey, 50%)
+    background-color $color-lightest-grey
   100%
-    background-color $color-lighter-grey
+    background-color lighten($color-lightest-grey, 20%)
 
 @keyframes pulse
   0%
-    background-color $color-lighter-grey
+    background-color lighten($color-lightest-grey, 20%)
   50%
-    background-color lighten($color-lighter-grey, 50%)
+    background-color $color-lightest-grey
   100%
-    background-color $color-lighter-grey
+    background-color lighten($color-lightest-grey, 20%)
 
 </style>

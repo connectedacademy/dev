@@ -2,7 +2,7 @@
 
 .info-dialogue.animated.fadeIn(v-if="!dismissed" v-bind:class="{ dismissed: dismissed }")
   .dismiss-button(v-if="dismissable" @click="dismiss")
-    icon(name="times")
+    i.fas.fa-times
   slot
 
 </template>
@@ -10,8 +10,6 @@
 <script>
 import API from '@/api';
 import { mapGetters } from 'vuex';
-
-import 'vue-awesome/icons/times';
 
 export default {
   name: 'info-dialogue',
@@ -56,7 +54,7 @@ export default {
     width 3px
     text-align center
     animate()
-    .fa-icon
+    svg
       opacity 0
       height 20px
       width 20px
@@ -70,7 +68,7 @@ export default {
     .dismiss-button
       cursor pointer
       width 50px
-      .fa-icon
+      svg
         opacity 1
   p
     reset()

@@ -1,14 +1,12 @@
 <template lang="pug">
 
   .previous-button(name="previous-button" @click="previous")
-    icon(name="angle-left")
+    i.fa.fa-angle-left
     | {{ $t('common.previous_page') }}
 
 </template>
 
 <script>
-import 'vue-awesome/icons/angle-left';
-
 export default {
   name: 'previous-button',
   methods: {
@@ -35,7 +33,7 @@ export default {
   right 0px
   position relative
   padding-left 30px
-  .fa-icon
+  svg
     height 20px
     padding 0 15px
     position absolute
