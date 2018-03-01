@@ -3,7 +3,7 @@
 .schedule-page(name="schedule-page")
   .col#col-main
     .main-container
-      narrow-page-header(title="Participate" subtitle="Dive in to incredible live classes")
+      narrow-page-header(title="Explore content" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
           router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }" v-bind:class="{ released: isReleased(theClass) }")

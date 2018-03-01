@@ -66,8 +66,8 @@
 
           // Check for flash messages
           if (this.$route.query.flash) {
-            alert(this.$route.query.flash.msg)
             // TODO: Make a modal with use of this.$route.query.flash.type
+            alert(this.$route.query.flash.msg)
           }
         },
         deep: true

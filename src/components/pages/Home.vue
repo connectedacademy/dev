@@ -14,7 +14,7 @@
         
         #details-container
           markdown-renderer(v-bind:markdown-url="markdownUrl")
-          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Participate now
+          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Explore content
 
 </template>
 

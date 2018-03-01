@@ -22,14 +22,14 @@ export default {
     next_page: 'Next Page',
     previous_page: 'Previous Page',
     choose_one: 'Choose one',
-    participate: 'Participate',
+    participate: 'Explore',
 
     scroll_down_for_live_class: 'Scroll down for the live class',
   },
   nav: {
     home: 'Introduction',
     home_description: 'Learn about the course and what it has to offer.',
-    schedule: 'Participate',
+    schedule: 'Explore',
     schedule_description: 'Discover classes and participate in a new form of online learning.',
     about: 'About',
     about_description: 'Learn about Connected Academy and how we are changing how education.',

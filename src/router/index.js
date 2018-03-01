@@ -120,40 +120,37 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 
-  // Ensure authenticated
-  if (to.matched.some(record => record.meta.ensureAuthenticated)) {
-    if (typeof store.state.auth.user === 'undefined') {
-      next({ name: 'schedule', query: { flash: { msg: 'You are not authenticated', type: 'warn' } } })
-    }
-  }
-
   // Ensure registered
   if (to.matched.some(record => record.meta.ensureRegistered)) {
     if (!(store.state.auth.user && store.state.auth.user.registration)) {
       next({ name: 'schedule', query: { flash: { msg: 'You are not registered', type: 'warn' } } })
+    } else {
+      next()
     }
   }
 
   // Ensure not registered
-  if (to.matched.some(record => record.meta.ensureNotRegistered)) {
-
+  else if (to.matched.some(record => record.meta.ensureNotRegistered)) {
     API.auth.checkAuth(
-      response => (response) => {
-        
-        if (!response.data.data.user || response.data.data.user && response.data.data.user.registration) {
+      response => {
+        if (response.user && response.user.registration) {
+          // Registered
+          console.log('Registered!');
           next({ name: 'schedule', query: { flash: { msg: 'You are already registered', type: 'warn' } } })
+        } else {
+          // Not registered
+          console.log('Not registered!');
+          next()
         }
-        next()
       },
-      response => (response) => {
-        if (!response.data.data.user || response.data.data.user && response.data.data.user.registration) {
-          next({ name: 'schedule', query: { flash: { msg: 'You are already registered', type: 'warn' } } })
-        }
-        next()
+      response => {
+        next({ name: 'registration', query: { flash: { msg: 'Please register', type: 'warn' } } })
       }
     )
   }
-  next()
+  else {
+    next()
+  }
 })
 
 export default router

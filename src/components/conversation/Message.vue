@@ -20,7 +20,6 @@
         ul.tweet-actions(v-else-if="canJump")
           router-link.jump-action(tag="li" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
             i.fas.fa-link
-            | View in context
         
         ul.tweet-actions(v-else)
           li.like-action(@click="showInfoModal()")

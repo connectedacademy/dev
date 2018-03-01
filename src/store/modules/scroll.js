@@ -16,9 +16,6 @@ const getters = {
 const actions = {
   saveScrollPosition({ commit }, scrollPosition) {
     commit(types.SAVE_SCROLL_POSITION, scrollPosition)
-  },
-  resetState({ commit }) {
-    commit(types.RESET_SCROLL_POINTS)
   }
 }
 

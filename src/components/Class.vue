@@ -4,7 +4,7 @@
     .col#col-main
       .main-container
         narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="One moment.." link="" route="schedule")
-        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="classPosition" link="632 Live Listeners" route="schedule")
+        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="`Explore other content`" v-bind:link="liveListenerCount")
         loading(v-if="currentClass && currentClass.loading")
         live-class(v-else v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
@@ -39,7 +39,6 @@ export default {
   beforeRouteLeave (to, from, next) {
     this.$store.commit('PAUSE_MEDIA')
     this.$store.dispatch('saveScrollPosition', window.scrollY)
-    this.$store.dispatch('resetState')
     next()
   },
   mounted() {
@@ -68,6 +67,10 @@ export default {
           ${numberToWords.toWords(numberOfClasses)} classes
         </a>`
     },
+    liveListenerCount () {
+      const listenerCount = Math.floor(Math.random() * 100) // TODO: Caluclate correctly
+      return `${listenerCount} Live Listeners`
+    }
   },
   methods: {
     jsUcfirst(string) {

@@ -126,3 +126,9 @@
     }
   }
 </script>
+
+<style lang="stylus" scoped>
+
+@import '~stylus/registration'
+
+</style>
