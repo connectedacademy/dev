@@ -29,12 +29,12 @@ describe('Live Class', function () {
     schedulePage = new SchedulePageObject()
   })
 
-  it('Nagivates to it as logged in user', function () {
-    browser.windowHandleMaximize()
-    browser.url('https://api.connectedacademy.io/v1/auth/loginexistinguser/?account=' + testEnv.USER_ACCOUNT + '&psk=' + testEnv.PSK + '&callback=' + testEnv.APP_URL)
-    browser.url(testEnv.APP_URL)
-    assert(browser.getTitle().match(/Connected Academy/i))
-  })
+  // it('Nagivates to it as logged in user', function () {
+  //   browser.windowHandleMaximize()
+  //   browser.url('https://api.connectedacademy.io/v1/auth/loginexistinguser/?account=' + testEnv.USER_ACCOUNT + '&psk=' + testEnv.PSK + '&callback=' + testEnv.APP_URL)
+  //   browser.url(testEnv.APP_URL)
+  //   assert(browser.getTitle().match(/Connected Academy/i))
+  // })
 
   // it('Views first class from the schedule', () => {
 
