@@ -10,7 +10,7 @@
 
       .content-block.header-block.unpadded-block.white-block
 
-        video-embed(video-src="FLY5HaiYDqE?modestbranding=1&autohide=1&showinfo=0&controls=0" autoLoad)
+        video-embed(video-src="YE7VzlLtp-4?modestbranding=1&autohide=1&showinfo=0&controls=0" autoLoad)
         #details-container
           markdown-renderer(v-bind:markdown-url="markdownUrl")
           router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Explore content
