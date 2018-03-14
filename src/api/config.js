@@ -1,8 +1,5 @@
 let isLocal = false
-isLocal = true
 let localIP = 'localhost'
-// localIP = '10.70.15.124'
-// localIP = '10.70.15.170'
 
 export const SOUNCLOUD_CLIENT_ID = '3b3b0aa8045ca036d24515344ae0d60b'
 export const LOCALHOST = 'http://localhost:8080'
