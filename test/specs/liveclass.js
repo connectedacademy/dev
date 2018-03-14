@@ -164,7 +164,7 @@ describe('Live Class', function () {
 //     }
 //   })
 
-// })
+})
 
 // function pickMessageVisibleBlock(sblock) {
 
