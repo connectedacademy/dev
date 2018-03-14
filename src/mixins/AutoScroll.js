@@ -163,12 +163,12 @@ export default {
       const element = document.getElementById('course-content-liveclass');
       const content = _find(this.$store.getters.currentClass.content, { content_type: 'class' })
       
+      if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return
+      
       // Offset
       const actionPanelHeight = 320
       let offsetScrollPos = scrollPos + window.innerHeight - (element.offsetTop + actionPanelHeight)
       
-      if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return
-
       let additionalOffset = 0;
 
       const currentSection = {

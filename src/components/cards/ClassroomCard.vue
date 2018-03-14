@@ -2,8 +2,7 @@
 
   .card#classroom-card(v-if="user" v-bind:class="{ visible: visible, active: currentClassroom }")
 
-    h3 {{ $t('classroom.classroom') }}
-    p.hidden {{ $t('classroom.enter_code') }}
+    p {{ $t('classroom.classroom') }}
 
     input#classroom-input(v-model="classroomCode" placeholder="7342" v-bind:disabled="currentClassroom")
 
@@ -92,13 +91,14 @@ export default {
   radius(6px)
   background-color $color-info
   color white
+  margin 0 15px 15px 15px
   padding 0
   text-align center
-  position absolute
-  bottom 15px
-  left 15px
-  right 15px
-  top auto
+  // position absolute
+  // bottom 15px
+  // left 15px
+  // right 15px
+  // top auto
   &.active
     background-color $color-success
     color white
@@ -108,19 +108,12 @@ export default {
     reset()
     line-height 50px
 
-  h3
-    cleanlist()
-    background-color transparent
-    border alpha(black, 0.1) 1px solid
-    color inherit
-    cursor default
-    font-weight bold
-    line-height 50px
-
   p
     reset()
     color inherit
-    padding 20px 10px 0px 10px
+    font-weight bold
+    line-height 50px
+    padding 0 10px
 
   input#classroom-input
     animate()
@@ -133,7 +126,7 @@ export default {
     display inline-block
     font-size 1.6em
     padding 10px
-    margin 20px 20px 16px 20px
+    margin 0 20px 20px 20px
     text-align center
     width calc(100% - 40px)
     outline 0

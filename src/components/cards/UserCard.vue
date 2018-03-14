@@ -52,6 +52,10 @@ export default {
   padding 15px
   position relative
   text-align center
+  .pure-button
+    font-style 1em
+    font-weight bold
+    padding 13px 0
   img.user-profile
     radius(50%)
     background-color alpha(black, 0.1)
