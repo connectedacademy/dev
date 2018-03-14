@@ -36,15 +36,15 @@ describe('Live Class', function () {
     assert(browser.getTitle().match(/Connected Academy/i))
   })
 
-  it('Views first class from the schedule', () => {
+  // it('Views first class from the schedule', () => {
 
-    $(landingPage.getStartedButton).click()
+  //   $(landingPage.getStartedButton).click()
 
-    browser.pause(1000)
+  //   browser.pause(1000)
 
-    browser.click(schedulePage.firstClass)
+  //   browser.click(schedulePage.firstClass)
 
-  })
+  // })
 
   // it('Scrolls liveclass', () => {
 
@@ -120,66 +120,66 @@ describe('Live Class', function () {
   //   browser.saveScreenshot('./test/screenshots/liveclass/liveclass-testmessage.png')
   // })
 
-  it('Scrolls up and down a lot then makes another message', () => {
+//   it('Scrolls up and down a lot then makes another message', () => {
     
-    $(classPage.continueListeningButton).waitForExist(5000)
+//     $(classPage.continueListeningButton).waitForExist(5000)
 
-    $(classPage.continueListeningButton).scroll(0, 300)
-    $(classPage.continueListeningButton).click()
+//     $(classPage.continueListeningButton).scroll(0, 300)
+//     $(classPage.continueListeningButton).click()
 
-    browser.pause(2000)
+//     browser.pause(2000)
 
-    for (let i = 0; i < CREATE_MESSAGE_COUNT; i++) {
+//     for (let i = 0; i < CREATE_MESSAGE_COUNT; i++) {
 
-      // Pick random block
-      let sblock = _sample($$(classPage.timeSegment))
+//       // Pick random block
+//       let sblock = _sample($$(classPage.timeSegment))
 
-      browser.scroll(0, browser.elementIdLocation(sblock.ELEMENT).value.y - 50).pause(1000)
-      browser.pause(500)
-      browser.scroll(0, browser.elementIdLocation(sblock.ELEMENT).value.y - 30).pause(1000)
+//       browser.scroll(0, browser.elementIdLocation(sblock.ELEMENT).value.y - 50).pause(1000)
+//       browser.pause(500)
+//       browser.scroll(0, browser.elementIdLocation(sblock.ELEMENT).value.y - 30).pause(1000)
 
-      browser.pause(3000) // Let it play
+//       browser.pause(3000) // Let it play
 
-      let block = pickMessageVisibleBlock(sblock)
+//       let block = pickMessageVisibleBlock(sblock)
 
-      block.click()
-      browser.pause(500)
+//       block.click()
+//       browser.pause(500)
 
-      let txt = 'This is a #test message from Selenium at ' + Moment()
-      browser.setValue(classPage.activeComposer, txt)
+//       let txt = 'This is a #test message from Selenium at ' + Moment()
+//       browser.setValue(classPage.activeComposer, txt)
       
-      browser.pause(2000)
-      $(classPage.activeComposerButton).click()
-      browser.pause(2000)
+//       browser.pause(2000)
+//       $(classPage.activeComposerButton).click()
+//       browser.pause(2000)
       
-      console.log($(classPage.peekSegmentMessageText).getText())
-      console.log(`${txt} ${testEnv.HASHTAG}`)
+//       console.log($(classPage.peekSegmentMessageText).getText())
+//       console.log(`${txt} ${testEnv.HASHTAG}`)
 
-      chai.expect(classPage.peekSegmentMessageText).to.have.text(`${txt} ${testEnv.HASHTAG}`)
+//       chai.expect(classPage.peekSegmentMessageText).to.have.text(`${txt} ${testEnv.HASHTAG}`)
 
-      // Save screenshot
-      browser.saveScreenshot(`./test/screenshots/liveclass/liveclass-testmessage-${i}.png`)
+//       // Save screenshot
+//       browser.saveScreenshot(`./test/screenshots/liveclass/liveclass-testmessage-${i}.png`)
 
-      browser.click('#content-overlay', 50, 50).pause(200)
-    }
-  })
+//       browser.click('#content-overlay', 50, 50).pause(200)
+//     }
+//   })
 
-})
+// })
 
-function pickMessageVisibleBlock(sblock) {
+// function pickMessageVisibleBlock(sblock) {
 
-  let time = parseInt(browser.elementIdAttribute(sblock.ELEMENT, 'data-top').value)
+//   let time = parseInt(browser.elementIdAttribute(sblock.ELEMENT, 'data-top').value)
 
-  let inviewport = []
+//   let inviewport = []
 
-  for (let i = 1; i < 2; i++)
-  {
-    const expectedTop = (time + (i * 158))
-    let isview = browser.isVisibleWithinViewport(`[data-top='${expectedTop}']`)
-    if (isview) {
-      inviewport.push(`[data-top='${expectedTop}']`)
-    }
-  }
+//   for (let i = 1; i < 2; i++)
+//   {
+//     const expectedTop = (time + (i * 158))
+//     let isview = browser.isVisibleWithinViewport(`[data-top='${expectedTop}']`)
+//     if (isview) {
+//       inviewport.push(`[data-top='${expectedTop}']`)
+//     }
+//   }
 
-  return $(`${_sample(inviewport)}`)
-}
+//   return $(`${_sample(inviewport)}`)
+// }
