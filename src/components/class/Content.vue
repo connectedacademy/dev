@@ -1,7 +1,6 @@
 <template lang="pug">
 .class-content  
   .column.column-left
-    //- h1 left
   .column.column-center
     narrow-page-header(v-if="currentClass.loading" title="" v-bind:subtitle="course.title" route="schedule")
     narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="course.title")
@@ -31,7 +30,7 @@ import NarrowPageHeader from '@/components/NarrowPageHeader'
 import DeepDive from '@/components/class/DeepDive'
 import Homework from '@/components/conversation/Homework'
 import FourCornersBanner from '@/components/class/FourCornersBanner'
-// import NextClass from '@/components/conversation/NextClass'
+import NextClass from '@/components/class/NextClass'
 // import Survey from '@/components/conversation/Survey'
 // import FutureContent from '@/components/conversation/FutureContent'
 
@@ -43,7 +42,7 @@ export default {
     DeepDive,
     Homework,
     FourCornersBanner,
-    // NextClass,
+    NextClass,
     // Survey,
     // FutureContent
   },
@@ -57,13 +56,13 @@ export default {
     ...mapGetters(['course', 'currentClass']),
     primaryContent () {
       return _filter(this.currentClass.content, (content) => {
-        const types = ['intro', 'pre', 'postclass', 'fourcorners']
+        const types = ['intro', 'pre', 'postclass', 'fourcorners', 'nextclass']
         return types.indexOf(content.content_type) !==  -1
       })
     },
     secondaryContent () {
       return _filter(this.currentClass.content, (content) => {
-        const types = ['class', 'homework', 'nextclass']
+        const types = ['class', 'homework']
         return types.indexOf(content.content_type) !==  -1
       })
     }
@@ -73,6 +72,9 @@ export default {
       switch (type) {
         case 'fourcorners':
           return 'FourCornersBanner'
+
+        case 'nextclass':
+          return 'NextClass'
       
         default:
           return 'DeepDive'
