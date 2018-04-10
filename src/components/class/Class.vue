@@ -10,7 +10,7 @@
   .column.column-right
     .content-wrapper
       transition(name="fade" appear mode="out-in")
-        .content-item.liveclass-item(v-for="(content, index) in secondaryContent" v-bind:key="index" v-if="$route.name !== 'live' || content.content_type !== 'class'")
+        .content-item.liveclass-item(v-for="(content, index) in secondaryContent" v-bind:key="index" v-if="$route.name === 'content'")
           h3
             i.fas.fa-headphones
             | {{ content.title }}
