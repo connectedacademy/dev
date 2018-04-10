@@ -37,7 +37,7 @@ export default {
     return {
       navTitle: 'Home - Connected Academy',
       pageStyle: { type: undefined, visible: true, minimized: false },
-      videoSrc: '5GX37R0v8D0'
+      videoSrc: '' // 5GX37R0v8D0
     }
   },
   computed: {

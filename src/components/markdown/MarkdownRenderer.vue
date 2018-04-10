@@ -233,7 +233,7 @@
     display none
     svg
       color #CCC
-      padding 60px
+      padding 20px
   &.loading
     text-align center
     .loading-symbol

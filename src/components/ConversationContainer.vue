@@ -2,7 +2,7 @@
 
   .conversation-container(ref="conversationContainer")
 
-    #view-toggle(v-if="currentSection && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
+    #view-toggle(v-if="$route.name === 'live' && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
       onboarding-prompt(identifier="view-toggle" prompt="subtitles/tweets" top="50" left="-70" position="top-right" z-index="1")
       i.fas.fa-quote-left
       i.fab.fa-twitter
