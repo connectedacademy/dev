@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import MarkdownRenderer from '@/components/MarkdownRenderer';
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer';
 import MarkdownIt from 'markdown-it';
 
 export default {

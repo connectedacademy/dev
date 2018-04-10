@@ -30,7 +30,7 @@ import _includes from 'lodash/includes'
 
 import LiveClass from '@/components/live/LiveClass'
 import DeepDive from '@/components/live/DeepDive'
-import Homework from '@/components/live/Homework'
+import Homework from '@/components/class/Homework'
 import FourCornersBanner from '@/components/live/FourCornersBanner'
 import NextClass from '@/components/live/NextClass'
 import Survey from '@/components/live/Survey'

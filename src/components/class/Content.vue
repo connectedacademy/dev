@@ -13,7 +13,7 @@ import PageStyle from '@/mixins/PageStyle'
 
 // Components
 import DeepDive from '@/components/class/DeepDive'
-import Homework from '@/components/live/Homework'
+import Homework from '@/components/class/Homework'
 import FourCornersBanner from '@/components/class/FourCornersBanner'
 import NextClass from '@/components/class/NextClass'
 import Survey from '@/components/class/Survey'

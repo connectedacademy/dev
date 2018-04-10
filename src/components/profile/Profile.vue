@@ -200,7 +200,7 @@ $action-expanded-max-width = 500px
 // Profile action
 .profile-action
   pinned()
-  radius(4px)
+  radius(10px)
   background-color white
   overflow hidden
   top 40px

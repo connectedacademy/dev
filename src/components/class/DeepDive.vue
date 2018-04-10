@@ -22,8 +22,8 @@
 
 <script>
 import LikeIndicator from '@/components/LikeIndicator'
-import MarkdownContent from '@/components/MarkdownContent'
-import MarkdownLink from '@/components/MarkdownLink'
+import MarkdownContent from '@/components/markdown/MarkdownContent'
+import MarkdownLink from '@/components/markdown/MarkdownLink'
 import MediaCarousel from '@/components/MediaCarousel'
 import MediaThumbnails from '@/components/MediaThumbnails'
 import SoundcloudEmbed from '@/components/SoundcloudEmbed'

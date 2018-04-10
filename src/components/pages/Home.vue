@@ -6,14 +6,13 @@
     
     .main-container
 
-      narrow-page-header(title="Introduction" subtitle="Welcome to Connected Academy.")
-
       .content-block.header-block.unpadded-block.white-block
+        video-embed(v-bind:video-src="`${videoSrc}?modestbranding=1&autohide=1&showinfo=0&controls=0`" autoLoad)
 
-        video-embed(video-src="YE7VzlLtp-4?modestbranding=1&autohide=1&showinfo=0&controls=0" autoLoad)
         #details-container
+          h2 {{ course.title }}
           markdown-renderer(v-bind:markdown-url="markdownUrl")
-          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Explore content
+          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Start course
 
 </template>
 
@@ -25,21 +24,20 @@ import PageStyle from '@/mixins/PageStyle'
 
 // Components
 import VideoEmbed from '@/components/VideoEmbed'
-import NarrowPageHeader from '@/components/NarrowPageHeader'
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
 
 export default {
   name: 'home',
   mixins: [ PageStyle ],
   components: {
     VideoEmbed,
-    NarrowPageHeader,
     MarkdownRenderer
   },
   data() {
     return {
       navTitle: 'Home - Connected Academy',
-      pageStyle: { type: undefined, visible: true, minimized: false }
+      pageStyle: { type: undefined, visible: true, minimized: false },
+      videoSrc: '5GX37R0v8D0'
     }
   },
   computed: {
@@ -57,9 +55,11 @@ export default {
 @import '~stylus/buttons'
 
 .home-page
-  text-align center
   .video-container
+    radius(10px)
     margin 0
+    overflow hidden
   #details-container
     padding 0px 20px 20px 20px
+    text-align center
 </style>

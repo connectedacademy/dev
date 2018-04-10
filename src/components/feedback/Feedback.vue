@@ -43,7 +43,7 @@ import _get from 'lodash/get'
 import _filter from 'lodash/filter'
 
 import PageHeader from '@/components/PageHeader'
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
 import FourCornersLink from '@/components/fourcorners/FourCornersLink'
 import FeedbackSubmission from '@/components/feedback/FeedbackSubmission'
 import FeedbackList from '@/components/feedback/FeedbackList'

@@ -12,7 +12,7 @@ const Registration = () => import('@/components/authentication/Registration')
 
 const Class = () => import('@/components/class/Class')
 const Content = () => import('@/components/class/Content')
-const Markdown = () => import('@/components/Markdown')
+const Markdown = () => import('@/components/markdown/Markdown')
 const Live = () => import('@/components/live/Live')
 
 const Feedback = () => import('@/components/feedback/Feedback')

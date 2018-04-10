@@ -4,7 +4,8 @@
   
   .course-content--header.block
     i.fab.fa-twitter.fa-lg
-    h1.content-title {{ content.title }}
+    h1.content-title
+      | {{ content.title }}
     p.content-description(v-if="content.description") {{ content.description }}
 
   .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
@@ -64,7 +65,7 @@ export default {
 @import '~stylus/buttons'
 @import '~stylus/layout/course-content'
 
-.course-content#course-content-liveclass
+.course-content
   background-color white !important
   position relative
 

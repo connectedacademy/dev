@@ -53,7 +53,7 @@ import { mapGetters } from 'vuex'
 import PageStyle from '@/mixins/PageStyle'
 
 // Components
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
 import VideoEmbed from '@/components/VideoEmbed'
 import FourCornersInteraction from '@/components/fourcorners/FourCornersInteraction'
 

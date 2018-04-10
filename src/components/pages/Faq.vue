@@ -22,7 +22,7 @@ import PageStyle from '@/mixins/PageStyle'
 
 // Components
 import NarrowPageHeader from '@/components/NarrowPageHeader'
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
 
 export default {
   name: 'faq',

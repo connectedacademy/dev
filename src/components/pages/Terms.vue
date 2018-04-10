@@ -21,7 +21,7 @@ import { mapGetters } from 'vuex'
 import MarkdownIt from 'markdown-it'
 
 // Mixins
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
 
 // Components
 import NarrowPageHeader from '@/components/NarrowPageHeader'

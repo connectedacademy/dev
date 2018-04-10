@@ -11,11 +11,13 @@
     .content-wrapper
       transition(name="fade" appear mode="out-in")
         .content-item.liveclass-item(v-for="(content, index) in secondaryContent" v-bind:key="index" v-if="$route.name === 'content'")
-          h3
-            i.fas.fa-headphones
-            | {{ content.title }}
-          p Join the live discussion right here on Connected Academy via Twitter
-          router-link.pure-button.pure-button-info.full-width.no-margin(v-if="content.content_type === 'class'" v-bind:to="{ name: 'live' }") Join class
+          .content
+            h1
+              i.fab.fa-twitter
+              | {{ content.title }}
+            p This class has a live twitter based discussion, click below to join it.
+          router-link.pure-button.pure-button-info.full-width.no-margin(v-if="content.content_type === 'class'" v-bind:to="{ name: 'live' }")
+            | Join Class
   .clearfix
 </template>
 
@@ -30,7 +32,7 @@ import PageStyle from '@/mixins/PageStyle'
 import NarrowPageHeader from '@/components/NarrowPageHeader'
 
 import DeepDive from '@/components/class/DeepDive'
-import Homework from '@/components/live/Homework'
+import Homework from '@/components/class/Homework'
 import FourCornersBanner from '@/components/class/FourCornersBanner'
 import NextClass from '@/components/class/NextClass'
 // import Survey from '@/components/live/Survey'
@@ -116,14 +118,29 @@ export default {
     radius(10px)
     background-color white
     margin 20px 0 0 0
+    overflow hidden
     padding 20px
     position relative
     &.liveclass-item
-      h3
+      background-color $color-info
+      padding 10px
+      .content
+        padding 10px
+      h1
         reset()
+        color white
+        font-size 1.3em
         svg
-          margin-right 6px
+          color white
+          margin-right 10px
+        // position absolute
+        // top 15px
+        // right 15px
+      .pure-button
+        radius(10px)
+        background-color alpha(black, 0.1)
       p
         reset()
+        color white
         margin 10px 0
 </style>

@@ -50,7 +50,7 @@ import VueScroll from 'vue-scroll';
 import throttle from 'lodash/throttle';
 import _get from 'lodash/get';
 
-import MarkdownRenderer from '@/components/MarkdownRenderer';
+import MarkdownRenderer from '@/components/markdown/MarkdownRenderer';
 import FourCornersLink from '@/components/fourcorners/FourCornersLink';
 import JoinBanner from '@/components/banners/JoinBanner';
 
