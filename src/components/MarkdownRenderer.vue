@@ -80,7 +80,8 @@
         API.markdown.fetchMarkdown(
           url,
           (response) => {
-            this.renderedMarkdown = response;
+            this.renderedMarkdown = response.replace('@[bio]', '\n\n\n@[bio]');
+            
             this.loading = false;
             this.renderMarkdown();
           },
@@ -97,7 +98,7 @@
         this.$log.info('Rendering markdown');
   
         // Render markdown
-        var res = Vue.compile(this.rawMarkdown);
+        var res = Vue.compile(this.rawMarkdown())
   
         var parent = this;
         var RenderedMarkdown = new Vue({
@@ -132,8 +133,6 @@
           FourCornersLib.init();
         });
       },
-    },
-    computed: {
       rawMarkdown() {
   
         var parent = this;
@@ -219,7 +218,7 @@
             return `<a v-on:click="goToLink('${href}')">`;
           }
         };
-  
+        
         return `<div>${md.render(this.renderedMarkdown)}</div>`;
       },
     },

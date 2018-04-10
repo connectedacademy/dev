@@ -40,11 +40,16 @@ transition(name="slide-left")
 export default {
   name: 'left-drawer',
   beforeRouteUpdate(to, from, next) {
-    this.$store.commit('TOGGLE_LEFT_DRAWER')
+    this.dismissDrawer()
   },
   computed: {
     isVisible() {
       return this.$store.state.navigation.leftDrawer.visible;
+    }
+  },
+  methods: {
+    dismissDrawer () {
+      this.$store.commit('TOGGLE_LEFT_DRAWER')
     }
   }
 };

@@ -115,9 +115,10 @@ export default {
     playheadPos() {
       // If no scrollStatus assume start
       if (typeof this.scrollStatus === 'undefined') return 0
-
+      
       // Set playhead position relative to vis width
-      return parseInt((100 / parseInt(this.contentDuration)) * this.scrollStatus.currentTime)
+      const pos = parseInt((100 / parseInt(this.contentDuration)) * this.scrollStatus.currentTime)
+      return pos ? pos : 0
     }
   },
   methods: {
@@ -130,7 +131,7 @@ export default {
       if (_find(this.animations, { x: pos })) return console.log('Exists!')
       
       // Put new animation at start of array
-      this.animations.unshift(animation)
+      // this.animations.unshift(animation)
       
       // Limit number of animations
       if (this.animations.length > 10) this.animations.pop()

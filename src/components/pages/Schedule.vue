@@ -3,24 +3,20 @@
 .schedule-page(name="schedule-page")
   .col#col-main
     .main-container
-      narrow-page-header(title="Explore content" subtitle="Dive in to incredible live classes")
+      narrow-page-header(v-bind:title="course.title" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
-          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'class', params: { classSlug: theClass.slug } }" v-bind:class="{ released: isReleased(theClass) }")
-            .calendar-tile
+          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'content', params: { classSlug: theClass.slug } }" v-bind:class="{ released: isReleased(theClass), 'has-release': theClass.releaseAt }")
+            .calendar-tile(v-if="theClass.releaseAt")
               .day-label
                 | {{ releaseDay(theClass) }}
               .month-label
                 | {{ releaseMonth(theClass) }}
             .state-tags
-              .state-tag.active(v-if="isActive(theClass)")
-                span Live
-              .state-tag.released(v-if="isReleased(theClass)")
-                span Open
-              .state-tag(v-if="!isReleased(theClass)")
-                span Closed
+              .state-tag.active(v-if="isActive(theClass)") Live
+              .state-tag(v-bind:class="{ released: isReleased(theClass) }") {{ isReleased(theClass) ? 'Open' : 'Closed' }}
               .clearfix
-            h3 {{ `${(index + 1)} - ${theClass.title}` }}
+            h3 {{ theClass.title }}
             h5 {{ (!theClass.description) ? 'No description provided was for this class' : theClass.description }}
             .clearfix
 
@@ -91,19 +87,19 @@ export default {
         box-shadow()
         border-box()
         animate()
-        background-color $color-lightest-grey
-        border-bottom $color-border 1px solid
+        background-color white
         min-height 92px
         padding 30px
-        padding-left 140px
         position relative
+        &:not(:last-child)
+          border-bottom $color-border 1px solid
+        &.has-release
+          padding-left 140px
         &.released
           background-color white
         &:hover
           cursor pointer
           background-color $color-lightest-grey
-        &:last-child
-          border-bottom none
         h3
           reset()
           font-size 1.3em
@@ -120,7 +116,7 @@ export default {
           top 15px
           right 15px
           .state-tag
-            transition(height 0.3s ease)
+            animate()
             radius(12px)
             box-sizing()
             background-color $color-border
@@ -132,9 +128,6 @@ export default {
             margin 5px 5px 5px 0
             min-width 24px
             padding 0 10px
-            span
-              transition(opacity 0.2s ease)
-              opacity 1
             &.active
               background-color $color-info
               color white
@@ -143,10 +136,14 @@ export default {
               color white
             @media(max-width: 568px)
               radius(3px)
+              content ''
               height 6px
+              overflow hidden
               width 24px
-              span
-                opacity 0
+              &.active
+                color $color-info
+              &.released
+                color $color-success
         .calendar-tile
           box-shadow()
           radius(10px)

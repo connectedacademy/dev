@@ -161,6 +161,8 @@ export default {
       let scrollPos = window.scrollY
 
       const element = document.getElementById('course-content-liveclass');
+      if (!element) return
+      
       const content = _find(this.$store.getters.currentClass.content, { content_type: 'class' })
       
       if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return

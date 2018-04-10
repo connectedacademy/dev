@@ -92,7 +92,7 @@ export default {
       API.course.getLikeCount(
         request,
         (response) => {
-          this.$log.info(`123Response from like count request - '${this.contentSlug}'`)
+          this.$log.info(`Response from like count request - '${this.contentSlug}'`)
           this.$log.info(response)
           // this.likeCount = reduce(response, function(sum, o) {
           //   return o

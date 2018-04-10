@@ -51,21 +51,24 @@ export default {
   .slick-slider
     button.slick-arrow
       animate()
-      radius(4px)
+      radius(22px)
       border none
-      background alpha($color-darkest-grey, 0.5)
-      margin-top -46px
+      background $color-info
+      color white
+      height 44px
+      margin-top -22px
       outline 0
-      padding 30px 15px
+      padding 0
       position absolute
       top 50%
+      width 44px
       z-index 1
       &:hover
         cursor pointer
-        background alpha($color-darkest-grey, 0.8)
+        background darken($color-info, 10%)
       svg
         height 30px
-        color white
+        fill white
       &.slick-prev
         left 8px
       &.slick-next

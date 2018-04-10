@@ -3,9 +3,9 @@
   .class-page(name="class-page")
     .col#col-main
       .main-container
-        narrow-page-header(v-if="currentClass.loading" v-bind:title="currentClass.title" subtitle="One moment.." link="" route="schedule")
-        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="`Explore other content`" v-bind:link="liveListenerCount")
-        loading(v-if="currentClass && currentClass.loading")
+        narrow-page-header(v-if="isLoading" title="Loading..." v-bind:subtitle="course.title" link="" route="schedule")
+        narrow-page-header(v-else v-bind:title="currentClass.title" v-bind:subtitle="course.title" v-bind:link="liveListenerCount")
+        loading(v-if="isLoading")
         live-class(v-else v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
 </template>
@@ -54,6 +54,9 @@ export default {
   },
   computed: {
     ...mapGetters(['course', 'currentClass']),
+    isLoading () {
+      return !this.currentClass || this.currentClass.loading
+    },
     content () {
       return _find(this.currentClass.content, { content_type: 'class' })
     },

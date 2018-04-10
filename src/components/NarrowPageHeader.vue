@@ -1,14 +1,21 @@
 <template lang="pug">
   .narrow-page-header
-    h1.page-title {{ title }}
+    h1.page-title {{ prettyTitle }}
     h2.page-subtitle(v-html="subtitle")
     router-link.page-link(v-bind:to="{ name: route }") {{ link }}
 </template>
 
 <script>
+import _capitalize from 'lodash/capitalize'
+
 export default {
   name: 'narrow-page-header',
-  props: ['title', 'subtitle', 'link', 'route']
+  props: ['title', 'subtitle', 'link', 'route'],
+  computed: {
+    prettyTitle () {
+      return _capitalize(this.title)
+    }
+  }
 }
 </script>
 
@@ -25,11 +32,13 @@ export default {
   h1.page-title
     reset()
     font-size 1.8em
+    min-height 40px
   a.page-link, h2.page-subtitle
     reset()
     color white
     font-size 1em
     font-weight bold
+    min-height 22px
     text-decoration none
   a.page-link
     position absolute

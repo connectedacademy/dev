@@ -11,6 +11,7 @@ const Survey = () => import('@/components/survey/Survey')
 const Registration = () => import('@/components/authentication/Registration')
 
 const Class = () => import('@/components/Class')
+const Content = () => import('@/components/class/Content')
 const Markdown = () => import('@/components/Markdown')
 
 const Feedback = () => import('@/components/feedback/Feedback')
@@ -33,6 +34,11 @@ const router = new Router({
       name: 'schedule',
       path: '/schedule',
       component: Schedule,
+    },
+    {
+      name: 'content',
+      path: '/content/:classSlug',
+      component: Content,
     },
     {
       name: 'class',

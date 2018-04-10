@@ -97,7 +97,7 @@ Vue.http.interceptors.push((request, next) => {
 Vue.config.lang = 'en'
 Vue.config.fallbackLang = 'en'
 
-store.dispatch('getCourse')
+store.dispatch('getSchedule')
 
 // Particle effect
 require('particles.js')

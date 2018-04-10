@@ -45,7 +45,7 @@ import Students from '@/components/profile/panels/Students'
 import Submissions from '@/components/profile/panels/Submissions'
 import Messages from '@/components/profile/panels/Messages'
 import QuestionResponses from '@/components/profile/panels/QuestionResponses'
-import Storify from '@/components/profile/panels/Storify'
+// import Storify from '@/components/profile/panels/Storify'
 import Moderation from '@/components/profile/panels/Moderation'
 
 export default {
@@ -60,7 +60,7 @@ export default {
     Submissions,
     Messages,
     QuestionResponses,
-    Storify,
+    // Storify,
     Moderation
   },
   mounted() {
@@ -113,11 +113,11 @@ export default {
           label: 'Class Responses',
           component: 'submissions',
         },
-        {
-          role: 'teacher',
-          label: 'Class Storify',
-          component: 'storify',
-        },
+        // {
+        //   role: 'teacher',
+        //   label: 'Class Storify',
+        //   component: 'storify',
+        // },
         {
           role: 'teacher',
           label: 'Class Students',

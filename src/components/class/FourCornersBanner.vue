@@ -90,7 +90,7 @@ $corner-offset = 15px
 $corner-width = 8px
 
 #four-corners-banner
-  radius(6px)
+  radius(10px)
   background-color #0B2130
   background url('../../assets/images/lake.jpg')
   background-image()
@@ -101,13 +101,11 @@ $corner-width = 8px
   position relative
   text-align center
 
-  @media(max-width: 800px)
-    radius(0)
-
   &:after
     animate()
     pinned()
-    background-color alpha(black, 0.5)
+    radius(10px)
+    background-color alpha(black, 0.3)
     content ''
     position absolute
     pointer-events none
@@ -115,6 +113,8 @@ $corner-width = 8px
 
   #tile-wrapper
     animate()
+    radius(10px)
+    // border alpha(white, 0.2) 1px solid
     transition-duration 1s
     height 130px
     overflow visible
@@ -138,10 +138,12 @@ $corner-width = 8px
       overflow hidden
 
     .pure-button
-      background-color alpha(white, 0.1)
+      radius(20px)
+      background-color alpha(white, 0.2)
       border-color transparent
       color white
       margin 10px auto 5px auto
+      padding 10px 20px
       &:hover
         background-color white
         color $color-darkest-grey
