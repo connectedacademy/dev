@@ -8,7 +8,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'page-header',
   props: ['title', 'identifier']
@@ -24,9 +23,9 @@ export default {
     pinned()
     background-color $color-primary
     height $page-header-height
-    padding 0 10px
+    padding 0 10px 0 40px
     position fixed
-    top $navigation-height
+    top 0
     bottom auto
     z-index 2
     &.homework
@@ -44,6 +43,6 @@ export default {
     .profile-class-selector
       position absolute
       top 0px
-      right 10px
+      right 60px
       z-index 10
 </style>

@@ -42,8 +42,8 @@ export default {
     login: 'Login',
     logout: 'Logout',
 
-    login_with_twitter: 'Continue with Twitter',
     login_to_participate: 'Login to Participate',
+    login_with_twitter: 'Sign in with Twitter to gain full access to the course!',
 
     register: 'Register',
     welcome_to_registration: 'Welcome to registration',
@@ -61,7 +61,7 @@ export default {
     i_agree_to_terms_and_conditions: 'I agree with the terms & conditions',
 
     show_hints: 'Show Hints',
-    dashboard: 'View Dashboard',
+    dashboard: 'Dashboard',
 
     form: {
       your_name: 'Your Name',

@@ -2,11 +2,7 @@
 
 .profile-page
   
-  page-header(title="Dashboard" identifier="profile")
-
-    profile-class-selector
-
-  .visualisation-container(v-if="profilespaClass")
+  //- .visualisation-container
     visualisation(v-bind:contentDuration="1740" v-bind:classSlug="profileClass.slug" contentSlug="liveclass" v-bind:showReflections="true" v-bind:classView="false" visHeight="200px")
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")
@@ -36,8 +32,6 @@ import PageStyle from '@/mixins/PageStyle'
 
 // Components
 import Visualisation from '@/components/live/Visualisation'
-import PageHeader from '@/components/PageHeader'
-import ProfileClassSelector from '@/components/profile/ProfileClassSelector'
 
 // Panels
 import User from '@/components/profile/panels/User'
@@ -52,8 +46,6 @@ export default {
   name: 'profile-main',
   mixins: [ Auth, PageStyle ],
   components: {
-    PageHeader,
-    ProfileClassSelector,
     Visualisation,
     User,
     Students,
@@ -191,9 +183,6 @@ export default {
 
 $action-expanded-max-width = 500px
 
-.profile-page
-  padding-top $navigation-height
-
 .visualisation-container
   pinned()
   background-color lighten($color-profile, 5%)
@@ -231,8 +220,7 @@ $action-expanded-max-width = 500px
       
 // Dashboard
 .dashboard
-  padding 20px
-  padding-top $page-header-height + 20px
+  padding $page-header-height 20px 20px 20px
   .gutter-block-selector
     width 20px
   .dashboard--item
@@ -240,6 +228,8 @@ $action-expanded-max-width = 500px
     background-color white
     margin-bottom 20px
     overflow hidden
+    &:first-child
+      overflow visible
     h1
       reset()
 </style>

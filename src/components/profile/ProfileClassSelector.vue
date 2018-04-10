@@ -65,17 +65,19 @@ export default {
 
 @import '~stylus/shared'
 
-$selector-height = 40px
+$selector-height = 60px
 
 ul.profile-class-selector
   cleanlist()
   radius(4px)
   box-shadow()
-  margin 15px 5px
+  border-bottom $color-lightest-grey 3px solid
   height $selector-height
-  max-width 280px
+  max-width 400px
   min-width 160px
+  position relative
   overflow hidden
+  z-index 55
   &.selecting
     height auto
   li.profile-class-selector--item
@@ -83,9 +85,15 @@ ul.profile-class-selector
     animate()
     background-color white
     border-bottom $color-border 1px solid
-    padding 0 20px
+    color #666
     line-height $selector-height
+    height 60px
+    font-size 1.2em
+    font-weight bold
+    overflow hidden
+    padding 0 40px 0 20px
     position relative
+    text-align left
     &:hover
       cursor pointer
       background-color $color-lightest-grey
@@ -103,7 +111,7 @@ ul.profile-class-selector
     &.active
       .toggle
         background-color $color-success
-    &:last-child
-      border-bottom none
+      &:last-child
+        border-bottom none
 
 </style>

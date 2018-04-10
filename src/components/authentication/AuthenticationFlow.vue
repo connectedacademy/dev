@@ -1,13 +1,14 @@
 <template lang="pug">
 transition(name="slide-up")
   .auth-modal(v-if="isVisible")
-    .auth-modal--header
-      h1 {{ $t('auth.authenticate') }}
+    //- .auth-modal--header
+    //-   h1 {{ $t('auth.authenticate') }}
     .auth-modal--container
-      p Sign in with Twitter to gain full access to Connected Academy.
+      p {{ $t('auth.login_with_twitter') }}
 
       button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
-        | {{ $t('auth.login_with_twitter') }}
+        i.fab.fa-twitter
+        | {{ $t('common.continue') }}
 
 </template>
 

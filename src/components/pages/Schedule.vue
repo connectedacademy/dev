@@ -73,7 +73,6 @@ export default {
 
 .schedule-page
   .main-container
-    padding 0 10px
     h1
       reset()
       margin-bottom 20px

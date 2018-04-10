@@ -37,7 +37,7 @@ export default {
       return this.$store.state.navigation.visible
     },
     isRoot() {
-      const paths = ['schedule', 'home', 'about', 'faq']
+      const paths = ['schedule', 'home', 'about', 'faq', 'profile']
       return paths.indexOf(this.$route.name) !== -1
     }
   }

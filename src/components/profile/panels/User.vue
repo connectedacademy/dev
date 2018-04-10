@@ -2,33 +2,37 @@
 
 .profile-panel.no-header
 
-  .profile-panel--content
-    img#user-avatar(v-bind:src="profileImage" height="50px")
+  //- profile-panel-header(label="Select Class")
+  profile-class-selector
 
-    h3 {{ user.name }}
+  .profile-panel--content
+
+    
+    .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
+      | Generate Teacher Code
+    .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
+      //- pre {{ classroom }}
+      .code Class Code - {{ classroom.code }}
+      .teacher(v-if="classroom.teacher && classroom.teacher.name") {{ classroom.teacher.name }}
+      //- pre {{ classroom }}
+
+    //- img#user-avatar(v-bind:src="profileImage" height="50px")
+
+    //- h3 {{ user.name }}
 
     //- pre {{ user }}
     
     //- h3 Roles
-    tag-list(v-bind:tags="userRoles")
+    //- tag-list(v-bind:tags="userRoles")
 
     .clearfix
 
-    #admin-mode-button.pure-button.pure-button-subtle.pure-button-small(@click="toggleAdminView" v-bind:class="{ active: adminView }") Admin View
+    //- #admin-mode-button.pure-button.pure-button-subtle.pure-button-small(@click="toggleAdminView" v-bind:class="{ active: adminView }") Admin View
     
     .clearfix
 
     //- h3 Linked Accounts
     //- tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
-    
-    h3 Class Code
-    .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
-      | Generate Teacher Code
-    .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
-      //- pre {{ classroom }}
-      .code {{ classroom.code }}
-      .teacher(v-if="classroom.teacher && classroom.teacher.name") {{ classroom.teacher.name }}
-      //- pre {{ classroom }}
 
 </template>
 
@@ -37,8 +41,10 @@ import API from '@/api'
 import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 
+import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 import ActionSelector from '@/components/profile/ActionSelector'
 import TagList from '@/components/shared/TagList'
+import ProfileClassSelector from '@/components/profile/ProfileClassSelector'
 
 import _find from 'lodash/find'
 import _filter from 'lodash/filter'
@@ -47,8 +53,10 @@ export default {
   name: 'user',
   props: ['label', 'adminView'],
   components: {
+    ProfilePanelHeader,
     ActionSelector,
     TagList,
+    ProfileClassSelector
   },
   mounted() {
     this.getClassrooms()
@@ -123,24 +131,19 @@ export default {
 .profile-panel
   .profile-panel--content
     padding 15px
-    text-align center
-    img#user-avatar
-      radius(50%)
-      height 80px
-      margin-top 20px
-      width 80px
+    text-align left
 
     .classroom-tile
       radius(6px)
       background $color-darkest-grey
       color white
-      margin-bottom 10px
-      padding 5px
+      line-height 44px
+      padding 0 5px
+      text-align center
       &:last-child
         margin-bottom 0
       .code
         font-weight bold
-        margin 5px
       .teacher
         font-weight normal
         margin 5px

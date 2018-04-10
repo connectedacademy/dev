@@ -18,7 +18,7 @@
           li Deny
 
         ul.tweet-actions(v-else-if="canJump")
-          router-link.jump-action(tag="li" v-bind:to="{ name: 'class', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
+          router-link.jump-action(tag="li" v-bind:to="{ name: 'live', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
             i.fas.fa-link
         
         ul.tweet-actions(v-else)

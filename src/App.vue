@@ -145,11 +145,10 @@ body.disable-scroll
       max-width $col-width
       padding-top $navigation-height
       position relative
+      width calc(100% - 20px)
 
       @media(max-width: 800px)
-        max-width 100%
-        margin 0 0px
-        padding-top $navigation-height
+        margin-bottom 0
 
 #content-overlay
   pinned()

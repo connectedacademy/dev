@@ -25,7 +25,7 @@ const getters = {
   primaryContent() {
     if (!state.current_class) return []
     return _filter(state.current_class.content, (content) => {
-      const types = ['intro', 'pre', 'postclass', 'fourcorners', 'nextclass']
+      const types = ['intro', 'content', 'fourcorners', 'nextclass']
       return types.indexOf(content.content_type) !== -1
     })
   },
