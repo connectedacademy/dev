@@ -80,49 +80,14 @@ export default {
 
     .slick-slide
       animate()
-      opacity 0.3
       outline 0
       img
-        height 204px
-        max-height 204px
+        height 240px
+        max-height 240px
         max-width 100%
         margin 0 10px
-      &:hover
-        cursor pointer
-      &.slick-current
-        opacity 1
-
-  .slick-track
-    z-index 1
-    position relative
-
-    .slick-slide
-      opacity 0.5
-      outline 0
-      img
-        height 204px
-        max-height 204px
-        max-width 100%
-        margin 0 10px
-      &:hover
-        cursor pointer
-      &.slick-current
-        opacity 1
-
-  .slick-track
-    z-index 1
-    position relative
-
-    .slick-slide
-      opacity 0.5
-      outline 0
-      img
-        height 300px
-        max-height 300px
-        max-width 100%
-        margin 0 10px
-      &:hover
-        cursor pointer
+      // &:hover
+      //   cursor pointer
       &.slick-current
         opacity 1
 </style>
