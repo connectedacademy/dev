@@ -8,7 +8,7 @@
   h5.user-account {{ user.account }}
 
   router-link.pure-button.pure-button-info.full-width(v-bind:to="{ name: 'profile' }") {{ $t('auth.dashboard') }}
-  //- .pure-button.pure-button-action(v-if="false" @click="showHints") {{ $t('auth.show_hints') }}
+  .pure-button.pure-button-action.full-width(@click="showHints") {{ $t('auth.show_hints') }}
   //- .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 
 </template>
