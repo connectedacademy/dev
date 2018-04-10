@@ -67,7 +67,7 @@
           // Check for flash messages
           if (this.$route.query.flash) {
             // TODO: Make a modal with use of this.$route.query.flash.type
-            alert(this.$route.query.flash.msg)
+            // alert(this.$route.query.flash.msg)
           }
         },
         deep: true
@@ -141,7 +141,7 @@ body.disable-scroll
 
     &#col-main
       radius($corner-radius)
-      margin 0 auto 60px auto
+      margin 0 auto 80px auto
       max-width $col-width
       padding-top $navigation-height
       position relative

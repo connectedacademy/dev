@@ -14,8 +14,10 @@ html, body
 .pull-right
   float right
 
-.clearfix
+.clearfix::after
+  content ""
   clear both
+  display table
   float none
 
 .no-margin

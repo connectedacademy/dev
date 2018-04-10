@@ -2,7 +2,7 @@
   
   #media-lightbox.animated.fadeIn(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
     #lightbox--close(@click="toggleLightbox()")
-      i.fas.fa-close.fa-2x
+      i.fas.fa-times.fa-2x
     .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${course.baseUri}../media/large/${currentLightboxMedia}')` }")
 
 </template>

@@ -25,7 +25,7 @@ const getters = {
 
 // actions
 const actions = {
-  getCourse({
+  getSchedule({
     commit,
   }) {
     API.course.getSchedule(
@@ -46,17 +46,15 @@ const actions = {
       title: classSlug.charAt(0).toUpperCase() + classSlug.slice(1),
       loading: true,
     }
-    setTimeout(() => {
-      API.course.getSpec(
-        classSlug,
-        response => commit(types.GET_SPEC_SUCCESS, {
-          response,
-        }),
-        response => commit(types.GET_SPEC_FAILURE, {
-          response,
-        }),
-      )
-    }, 500)
+    API.course.getSpec(
+      classSlug,
+      response => commit(types.GET_SPEC_SUCCESS, {
+        response,
+      }),
+      response => commit(types.GET_SPEC_FAILURE, {
+        response,
+      }),
+    )
   },
   getHubs({
     commit,

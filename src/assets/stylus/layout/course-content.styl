@@ -1,16 +1,13 @@
 @import '~stylus/shared'
 
 .course-content
+  box-shadow()
+  radius($corner-radius)
   background-color white
   margin $tile-spacing 0 0 0
   min-height 100px
   padding 0
   position relative
-  &:last-child
-    margin-bottom 100px
-  @media(min-width: 800px)
-    box-shadow()
-    radius($corner-radius)
   @media(max-width: 800px)
     margin $tile-spacing 0 0 0
 
@@ -30,8 +27,6 @@
     background-color transparent
     overflow hidden
     padding 20px 20px 10px 20px
-    @media(max-width: 800px)
-      radius-top(0)
     h1.content-title
       reset()
       color $color-text-dark-grey
@@ -53,8 +48,6 @@
         margin 0 auto
       svg
         color white
-      @media(max-width: 800px)
-        radius(0)
 
   .course-content--body
     overflow hidden
@@ -68,5 +61,8 @@
   .course-content--footer
     radius-bottom($corner-radius)
     padding 20px
-    @media(max-width: 800px)
-      radius-bottom(0)
+
+  // @media(max-width: 800px)
+  //   .course-content--header, .course-content--footer
+  //     radius(0)
+      
