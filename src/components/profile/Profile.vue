@@ -35,7 +35,7 @@ import Auth from '@/mixins/Auth'
 import PageStyle from '@/mixins/PageStyle'
 
 // Components
-import Visualisation from '@/components/conversation/Visualisation'
+import Visualisation from '@/components/live/Visualisation'
 import PageHeader from '@/components/PageHeader'
 import ProfileClassSelector from '@/components/profile/ProfileClassSelector'
 

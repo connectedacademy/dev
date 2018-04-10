@@ -28,13 +28,13 @@ import Moment from 'moment-mini'
 import _filter from 'lodash/filter'
 import _includes from 'lodash/includes'
 
-import LiveClass from '@/components/conversation/LiveClass'
-import DeepDive from '@/components/conversation/DeepDive'
-import Homework from '@/components/conversation/Homework'
-import FourCornersBanner from '@/components/conversation/FourCornersBanner'
-import NextClass from '@/components/conversation/NextClass'
-import Survey from '@/components/conversation/Survey'
-import FutureContent from '@/components/conversation/FutureContent'
+import LiveClass from '@/components/live/LiveClass'
+import DeepDive from '@/components/live/DeepDive'
+import Homework from '@/components/live/Homework'
+import FourCornersBanner from '@/components/live/FourCornersBanner'
+import NextClass from '@/components/live/NextClass'
+import Survey from '@/components/live/Survey'
+import FutureContent from '@/components/live/FutureContent'
 
 export default {
   name: 'course-content',

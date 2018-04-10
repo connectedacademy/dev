@@ -39,7 +39,7 @@
   
   import MessageComposer from '@/components/MessageComposer'
   import MediaContainer from '@/components/MediaContainer'
-  import Visualisation from '@/components/conversation/Visualisation'
+  import Visualisation from '@/components/live/Visualisation'
 
   import _round from 'lodash/round'
 

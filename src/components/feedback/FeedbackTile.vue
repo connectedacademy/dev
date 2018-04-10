@@ -20,7 +20,7 @@ export default {
   props: ['content'],
   methods: {
     viewFeedback() {
-      this.$router.replace(`/feedback/${this.content.id.replace('#', '%23')}`)
+      this.$router.replace({ name: 'feedback', params: { id: this.content.id.replace('#', '%23') } })
     }
   }
 }

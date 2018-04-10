@@ -14,7 +14,7 @@ import _take from 'lodash/take'
 import _reverse from 'lodash/reverse'
 import _orderBy from 'lodash/orderBy'
 
-import Message from '@/components/conversation/Message'
+import Message from '@/components/live/Message'
 import MessageComposer from '@/components/MessageComposer'
 
 export default {

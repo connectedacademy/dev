@@ -29,7 +29,7 @@ import { EventBus } from '@/event-bus.js';
 import Messages from '@/mixins/Messages';
 import Subtitles from '@/mixins/Subtitles';
 
-import TimeSegment from '@/components/conversation/TimeSegment';
+import TimeSegment from '@/components/live/TimeSegment';
 
 export default {
   name: 'conversation-container',

@@ -1,7 +1,7 @@
 <template lang="pug">
   .narrow-page-header
-    h1.page-title {{ prettyTitle }}
-    h2.page-subtitle(v-html="subtitle")
+    .page-title {{ prettyTitle }}
+    .page-subtitle(v-html="subtitle")
     router-link.page-link(v-bind:to="{ name: route }") {{ link }}
 </template>
 
@@ -21,19 +21,19 @@ export default {
 
 <style lang="stylus" scoped>
 
-@import '~stylus/shared'
+@import '~stylus/shared/mixins'
 
 .narrow-page-header
   color white
   padding 0 20px
   position relative
-  @media(max-width: 800px)
-    padding 20px 20px 0 20px
-  h1.page-title
+  .page-title
     reset()
+    color white
     font-size 1.8em
+    font-weight bold
     min-height 40px
-  a.page-link, h2.page-subtitle
+  a.page-link, .page-subtitle
     reset()
     color white
     font-size 1em

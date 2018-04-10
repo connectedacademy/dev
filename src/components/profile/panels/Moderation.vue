@@ -23,7 +23,7 @@ import _orderBy from 'lodash/orderBy'
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 import StudentTile from '@/components/profile/tiles/StudentTile'
 
-import Message from '@/components/conversation/Message'
+import Message from '@/components/live/Message'
 
 export default {
   name: 'moderation',

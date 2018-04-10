@@ -10,9 +10,10 @@ const Survey = () => import('@/components/survey/Survey')
 
 const Registration = () => import('@/components/authentication/Registration')
 
-const Class = () => import('@/components/Class')
+const Class = () => import('@/components/class/Class')
 const Content = () => import('@/components/class/Content')
 const Markdown = () => import('@/components/Markdown')
+const Live = () => import('@/components/live/Live')
 
 const Feedback = () => import('@/components/feedback/Feedback')
 const FeedbackView = () => import('@/components/feedback/FeedbackView')
@@ -36,14 +37,26 @@ const router = new Router({
       component: Schedule,
     },
     {
-      name: 'content',
-      path: '/content/:classSlug',
-      component: Content,
-    },
-    {
       name: 'class',
-      path: '/class/:classSlug/:contentSlug?/:segmentId?',
+      path: '/class/:classSlug',
       component: Class,
+      children: [
+        {
+          name: 'content',
+          path: '',
+          component: Content
+        },
+        {
+          name: 'markdown',
+          path: '/markdown/:url',
+          component: Markdown,
+        },
+        {
+          name: 'live',
+          path: 'live/:segmentId?',
+          component: Live
+        }
+      ]
     },
     {
       name: 'course',
@@ -72,11 +85,6 @@ const router = new Router({
       name: 'fourcorners',
       path: '/fourcorners',
       component: FourCornersOnboarding,
-    },
-    {
-      name: 'markdown',
-      path: '/markdown/:url',
-      component: Markdown,
     },
     {
       name: 'about',

@@ -36,11 +36,9 @@ html, body
 
 .main-container
   radius($corner-radius)
-  margin-top 20px
   position relative
   @media(max-width: 800px)
     radius(0)
-    margin-top 0
   &.main-container-padded
     padding 20px
 
@@ -48,12 +46,10 @@ html, body
   radius($corner-radius)
   padding 20px
   margin 0 0 20px 0
-  @media(max-width: 800px)
-    radius(0)
   &.white-block
     background-color white
   &.padded-block
-    padding 40px
+    padding 20px
   &.unpadded-block
     padding 0
   &.header-block

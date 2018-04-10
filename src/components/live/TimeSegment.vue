@@ -45,9 +45,9 @@
   import API from '@/api';
   
   import MessageComposer from '@/components/MessageComposer';
-  import Subtitle from '@/components/conversation/Subtitle';
-  import Message from '@/components/conversation/Message';
-  import MockMessage from '@/components/conversation/MockMessage';
+  import Subtitle from '@/components/live/Subtitle';
+  import Message from '@/components/live/Message';
+  import MockMessage from '@/components/live/MockMessage';
   
   export default {
     name: 'time-segment',
@@ -151,7 +151,7 @@
         if (typeof this.peekSegment !== 'undefined') return;
         
         // Update url
-        this.$router.replace({ name: 'class', params: { classSlug: this.classSlug, contentSlug: this.contentSlug, segmentId: this.message.segmentGroup } });
+        this.$router.replace({ name: 'live', params: { segmentId: this.message.segmentGroup } });
 
         if (!this.segmentOpened) {
   
@@ -178,7 +178,7 @@
           this.$store.commit('SET_PEEK_SEGMENT', undefined);
           this.$store.commit('SET_REPLYING_TO', undefined);
 
-          this.$router.replace({ name: 'class', params: { classSlug: this.classSlug } });
+          this.$router.replace({ name: 'live' });
 
         }, 300); // Timeout equal to time for overlay to fade
       },

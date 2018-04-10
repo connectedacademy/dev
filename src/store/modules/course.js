@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
+import _filter from 'lodash/filter'
 
 // initial state
 const state = {
@@ -20,6 +21,20 @@ const getters = {
   },
   currentClass() {
     return state.current_class
+  },
+  primaryContent() {
+    if (!state.current_class) return []
+    return _filter(state.current_class.content, (content) => {
+      const types = ['intro', 'pre', 'postclass', 'fourcorners', 'nextclass']
+      return types.indexOf(content.content_type) !== -1
+    })
+  },
+  secondaryContent() {
+    if (!state.current_class) return []
+    return _filter(state.current_class.content, (content) => {
+      const types = ['class', 'homework']
+      return types.indexOf(content.content_type) !== -1
+    })
   }
 }
 

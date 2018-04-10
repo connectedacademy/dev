@@ -82,7 +82,7 @@ export default {
 
 #navigation-bar
   animate()
-  background-color darken($color-primary, 10%)
+  background-color alpha($color-primary, 0.9)
   height $navigation-height
   pointer-events none
   position fixed

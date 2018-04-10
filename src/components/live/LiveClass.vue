@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .course-content(name="section-liveclass")
-
+  
   .course-content--header.block
     i.fab.fa-twitter.fa-lg
     h1.content-title {{ content.title }}
@@ -23,37 +23,40 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
-import ActionPanel from '@/components/conversation/ActionPanel';
-import ConversationContainer from '@/components/ConversationContainer';
+import ActionPanel from '@/components/live/ActionPanel'
+import ConversationContainer from '@/components/ConversationContainer'
 
-import _find from 'lodash/find';
+import _find from 'lodash/find'
 
 import emoji from 'node-emoji'
 
 export default {
-  name: 'live-class',
-  props: ['content', 'currentClass'],
+  name: 'live',
   components: {
     ActionPanel,
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['isCollapsed']),
+    ...mapGetters(['currentClass', 'isCollapsed']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
+    },
+    content () {
+      if (!this.currentClass) return {}
+      return _find(this.currentClass.content, { content_type: 'class' })
     }
   },
   methods: {
     continueListening() {
-      this.$store.commit('EXPAND_CONVERSATION');
+      this.$store.commit('EXPAND_CONVERSATION')
       setTimeout(() => {
-        this.$store.commit('PLAY_MEDIA');
-      }, 100);
+        this.$store.commit('PLAY_MEDIA')
+      }, 100)
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -72,8 +72,8 @@ export default {
 @import '~stylus/buttons'
 
 .schedule-page
-
   .main-container
+    padding 0 10px
     h1
       reset()
       margin-bottom 20px
