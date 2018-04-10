@@ -11,10 +11,7 @@
     .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
       | Generate Teacher Code
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
-      //- pre {{ classroom }}
-      .code Class Code - {{ classroom.code }}
-      .teacher(v-if="classroom.teacher && classroom.teacher.name") {{ classroom.teacher.name }}
-      //- pre {{ classroom }}
+      | Class Code - {{ classroom.code }}
 
     //- img#user-avatar(v-bind:src="profileImage" height="50px")
 
@@ -136,17 +133,12 @@ export default {
     .classroom-tile
       radius(6px)
       background $color-darkest-grey
+      border $color-darkest-grey 1px solid
       color white
-      line-height 44px
-      padding 0 5px
+      font-weight bold
+      line-height 1.5em
+      padding 0.4em 1em
       text-align center
-      &:last-child
-        margin-bottom 0
-      .code
-        font-weight bold
-      .teacher
-        font-weight normal
-        margin 5px
 
 #admin-mode-button
   margin-top 10px

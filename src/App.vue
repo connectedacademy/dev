@@ -29,20 +29,20 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex'
   
   // Components
-  import Navigation from '@/components/navigation/Navigation';
-  import LeftDrawer from '@/components/navigation/drawers/LeftDrawer';
-  import RightDrawer from '@/components/navigation/drawers/RightDrawer';
-  import AuthenticationFlow from '@/components/authentication/AuthenticationFlow';
-  import MediaLightbox from '@/components/modals/MediaLightbox';
-  import InfoModal from '@/components/modals/InfoModal';
-  import QuestionModal from '@/components/modals/QuestionModal';
-  // import Lock from '@/components/authentication/Lock';
+  import Navigation from '@/components/navigation/Navigation'
+  import LeftDrawer from '@/components/navigation/drawers/LeftDrawer'
+  import RightDrawer from '@/components/navigation/drawers/RightDrawer'
+  import AuthenticationFlow from '@/components/authentication/AuthenticationFlow'
+  import MediaLightbox from '@/components/modals/MediaLightbox'
+  import InfoModal from '@/components/modals/InfoModal'
+  import QuestionModal from '@/components/modals/QuestionModal'
+  // import Lock from '@/components/authentication/Lock'
   
   // Mixins
-  import Overlay from '@/mixins/Overlay';
+  import Overlay from '@/mixins/Overlay'
 
   export default {
     name: 'app',
@@ -75,7 +75,7 @@
       '$route.params.classSlug': {
         handler: function(nV, oV) {
           if (nV && nV !== oV) {
-            this.$store.dispatch('getSpec', nV);
+            this.$store.dispatch('getSpec', nV)
           }
         },
         deep: true
@@ -83,21 +83,21 @@
       activeSegment(nV) {
         if (nV) {
           // Segment visible, disable scroll on window
-          document.body.className = "disable-scroll";
+          document.body.className = "disable-scroll"
         } else {
-          document.body.className = "allow-scroll";
+          document.body.className = "allow-scroll"
         }
       },
     },
     mounted() {
-      this.$store.dispatch('checkAuth');
+      this.$store.dispatch('checkAuth')
 
-      this.$store.dispatch('getSpec', this.$route.params.classSlug);
+      this.$store.dispatch('getSpec', this.$route.params.classSlug)
     },
     data() {
       return {
         navTitle: 'Connected Academy',
-      };
+      }
     },
     computed: {
       ...mapGetters([
@@ -162,14 +162,14 @@ body.disable-scroll
     pointer-events all
 
 // Page background colors
-html.primary #navigation { background-color: $color-primary; }
-html.home #navigation { background-color: $color-home; }
-html.registration #navigation { background-color: $color-registration; }
-html.survey #navigation { background-color: $color-survey; }
-html.schedule #navigation { background-color: $color-schedule; }
+html.primary #navigation { background-color: $color-primary }
+html.home #navigation { background-color: $color-home }
+html.registration #navigation { background-color: $color-registration }
+html.survey #navigation { background-color: $color-survey }
+html.schedule #navigation { background-color: $color-schedule }
 
 // Just header and nav colors
-html.homework #navigation { background-color: $color-homework; }
-html.fourcorners #navigation { background-color: $color-fourcorners; }
-html.profile #navigation { background-color: $color-profile; }
+html.homework #navigation { background-color: $color-homework }
+html.fourcorners #navigation { background-color: $color-fourcorners }
+html.profile #navigation { background-color: $color-profile }
 </style>

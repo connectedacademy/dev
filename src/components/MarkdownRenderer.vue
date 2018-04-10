@@ -67,7 +67,7 @@
           if (!(this.$store.getters.course && this.$store.getters.course.baseUri)) {
             return ''
           } else {
-            return `${this.$store.getters.course.baseUri}${url}`
+            return `${this.$store.getters.course.baseUri}/${this.$route.params.classSlug}/${url}`
           }
         }
       },

@@ -13,7 +13,7 @@ export default {
   props: ['mdContent'],
   computed: {
     markdownUrl() {
-      return encodeURIComponent(`${this.$store.getters.currentClass.dir}/${this.mdContent.url}`)
+      return `${encodeURIComponent(this.mdContent.url)}`
     }
   }
 }

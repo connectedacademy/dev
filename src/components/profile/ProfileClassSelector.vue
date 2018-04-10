@@ -45,6 +45,7 @@ export default {
       if (!this.selecting) {
         this.selecting = true
       }
+      EventBus.$emit('redrawMasonry')
     },
     setClass(theClass) {
 
@@ -84,7 +85,6 @@ ul.profile-class-selector
     cleanlist()
     animate()
     background-color white
-    border-bottom $color-border 1px solid
     color #666
     line-height $selector-height
     height 60px
@@ -100,7 +100,6 @@ ul.profile-class-selector
     .toggle
       radius(50%)
       background-color $color-border
-
       height 10px
       width 10px
       margin-top -(10px / 2)
@@ -111,7 +110,5 @@ ul.profile-class-selector
     &.active
       .toggle
         background-color $color-success
-      &:last-child
-        border-bottom none
 
 </style>
