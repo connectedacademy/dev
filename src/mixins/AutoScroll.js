@@ -192,14 +192,9 @@ export default {
         currentSegmentGroup
       }
 
-      // console.log('scrollStatus')
-      // console.log(scrollStatus)
-
-      // Emit position
-      EventBus.$emit('scrollStatus', scrollStatus)
-
-      // Update local objects
+      // Update scrollStatus
       self.scrollStatus = scrollStatus
+      EventBus.$emit('scrollStatus', scrollStatus)
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true })
   }
