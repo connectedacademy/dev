@@ -35,9 +35,6 @@ export default {
   mounted() {
     this.toMessage()
   },
-  activated() {
-    window.scrollTo(0, this.$store.state.scroll.savedScrollPosition)
-  },
   data() {
     return {
       pageStyle: { type: undefined, visible: true, minimized: false }
@@ -51,19 +48,30 @@ export default {
       const segmentId = this.$route.params.segmentId
       if (segmentId) {
         this.$store.commit('EXPAND_CONVERSATION')
+        // Scroll to segment group
         const segmentGroup = parseInt(segmentId)
         setTimeout(() => {
           this.$store.commit('SET_PEEK_SEGMENT', segmentGroup)
-          this.$router.replace({ name: 'live', params: { segmentId: segmentId } });
-          setTimeout(() => {
-            var el = document.querySelector(".peek")
-            if (typeof this.$refs.innerwrapper === 'undefined') return
-            window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
-          }, 1000)
-        }, 2000)
+          var el = document.querySelector(".peek")
+          if (typeof this.$refs.innerwrapper === 'undefined') return
+          window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
+        }, 500)
+      } else if (this.$store.state.scroll.savedScrollPosition) {
+        this.$store.commit('EXPAND_CONVERSATION')
+        // Scroll to saved position
+        setTimeout(() => {
+          window.scrollTo(0, this.$store.state.scroll.savedScrollPosition)
+        }, 1000)
       }
     }
   }
 }
 </script>
 
+<style lang="stylus" scoped>
+
+@media(max-width 600px)
+  .class-page
+    margin 0 -10px
+
+</style>

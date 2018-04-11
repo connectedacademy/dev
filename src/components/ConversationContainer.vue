@@ -135,7 +135,7 @@ export default {
     background-color white
     background url('../assets/images/line.png')
     background-repeat repeat
-    background-position center -1px
+    background-position center 0
     overflow hidden
     
     .subtitle-wrapper, .message-wrapper

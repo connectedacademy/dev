@@ -359,8 +359,8 @@
   .primary-wrapper
     background-color white
     border-bottom $color-border 1px solid
-    height 156px
-    min-height 156px
+    height 157px
+    min-height 157px
     position relative
     z-index 2
     &:hover
