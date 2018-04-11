@@ -29,11 +29,11 @@ export default {
       window.addEventListener('wheel', this.onWheel, { passive: true }) // Passive to improve mobile performance
 
       // Listen for mousedown events
-      // window.addEventListener('mousedown', this.onMousedown, { passive: true }) // Passive to improve mobile performance
-      // window.addEventListener('touchstart', this.onMousedown, { passive: true }) // Passive to improve mobile performance
+      window.addEventListener('mousedown', this.onMousedown, { passive: true }) // Passive to improve mobile performance
+      window.addEventListener('touchstart', this.onWheel, { passive: true }) // Passive to improve mobile performance
 
       // Listen for mouseup events
-      // window.addEventListener('mouseup', this.onMouseup, { passive: true }) // Passive to improve mobile performance
+      window.addEventListener('mouseup', this.onMouseup, { passive: true }) // Passive to improve mobile performance
       // window.addEventListener('touchend', this.onMouseup, { passive: true }) // Passive to improve mobile performance
     }, 2000)
   },
@@ -44,8 +44,10 @@ export default {
     // Remove event listeners
     window.removeEventListener('scroll', this.onScroll)
     window.removeEventListener('wheel', this.onWheel)
-    // window.removeEventListener('mousedown', this.onMousedown)
-    // window.removeEventListener('mouseup', this.onMouseup)
+    window.removeEventListener('mousedown', this.onMousedown)
+    window.removeEventListener('mouseup', this.onMouseup)
+    window.removeEventListener('touchstart', this.onWheel)
+    // window.removeEventListener('touchend', this.onMouseup)
   },
   data() {
     return {

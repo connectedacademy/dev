@@ -2,13 +2,12 @@
 
   .profile-class-selector
     ul.profile-class-selector(v-bind:class="{ selecting: selecting }" @click="expand")
-    
+      i.fas.fa-angle-down
       li.profile-class-selector--item.active(v-if="!selecting && profileClass" @click="setClass(profileClass)")
         | {{ profileClass.title }}
-        .toggle
       li.profile-class-selector--item(v-else v-for="(theClass, index) in classes" v-bind:key="index" v-bind:class="{ active: (profileClassSlug === theClass.slug) }" @click="setClass(theClass)")
         | {{ theClass.title }}
-        .toggle
+        i.fas.fa-circle
 
 </template>
 
@@ -79,8 +78,20 @@ ul.profile-class-selector
   position relative
   overflow hidden
   z-index 55
+  svg
+    color $color-border
+    height 20px
+    width 20px
+    margin-top -(20px / 2)
+    position absolute
+    right 15px
+    top 50%
+    bottom 0
+    z-index 1
   &.selecting
     height auto
+    svg
+      opacity 0
   li.profile-class-selector--item
     cleanlist()
     animate()
@@ -97,18 +108,5 @@ ul.profile-class-selector
     &:hover
       cursor pointer
       background-color $color-lightest-grey
-    .toggle
-      radius(50%)
-      background-color $color-border
-      height 10px
-      width 10px
-      margin-top -(10px / 2)
-      position absolute
-      right 10px
-      top 50%
-      bottom 0
-    &.active
-      .toggle
-        background-color $color-success
 
 </style>

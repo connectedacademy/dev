@@ -115,7 +115,7 @@ export default {
 
 .content-wrapper
   .content-item
-    radius(10px)
+    radius($corner-radius)
     background-color white
     margin $tile-spacing 0 0 0
     overflow hidden

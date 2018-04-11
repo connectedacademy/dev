@@ -56,7 +56,7 @@ export default {
 
 .home-page
   .video-container
-    radius(10px)
+    radius($corner-radius)
     margin 0
     overflow hidden
   #details-container

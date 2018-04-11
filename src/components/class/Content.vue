@@ -63,7 +63,7 @@ export default {
 
 .content-wrapper
   .content-item
-    radius(10px)
+    radius($corner-radius)
     background-color white
     margin 20px 0 0 0
     padding 20px

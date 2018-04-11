@@ -90,7 +90,7 @@ $corner-offset = 15px
 $corner-width = 8px
 
 #four-corners-banner
-  radius(10px)
+  radius($corner-radius)
   background-color #0B2130
   background url('../../assets/images/lake.jpg')
   background-image()
@@ -106,7 +106,7 @@ $corner-width = 8px
   &:after
     animate()
     pinned()
-    radius(10px)
+    radius($corner-radius)
     background-color alpha(black, 0.3)
     content ''
     position absolute
@@ -115,7 +115,7 @@ $corner-width = 8px
 
   #tile-wrapper
     animate()
-    radius(10px)
+    radius($corner-radius)
     // border alpha(white, 0.2) 1px solid
     transition-duration 1s
     height 130px

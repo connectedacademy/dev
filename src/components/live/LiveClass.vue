@@ -67,6 +67,7 @@ export default {
 
 .course-content
   background-color white !important
+  margin-bottom 240px
   position relative
 
   .course-content--header.block
@@ -77,14 +78,8 @@ export default {
       top 10px
       right 10px
 
-    .pure-button
-      background-color transparent
-      border white 1px solid
-      color white
-      margin 10px auto 5px auto
-      &:hover
-        background-color white
-        color $color-warning
+    @media(max-width: 600px)
+      radius(0)
 
   .course-content--footer
     p
@@ -110,6 +105,8 @@ export default {
     height 160px
     position relative
     text-align center
+    @media(max-width: 600px)
+      radius(0)
     .pure-button
       box-sizing()
       left 50%

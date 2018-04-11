@@ -21,7 +21,10 @@ export default {
   methods: {
     toggleLeftDrawer() {
       this.$logging.logEvent('navigation-button', 'clicked', 1)
-      if (this.isRoot) {
+      if (this.$route.name === 'profile') {
+        this.$router.push({ name: 'schedule' })
+      }
+      else if (this.isRoot) {
         this.$store.commit('TOGGLE_LEFT_DRAWER')
       }
       else {
@@ -37,7 +40,7 @@ export default {
       return this.$store.state.navigation.visible
     },
     isRoot() {
-      const paths = ['schedule', 'home', 'about', 'faq', 'profile']
+      const paths = ['schedule', 'home', 'about', 'faq']
       return paths.indexOf(this.$route.name) !== -1
     }
   }

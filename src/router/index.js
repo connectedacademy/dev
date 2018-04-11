@@ -137,7 +137,7 @@ router.beforeEach((to, from, next) => {
   // Ensure registered
   if (to.matched.some(record => record.meta.ensureRegistered)) {
     if (!(store.state.auth.user && store.state.auth.user.registration)) {
-      next({ name: 'schedule', query: { flash: { msg: 'You are not registered', type: 'warn' } } })
+      next({ name: 'schedule', query: { flash: 'You are not registered' } })
     } else {
       next()
     }
@@ -150,7 +150,7 @@ router.beforeEach((to, from, next) => {
         if (response.user && response.user.registration) {
           // Registered
           console.log('Registered!');
-          next({ name: 'schedule', query: { flash: { msg: 'You are already registered', type: 'warn' } } })
+          next({ name: 'schedule', query: { flash: 'You are already registered' } })
         } else {
           // Not registered
           console.log('Not registered!');
@@ -158,7 +158,7 @@ router.beforeEach((to, from, next) => {
         }
       },
       response => {
-        next({ name: 'registration', query: { flash: { msg: 'Please register', type: 'warn' } } })
+        next({ name: 'registration', query: { flash: 'Please register' } })
       }
     )
   }

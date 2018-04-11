@@ -145,7 +145,7 @@ export default {
                 color $color-success
         .calendar-tile
           box-shadow()
-          radius(10px)
+          radius($corner-radius)
           background-color white
           border $color-border 1px solid
           overflow hidden

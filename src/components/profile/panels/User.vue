@@ -9,15 +9,9 @@
 
     
     .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
-      | Generate Teacher Code
+      | Generate Code
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
-      | Class Code - {{ classroom.code }}
-
-    //- img#user-avatar(v-bind:src="profileImage" height="50px")
-
-    //- h3 {{ user.name }}
-
-    //- pre {{ user }}
+      | {{ classroom.code }}
     
     //- h3 Roles
     //- tag-list(v-bind:tags="userRoles")

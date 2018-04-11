@@ -8,7 +8,7 @@
         i.fas.fa-sync
 
       .action-button.expand-button(v-if="canExpand" @click="expand")
-        i.fas.fa-expand-arrows-alt
+        i.fas.fa-expand
 
       .clearfix
 

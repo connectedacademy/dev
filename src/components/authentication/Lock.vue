@@ -44,7 +44,7 @@ export default {
   position fixed
   z-index 999
   .overlay-lock--modal
-    radius(10px)
+    radius($corner-radius)
     background-color white
     padding 30px
     position absolute

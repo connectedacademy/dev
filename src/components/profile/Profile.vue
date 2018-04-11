@@ -58,7 +58,7 @@ export default {
   mounted() {
     this.redrawInterval = setInterval(() => {
       this.$redrawVueMasonry()
-    }, 10000)
+    }, 2000)
 
     // Listen for redraw event
     EventBus.$on('redrawMasonry', () => {
@@ -200,7 +200,7 @@ $action-expanded-max-width = 500px
 // Profile action
 .profile-action
   pinned()
-  radius(10px)
+  radius($corner-radius)
   background-color white
   overflow hidden
   top 40px
