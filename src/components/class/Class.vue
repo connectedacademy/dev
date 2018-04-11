@@ -117,10 +117,12 @@ export default {
   .content-item
     radius(10px)
     background-color white
-    margin 20px 0 0 0
+    margin $tile-spacing 0 0 0
     overflow hidden
     padding 20px
     position relative
+    @media(max-width: 860px)
+      margin-top $tile-spacing-mobile
     &.liveclass-item
       background-color $color-info
       padding 10px

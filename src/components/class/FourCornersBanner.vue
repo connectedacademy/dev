@@ -100,7 +100,9 @@ $corner-width = 8px
   overflow hidden
   position relative
   text-align center
-
+  @media(max-width: 860px)
+    margin-top $tile-spacing-mobile
+    
   &:after
     animate()
     pinned()

@@ -82,6 +82,8 @@ export default {
 
       this.isAutoScrolling = true
 
+      const end = this.end
+
       let position = function(start, end, elapsed, duration) {
         return start + (end - start) * (elapsed / duration) // Linear
       }
@@ -94,13 +96,13 @@ export default {
       const start = (this.scrollStatus && this.scrollStatus.scrollPos) ? this.scrollStatus.scrollPos : 0
       const durationRate = 5000
 
-      var duration = (((this.end - start) / (this.$app.segmentHeight * 1.0)) * durationRate)
+      var duration = (((end - start) / (this.$app.segmentHeight * 1.0)) * durationRate)
 
       var step = () => {
 
         var elapsed = Date.now() - clock
 
-        const yPos = position(start, this.end, elapsed, duration)
+        const yPos = position(start, end, elapsed, duration)
 
         if (!this.preventScroll) {
           window.scroll(0, yPos)
