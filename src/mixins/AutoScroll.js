@@ -82,7 +82,7 @@ export default {
 
       this.isAutoScrolling = true
 
-      const end = this.end
+      const end = this.getEnd()
 
       let position = function(start, end, elapsed, duration) {
         return start + (end - start) * (elapsed / duration) // Linear
@@ -151,6 +151,11 @@ export default {
       this.preventScroll = false
       this.isAutoScrolling = false
     },
+    getEnd() {
+      const element = document.getElementById('liveclass');
+      if (!element) return 0
+      return element.offsetTop + element.offsetHeight
+    },
     onScroll: _throttle(function (self) {
 
       // Calculate
@@ -169,7 +174,7 @@ export default {
 
       const offsetScrollPos = scrollPos + window.innerHeight - (element.offsetTop + actionPanelHeight + additionalOffset)
       
-      this.end = element.offsetTop + element.offsetHeight
+      this.end = this.getEnd()
 
       // Time
       const currentTime = _round(offsetScrollPos / (app.segmentHeight * 0.2))

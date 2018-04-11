@@ -8,8 +8,6 @@
 
     .primary-wrapper(@click="peek")
 
-      .avatar(v-bind:style="{ 'background-image': profile }")
-
       .subtitle-wrapper(@click="openSegment()")
         subtitle(v-bind:subtitle="subtitle")
 
@@ -111,9 +109,6 @@
         'replyingTo',
         'subscribedTo',
       ]),
-      profile () {
-        return `url('${this.$store.state.auth.user.profile}')`
-      },
       quickNoteTop () {
         return `${158 + 32}px`;
       },
@@ -383,16 +378,6 @@
       position absolute
       top 50%
 
-  .primary-wrapper .avatar
-    radius(50%)
-    background-image()
-    display none
-    position absolute
-    bottom 10px
-    right 10px
-    height 20px
-    width 20px
-
   @media(min-width: 800px)
     .primary-wrapper:before
       pinned()
@@ -407,8 +392,6 @@
       width 3px
 
   &.current .primary-wrapper
-    .avatar
-      display block
 
     &:before
       left 0

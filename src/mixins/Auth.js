@@ -10,8 +10,6 @@ export default {
   },
   methods: {
     showAuth() {
-      this.$store.commit('SET_ACTIVE_SEGMENT', undefined)
-      this.$store.commit('SET_PEEK_SEGMENT', undefined)
       this.$store.commit('SHOW_AUTH')
     }
   }

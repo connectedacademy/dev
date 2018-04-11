@@ -1,11 +1,8 @@
 <template lang="pug">
 transition(name="slide-up")
   .auth-modal(v-if="isVisible")
-    //- .auth-modal--header
-    //-   h1 {{ $t('auth.authenticate') }}
     .auth-modal--container
       p {{ $t('auth.login_with_twitter') }}
-
       button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
         i.fab.fa-twitter
         | {{ $t('common.continue') }}
@@ -65,6 +62,7 @@ export default {
       font-size 1.2em
   .auth-modal--container
     radius($corner-radius)
+    box-shadow()
     background-color white
     padding 20px 30px
     text-align center
