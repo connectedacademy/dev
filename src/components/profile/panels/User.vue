@@ -132,8 +132,8 @@ export default {
 
     .classroom-tile
       radius(6px)
-      background $color-darkest-grey
-      border $color-darkest-grey 1px solid
+      background $color-success
+      border $color-success 1px solid
       color white
       font-weight bold
       line-height 1.5em

@@ -2,9 +2,6 @@
 
 .debug-panel(v-if="this.$store.state.debug")
   span
-    p currentSection
-    pre {{ currentSection }}
-  span
     p scrollPoints
     pre {{ scrollPoints }}
 
@@ -24,7 +21,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentSection',
       'scrollPoints',
       'subscribedTo',
       'mediaPlaying'

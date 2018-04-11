@@ -46,9 +46,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters([
-      'currentClass', 'currentSection'
-    ]),
+    ...mapGetters(['currentClass']),
   },
   methods: {
     loadSegmentSummary(segmentGroup, force) {

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.course-content(name="section-liveclass")
+.course-content#liveclass(name="section-liveclass")
   
   .course-content--header.block
     i.fab.fa-twitter.fa-lg

@@ -94,7 +94,7 @@ export default {
       let postData = {
         text: `${this.message.text} ${this.hashtags} ${this.url}`,
         currentClass: this.classSlug,
-        currentSection: this.contentSlug,
+        currentSection: 'liveclass',
         currentSegmentGroup: this.currentSegmentGroup,
       }
 
@@ -132,7 +132,6 @@ export default {
       'peekSegment',
       'isRegistered',
       'course',
-      'currentSection',
       'replyingTo'
     ]),
     hashtags() {

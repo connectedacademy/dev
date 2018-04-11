@@ -10,7 +10,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['course', 'currentClass', 'currentSection']),
+    ...mapGetters(['course', 'currentClass']),
   },
   methods: {
     loadSubtitles(content) {

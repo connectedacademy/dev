@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      currentSection: undefined,
+      end: undefined,
       scrollStatus: undefined,
       wheeling: false,
       isAutoScrolling: false,
@@ -62,11 +62,6 @@ export default {
   watch: {
     mediaPlaying(nV) {
       if (nV) { this.attemptAutoScroll() }
-    },
-    currentSection(nV, oV) {
-      if (typeof nV === 'undefined') {
-        this.$store.commit('PAUSE_MEDIA')
-      }
     }
   },
   computed: {
@@ -74,7 +69,7 @@ export default {
       'mediaPlaying', 'activeSegment', 'peekSegment'
     ]),
     canAutoScroll() {
-      return (!this.peekSegment && !this.preventScroll && this.mediaPlaying && (typeof this.scrollStatus !== 'undefined') && (typeof this.currentSection !== 'undefined'))
+      return !this.peekSegment && !this.preventScroll && this.mediaPlaying && (typeof this.scrollStatus !== 'undefined')
     }
   },
   methods: {
@@ -96,17 +91,16 @@ export default {
       window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
         function(fn) { window.setTimeout(fn, 15) }
 
-      var start = (this.scrollStatus && this.scrollStatus.scrollPos) ? this.scrollStatus.scrollPos : 0
+      const start = (this.scrollStatus && this.scrollStatus.scrollPos) ? this.scrollStatus.scrollPos : 0
       const durationRate = 5000
-      let end = this.currentSection.bottom
 
-      var duration = (((end - start) / (this.$app.segmentHeight * 1.0)) * durationRate)
+      var duration = (((this.end - start) / (this.$app.segmentHeight * 1.0)) * durationRate)
 
       var step = () => {
 
         var elapsed = Date.now() - clock
 
-        const yPos = position(start, end, elapsed, duration)
+        const yPos = position(start, this.end, elapsed, duration)
 
         if (!this.preventScroll) {
           window.scroll(0, yPos)
@@ -160,7 +154,7 @@ export default {
       // Calculate
       let scrollPos = window.scrollY
 
-      const element = document.getElementById('course-content-liveclass');
+      const element = document.getElementById('liveclass');
       if (!element) return
       
       const content = _find(this.$store.getters.currentClass.content, { content_type: 'class' })
@@ -168,27 +162,12 @@ export default {
       if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return
       
       // Offset
-      const actionPanelHeight = 320
-      let offsetScrollPos = scrollPos + window.innerHeight - (element.offsetTop + actionPanelHeight)
-      
-      let additionalOffset = 0;
+      const actionPanelHeight = 260
+      const additionalOffset = 200
 
-      const currentSection = {
-        title: content.title,
-        slug: content.slug,
-        content_type: content.content_type,
-        sectionTop: element.offsetTop,
-        top: (additionalOffset + element.offsetTop),
-        bottom: element.offsetTop + element.offsetHeight,
-        duration: content.duration,
-        transcript: content.transcript,
-        prompts: content.prompts,
-        images: content.images,
-        videoId: content.video,
-        soundcloudId: content.soundcloudId
-      }
+      const offsetScrollPos = scrollPos + window.innerHeight - (element.offsetTop + actionPanelHeight + additionalOffset)
       
-      self.$store.commit('SET_CURRENT_SECTION', currentSection)
+      this.end = element.offsetTop + element.offsetHeight
 
       // Time
       const currentTime = _round(offsetScrollPos / (app.segmentHeight * 0.2))
@@ -212,7 +191,6 @@ export default {
 
       // Update local objects
       self.scrollStatus = scrollStatus
-      self.currentSection = currentSection
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true })
   }

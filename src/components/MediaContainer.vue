@@ -3,9 +3,9 @@
   #media-wrapper
     
     #images-wrapper
-      slick#image-swiper(v-if="slickMode && liveclassMedia" ref="classslick" v-bind:options="slickOptions")
+      slick#image-swiper(v-if="liveclassMedia" ref="classslick" v-bind:options="slickOptions" v-on:afterChange="afterChange" v-on:swipe="interactionOccured")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
-          img(v-bind:data-lazy="`${course.baseUri}../media/small/${item.text}`" @click="setLightboxMedia(item.text)")
+          img(v-bind:data-lazy="`${course.baseUri}../media/small/${item.text}`" @click="setLightboxMedia(index)")
 
 </template>
 
@@ -58,24 +58,26 @@ export default {
       handler: function(nV, oV) {
         if (typeof nV === 'undefined') return
 
-        if (this.slickMode && (typeof this.$refs.classslick !== 'undefined')) {
+        if (typeof this.$refs.classslick !== 'undefined') {
           this.$refs.classslick.reSlick()
         }
         else {
-          this.$log.info('Either slick ref does not exist or not in slick mode')
+          this.$log.info('Slick ref does not exist')
         }
       },
       deep: true,
     },
     scrollStatus(nV, oV) {
+      if (this.userInteracting) return
       this.updateCarousel(this)
     }
   },
   data() {
     return {
+      interactionTimer: undefined,
+      userInteracting: false,
       liveclassMedia: undefined,
       scrollStatus: undefined,
-      slickMode: true,
       currentIndex: 0,
       nextIndex: 1,
       lightboxVisible: false,
@@ -85,15 +87,16 @@ export default {
       slickOptions: {
         initialSlide: 0,
         arrows: false,
-        centerMode: false,
+        centerMode: true,
         slidesToShow: 5,
         slidesToScroll: 1,
+        focusOnSelect: true,
         variableWidth: true,
         infinite: false,
-        swipe: false,
-        swipeToSlide: false,
-        touchMove: false,
-        draggable: false,
+        swipe: true,
+        swipeToSlide: true,
+        // touchMove: false,
+        draggable: true,
         useTransform: true,
         useCSS: true,
         lazyLoad: 'ondemand'
@@ -107,13 +110,26 @@ export default {
     },
   },
   methods: {
+    afterChange(event, slick, currentSlide) {
+      this.currentIndex = currentSlide
+    },
     reslick() {
       this.$nextTick(() => {
         this.$refs.classslick.reSlick()
       })
     },
-    setLightboxMedia(media) {
-      this.$store.commit('SET_LIGHTBOX_MEDIA', media)
+    interactionOccured() {
+      this.userInteracting = true
+      clearTimeout(this.interactionTimer)
+      this.interactionTimer = setTimeout(() => {
+        this.userInteracting = false
+      }, 10000)
+    },
+    setLightboxMedia(index) {
+      const media = this.liveclassMedia[index]
+      if (index === this.currentIndex) {
+        this.$store.commit('SET_LIGHTBOX_MEDIA', media.text)
+      }
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
@@ -123,9 +139,7 @@ export default {
         const image = self.liveclassMedia[i]
 
         if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
-          if (self.slickMode) {
-            self.$refs.classslick.goTo(i)
-          }
+          self.$refs.classslick.goTo(i)
           self.currentIndex = i
           self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined
           
@@ -136,7 +150,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '~stylus/shared'
 
@@ -174,16 +188,16 @@ export default {
   z-index 1
   position relative
 
-  .slick-slide
-    opacity 0.5
-    outline 0
-    img
-      height ($media-height - $media-margin)
-      max-height ($media-height - $media-margin)
-      max-width 100%
-      // margin 5px 5px 10px 5px
-    &:hover
-      cursor pointer
-    &.slick-current
-      opacity 1
+.slick-slide
+  opacity 0.5
+  outline 0
+  img
+    height ($media-height - $media-margin)
+    max-height ($media-height - $media-margin)
+    max-width 100%
+    // margin 5px 5px 10px 5px
+  &:hover
+    cursor pointer
+  &.slick-current
+    opacity 1
 </style>

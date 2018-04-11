@@ -59,13 +59,6 @@ export default {
     });
 
     window.addEventListener('keydown', (event) => {
-      // SPACE
-      // if (event.keyCode === 32) { 
-      //   if (typeof this.peekSegment !== 'undefined') return;
-      //   if (typeof this.currentSection === 'undefined') return;
-      //   event.preventDefault();
-      //   this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA');
-      // }
       // ESC
       if (event.keyCode === 27) {
         this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
@@ -80,9 +73,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'currentSection', 'peekSegment', 'activeSegment', 'course', 'mediaPlaying',
-    ]),
+    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying']),
     containerHeight() {
       return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`;
     },
@@ -99,7 +90,7 @@ export default {
       }
     },
     scrollStatus(nV, oV) {
-      if ((typeof nV === 'undefined') || (typeof oV === 'undefined') || (nV.currentSegmentGroup === oV.currentSegmentGroup) || (typeof this.currentSection === 'undefined')) return
+      if ((typeof nV === 'undefined') || (typeof oV === 'undefined') || (nV.currentSegmentGroup === oV.currentSegmentGroup)) return
 
       this.$log.info(`Fetching segment: ${nV.currentSegmentGroup}`);
       this.loadSegmentSummary(nV.currentSegmentGroup, true);

@@ -126,6 +126,8 @@ export default {
       padding 10px
       .content
         padding 10px
+      .pure-button
+        padding 0.6em 1em
       h1
         reset()
         color white

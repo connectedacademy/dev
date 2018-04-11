@@ -180,29 +180,31 @@
               }
   
               const parts = arg.split('|')
+
+              console.log(parts)
   
-              const caption = parts[0].trim()
-              const image = parts[1].trim()
-  
-              if (parts.length > 2) { // if (bio !=== '') {
-                const bio = parts[2].trim()
-                const link = parts[3].trim()
-  
+              const captionElement = (parts.length > 0) ? `<h5 class="md-bio--caption">${parts[0].trim()}</h5>` : ''
+              const image = (parts.length > 1) ? parts[1].trim() : 'default'
+              const imageElement = (image !== 'default') ? `<img class="md-bio--image" src="${image}" />` : ''
+              const bioElement = (parts.length > 2) ? `<p class="md-bio--bio">${parts[2].trim()}</p>` : ''
+              const linkElement = (parts.length > 3) ? `<a href="${parts[3].trim()}" target="_blank" class="md-bio--link">${parts[3].trim()}</a>` : ''
+              
+              if (parts.length > 2) {
                 return `
                 <div class="md-bio md-bio--with-bio">
-                  <img class="md-bio--image" src="${image}" />
+                  ${imageElement}
                   <div class="md-bio--content">
-                    <h5 class="md-bio--caption">${caption}</h5>
-                    <p class="md-bio--bio">${bio}</p>
-                    <a href="${link}" target="_blank" class="md-bio--link">${link}</a>
+                    ${captionElement}
+                    ${bioElement}
+                    ${linkElement}
                   </div>
                 </div>
                 `
               } else {
                 return `
                 <div class="md-bio">
-                  <img class="md-bio--image" src="${image}" />
-                  <h5 class="md-bio--caption">${caption}</h5>
+                  ${imageElement}
+                  ${captionElement}
                 </div>
                 `
               }

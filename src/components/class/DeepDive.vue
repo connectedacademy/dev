@@ -1,5 +1,5 @@
 <template lang="pug">
-.course-content(v-bind:name="`section-${content.slug}`" v-bind:class="{ optional: content.optional }" v-bind:id="'course-content-' + content.slug")
+.course-content(v-bind:name="`section-${content.slug}`" v-bind:class="{ optional: content.optional }")
 
   like-indicator(v-bind:content-slug="content.slug" v-bind:class-slug="currentClassSlug" v-bind:haveliked="content.haveliked" v-bind:likes="content.likes" v-bind:has-liked.sync="content.haveliked" v-bind:like-count.sync="content.likes")
 
