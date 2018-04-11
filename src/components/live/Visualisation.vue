@@ -79,14 +79,12 @@ export default {
     })
 
     EventBus.$on('socketVisupdate', (obj) => {
-
-      let i = 0
       for (const o in obj) {
         if (obj.hasOwnProperty(o)) {
-          i = i + 1
           const element = obj[o]
           if (element.msgtype === 'visupdate') {
             this.pushAnimation(element.msg.segment)
+            this.loadVisualisation(true)
           }
         }
       }
@@ -131,7 +129,7 @@ export default {
       if (_find(this.animations, { x: pos })) return console.log('Exists!')
       
       // Put new animation at start of array
-      // this.animations.unshift(animation)
+      this.animations.unshift(animation)
       
       // Limit number of animations
       if (this.animations.length > 10) this.animations.pop()
