@@ -2,7 +2,6 @@
   #webinar-message-ticker
     .message-wrapper(v-for="(message, index) in orderedMessages")
       message(v-bind:message="message")
-    message-composer(v-if="isRegistered" static="true" v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug")
 </template>
 
 <script>
@@ -15,14 +14,12 @@ import _reverse from 'lodash/reverse'
 import _orderBy from 'lodash/orderBy'
 
 import Message from '@/components/live/Message'
-import MessageComposer from '@/components/MessageComposer'
 
 export default {
   name: 'webinar-message-ticker',
   props: ['classSlug', 'contentSlug'],
   components: {
-    Message,
-    MessageComposer,
+    Message
   },
   mounted() {
     // Subscribe to socket for content messages

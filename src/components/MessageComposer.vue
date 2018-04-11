@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .message-composer-wrapper(v-bind:class="{ static: static }")
+  .message-composer-wrapper
 
     .message-composer
 
@@ -41,15 +41,13 @@ Vue.use(VueTextareaAutosize)
 
 export default {
   name: 'message-composer',
-  props: ['static', 'classSlug', 'contentSlug', 'currentSegmentGroup'],
+  props: ['classSlug', 'contentSlug', 'currentSegmentGroup'],
   mixins: [
     Auth,
   ],
   mounted() {
-    if (!this.static) {
-      // Auto focus textarea
-      if (this.$refs.textarea) this.$refs.textarea.$el.focus()
-    }
+    // Auto focus textarea
+    if (this.$refs.textarea) this.$refs.textarea.$el.focus()
   },
   data() {
     return {
@@ -141,11 +139,8 @@ export default {
       return this.course.hashtag
     },
     url() {
-      let url = `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/${this.contentSlug}`
-      if (!this.static){
-        return `${url}/${this.currentSegmentGroup}`
-      }
-      return url
+      return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/liveclass/${this.currentSegmentGroup}`
+      // return `https://${this.course.slug}.connectedacademy.io/#/class/${this.classSlug}/live/${this.currentSegmentGroup}`
     },
     shortenedUrl() {
       return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`
@@ -283,21 +278,5 @@ export default {
             line-height 30px
             margin 0px 15px
             padding 0 15px
-
-  &.static
-
-    radius(4px)
-    border $color-border 1px solid
-    margin-bottom 20px
-    position relative !important
-    bottom auto
-    top auto
-    left auto
-    right auto
-    .message-composer
-      border-top none
-      top 0
-    .message-composer--footer
-      border-top $color-border 1px solid
 
 </style>
