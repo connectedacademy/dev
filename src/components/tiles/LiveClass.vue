@@ -2,7 +2,7 @@
 .content-item.liveclass-item(v-if="$route.name === 'content'" v-bind:class="{ independent: independent }")
   .content
     h1 #[i.fab.fa-twitter]{{ content.title }}
-    p This class has a live twitter based discussion, click below to join it.
+    p {{ independent ? 'This class has a live twitter based discussion, click below to join it.' : content.description }}
   router-link.pure-button.pure-button-transparent.no-margin(v-bind:to="{ name: 'live' }")
     | Join Class
   .clearfix

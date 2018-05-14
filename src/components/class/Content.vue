@@ -65,22 +65,5 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
-@import '~stylus/buttons'
-
-.content-wrapper
-  .content-item
-    radius($corner-radius)
-    background-color white
-    margin 20px 0 0 0
-    padding 20px
-    position relative
-    &.liveclass-item
-      h3
-        reset()
-        svg
-          margin-right 6px
-      p
-        reset()
-        margin 10px 0
 
 </style>
