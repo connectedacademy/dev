@@ -46,6 +46,9 @@ export default {
         case 'nextclass':
           return 'NextClass'
 
+        case 'homework':
+          return 'Homework'
+
         default:
           return 'DeepDive'
       }
