@@ -11,7 +11,6 @@
 
   //- Authentication   
   authentication-flow
-  //- lock(passcode="76234")
 
   //- Navigation
   left-drawer
@@ -21,7 +20,7 @@
     navigation
 
     transition(name="fade" appear mode="out-in")
-      keep-alive(v-bind:include="['class', 'course']")
+      keep-alive(v-bind:include="['content']")
         router-view
 
   #content-overlay(v-on:click="dismissOverlay" v-bind:class="{ 'visible': overlayVisible }")
@@ -39,7 +38,6 @@
   import MediaLightbox from '@/components/modals/MediaLightbox'
   import InfoModal from '@/components/modals/InfoModal'
   import QuestionModal from '@/components/modals/QuestionModal'
-  // import Lock from '@/components/authentication/Lock'
   
   // Mixins
   import Overlay from '@/mixins/Overlay'

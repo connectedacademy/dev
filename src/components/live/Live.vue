@@ -29,7 +29,6 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     this.$store.commit('PAUSE_MEDIA')
-    this.$store.dispatch('saveScrollPosition', window.scrollY)
     next()
   },
   mounted() {
@@ -56,12 +55,8 @@ export default {
           if (typeof this.$refs.innerwrapper === 'undefined') return
           window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
         }, 500)
-      } else if (this.$store.state.scroll.savedScrollPosition) {
-        this.$store.commit('EXPAND_CONVERSATION')
-        // Scroll to saved position
-        setTimeout(() => {
-          window.scrollTo(0, this.$store.state.scroll.savedScrollPosition)
-        }, 1000)
+      } else {
+        window.scrollTo(0, 0)
       }
     }
   }

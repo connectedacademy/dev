@@ -32,13 +32,13 @@ export default {
     color white
     font-size 1.8em
     font-weight bold
-    min-height 40px
+    line-height 30px
   a.page-link, .page-subtitle
     reset()
     color white
     font-size 1em
     font-weight bold
-    min-height 22px
+    line-height 30px
     text-decoration none
   a.page-link
     position absolute

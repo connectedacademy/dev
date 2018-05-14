@@ -17,7 +17,6 @@ import Homework from '@/components/class/Homework'
 import FourCornersBanner from '@/components/class/FourCornersBanner'
 import NextClass from '@/components/class/NextClass'
 import Survey from '@/components/class/Survey'
-// import FutureContent from '@/components/live/FutureContent'
 
 export default {
   name: 'class-content',
@@ -27,8 +26,7 @@ export default {
     Homework,
     FourCornersBanner,
     NextClass,
-    Survey,
-    // FutureContent
+    Survey
   },
   data() {
     return {
@@ -47,7 +45,7 @@ export default {
 
         case 'nextclass':
           return 'NextClass'
-      
+
         default:
           return 'DeepDive'
       }

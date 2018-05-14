@@ -12,7 +12,7 @@
         #details-container
           h2 {{ course.title }}
           markdown-renderer(v-bind:markdown-url="markdownUrl")
-          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Start course
+          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Explore course
 
 </template>
 

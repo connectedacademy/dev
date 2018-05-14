@@ -110,9 +110,6 @@
         // Toggle playback
         this.$store.commit(this.mediaPlaying ? 'PAUSE_MEDIA' : 'PLAY_MEDIA')
 
-        // Toggle media
-        this.$store.commit(this.mediaPlaying ? 'SHOW_MEDIA' : 'HIDE_MEDIA')
-
         // Expand conversation
         if (!this.mediaPlaying) { this.$store.commit('EXPAND_CONVERSATION') }
       }

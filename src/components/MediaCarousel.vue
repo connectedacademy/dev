@@ -52,6 +52,7 @@ export default {
 @import '~stylus/shared'
 
 .media-carousel-wrapper
+  max-height 240px
   .slick-slider
     button.slick-arrow
       animate()
@@ -84,14 +85,13 @@ export default {
 
     .slick-slide
       animate()
+      display inline-block
       outline 0
       img
         height 240px
         max-height 240px
         max-width 100%
         margin 0 10px
-      // &:hover
-      //   cursor pointer
       &.slick-current
         opacity 1
 </style>

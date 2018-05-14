@@ -10,13 +10,13 @@
   .column.column-right
     .content-wrapper
       transition(name="fade" appear mode="out-in")
-        .content-item.liveclass-item(v-for="(content, index) in secondaryContent" v-bind:key="index" v-if="$route.name === 'content'")
+        .content-item.liveclass-item(v-if="liveclassContent && $route.name === 'content'")
           .content
             h1
               i.fab.fa-twitter
-              | {{ content.title }}
+              | {{ liveclassContent.title }}
             p This class has a live twitter based discussion, click below to join it.
-          router-link.pure-button.pure-button-info.full-width.no-margin(v-if="content.content_type === 'class'" v-bind:to="{ name: 'live' }")
+          router-link.pure-button.pure-button-info.full-width.no-margin(v-bind:to="{ name: 'live' }")
             | Join Class
   .clearfix
 </template>
@@ -57,7 +57,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course', 'currentClass', 'secondaryContent'])
+    ...mapGetters(['course', 'currentClass', 'liveclassContent'])
   },
   methods: {
     contentComponent (type) {
@@ -125,6 +125,7 @@ export default {
       margin-top $tile-spacing-mobile
     &.liveclass-item
       background-color $color-info
+      margin-top 20px
       padding 10px
       .content
         padding 10px

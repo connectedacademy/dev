@@ -17,7 +17,7 @@
       .corner#corner-top-left(name="4c-banner-top-left" v-bind:class="{ active: currentCorner === 'topLeft' }" @click="toggleCorner('topLeft')")
       .corner#corner-top-right(name="4c-banner-top-right" v-bind:class="{ active: currentCorner === 'topRight' }" @click="toggleCorner('topRight')")
       .corner#corner-bottom-left(name="4c-banner-bottom-left" v-bind:class="{ active: currentCorner === 'bottomLeft' }" @click="toggleCorner('bottomLeft')")
-      .corner#corner-bottom-right(name="4c-banner-bottom-right" v-bind:class="{ active: currentCorner === 'bottomRight', pulsing: currentCorner === 'default' }" @click="toggleCorner('bottomRight')")
+      .corner#corner-bottom-right(name="4c-banner-bottom-right" v-bind:class="{ active: currentCorner === 'bottomRight' }" @click="toggleCorner('bottomRight')")
 
 </template>
 
@@ -194,8 +194,6 @@ $corner-width = 8px
           right $corner-offset
           bottom $corner-offset
           opacity 0.3
-          &.pulsing
-            animation pulse 2s infinite
 
           &:hover
             opacity 1 !important
@@ -227,21 +225,4 @@ $corner-width = 8px
           &:hover
             opacity 1
 
-
-
-@-webkit-keyframes pulse
-  0%
-    opacity 0.6
-  50%
-    opacity 0.2
-  100%
-    opacity 0.6
-
-@keyframes pulse
-  0%
-    opacity 0.6
-  50%
-    opacity 0.2
-  100%
-    opacity 0.6
 </style>
