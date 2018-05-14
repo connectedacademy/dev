@@ -3,7 +3,6 @@
 
     .fourcorners-interaction
       .dialog(v-bind:class="{ active: (activeCorner !== undefined) }")
-        img(src="../../assets/logos/fourcorners/white-text.svg" height="40" v-if="activeCorner === undefined")
         .dialog--text(v-if="activeCorner !== undefined")
           h1 {{ corners[activeCorner].title }}
           p {{ corners[activeCorner].description }}

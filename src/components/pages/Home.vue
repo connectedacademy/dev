@@ -62,4 +62,6 @@ export default {
   #details-container
     padding 0px 20px 20px 20px
     text-align center
+    .pure-button
+      margin-top 10px
 </style>

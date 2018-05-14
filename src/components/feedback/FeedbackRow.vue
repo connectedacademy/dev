@@ -23,7 +23,6 @@ export default {
 
 .feedback-row
   animate()
-  background-color white
   border-left white 3px solid
   height 69px
   position relative

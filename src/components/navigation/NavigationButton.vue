@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .navigation-button(v-if="isVisible" name="navigation-button" v-on:click="toggleLeftDrawer" v-bind:class="{ active: (state === 'close'), back: !isRoot }")
+  .navigation-button(v-if="isVisible" name="navigation-button" v-on:click="performNavigation" v-bind:class="{ active: (state === 'close'), back: !isRoot }")
     .bar-wrapper(v-bind:class="{cross: (state === 'close') }")
       .bar.top-bar
       .bar.middle-bar
@@ -19,16 +19,15 @@ export default {
     ]),
   },
   methods: {
-    toggleLeftDrawer() {
+    performNavigation() {
       this.$logging.logEvent('navigation-button', 'clicked', 1)
-      if (this.$route.name === 'profile') {
-        this.$router.push({ name: 'schedule' })
-      }
-      else if (this.isRoot) {
+      if (this.isRoot) {
         this.$store.commit('TOGGLE_LEFT_DRAWER')
       }
-      else {
+      else if (document.referrer.indexOf(window.location.host) !== -1) {
         this.$router.go(-1)
+      } else {
+        this.$router.push({ name: 'schedule' })
       }
     }
   },

@@ -1,8 +1,8 @@
 <template lang="pug">
 
-.feedback-page(name="feedback-page")
+.feedback-page(name="feedback-page" v-bind:class="{ 'show-messages': (myFeedbackItems.length || feedbackItems.length || availableFeedbackItems.length) }")
   
-  page-header(title="Response Area" identifier="homework")
+  page-header(title="Homework Area" identifier="homework")
 
   #chat-list-container
     feedback-list(header="Your Responses" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="myFeedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")
@@ -15,10 +15,9 @@
       .markdown-wrapper
         markdown-renderer(v-bind:markdown-url="markdownUrl")
 
-      four-corners-link(message="This task requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
-
-      h2 Submit Response
+      h2 Submit homework
       feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
+      four-corners-link(message="This task requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
 
       #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit a response
 
@@ -215,11 +214,12 @@ $chat-list-width = 320px
 
 .feedback-page
   pinned()
-  background-color $color-lightest-grey
+  background-color white
   top $navigation-height
   overflow-x none
   overflow-y scroll
   position fixed
+  z-index 2
   
   .feedback-page--header
     pinned()
@@ -242,32 +242,40 @@ $chat-list-width = 320px
 #chat-list-container
   box-sizing()
   pinned()
+  animate()
   background-color white
   border-right $color-lighter-grey 1px solid
   overflow-y auto
   position fixed
   right auto
-  top $navigation-height + $page-header-height
+  top $navigation-height
   width $chat-list-width
+  left -($chat-list-width)
   z-index 1
   @media(max-width: 600px)
     width 75px
 
 #conversation-container
+  animate()
+  radius(6px)
   background-color white
   border-right $color-lighter-grey 1px solid
   min-height 100%
   padding 20px
-  padding-left $chat-list-width + 20px
-  padding-top $page-header-height + 20px
   position relative
   max-width 800px
   z-index 0
-  @media(max-width: 600px)
-    padding-left 75px + 20px
   h2
     color $color-text-dark-grey
     font-size 1.3em
+
+&.show-messages
+  #chat-list-container
+    left 0
+  #conversation-container
+    padding-left $chat-list-width + 20px
+    @media(max-width: 600px)
+      padding-left 75px + 20px
 
 .homework-details
 

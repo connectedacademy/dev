@@ -13,8 +13,8 @@
         .clearfix
 
         br
-
-        four-corners(v-bind:html="feedbackItem.html")
+        
+        four-corners(v-html="feedbackItem.html")
 
     .feedback-conversation
       .feedback-message-wrapper(v-for="message in feedbackMessages")
@@ -110,7 +110,7 @@ export default {
       document.location = location
     },
     closeSubmission() {
-      this.$emit('update:currentFeedbackId', undefined)
+      this.$router.push({ name: 'feedback' })
     },
     removeSubmission() {
       const postData = {

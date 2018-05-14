@@ -16,7 +16,7 @@
               .state-tag.active(v-if="isActive(theClass)") Live
               .state-tag(v-bind:class="{ released: isReleased(theClass) }") {{ isReleased(theClass) ? 'Open' : 'Closed' }}
               .clearfix
-            h3 {{ theClass.title }}
+            h3 {{ (index + 1) + ': ' + theClass.title }}
             h5 {{ (!theClass.description) ? 'No description provided was for this class' : theClass.description }}
             .clearfix
 
