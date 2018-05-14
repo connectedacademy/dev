@@ -9,46 +9,28 @@
   
   .column.column-right
     .content-wrapper
-      transition(name="fade" appear mode="out-in")
-        .content-item.liveclass-item(v-if="liveclassContent && $route.name === 'content'")
-          .content
-            h1
-              i.fab.fa-twitter
-              | {{ liveclassContent.title }}
-            p This class has a live twitter based discussion, click below to join it.
-          router-link.pure-button.pure-button-info.full-width.no-margin(v-bind:to="{ name: 'live' }")
-            | Join Class
+      live-class(v-if="liveclass" v-bind:content="liveclass" independent)
   .clearfix
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import _filter from 'lodash/filter'
+import _find from 'lodash/find'
 
 // Mixins
 import PageStyle from '@/mixins/PageStyle'
 
 // Components
 import NarrowPageHeader from '@/components/NarrowPageHeader'
-
-import DeepDive from '@/components/class/DeepDive'
-import Homework from '@/components/class/Homework'
-import FourCornersBanner from '@/components/class/FourCornersBanner'
-import NextClass from '@/components/class/NextClass'
-// import Survey from '@/components/live/Survey'
-// import FutureContent from '@/components/live/FutureContent'
+import LiveClass from '@/components/tiles/LiveClass'
 
 export default {
   name: 'class-content',
   mixins: [ PageStyle ],
   components: {
     NarrowPageHeader,
-    DeepDive,
-    Homework,
-    FourCornersBanner,
-    NextClass,
-    // Survey,
-    // FutureContent
+    LiveClass
   },
   data() {
     return {
@@ -57,20 +39,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course', 'currentClass', 'liveclassContent'])
-  },
-  methods: {
-    contentComponent (type) {
-      switch (type) {
-        case 'fourcorners':
-          return 'FourCornersBanner'
-
-        case 'nextclass':
-          return 'NextClass'
-      
-        default:
-          return 'DeepDive'
-      }
+    ...mapGetters(['course', 'currentClass']),
+    liveclass() {
+      return _find(this.currentClass.content, { content_type: 'class' })
     }
   }
 }
@@ -105,47 +76,6 @@ export default {
       margin 0 auto
       max-width 780px !important
       width calc(100% - 20px) !important
-      &.column-center
-        padding-bottom 0
-      &.column-left
+      &.column-left, &.column-right
         display none
-      &.column-right
-        padding 0 0 100px 0
-
-
-.content-wrapper
-  .content-item
-    radius($corner-radius)
-    background-color white
-    margin $tile-spacing 0 0 0
-    overflow hidden
-    padding 20px
-    position relative
-    @media(max-width: 860px)
-      margin-top $tile-spacing-mobile
-    &.liveclass-item
-      background-color $color-info
-      margin-top 20px
-      padding 10px
-      .content
-        padding 10px
-      .pure-button
-        padding 0.6em 1em
-      h1
-        reset()
-        color white
-        font-size 1.3em
-        svg
-          color white
-          margin-right 10px
-        // position absolute
-        // top 15px
-        // right 15px
-      .pure-button
-        radius(10px)
-        background-color alpha(black, 0.1)
-      p
-        reset()
-        color white
-        margin 10px 0
 </style>

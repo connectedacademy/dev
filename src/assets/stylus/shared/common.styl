@@ -56,6 +56,17 @@ html, body
     margin-top 20px
     overflow hidden
 
+.content-wrapper
+  .content-item
+    radius($corner-radius)
+    background-color white
+    margin $tile-spacing 0 0 0
+    overflow hidden
+    padding 20px
+    position relative
+    @media(max-width: 860px)
+      margin-top $tile-spacing-mobile
+
 // Transitions
 .fade-enter-active, .fade-leave-active
   animate()

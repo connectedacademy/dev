@@ -12,19 +12,21 @@ import _filter from 'lodash/filter'
 import PageStyle from '@/mixins/PageStyle'
 
 // Components
-import DeepDive from '@/components/class/DeepDive'
-import Homework from '@/components/class/Homework'
-import FourCornersBanner from '@/components/class/FourCornersBanner'
-import NextClass from '@/components/class/NextClass'
-import Survey from '@/components/class/Survey'
+import DeepDive from '@/components/tiles/DeepDive'
+import FourCornersBanner from '@/components/tiles/FourCornersBanner'
+import Homework from '@/components/tiles/Homework'
+import LiveClass from '@/components/tiles/LiveClass'
+import NextClass from '@/components/tiles/NextClass'
+import Survey from '@/components/tiles/Survey'
 
 export default {
   name: 'class-content',
   mixins: [ PageStyle ],
   components: {
     DeepDive,
-    Homework,
     FourCornersBanner,
+    Homework,
+    LiveClass,
     NextClass,
     Survey
   },
@@ -45,6 +47,9 @@ export default {
 
         case 'nextclass':
           return 'NextClass'
+
+        case 'class':
+          return 'LiveClass'
 
         case 'homework':
           return 'Homework'

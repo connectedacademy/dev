@@ -1,0 +1,31 @@
+@import '~stylus/shared'
+@import '~stylus/buttons'
+
+.content-item
+  margin-top 30px
+  padding 10px
+  &.liveclass-item
+    background-color $color-info !important
+  &.homework-item
+    background-color $color-homework !important
+  .content
+    padding 10px
+  h1
+    reset()
+    color white
+    font-size 1.3em
+    svg
+      color white
+      margin-right 10px
+  p
+    reset()
+    color white
+    margin 10px 0
+  .pure-button
+    radius(10px)
+    background-color alpha(black, 0.1)
+    border none
+    float right
+    min-width 120px
+    max-width 200px
+    padding 0.6em 1em

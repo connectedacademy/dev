@@ -11,8 +11,8 @@
 <script>
 export default {
   name: 'next-class',
-  props: ['content'],
-};
+  props: ['content']
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -1,7 +1,7 @@
 <template lang="pug">
 
   .markdown-link
-    router-link.pure-button(v-bind:name="`${mdContent.slug}-markdown-link`" v-bind:to="{ name: 'markdown', params: { url: markdownUrl }}")
+    router-link.pure-button.pure-button-white(v-bind:name="`${mdContent.slug}-markdown-link`" v-bind:to="{ name: 'markdown', params: { url: markdownUrl }}")
       | {{ $t('common.explore_content') }}
 
 </template>
@@ -24,5 +24,10 @@ export default {
 
 @import '~stylus/shared'
 @import '~stylus/buttons'
+
+.markdown-link
+  .pure-button
+    min-width 120px
+    max-width 200px
 
 </style>

@@ -140,7 +140,6 @@ $corner-width = 8px
       overflow hidden
 
     .pure-button
-      radius(20px)
       background-color alpha(white, 0.2)
       border-color transparent
       color white

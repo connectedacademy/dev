@@ -2,7 +2,6 @@ import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
 import _filter from 'lodash/filter'
-import _find from 'lodash/find'
 
 // initial state
 const state = {
@@ -26,13 +25,9 @@ const getters = {
   primaryContent() {
     if (!state.current_class) return []
     return _filter(state.current_class.content, (content) => {
-      const types = ['intro', 'content', 'fourcorners', 'nextclass', 'homework']
+      const types = ['intro', 'content', 'fourcorners', 'nextclass', 'homework', 'class']
       return types.indexOf(content.content_type) !== -1
     })
-  },
-  liveclassContent() {
-    if (!state.current_class) return undefined
-    return _find(state.current_class.content, { content_type: 'class' })
   }
 }
 

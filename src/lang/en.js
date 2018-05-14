@@ -22,7 +22,7 @@ export default {
     next_page: 'Next Page',
     previous_page: 'Previous Page',
     choose_one: 'Choose one',
-    participate: 'Explore',
+    participate: 'Participate',
 
     scroll_down_for_live_class: 'Scroll down for the live class',
   },

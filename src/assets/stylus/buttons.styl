@@ -10,8 +10,8 @@ button()
 
 .pure-button
   animate()
-  radius(4px)
   hover($color-primary, white)
+  radius(10px)
   background-color transparent
   border $color-primary 1px solid
   color $color-primary
@@ -54,6 +54,18 @@ button()
     hover($color-light-grey, $color-text-dark-grey)
     background-color transparent
     border-color $color-grey
+    color $color-text-grey
+
+  &.pure-button-transparent
+    hover(alpha(black, 0.1), white)
+    background-color alpha(black, 0.05)
+    border-color transparent
+    color white
+
+  &.pure-button-white
+    hover(alpha(black, 0.1), $color-text-grey)
+    background-color alpha(black, 0.05)
+    border-color transparent
     color $color-text-grey
   
   // Branded
