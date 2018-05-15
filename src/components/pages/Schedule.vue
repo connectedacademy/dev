@@ -2,7 +2,7 @@
 
 .schedule-page(name="schedule-page")
   .col#col-main
-    .main-container
+    .main-container(v-if="course")
       narrow-page-header(v-bind:title="course.title" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")

@@ -87,7 +87,7 @@ export default {
       slickOptions: {
         initialSlide: 0,
         arrows: false,
-        centerMode: true,
+        centerMode: false,
         slidesToShow: 5,
         slidesToScroll: 1,
         focusOnSelect: true,

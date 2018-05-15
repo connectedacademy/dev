@@ -15,10 +15,12 @@
   //- Navigation
   left-drawer
   right-drawer
+  
+  .warning-banner(v-if="!course.loaded")
+    | Site is currently offline
 
-  .main-page
+  .main-page(v-if="course.loaded")
     navigation
-
     transition(name="fade" appear mode="out-in")
       keep-alive(v-bind:include="['content']")
         router-view
@@ -99,7 +101,7 @@
     },
     computed: {
       ...mapGetters([
-        'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
+        'course', 'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
       ]),
     }
   }
@@ -170,4 +172,15 @@ html.schedule #navigation { background-color: $color-schedule }
 html.homework #navigation { background-color: $color-homework }
 html.fourcorners #navigation { background-color: $color-fourcorners }
 html.profile #navigation { background-color: $color-profile }
+
+.warning-banner
+  pinned()
+  background $color-danger
+  bottom auto
+  color white
+  height 40px
+  line-height 40px
+  position fixed
+  text-align center
+
 </style>

@@ -5,7 +5,7 @@
     img(src="../../assets/logos/fourcorners/black.svg")
   .four-corners-link--footer
     p {{ message }}
-    router-link.pure-button.pure-button-subtle.pull-right(to="/fourcorners") Learn More
+    router-link.pure-button.pure-button-white.pull-right(:to="{ name: 'fourcorners' }") Learn More
     .clearfix
 
 </template>

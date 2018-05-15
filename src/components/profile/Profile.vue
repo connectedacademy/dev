@@ -1,9 +1,6 @@
 <template lang="pug">
 
 .profile-page
-  
-  //- .visualisation-container
-    visualisation(v-bind:contentDuration="1740" v-bind:classSlug="profileClass.slug" contentSlug="liveclass" v-bind:showReflections="true" v-bind:classView="false" visHeight="200px")
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")
     component(v-bind:is="profileAction.component" v-bind:label="profileAction.label" v-bind:role="profileAction.role" v-bind:panel="profileAction" v-bind:limitHeight="false" v-bind:can-expand="false" v-bind:expanded-view="true")
@@ -30,29 +27,23 @@ import _indexOf from 'lodash/indexOf'
 import Auth from '@/mixins/Auth'
 import PageStyle from '@/mixins/PageStyle'
 
-// Components
-import Visualisation from '@/components/live/Visualisation'
-
 // Panels
 import User from '@/components/profile/panels/User'
 import Students from '@/components/profile/panels/Students'
 import Submissions from '@/components/profile/panels/Submissions'
 import Messages from '@/components/profile/panels/Messages'
 import QuestionResponses from '@/components/profile/panels/QuestionResponses'
-// import Storify from '@/components/profile/panels/Storify'
 import Moderation from '@/components/profile/panels/Moderation'
 
 export default {
   name: 'profile-main',
   mixins: [ Auth, PageStyle ],
   components: {
-    Visualisation,
     User,
     Students,
     Submissions,
     Messages,
     QuestionResponses,
-    // Storify,
     Moderation
   },
   mounted() {
@@ -79,7 +70,7 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'profile', visible: true, minimized: true },
+      pageStyle: { type: 'profile', visible: true, minimized: false },
       adminView: false,
       contentPanelVisible: false,
       panelMargin: 10,

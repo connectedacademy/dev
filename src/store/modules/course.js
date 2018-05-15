@@ -7,7 +7,9 @@ import _filter from 'lodash/filter'
 const state = {
   current_class: undefined,
   current_lang: 'en',
-  course: {},
+  course: {
+    loaded: false
+  },
   hubs: {},
 }
 
@@ -85,11 +87,14 @@ const mutations = {
     response,
   }) {
     state.course = response
+    state.course.loaded = true
   },
   [types.GET_SCHEDULE_FAILURE](initialState, {
     response,
   }) {
-    state.course = {}
+    state.course = {
+      loaded: false
+    }
     // error in response
   },
   [types.GET_SPEC_SUCCESS](initialState, {

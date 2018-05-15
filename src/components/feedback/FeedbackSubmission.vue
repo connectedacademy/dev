@@ -7,7 +7,7 @@
       | Search your site for a FourCorners image
     input(type="text" name="text" placeholder="E.g. https://example.com/page" v-model="submissionLink")
     p.pull-left {{ resultsText }}
-    .pure-button.pure-button-primary.pull-right(v-on:click="postSubmission") Begin Search
+    .pure-button.pure-button-transparent.pull-right(v-on:click="postSubmission") Begin Search
     .clearfix
   
   ul.submission-selector(v-if="submissions.length > 0")
@@ -123,20 +123,11 @@ export default {
         border none
         box-shadow none
         line-height 40px
-        margin 10px 0
+        margin 10px 0 20px 0
         padding 0 10px
         outline 0
         resize none
         width 100%
-      .pure-button
-        background-color transparent
-        border white 1px solid
-        color white
-        margin-top 10px
-        &:hover
-          background-color white
-          border-color white
-          color $color-darkest-grey
 
   ul.submission-selector
     cleanlist()
