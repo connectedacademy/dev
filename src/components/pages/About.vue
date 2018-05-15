@@ -12,6 +12,8 @@
 
         markdown-renderer(v-bind:markdown-url="markdownUrl")
 
+        a.pure-button.pure-button-info(href="https://connectedacademy.io" target="_blank") Learn More
+
 </template>
 
 <script>
@@ -46,3 +48,9 @@ export default {
 }
 
 </script>
+
+<style lang="stylus" scoped>
+
+@import '~stylus/buttons'
+
+</style>
