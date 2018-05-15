@@ -41,7 +41,7 @@ export default {
   name: 'four-corners-interaction',
   data() {
     return {
-      activeCorner: undefined,
+      activeCorner: 'tl',
       corners: {
         tl: {
           title: 'Related Images or Videos',

@@ -27,6 +27,9 @@ export default {
       else if (this.$route.name === 'content') {
         this.$router.push({ name: 'schedule' })
       }
+      else if (this.$route.name === 'class') {
+        this.$router.push({ name: 'content' })
+      }
       else if (document.referrer.indexOf(window.location.host) !== -1) {
         this.$router.go(-1)
       } else {
