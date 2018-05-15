@@ -60,7 +60,7 @@ import FourCornersInteraction from '@/components/fourcorners/FourCornersInteract
 export default {
   name: 'four-corners-onboarding',
   mixins: [ PageStyle ],
-  activated() {
+  mounted() {
     window.scroll(0, 0)
   },
   components: {

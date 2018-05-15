@@ -24,6 +24,9 @@ export default {
       if (this.isRoot) {
         this.$store.commit('TOGGLE_LEFT_DRAWER')
       }
+      else if (this.$route.name === 'content') {
+        this.$router.push({ name: 'schedule' })
+      }
       else if (document.referrer.indexOf(window.location.host) !== -1) {
         this.$router.go(-1)
       } else {

@@ -74,6 +74,15 @@ html, body
 .fade-enter, .fade-leave-to
   opacity 0
 
+.slide-top-enter-active, .slide-top-leave-active
+  animate()
+
+.slide-top-enter, .slide-top-leave-to
+  transform translateY(-100%)
+  opacity 0
+.slide-top-enter
+  transition-delay 2s
+
 .particles-js-canvas-el
   pinned()
   position fixed

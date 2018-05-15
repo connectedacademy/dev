@@ -6,7 +6,7 @@
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
         
-        onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
+        //- onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
         
         span(v-show="mediaPlaying")
           i.fas.fa-pause

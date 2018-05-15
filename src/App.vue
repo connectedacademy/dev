@@ -15,9 +15,10 @@
   //- Navigation
   left-drawer
   right-drawer
-  
-  .warning-banner(v-if="!course.loaded")
-    | Site is currently offline
+
+  transition(name="slide-top" appear mode="out-in")
+    .warning-banner(v-if="!course.loaded")
+      | Site is currently offline
 
   .main-page(v-if="course.loaded")
     navigation
@@ -175,11 +176,12 @@ html.profile #navigation { background-color: $color-profile }
 
 .warning-banner
   pinned()
+  animate()
   background $color-danger
   bottom auto
   color white
-  height 40px
-  line-height 40px
+  height $navigation-height
+  line-height $navigation-height
   position fixed
   text-align center
 

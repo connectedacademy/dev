@@ -3,6 +3,7 @@
 .markdown-page(name="markdown-page")
   .content-block.padded-block.header-block.white-block
     markdown-renderer
+    router-link.pure-button.pure-button-white(:to="{ name: 'content' }") #[i.fas.fa-angle-left]Back to class
 
 </template>
 
@@ -31,3 +32,11 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+
+@import '~stylus/buttons'
+
+.pure-button
+  margin-top 20px
+</style>

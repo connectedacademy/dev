@@ -40,15 +40,6 @@ export default {
     visible() {
       return this.$store.state.navigation.visible
     }
-  },
-  methods: {
-    goHome() {
-      this.$router.push({ name: 'schedule' })
-      this.$store.commit('PAUSE_MEDIA')
-      setTimeout(() => {
-        window.scroll(0, 0)
-      }, 500)
-    }
   }
 }
 </script>
