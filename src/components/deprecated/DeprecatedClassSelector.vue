@@ -31,7 +31,7 @@
           h1.content-title About the course
 
         .course-content--body
-          markdown-renderer(v-if="course && course.baseUri" v-bind:markdown-url="infoMarkdown")
+          markdown-renderer(v-if="course && course.cdn" v-bind:markdown-url="infoMarkdown")
 
           four-corners-link(message="During this course you will use FourCorners to submit images as 'homework', this will allow you to add rich metadata to your images.")
         
@@ -93,7 +93,7 @@ export default {
       return _get(this.currentClass, 'slug', 'intro')
     },
     infoMarkdown() {
-      return `${this.course.baseUri}info.md`;
+      return `${this.course.cdn}info.md`;
     },
     theWidth() {
       return ((this.course.classes.length) * 190.0) + 44
@@ -134,10 +134,10 @@ export default {
       for (const theClass of this.course.classes) {
         if (theClass.status === 'CURRENT') {
           currentExists = true
-          this.$store.dispatch('getSpec', theClass.slug);
+          this.$store.dispatch('getClass', theClass.slug);
         }
       }
-      if (!currentExists) this.$store.dispatch('getSpec', this.course.classes[0].slug);
+      if (!currentExists) this.$store.dispatch('getClass', this.course.classes[0].slug);
     },
     scrollLeft() {
       this.$refs.classselector.scrollLeft -= 80;

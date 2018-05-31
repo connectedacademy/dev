@@ -2,17 +2,17 @@
 
 .course-content-wrapper
   
-  .course-content-group(v-if="releasedContent && content.content_type === 'class'" v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
+  .course-content-group(v-if="releasedContent && content.type === 'class'" v-for="(content, index) in releasedContent" v-bind:key="index" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }")
 
     //- homework(v-if="content.expectsubmission" v-bind:content="content")
     //- four-corners-banner(v-else-if="content.fourcornersintro")
-    live-class(v-if="content.content_type === 'class'" v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
+    live-class(v-if="content.type === 'class'" v-bind:current-class="currentClass" v-bind:content="content" v-bind:id="'course-content-' + content.slug")
     //- deep-dive(v-else v-bind:content="content" v-bind:id="'course-content-' + content.slug")
 
   .course-content-group.course-content-group--future(v-if="futureContent && classReleased" v-for="(content, index) in futureContent" v-bind:class="{ optional: content.optional, [content.status.toLowerCase()]: true }" v-show="index === 0")
     
-    next-class(v-if="content.content_type === 'nextclass'" v-bind:content="content")
-    survey(v-else-if="content.content_type === 'survey'" v-bind:content="content")
+    next-class(v-if="content.type === 'nextclass'" v-bind:content="content")
+    survey(v-else-if="content.type === 'survey'" v-bind:content="content")
     future-content(v-else v-bind:title="`${content.slug}`" v-bind:subtitle="`Will release at ${content.release_at}`")
 
   .course-content-group.course-content-group--future(v-if="!classReleased")
@@ -56,7 +56,7 @@ export default {
     courseContent() {
       return _filter(this.currentClass.content, item => {
         // Exclude titles from course content
-        return !_includes(['title'], item.content_type)
+        return !_includes(['title'], item.type)
       })
     },
     releasedContent() {

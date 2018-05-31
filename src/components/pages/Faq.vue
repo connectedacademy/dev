@@ -40,7 +40,7 @@ export default {
   computed: {
     ...mapGetters(['course']),
     markdownUrl() {
-      return `${this.course.baseUri}faq.md`
+      return `${this.course.cdn}faq.md`
     }
   }
 }

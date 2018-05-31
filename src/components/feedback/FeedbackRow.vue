@@ -2,11 +2,9 @@
 
 .feedback-row(v-bind:class="{ active: active }")
   .user-strip
-    img.user-profile-image(v-bind:src="content.user.profile")
-    h5.user-profile-name {{ content.user.name }}
-    p.message-count {{ content.message ? content.message : 'no' }} messages
-
-  .unread-count.animated.tada(v-if="content.unread") {{ content.unread }}
+    img.submission-image(v-bind:src="content.url")
+    h5.user-profile-name {{ content._user.profile.name }}
+    p.message-count {{ content._messages.length ? content._messages.length : 'no' }} messages
 
 </template>
 
@@ -43,13 +41,13 @@ export default {
 
   .user-strip
     padding 10px
-    padding-left 60px
+    padding-left 90px
     position relative
 
-    img.user-profile-image
-      radius(50%)
+    img.submission-image
+      radius(4px)
       height 50px
-      width 50px
+      width 80px
       position absolute
       top 10px
       left 10px
@@ -81,6 +79,8 @@ export default {
 
   @media(max-width: 600px)
     .user-strip
+      img.submission-image
+        width 50px
       h5.user-profile-name, p.message-count
         display none
 

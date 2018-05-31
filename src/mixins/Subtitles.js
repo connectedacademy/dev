@@ -22,7 +22,7 @@ export default {
 
       API.message.getSubtitles(
         `${content.slug}`,
-        `${this.course.baseUri}${this.currentClass.dir}/${content.transcript}`,
+        `${this.course.cdn}${this.currentClass.slug}/transcripts/${content.transcript}`,
         response => {
 
           for (var subtitle of response.response) {

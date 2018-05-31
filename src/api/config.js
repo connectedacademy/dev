@@ -5,5 +5,4 @@ export const ROUTE = (process.env.NODE_ENV === 'production') ? 'https://api.conn
 // export const ROUTE = 'https://api.connectedacademy.io'
 
 export const WATERCOOLER_API = `${ROUTE}/v1`
-export const AUTH_URL = `${ROUTE}/v1/auth/login`
-export const SOCKET_API = `${ROUTE}`
+export const AUTH_URL = `${ROUTE}/v1/auth/twitter/login`

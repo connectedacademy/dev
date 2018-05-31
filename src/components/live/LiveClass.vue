@@ -1,18 +1,19 @@
 <template lang="pug">
 
-.course-content#liveclass(name="section-liveclass" v-if="content")
+.course-content#liveclass(name="section-liveclass" v-if="liveClass")
   
   .course-content--header.block
-    i.fab.fa-twitter.fa-lg
+    i.fab.fa-twitter.fa-lg(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
+    i.fas.fa-comment.fa-lg(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
     h1.content-title
-      | {{ content.title }}
-    p.content-description(v-if="content.description") {{ content.description }}
+      | {{ liveClass.title }}
+    p.content-description(v-if="liveClass.description") {{ liveClass.description }}
 
   .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
 
-    action-panel(v-bind:content="content" v-bind:current-class="currentClass")
+    action-panel(v-bind:content="liveClass" v-bind:current-class="currentClass")
 
-    conversation-container(v-bind:content="content" v-bind:collapsed="isCollapsed")
+    conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
 
   #continue-listening(v-show="isCollapsed" name="continue-listening")
     .pure-button.pure-button-info.rounded-tall(@click="continueListening()") Continue Listening
@@ -40,13 +41,9 @@ export default {
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['currentClass', 'isCollapsed']),
+    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
-    },
-    content () {
-      if (!this.currentClass) return {}
-      return _find(this.currentClass.content, { content_type: 'class' })
     }
   },
   methods: {

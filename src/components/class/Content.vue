@@ -1,6 +1,6 @@
 <template lang="pug">
 .content-wrapper
-  .content(v-for="(content, index) in primaryContent" v-bind:key="index" v-bind:title="content.content_type" v-bind:is="contentComponent(content.content_type)" v-bind:content="content")
+  .content(v-for="(content, index) in classContent" v-bind:key="index" v-bind:title="content.type" v-bind:is="contentComponent(content.type)" v-bind:content="content")
   .clearfix
 </template>
 
@@ -37,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['primaryContent'])
+    ...mapGetters(['classContent'])
   },
   methods: {
     contentComponent (type) {
@@ -48,7 +48,7 @@ export default {
         case 'nextclass':
           return 'NextClass'
 
-        case 'class':
+        case 'liveclass':
           return 'LiveClass'
 
         case 'homework':

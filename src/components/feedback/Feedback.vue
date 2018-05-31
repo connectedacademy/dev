@@ -5,9 +5,7 @@
   page-header(title="Homework Area" identifier="homework")
 
   #chat-list-container
-    feedback-list(header="Your Responses" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="myFeedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")
-    feedback-list(header="Current conversations" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="feedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")    
-    feedback-list(header="Suggested conversations" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="availableFeedbackItems" noContent="No suggestions available" v-bind:currentFeedbackId="currentFeedbackId")
+    feedback-list(header="Your Conversations" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="myFeedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")
     
   #conversation-container.background-white
 
@@ -17,7 +15,6 @@
 
       h2 Submit homework
       feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
-      four-corners-link(message="This task requires the submission of a FourCorners image, we have created a space to learn about FourCorners and what makes it relevant to today's digital photography.")
 
       #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit a response
 
@@ -43,7 +40,6 @@ import _filter from 'lodash/filter'
 
 import PageHeader from '@/components/PageHeader'
 import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
-import FourCornersLink from '@/components/fourcorners/FourCornersLink'
 import FeedbackSubmission from '@/components/feedback/FeedbackSubmission'
 import FeedbackList from '@/components/feedback/FeedbackList'
 import FeedbackView from '@/components/feedback/FeedbackView'
@@ -59,7 +55,6 @@ export default {
     PageHeader,
     MarkdownRenderer,
     FeedbackSubmission,
-    FourCornersLink,
     InfoDialogue,
     FeedbackList,
     FeedbackView,
@@ -67,17 +62,19 @@ export default {
   activated() {
     // Fetch feedback items
     this.getFeedbackItems()
-    this.getAvailableFeedbackItems()
   },
   mounted() {
-    this.subscribeToSocketEvents()
+    EventBus.$on('homework', (homework) => {
+      console.log('homework')
+      // Update homework
+      this.getFeedbackItems()
+    })
 
     if (this.$route.params.id) {
       this.currentFeedbackId = this.$route.params.id.replace('%23', '#')
     }
 
     this.getFeedbackItems()
-    this.getAvailableFeedbackItems()
   },
   watch: {
     '$route.params.id': {
@@ -113,45 +110,12 @@ export default {
       return this.$route.params.contentSlug
     },
     markdownUrl() {
-      return `${this.course.baseUri}${this.currentClass.dir}/${this.contentSlug}.md`
+      return `${this.course.cdn}${this.currentClass.slug}/${this.contentSlug}.md`
     },
   },
   methods: {
-    subscribeToSocketEvents() {
-      // Get user socket (for submissions and feedback messages)
-      this.$io.socket.get(`/v1/auth/me`, function (resData, jwres) {
-        Vue.$log.debug('SOCKET RESPONSE - me')
-        // alert('SOCKET RESPONSE - me')
-        Vue.$log.debug(resData)
-      })
-    
-      EventBus.$on('socketUser', (obj) => {
-        this.$log.debug('socketUser')
-
-        this.$log.debug('Submission message received')
-        this.$log.debug(obj)
-
-        switch (obj.data.msgtype) {
-          case 'submission':
-
-            this.getFeedbackItems()
-            this.getAvailableFeedbackItems()
-
-            break
-          case 'discussion':
-
-            if (this.currentFeedbackId === obj.data.msg.relates_to) {
-              this.discussion.push(obj.data.msg)
-            }
-
-            break
-          default:
-        }
-      })
-    },
     reloadChats() {
       this.getFeedbackItems()
-      this.getAvailableFeedbackItems()
     },
     getFeedbackItems() {
       
@@ -164,35 +128,15 @@ export default {
 
       Vue.$log.debug('No class or content slug so returning')
 
-      API.feedback.getFeedbackItems(
-        request,
+      API.homework.getHomeworks(
         (response) => {
           this.$log.debug('Response from feedback request')
           this.$log.debug(response)
-          this.myFeedbackItems = _filter(response.data, (item) => {
-            return item.user && (item.user.account_number === this.user.account_number)
-          })
-          this.feedbackItems = _filter(response.data, (item) => {
-            return item.user && (item.user.account_number !== this.user.account_number)
-          })
-        },
-        (response) => {
-          // TODO: Handle failed request
-          this.$log.error(response)
-          this.$log.info('Failed to retrieve feedback')
-        },
-      )
-    },
-    getAvailableFeedbackItems() {
-      const request = { class: this.classSlug, content: this.contentSlug }
-      API.feedback.getAvailableFeedbackItems(
-        request,
-        (response) => {
-          this.$log.debug('Response from feedback request (available)')
-          this.$log.debug(response)
-          this.availableFeedbackItems = _filter(response.data, (o) => {
-            return _get(o, 'user.profile', false)
-          })
+          this.myFeedbackItems = response
+          // _filter(response, { '_user._id': this.user._id })
+          // this.feedbackItems = _filter(response.data, (item) => {
+          //   return item.user && (item.user.account_number !== this.user.account_number)
+          // })
         },
         (response) => {
           // TODO: Handle failed request

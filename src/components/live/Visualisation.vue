@@ -3,7 +3,7 @@
 #vis-container
 
   // Visualisation
-  svg(v-if="visualisation" v-bind:height="visHeight" width="100%" viewBox="0 0 600 60" preserveAspectRatio="none")
+  svg#visualisation(v-if="visualisation" v-bind:height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
     defs
       filter(id="bandw")
         feColorMatrix(type="matrix" values="0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 1 0")
@@ -15,26 +15,24 @@
       rect(v-for="(segment, index) in buffered" v-bind:key="index" v-bind:x="`${segment.start}%`" y="0" v-bind:width="`${segment.end}%`" height="60" fill="black")
     
     // Vis
-    g(id="vis")
-      g(id="primaryVis")
-        rect(v-for="(val, index) in visualisation" v-bind:key="index" v-if="(typeof val === 'number')" v-bind:x="`${index}%`" width="2px" v-bind:y="`${(100 - parseInt(val * 180)) / 2}%`" v-bind:height="`${parseInt(val * 180)}%`" v-bind:style="{ fill: classView ? '#1864ef' : 'white' }")
-      use(v-if="classView" x="0" y="0" href="#primaryVis" clip-path="url(#progress)" filter="url(#bandw)")
+    g(id="primaryVis")
+      rect(v-for="(val, index) in visualisation" v-bind:key="index" v-if="(typeof val === 'number')" v-bind:x="`${index}%`" width="2px" rx="1" ry="1" v-bind:y="`${(100 - parseInt(val * 80)) / 2}%`" v-bind:height="`${parseInt(val * 80)}%`" v-bind:style="{ fill: '#1864ef' }")
+    use(x="0" y="0" href="#primaryVis" clip-path="url(#progress)" filter="url(#bandw)")
 
     // Track
-    g(id="track")
-      g(id="primaryTrack")
-        rect(x="0%" width="100%" v-bind:y="classView ? '29px' : '49%'" v-bind:height="classView ? '2px' : '2%'" v-bind:style="{ fill: classView ? '#1864ef' : 'white' }")
-      use(x="0" y="0" href="#primaryTrack" clip-path="url(#progress)" filter="url(#bandw)")
+    g(id="primaryTrack")
+      rect(x="0%" width="100%" v-bind:y="'29px'" v-bind:height="'2px'" v-bind:style="{ fill: '#1864ef' }")
+    use(x="0" y="0" href="#primaryTrack" clip-path="url(#progress)" filter="url(#bandw)")
 
     // Buffer
-    g.hidden(v-if="classView" id="buffer")
+    //- g(id="buffer")
       rect(x="0%" width="100%" y="39px" height="2px" v-bind:style="{ fill: 'orange' }" opacity="1.0")
       rect(clip-path="url(#mask)" x="0%" width="100%" y="38px" height="4px" v-bind:style="{ fill: 'white' }")
 
   // Animations
-  svg#animations(v-if="visualisation" v-bind:height="visHeight" width="100%" viewBox="0 0 600 60")
+  svg#animations(v-if="visualisation" v-bind:height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
     g(id="animations")
-      circle(v-for="(animation, index) in animations" v-bind:key="animation.x"  v-bind:cx="`${parseInt(animation.x * 100)}%`" cy="30px" r="5px" v-bind:style="{ fill: '#FF01A0' }")
+      circle(v-for="(animation, index) in animations" v-bind:key="animation.x"  v-bind:cx="`${animation.x}%`" cy="30px" r="5px" v-bind:style="{ fill: '#FF01A0' }")
 
 </template>
 
@@ -50,44 +48,36 @@ import _find from 'lodash/find'
 
 export default {
   name: 'visualisation',
-  props: ['bufferedSegments', 'classSlug', 'contentSlug', 'contentDuration', 'showReflections', 'classView', 'visHeight'],
+  props: ['bufferedSegments', 'classSlug', 'contentSlug', 'contentDuration', 'showReflections', 'visHeight'],
   mixins: [
     Visualisation
   ],
+  sockets: {
+    visualisation: function (val) {
+      console.log('SOCKET: visualisation updating..')
+      this.loadVisualisation()
+    },
+    message: function (val) {
+      console.log('val')
+      this.pushAnimation(val.segmentGroup)
+    }
+  },
   watch: {
     classSlug() {
-      this.loadVisualisation(true)
+      this.loadVisualisation()
     },
     contentSlug() {
-      this.loadVisualisation(true)
+      this.loadVisualisation()
     },
     contentDuration() {
-      this.loadVisualisation(true)
+      this.loadVisualisation()
     }
   },
   mounted() {
-    // Fake activity
-    setInterval(() => {
-      this.pushAnimation(Math.floor(Math.random() * 1000))
-    }, 1000)
-
-    // Load visualisation with socket connection
-    this.loadVisualisation(true)
+    this.loadVisualisation()
 
     EventBus.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
-    })
-
-    EventBus.$on('socketVisupdate', (obj) => {
-      for (const o in obj) {
-        if (obj.hasOwnProperty(o)) {
-          const element = obj[o]
-          if (element.msgtype === 'visupdate') {
-            this.pushAnimation(element.msg.segment)
-            this.loadVisualisation(true)
-          }
-        }
-      }
     })
   },
   data() {
@@ -118,22 +108,6 @@ export default {
       const pos = parseInt((100 / parseInt(this.contentDuration)) * this.scrollStatus.currentTime)
       return pos ? pos : 0
     }
-  },
-  methods: {
-    pushAnimation (segment) {
-      const segmentSize = 5
-      const pos = ((segment * segmentSize) / this.contentDuration)
-      const animation = { x: pos }
-
-      // If animation exists return
-      if (_find(this.animations, { x: pos })) return console.log('Exists!')
-      
-      // Put new animation at start of array
-      this.animations.unshift(animation)
-      
-      // Limit number of animations
-      if (this.animations.length > 10) this.animations.pop()
-    }
   }
 }
 </script>
@@ -149,26 +123,29 @@ export default {
   svg
     pinned()    
     position absolute
-
-  #animations
+  svg#visualisation
+    rect
+      transform translateX(-2px)
+  svg#animations
     circle
-      animation fade-out 3s linear
+      animation fade-out 4s ease
       opacity 0
       pointer-events none
+      transform translateX(-1px)
 
 .slide-fade-enter-active
-  transition all .5s ease
+  transition all 0.3s ease
 
 .slide-fade-leave-active
-  transition all .5s cubic-bezier(1.0, 0.8, 0.8, 1.0)
+  transition all 0.3s cubic-bezier(1.0, 0.8, 0.8, 1.0)
 
 .slide-fade-enter, .slide-fade-leave-to
   transform translateY(100px)
   opacity 0
 
 @keyframes fade-out {
-  0% { opacity: 0 }
-  30% { opacity: 1 }
-  100% { opacity: 0 }
+  0% { opacity: 0; r: 0px; }
+  30% { opacity: 1; }
+  100% { opacity: 0; r: 8px; }
 }
 </style>

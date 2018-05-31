@@ -1,8 +1,8 @@
 <template lang="pug">
 
 li.navigation-item(v-bind:name="`navigator-${scrollPoint.slug}`" @click="jumpToContent(scrollPoint.slug)")
-  i.fas.fa-play(v-if="scrollPoint.content_type === 'class'")
-  i.fas.fa-play(v-else-if="scrollPoint.content_type === 'webinar'")
+  i.fas.fa-play(v-if="scrollPoint.type === 'class'")
+  i.fas.fa-play(v-else-if="scrollPoint.type === 'webinar'")
   i.fas.fa-circle(v-else)
 
   .content-label {{ scrollPoint.title }}

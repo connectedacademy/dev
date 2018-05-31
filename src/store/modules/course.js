@@ -2,6 +2,7 @@ import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
 import _filter from 'lodash/filter'
+import _find from 'lodash/find'
 
 // initial state
 const state = {
@@ -24,30 +25,31 @@ const getters = {
   currentClass() {
     return state.current_class
   },
-  primaryContent() {
+  classContent() {
     if (!state.current_class) return []
-    return _filter(state.current_class.content, (content) => {
-      const types = ['intro', 'content', 'fourcorners', 'nextclass', 'homework', 'class', 'survey']
-      return types.indexOf(content.content_type) !== -1
-    })
+    return state.current_class.content
+  },
+  liveClass() {
+    if (!state.current_class) return {}
+    return _find(state.current_class.content, { type: 'liveclass' })
   }
 }
 
 // actions
 const actions = {
-  getSchedule({
+  getCourse({
     commit,
   }) {
-    API.course.getSchedule(
-      response => commit(types.GET_SCHEDULE_SUCCESS, {
+    API.course.getCourse(
+      response => commit(types.GET_COURSE_SUCCESS, {
         response,
       }),
-      response => commit(types.GET_SCHEDULE_FAILURE, {
+      response => commit(types.GET_COURSE_FAILURE, {
         response,
       }),
     )
   },
-  getSpec({
+  getClass({
     commit,
   }, classSlug) {
     if (typeof classSlug === 'undefined') return
@@ -56,12 +58,12 @@ const actions = {
       title: classSlug.charAt(0).toUpperCase() + classSlug.slice(1),
       loading: true,
     }
-    API.course.getSpec(
+    API.course.getClass(
       classSlug,
-      response => commit(types.GET_SPEC_SUCCESS, {
+      response => commit(types.GET_CLASS_SUCCESS, {
         response,
       }),
-      response => commit(types.GET_SPEC_FAILURE, {
+      response => commit(types.GET_CLASS_FAILURE, {
         response,
       }),
     )
@@ -83,13 +85,13 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.GET_SCHEDULE_SUCCESS](initialState, {
+  [types.GET_COURSE_SUCCESS](initialState, {
     response,
   }) {
     state.course = response
     state.course.loaded = true
   },
-  [types.GET_SCHEDULE_FAILURE](initialState, {
+  [types.GET_COURSE_FAILURE](initialState, {
     response,
   }) {
     state.course = {
@@ -97,13 +99,13 @@ const mutations = {
     }
     // error in response
   },
-  [types.GET_SPEC_SUCCESS](initialState, {
+  [types.GET_CLASS_SUCCESS](initialState, {
     response,
   }) {
     // Only update spec if not exists
-    state.current_class = response.spec
+    state.current_class = response
   },
-  [types.GET_SPEC_FAILURE](initialState, {
+  [types.GET_CLASS_FAILURE](initialState, {
     response,
   }) {
     state.current_class = undefined

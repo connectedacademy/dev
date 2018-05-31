@@ -13,8 +13,8 @@
     .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
       | {{ classroom.code }}
     
-    //- h3 Roles
-    //- tag-list(v-bind:tags="userRoles")
+    h3 Roles
+    tag-list(v-bind:tags="userRoles")
 
     .clearfix
 
@@ -66,7 +66,7 @@ export default {
       return this.user.roles
     },
     profileImage() {
-      return (this.user && this.user.profile) ? this.user.profile.replace('_normal', '') : ''
+      return (this.user && this.user.profile.avatar) ? this.user.profile.avatar.replace('_normal', '') : ''
     },
     proseLink() {
       return 'http://prose.io/#connectedacademy'

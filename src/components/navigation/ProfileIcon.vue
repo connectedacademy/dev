@@ -11,7 +11,7 @@ export default {
   name: 'profile-icon',
   computed: {
     profile() {
-      return `url('${this.$store.state.auth.user.profile}')`;
+      return `url('${this.$store.state.auth.user.profile.avatar}')`;
     },
     isRegistering() {
       return this.$route.name === 'registration';

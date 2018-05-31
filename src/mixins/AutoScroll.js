@@ -166,7 +166,7 @@ export default {
       const element = document.getElementById('liveclass');
       if (!element) return
       
-      const content = _find(this.$store.getters.currentClass.content, { content_type: 'class' })
+      const content = _find(this.$store.getters.currentClass.content, { type: 'class' })
       
       if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return
       

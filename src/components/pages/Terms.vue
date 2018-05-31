@@ -10,7 +10,7 @@
 
       .content-block.padded-block.header-block.white-block
 
-        .terms(v-html="termsMarkdown")
+        markdown-renderer(v-bind:markdown-url="markdownUrl")
 
 </template>
 
@@ -45,29 +45,8 @@ export default {
   },
   computed: {
     ...mapGetters(['course']),
-    termsMarkdown() {
-
-      const md = new MarkdownIt({
-        html: true,
-        linkify: true,
-      })
-
-      return `<div>${md.render(this.release)}</div>`
-    },
-  },
-  methods: {
-    loadTerms() {
-  
-      API.auth.fetchQuestions(
-        (response) => {
-          this.release = response.release
-        },
-        (response) => {
-          // TODO: Better handle failed request
-          this.$log.error(response)
-          this.$log.info('Failed to fetch questions')
-        }
-      )
+    markdownUrl() {
+      return `${this.course.cdn}terms.md`
     }
   }
 }

@@ -46,7 +46,7 @@ export default {
           this.$store.commit('SET_SCROLL_POINT', {
             title: content.title,
             slug: content.slug,
-            content_type: content.content_type,
+            type: content.type,
             sectionTop: element.offsetTop,
             top: (additionalOffset + element.offsetTop),
             bottom: element.offsetTop + element.offsetHeight,

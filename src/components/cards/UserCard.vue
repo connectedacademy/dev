@@ -4,12 +4,12 @@
   
   img.user-profile(v-bind:src="profileImage")
   
-  h1.user-name {{ user.name }}
-  h5.user-account {{ user.account }}
+  h1.user-name {{ user.profile.name }}
+  h5.user-account {{ user.twitter.username }}
 
   router-link.pure-button.pure-button-info.full-width(v-bind:to="{ name: 'profile' }") {{ $t('auth.dashboard') }}
-  .pure-button.pure-button-action.full-width(@click="showHints") {{ $t('auth.show_hints') }}
-  //- .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
+  //- .pure-button.pure-button-action.full-width(@click="showHints") {{ $t('auth.show_hints') }}
+  .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
 
 </template>
 
@@ -36,7 +36,7 @@ export default {
   computed: {
     ...mapGetters(['user', 'admin']),
     profileImage() {
-      return this.user.profile.replace('_normal', '')
+      return this.user.profile.avatar.replace('_normal', '')
     }
   },
 }

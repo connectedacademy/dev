@@ -6,15 +6,10 @@
       narrow-page-header(v-bind:title="course.title" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
-          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'content', params: { classSlug: theClass.slug } }" v-bind:class="{ released: isReleased(theClass), 'has-release': theClass.releaseAt }")
-            .calendar-tile(v-if="theClass.releaseAt")
-              .day-label
-                | {{ releaseDay(theClass) }}
-              .month-label
-                | {{ releaseMonth(theClass) }}
+          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'content', params: { classSlug: theClass.slug } }" v-bind:class="{ released: theClass.released, 'has-release': theClass.releaseAt }")
             .state-tags
-              .state-tag.active(v-if="isActive(theClass)") Live
-              //- .state-tag(v-bind:class="{ released: isReleased(theClass) }") {{ isReleased(theClass) ? 'Open' : 'Closed' }}
+              .state-tag.active(v-if="theClass.active") Live
+              .state-tag(v-bind:class="{ released: theClass.released }" :title="`${theClass.released ? 'Released on' : 'Will be released'} - ${prettyDate(theClass.date)}`") {{ theClass.released ? 'Open' : 'Closed' }}
               .clearfix
             h3 {{ (index + 1) + ': ' + theClass.title }}
             h5 {{ (!theClass.description) ? 'No description provided was for this class' : theClass.description }}
@@ -50,17 +45,8 @@ export default {
     ...mapGetters(['course'])
   },
   methods: {
-    isActive(theClass) {
-      return (theClass.status === 'CURRENT')
-    },
-    isReleased(theClass) {
-      return Moment().isAfter(Moment(theClass.release_at)) || (theClass.status === 'RELEASED')
-    },
-    releaseDay(theClass) {
-      return Moment(theClass.release_at).format('D')
-    },
-    releaseMonth(theClass) {
-      return Moment(theClass.release_at).format('MMM')
+    prettyDate(date) {
+      return Moment(date).format('DD MMM YYYY')
     }
   }
 }

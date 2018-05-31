@@ -1,16 +1,12 @@
 <template lang="pug">
 
-.profile-panel(v-bind:class="{ limited: limitHeight, collapsed: false, expanded: expandedView }")
+.profile-panel(:class="{ limited: limitHeight, collapsed: false, expanded: expandedView }")
 
-  profile-panel-header(v-bind:label="`${panel.label} (${messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
+  profile-panel-header(:label="`${panel.label} (${messages.length === 100 ? '100+' : messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh :can-expand="canExpand")
   
-  //- .filter-search(v-if="expandedView")
-    input(v-model="filterTerm" placeholder="Filter Results...")
-
   .profile-panel--content.no-padding
     .no-results(v-if="messages.length === 0") {{ $t('common.no_results') }}
-    //- pre(v-for="(message, index) in filteredMessages") {{ message }}
-    message(v-for="(message, index) in filteredMessages" v-bind:key="index" v-bind:message="message" v-bind:truncate="false" v-bind:can-jump="true" v-if="(limitHeight && (index < 4)) || !limitHeight")
+    message(v-for="(message, index) in filteredMessages" :key="index" :user="user" :message="message" :truncate="false" :can-jump="true" v-if="(limitHeight && (index < 4)) || !limitHeight")
 
 </template>
 
@@ -42,17 +38,9 @@ export default {
       this.loadData()
     })
 
-    // New message added, push to list
-    EventBus.$on('profileMessageReceived', (profileMessage) => {
-      Vue.$log.info(profileMessage)
-      if (this.panel.role === 'user') {
-        if (profileMessage.msg.user.id === this.user.id) {
-          this.messages.push(profileMessage.msg)
-        }
-      }
-      else {
-        this.messages.push(profileMessage.msg)
-      }
+    EventBus.$on('message', (message) => {
+      Vue.$log.info('Loading..')
+      this.loadData()
     })
   },
   data() {
@@ -64,11 +52,7 @@ export default {
   computed: {
     ...mapGetters(['user', 'profileClassSlug']),
     filteredMessages() {
-      return _orderBy(this.messages, ['createdAt'], ['desc'])
-      // _filter(this.messages, (message) => {
-      //   return true
-      //   // return message.account.profile === this.filterTerm
-      // })
+      return _orderBy(this.messages, ['created'], ['desc'])
     }
   },
   methods: {
@@ -79,7 +63,7 @@ export default {
       API[this.panel.role].getMessages(
         this.profileClassSlug,
         (response) => {
-          this.messages = response.data
+          this.messages = response
           EventBus.$emit('redrawMasonry')
         },
         (response) => {

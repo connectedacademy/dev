@@ -39,8 +39,8 @@
         return `url('${this.$store.state.auth.user.profile}')`
       },
       profileImage() {
-        if (!(this.user && this.user.profile)) return
-        return this.user.profile.replace('_normal', '')
+        if (!(this.user && this.user.profile.avatar)) return
+        return this.user.profile.avatar.replace('_normal', '')
       },
       validatedResponse() {
         return {

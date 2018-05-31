@@ -4,6 +4,9 @@ import API from '@/api'
 export default {
   logEvent(...args) {
     
+    return
+    // TODO: Enable logging
+
     let [category, action, label, value] = args
     
     // Log on google analytics

@@ -1,7 +1,7 @@
 <template lang="pug">
   #webinar-message-ticker
     .message-wrapper(v-for="(message, index) in orderedMessages")
-      message(v-bind:message="message")
+      message(:user="user" :message="message")
 </template>
 
 <script>
@@ -46,10 +46,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isRegistered']),
+    ...mapGetters(['isRegistered', 'user']),
     orderedMessages() {
       // Order messages
-      return _reverse(_take(_orderBy(this.webinarMessages, ['createdAt'], ['asc']), 3))
+      return _reverse(_take(_orderBy(this.webinarMessages, ['created'], ['asc']), 3))
     }
   },
   methods: {
@@ -58,10 +58,6 @@ export default {
         theClass: this.classSlug,
         theContent: this.contentSlug,
       }
-
-      this.$io.socket.get(`/v1/messages/content/${theRequest.theClass}/${theRequest.theContent}?whitelist=true&limit=100`, (resData, jwres) => {
-        this.webinarMessages = resData.data
-      });
     }
   }
 }

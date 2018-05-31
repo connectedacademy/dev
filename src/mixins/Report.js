@@ -4,7 +4,8 @@ import API from '@/api'
 export default {
   methods: {
     reportItem(itemId) {
-      
+      const r = confirm('Report item?')
+      if (!r) return
       API.moderation.reportItem(
         itemId,
         (response) => {

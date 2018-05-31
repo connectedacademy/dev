@@ -11,12 +11,12 @@ import VueI18n from 'vue-i18n'
 import VueLogger from 'vuejs-logger'
 import { VueMasonryPlugin } from 'vue-masonry'
 import VueResource from 'vue-resource'
+import VueSocketio from 'vue-socket.io'
 
 // import Raven from 'raven-js'
 // import RavenVue from 'raven-js/plugins/vue'
 
 import { sync } from 'vuex-router-sync'
-
 
 import app_config from '@/config'
 import * as api_config from '@/api/config'
@@ -27,7 +27,6 @@ import router from '@/router'
 
 import App from '@/App'
 import Lang from '@/Lang'
-import Sockets from '@/Sockets'
 
 import { EventBus } from '@/event-bus.js'
 
@@ -41,6 +40,7 @@ Vue.prototype.$logging = logging
 
 sync(store, router)
 
+Vue.use(VueSocketio, 'http://localhost:4000')
 Vue.use(VueResource)
 Vue.use(Vuex)
 
@@ -75,33 +75,34 @@ Vue.config.productionTip = false
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json', timeout: 5000 }
 
-Vue.http.interceptors.push((request, next) => {
-  if (request.url.startsWith(api_config.WATERCOOLER_API)) {
-    // Add elevator version to every request
-    request.headers.set('elevator-version', `${app_config.version}`)
-  }
+// Vue.http.interceptors.push((request, next) => {
+//   if (request.url.startsWith(api_config.WATERCOOLER_API)) {
+//     // Add elevator version to every request
+//     request.headers.set('elevator-version', `${app_config.version}`)
+//   }
 
-  // continue to next interceptor
-  next(function (response) {
+//   // continue to next interceptor
+//   next(function (response) {
 
-    // modify response
-    if (response.status === 403) {
-      // Unauthorized
-      // alert('Unauthorized')
-    }
-  })
+//     // modify response
+//     if (response.status === 403) {
+//       // Unauthorized
+//       // alert('Unauthorized')
+//     }
+//   })
 
-})
+// })
 
 // I18n config
 Vue.config.lang = 'en'
 Vue.config.fallbackLang = 'en'
 
-store.dispatch('getSchedule')
+store.dispatch('getCourse')
 
 // Particle effect
 require('particles.js')
 particlesJS.load('app', '/static/particles.json')
+
 
 /* eslint-disable no-new */
 new Vue({
@@ -109,9 +110,28 @@ new Vue({
   store,
   router,
   template: '<App/>',
+  sockets: {
+    connect: function () {
+      console.log('socket connected')
+    },
+    notification: function (val) {
+      console.log('notifications', val)
+    },
+    message: function (val) {
+      console.log('SOCKET - message', val)
+      EventBus.$emit('message', val)
+    },
+    homeworkmessage: function (val) {
+      console.log('SOCKET - homeworkmessage', val)
+      EventBus.$emit('homeworkmessage', val)
+    },
+    homework: function (val) {
+      console.log('SOCKET - homework', val)
+      EventBus.$emit('homework', val)
+    },
+  },
   components: {
     App,
-    Lang,
-    Sockets
+    Lang
   }
 })

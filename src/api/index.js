@@ -5,7 +5,7 @@ import admin from '@/api/admin'
 import auth from '@/api/auth'
 import classroom from '@/api/classroom'
 import course from '@/api/course'
-import feedback from '@/api/feedback'
+import homework from '@/api/homework'
 import like from '@/api/like'
 import logging from '@/api/logging'
 import markdown from '@/api/markdown'
@@ -20,7 +20,7 @@ export default {
   auth,
   classroom,
   course,
-  feedback,
+  homework,
   like,
   logging,
   markdown,

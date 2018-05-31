@@ -1,36 +1,36 @@
 <template lang="pug">
 
-  .time-segment(ref="timeSegment" v-bind:data-top="`${158.0 * index}`" v-bind:class="segmentClasses" v-bind:style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
+  .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
     .associated-media
-    .message-count(v-if="messageCount") {{ messageCount }}
+    .message-count(v-if="message.total > 1") {{ message.total }}
     //- .message-count {{ (index * 5) }}
     .subscribed-status(v-if="showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
       .subtitle-wrapper(@click="openSegment()")
-        subtitle(v-bind:subtitle="subtitle")
+        subtitle(:subtitle="subtitle")
 
       .message-wrapper
-
-        .suggestion(v-if="isSuggestion") "{{ message.message.text }}"
-        message(v-else-if="isMessage" v-bind:message="message.message" v-bind:truncate="true" v-bind:segment-opened="segmentOpened")
-        mock-message(v-else-if="isMock" v-bind:loading="message.loading")
+        transition(appear name="fade" mode="out-in")
+          message(v-if="isMessage" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
+          .suggestion(v-if="isSuggestion") "{{ message.text }}"
+          mock-message(v-if="isMock" :loading="message.loading")
 
       .clearfix
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
       | Show discussion
 
-    .meta-container(v-if="segmentOpened" v-bind:class="{ active: segmentOpened }" v-bind:style="{ bottom: `${quickNoteHeight}px` }")
+    .meta-container(v-if="segmentOpened" :class="{ active: segmentOpened }" :style="{ bottom: `${quickNoteHeight}px` }")
       .status-indicator(v-if="loadingMessages") Fetching discussion...
-      .status-indicator(v-if="!loadingMessages && (orderedMessages.length === 0)" @click="loadSegmentMessages") Nothing here yet.
+      .status-indicator(v-if="!loadingMessages && (activeSegmentMessages.length === 0)" @click="loadSegmentMessages") Nothing here yet.
 
-      .message-wrapper.animated.fadeIn(v-for="segmentMessage in orderedMessages")
-        message(v-bind:message="segmentMessage")
+      .message-wrapper.animated.fadeIn(v-for="segmentMessage in activeSegmentMessages")
+        message(:user="user" :message="segmentMessage")
 
-    .quick-note(v-if="segmentPeeking || segmentOpened" v-bind:class="{ replying: replyingTo }" v-bind:style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
-      message-composer(v-bind:contentSlug="contentSlug" v-bind:classSlug="classSlug" v-bind:currentSegmentGroup="index" v-bind:quick-note-height.sync="quickNoteHeight")
+    .quick-note(v-if="segmentPeeking || segmentOpened" :class="{ replying: replyingTo }" :style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
+      message-composer(:contentSlug="contentSlug" :classSlug="classSlug" :currentSegmentGroup="index" :quick-note-height.sync="quickNoteHeight")
     .clearfix
 
 </template>
@@ -55,6 +55,13 @@
       Message,
       MockMessage,
       Subtitle,
+    },
+    sockets: {
+      message: function (val) {
+        if (this.segmentPeeking && val.segment === this.message.segment) {
+          this.loadSegmentMessages()
+        }
+      }
     },
     watch: {
       'activeSegment': {
@@ -108,6 +115,7 @@
         'modalVisible',
         'replyingTo',
         'subscribedTo',
+        'user'
       ]),
       quickNoteTop () {
         return `${158 + 32}px`;
@@ -124,24 +132,17 @@
         }
       },
       isMessage () {
-        return this.messageCount
+        return !this.message.loading
       },
       isSuggestion () {
         return _get(this.message, ['message', 'suggestion'], false);
       },
       isMock () {
-        return this.message.loading || !this.isMessage
-      },
-      messageCount () {
-        return _get(this.message, ['info', 'total'], undefined);
-      },
-      orderedMessages () {
-        return _orderBy(this.activeSegmentMessages, ['createdAt'], ['asc']);
+        return this.message.loading
       }
     },
     methods: {
       peek () {
-        
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return;
         
@@ -247,14 +248,14 @@
         const theRequest = {
           theClass: this.classSlug,
           theContent: this.contentSlug,
-          startSegment: `${this.message.segmentGroup}`,
-          endSegment: `${parseInt(this.message.segmentGroup) + 4}`,
-        };
+          startSegment: this.message.segmentGroup,
+          endSegment: this.message.segmentGroup
+        }
   
         API.message.getMessages(
           theRequest,
           response => {
-            this.$store.commit('SET_SEGMENT_MESSAGES', response.data);
+            this.$store.commit('SET_SEGMENT_MESSAGES', response);
             this.loadingMessages = false;
           },
           response => {

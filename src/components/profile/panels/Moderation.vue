@@ -1,13 +1,13 @@
 <template lang="pug">
 
-.profile-panel(v-bind:class="{ limited: limitHeight, collapsed: false, expanded: expandedView }")
+.profile-panel(:class="{ limited: limitHeight, collapsed: false, expanded: expandedView }")
 
-  profile-panel-header(v-bind:label="`${panel.label} (${moderationItems.messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh v-bind:can-expand="canExpand")
+  profile-panel-header(:label="`${panel.label} (${moderationItems.messages.length})`" v-on:refresh="loadData" v-on:expand="expand" can-refresh :can-expand="canExpand")
   
   .profile-panel--content.no-padding
     //- .no-results() {{ $t('common.no_results') }}
     //- pre {{ moderationItems.messages }}
-    message(v-for="(message, index) in moderationItems.messages" v-bind:key="index" v-bind:message="message" v-bind:truncate="false" v-bind:can-jump="false" v-bind:moderate="true" v-if="(limitHeight && (index < 4)) || !limitHeight")
+    message(v-for="(message, index) in moderationItems.messages" :key="index" :user="user" :message="message" :truncate="false" :can-jump="false" :moderate="true" v-if="(limitHeight && (index < 4)) || !limitHeight")
 
 </template>
 

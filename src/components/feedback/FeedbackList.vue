@@ -2,8 +2,8 @@
   ul(v-if="feedbackItems.length !== 0")
     li.list-header {{ header }}
     li.no-content(v-if="feedbackItems.length === 0") You are not in any conversations
-    router-link(v-for="(feedbackItem, index) in feedbackItems" v-bind:key="index" replace v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem.id) }}" tag="li")
-      feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem.id" @click="feedbackItem.unread = 0")
+    router-link(v-for="(feedbackItem, index) in feedbackItems" v-bind:key="index" replace v-bind:to="{ name: 'feedback_view', params: { classSlug: classSlug, contentSlug: contentSlug, id: encodedId(feedbackItem._id) }}" tag="li")
+      feedback-row(v-bind:content="feedbackItem" v-bind:active="currentFeedbackId === feedbackItem._id" @click="feedbackItem.unread = 0")
 </template>
 
 <script>

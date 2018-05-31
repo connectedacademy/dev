@@ -7,13 +7,14 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'markdown-link',
   props: ['mdContent'],
   computed: {
+    ...mapGetters(['currentClass']),
     markdownUrl() {
-      return `${encodeURIComponent(this.mdContent.url)}`
+      return `${encodeURIComponent(this.currentClass.slug)}/${encodeURIComponent(this.mdContent.slug)}`
     }
   }
 }

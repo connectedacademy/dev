@@ -7,14 +7,14 @@ export default {
     cancel();
   },
   getSegmentSummary(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/messages/summarybatch/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}/1?whitelist=true`).then((response) => {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/${request.theClass}/${request.startSegment}/${request.endSegment}/true`).then((response) => {
       cb(response.data);
     }, (response) => {
       errorCb(response);
     });
   },
   getMessages(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/messages/list/${request.theClass}/${request.theContent}/${request.startSegment}/${request.endSegment}?whitelist=true&limit=200`).then((response) => {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/${request.theClass}/${request.startSegment}/${request.endSegment}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
@@ -37,6 +37,14 @@ export default {
   sendMessage(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
     Vue.http.post(`${config.WATERCOOLER_API}/messages/create`, postData).then((response) => {
+      cb(response, postData);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
+  likeMessage(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.post(`${config.WATERCOOLER_API}/message/like`, postData).then((response) => {
       cb(response, postData);
     }, (response) => {
       errorCb(response);

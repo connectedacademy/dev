@@ -9,6 +9,7 @@ import _values from 'lodash/values'
 import _map from 'lodash/map'
 import _mean from 'lodash/mean'
 import _take from 'lodash/take'
+import _reject from 'lodash/reject'
 
 export default {
   data() {
@@ -18,59 +19,32 @@ export default {
     }
   },
   methods: {
-    loadVisualisation(isSocket) {
-      this.animations = []
+    pushAnimation(segment) {
+      // Create animation
+      const key = Math.floor((segment / (1800 / 5)) * 100)
+      const animation = { x: key }
 
-      const segmentSize = 5
-      const request = { class: this.classSlug, content: this.contentSlug, duration: parseInt(this.contentDuration / segmentSize) }
-      // lin, log, raw
-      const url = `${config.WATERCOOLER_API}/messages/visualisation/${request.class}/${request.content}/1/${request.duration}?whitelist=true&clearcache=false&scale=log`
-      
-      if (isSocket) {
-        
-        // Subscribe to visualisation socket
-        this.$io.socket.get(url, (resData, jwres) => {
-          this.setVisualisation(resData.data, false)
-        })
-      }
-      else {
-        // lin, log, raw
-        Vue.http.get(url).then((response) => {
-          this.setVisualisation(response.data.data, true)
-        }, (response) => {
-          // Handle error
-        });
-      }
+      // Put new animation at start of array
+      this.animations = _reject(this.animations, o => { return o.x === animation.x })
+      this.animations.unshift(animation)
+
+      // Limit number of animations
+      if (this.animations.length > 10) this.animations.pop()
     },
-    setVisualisation(values, tween) {
-
-      values = _values(values)
-
-      let result = []
-      let chunk = values.length / 100;
-
-      for (var i = 0; i < values.length; i += chunk) {
-        result.push(values.slice(i, i + chunk));
-      }
-      result = _map(result, (r, key) => {
-        const mean = (typeof key === 'number') ? _mean(r) : 0
-        return mean
+    loadVisualisation() {
+      const url = `${config.WATERCOOLER_API}/messages/vis/${this.classSlug}/${this.contentDuration}`
+      Vue.http.get(url).then((response) => {
+        this.setVisualisation(response.body.visualisation)
+      }, (response) => {
+        // Handle error
       })
-      let newresult = {}
-      _each(result, (r, index) => {
-        newresult[index] = r
-      })
-
-      if (tween) {
-        TweenLite.to(
-          this.$data.visualisation,
-          0.5,
-          newresult
-        )
+    },
+    setVisualisation(values) {
+      if (!this.$data.visualisation) {
+        this.visualisation = values
+        return
       }
-      else {
-        this.visualisation = newresult
-      }
+      TweenLite.to(this.$data.visualisation, 2, values)
     }
   }
 }

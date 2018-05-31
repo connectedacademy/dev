@@ -10,13 +10,13 @@
 
     .no-results(v-if="submissions.length === 0") {{ $t('common.no_results') }}
 
-    .submission(v-for="(submission, index) in submissions" v-if="(limitHeight && (index < 3)) || !limitHeight")
-      img(v-if="expandedView" v-bind:src="submission.thumbnail" width="100%")
-      .submission--thumbnail(v-else v-bind:style="{ 'background-image': `url(${submission.thumbnail})` }")
+    router-link.submission(v-for="(submission, index) in submissions" :key="index" v-if="(limitHeight && (index < 3)) || !limitHeight" :to="{ name: 'feedback_view', params: { classSlug: submission.class, contentSlug: submission.content, id: submission._id } }")
+      img(v-if="expandedView" v-bind:src="submission.url" width="100%")
+      .submission--thumbnail(v-else v-bind:style="{ 'background-image': `url(${submission.url})` }")
       
-      a(v-bind:href="submission.original" target="_blank")
-      p {{ submission.user.name }} ({{ submission.user.account }})
-      p Submitted {{ timeStamp(submission.createdAt) }}
+      a(v-bind:href="submission.link" target="_blank")
+      p {{ submission._user.profile.name }} ({{ submission._user.twitter.username }})
+      p Submitted {{ timeStamp(submission.created) }}
 
 </template>
 

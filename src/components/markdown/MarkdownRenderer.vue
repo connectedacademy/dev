@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+  
   import Auth from '@/mixins/Auth'
   
   import MarkdownIt from 'markdown-it'
@@ -52,24 +54,15 @@
         frontMatter: {}
       }
     },
+    computed: {
+      ...mapGetters(['course'])
+    },
     methods: {
       getUrl() {
         if (this.markdownUrl) {
           return this.markdownUrl
         }
-        let url = this.$route.params.url
-        if (!url) {
-          return undefined
-        }
-        if (startsWith(url, 'http') || startsWith(url, 'www')) {
-          return url
-        } else {
-          if (!(this.$store.getters.course && this.$store.getters.course.baseUri)) {
-            return ''
-          } else {
-            return `${this.$store.getters.course.baseUri}/${this.$route.params.classSlug}/${url}`
-          }
-        }
+        return `${this.course.cdn}${decodeURIComponent(this.$route.params.url)}.md`
       },
       loadMarkdown() {
 
@@ -77,7 +70,7 @@
 
         const url = this.getUrl()
         if (!url) return
-
+    
         API.markdown.fetchMarkdown(
           url,
           (response) => {
@@ -155,7 +148,7 @@
               if (!this.$store.getters.course) {
                 return ''
               } else {
-                return `${this.$store.getters.course.baseUri}${link}`
+                return `${this.$store.getters.course.cdn}${link}`
               }
             },
           })

@@ -24,10 +24,13 @@ export default {
       if (this.isRoot) {
         this.$store.commit('TOGGLE_LEFT_DRAWER')
       }
+      else if (this.$route.name === 'schedule') {
+        this.$router.push({ name: 'home' })
+      }
       else if (this.$route.name === 'content') {
         this.$router.push({ name: 'schedule' })
       }
-      else if (this.$route.name === 'class') {
+      else if (['live', 'feedback', 'feedback_view', 'markdown'].indexOf(this.$route.name) !== -1) {
         this.$router.push({ name: 'content' })
       }
       else if (document.referrer.indexOf(window.location.host) !== -1) {
@@ -45,7 +48,7 @@ export default {
       return this.$store.state.navigation.visible
     },
     isRoot() {
-      const paths = ['schedule', 'home', 'about', 'faq']
+      const paths = ['home', 'about', 'faq']
       return paths.indexOf(this.$route.name) !== -1
     }
   }

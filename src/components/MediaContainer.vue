@@ -5,7 +5,7 @@
     #images-wrapper
       slick#image-swiper(v-if="liveclassMedia" ref="classslick" v-bind:options="slickOptions" v-on:afterChange="afterChange" v-on:swipe="interactionOccured")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
-          img(v-bind:data-lazy="`${course.baseUri}../media/small/${item.text}`" @click="setLightboxMedia(index)")
+          img(v-bind:data-lazy="`${course.cdn}../media/small/${item.text}`" @click="setLightboxMedia(index)")
 
 </template>
 
@@ -38,7 +38,7 @@ export default {
 
     if (typeof this.content.images === 'undefined') return
     Vue.$log.info('Getting media...')
-    const mediaPath = `${this.course.baseUri}${this.currentClass.dir}/${this.content.images}`
+    const mediaPath = `${this.course.cdn}${this.currentClass.slug}/transcripts/${this.content.images}`
 
     API.message.getMedia(
       this.content.slug,
@@ -189,15 +189,11 @@ export default {
   position relative
 
 .slick-slide
-  opacity 0.5
   outline 0
   img
     height ($media-height - $media-margin)
     max-height ($media-height - $media-margin)
     max-width 100%
-    // margin 5px 5px 10px 5px
   &:hover
     cursor pointer
-  &.slick-current
-    opacity 1
 </style>

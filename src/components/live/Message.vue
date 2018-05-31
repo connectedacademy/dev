@@ -1,13 +1,13 @@
 <template lang="pug">
 
-  .single-message-wrapper(v-bind:class="{ opened: segmentOpened }")
+  .single-message-wrapper(:class="{ opened: segmentOpened }")
 
     .message
-      img.profile-image(v-if="message.author" v-bind:src="message.author.profile")
+      img.profile-image(v-if="message._user" :src="message._user.profile.avatar")
 
-      .author-label(v-if="message.author")
-        | {{ message.author.account }}
-        i.fas.fa-reply(v-if="message.in_reply_to")
+      .author-label(v-if="message._user")
+        | {{ message._user.profile.name }}
+        i.fas.fa-reply(v-if="message._parent")
 
       p.message-content(v-html="parseText()")
 
@@ -17,18 +17,14 @@
           li Allow
           li Deny
 
-        ul.tweet-actions(v-else-if="canJump")
-          router-link.jump-action(tag="li" v-bind:to="{ name: 'live', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
-            i.fas.fa-link
-        
-        ul.tweet-actions(v-else)
-          li.like-action(@click="showInfoModal()")
+        ul.tweet-actions
+          li.like-action(:class="{ active: (message._likes.indexOf(user._id) !== -1) }" @click="likeMessage")
             i.fas.fa-heart
-          li.retweet-action(@click="showInfoModal()")
-            i.fas.fa-retweet
-          li.reply-action(@click="replyToMessage(message)")
+          li.reply-action(@click="replyToMessage(message)" v-if="!message._parent")
             i.fas.fa-reply
-          li.moderate-action(@click="reportItem(message.id)")
+          router-link(v-if="$route.name !== 'live'" tag="li" :to="{ name: 'live', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
+            i.fas.fa-plus
+          li.moderate-action(@click="reportItem(message._id)")
             i.fas.fa-ellipsis-h
           li.message-timestamp
             | {{ timeStamp }}
@@ -36,8 +32,8 @@
           .clearfix
     
     .replies-wrapper
-      .reply-wrapper(v-for="(reply, index) in message.in_reply" v-bind:key="index")
-        message(v-bind:message="reply")
+      .reply-wrapper(v-for="(reply, index) in message._replies" :key="index")
+        message(:user="user" :message="reply")
 
 </template>
 
@@ -45,20 +41,21 @@
 import API from '@/api'
 import TweetPatch from 'tweet-patch'
 import Moment from 'moment-mini'
+import _find from 'lodash/find'
 
 import Report from '@/mixins/Report'
 
 export default {
   name: 'message',
-  props: ['message', 'truncate', 'canJump', 'segmentOpened', 'moderate'],
+  props: ['message', 'truncate', 'canJump', 'segmentOpened', 'moderate', 'user'],
   mixins: [Report],
   computed: {
-    authorLink() { return `https://twitter.com/${this.message.author.account}` },
+    authorLink() { return `https://twitter.com/${this.message._user.account}` },
     tweetLink() { return `https://twitter.com/statuses/${this.message.message_id}` },
-    replyLink() { return `https://twitter.com/intent/tweet?in_reply_to=${this.message.message_id}` },
+    replyLink() { return `https://twitter.com/intent/tweet?replyTo=${this.message.message_id}` },
     retweetLink() { return `https://twitter.com/intent/retweet?tweet_id=${this.message.message_id}` },
     likeLink() { return `https://twitter.com/intent/like?tweet_id=${this.message.message_id}` },
-    timeStamp() { return Moment(this.message.createdAt).fromNow() },
+    timeStamp() { return Moment(this.message.created).fromNow() },
   },
   methods: {
     parseText() {
@@ -76,6 +73,19 @@ export default {
     },
     replyToMessage(message) {
       this.$store.commit('SET_REPLYING_TO', message)
+    },
+    likeMessage() {
+      const postData = {
+        target: this.message._id
+      }
+      API.message.likeMessage(
+        postData,
+        (response) => {
+          this.message._likes.push(this.user._id)
+        },
+        (response) => {
+        }
+      )
     }
   },
 }
@@ -125,7 +135,7 @@ export default {
       text-decoration none
       font-size 0.9em
       svg
-        color $color-primary
+        color $color-info
         height 12px
         margin 0 10px
 
@@ -160,9 +170,6 @@ export default {
             color $color-twitter
           &.reply-action:hover, &.reply-action.active
             color $color-primary
-          &.jump-action
-            max-width 100%
-            line-height 30px
 
           &.message-timestamp
             color #CCC

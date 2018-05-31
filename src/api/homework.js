@@ -3,9 +3,39 @@ import Vue from 'vue';
 import * as config from '@/api/config';
 
 export default {
-  getFeedbackItem(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/discussion/submission/${request.id}`).then((response) => {
+  getHomeworks(cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/homework`).then((response) => {
       cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
+  getHomework(id, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/homework/${id}`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
+  postHomework(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.post(`${config.WATERCOOLER_API}/homework`, postData).then((response) => {
+      cb(response);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
+  getHomeworkMessages(id, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/homework/messages/${id}`).then((response) => {
+      cb(response);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
+  postHomeworkMessage(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.post(`${config.WATERCOOLER_API}/homework/message`, postData).then((response) => {
+      cb(response);
     }, (response) => {
       errorCb(response);
     });
@@ -42,14 +72,6 @@ export default {
   getUserSubmissions(request, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
     Vue.http.get(`${config.WATERCOOLER_API}/discussion/user/${request.classSlug}/${request.contentSlug}/${request.userId}`).then((response) => {
-      cb(response);
-    }, (response) => {
-      errorCb(response);
-    });
-  },
-  postSubmission(postData, cb, errorCb) {
-    Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.post(`${config.WATERCOOLER_API}/discussion/submit/${postData.class}/${postData.content}`, postData).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);

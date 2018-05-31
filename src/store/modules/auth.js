@@ -13,7 +13,7 @@ const state = {
 const getters = {
   user: (initialState) => initialState.user,
   isRegistered: (initialState) => {
-    return ((typeof initialState.user !== 'undefined') && (typeof initialState.user.registration !== 'undefined'))
+    return typeof initialState.user !== 'undefined'
   }
 }
 

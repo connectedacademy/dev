@@ -1,36 +1,36 @@
 <template lang="pug">
 
-  .feedback-view(v-if="currentFeedbackId && feedbackItem")
+  .feedback-view(v-if="$route.params.id")
 
     .feedback-section
 
-      .feedback-tile(v-if="feedbackItem && feedbackItem.html")
-        //- a.pure-button.pure-button-subtle.pull-left(v-if="feedbackItem.original" v-bind:href="feedbackItem.original" target="_blank" alt="View original submission") View original
-        .pure-button.pure-button-subtle.pull-left(v-if="isOwner" @click="removeSubmission" alt="Delete submission") Delete
-        .pure-button.pure-button-subtle.pull-left(v-else @click="navigateTo(feedbackItem.original)" alt="View original submission") View submission
-        .pure-button.pure-button-subtle.pull-right(@click="closeSubmission" alt="Close") Close
-        //- pre {{ feedbackItem }}
-        .clearfix
-
-        br
-        
-        four-corners(v-html="feedbackItem.html")
+      .feedback-tile(v-if="feedbackItem")
+        .hidden
+          .pure-button.pure-button-subtle.pull-left(v-if="isOwner" @click="removeSubmission" alt="Delete submission") Delete
+          a.pure-button.pure-button-subtle.pull-left(v-else-if="feedbackItem.url" v-bind:href="feedbackItem.url" target="_blank" alt="View submission") View original
+          .pure-button.pure-button-subtle.pull-right(@click="closeSubmission" alt="Close") Close
+          .clearfix
+          br
+      
+        img(:src="feedbackItem.url")
+        p #[strong {{ feedbackItem._user.profile.name }}]: {{ feedbackItem.description }}
 
     .feedback-conversation
       .feedback-message-wrapper(v-for="message in feedbackMessages")
-        .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (!message.canview), reply: (message.fromuser.id !== user.id) }")
-          a(v-bind:href="`https://twitter.com/${message.fromuser.account}`" target="_blank")
-            img.avatar(v-bind:src="message.fromuser.profile")
-          .feedback-message--bubble
-            p(v-if="!message.canview")
-              i.fas.fa-lock(style="height: 12px;margin: 0 7px 0 0")
-              | Message locked (click here)
-            p(v-if="message.canview") {{ message.message }}
-            .feedback-message--action(@click="reportItem(message.id)")
-              i.fas.fa-ellipsis-h
-            .clearfix
-          .feedback-message--author
-            p by {{ message.fromuser.name }}
+        .feedback-message.animated.fadeInUp(@click="unlockMessage(message)" v-bind:class="{ locked: (message.hidden), reply: (message._user._id !== user._id) }")
+          a(v-bind:href="`https://twitter.com/${message._user.twitter.username}`" target="_blank")
+            img.avatar(v-bind:src="message._user.profile.avatar")
+          transition(name="fade" appear)
+            .feedback-message--bubble
+              p(v-if="message.hidden")
+                i.fas.fa-lock(style="height: 12px;margin: 0 7px 0 0")
+                | Message locked (click here)
+              p(v-if="!message.hidden") {{ message.text }}
+              .feedback-message--action(@click="reportItem(message._id)")
+                i.fas.fa-ellipsis-h
+              .clearfix
+            .feedback-message--author
+              p by {{ message._user.profile.name }}
         .clearfix
 
       .feedback-submission
@@ -40,8 +40,6 @@
           p.feedback-submission-note Your comments are private and will not be posted to Twitter.
           .clearfix
       .clearfix
-
-
     .clearfix
 
 </template>
@@ -49,34 +47,42 @@
 <script>
 import API from '@/api'
 import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
-import orderBy from 'lodash/orderBy'
+import _orderBy from 'lodash/orderBy'
+import _get from 'lodash/get'
 
-import FourCorners from '@/components/fourcorners/FourCorners'
 import InfoDialogue from '@/components/InfoDialogue'
 
 import Report from '@/mixins/Report'
 
 export default {
   name: 'feedback-view',
-  props: ['currentFeedbackId', 'discussion', 'classSlug', 'contentSlug'],
+  props: ['discussion', 'classSlug', 'contentSlug'],
   mixins: [Report],
   components: {
-    InfoDialogue,
-    FourCorners,
+    InfoDialogue
+  },
+  mounted() {
+    // Get homework
+    this.getHomework()
+    EventBus.$on('homeworkmessage', (message) => {
+      // Update messages
+      if (message._target === this.$route.params.id) {
+        console.log('homeworkmessage')
+        this.getHomeworkMessages()
+      }
+    })
   },
   watch: {
-    currentFeedbackId() {
-      // Fetch feedback item
-      this.getFeedbackItem()
-    },
-    feedbackItem() {
-      // Set loading state
-      this.loading = true
-      // Clear discussion
-      this.$emit('update:discussion', [])
-      // Fetch discussion
-      this.getDiscussion()
+    '$route.params': {
+      handler: function(nV, oV) {
+        // Set loading state
+        this.loading = true
+        // Get homework
+        this.getHomework()
+      },
+      deep: true,
     }
   },
   data() {
@@ -92,18 +98,11 @@ export default {
       'isRegistered', 'user'
     ]),
     isOwner() {
-      return (this.user && (this.user.account === this.feedbackItem.user.account))
+      return _get(this.user, 'twitter.username') === this.feedbackItem._user.twitter.username
     },
     feedbackMessages() {
-      return orderBy(this.discussion, ['createdAt'], ['asc'])
-    },
-    encodedContentId() {
-      if (!this.currentFeedbackId) {
-        return undefined
-      } else {
-        return this.currentFeedbackId.replace('#','%23')
-      }
-    },
+      return _orderBy(this.discussion, ['created'], ['asc'])
+    }
   },
   methods: {
     navigateTo(location) {
@@ -114,14 +113,13 @@ export default {
     },
     removeSubmission() {
       const postData = {
-        id: this.encodedContentId
+        id: this.$route.params.id
       }
       API.feedback.removeSubmission(
         postData,
         (response) => {
           this.$log.info('Response from remove submission request')
           this.$log.info(response)
-          this.$emit('update:currentFeedbackId', undefined)
           this.$emit('reloadchats')
         },
         (response) => {
@@ -132,46 +130,45 @@ export default {
       )
     },
     unlockMessage(message) {
-      if (!message.canview) {
+      if (message.hidden) {
         
-        this.$store.commit('SHOW_INFO_MODAL', { title: 'Locked', body: `Please leave feedback on ${message.fromuser.name}'s submission to view their comments on your images`, action: this.$t('submission.view_submission') })
+        this.$store.commit('SHOW_INFO_MODAL', { title: 'Locked', body: `Please leave feedback on ${message._user.profile.name}'s submission to view their comments on your images`, action: this.$t('submission.view_submission') })
 
         // Redirect to other user's feedback
 
-        const request = {
-          classSlug: this.classSlug,
-          contentSlug: this.contentSlug,
-          userId: message.fromuser.id.replace('#', '%23')
-        }
-        API.feedback.getUserSubmissions(
-          request,
-          (response) => {
-            this.$log.info('Response from user submissions request')
-            this.$log.info(response)
-            const feedbackId = response.body[0].id
-            this.$emit('update:currentFeedbackId', feedbackId)
-            
-          },
-          (response) => {
-            // TODO: Handle failed request
-            this.$log.error(response)
-            this.$log.info('Failed to user submissions')
-          }
-        )
+        // const request = {
+        //   classSlug: this.classSlug,
+        //   contentSlug: this.contentSlug,
+        //   userId: message.fromuser.id.replace('#', '%23')
+        // }
+        // API.feedback.getUserSubmissions(
+        //   request,
+        //   (response) => {
+        //     this.$log.info('Response from user submissions request')
+        //     this.$log.info(response)
+        //   },
+        //   (response) => {
+        //     // TODO: Handle failed request
+        //     this.$log.error(response)
+        //     this.$log.info('Failed to user submissions')
+        //   }
+        // )
       }
     },
     postFeedbackComment() {
 
-      let message = { reply: false, text: this.comment, user: { name: 'You' } }
+      const request = {
+        target: this.$route.params.id,
+        text: this.comment
+      }
 
-      const request = { text: this.comment, id: this.encodedContentId }
-
-      API.feedback.postFeedbackMessage(
+      API.homework.postHomeworkMessage(
         request,
         (response) => {
           this.$log.info('Response from feedback request')
           this.$log.info(response)
           this.comment = ''
+          this.getHomeworkMessages()
         },
         (response) => {
           // TODO: Handle failed request
@@ -180,15 +177,13 @@ export default {
         },
       )
     },
-    getDiscussion() {
-      const request = { id: this.encodedContentId }
-
-      API.feedback.getDiscussion(
-        request,
+    getHomeworkMessages() {
+      API.homework.getHomeworkMessages(
+        this.$route.params.id,
         (response) => {
           this.$log.info('Response from feedback request')
-          this.$log.info(response)
-          this.$emit('update:discussion', response)
+          this.$log.info(response.body)
+          this.$emit('update:discussion', response.body)
           // Set loading state
           this.loading = false
         },
@@ -201,16 +196,14 @@ export default {
         },
       )
     },
-    getFeedbackItem() {
-
-      const request = { id: this.encodedContentId }
-
-      API.feedback.getFeedbackItem(
-        request,
+    getHomework() {
+      API.homework.getHomework(
+        this.$route.params.id,
         (response) => {
           this.$log.info('Response from feedback request')
           this.$log.info(response)
           this.feedbackItem = response
+          this.getHomeworkMessages()
         },
         (response) => {
           // TODO: Handle failed request
@@ -236,6 +229,9 @@ export default {
     // a#view-submission-link
     //   color $color-text-grey
     //   text-decoration none
+
+    img
+      width 100%
 
     .user-strip
       padding-left 60px
@@ -329,6 +325,7 @@ export default {
   .feedback-submission
     background-color $color-lightest-grey
     border $color-light-grey 1px solid
+    margin-top 20px
     padding 10px
     textarea
       background-color transparent

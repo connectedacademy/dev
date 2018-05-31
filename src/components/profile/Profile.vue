@@ -58,12 +58,6 @@ export default {
         this.$redrawVueMasonry()
       }, 1000);
     })
-
-    // Subscribe to sockets
-    this.subscribeToSocketEvents()
-    EventBus.$on('profileClassUpdated', () => {
-      this.subscribeToSocketEvents()
-    })
   },
   unmounted() {
     clearInterval(this.redrawInterval)
@@ -91,11 +85,11 @@ export default {
           label: 'Class Notes',
           component: 'messages',
         },
-        {
-          role: 'teacher',
-          label: 'Class Responses',
-          component: 'submissions',
-        },
+        // {
+        //   role: 'teacher',
+        //   label: 'Class Responses',
+        //   component: 'submissions',
+        // },
         // {
         //   role: 'teacher',
         //   label: 'Class Storify',
@@ -116,21 +110,21 @@ export default {
           label: 'All Notes',
           component: 'messages',
         },
-        {
-          role: 'admin',
-          label: 'All Students',
-          component: 'students',
-        },
-        {
-          role: 'admin',
-          label: 'All Responses',
-          component: 'submissions',
-        },
-        {
-          role: 'admin',
-          label: 'Moderate',
-          component: 'moderation',
-        },
+        // {
+        //   role: 'admin',
+        //   label: 'All Students',
+        //   component: 'students',
+        // },
+        // {
+        //   role: 'admin',
+        //   label: 'All Responses',
+        //   component: 'submissions',
+        // },
+        // {
+        //   role: 'admin',
+        //   label: 'Moderate',
+        //   component: 'moderation',
+        // },
       ],
     }
   },
@@ -141,14 +135,8 @@ export default {
     },
   },
   methods: {
-    subscribeToSocketEvents() {
-      this.$io.socket.get(`/v1/classroom/mycode/${this.profileClass.slug}`, function (resData, jwres) {
-        Vue.$log.info('SOCKET RESPONSE - profile')
-        // alert('SOCKET RESPONSE - profile')
-        Vue.$log.info(resData)
-      })
-    },
     isVisible(panel) {
+      return true
       if (!this.user) return false
       if (panel.role === 'admin' && !this.adminView) return false
       if (panel.role !== 'admin' && this.adminView) return false

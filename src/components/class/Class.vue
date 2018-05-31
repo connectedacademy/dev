@@ -41,7 +41,7 @@ export default {
   computed: {
     ...mapGetters(['course', 'currentClass']),
     liveclass() {
-      return _find(this.currentClass.content, { content_type: 'class' })
+      return _find(this.currentClass.content, { type: 'class' })
     }
   }
 }

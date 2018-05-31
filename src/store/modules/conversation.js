@@ -89,10 +89,10 @@ const mutations = {
     state.activeSegmentMessages = messages
   },
   [types.PUSH_SEGMENT_MESSAGE](initialState, newMessage) {
-    if (newMessage.in_reply_to) {
+    if (newMessage.replyTo) {
       // A reply so push to message replies
-      const index = findIndex(state.activeSegmentMessages, function (message) { return message.id == newMessage.in_reply_to })
-      state.activeSegmentMessages[index].in_reply.push(newMessage)
+      const index = findIndex(state.activeSegmentMessages, function (message) { return message.id == newMessage.replyTo })
+      state.activeSegmentMessages[index]._replies.push(newMessage)
     } else {
       // Not a reply so just push onto array
       state.activeSegmentMessages.push(newMessage)

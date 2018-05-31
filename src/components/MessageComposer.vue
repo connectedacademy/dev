@@ -7,7 +7,7 @@
       .message-composer--body
       
         .replying-to-banner(v-if="replyingTo")
-          p {{ $t('composer.replying_to', { name: replyingTo.author.name }) }}
+          p {{ $t('composer.replying_to', { name: replyingTo._user.profile.name }) }}
           .dismiss-replying-to.animated.fadeInRight(@click="cancelReply")
             i.fas.fa-times
 
@@ -97,9 +97,8 @@ export default {
         currentSection: 'liveclass',
         currentSegmentGroup: this.currentSegmentGroup,
       }
-
       // If this is a reply then append message id
-      if (this.replyingTo) { postData.in_reply_to = this.replyingTo.id }
+      if (this.replyingTo) { postData.replyTo = this.replyingTo._id }
 
       this.sending = true
 
@@ -111,10 +110,6 @@ export default {
           setTimeout(() => { this.infoLabel = ""}, 2000)
           this.sending = false
           this.$store.commit('SET_REPLYING_TO', undefined)
-          if (typeof this.activeSegment === 'undefined') {
-            this.$store.commit('SET_PEEK_SEGMENT', undefined)
-          }
-          // EventBus.$emit('socketConversationMessage', { msgtype: 'message', msg: response.body })
         },
         (response, postData) => {
           alert('Failed to send message')

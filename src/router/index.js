@@ -37,7 +37,6 @@ const router = new Router({
       component: Schedule,
     },
     {
-      name: 'class',
       path: '/class/:classSlug',
       component: Class,
       children: [
@@ -73,13 +72,13 @@ const router = new Router({
       name: 'feedback',
       path: '/feedback/browse/:classSlug/:contentSlug',
       component: Feedback,
-      meta: { ensureRegistered: true }
+      // meta: { ensureRegistered: true }
     },
     {
       name: 'feedback_view',
       path: '/feedback/browse/:classSlug/:contentSlug/:id',
       component: Feedback,
-      meta: { ensureRegistered: true }
+      // meta: { ensureRegistered: true }
     },
     {
       name: 'fourcorners',
@@ -136,7 +135,7 @@ router.beforeEach((to, from, next) => {
 
   // Ensure registered
   if (to.matched.some(record => record.meta.ensureRegistered)) {
-    if (!(store.state.auth.user && store.state.auth.user.registration)) {
+    if (!(store.state.auth.user && store.state.auth.user)) {
       next({ name: 'schedule', query: { flash: 'You are not registered' } })
     } else {
       next()

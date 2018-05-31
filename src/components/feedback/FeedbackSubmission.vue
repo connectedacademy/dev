@@ -4,22 +4,22 @@
 
   .feedback-submission.feedback-submission-submit
     label
-      | Search your site for a FourCorners image
-    input(type="text" name="text" placeholder="E.g. https://example.com/page" v-model="submissionLink")
-    p.pull-left {{ resultsText }}
-    .pure-button.pure-button-transparent.pull-right(v-on:click="postSubmission") Begin Search
+      | Copy an image address below
+    input(type="text" name="link" placeholder="E.g. https://example.com/my-image.jpg" v-model="submissionLink")
+    textarea(name="description" placeholder="Explain your submission here" v-model="submissionDescription")
+    .pure-button.pure-button-transparent.pull-right(v-on:click="postSubmission") Submit
     .clearfix
   
-  ul.submission-selector(v-if="submissions.length > 0")
-    li(v-for="(submission, index) in submissions" v-bind:key="index" @click="verifySubmission(submission.id)" v-bind:style="{ 'background-image': submissionSrc(submission.id) }")
+  .submission-selector(v-if="submissionLink")
+    .submission-image(v-bind:style="{ 'background-image': `url(${submissionLink})` }")
     .clearfix
 
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import API from '@/api';
-import * as types from '@/store/mutation-types';
+import { mapGetters } from 'vuex'
+import API from '@/api'
+import * as types from '@/store/mutation-types'
 
 export default {
   name: 'feedback-submission',
@@ -27,9 +27,8 @@ export default {
   data() {
     return {
       submissionLink: '',
-      resultsText: '',
-      submissions: []
-    };
+      submissionDescription: ''
+    }
   },
   computed: {
     ...mapGetters([
@@ -37,56 +36,27 @@ export default {
     ])
   },
   methods: {
-    submissionSrc(submissionId) {
-      return `url(https://api.connectedacademy.io/v1/discussion/thumbnail/${submissionId.replace('#','%23')})`
-    },
-    showAuth() {
-      this.$store.commit(types.SHOW_AUTH);
-    },
-    goToLink(href) {
-      this.$router.push(href.replace('/#/markdown','/markdown'));
-    },
-    verifySubmission(submissionId) {
-      const postData = {
-        submission: submissionId.replace('#','%23')
-      }
-
-      API.feedback.verifySubmission(
-        postData,
-        (response) => {
-          this.$log.debug(response)
-          this.$emit('reloadchats')
-        },
-        (response) => {
-          this.$log.error(response)
-          this.$log.info('Submission verification failed')
-          alert('Submission verification failed, please try again.')
-        }
-      )
-    },
     postSubmission() {
-      // Submit
-
-      this.resultsText = 'Searching...';
-
       const postData = {
         class: this.theClass,
         content: this.theContent,
         url: this.submissionLink,
-      };
+        description: this.submissionDescription
+      }
 
-      API.feedback.postSubmission(
+      API.homework.postHomework(
         postData,
         (response) => {
-          this.submissions = response.body.submissions;
-          this.resultsText = (this.submissions.length) ? `Select an Image` : 'No Images Found';
+          this.submissionLink = ''
+          this.submissionDescription = ''
+          alert('Posted')
         },
         (response) => {
+          this.submissionLink = ''
+          this.submissionDescription = ''
           this.$log.error(response)
           this.$log.info('Submission failed')
-          alert('Submission failed, please try again.');
-          this.resultsText = '';
-          this.submissions = [];
+          alert('Submission failed, please try again.')
         }
       )
     }
@@ -117,35 +87,34 @@ export default {
         color white
         line-height 40px
         margin-top 10px
-      input[type="text"]
+      input[type="text"], textarea
         radius(6px)
         box-sizing()
         border none
         box-shadow none
+        display block
         line-height 40px
         margin 10px 0 20px 0
         padding 0 10px
         outline 0
         resize none
+        min-width 260px
+      textarea
         width 100%
 
-  ul.submission-selector
+  .submission-selector
     cleanlist()
     background-color alpha(black, 0.2)
     margin-top 5px
     padding 10px
-    li
+    .submission-image
       cleanlist()
       background-image()
       float left
       height 140px
       margin 10px
-      opacity 0.8
+      outline white 3px solid
       width 200px
-      &:hover
-        cursor pointer
-        opacity 1.0
-        outline white 3px solid
 
 
 </style>

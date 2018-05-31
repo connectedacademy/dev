@@ -76,7 +76,7 @@
       '$route.params.classSlug': {
         handler: function(nV, oV) {
           if (nV && nV !== oV) {
-            this.$store.dispatch('getSpec', nV)
+            this.$store.dispatch('getClass', nV)
           }
         },
         deep: true
@@ -93,7 +93,7 @@
     mounted() {
       this.$store.dispatch('checkAuth')
 
-      this.$store.dispatch('getSpec', this.$route.params.classSlug)
+      this.$store.dispatch('getClass', this.$route.params.classSlug)
     },
     data() {
       return {

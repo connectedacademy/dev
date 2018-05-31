@@ -1,19 +1,9 @@
 <template lang="pug">
 
 .student-tile
-  img.student--profile(v-bind:src="student.profile")
-  a.student--name(v-bind:href="student.link") {{ student.name }}
-  .student--account {{ `@${student.account}` }}
-  //- pre {{ student }}
-  ul.labels
-    li.label
-      i.fas.fa-comment
-      | {{ student.messages }}
-    //-
-      li.label
-        i.fas.fa-graduation-cap
-        | {{ student.homework }}
-    .clearfix
+  img.student--profile(v-bind:src="student.profile.avatar")
+  a.student--name(v-bind:href="student.link") {{ student.profile.name }}
+  .student--account {{ `@${student.twitter.username}` }}
 
 </template>
 
@@ -31,7 +21,7 @@ export default {
 @import '~stylus/shared'
 
 .student-tile
-  padding 10px 20px 10px 60px
+  padding 10px 30px 15px 70px
   position relative
   img.student--profile
     radius(50%)
@@ -39,7 +29,7 @@ export default {
     width 40px
     position absolute
     top 10px
-    left 10px
+    left 20px
   .student--name
     color $color-text-dark-grey
     line-height 25px

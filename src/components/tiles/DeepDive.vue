@@ -10,11 +10,11 @@
     markdown-content(v-if="content.description" v-bind:markdown="content.description")
     media-carousel(v-if="content.carousel" v-bind:media="content.carousel")
     media-thumbnails(v-if="content.thumbnails" v-bind:thumbnails="content.thumbnails")
-    soundcloud-embed(v-if="content.soundcloud && (content.content_type !== 'class')" v-bind:soundcloud-src="content.soundcloud" v-bind:auto-load="true")
-    video-embed(v-if="content.video && (content.content_type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.content_type")
-    webinar-message-ticker(v-if="content.content_type === 'webinar'" v-bind:class-slug="currentClassSlug" v-bind:content-slug="content.slug")
+    soundcloud-embed(v-if="content.soundcloud && (content.type !== 'class')" v-bind:soundcloud-src="content.soundcloud" v-bind:auto-load="true")
+    video-embed(v-if="content.video && (content.type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.type")
+    webinar-message-ticker(v-if="content.type === 'webinar'" v-bind:class-slug="currentClassSlug" v-bind:content-slug="content.slug")
 
-  .course-content--footer(v-if="content.hasContent && !content.thumbnails")
+  .course-content--footer(v-if="content.rich")
     markdown-link.pull-right(v-bind:md-content="content")
     .clearfix
 
