@@ -31,7 +31,10 @@ export default {
     for (const index in this.content.audio) {
       const url = `${this.course.cdn}/audio/${this.$route.params.classSlug}/${this.content.audio[index]}`
       if (this.fileExists(url)) {
+        console.log('fileExists', url)
         src.push(url)
+      } else {
+        console.log('fileDoesNotExist', url)
       }
     }
 
@@ -125,11 +128,13 @@ export default {
       }
 
       const playerTime = self.sound.seek()
+      console.log('playerTime', playerTime)
+      
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 
       if (!inSync) {
         self.$log.info(`Audio not in sync, seeking to ${self.scrollStatus.currentTime}`)
-        self.sound.seek(self.scrollStatus.currentTime)
+        self.sound.seek(parseInt(self.scrollStatus.currentTime))
       }
     }, 500)
   }

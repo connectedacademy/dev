@@ -88,7 +88,7 @@
         } else {
           document.body.className = "allow-scroll"
         }
-      },
+      }
     },
     mounted() {
       this.$store.dispatch('checkAuth')
@@ -97,7 +97,7 @@
     },
     data() {
       return {
-        navTitle: 'Connected Academy',
+        navTitle: 'Connected Academy'
       }
     },
     computed: {
