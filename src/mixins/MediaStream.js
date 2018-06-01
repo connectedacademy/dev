@@ -29,7 +29,7 @@ export default {
 
     // Grab audio files for class
     for (const index in this.content.audio) {
-      const url = `${this.course.cdn}/audio/${this.content.audio[index]}`
+      const url = `${this.course.cdn}/audio/${this.$route.params.classSlug}/${this.content.audio[index]}`
       if (this.fileExists(url)) {
         src.push(url)
       }
