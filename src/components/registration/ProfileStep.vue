@@ -16,7 +16,7 @@
 
         .terms-message
           span By continuing you are agreeing to our 
-          a(href="/#/terms" target="_blank") terms and conditions
+          router-link(:to="{ name: 'terms' }") terms and conditions
           span {{ ` and understand that you are partaking in a research study.` }}
         
         br

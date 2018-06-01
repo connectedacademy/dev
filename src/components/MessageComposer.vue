@@ -133,8 +133,7 @@ export default {
       return this.course.hashtag
     },
     url() {
-      return `https://${this.course.slug}.connectedacademy.io/#/course/${this.classSlug}/liveclass/${this.currentSegmentGroup}`
-      // return `https://${this.course.slug}.connectedacademy.io/#/class/${this.classSlug}/live/${this.currentSegmentGroup}`
+      return `${window.location.protocol}//${window.location.host}/class/${this.classSlug}/live/${this.currentSegmentGroup}`
     },
     shortenedUrl() {
       return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`

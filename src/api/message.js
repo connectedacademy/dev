@@ -20,18 +20,18 @@ export default {
       errorCb(response);
     });
   },
-  getSubtitles(slug, url, cb, errorCb) {
-    Vue.http.get(url, { credentials: false, responseType: 'json' }).then((response) => {
-      cb({slug: slug, response: response.body});
+  getSubtitles(request, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/subtitles/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
+      cb(response.body);
     }, (response) => {
-      errorCb({slug: slug, response: response});
+      errorCb(response);
     });
   },
-  getMedia(slug, path, cb, errorCb) {
-    Vue.http.get(path, { credentials: false, responseType: 'json' }).then((response) => {
-      cb({slug: slug, response: response.body});
+  getMedia(request, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/media/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
+      cb(response.body);
     }, (response) => {
-      errorCb({slug: slug, response: response});
+      errorCb(response);
     });
   },
   sendMessage(postData, cb, errorCb) {

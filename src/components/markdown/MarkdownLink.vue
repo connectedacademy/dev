@@ -14,7 +14,7 @@ export default {
   computed: {
     ...mapGetters(['currentClass']),
     markdownUrl() {
-      return `${encodeURIComponent(this.currentClass.slug)}/${encodeURIComponent(this.mdContent.slug)}`
+      return encodeURIComponent(this.mdContent.slug)
     }
   }
 }

@@ -21,11 +21,13 @@ export default {
       this.subtitles = []; // Clear existing subtitles
 
       API.message.getSubtitles(
-        `${content.slug}`,
-        `${this.course.cdn}${this.currentClass.slug}/transcripts/${content.transcript}`,
+        {
+          theClass: this.currentClass.slug,
+          filename: content.transcript
+        },
         response => {
 
-          for (var subtitle of response.response) {
+          for (var subtitle of response) {
 
             let group = math.divide(math.floor(subtitle.start + 2.5), 5);
 

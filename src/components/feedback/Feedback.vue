@@ -110,7 +110,7 @@ export default {
       return this.$route.params.contentSlug
     },
     markdownUrl() {
-      return `${this.course.cdn}${this.currentClass.slug}/${this.contentSlug}.md`
+      return `${this.course.cdn}/content/${this.currentClass.slug}/${this.contentSlug}.md`
     },
   },
   methods: {

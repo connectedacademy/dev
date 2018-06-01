@@ -62,13 +62,13 @@
         if (this.markdownUrl) {
           return this.markdownUrl
         }
-        return `${this.course.cdn}${decodeURIComponent(this.$route.params.url)}.md`
+        return this.$route.params.classSlug ? `${this.course.cdn}/content/${encodeURIComponent(this.$route.params.classSlug + '/' + this.$route.params.url)}` : `${this.course.cdn}/content/${this.course.slug}/${this.$route.params.url}`
       },
       loadMarkdown() {
 
         this.loading = true
-
         const url = this.getUrl()
+
         if (!url) return
     
         API.markdown.fetchMarkdown(
@@ -107,12 +107,12 @@
           },
           computed: {
             contentUrl() {
-              return `${window.location.protocol}//${window.location.host}/#/submission/${parent.theClass}/${parent.theContent}`
+              return `${window.location.protocol}//${window.location.host}/submission/${parent.theClass}/${parent.theContent}`
             },
           },
           methods: {
             goToLink(href) {
-              this.$router.push(href.replace('/#/markdown', '/markdown'))
+              this.$router.push(href)
             },
           },
           render: res.render,
@@ -142,13 +142,13 @@
               if (endsWith(link, '.md')) {
                 const url = this.getUrl()
                 const currentUrl = url.substring(0, url.lastIndexOf('/') + 1)
-                return `/#/markdown/${encodeURIComponent(link)}`
+                return `/content/${encodeURIComponent(link)}`
               }
   
               if (!this.$store.getters.course) {
                 return ''
               } else {
-                return `${this.$store.getters.course.cdn}${link}`
+                return `${this.$store.getters.course.cdn}/content/${link}`
               }
             },
           })

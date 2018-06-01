@@ -46,7 +46,7 @@ export default {
   computed: {
     ...mapGetters(['course']),
     markdownUrl() {
-      return `${this.course.cdn}terms.md`
+      return `${this.course.cdn}/content/terms`
     }
   }
 }

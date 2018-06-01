@@ -47,7 +47,7 @@ const router = new Router({
         },
         {
           name: 'markdown',
-          path: 'markdown/:url',
+          path: 'content/:url*',
           component: Markdown,
         },
         {

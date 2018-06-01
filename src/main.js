@@ -1,6 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueAnalytics from 'vue-analytics'
@@ -12,9 +9,6 @@ import VueLogger from 'vuejs-logger'
 import { VueMasonryPlugin } from 'vue-masonry'
 import VueResource from 'vue-resource'
 import VueSocketio from 'vue-socket.io'
-
-// import Raven from 'raven-js'
-// import RavenVue from 'raven-js/plugins/vue'
 
 import { sync } from 'vuex-router-sync'
 
@@ -40,7 +34,7 @@ Vue.prototype.$logging = logging
 
 sync(store, router)
 
-Vue.use(VueSocketio, 'https://api.connectedacademy.io')
+Vue.use(VueSocketio, app_config.api_url)
 Vue.use(VueResource)
 Vue.use(Vuex)
 
@@ -66,32 +60,11 @@ Vue.use(VueAnalytics, {
   }
 })
 
-// TODO: Enabled for production
-// Raven.config(app_config.sentry).addPlugin(RavenVue, Vue).install()
-
 // General config
 Vue.config.productionTip = false
 
 // Http config
 Vue.http.options = { credentials: true, responseType: 'json', timeout: 5000 }
-
-// Vue.http.interceptors.push((request, next) => {
-//   if (request.url.startsWith(api_config.WATERCOOLER_API)) {
-//     // Add elevator version to every request
-//     request.headers.set('elevator-version', `${app_config.version}`)
-//   }
-
-//   // continue to next interceptor
-//   next(function (response) {
-
-//     // modify response
-//     if (response.status === 403) {
-//       // Unauthorized
-//       // alert('Unauthorized')
-//     }
-//   })
-
-// })
 
 // I18n config
 Vue.config.lang = 'en'
