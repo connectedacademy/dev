@@ -29,7 +29,7 @@ const Terms = () => import('@/components/pages/Terms')
 Vue.use(Router)
 
 const router = new Router({
-  // mode: 'history',
+  mode: 'history',
   routes: [
     {
       name: 'schedule',
