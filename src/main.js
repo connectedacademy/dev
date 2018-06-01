@@ -34,7 +34,7 @@ Vue.prototype.$logging = logging
 
 sync(store, router)
 
-Vue.use(VueSocketio, app_config.api_url)
+Vue.use(VueSocketio, (process.env.NODE_ENV === 'production') ? 'https://api.connectedacademy.io' : 'http://localhost:4000')
 Vue.use(VueResource)
 Vue.use(Vuex)
 
