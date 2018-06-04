@@ -43,7 +43,7 @@ export default {
       this.mention = message
       setTimeout(() => {
         this.mention = undefined
-      }, 2000)
+      }, 5000)
     })
   },
   data() {
@@ -98,12 +98,13 @@ export default {
   
 #mentions-banner
   pinned()
-  background-color alpha($color-info, 0.8)
+  background-color alpha($color-success, 0.8)
   color white
   position fixed
   bottom auto
-  line-height 60px
-  height 60px
+  line-height 40px
+  padding 10px
+  min-height 40px
   z-index 999
   text-align center
 
