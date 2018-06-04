@@ -33,7 +33,7 @@
               p by {{ message._user.profile.name }}
         .clearfix
 
-      .feedback-submission
+      .feedback-submission(v-if="isRegistered")
         textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment" @keydown.enter.prevent.stop="postFeedbackComment")
         .feedback-submission--footer
           .pure-button(v-on:click="postFeedbackComment") Send
