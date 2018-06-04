@@ -3,7 +3,7 @@
   .conversation-container(ref="conversationContainer")
 
     #view-toggle(v-if="$route.name === 'live' && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
-      onboarding-prompt(identifier="view-toggle" prompt="subtitles/tweets" top="50" left="-70" position="top-right" z-index="1")
+      onboarding-prompt(identifier="view-toggle" prompt="transcript/tweets" top="50" left="-70" position="top-right" z-index="1")
       i.fas.fa-quote-left
       i.fab.fa-twitter(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
       i.fas.fa-comment(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
@@ -13,7 +13,7 @@
         v-bind:key="index"
         v-bind:index="index"
         v-bind:message="message"
-        v-bind:subtitle="subtitles[index]"
+        v-bind:transcript="transcript[index]"
         v-bind:contentSlug="content.slug"
         v-bind:classSlug="currentClass.slug"
         v-bind:isCurrent="isCurrent(index)")
@@ -27,7 +27,7 @@ import { EventBus } from '@/event-bus.js';
 
 // Mixins
 import Messages from '@/mixins/Messages';
-import Subtitles from '@/mixins/Subtitles';
+import Transcript from '@/mixins/Transcript';
 
 import TimeSegment from '@/components/live/TimeSegment';
 
@@ -35,14 +35,14 @@ export default {
   name: 'conversation-container',
   mixins: [
     Messages,
-    Subtitles,
+    Transcript,
   ],
   components: {
     TimeSegment,
   },
   props: ['content', 'collapsed'],
   mounted() {
-    this.loadSubtitles(this.content);
+    this.loadTranscript(this.content);
     this.loadSegmentSummary(0, true);
 
     // Fill with blank messages
@@ -129,23 +129,23 @@ export default {
     background-position center 0
     overflow hidden
     
-    .subtitle-wrapper, .message-wrapper
+    .transcript-wrapper, .message-wrapper
       transform translate(0%, -50%)
       width 50%
       &.message-wrapper
         transform translate(100%, -50%)
 
     @media(max-width: 600px)
-      .subtitle-wrapper, .message-wrapper
+      .transcript-wrapper, .message-wrapper
         width 100%
-        &.subtitle-wrapper
+        &.transcript-wrapper
           display block
         &.message-wrapper
           display none
       &.message-priority
-        .subtitle-wrapper, .message-wrapper
+        .transcript-wrapper, .message-wrapper
           width 100%
-          &.subtitle-wrapper
+          &.transcript-wrapper
             display none
           &.message-wrapper
             display block

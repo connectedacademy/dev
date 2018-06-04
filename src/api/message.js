@@ -20,8 +20,8 @@ export default {
       errorCb(response);
     });
   },
-  getSubtitles(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/subtitles/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
+  getTranscript(request, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/transcript/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);

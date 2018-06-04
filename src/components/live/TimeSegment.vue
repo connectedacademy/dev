@@ -8,8 +8,8 @@
 
     .primary-wrapper(@click="peek")
 
-      .subtitle-wrapper(@click="openSegment()")
-        subtitle(:subtitle="subtitle")
+      .transcript-wrapper(@click="openSegment()")
+        transcript(:transcript="transcript")
 
       .message-wrapper
         transition(appear name="fade" mode="out-in")
@@ -43,18 +43,18 @@
   import API from '@/api';
   
   import MessageComposer from '@/components/MessageComposer';
-  import Subtitle from '@/components/live/Subtitle';
+  import Transcript from '@/components/live/Transcript';
   import Message from '@/components/live/Message';
   import MockMessage from '@/components/live/MockMessage';
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'subtitle', 'classSlug', 'contentSlug', 'isCurrent'],
+    props: ['index', 'message', 'transcript', 'classSlug', 'contentSlug', 'isCurrent'],
     components: {
       MessageComposer,
       Message,
       MockMessage,
-      Subtitle,
+      Transcript,
     },
     sockets: {
       message: function (val) {
@@ -343,10 +343,10 @@
     width calc(100% - 20px)
 
   &.peek
-    .subtitle-wrapper:hover
+    .transcript-wrapper:hover
       cursor pointer
   &.opened
-    .subtitle-wrapper:hover
+    .transcript-wrapper:hover
       cursor default !important
   &.peek, &.open
     .primary-wrapper:hover
@@ -374,7 +374,7 @@
       position absolute
       top 50%
 
-    .subtitle-wrapper
+    .transcript-wrapper
       animate()
       position absolute
       top 50%

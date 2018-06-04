@@ -1,22 +1,22 @@
 <template lang="pug">
 
-  .subtitle
+  .transcript
 
-    h1(v-if="subtitle" v-html="subtitle")
+    h1(v-if="transcript" v-html="transcript")
     h1(v-else) ...
 
 </template>
 
 <script>
 export default {
-  name: 'subtitle',
-  props: ['subtitle']
+  name: 'transcript',
+  props: ['transcript']
 }
 </script>
 
 <style lang="stylus" scoped>
 
-.subtitle
+.transcript
   padding 15px 20px
   h1
     reset()

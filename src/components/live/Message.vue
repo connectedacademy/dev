@@ -18,7 +18,7 @@
           li Deny
 
         ul.tweet-actions
-          li.like-action(:class="{ active: (message._likes.indexOf(user._id) !== -1) }" @click="likeMessage")
+          li.like-action(:class="{ active: user && (message._likes.indexOf(user._id) !== -1) }" @click="likeMessage")
             i.fas.fa-heart
           li.reply-action(@click="replyToMessage(message)" v-if="!message._parent")
             i.fas.fa-reply
