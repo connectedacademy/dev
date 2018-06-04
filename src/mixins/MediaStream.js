@@ -128,14 +128,12 @@ export default {
       }
 
       const playerTime = self.sound.seek()
-      console.log('playerTime', playerTime)
-      
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 
       if (!inSync) {
         self.$log.info(`Audio not in sync, seeking to ${self.scrollStatus.currentTime}`)
         self.sound.seek(parseInt(self.scrollStatus.currentTime))
       }
-    }, 500)
+    }, 1000)
   }
 }
