@@ -58,7 +58,7 @@ export default {
       this.loadVisualisation()
     },
     message: function (val) {
-      console.log('val')
+      console.log('SOCKET: animation updating..')
       this.pushAnimation(val.segmentGroup)
     }
   },

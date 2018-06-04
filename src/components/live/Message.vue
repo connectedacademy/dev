@@ -20,7 +20,7 @@
         ul.tweet-actions
           li.like-action(:class="{ active: user && (message._likes.indexOf(user._id) !== -1) }" @click="likeMessage")
             i.fas.fa-heart
-          li.reply-action(@click="replyToMessage(message)" v-if="!message._parent")
+          li.reply-action(v-if="!truncate || !message._parent" @click="replyToMessage(message)")
             i.fas.fa-reply
           router-link(v-if="$route.name !== 'live'" tag="li" :to="{ name: 'live', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
             i.fas.fa-plus
@@ -33,7 +33,7 @@
     
     .replies-wrapper
       .reply-wrapper(v-for="(reply, index) in message._replies" :key="index")
-        message(:user="user" :message="reply")
+        message(:user="user" :message="reply" :parent="message")
 
 </template>
 
@@ -47,7 +47,7 @@ import Report from '@/mixins/Report'
 
 export default {
   name: 'message',
-  props: ['message', 'truncate', 'canJump', 'segmentOpened', 'moderate', 'user'],
+  props: ['message', 'parent', 'truncate', 'canJump', 'segmentOpened', 'moderate', 'user'],
   mixins: [Report],
   computed: {
     authorLink() { return `https://twitter.com/${this.message._user.account}` },
@@ -72,7 +72,11 @@ export default {
       this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') })
     },
     replyToMessage(message) {
-      this.$store.commit('SET_REPLYING_TO', message)
+      if (this.parent) {
+        this.$store.commit('SET_REPLYING_TO', this.parent)
+      } else {
+        this.$store.commit('SET_REPLYING_TO', message)
+      }
     },
     likeMessage() {
       const postData = {

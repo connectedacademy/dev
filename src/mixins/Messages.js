@@ -16,7 +16,15 @@ export default {
   },
   mounted() {
     EventBus.$on('message', (message) => {
-      console.log('message')
+      console.log('message', message)
+      
+      // Check if message is a reply to current user
+      if (this.user) {
+        if (message.text.indexOf(`@${this.user.twitter.username}`) !== -1) {
+          alert(`You were mentioned by ${message._user.profile.name}`)
+          
+        }
+      }
 
       if (message.class === this.$route.params.classSlug) {
         // Update messages
@@ -31,7 +39,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['currentClass']),
+    ...mapGetters(['currentClass', 'user']),
   },
   methods: {
     loadSegmentSummary(segmentGroup, force) {
