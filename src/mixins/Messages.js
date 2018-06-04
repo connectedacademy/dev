@@ -21,8 +21,7 @@ export default {
       // Check if message is a reply to current user
       if (this.user) {
         if (message.text.indexOf(`@${this.user.twitter.username}`) !== -1) {
-          alert(`You were mentioned by ${message._user.profile.name}`)
-          
+          EventBus.$emit('mention', message)
         }
       }
 
