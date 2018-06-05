@@ -19,6 +19,9 @@ const getters = {
   course() {
     return state.course
   },
+  CDN() {
+    return state.course.cdn
+  },
   hubs() {
     return state.hubs
   },

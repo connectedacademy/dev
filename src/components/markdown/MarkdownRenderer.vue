@@ -55,14 +55,14 @@
       }
     },
     computed: {
-      ...mapGetters(['course'])
+      ...mapGetters(['course', 'CDN'])
     },
     methods: {
       getUrl() {
         if (this.markdownUrl) {
           return this.markdownUrl
         }
-        return this.$route.params.classSlug ? `${this.course.cdn}/content/${encodeURIComponent(this.$route.params.classSlug + '/' + this.$route.params.url)}` : `${this.course.cdn}/content/${this.course.slug}/${this.$route.params.url}`
+        return `${this.CDN}/classes/${this.$route.params.classSlug}/${this.$route.params.url}.md`
       },
       loadMarkdown() {
 
@@ -74,7 +74,10 @@
         API.markdown.fetchMarkdown(
           url,
           (response) => {
-            this.renderedMarkdown = response.replace('@[bio]', '\n\n\n@[bio]')
+            let markdown = response
+            markdown = markdown.replace('@[bio]', '\n\n\n@[bio]')
+            markdown = markdown.replace(/CDN_URL/g, this.CDN)
+            this.renderedMarkdown = markdown
             
             this.loading = false
             this.renderMarkdown()
@@ -148,7 +151,7 @@
               if (!this.$store.getters.course) {
                 return ''
               } else {
-                return `${this.$store.getters.course.cdn}/content/${link}`
+                return `${this.CDN}/content/${link}`
               }
             },
           })

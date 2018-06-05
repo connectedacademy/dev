@@ -25,7 +25,7 @@ export default {
 
     // Grab audio files for class
     for (const index in this.content.audio) {
-      const url = `${this.course.cdn}/${this.course.slug}/classes/${this.$route.params.classSlug}/${this.content.audio[index]}`
+      const url = `${this.CDN}/classes/${this.$route.params.classSlug}/${this.content.audio[index]}`
       if (this.fileExists(url)) {
         src.push(url)
       }
@@ -77,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course', 'mediaPlaying'])
+    ...mapGetters(['CDN', 'mediaPlaying'])
   },
   methods: {
     fileExists (url) {

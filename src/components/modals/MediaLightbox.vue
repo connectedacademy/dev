@@ -3,7 +3,7 @@
   #media-lightbox.animated.fadeIn(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
     #lightbox--close(@click="toggleLightbox()")
       i.fas.fa-times.fa-2x
-    .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${course.cdn}/images/large/${currentLightboxMedia}')` }")
+    .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${CDN}/images/${currentLightboxMedia}')` }")
 
 </template>
 
@@ -14,7 +14,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'media-lightbox',
   computed: {
-    ...mapGetters(['course', 'currentLightboxMedia', 'lightboxVisible'])
+    ...mapGetters(['CDN', 'currentLightboxMedia', 'lightboxVisible'])
   },
   methods: {
     toggleLightbox() {

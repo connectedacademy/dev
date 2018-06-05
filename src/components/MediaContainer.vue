@@ -5,7 +5,7 @@
     #images-wrapper
       slick#image-swiper(v-if="liveclassMedia" ref="classslick" v-bind:options="slickOptions" v-on:afterChange="afterChange" v-on:swipe="interactionOccured")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
-          img(v-bind:data-lazy="`${course.cdn}/${course.slug}/images/${item.text}`" @click="setLightboxMedia(index)")
+          img(v-bind:data-lazy="`${CDN}/images/${item.text}`" @click="setLightboxMedia(index)")
 
 </template>
 
@@ -105,7 +105,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course']),
+    ...mapGetters(['CDN']),
     src () {
       return _get(this.content.videoId)
     },

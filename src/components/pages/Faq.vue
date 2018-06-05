@@ -38,9 +38,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course']),
+    ...mapGetters(['CDN']),
     markdownUrl() {
-      return `${this.course.cdn}/content/faq`
+      return `${this.CDN}/content/faq.md`
     }
   }
 }

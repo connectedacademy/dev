@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isRegistered', 'user', 'currentClass', 'course'
+      'isRegistered', 'user', 'currentClass', 'CDN'
     ]),
     classSlug() {
       return this.$route.params.classSlug
@@ -110,7 +110,7 @@ export default {
       return this.$route.params.contentSlug
     },
     markdownUrl() {
-      return `${this.course.cdn}/content/${this.currentClass.slug}/${this.contentSlug}.md`
+      return `${this.CDN}/content/${this.currentClass.slug}/${this.contentSlug}.md`
     },
   },
   methods: {
