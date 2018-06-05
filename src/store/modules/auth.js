@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
+import store from '@/store'
 import * as config from '@/api/config'
 
 // initial state
@@ -69,7 +70,7 @@ const mutations = {
     // error in response
   },
   attemptAuth({ commit }) {
-    document.location = config.AUTH_URL
+    document.location = `${config.AUTH_URL}/${store.getters.course.slug}`
   },
 }
 
