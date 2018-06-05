@@ -3,6 +3,16 @@ transition(name="slide-up")
   .auth-modal(v-if="isVisible")
     .auth-modal--container
       p {{ $t('auth.login_with_twitter') }}
+      p
+        input(type="checkbox")
+        | I understand this service is part of a research project and my data will be processed as described in the Research Policy
+      p
+        input(type="checkbox")
+        | I agree to the Privacy Policy
+      p
+        input(type="checkbox")
+        | I agree to the Terms of Use
+      .clearfix
       button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
         i.fab.fa-twitter
         | {{ $t('common.continue') }}
@@ -45,12 +55,12 @@ export default {
 .auth-modal
   animate()
   display block
-  max-width 320px
+  max-width 300px
   position fixed
   z-index 57
   top 80px
   left 50%
-  margin-left -160px
+  margin-left -150px
 
   .auth-modal--header
     height 40px

@@ -16,8 +16,6 @@ export default {
   },
   mounted() {
     EventBus.$on('message', (message) => {
-      console.log('message', message)
-      
       // Check if message is a reply to current user
       if (this.user) {
         if (message.text.indexOf(`@${this.user.twitter.username}`) !== -1) {

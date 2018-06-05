@@ -91,8 +91,9 @@ export default {
       this.$store.commit('SET_REPLYING_TO', undefined)
     },
     sendMessage() {
+      let composedMessage = `${this.message.text} ${this.hashtags} ${this.url}`
       let postData = {
-        text: `${this.message.text} ${this.hashtags} ${this.url}`,
+        text: composedMessage,
         currentClass: this.classSlug,
         currentSection: 'liveclass',
         currentSegmentGroup: this.currentSegmentGroup,

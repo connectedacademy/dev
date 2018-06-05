@@ -1,14 +1,7 @@
-import Vue from 'vue'
 import API from '@/api'
-import * as config from '@/api/config'
 
 import { TweenLite } from 'gsap'
 
-import _each from 'lodash/each'
-import _values from 'lodash/values'
-import _map from 'lodash/map'
-import _mean from 'lodash/mean'
-import _take from 'lodash/take'
 import _reject from 'lodash/reject'
 
 export default {
@@ -21,7 +14,7 @@ export default {
   methods: {
     pushAnimation(segment) {
       // Create animation
-      const key = Math.floor((segment / (1800 / 5)) * 100)
+      const key = Math.floor((segment / (this.contentDuration / 5)) * 100)
       const animation = { x: key }
 
       // Put new animation at start of array
@@ -32,12 +25,19 @@ export default {
       if (this.animations.length > 10) this.animations.pop()
     },
     loadVisualisation() {
-      const url = `${config.WATERCOOLER_API}/messages/vis/${this.classSlug}/${this.contentDuration}`
-      Vue.http.get(url).then((response) => {
-        this.setVisualisation(response.body.visualisation)
-      }, (response) => {
-        // Handle error
-      })
+      const theRequest = {
+        theClass: this.classSlug,
+        contentDuration: this.contentDuration
+      }
+      API.message.getVisulation(
+        theRequest,
+        (response) => {
+          this.setVisualisation(response.visualisation)
+        },
+        (response) => {
+          // Handle error
+        }
+      )
     },
     setVisualisation(values) {
       if (!this.$data.visualisation) {

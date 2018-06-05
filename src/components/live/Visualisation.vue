@@ -65,12 +65,6 @@ export default {
   watch: {
     classSlug() {
       this.loadVisualisation()
-    },
-    contentSlug() {
-      this.loadVisualisation()
-    },
-    contentDuration() {
-      this.loadVisualisation()
     }
   },
   mounted() {

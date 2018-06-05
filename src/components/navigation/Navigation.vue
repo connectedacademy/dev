@@ -50,20 +50,22 @@ export default {
 
 #login-button
   animate()
+  radius(4px)
+  background-color $color-success
   color white
   font-weight bold
-  height $navigation-height
-  line-height $navigation-height
+  height $navigation-height - 20px
+  line-height $navigation-height - 20px
   padding 0 15px
-  position absolute
-  top 0
-  right 0
+  position fixed
+  top 10px
+  right 10px
   z-index 52
   svg
     height $navigation-height - -14px 20px
     margin 10px auto
   &:hover
-    background-color alpha(black, 0.1)
+    background-color darken($color-success, 10%)
     cursor pointer
 
 #navigation

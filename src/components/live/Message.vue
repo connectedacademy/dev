@@ -7,7 +7,7 @@
 
       .author-label(v-if="message._user")
         | {{ message._user.profile.name }}
-        i.fas.fa-reply(v-if="message._parent")
+        span(v-if="message._parent") #[i.fas.fa-reply]
 
       p.message-content(v-html="parseText()")
 

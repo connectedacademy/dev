@@ -20,6 +20,13 @@ export default {
       errorCb(response);
     });
   },
+  getVisulation(request, cb, errorCb) {
+    Vue.http.get(`${config.WATERCOOLER_API}/messages/vis/${request.theClass}/${request.contentDuration}`).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
   getTranscript(request, cb, errorCb) {
     Vue.http.get(`${config.WATERCOOLER_API}/transcript/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
       cb(response.body);

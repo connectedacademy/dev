@@ -16,25 +16,18 @@ export default {
       this.sound.unload()
     } catch (error) {
       console.error(error);
-      
     }
   },
   mounted() {
-    console.log('this.content.audio')
-    console.log(this.content.audio)
-    
     if (typeof this.content.audio === 'undefined') return
     
     let src = []
 
     // Grab audio files for class
     for (const index in this.content.audio) {
-      const url = `${this.course.cdn}/audio/${this.$route.params.classSlug}/${this.content.audio[index]}`
+      const url = `${this.$app.api_url}/${this.course.slug}/classes/${this.$route.params.classSlug}/${this.content.audio[index]}`
       if (this.fileExists(url)) {
-        console.log('fileExists', url)
         src.push(url)
-      } else {
-        console.log('fileDoesNotExist', url)
       }
     }
 
