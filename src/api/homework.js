@@ -4,14 +4,14 @@ import * as config from '@/api/config';
 
 export default {
   getHomeworks(cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/homework`).then((response) => {
+    Vue.http.get(`${config.API}/homework`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
   getHomework(id, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/homework/${id}`).then((response) => {
+    Vue.http.get(`${config.API}/homework/${id}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
@@ -19,14 +19,14 @@ export default {
   },
   postHomework(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.post(`${config.WATERCOOLER_API}/homework`, postData).then((response) => {
+    Vue.http.post(`${config.API}/homework`, postData).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);
     });
   },
   getHomeworkMessages(id, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/homework/messages/${id}`).then((response) => {
+    Vue.http.get(`${config.API}/homework/messages/${id}`).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);
@@ -34,28 +34,28 @@ export default {
   },
   postHomeworkMessage(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.post(`${config.WATERCOOLER_API}/homework/message`, postData).then((response) => {
+    Vue.http.post(`${config.API}/homework/message`, postData).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);
     });
   },
   getDiscussion(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/discussion/messages/${request.id}`).then((response) => {
+    Vue.http.get(`${config.API}/discussion/messages/${request.id}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
   getFeedbackItems(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/discussion/list/${request.class}/${request.content}`).then((response) => {
+    Vue.http.get(`${config.API}/discussion/list/${request.class}/${request.content}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
     });
   },
   getAvailableFeedbackItems(request, cb, errorCb) {
-    Vue.http.get(`${config.WATERCOOLER_API}/discussion/available/${request.class}/${request.content}`).then((response) => {
+    Vue.http.get(`${config.API}/discussion/available/${request.class}/${request.content}`).then((response) => {
       cb(response.body);
     }, (response) => {
       errorCb(response);
@@ -63,7 +63,7 @@ export default {
   },
   postFeedbackMessage(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.post(`${config.WATERCOOLER_API}/discussion/create/${postData.id}`, postData).then((response) => {
+    Vue.http.post(`${config.API}/discussion/create/${postData.id}`, postData).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);
@@ -71,7 +71,7 @@ export default {
   },
   getUserSubmissions(request, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.get(`${config.WATERCOOLER_API}/discussion/user/${request.classSlug}/${request.contentSlug}/${request.userId}`).then((response) => {
+    Vue.http.get(`${config.API}/discussion/user/${request.classSlug}/${request.contentSlug}/${request.userId}`).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);
@@ -79,7 +79,7 @@ export default {
   },
   verifySubmission(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.post(`${config.WATERCOOLER_API}/discussion/verify/${postData.submission}`, postData).then((response) => {
+    Vue.http.post(`${config.API}/discussion/verify/${postData.submission}`, postData).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);
@@ -87,7 +87,7 @@ export default {
   },
   removeSubmission(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' };
-    Vue.http.post(`${config.WATERCOOLER_API}/discussion/remove`, postData).then((response) => {
+    Vue.http.post(`${config.API}/discussion/remove`, postData).then((response) => {
       cb(response);
     }, (response) => {
       errorCb(response);

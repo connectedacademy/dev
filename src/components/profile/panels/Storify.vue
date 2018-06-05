@@ -53,7 +53,7 @@ export default {
   computed: {
     ...mapGetters(['user', 'profileClass', 'profileClassSlug']),
     storifyLink() {
-      return this.classroom ? `${config.WATERCOOLER_API}/classroom/rss/${this.classroom.code}` : 'Not available'
+      return this.classroom ? `${config.API}/classroom/rss/${this.classroom.code}` : 'Not available'
     }
   },
   methods: {

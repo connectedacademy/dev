@@ -25,7 +25,7 @@ export default {
 
     // Grab audio files for class
     for (const index in this.content.audio) {
-      const url = `${this.$app.api_url}/${this.course.slug}/classes/${this.$route.params.classSlug}/${this.content.audio[index]}`
+      const url = `${this.course.cdn}/${this.course.slug}/classes/${this.$route.params.classSlug}/${this.content.audio[index]}`
       if (this.fileExists(url)) {
         src.push(url)
       }
