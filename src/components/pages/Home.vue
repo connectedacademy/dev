@@ -7,9 +7,9 @@
     .main-container
 
       .content-block.header-block.unpadded-block.white-block
-        .lead-image(:style="{ 'background-image': 'url(https://farm4.staticflickr.com/3782/10728232106_b797749f2e_k_d.jpg)' }")
-          .credit Photo Credit: Alan Levine
-        //- video-embed(v-bind:video-src="`${videoSrc}?modestbranding=1&autohide=1&showinfo=0&controls=0`" autoLoad)
+        video-embed(v-if="course.video" v-bind:video-src="`${course.video}?modestbranding=1&autohide=1&showinfo=0&controls=0`" autoLoad)
+        .lead-image(v-if="course.image" :style="{ 'background-image': `url(${course.image})` }")
+          .credit(v-if="course.imagecredit") Photo Credit: {{ course.imagecredit }}
 
         #details-container
           h2 {{ course.title }}
@@ -39,8 +39,7 @@ export default {
   data() {
     return {
       navTitle: 'Home - Connected Academy',
-      pageStyle: { type: undefined, visible: true, minimized: false },
-      videoSrc: '' // 5GX37R0v8D0
+      pageStyle: { type: undefined, visible: true, minimized: false }
     }
   },
   computed: {

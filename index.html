@@ -13,6 +13,29 @@ x    <meta name="apple-mobile-web-app-status-bar-style" content="black-transluce
 
     <title>Connected Academy (Rocket)</title>
 
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+      window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#efefef",
+              "text": "#404040"
+            },
+            "button": {
+              "background": "#20AF3D"
+            }
+          },
+          "theme": "classic",
+          "content": {
+            "message": "By continuing to use this site you consent to cookies being used to track your activity and improve your experience on the site."
+          }
+        })
+      });
+    </script>
+
     <style type="text/css">
       html {
         background-color: #082736;
