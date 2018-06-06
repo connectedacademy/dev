@@ -11,7 +11,18 @@ import _floor from 'lodash/floor'
 export default {
   data() {
     return {
-      conversationMessages: {},
+      viewportConversationMessages: [],
+      conversationMessages: (() => {
+        const segmentCount = parseInt(this.content.duration / 5)
+        // let obj = {}
+        // for (let i = 0; i < segmentCount; i++) {
+        //   obj[i] = { loading: true, segmentGroup: i }
+        // }
+        // return obj
+        return Array.apply(null, Array(segmentCount)).map((x, i) => { return { loading: true, segmentGroup: i } })
+      })(),
+      startSegment: 0,
+      endSegment: 20
     }
   },
   mounted() {
@@ -36,28 +47,27 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['currentClass', 'user']),
+    ...mapGetters(['currentClass', 'user'])
   },
   methods: {
     loadSegmentSummary(segmentGroup, force) {
       Vue.$log.debug(`Getting message summary for - ${segmentGroup}`)
 
-      let loadAhead = 5
-      let loadBehind = 5
+      const loadAhead = 10, loadBehind = 10
 
-      let segmentViewport = _floor(window.innerHeight / this.$app.segmentHeight) + loadBehind
+      const segmentViewport = _floor(window.innerHeight / this.$app.segmentHeight) + loadBehind
 
-      let endSegment = (segmentGroup + loadAhead)
-      let startSegment = endSegment - segmentViewport
+      const endSegment = (segmentGroup + loadAhead)
+      const startSegment = endSegment - segmentViewport
 
-      startSegment = _clamp(startSegment, 0, startSegment)
-      endSegment = _clamp(endSegment, 5, endSegment)
+      this.startSegment = _clamp(startSegment, -1, startSegment)
+      this.endSegment = _clamp(endSegment, 10, endSegment)
 
       const theRequest = {
         theClass: this.currentClass.slug,
         theContent: this.content.slug,
-        startSegment: startSegment,
-        endSegment: endSegment
+        startSegment: this.startSegment,
+        endSegment: this.endSegment
       }
       
       if (((endSegment % (endSegment - startSegment)) === 0) || force) {

@@ -30,7 +30,7 @@
         message(:user="user" :message="segmentMessage")
 
     .quick-note(v-if="segmentPeeking || segmentOpened" :class="{ replying: replyingTo }" :style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
-      message-composer(:contentSlug="contentSlug" :classSlug="classSlug" :currentSegmentGroup="index" :quick-note-height.sync="quickNoteHeight")
+      message-composer(:contentSlug="$route.params.contentSlug" :classSlug="$route.params.classSlug" :currentSegmentGroup="index" :quick-note-height.sync="quickNoteHeight")
     .clearfix
 
 </template>
@@ -49,7 +49,7 @@
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'transcript', 'classSlug', 'contentSlug', 'isCurrent'],
+    props: ['index', 'message', 'transcript', 'isCurrent'],
     components: {
       MessageComposer,
       Message,
@@ -242,12 +242,10 @@
         this.$log.info('Loading segment messages');
   
         this.loadingMessages = true;
-  
-        let theContent = (this.message.message && this.message.message.content) ? this.message.message.content : this.contentSlug;
-  
+        
         const theRequest = {
-          theClass: this.classSlug,
-          theContent: this.contentSlug,
+          theClass: this.$route.params.classSlug,
+          theContent: this.$route.params.contentSlug,
           startSegment: this.message.segmentGroup,
           endSegment: this.message.segmentGroup
         }

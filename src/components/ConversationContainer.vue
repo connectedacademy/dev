@@ -10,26 +10,25 @@
 
     .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
       time-segment(v-for="(message, index) in conversationMessages"
+        v-if="index > startSegment && index < endSegment"
         v-bind:key="index"
         v-bind:index="index"
         v-bind:message="message"
         v-bind:transcript="transcript[index]"
-        v-bind:contentSlug="content.slug"
-        v-bind:classSlug="currentClass.slug"
         v-bind:isCurrent="isCurrent(index)")
 
 </template>
 
 <script>
-import Vue from 'vue';
-import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus.js';
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
 // Mixins
-import Messages from '@/mixins/Messages';
-import Transcript from '@/mixins/Transcript';
+import Messages from '@/mixins/Messages'
+import Transcript from '@/mixins/Transcript'
 
-import TimeSegment from '@/components/live/TimeSegment';
+import TimeSegment from '@/components/live/TimeSegment'
 
 export default {
   name: 'conversation-container',
@@ -42,58 +41,52 @@ export default {
   },
   props: ['content', 'collapsed'],
   mounted() {
-    this.loadTranscript(this.content);
-    this.loadSegmentSummary(0, true);
-
-    // Fill with blank messages
-    const start = 0;
-    const segmentCount = this.content.duration * 0.2;
-    // const segmentCount = 10;
-    for (var index = start; index < segmentCount; index++) {
-      if (this.conversationMessages[index]) continue;
-      Vue.set(this.conversationMessages, index, { loading: true, segmentGroup: index });
-    }
+    this.loadTranscript(this.content)
+    this.loadSegmentSummary(0, true)
 
     EventBus.$on('scrollStatus', (scrollStatus) => {
-      this.scrollStatus = scrollStatus;
-    });
+      this.scrollStatus = scrollStatus
+    })
 
     window.addEventListener('keydown', (event) => {
       // ESC
       if (event.keyCode === 27) {
-        this.$store.commit('SET_ACTIVE_SEGMENT', undefined);
-        this.$store.commit('SET_PEEK_SEGMENT', undefined);
+        this.$store.commit('SET_ACTIVE_SEGMENT', undefined)
+        this.$store.commit('SET_PEEK_SEGMENT', undefined)
       }
-    });
+    })
   },
   data() {
     return {
       messagePriority: false,
       scrollStatus: undefined,
-    };
+    }
   },
   computed: {
     ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying']),
     containerHeight() {
-      return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`;
+      return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`
     },
+    segmentCount() {
+      return this.content.duration * 0.2
+    }
   },
   watch: {
     activeSegment(nV) {
       setTimeout(() => {
-        this.messagePriority = (nV) ? false : this.messagePriority;
-      }, 300);
+        this.messagePriority = (nV) ? false : this.messagePriority
+      }, 300)
     },
     peekSegment(nV) {
       if (typeof nV !== 'undefined') {
-        this.loadSegmentSummary(nV, true);
+        this.loadSegmentSummary(nV, true)
       }
     },
     scrollStatus(nV, oV) {
       if ((typeof nV === 'undefined') || (typeof oV === 'undefined') || (nV.currentSegmentGroup === oV.currentSegmentGroup)) return
 
-      this.$log.info(`Fetching segment: ${nV.currentSegmentGroup}`);
-      this.loadSegmentSummary(nV.currentSegmentGroup, true);
+      this.$log.info(`Fetching segment: ${nV.currentSegmentGroup}`)
+      this.loadSegmentSummary(nV.currentSegmentGroup, true)
     },
   },
   methods: {
@@ -101,7 +94,7 @@ export default {
       return this.scrollStatus && (this.scrollStatus.currentSegmentGroup === parseInt(index))
     },
   },
-};
+}
 </script>
 
 <style lang="stylus">
