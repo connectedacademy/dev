@@ -6,7 +6,7 @@
       narrow-page-header(v-bind:title="course.title" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
-          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="{ name: 'content', params: { classSlug: theClass.slug } }" v-bind:class="{ released: theClass.released, 'has-release': theClass.releaseAt }")
+          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="theClass.released ? { name: 'content', params: { classSlug: theClass.slug } } : {}" v-bind:class="{ released: theClass.released, 'has-release': theClass.releaseAt }")
             .state-tags
               .state-tag.active(v-if="theClass.active") Live
               .state-tag(v-bind:class="{ released: theClass.released }" :title="`${theClass.released ? 'Released on' : 'Will be released'} - ${prettyDate(theClass.date)}`") {{ theClass.released ? 'Open' : 'Closed' }}
@@ -82,9 +82,9 @@ export default {
           padding-left 140px
         &.released
           background-color white
-        &:hover
-          cursor pointer
-          background-color $color-lightest-grey
+          &:hover
+            cursor pointer
+            background-color $color-lightest-grey
         h3
           reset()
           font-size 1.3em
