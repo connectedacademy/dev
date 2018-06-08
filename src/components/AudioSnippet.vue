@@ -72,6 +72,7 @@ export default {
 .audio-snippet
   animate()
   background-color darken($color-info, 10%)
+  height 60px
   position relative
   p
     reset()
@@ -79,11 +80,17 @@ export default {
   svg
     color white
   .controls
+    pinned()
+    position absolute
     padding 0 20px
+    width 60px
+    right auto
     .control
       cursor pointer
   .meta
-    max-width 200px
+    pinned()
+    position absolute
+    left 60px
   .progress
     pinned()
     animate()
@@ -97,8 +104,6 @@ export default {
     animate()
     height 60px
     line-height 60px
-    float left
-    position relative
     z-index 1
   &.playing
     background-color darken($color-info, 10%)
