@@ -7,7 +7,7 @@
     .main-container
 
       .content-block.header-block.unpadded-block.white-block
-        video-embed(v-if="course.video" v-bind:video-src="`${course.video}?modestbranding=1&autohide=1&showinfo=0&controls=0`" autoLoad)
+        video-embed(v-if="course.video" v-bind:video-src="`${course.video}?modestbranding=1&autohide=1&showinfo=0&controls=1&rel=0&playsinline=1`" autoLoad)
         .lead-image(v-if="course.image" :style="{ 'background-image': `url(${course.image})` }")
           .credit(v-if="course.imagecredit") Photo Credit: {{ course.imagecredit }}
 
