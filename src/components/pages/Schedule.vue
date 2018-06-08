@@ -6,10 +6,10 @@
       narrow-page-header(v-bind:title="course.title" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
-          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="theClass.released ? { name: 'content', params: { classSlug: theClass.slug } } : {}" v-bind:class="{ released: theClass.released, 'has-release': theClass.releaseAt }")
+          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="canView(theClass) ? { name: 'content', params: { classSlug: theClass.slug } } : {}" v-bind:class="{ released: canView(theClass), 'has-release': theClass.releaseAt }")
             .state-tags
               .state-tag.active(v-if="theClass.active") Live
-              .state-tag(v-bind:class="{ released: theClass.released }" :title="`${theClass.released ? 'Released on' : 'Will be released'} - ${prettyDate(theClass.date)}`") {{ theClass.released ? 'Open' : 'Closed' }}
+              .state-tag(v-bind:class="{ released: isReleased(theClass) }" :title="`${isReleased(theClass) ? 'Released on' : 'Will be released'} - ${prettyDate(theClass.date)}`") {{ isReleased(theClass) ? 'Open' : 'Closed' }}
               .clearfix
             h3 {{ (index + 1) + ': ' + theClass.title }}
             h5 {{ (!theClass.description) ? 'No description provided was for this class' : theClass.description }}
@@ -22,6 +22,7 @@ import Moment from 'moment-mini'
 
 import * as types from '@/store/mutation-types'
 import { mapGetters } from 'vuex'
+import _get from 'lodash/get'
 
 // Mixins
 import PageStyle from '@/mixins/PageStyle'
@@ -42,11 +43,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course'])
+    ...mapGetters(['course', 'user'])
   },
   methods: {
     prettyDate(date) {
       return Moment(date).format('DD MMM YYYY')
+    },
+    isReleased(theClass) {
+      return theClass.released
+    },
+    canView(theClass) {
+      // Can view if class is released or user is admin
+      return this.isReleased(theClass) || _get(this.user, 'isAdmin', false)
     }
   }
 }
