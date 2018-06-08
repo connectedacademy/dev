@@ -24,8 +24,14 @@ export default {
       playing: false
     }
   },
+  beforeDestroy() {
+    try {
+      this.sound.unload()
+    } catch (error) {
+      console.error(error);
+    }
+  },
   mounted() {
-
     // Create Howl instance
     this.sound = new Howl({
       src: this.url,
@@ -33,7 +39,7 @@ export default {
       html5: true,
       buffer: true,
       onplay: () => {
-        this.playing = false
+        this.playing = true
       },
       onpause: () => {
         this.playing = false

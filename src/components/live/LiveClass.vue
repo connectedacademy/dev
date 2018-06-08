@@ -11,7 +11,7 @@
 
   .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
 
-    //- audio-snippet(:title="liveClass.intro.title" :url="liveClass.intro.audio")
+    audio-snippet(:title="liveClass.intro.title" :url="liveClass.intro.audio")
 
     action-panel(v-bind:content="liveClass" v-bind:current-class="currentClass")
 
