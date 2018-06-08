@@ -11,6 +11,8 @@
 
   .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
 
+    //- audio-snippet(:title="liveClass.intro.title" :url="liveClass.intro.audio")
+
     action-panel(v-bind:content="liveClass" v-bind:current-class="currentClass")
 
     conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
@@ -28,6 +30,7 @@
 import { mapGetters } from 'vuex'
 
 import ActionPanel from '@/components/live/ActionPanel'
+import AudioSnippet from '@/components/AudioSnippet'
 import ConversationContainer from '@/components/ConversationContainer'
 
 import _find from 'lodash/find'
@@ -38,6 +41,7 @@ export default {
   name: 'live',
   components: {
     ActionPanel,
+    AudioSnippet,
     ConversationContainer,
   },
   computed: {
@@ -89,6 +93,11 @@ export default {
       height 927px
       max-height 927px
       overflow hidden
+    
+    .liveclass-introduction
+      background-color $color-lightest-grey
+      padding 20px
+      text-align center
 
   .course-content--footer
     background-color white
