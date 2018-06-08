@@ -181,7 +181,7 @@
   
               const captionElement = (parts.length > 0) ? `<h5 class="md-bio--caption">${parts[0].trim()}</h5>` : ''
               const image = (parts.length > 1) ? parts[1].trim() : 'default'
-              const imageElement = (image !== 'default') ? `<img class="md-bio--image" src="${image}" />` : ''
+              const imageElement = (image !== 'default') ? `<img class="md-bio--image" src="${image}" />` : '<div class="md-bio--image"></div>'
               const bioElement = (parts.length > 2) ? `<p class="md-bio--bio">${parts[2].trim()}</p>` : ''
               const linkElement = (parts.length > 3) ? `<a href="${parts[3].trim()}" target="_blank" class="md-bio--link">${parts[3].trim()}</a>` : ''
               

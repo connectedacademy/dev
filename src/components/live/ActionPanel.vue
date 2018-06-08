@@ -16,7 +16,7 @@
       li.experience-control#current-time
         p {{ currentTime }}
       
-      li.experience-control#progress-bar(ref="progressbar" @mousedown="startScrub" @mouseup="endScrub" @mouseleave="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
+      li.experience-control#progress-bar(ref="progressbar" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
         visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug" v-bind:contentDuration="content.duration" v-bind:showReflections="false" v-bind:classView="true" visHeight="60px")
       
       li.experience-control.pull-right(@click="toggleComposer")
@@ -77,31 +77,31 @@
       ...mapGetters(['mediaHidden', 'mediaPlaying'])
     },
     methods: {
+      scrollToPos() {
+        const offset = -24
+        const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration) + offset
+        const segmentSize = 5
+        window.scroll(0, ((newPos / segmentSize) * 158.0))
+
+        setTimeout(() => { this.trackOffset = 0 }, 500)
+      },
       scrubMove(event) {
-        if (this.mouseOffsetStart !== 0) {
-          this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft)
-          
-          const offset = -24
-          const newPos = ((this.trackOffset / this.$refs.progressbar.offsetWidth) * this.content.duration) + offset
-          const segmentSize = 5
-          window.scroll(0, ((newPos / segmentSize) * 158.0))
-        }
+        if (this.mouseOffsetStart === 0 || event.clientY < this.$refs.actionpanel.offsetTop) return
+        this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft)
+        this.scrollToPos()
       },
       startScrub(event) {
         this.$store.commit('EXPAND_CONVERSATION')
         this.$store.commit('PAUSE_MEDIA')
         this.trackOffset = 0
-        setTimeout(() => {
-          this.mouseOffsetStart = event.pageX
-        }, 200)
+        this.mouseOffsetStart = event.pageX
       },
       endScrub(event) {
-        
         this.mouseOffsetStart = 0
-
-        setTimeout(() => {
-          this.trackOffset = 0
-        }, 500)
+        this.trackOffset = (event.pageX - this.$refs.actionpanel.offsetLeft - this.$refs.progressbar.offsetLeft)
+        
+        this.scrollToPos()
+        setTimeout(() => { this.$store.commit('PLAY_MEDIA') }, 1000)
       },
       toggleComposer() {
         this.$store.commit(this.mediaHidden ? 'SHOW_MEDIA' : 'HIDE_MEDIA')

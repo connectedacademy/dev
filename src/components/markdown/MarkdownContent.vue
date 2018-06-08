@@ -44,9 +44,11 @@ export default {
               const bio = parts[2] ? parts[2].trim() : ''
               const link = parts[3] ? parts[3].trim() : ''
 
+              const imageElement = (image !== 'default') ? `<img class="md-bio--image" src="${image}" />` : '<div class="md-bio--image"></div>'
+
               return `
               <div class="md-bio md-bio--with-bio">
-                <img class="md-bio--image" src="${image}" />
+                ${imageElement}
                 <div class="md-bio--content">
                   <h5 class="md-bio--caption">${caption}</h5>
                   <p class="md-bio--bio">${bio}</p>
@@ -59,7 +61,7 @@ export default {
 
               return `
               <div class="md-bio">
-                <img class="md-bio--image" src="${image}" />
+                ${imageElement}
                 <h5 class="md-bio--caption">${caption}</h5>
               </div>
               `
