@@ -16,10 +16,10 @@
       li.experience-control#current-time
         p {{ currentTime }}
       
-      li.experience-control#progress-bar(ref="progressbar" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
+      li.experience-control#progress-bar(ref="progressbar" :class="{ 'has-media': content.images }" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
         visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug" v-bind:contentDuration="content.duration" v-bind:showReflections="false" v-bind:classView="true" visHeight="60px")
       
-      li.experience-control.pull-right(@click="toggleComposer")
+      li.experience-control.pull-right(v-if="content.images" @click="toggleComposer")
         onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
         span(v-show="mediaHidden")
           i.fas.fa-caret-up.fa-2x
@@ -28,7 +28,7 @@
 
       .clearfix
 
-    media-container#media-container(v-bind:content="content" v-bind:current-class="currentClass")
+    media-container#media-container(v-if="content.images" v-bind:content="content" v-bind:current-class="currentClass")
 
 </template>
 
@@ -204,6 +204,8 @@
       margin 0
       position absolute
       left (38px * 2) + 10px
-      right (38px * 1) + 10px
+      right (38px * 0) + 10px
+      &.has-media
+        right (38px * 1) + 10px
 
 </style>
