@@ -40,7 +40,7 @@ export default {
       errorCb(response)
     })
   },
-  fetchTranscript(courseSlug, classSlug, cb, errorCb) {
+  fetchTranscript(classSlug, cb, errorCb) {
     Vue.http.get(`${config.API}/transcription/fetch/${classSlug}`).then((response) => {
       cb(response)
     }, (response) => {
