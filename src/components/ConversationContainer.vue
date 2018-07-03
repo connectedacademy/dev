@@ -48,6 +48,10 @@ export default {
       this.scrollStatus = scrollStatus
     })
 
+    EventBus.$on('transcriptUpdated', () => {
+      this.loadTranscript(this.content)
+    })
+
     window.addEventListener('keydown', (event) => {
       // ESC
       if (event.keyCode === 27) {
@@ -63,7 +67,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying']),
+    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying', 'editingTranscript', 'editingSegment']),
     containerHeight() {
       return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`
     },
@@ -80,6 +84,8 @@ export default {
     peekSegment(nV) {
       if (typeof nV !== 'undefined') {
         this.loadSegmentSummary(nV, true)
+      } else {
+        EventBus.$emit('segmentClosed')
       }
     },
     scrollStatus(nV, oV) {
@@ -87,7 +93,7 @@ export default {
 
       this.$log.info(`Fetching segment: ${nV.currentSegmentGroup}`)
       this.loadSegmentSummary(nV.currentSegmentGroup, true)
-    },
+    }
   },
   methods: {
     isCurrent(index) {

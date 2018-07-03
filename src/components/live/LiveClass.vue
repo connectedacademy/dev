@@ -3,17 +3,22 @@
 .course-content#liveclass(name="section-liveclass" v-if="liveClass")
   
   .course-content--header.block
-    i.fab.fa-twitter.fa-lg(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
-    i.fas.fa-comment.fa-lg(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
+    #adminAction(v-if="isAdmin" @click="adminToolsVisible = !adminToolsVisible")
+      i.fas.fa-cog.fa-lg
+    #engineType
+      i.fab.fa-twitter.fa-lg(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
+      i.fas.fa-comment.fa-lg(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
     h1.content-title
       | {{ liveClass.title }}
     p.content-description(v-if="liveClass.description") {{ liveClass.description }}
 
   .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
 
-    audio-snippet(:title="liveClass.intro.title" :url="liveClass.intro.audio")
+    admin-tools(v-if="adminToolsVisible")
+    
+    audio-snippet(v-if="liveClass.intro" :title="liveClass.intro.title" :url="liveClass.intro.audio")
 
-    action-panel(v-bind:content="liveClass" v-bind:current-class="currentClass")
+    action-panel(v-show="!editingTranscript" v-bind:content="liveClass" v-bind:current-class="currentClass")
 
     conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
 
@@ -31,6 +36,7 @@ import { mapGetters } from 'vuex'
 
 import ActionPanel from '@/components/live/ActionPanel'
 import AudioSnippet from '@/components/AudioSnippet'
+import AdminTools from '@/components/AdminTools'
 import ConversationContainer from '@/components/ConversationContainer'
 
 import _find from 'lodash/find'
@@ -42,10 +48,16 @@ export default {
   components: {
     ActionPanel,
     AudioSnippet,
+    AdminTools,
     ConversationContainer,
   },
+  data () {
+    return {
+      adminToolsVisible: false
+    }
+  },
   computed: {
-    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course']),
+    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingTranscript', 'isAdmin']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
     }
@@ -63,6 +75,7 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '~stylus/shared'
 @import '~stylus/buttons'
 @import '~stylus/layout/course-content'
 
@@ -75,6 +88,15 @@ export default {
 
     svg
       color white
+
+    #adminAction
+      position absolute
+      top 10px
+      left 10px
+      &:hover
+        cursor pointer
+
+    #engineType
       position absolute
       top 10px
       right 10px

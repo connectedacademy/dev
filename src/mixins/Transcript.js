@@ -26,19 +26,7 @@ export default {
           filename: content.transcript
         },
         response => {
-
-          for (var transcript of response) {
-
-            let group = math.divide(math.floor(transcript.start + 2.5), 5);
-
-            const segmentGroup = parseInt(group);
-
-            let newTransctipt = transcript;
-
-            newTransctipt.segmentGroup = segmentGroup;
-
-            Vue.set(this.transcript, segmentGroup, (this.transcript[segmentGroup]) ? this.transcript[segmentGroup] + ' ' + newTransctipt.text : newTransctipt.text);
-          }
+          this.transcript = response
         },
         response => {},
       );

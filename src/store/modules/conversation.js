@@ -26,7 +26,9 @@ const state = {
       body: undefined,
       action: undefined
     }
-  }
+  },
+  editingTranscript: false,
+  editingSegment: undefined
 }
 
 // getters
@@ -43,7 +45,9 @@ const getters = {
   questionModal: (initialState) => initialState.questionModal.content,
   modalVisible() {
     return state.infoModal.visible || state.questionModal.visible
-  }
+  },
+  editingTranscript: (initialState) => initialState.editingTranscript,
+  editingSegment: (initialState) => initialState.editingSegment
 }
 
 // actions
@@ -120,6 +124,12 @@ const mutations = {
   },
   [types.COLLAPSE_CONVERSATION](initialState) {
     state.isCollapsed = true
+  },
+  [types.TOGGLE_EDITING_TRANSCRIPT](initialState) {
+    state.editingTranscript = !state.editingTranscript
+  },
+  [types.EDITING_SEGMENT](initialState, segmentGroup) {
+    state.editingSegment = segmentGroup
   }
 }
 

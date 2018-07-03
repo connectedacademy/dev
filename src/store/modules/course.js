@@ -75,7 +75,6 @@ const actions = {
     commit,
   }) {
     API.course.getHubs(
-      API.course,
       response => commit(types.GET_HUBS_SUCCESS, {
         response,
       }),

@@ -1,17 +1,17 @@
 <template lang="pug">
 
   .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
-    .associated-media
-    .message-count(v-if="message.total > 1") {{ message.total }}
+    // .associated-media
+    .message-count(v-if="!editingTranscript && message && message.total > 1") {{ message.total }}
     //- .message-count {{ (index * 5) }}
-    .subscribed-status(v-if="showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
+    .subscribed-status(v-if="!editingTranscript && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
       .transcript-wrapper(@click="openSegment()")
-        transcript(:transcript="transcript")
+        transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
 
-      .message-wrapper
+      .message-wrapper(v-if="!editingTranscript")
         transition(appear name="fade" mode="out-in")
           message(v-if="isMessage" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
           .suggestion(v-if="isSuggestion") "{{ message.text }}"
@@ -36,16 +36,16 @@
 </template>
 
 <script>
-  import _orderBy from 'lodash/orderBy';
-  import _get from 'lodash/get';
+  import _orderBy from 'lodash/orderBy'
+  import _get from 'lodash/get'
 
-  import { mapGetters } from 'vuex';
-  import API from '@/api';
+  import { mapGetters } from 'vuex'
+  import API from '@/api'
   
-  import MessageComposer from '@/components/MessageComposer';
-  import Transcript from '@/components/live/Transcript';
-  import Message from '@/components/live/Message';
-  import MockMessage from '@/components/live/MockMessage';
+  import MessageComposer from '@/components/MessageComposer'
+  import Transcript from '@/components/live/Transcript'
+  import Message from '@/components/live/Message'
+  import MockMessage from '@/components/live/MockMessage'
   
   export default {
     name: 'time-segment',
@@ -67,7 +67,7 @@
       'activeSegment': {
         handler: function(nV, oV) {
           if (oV === this.message.segmentGroup) {
-            this.closeSegment();
+            this.closeSegment()
           }
         },
         deep: false,
@@ -76,7 +76,7 @@
         handler: function(nV, oV) {
           if (nV === this.message.segmentGroup) {
   
-            this.segmentPeeking = (this.segmentPeeking) ? this.segmentPeeking : true;
+            this.segmentPeeking = (this.segmentPeeking) ? this.segmentPeeking : true
   
           } else if (oV === this.message.segmentGroup) {
   
@@ -85,11 +85,11 @@
               position: 'absolute',
               height: '157px',
               'z-index': 56,
-            };
+            }
   
             setTimeout(() => {
               this.unpeek()
-            }, 50);
+            }, 50)
           }
         },
         deep: false,
@@ -105,7 +105,7 @@
         calculatedOffset: 0,
         calculatedOffsetBottom: 0,
         quickNoteHeight: 50,
-      };
+      }
     },
     computed: {
       ...mapGetters([
@@ -115,13 +115,14 @@
         'modalVisible',
         'replyingTo',
         'subscribedTo',
-        'user'
+        'user',
+        'editingTranscript'
       ]),
       quickNoteTop () {
-        return `${158 + 32}px`;
+        return `${158 + 32}px`
       },
       segmentPeekHeight () {
-        return `${158 + 32 + this.quickNoteHeight}px`;
+        return `${158 + 32 + this.quickNoteHeight}px`
       },
       segmentClasses () {
         return {
@@ -135,7 +136,7 @@
         return !this.message.loading
       },
       isSuggestion () {
-        return _get(this.message, ['message', 'suggestion'], false);
+        return _get(this.message, ['message', 'suggestion'], false)
       },
       isMock () {
         return this.message.loading
@@ -144,19 +145,23 @@
     methods: {
       peek () {
         // Cancel peek if another segment is open
-        if (typeof this.peekSegment !== 'undefined') return;
+        if (typeof this.peekSegment !== 'undefined') return
         
+        // Cancel peek if editing transcript
+        if (this.editingTranscript) return
+
         // Update url
-        this.$router.replace({ name: 'live', params: { segmentId: this.message.segmentGroup } });
+        this.$router.replace({ name: 'live', params: { segmentId: this.message.segmentGroup } })
 
         if (!this.segmentOpened) {
   
           this.segmentStyle = {
             transition: 'height .3s ease'
-          };
+          }
   
-          this.$store.commit('PAUSE_MEDIA');
-          this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup);
+          this.$store.commit('PAUSE_MEDIA')
+          this.$store.commit('SET_PEEK_SEGMENT', this.message.segmentGroup)
+          this.$store.commit('EXPAND_CONVERSATION')
         }
       },
       unpeek () {
@@ -165,73 +170,73 @@
           position: 'absolute',
           height: '157px',
           'z-index': 56,
-        };
+        }
   
         setTimeout(() => {
   
-          this.segmentStyle = {};
-          this.segmentOpened = this.segmentPeeking = false;
-          this.$store.commit('SET_PEEK_SEGMENT', undefined);
-          this.$store.commit('SET_REPLYING_TO', undefined);
+          this.segmentStyle = {}
+          this.segmentOpened = this.segmentPeeking = false
+          this.$store.commit('SET_PEEK_SEGMENT', undefined)
+          this.$store.commit('SET_REPLYING_TO', undefined)
 
-          this.$router.replace({ name: 'live' });
+          this.$router.replace({ name: 'live' })
 
-        }, 300); // Timeout equal to time for overlay to fade
+        }, 300) // Timeout equal to time for overlay to fade
       },
       openSegment () {
 
         // Cancel open if another segment is open
-        if (typeof this.activeSegment !== 'undefined') return;
+        if (typeof this.activeSegment !== 'undefined') return
         if (!this.segmentPeeking) return
   
-        if (this.segmentOpened) return;
+        if (this.segmentOpened) return
   
         // Remove segment messages
-        this.$store.commit('SET_SEGMENT_MESSAGES', []);
+        this.$store.commit('SET_SEGMENT_MESSAGES', [])
   
-        this.loadingMessages = true;
+        this.loadingMessages = true
   
         this.$store.commit('SET_ACTIVE_SEGMENT', this.message.segmentGroup)
   
-        const peekElement = document.getElementsByClassName('peek')[0].getBoundingClientRect();
-        this.calculatedOffset = peekElement.top;
-        this.calculatedOffsetBottom = window.innerHeight - peekElement.bottom;
+        const peekElement = document.getElementsByClassName('peek')[0].getBoundingClientRect()
+        this.calculatedOffset = peekElement.top
+        this.calculatedOffsetBottom = window.innerHeight - peekElement.bottom
   
         this.segmentStyle = {
           top: `${this.calculatedOffset}px`,
           bottom: `${this.calculatedOffsetBottom}px`,
           position: 'fixed',
-        };
+        }
   
         setTimeout(() => {
           // DOM updated
-          this.segmentOpened = true;
+          this.segmentOpened = true
           this.segmentStyle = {
             transition: 'all .3s ease',
             top: '60px',
             bottom: '10px',
             position: 'fixed',
-          };
+          }
   
           setTimeout(() => {
             this.loadSegmentMessages()
-          }, 300);
+          }, 300)
   
-        }, 50);
+        }, 50)
       },
       closeSegment () {
   
         if (this.opened) return
   
         // Remove segment messages
-        this.$store.commit('SET_SEGMENT_MESSAGES', []);
+        this.$store.commit('SET_SEGMENT_MESSAGES', [])
   
         this.segmentStyle = {
           transition: 'all .3s ease',
           top: `${this.calculatedOffset}px`,
           bottom: `${this.calculatedOffsetBottom + 90}px`,
           position: 'fixed',
-        };
+        }
   
         setTimeout(() => {
           this.unpeek()
@@ -239,9 +244,9 @@
       },
       loadSegmentMessages () {
   
-        this.$log.info('Loading segment messages');
+        this.$log.info('Loading segment messages')
   
-        this.loadingMessages = true;
+        this.loadingMessages = true
         
         const theRequest = {
           theClass: this.$route.params.classSlug,
@@ -253,18 +258,18 @@
         API.message.getMessages(
           theRequest,
           response => {
-            this.$store.commit('SET_SEGMENT_MESSAGES', response);
-            this.loadingMessages = false;
+            this.$store.commit('SET_SEGMENT_MESSAGES', response)
+            this.loadingMessages = false
           },
           response => {
-            alert('There was an error');
-            this.$store.commit('SET_SEGMENT_MESSAGES', []);
-            this.loadingMessages = false;
+            alert('There was an error')
+            this.$store.commit('SET_SEGMENT_MESSAGES', [])
+            this.loadingMessages = false
           },
-        );
+        )
       },
     },
-  };
+  }
 </script>
 
 <style lang="stylus" scoped>

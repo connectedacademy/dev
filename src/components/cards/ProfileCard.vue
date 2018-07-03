@@ -24,32 +24,25 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'profile-card',
   props: ['visible'],
   data() {
     return {
-      editorVisible: false,
-    };
+      editorVisible: false
+    }
   },
   computed: {
-    ...mapGetters(['user']),
-    isAdmin() {
-      // TODO: Check if admin
-      return true;
-    },
-    user() {
-      return this.user;
-    },
+    ...mapGetters(['user'])
   },
   methods: {
     toggleProfileEditor() {
-      this.editorVisible = !this.editorVisible;
-    },
+      this.editorVisible = !this.editorVisible
+    }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
