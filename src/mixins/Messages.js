@@ -13,7 +13,7 @@ export default {
     return {
       viewportConversationMessages: [],
       conversationMessages: (() => {
-        const segmentCount = parseInt(this.content.duration / 5)
+        const segmentCount = parseInt(this.content.duration / 5) + 1
         // let obj = {}
         // for (let i = 0; i < segmentCount; i++) {
         //   obj[i] = { loading: true, segmentGroup: i }
@@ -53,7 +53,7 @@ export default {
     loadSegmentSummary(segmentGroup, force) {
       Vue.$log.debug(`Getting message summary for - ${segmentGroup}`)
 
-      const loadAhead = 10, loadBehind = 10
+      const loadAhead = 10, loadBehind = 20
 
       const segmentViewport = _floor(window.innerHeight / this.$app.segmentHeight) + loadBehind
 
