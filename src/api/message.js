@@ -34,6 +34,14 @@ export default {
       errorCb(response);
     });
   },
+  updateTranscript(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' };
+    Vue.http.post(`${config.API}/transcript/${postData.theClass}`, postData).then((response) => {
+      cb(response.body);
+    }, (response) => {
+      errorCb(response);
+    });
+  },
   getMedia(request, cb, errorCb) {
     Vue.http.get(`${config.API}/media/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
       cb(response.body);
