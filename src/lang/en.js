@@ -43,7 +43,7 @@ export default {
     logout: 'Logout',
 
     login_to_participate: 'Login to Participate',
-    login_with_twitter: 'Login with Twitter to gain full access to the course!',
+    login_with_twitter: 'Login with Twitter to gain full access to the course',
 
     register: 'Register',
     welcome_to_registration: 'Welcome to registration',
