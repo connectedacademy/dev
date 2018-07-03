@@ -2,14 +2,16 @@
 transition(name="slide-up")
   .auth-modal(v-if="isVisible")
     .auth-modal--container
-      p {{ $t('auth.login_with_twitter') }}
       p
+        strong {{ $t('auth.login_with_twitter') }}
+      p By continuing you agree to our #[a(href="/terms") Terms of Service] and #[a(href="/privacy") Privacy Policy].
+      // p
         input(type="checkbox")
         | I understand this service is part of a research project and my data will be processed as described in the Research Policy
-      p
+      // p
         input(type="checkbox")
         | I agree to the Privacy Policy
-      p
+      // p
         input(type="checkbox")
         | I agree to the Terms of Use
       .clearfix
