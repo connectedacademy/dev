@@ -11,12 +11,12 @@
     clipPath(id="progress")
       rect(v-bind:x="`${playheadPos}%`" y="0" v-bind:width="`${100 - playheadPos}%`" height="100%" fill="black" filter="url(#bandw)")
     
-    clipPath(id="mask")
+    // clipPath(id="mask")
       rect(v-for="(segment, index) in buffered" v-bind:key="index" v-bind:x="`${segment.start}%`" y="0" v-bind:width="`${segment.end}%`" height="60" fill="black")
     
     // Vis
     g(id="primaryVis")
-      rect(v-for="(val, index) in visualisation" v-bind:key="index" v-if="(typeof val === 'number')" v-bind:x="`${index}%`" width="2px" rx="1" ry="1" v-bind:y="`${(100 - parseInt(val * 80)) / 2}%`" v-bind:height="`${parseInt(val * 80)}%`" v-bind:style="{ fill: '#1864ef' }")
+      rect(v-for="(val, index) in visualisation" v-bind:key="index" v-if="(typeof val === 'number')" v-bind:x="`${(index > 99) ? 99 : index}%`" width="2px" rx="1" ry="1" v-bind:y="`${(100 - parseInt(val * 80)) / 2}%`" v-bind:height="`${parseInt(val * 80)}%`" v-bind:style="{ fill: '#1864ef' }")
     use(x="0" y="0" href="#primaryVis" clip-path="url(#progress)" filter="url(#bandw)")
 
     // Track
@@ -25,7 +25,7 @@
     use(x="0" y="0" href="#primaryTrack" clip-path="url(#progress)" filter="url(#bandw)")
 
     // Buffer
-    //- g(id="buffer")
+    // - g(id="buffer")
       rect(x="0%" width="100%" y="39px" height="2px" v-bind:style="{ fill: 'orange' }" opacity="1.0")
       rect(clip-path="url(#mask)" x="0%" width="100%" y="38px" height="4px" v-bind:style="{ fill: 'white' }")
 
