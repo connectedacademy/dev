@@ -3,21 +3,19 @@ transition(name="slide-up")
   .auth-modal(v-if="isVisible")
     .auth-modal--container
       p
-        strong {{ $t('auth.login_with_twitter') }}
-      p By continuing you agree to our #[a(href="/terms") Terms of Service] and #[a(href="/privacy") Privacy Policy].
-      // p
-        input(type="checkbox")
-        | I understand this service is part of a research project and my data will be processed as described in the Research Policy
-      // p
-        input(type="checkbox")
-        | I agree to the Privacy Policy
-      // p
-        input(type="checkbox")
-        | I agree to the Terms of Use
+        strong Please confirm that you have read, understood and agree to by clicking continue:
+      
+      p
+        a(href="/research") Research Policy
+      p
+        a(href="/terms") Terms of Service
+      p
+        a(href="/privacy") Privacy Policy
+
       .clearfix
       button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
         i.fab.fa-twitter
-        | {{ $t('common.continue') }}
+        | Continue
 
 </template>
 

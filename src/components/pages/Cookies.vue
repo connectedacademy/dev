@@ -6,7 +6,7 @@
     
     .main-container
 
-      narrow-page-header(title="Terms of Use" subtitle="The terms of use when using this website")
+      narrow-page-header(title="Cookies Policy" subtitle="How we use cookies on the site")
 
       .content-block.padded-block.header-block.white-block
 
@@ -27,7 +27,7 @@ import NarrowPageHeader from '@/components/NarrowPageHeader'
 import PageStyle from '@/mixins/PageStyle'
 
 export default {
-  name: 'terms',
+  name: 'cookies',
   mixins: [ PageStyle ],
   components: {
     NarrowPageHeader,

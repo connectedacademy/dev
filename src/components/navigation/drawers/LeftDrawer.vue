@@ -32,7 +32,13 @@ transition(name="slide-left")
 
     ul.drawer-links
       li
-        router-link(v-bind:to="{ name: 'terms' }") Terms & Conditions
+        router-link(v-bind:to="{ name: 'cookies' }") Cookies
+      li
+        router-link(v-bind:to="{ name: 'research' }") Research
+      li
+        router-link(v-bind:to="{ name: 'privacy' }") Privacy
+      li
+        router-link(v-bind:to="{ name: 'terms' }") Terms
 
 </template>
 

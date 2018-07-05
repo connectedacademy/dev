@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Auth from '@/mixins/Auth'
 import API from '@/api'
 import store from '@/store'
 
@@ -16,7 +15,6 @@ const Markdown = () => import('@/components/markdown/Markdown')
 const Live = () => import('@/components/live/Live')
 
 const Feedback = () => import('@/components/feedback/Feedback')
-const FeedbackView = () => import('@/components/feedback/FeedbackView')
 
 const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding')
 
@@ -24,6 +22,10 @@ const Home = () => import('@/components/pages/Home')
 const About = () => import('@/components/pages/About')
 const Faq = () => import('@/components/pages/Faq')
 const Schedule = () => import('@/components/pages/Schedule')
+
+const Cookies = () => import('@/components/pages/Cookies')
+const Research = () => import('@/components/pages/Research')
+const Privacy = () => import('@/components/pages/Privacy')
 const Terms = () => import('@/components/pages/Terms')
 
 Vue.use(Router)
@@ -118,6 +120,21 @@ const router = new Router({
       name: 'home',
       path: '/',
       component: Home
+    },
+    {
+      name: 'cookies',
+      path: '/cookies',
+      component: Cookies,
+    },
+    {
+      name: 'research',
+      path: '/research',
+      component: Research,
+    },
+    {
+      name: 'privacy',
+      path: '/privacy',
+      component: Privacy,
     },
     {
       name: 'terms',

@@ -6,7 +6,7 @@
     
     .main-container
 
-      narrow-page-header(title="Terms of Use" subtitle="The terms of use when using this website")
+      narrow-page-header(title="Privacy Policy" subtitle="How we handle your privacy and personal data")
 
       .content-block.padded-block.header-block.white-block
 
@@ -27,7 +27,7 @@ import NarrowPageHeader from '@/components/NarrowPageHeader'
 import PageStyle from '@/mixins/PageStyle'
 
 export default {
-  name: 'terms',
+  name: 'privacy',
   mixins: [ PageStyle ],
   components: {
     NarrowPageHeader,

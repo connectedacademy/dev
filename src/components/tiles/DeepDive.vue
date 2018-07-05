@@ -1,21 +1,21 @@
 <template lang="pug">
-.course-content(v-bind:name="`section-${content.slug}`" v-bind:class="{ optional: content.optional }")
+.course-content(:name="`section-${content.slug}`" :class="{ optional: content.optional }")
 
-  like-indicator(v-bind:content-slug="content.slug" v-bind:class-slug="currentClassSlug" v-bind:haveliked="content.haveliked" v-bind:likes="content.likes" v-bind:has-liked.sync="content.haveliked" v-bind:like-count.sync="content.likes")
+  like-indicator(:content-slug="content.slug" :class-slug="currentClassSlug" :haveliked="content.haveliked" :likes="content.likes" :has-liked.sync="content.haveliked" :like-count.sync="content.likes")
 
   .course-content--header
     h1.content-title(v-if="content.title") {{ content.title }}
 
   .course-content--body
-    markdown-content(v-if="content.description" v-bind:markdown="content.description")
-    media-carousel(v-if="content.carousel" v-bind:media="content.carousel")
-    media-thumbnails(v-if="content.thumbnails" v-bind:thumbnails="content.thumbnails")
-    soundcloud-embed(v-if="content.soundcloud && (content.type !== 'class')" v-bind:soundcloud-src="content.soundcloud" v-bind:auto-load="true")
-    video-embed(v-if="content.video && (content.type !== 'class')" v-bind:video-src="content.video" v-bind:content-type="content.type")
-    webinar-message-ticker(v-if="content.type === 'webinar'" v-bind:class-slug="currentClassSlug" v-bind:content-slug="content.slug")
+    markdown-content(v-if="content.description" :markdown="content.description")
+    media-carousel(v-if="content.carousel" :media="content.carousel")
+    media-thumbnails(v-if="content.thumbnails" :thumbnails="content.thumbnails")
+    soundcloud-embed(v-if="content.soundcloud && (content.type !== 'class')" :soundcloud-src="content.soundcloud" :auto-load="true")
+    video-embed(v-if="content.video && (content.type !== 'class')" :video-src="content.video" :content-type="content.type" :auto-load="true")
+    webinar-message-ticker(v-if="content.type === 'webinar'" :class-slug="currentClassSlug" :content-slug="content.slug")
 
   .course-content--footer(v-if="content.rich")
-    markdown-link.pull-right(v-bind:md-content="content")
+    markdown-link.pull-right(:md-content="content")
     .clearfix
 
 </template>
