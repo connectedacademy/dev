@@ -31,9 +31,12 @@ export default {
   },
   methods: {
     onFocus () {
-      console.log('onFocus')
-      
-      this.$store.commit('EDITING_SEGMENT', this.segmentGroup)
+      if (this.editingMode === 'transcript') {
+        this.$store.commit('EDITING_SEGMENT', this.segmentGroup)
+      }
+    },
+    onBlur () {
+      this.$store.commit('EDITING_SEGMENT', undefined)
     },
     saveEdit() {
       API.message.updateTranscript({
