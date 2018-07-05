@@ -3,8 +3,7 @@ transition(name="slide-up")
   .auth-modal(v-if="isVisible")
     .auth-modal--container
       p
-        strong Please confirm that you have read, understood and agree to by clicking continue:
-      
+        strong Please confirm that you have read, understood and agree to the following by clicking continue:
       p
         a(href="/research") Research Policy
       p
