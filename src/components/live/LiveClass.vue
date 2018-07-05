@@ -3,8 +3,8 @@
 .course-content#liveclass(name="section-liveclass" v-if="liveClass")
   
   .course-content--header.block
-    #adminAction(v-if="isAdmin" @click="adminToolsVisible = !adminToolsVisible")
-      i.fas.fa-cog.fa-lg
+    #adminAction(v-if="isAdmin" @click="toggleAdminTools")
+      i.fas.fa-wrench.fa-lg
     #engineType
       i.fab.fa-twitter.fa-lg(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
       i.fas.fa-comment.fa-lg(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
@@ -12,13 +12,18 @@
       | {{ liveClass.title }}
     p.content-description(v-if="liveClass.description") {{ liveClass.description }}
 
-  .course-content--container(v-bind:class="{ collapsed: isCollapsed }")
+  .course-content--container
 
-    admin-tools(v-if="adminToolsVisible")
+    admin-tools(v-if="editingMode && editingMode !== 'transcript'" :liveclass="liveClass")
+
+    #editingstate(v-if="editingMode === 'transcript'" @click="toggleEditingTranscript")
+      | Finished Editing?
     
-    audio-snippet(v-if="liveClass.intro" :title="liveClass.intro.title" :url="liveClass.intro.audio")
+    #audio-snippets(v-if="!editingMode || editingMode === 'intro'" :class="{ editing: editingMode }")
+      audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode")
+      .clearfix
 
-    action-panel(v-show="!editingTranscript" v-bind:content="liveClass" v-bind:current-class="currentClass")
+    action-panel(v-show="!editingMode" v-bind:content="liveClass" v-bind:current-class="currentClass")
 
     conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
 
@@ -51,13 +56,8 @@ export default {
     AdminTools,
     ConversationContainer,
   },
-  data () {
-    return {
-      adminToolsVisible: false
-    }
-  },
   computed: {
-    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingTranscript', 'isAdmin']),
+    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingMode', 'isAdmin']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
     }
@@ -68,6 +68,13 @@ export default {
       setTimeout(() => {
         this.$store.commit('PLAY_MEDIA')
       }, 100)
+    },
+    toggleAdminTools() {
+      this.$store.commit('EDITING_MODE', this.editingMode ? undefined : 'intro')
+    },
+    toggleEditingTranscript () {
+      this.$store.commit('EDITING_MODE', 'other')
+      this.$store.commit('EDITING_SEGMENT', undefined)
     }
   }
 }
@@ -81,7 +88,7 @@ export default {
 
 .course-content
   background-color white !important
-  margin-bottom 240px
+  margin-bottom 60px
   position relative
 
   .course-content--header.block
@@ -107,23 +114,41 @@ export default {
   .course-content--footer
     p
       color $color-text-grey
+
   .course-content--container
     background-color white
     position relative
 
-    &.collapsed
-      height 927px
-      max-height 927px
-      overflow hidden
-    
-    .liveclass-introduction
-      background-color $color-lightest-grey
-      padding 20px
-      text-align center
+    #audio-snippets
+      animate()
+      background-color darken($color-info, 10%)
+      min-height 60px
+      padding 5px
+      position relative
+      &.editing
+        background-color $color-tools
 
   .course-content--footer
     background-color white
     text-align center
+
+  #editingstate
+    radius-top(10px)
+    background-color $color-success
+    box-sizing border-box
+    color white
+    cursor pointer
+    font-weight bold
+    line-height 20px
+    padding 20px 40px
+    position fixed
+    text-align center
+    z-index 999
+    top auto
+    bottom 0
+    left 50%
+    margin-left -160px
+    width 320px
 
   #continue-listening
     pinned()
@@ -138,7 +163,7 @@ export default {
     .pure-button
       box-sizing()
       left 50%
-      top calc(calc(160px - 40px) / 2)
+      top calc(calc(160px - 52px) / 2)
       margin-left -100px
       position absolute
       width 200px

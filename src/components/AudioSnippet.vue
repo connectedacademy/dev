@@ -1,27 +1,41 @@
 <template lang="pug">
-  .audio-snippet(v-if="sound" :class="{ playing: playing }")
-    .progress(:style="{ right: `${100 - progress}%` }")
-    .controls
-      .control.play(@click="toggleAudio")
-        span.playing(v-show="playing")
-          i.fas.fa-pause
-        span.paused(v-show="!playing")
-          i.fas.fa-play
-    .meta
-      p.title {{ title }}
+  .snippet(v-if="sound" :class="{ playing: playing, editing: editing }" @click="playAudio")
+    #controls
+      span.rewind(@click="rewindAudio")
+        i.fas.fa-step-backward
+      span.pause(v-show="playing" @click="pauseAudio")
+        i.fas.fa-pause
+      span.play(v-show="!playing")
+        i.fas.fa-play
+      span.skip
+        i.fas.fa-step-forward
+    #meta
+      p.title {{ intro.title }}
+    #manage(v-if="editing")
+      .pure-button.pure-button-transparent.full-width Remove
     .clearfix
 </template>
 
 <script>
 require('howler')
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'audio-snippet',
-  props: ['title', 'url'],
+  props: ['intro', 'editing'],
   data() {
     return {
       sound: undefined,
-      playing: false
+      playing: false,
+      progress: 0
+    }
+  },
+  computed: {
+    ...mapGetters(['mediaPlaying'])
+  },
+  watch: {
+    mediaPlaying(nV) {
+      if (nV) { this.pauseAudio() }
     }
   },
   beforeDestroy() {
@@ -34,7 +48,7 @@ export default {
   mounted() {
     // Create Howl instance
     this.sound = new Howl({
-      src: this.url,
+      src: this.intro.audio,
       preload: true,
       html5: true,
       buffer: true,
@@ -47,19 +61,15 @@ export default {
     })
   },
   methods: {
-    toggleAudio() {
-      if (this.playing) {
-        this.sound.pause()
-      } else {
-        this.sound.play()
-      }
-    }
-  },
-  computed: {
-    progress() {
-      if (this.sound && !this.playing) return 0
-      let prog = (100 / this.sound.duration()) * this.sound.seek()
-      return (prog > 100) ? 0 : prog + 1
+    playAudio() {
+      if (this.playing)  return
+      this.sound.play()
+    },
+    pauseAudio() {
+      this.sound.pause()
+    },
+    rewindAudio() {
+      this.sound.seek(0)
     }
   }
 }
@@ -68,45 +78,46 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/shared'
+@import '~stylus/buttons'
 
-.audio-snippet
-  animate()
-  background-color darken($color-info, 10%)
-  height 60px
+.snippet
+  radius(10px)
+  background-color $color-info
+  cursor pointer
+  float left
+  height 100px
+  margin 5px
+  padding 10px
   position relative
+  text-align center
+  width 200px
+  &.editing
+    height 140px
+  @media(max-width: 470px)
+    height auto
+    width calc(100% - 30px)
   p
     reset()
     color white
+    font-weight bold
+    line-height 20px
+    max-height 40px
+    max-width 100%
+    margin-bottom 10px
+    overflow hidden
   svg
     color white
-  .controls
-    pinned()
-    position absolute
-    padding 0 20px
-    width 60px
-    right auto
-    .control
+    margin 15px 5px
+    &.fa-step-forward, &.fa-step-backward
+      opacity 0
+      pointer-events none
+    &:hover
       cursor pointer
-  .meta
-    pinned()
-    position absolute
-    left 60px
-  .progress
-    pinned()
-    animate()
-    background-color $color-pink
-    height 4px
-    position absolute
-    right 100%
-    top auto
-    z-index 0
-  .controls, .meta
-    animate()
-    height 60px
-    line-height 60px
-    z-index 1
   &.playing
-    background-color darken($color-info, 10%)
-    // .controls, .meta
+    background-color $color-pink
+    cursor default
+    svg.fa-step-backward
+      opacity 1.0
+      pointer-events all
 
 </style>

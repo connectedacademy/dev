@@ -27,7 +27,7 @@ const state = {
       action: undefined
     }
   },
-  editingTranscript: false,
+  editingMode: undefined,
   editingSegment: undefined
 }
 
@@ -46,7 +46,7 @@ const getters = {
   modalVisible() {
     return state.infoModal.visible || state.questionModal.visible
   },
-  editingTranscript: (initialState) => initialState.editingTranscript,
+  editingMode: (initialState) => initialState.editingMode,
   editingSegment: (initialState) => initialState.editingSegment
 }
 
@@ -125,8 +125,8 @@ const mutations = {
   [types.COLLAPSE_CONVERSATION](initialState) {
     state.isCollapsed = true
   },
-  [types.TOGGLE_EDITING_TRANSCRIPT](initialState) {
-    state.editingTranscript = !state.editingTranscript
+  [types.EDITING_MODE](initialState, editingMode) {
+    state.editingMode = editingMode
   },
   [types.EDITING_SEGMENT](initialState, segmentGroup) {
     state.editingSegment = segmentGroup

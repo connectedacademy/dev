@@ -1,9 +1,9 @@
 <template lang="pug">
 
-  .conversation-container(ref="conversationContainer")
+  .conversation-container(ref="conversationContainer" id="conversation-container" :class="{ collapsed: collapsed }")
 
     #view-toggle(v-if="$route.name === 'live' && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
-      onboarding-prompt(identifier="view-toggle" prompt="transcript/tweets" top="50" left="-70" position="top-right" z-index="1")
+      onboarding-prompt(identifier="view-toggle" prompt="transcript/notes" top="50" left="-70" position="top-right" z-index="1")
       i.fas.fa-quote-left
       i.fab.fa-twitter(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
       i.fas.fa-comment(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
@@ -14,6 +14,7 @@
         v-bind:key="index"
         v-bind:index="index"
         v-bind:message="message"
+        v-bind:suggestion="suggestions[index]"
         v-bind:transcript="transcript[index]"
         v-bind:isCurrent="isCurrent(index)")
 
@@ -26,6 +27,7 @@ import { EventBus } from '@/event-bus.js'
 
 // Mixins
 import Messages from '@/mixins/Messages'
+import Suggestions from '@/mixins/Suggestions'
 import Transcript from '@/mixins/Transcript'
 
 import TimeSegment from '@/components/live/TimeSegment'
@@ -34,6 +36,7 @@ export default {
   name: 'conversation-container',
   mixins: [
     Messages,
+    Suggestions,
     Transcript,
   ],
   components: {
@@ -41,6 +44,7 @@ export default {
   },
   props: ['content', 'collapsed'],
   mounted() {
+    this.loadSuggestions(this.content)
     this.loadTranscript(this.content)
     this.loadSegmentSummary(0, true)
 
@@ -67,7 +71,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying', 'editingTranscript', 'editingSegment']),
+    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying', 'editingSegment']),
     containerHeight() {
       return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`
     },
@@ -112,7 +116,11 @@ export default {
   position relative
 
   &.collapsed
+    height 948px
+    max-height 948px
     overflow hidden
+
+
 
   h5
     reset()

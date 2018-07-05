@@ -167,7 +167,6 @@ export default {
     }, 2000),
     attemptSync: _throttle(function (self) {
       
-      console.log('self.editingSegment', self.editingSegment)
       
       if (typeof self.editingSegment !== 'undefined') {
         this.$log.error('Currently editing a segment')
@@ -180,7 +179,6 @@ export default {
       }
 
       const playerTime = self.sound.seek(this.mainSoundId)
-      console.log('playerTime', playerTime)
       
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 

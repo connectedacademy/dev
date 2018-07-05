@@ -2,7 +2,7 @@
 
   .transcript
 
-    textarea(v-if="editingTranscript" placeholder="Write transcript..." v-model="currentTranscript" @focus="onFocus" @blur="saveEdit" ref="textarea")
+    textarea(v-if="editingMode === 'transcript'" placeholder="Write transcript..." v-model="currentTranscript" @focus="onFocus" @blur="saveEdit" ref="textarea")
     h1(v-else-if="transcript" v-html="transcript")
     h1(v-else) ...
 
@@ -27,7 +27,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'editingTranscript'])
+    ...mapGetters(['user', 'editingMode'])
   },
   methods: {
     onFocus () {

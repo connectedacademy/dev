@@ -29,7 +29,7 @@ export default {
         theClass: this.classSlug,
         contentDuration: this.contentDuration
       }
-      API.message.getVisulation(
+      API.message.getVisualisation(
         theRequest,
         (response) => {
           this.setVisualisation(response.visualisation)

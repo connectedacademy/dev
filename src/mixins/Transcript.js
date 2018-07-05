@@ -1,13 +1,12 @@
-import Vue from 'vue';
-import API from '@/api';
-import { mapGetters } from 'vuex';
-import math from 'lodash/math';
+import Vue from 'vue'
+import API from '@/api'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
-      transcript: [],
-    };
+      transcript: []
+    }
   },
   computed: {
     ...mapGetters(['course', 'currentClass']),
@@ -16,9 +15,9 @@ export default {
     loadTranscript(content) {
       if (typeof content.transcript === 'undefined') return
       
-      Vue.$log.info('Getting transcript...');
+      Vue.$log.info('Getting transcript...')
 
-      this.transcript = []; // Clear existing transcript
+      this.transcript = [] // Clear existing transcript
 
       API.message.getTranscript(
         {
@@ -27,9 +26,8 @@ export default {
         },
         response => {
           this.transcript = response
-        },
-        response => {},
-      );
+        }
+      )
     }
-  },
+  }
 }

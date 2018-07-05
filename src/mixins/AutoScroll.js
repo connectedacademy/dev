@@ -3,9 +3,9 @@ import app from '@/config'
 import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 
-import _throttle from 'lodash/throttle'
-import _find from 'lodash/find'
+import _get from 'lodash/get'
 import _round from 'lodash/round'
+import _throttle from 'lodash/throttle'
 
 const AUTO_SCROLL_ATTEMPT = 1500 // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000 // Interval before assumed no longer manually scrolling
@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mediaPlaying', 'activeSegment', 'peekSegment', 'editingTranscript'
+      'mediaPlaying', 'activeSegment', 'peekSegment', 'mediaHidden'
     ]),
     canAutoScroll() {
       return !this.peekSegment && !this.preventScroll && this.mediaPlaying && (typeof this.scrollStatus !== 'undefined')
@@ -100,7 +100,7 @@ export default {
       window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
         function(fn) { window.setTimeout(fn, 15) }
 
-      const start = (this.scrollStatus && this.scrollStatus.scrollPos) ? this.scrollStatus.scrollPos : 0
+      const start = _get(this.scrollStatus, 'scrollPos', 0)
 
       var duration = (((end - start) / (this.$app.segmentHeight * 1.0)) * this.durationRate)
 
@@ -158,7 +158,7 @@ export default {
       this.isAutoScrolling = false
     },
     getEnd() {
-      const element = document.getElementById('liveclass');
+      const element = document.getElementById('conversation-container');
       if (!element) return 0
       return element.offsetTop + element.offsetHeight
     },
@@ -167,18 +167,20 @@ export default {
       // Calculate
       let scrollPos = window.scrollY
 
-      const element = document.getElementById('liveclass');
-      if (!element) return
-      
-      const content = _find(this.$store.getters.currentClass.content, { type: 'class' })
-      
-      if ((!element) || (typeof element === 'null') || (typeof element === 'undefined')) return
-      
-      // Offset
-      const actionPanelHeight = 260
-      const additionalOffset = 200
+      // Get conversation container element
+      const element = document.getElementById('conversation-container')
 
-      const offsetScrollPos = scrollPos + window.innerHeight - (element.offsetTop + actionPanelHeight + additionalOffset)
+      // Ig no element then return
+      if (!element) return
+
+      // Offset
+      const bottomPadding = 120
+      const actionPanelHeight = self.mediaHidden ? 60 : 260
+      const pageOffset = document.documentElement.scrollHeight - element.offsetHeight - bottomPadding
+      const offset = actionPanelHeight + pageOffset // element.offsetTop
+      
+
+      const offsetScrollPos = scrollPos + window.innerHeight - offset
       
       this.end = this.getEnd()
 

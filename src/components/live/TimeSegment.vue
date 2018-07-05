@@ -1,21 +1,20 @@
 <template lang="pug">
 
   .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
-    // .associated-media
-    .message-count(v-if="!editingTranscript && message && message.total > 1") {{ message.total }}
-    //- .message-count {{ (index * 5) }}
-    .subscribed-status(v-if="!editingTranscript && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
+    .message-count(v-if="!editingMode && message && message.total > 1") {{ message.total }}
+    .subscribed-status(v-if="!editingMode && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
       .transcript-wrapper(@click="openSegment()")
         transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
 
-      .message-wrapper(v-if="!editingTranscript")
-        transition(appear name="fade" mode="out-in")
-          message(v-if="isMessage" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
-          .suggestion(v-if="isSuggestion") "{{ message.text }}"
-          mock-message(v-if="isMock" :loading="message.loading")
+      .message-wrapper
+        transition(v-if="suggestion" appear name="fade" mode="out-in")
+          .suggestion {{ suggestion }}
+        transition(v-else-if="!editingMode" appear name="fade" mode="out-in")
+          mock-message(v-if="isLoading" :loading="message.loading")
+          message(v-if="!isLoading" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
 
       .clearfix
 
@@ -49,7 +48,7 @@
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'transcript', 'isCurrent'],
+    props: ['index', 'message', 'suggestion', 'transcript', 'isCurrent'],
     components: {
       MessageComposer,
       Message,
@@ -116,7 +115,7 @@
         'replyingTo',
         'subscribedTo',
         'user',
-        'editingTranscript'
+        'editingMode'
       ]),
       quickNoteTop () {
         return `${158 + 32}px`
@@ -132,13 +131,7 @@
           current: this.isCurrent
         }
       },
-      isMessage () {
-        return !this.message.loading
-      },
-      isSuggestion () {
-        return _get(this.message, ['message', 'suggestion'], false)
-      },
-      isMock () {
+      isLoading () {
         return this.message.loading
       }
     },
@@ -147,8 +140,8 @@
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return
         
-        // Cancel peek if editing transcript
-        if (this.editingTranscript) return
+        // Cancel peek if in editing mode
+        if (this.editingMode) return
 
         // Update url
         this.$router.replace({ name: 'live', params: { segmentId: this.message.segmentGroup } })
