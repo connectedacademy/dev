@@ -35,8 +35,6 @@
     "raven-js": "^3.15.0",
     "selenium-webdriver": "^3.5.0",
     "soundcloud": "^3.1.2",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
     "tweet-patch": "^2.0.5",
     "validator": "^7.0.0",
     "vue": "^2.3.0",
