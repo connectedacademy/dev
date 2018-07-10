@@ -140,10 +140,11 @@ export default {
         const image = self.liveclassMedia[i]
 
         if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
+          console.log('IN RANGE', image.start)
+          
           self.$refs.classslick.goTo(i)
           self.currentIndex = i
           self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined
-          
         }
       }
     }, 300, { 'leading': false })

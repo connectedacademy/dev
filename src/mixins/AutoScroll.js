@@ -174,7 +174,7 @@ export default {
       if (!element) return
 
       // Offset
-      const bottomPadding = 120
+      const bottomPadding = 280
       const actionPanelHeight = self.mediaHidden ? 60 : 260
       const pageOffset = document.documentElement.scrollHeight - element.offsetHeight - bottomPadding
       const offset = actionPanelHeight + pageOffset // element.offsetTop

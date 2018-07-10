@@ -63,7 +63,7 @@ export default {
     h1
       color white
     &.column-center
-      padding 0 0 60px 0
+      padding 0 0 220px 0
       width 60%
     &.column-right
       padding $navigation-height 20px 100px 20px

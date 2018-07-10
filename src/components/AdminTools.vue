@@ -46,7 +46,7 @@
       
       .tab-view(v-show="editingMode === 'other'")
         .inner-wrapper
-          // .row
+          .row
             h3 Fetch transcript
             p Once the transcript has completed processing, click below to download
             .pure-button.pure-button-success(v-if="state.transcript !== 'downloading'" @click="fetchTranscript") Download

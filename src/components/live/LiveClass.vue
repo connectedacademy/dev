@@ -19,7 +19,7 @@
     #editingstate(v-if="editingMode === 'transcript'" @click="toggleEditingTranscript")
       | Finished Editing?
     
-    #audio-snippets(v-if="!editingMode || editingMode === 'intro'" :class="{ editing: editingMode }")
+    #audio-snippets(v-if="liveClass.intros && (!editingMode || editingMode === 'intro')" :class="{ editing: editingMode }")
       audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode")
       .clearfix
 
