@@ -5,22 +5,22 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      suggestions: []
+      prompts: {}
     }
   },
   computed: {
     ...mapGetters(['course', 'currentClass']),
   },
   methods: {
-    loadSuggestions(content) {
-      Vue.$log.info('Getting suggestions...')
+    loadPrompts(content) {
+      Vue.$log.info('Getting prompts...')
 
-      this.suggestions = [] // Clear existing suggestions
+      this.prompts = {} // Clear existing prompts
 
-      API.message.getSuggestions(
+      API.message.getPrompts(
         this.currentClass.slug,
         response => {
-          this.suggestions = response
+          this.prompts = response
         }
       )
     }

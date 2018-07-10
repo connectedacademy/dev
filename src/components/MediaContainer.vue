@@ -5,7 +5,7 @@
     #images-wrapper
       slick#image-swiper(v-if="liveclassMedia" ref="classslick" v-bind:options="slickOptions" v-on:afterChange="afterChange" v-on:swipe="interactionOccured")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
-          img(v-bind:data-lazy="`${CDN}/images/${item.text}`" @click="setLightboxMedia(index)")
+          img(v-bind:data-lazy="item.text.includes('http') ? item.text : `${CDN}/media/${item.text}`" @click="setLightboxMedia(index)")
 
 </template>
 
@@ -31,28 +31,21 @@ export default {
     Slick
     // VueYouTubeEmbed
   },
+  beforeDestroy() {
+    this.$store.commit('HIDE_MEDIA')
+  },
   mounted() {
     EventBus.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
     })
 
-    if (typeof this.content.images === 'undefined') return
     Vue.$log.info('Getting media...')
 
-    API.message.getMedia(
-      {
-        theClass: this.currentClass.slug,
-        filename: this.content.images
-      },
-      (response) => {
-        this.liveclassMedia = response
-      },
-      (response) => {
-        this.$log.error(response)
-        this.$log.info('Failed to get media')
-        this.liveclassMedia = undefined
-      }
-    )
+    this.getMedia()
+
+    EventBus.$on('mediaUpdated', () => {
+      this.getMedia()
+    })
   },
   watch: {
     'liveclassMedia': {
@@ -111,6 +104,25 @@ export default {
     },
   },
   methods: {
+    getMedia() {
+      API.message.getMedia(
+        {
+          theClass: this.currentClass.slug
+        },
+        (response) => {
+          this.liveclassMedia = response
+          if (this.liveclassMedia) {
+            EventBus.$emit('mediaLoaded')
+            this.$store.commit('SHOW_MEDIA')
+          }
+        },
+        (response) => {
+          this.$log.error(response)
+          this.$log.info('Failed to get media')
+          this.liveclassMedia = undefined
+        }
+      )
+    },
     afterChange(event, slick, currentSlide) {
       this.currentIndex = currentSlide
     },
@@ -135,19 +147,21 @@ export default {
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
       if (!self.liveclassMedia) return
-
-      for (let i = 0; i < self.liveclassMedia.length; i++) {
-        const image = self.liveclassMedia[i]
-
-        if (inRange(self.scrollStatus.currentTime, image.start, image.end)) {
-          console.log('IN RANGE', image.start)
-          
-          self.$refs.classslick.goTo(i)
-          self.currentIndex = i
-          self.nextIndex = (i < self.liveclassMedia.length) ? (i + 1) : undefined
+      let index = 0
+      let potentials = []
+      for (const i in self.liveclassMedia) {
+        
+        const media = self.liveclassMedia[i]
+        console.log('self.scrollStatus', self.scrollStatus)
+        
+        if (self.scrollStatus.currentTime > i) {
+          self.currentIndex = index
+          // self.nextIndex = (index < self.liveclassMedia.length) ? (i + 1) : undefined
         }
+        index = index + 1
       }
-    }, 300, { 'leading': false })
+      self.$refs.classslick.goTo(self.currentIndex)
+    }, 500, { 'leading': false })
   }
 }
 </script>

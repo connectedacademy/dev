@@ -3,7 +3,7 @@
 .media-carousel-wrapper
   slick#image-swiper(ref="slick" v-bind:options="slickOptions")
     .img-wrapper(v-for="(item, key) in media" v-bind:key="key" )
-      img(v-bind:data-lazy="`${CDN}/images/${item.image}`")
+      img(v-bind:data-lazy="`${CDN}/media/${item.image}`")
       
 </template>
 

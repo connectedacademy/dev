@@ -27,6 +27,15 @@ const state = {
       action: undefined
     }
   },
+  mediaUploadModal: {
+    visible: false,
+    content: {
+      title: undefined,
+      body: undefined,
+      action: undefined
+    }
+  },
+  isEditing: false,
   editingMode: undefined,
   editingSegment: undefined
 }
@@ -43,9 +52,12 @@ const getters = {
   infoModal: (initialState) => initialState.infoModal.content,
   questionModalVisible: (initialState) => initialState.questionModal.visible,
   questionModal: (initialState) => initialState.questionModal.content,
+  mediaUploadModalVisible: (initialState) => initialState.mediaUploadModal.visible,
+  mediaUploadModal: (initialState) => initialState.mediaUploadModal.content,
   modalVisible() {
-    return state.infoModal.visible || state.questionModal.visible
+    return state.infoModal.visible || state.questionModal.visible || state.mediaUploadModal.visible
   },
+  isEditing: (initialState) => initialState.isEditing,
   editingMode: (initialState) => initialState.editingMode,
   editingSegment: (initialState) => initialState.editingSegment
 }
@@ -54,6 +66,9 @@ const getters = {
 const actions = {
   showQuestionModal({ commit }, request) {
     commit('SHOW_QUESTION_MODAL', request)
+  },
+  showMediaUploadModal({ commit }, request) {
+    commit('SHOW_MEDIA_UPLOAD_MODAL', request)
   }
 }
 
@@ -119,11 +134,21 @@ const mutations = {
   [types.DISMISS_QUESTION_MODAL](initialState) {
     state.questionModal.visible = false
   },
+  [types.SHOW_MEDIA_UPLOAD_MODAL](initialState, params) {
+    state.mediaUploadModal.content = params
+    state.mediaUploadModal.visible = true
+  },
+  [types.DISMISS_MEDIA_UPLOAD_MODAL](initialState) {
+    state.mediaUploadModal.visible = false
+  },
   [types.EXPAND_CONVERSATION](initialState) {
     state.isCollapsed = false
   },
   [types.COLLAPSE_CONVERSATION](initialState) {
     state.isCollapsed = true
+  },
+  [types.IS_EDITING](initialState, isEditing) {
+    state.isEditing = isEditing
   },
   [types.EDITING_MODE](initialState, editingMode) {
     state.editingMode = editingMode

@@ -7,6 +7,7 @@
   //- Modals
   info-modal
   question-modal
+  media-upload-modal
   media-lightbox
 
   //- Authentication   
@@ -39,8 +40,10 @@
   import RightDrawer from '@/components/navigation/drawers/RightDrawer'
   import AuthenticationFlow from '@/components/authentication/AuthenticationFlow'
   import MediaLightbox from '@/components/modals/MediaLightbox'
+  
   import InfoModal from '@/components/modals/InfoModal'
   import QuestionModal from '@/components/modals/QuestionModal'
+  import MediaUploadModal from '@/components/modals/MediaUploadModal'
   
   // Mixins
   import Overlay from '@/mixins/Overlay'
@@ -57,7 +60,8 @@
       AuthenticationFlow,
       MediaLightbox,
       InfoModal,
-      QuestionModal
+      QuestionModal,
+      MediaUploadModal
     },
     watch: {
       '$route': {

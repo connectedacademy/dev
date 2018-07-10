@@ -3,20 +3,22 @@
 
     .tab-selector
       ul
-        li.tab(@click="toggleEditMode('intro')" :class="{ active: isActive('intro') }")
+        li.tab(@click="setEditMode('intro')" :class="{ active: isActive('intro') }")
           | Introductions
-        li.tab(@click="toggleEditMode('audio')" :class="{ active: isActive('audio') }")
+        li.tab(@click="setEditMode('audio')" :class="{ active: isActive('audio') }")
           | Primary Audio
-        // li.tab(@click="toggleEditMode('media')" :class="{ active: isActive('media') }")
-          | Media
-        li.tab(@click="toggleEditMode('other')" :class="{ active: isActive('other') }")
+        li.tab(@click="setEditMode('transcript')" :class="{ active: isActive('transcript') }")
           | Transcript
+        li.tab(@click="setEditMode('media')" :class="{ active: isActive('media') }")
+          | Media
+        li.tab(@click="setEditMode('prompts')" :class="{ active: isActive('prompts') }")
+          | Prompts
 
     .tabs
       .tab-view(v-show="editingMode === 'intro'")
         .inner-wrapper
           .row
-            h3 Upload audio
+            h3 Upload introduction audio
             p Add a new introduction to the class
             .form
               input(ref="introAudioFile" type="file" name="upload")
@@ -26,17 +28,10 @@
               .pure-button.pure-button-success(v-if="state.audio.introAudioFile === 'waiting'" @click="uploadFile('introAudioFile')") Upload
               .pure-button.pure-button-success(v-else) Uploading...
 
-      .tab-view(v-show="editingMode === 'media'")
-        .inner-wrapper
-          h3 Manage media
-          p Start adding, editing and removing images and videos that compliment the course.
-          .clearfix
-          .pure-button.pure-button-success(@click="") Manage
-
       .tab-view(v-show="editingMode === 'audio'")
         .inner-wrapper
           .row
-            h3 Upload audio
+            h3 Upload primary audio
             p Replace the existing audio for the class
             .form
               input(ref="mainAudioFile" type="file" name="upload")
@@ -44,17 +39,31 @@
               .pure-button.pure-button-success(v-if="state.audio.mainAudioFile === 'waiting'" @click="uploadFile('mainAudioFile')") Upload
               .pure-button.pure-button-success(v-else) Uploading...
       
-      .tab-view(v-show="editingMode === 'other'")
+      .tab-view(v-show="editingMode === 'transcript'")
         .inner-wrapper
-          .row
+          // .row
             h3 Fetch transcript
             p Once the transcript has completed processing, click below to download
             .pure-button.pure-button-success(v-if="state.transcript !== 'downloading'" @click="fetchTranscript") Download
             .pure-button.pure-button-success(v-else) Downloading...
           .row
-            h3 Edit transcript
-            p Enable edit mode to start making changes to the transcript
-            .pure-button.pure-button-warning(@click="toggleEditingTranscript") Start Editing
+            h3 Manage transcript
+            p Start editing the transcript below.
+            .pure-button.pure-button-warning(@click="startEditing()") Start Editing
+
+      .tab-view(v-show="editingMode === 'media'")
+        .inner-wrapper
+          h3 Manage media
+          p Start adding, editing and removing images and videos that compliment the class.
+          .clearfix
+          .pure-button.pure-button-warning(@click="startEditing()") Start Editing
+
+      .tab-view(v-show="editingMode === 'prompts'")
+        .inner-wrapper
+          h3 Manage prompts
+          p Start adding, editing and removing prompts that encourage engagement with the class.
+          .clearfix
+          .pure-button.pure-button-warning(@click="startEditing()") Start Editing
           
 </template>
 
@@ -80,8 +89,8 @@ export default {
     }
   },
   methods: {
-    toggleEditMode (mode) {
-      this.$store.commit('EDITING_MODE', mode)
+    startEditing () {
+      this.$store.commit('IS_EDITING', true)
     },
     uploadFile (identifer) {
       const formData = new FormData()
@@ -119,8 +128,8 @@ export default {
         }
       )
     },
-    toggleEditingTranscript () {
-      this.$store.commit('EDITING_MODE', 'transcript')
+    setEditMode (mode) {
+      this.$store.commit('EDITING_MODE', mode)
       this.$store.commit('EDITING_SEGMENT', undefined)
     },
     isActive(mode) {

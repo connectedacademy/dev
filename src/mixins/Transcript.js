@@ -13,16 +13,13 @@ export default {
   },
   methods: {
     loadTranscript(content) {
-      if (typeof content.transcript === 'undefined') return
-      
       Vue.$log.info('Getting transcript...')
 
       this.transcript = [] // Clear existing transcript
 
       API.message.getTranscript(
         {
-          theClass: this.currentClass.slug,
-          filename: content.transcript
+          theClass: this.currentClass.slug
         },
         response => {
           this.transcript = response

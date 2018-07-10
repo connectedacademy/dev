@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'mediaPlaying', 'activeSegment', 'peekSegment', 'mediaHidden'
+      'mediaPlaying', 'activeSegment', 'peekSegment', 'mediaHidden', 'isEditing'
     ]),
     canAutoScroll() {
       return !this.peekSegment && !this.preventScroll && this.mediaPlaying && (typeof this.scrollStatus !== 'undefined')
@@ -83,7 +83,7 @@ export default {
 
       Vue.$log.debug('Attempting auto scroll')
 
-      if (this.editingTranscript) { Vue.$log.debug('Cannot auto scroll - editing transcript'); return }
+      if (this.isEditing) { Vue.$log.debug('Cannot auto scroll - editing transcript'); return }
       if (!this.canAutoScroll) { Vue.$log.debug('Cannot auto scroll'); this.isAutoScrolling = false; this.onScroll(this); return }
       if (this.isAutoScrolling) { Vue.$log.debug('Already auto scrolling'); return }
 

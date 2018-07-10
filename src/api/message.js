@@ -23,15 +23,23 @@ export default {
       errorCb(response)
     })
   },
-  getSuggestions(theClass, cb, errorCb) {
-    Vue.http.get(`${config.API}/suggestions/${theClass}`, { credentials: false, responseType: 'json' }).then((response) => {
+  getPrompts(theClass, cb, errorCb) {
+    Vue.http.get(`${config.API}/prompts/${theClass}`, { credentials: false, responseType: 'json' }).then((response) => {
       cb(response.body)
     }, (response) => {
       errorCb(response)
     })
   },
   getTranscript(request, cb, errorCb) {
-    Vue.http.get(`${config.API}/transcript/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
+    Vue.http.get(`${config.API}/transcript/${request.theClass}`, { credentials: false, responseType: 'json' }).then((response) => {
+      cb(response.body)
+    }, (response) => {
+      errorCb(response)
+    })
+  },
+  updatePrompt(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' }
+    Vue.http.post(`${config.API}/prompts/${postData.theClass}`, postData).then((response) => {
       cb(response.body)
     }, (response) => {
       errorCb(response)
@@ -46,7 +54,7 @@ export default {
     })
   },
   getMedia(request, cb, errorCb) {
-    Vue.http.get(`${config.API}/media/${request.theClass}/${request.filename}`, { credentials: false, responseType: 'json' }).then((response) => {
+    Vue.http.get(`${config.API}/media/${request.theClass}`, { credentials: false, responseType: 'json' }).then((response) => {
       cb(response.body)
     }, (response) => {
       errorCb(response)

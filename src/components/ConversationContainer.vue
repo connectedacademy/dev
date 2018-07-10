@@ -14,7 +14,7 @@
         v-bind:key="index"
         v-bind:index="index"
         v-bind:message="message"
-        v-bind:suggestion="suggestions[index]"
+        v-bind:prompt="prompts[index]"
         v-bind:transcript="transcript[index]"
         v-bind:isCurrent="isCurrent(index)")
 
@@ -27,7 +27,7 @@ import { EventBus } from '@/event-bus.js'
 
 // Mixins
 import Messages from '@/mixins/Messages'
-import Suggestions from '@/mixins/Suggestions'
+import Prompts from '@/mixins/Prompts'
 import Transcript from '@/mixins/Transcript'
 
 import TimeSegment from '@/components/live/TimeSegment'
@@ -36,7 +36,7 @@ export default {
   name: 'conversation-container',
   mixins: [
     Messages,
-    Suggestions,
+    Prompts,
     Transcript,
   ],
   components: {
@@ -44,12 +44,16 @@ export default {
   },
   props: ['content', 'collapsed'],
   mounted() {
-    this.loadSuggestions(this.content)
+    this.loadPrompts(this.content)
     this.loadTranscript(this.content)
     this.loadSegmentSummary(0, true)
 
     EventBus.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
+    })
+
+    EventBus.$on('promptsUpdated', () => {
+      this.loadPrompts(this.content)
     })
 
     EventBus.$on('transcriptUpdated', () => {

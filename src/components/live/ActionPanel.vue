@@ -16,19 +16,20 @@
       li.experience-control#current-time
         p {{ currentTime }}
       
-      li.experience-control#progress-bar(ref="progressbar" :class="{ 'has-media': content.images }" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
+      li.experience-control#progress-bar(ref="progressbar" :class="{ 'has-media': mediaLoaded }" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
         visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug" v-bind:contentDuration="content.duration" v-bind:showReflections="false" v-bind:classView="true" visHeight="60px")
       
-      li.experience-control.pull-right(v-if="content.images" @click="toggleComposer")
-        onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
-        span(v-show="mediaHidden")
-          i.fas.fa-caret-up.fa-2x
-        span(v-show="!mediaHidden")
-          i.fas.fa-caret-down.fa-2x
+      transition(name="fade" appear mode="out-in")
+        li.experience-control.pull-right(v-if="mediaLoaded" @click="toggleComposer")
+          onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
+          span(v-show="mediaHidden")
+            i.fas.fa-caret-up.fa-2x
+          span(v-show="!mediaHidden")
+            i.fas.fa-caret-down.fa-2x
 
       .clearfix
 
-    media-container#media-container(v-if="content.images" v-bind:content="content" v-bind:current-class="currentClass")
+    media-container#media-container(v-show="mediaLoaded" v-bind:content="content" v-bind:current-class="currentClass")
 
 </template>
 
@@ -65,9 +66,13 @@
           this.currentTime = `${Math.floor(time / 60)}:${(time % 60).toString().padStart(2, '0')}`
         }
       })
+      EventBus.$on('mediaLoaded', () => {
+        this.mediaLoaded = true
+      })
     },
     data() {
       return {
+        mediaLoaded: false,
         currentTime: '0:00',
         mouseOffsetStart: 0,
         trackOffset: 0

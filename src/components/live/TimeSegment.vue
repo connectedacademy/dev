@@ -1,18 +1,23 @@
 <template lang="pug">
 
   .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
-    .message-count(v-if="!editingMode && message && message.total > 1") {{ message.total }}
-    .subscribed-status(v-if="!editingMode && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
+    
+    .message-count(v-if="!isEditing && message && message.total > 1") {{ message.total }}
+    .subscribed-status(v-if="!isEditing && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
+
+      .admin-actions#media-actions(v-if="editingMode === 'media' && isEditing" @click="showEditModal(index)")
+        i.fas.fa-plus
 
       .transcript-wrapper(@click="openSegment()")
         transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
 
-      .message-wrapper
-        transition(v-if="suggestion" appear name="fade" mode="out-in")
-          .suggestion {{ suggestion }}
-        transition(v-else-if="!editingMode" appear name="fade" mode="out-in")
+      .message-wrapper(:class="{ 'editing-prompt': isEditing && editingMode === 'prompts' }")
+        transition(v-if="prompt || editingMode === 'prompts'" name="fade" mode="out-in")
+          prompt(:prompt="prompt" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
+
+        transition(v-else-if="!isEditing" appear name="fade" mode="out-in")
           mock-message(v-if="isLoading" :loading="message.loading")
           message(v-if="!isLoading" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
 
@@ -42,18 +47,20 @@
   import API from '@/api'
   
   import MessageComposer from '@/components/MessageComposer'
+  import Prompt from '@/components/live/Prompt'
   import Transcript from '@/components/live/Transcript'
   import Message from '@/components/live/Message'
   import MockMessage from '@/components/live/MockMessage'
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'suggestion', 'transcript', 'isCurrent'],
+    props: ['index', 'message', 'prompt', 'transcript', 'isCurrent'],
     components: {
       MessageComposer,
       Message,
       MockMessage,
-      Transcript,
+      Prompt,
+      Transcript
     },
     sockets: {
       message: function (val) {
@@ -104,6 +111,7 @@
         calculatedOffset: 0,
         calculatedOffsetBottom: 0,
         quickNoteHeight: 50,
+        editingPrompt: false
       }
     },
     computed: {
@@ -115,6 +123,7 @@
         'replyingTo',
         'subscribedTo',
         'user',
+        'isEditing',
         'editingMode'
       ]),
       quickNoteTop () {
@@ -136,12 +145,20 @@
       }
     },
     methods: {
+      savePrompt (index) {
+        
+      },
+      showEditModal (index) {
+        // alert(index)
+        this.$store.dispatch('showMediaUploadModal', { segment: index })
+        this.$store.commit('EDITING_SEGMENT', index)
+      },
       peek () {
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return
         
-        // Cancel peek if in editing mode
-        if (this.editingMode) return
+        // Cancel peek if editing
+        if (this.isEditing) return
 
         // Update url
         this.$router.replace({ name: 'live', params: { segmentId: this.message.segmentGroup } })
@@ -358,15 +375,27 @@
     &:hover
       cursor pointer
 
-    .suggestion
-      color $color-text-dark-grey
-      font-size 1.2em
-      font-weight bold
-      padding 20px
-      text-align center
+    .admin-actions
+      radius(50%)
+      background-color $color-pink
+      display none
+      height 40px
+      width 40px
+      position absolute
+      top 10px
+      right 10px
+      z-index 999
+      svg
+        color white
+        height 20px
+        margin 10px
+        width 20px
+    &:hover
+      cursor pointer
+      .admin-actions
+        display block
 
     .message-wrapper
-      animate()
       position absolute
       top 50%
 

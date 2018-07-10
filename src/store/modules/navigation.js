@@ -40,6 +40,7 @@ const actions = {
     commit('DISMISS_AUTH')
     commit('DISMISS_INFO_MODAL')
     commit('DISMISS_QUESTION_MODAL')
+    commit('DISMISS_MEDIA_UPLOAD_MODAL')
     commit('DISMISS_LEFT_DRAWER')
     commit('DISMISS_RIGHT_DRAWER')
     commit('DISMISS_PROFILE_ACTION')

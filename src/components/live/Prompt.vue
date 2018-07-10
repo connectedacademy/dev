@@ -1,9 +1,9 @@
 <template lang="pug">
 
-  .transcript
+  .prompt
 
-    textarea(v-if="isEditing && editingMode === 'transcript'" placeholder="Write transcript..." v-model="currentTranscript" @focus="onFocus" @blur="saveEdit" ref="textarea")
-    h1(v-else-if="transcript" v-html="transcript")
+    textarea(v-if="isEditing && editingMode === 'prompts'" placeholder="Write prompt..." v-model="currentPrompt" @focus="onFocus" @blur="saveEdit" ref="textarea")
+    h1(v-else-if="prompt" v-html="prompt")
     h1(v-else) ...
 
 </template>
@@ -14,16 +14,16 @@ import { mapGetters } from 'vuex'
 import { EventBus } from '@/event-bus.js'
 
 export default {
-  name: 'transcript',
-  props: ['transcript', 'segmentGroup', 'isCurrent'],
+  name: 'prompt',
+  props: ['prompt', 'segmentGroup', 'isCurrent'],
   data () {
     return {
-      currentTranscript: this.transcript
+      currentPrompt: this.prompt
     }
   },
   watch: {
-    transcript: function (nv) {
-      this.currentTranscript = this.transcript
+    prompt: function (nv) {
+      this.currentPrompt = this.prompt
     }
   },
   computed: {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     onFocus () {
-      if (this.editingMode === 'transcript') {
+      if (this.editingMode === 'prompts') {
         this.$store.commit('EDITING_SEGMENT', this.segmentGroup)
       }
     },
@@ -39,14 +39,14 @@ export default {
       this.$store.commit('EDITING_SEGMENT', undefined)
     },
     saveEdit() {
-      API.message.updateTranscript({
+      API.message.updatePrompt({
         id: this.segmentGroup,
-        text: this.currentTranscript,
+        text: this.currentPrompt,
         theClass: this.$route.params.classSlug
       },
       response => {
-        // Pull new transcript
-        // EventBus.$emit('transcriptUpdated')
+        // Pull new prompt
+        // EventBus.$emit('promptsUpdated')
       },
       response => {
         console.log('Failed to save!')
@@ -59,18 +59,19 @@ export default {
 <style lang="stylus" scoped>
 @import '~stylus/shared'
 
-.transcript
+.prompt
   padding 15px 20px
   position relative
   h1, textarea
-    font-size 1.1em
+    font-size 1.2em
     font-weight bold
     font-family 'Avenir', Helvetica, Arial, sans-serif
     @media(max-width: 600px)
       text-align center
   h1
     reset()
-    color #444
+    color $color-text-dark-grey
+    text-align center
   textarea
     reset()
     border none

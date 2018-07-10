@@ -3,7 +3,7 @@
 .course-content#liveclass(name="section-liveclass" v-if="liveClass")
   
   .course-content--header.block
-    #adminAction(v-if="isAdmin" @click="toggleAdminTools")
+    #adminAction(v-if="isAdmin && !isEditing" @click="toggleAdminTools")
       i.fas.fa-wrench.fa-lg
     #engineType
       i.fab.fa-twitter.fa-lg(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
@@ -14,9 +14,9 @@
 
   .course-content--container
 
-    admin-tools(v-if="editingMode && editingMode !== 'transcript'" :liveclass="liveClass")
+    admin-tools(v-if="isAdmin && !isEditing" :liveclass="liveClass")
 
-    #editingstate(v-if="editingMode === 'transcript'" @click="toggleEditingTranscript")
+    #editingstate(v-if="isEditing" @click="finishEditing")
       | Finished Editing?
     
     #audio-snippets(v-if="liveClass.intros && (!editingMode || editingMode === 'intro')" :class="{ editing: editingMode }")
@@ -38,6 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { EventBus } from '@/event-bus.js'
 
 import ActionPanel from '@/components/live/ActionPanel'
 import AudioSnippet from '@/components/AudioSnippet'
@@ -57,7 +58,7 @@ export default {
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingMode', 'isAdmin']),
+    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingMode', 'isAdmin', 'isEditing']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
     }
@@ -72,8 +73,19 @@ export default {
     toggleAdminTools() {
       this.$store.commit('EDITING_MODE', this.editingMode ? undefined : 'intro')
     },
-    toggleEditingTranscript () {
-      this.$store.commit('EDITING_MODE', 'other')
+    finishEditing () {
+      switch (this.editingMode) {
+        case 'prompts':
+          // Pull new prompts
+          EventBus.$emit('promptsUpdated')
+          break
+        case 'transcript':
+          // Pull new transcript
+          EventBus.$emit('transcriptUpdated')
+          break
+      }
+      this.$store.commit('IS_EDITING', false)
+      this.$store.commit('EDITING_MODE', undefined)
       this.$store.commit('EDITING_SEGMENT', undefined)
     }
   }
@@ -120,7 +132,7 @@ export default {
     position relative
 
     #audio-snippets
-      animate()
+      // animate()
       background-color darken($color-info, 10%)
       min-height 60px
       padding 5px
