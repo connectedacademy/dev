@@ -3,7 +3,7 @@
   .content
     h1
       icon(:icon="['fab', 'twitter']" v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
-      icon(icon="comment (v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
+      icon(icon="comment" v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
       | {{ content.title }}
     p {{ independent ? 'This class has a live twitter based discussion, click below to join it.' : content.description }}
   router-link.pure-button.pure-button-transparent.no-margin(v-bind:to="{ name: 'live' }")
