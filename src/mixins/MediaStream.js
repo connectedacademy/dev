@@ -23,9 +23,7 @@ export default {
     let src = []
 
     for (const url of this.content.audio) {
-      if (this.fileExists(url)) {
-        src.push(url)
-      }
+      src.push(url)
     }
 
     if (src.length > 0) {
@@ -132,12 +130,6 @@ export default {
     ...mapGetters(['CDN', 'mediaPlaying', 'editingSegment'])
   },
   methods: {
-    fileExists (url) {
-      let http = new XMLHttpRequest()
-      http.open('HEAD', url, false)
-      http.send()
-      return http.status != 404
-    },
     checkBufferStatus: _throttle(function (self) {    
 
       if (!self.scrollStatus) return
