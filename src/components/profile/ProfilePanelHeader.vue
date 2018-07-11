@@ -5,10 +5,10 @@
 
     .profile-panel--header--actions
       .action-button.reload-button(v-if="canRefresh" @click="refresh")
-        i.fas.fa-sync
+        icon(icon="sync")
 
       .action-button.expand-button(v-if="canExpand" @click="expand")
-        i.fas.fa-expand
+        icon(icon="expand")
 
       .clearfix
 

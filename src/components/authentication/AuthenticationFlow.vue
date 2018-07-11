@@ -13,7 +13,7 @@ transition(name="slide-up")
 
       .clearfix
       button.pure-button.pure-button-twitter.rounded-tall(name="twitter-login-button" v-on:click.once="attemptAuth")
-        i.fab.fa-twitter
+        icon(icon="twitter")
         | Continue
 
 </template>

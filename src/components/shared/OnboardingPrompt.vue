@@ -6,7 +6,7 @@ transition(name="fade")
     .prompt--spot
     span {{ prompt }}
     .dismiss-button
-      i.fas.fa-check
+      icon(icon="check")
 
 </template>
 

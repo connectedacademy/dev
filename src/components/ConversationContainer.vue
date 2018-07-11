@@ -4,9 +4,8 @@
 
     #view-toggle(v-if="$route.name === 'live' && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
       onboarding-prompt(identifier="view-toggle" prompt="transcript/notes" top="50" left="-70" position="top-right" z-index="1")
-      i.fas.fa-quote-left
-      i.fab.fa-twitter(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
-      i.fas.fa-comment(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
+      icon(icon="quote-left")
+      icon(:icon="['fab', 'twitter']" v-if="course.engine === 'local'" title="Messages are published on Twitter")
 
     .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
       time-segment(v-for="(message, index) in conversationMessages"

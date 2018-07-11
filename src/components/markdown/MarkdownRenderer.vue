@@ -4,7 +4,7 @@
 
   .rendered-markdown(ref="renderedmarkdown" v-bind:class="{ loading: loading }")
     .loading-symbol
-      i.fas.fa-circle-notch.fa-spin
+      icon(:icon="['circle-notch', 'spin']")
 
 </template>
 

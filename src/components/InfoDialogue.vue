@@ -2,7 +2,7 @@
 
 .info-dialogue.animated.fadeIn(v-if="!dismissed" v-bind:class="{ dismissed: dismissed }")
   .dismiss-button(v-if="dismissable" @click="dismiss")
-    i.fas.fa-times
+    icon(icon="times")
   slot
 
 </template>

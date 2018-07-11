@@ -2,13 +2,13 @@
   .snippet(v-if="sound" :class="{ playing: playing, editing: editing }" @click="playAudio")
     #controls
       span.rewind(@click="rewindAudio")
-        i.fas.fa-step-backward
+        icon(icon="step-backward")
       span.pause(v-show="playing" @click="pauseAudio")
-        i.fas.fa-pause
+        icon(icon="pause")
       span.play(v-show="!playing")
-        i.fas.fa-play
+        icon(icon="play")
       span.skip
-        i.fas.fa-step-forward
+        icon(icon="step-forward")
     #meta
       p.title {{ intro.title }}
     #manage(v-if="editing")

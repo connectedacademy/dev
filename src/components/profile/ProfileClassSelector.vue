@@ -2,12 +2,12 @@
 
   .profile-class-selector
     ul.profile-class-selector(v-bind:class="{ selecting: selecting }" @click="expand")
-      i.fas.fa-angle-down
+      icon(icon="angle-down")
       li.profile-class-selector--item.active(v-if="!selecting && profileClass" @click="setClass(profileClass)")
         | {{ profileClass.title }}
       li.profile-class-selector--item(v-else v-for="(theClass, index) in classes" v-bind:key="index" v-bind:class="{ active: (profileClassSlug === theClass.slug) }" @click="setClass(theClass)")
         | {{ theClass.title }}
-        i.fas.fa-circle
+        icon(icon="circle")
 
 </template>
 

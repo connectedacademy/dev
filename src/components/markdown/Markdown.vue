@@ -3,7 +3,7 @@
 .markdown-page(name="markdown-page")
   .content-block.padded-block.header-block.white-block
     markdown-renderer
-    router-link.pure-button.pure-button-white(:to="{ name: 'content' }") #[i.fas.fa-angle-left]Back to class
+    router-link.pure-button.pure-button-white(:to="{ name: 'content' }") #[icon(icon="angle-left")]Back to class
 
 </template>
 

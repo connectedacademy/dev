@@ -4,10 +4,10 @@
   
   .course-content--header.block
     #adminAction(v-if="isAdmin && !isEditing" @click="toggleAdminTools")
-      i.fas.fa-wrench.fa-lg
+      icon(icon="wrench")
     #engineType
-      i.fab.fa-twitter.fa-lg(v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
-      i.fas.fa-comment.fa-lg(v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
+      icon(:icon="['fab', 'twitter']" v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
+      icon(icon="comment" v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
     h1.content-title
       | {{ liveClass.title }}
     p.content-description(v-if="liveClass.description") {{ liveClass.description }}
@@ -23,7 +23,7 @@
       audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode")
       .clearfix
 
-    action-panel(v-show="!editingMode" v-bind:content="liveClass" v-bind:current-class="currentClass")
+    action-panel(v-show="!isEditing" v-bind:content="liveClass" v-bind:current-class="currentClass")
 
     conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
 
@@ -83,6 +83,10 @@ export default {
           // Pull new transcript
           EventBus.$emit('transcriptUpdated')
           break
+        case 'media':
+          // Pull new media
+          EventBus.$emit('mediaUpdated')
+          break
       }
       this.$store.commit('IS_EDITING', false)
       this.$store.commit('EDITING_MODE', undefined)
@@ -107,6 +111,7 @@ export default {
 
     svg
       color white
+      font-size 1.2em
 
     #adminAction
       position absolute

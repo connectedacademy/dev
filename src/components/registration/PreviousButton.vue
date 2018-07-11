@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .previous-button(@click="$emit('previousStep')")
-  i.fas.fa-arrow-left
+  icon(icon="arrow-left")
 
 </template>
 

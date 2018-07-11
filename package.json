@@ -14,6 +14,10 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free-brands": "^5.0.13",
+    "@fortawesome/fontawesome-svg-core": "^1.2.0",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0",
+    "@fortawesome/vue-fontawesome": "^0.1.0",
     "animate.css": "^3.5.2",
     "fourcorners": "0.0.45",
     "fs": "0.0.1-security",
@@ -42,6 +46,7 @@
     "vue-autosize": "^1.0.0",
     "vue-config": "^1.0.0",
     "vue-cookie": "^1.1.4",
+    "vue-fontawesome": "0.0.2",
     "vue-i18n": "^5.0.3",
     "vue-logger": "0.0.2",
     "vue-markdown": "^2.1.3",

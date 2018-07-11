@@ -7,7 +7,7 @@
 
       .author-label(v-if="message._user")
         | {{ message._user.profile.name }}
-        span(v-if="message._parent") #[i.fas.fa-reply]
+        span(v-if="message._parent") #[icon(icon="reply")]
 
       p.message-content(v-html="parseText()")
 
@@ -19,13 +19,13 @@
 
         ul.tweet-actions
           li.like-action(:class="{ active: user && (message._likes.indexOf(user._id) !== -1) }" @click="likeMessage")
-            i.fas.fa-heart
+            icon(icon="heart")
           li.reply-action(v-if="!truncate || !message._parent" @click="replyToMessage(message)")
-            i.fas.fa-reply
+            icon(icon="reply")
           router-link(v-if="$route.name !== 'live'" tag="li" :to="{ name: 'live', params: { classSlug: message.class, contentSlug: 'liveclass', segmentId: message.segment } }")
-            i.fas.fa-plus
+            icon(icon="plus")
           li.moderate-action(@click="reportItem(message._id)")
-            i.fas.fa-ellipsis-h
+            icon(icon="ellipsis-h")
           li.message-timestamp
             | {{ timeStamp }}
 

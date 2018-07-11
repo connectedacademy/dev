@@ -23,11 +23,11 @@
           transition(name="fade" appear)
             .feedback-message--bubble
               p(v-if="message.hidden")
-                i.fas.fa-lock(style="height: 12px;margin: 0 7px 0 0")
+                icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
                 | Message locked (click here)
               p(v-if="!message.hidden") {{ message.text }}
               .feedback-message--action(@click="reportItem(message._id)")
-                i.fas.fa-ellipsis-h
+                icon(name="ellipsis-h")
               .clearfix
             .feedback-message--author
               p by {{ message._user.profile.name }}

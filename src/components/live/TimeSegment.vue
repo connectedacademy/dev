@@ -8,7 +8,7 @@
     .primary-wrapper(@click="peek")
 
       .admin-actions#media-actions(v-if="editingMode === 'media' && isEditing" @click="showEditModal(index)")
-        i.fas.fa-plus
+        icon(icon="plus")
 
       .transcript-wrapper(@click="openSegment()")
         transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")

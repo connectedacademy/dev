@@ -25,6 +25,18 @@ import { EventBus } from '@/event-bus.js'
 
 import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
 
+// Font Awesome
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPause, faPlay, faCaretUp, faCaretDown, faCoffee, faStepBackward, faStepForward, faComment, faQuoteLeft, faLock, faEllipsisH, faTimes, faWrench, faPlus, faReply, faHeart, faAngleLeft, faAngleDown, faCircle, faExpand, faSync, faArrowLeft, faCheck, faStar, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import { faTwitter } from '@fortawesome/fontawesome-free-brands'
+
+library.add(faPause, faPlay, faCaretUp, faCaretDown, faCoffee, faStepBackward, faStepForward, faComment, faQuoteLeft, faLock, faEllipsisH, faTimes, faWrench, faPlus, faReply, faHeart, faAngleLeft, faAngleDown, faCircle, faExpand, faSync, faArrowLeft, faCheck, faStar, faCircleNotch)
+
+library.add(faTwitter)
+
+Vue.component('icon', FontAwesomeIcon)
+
 // Global components
 Vue.component('onboarding-prompt', OnboardingPrompt)
 

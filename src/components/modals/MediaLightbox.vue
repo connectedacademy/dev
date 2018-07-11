@@ -2,8 +2,8 @@
   
   #media-lightbox.animated.fadeIn(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
     #lightbox--close(@click="toggleLightbox()")
-      i.fas.fa-times.fa-2x
-    .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${CDN}/media/${currentLightboxMedia}')` }")
+      icon(icon="times")
+    .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${currentLightboxMedia}')` }")
 
 </template>
 
@@ -47,6 +47,8 @@ export default {
     top 0
     right 0
     padding 30px
+    svg
+      font-size 2em
 
   .image-wrapper
     pinned()

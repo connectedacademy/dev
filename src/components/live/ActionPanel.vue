@@ -5,13 +5,8 @@
     ul#experience-controls
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
-        
         //- onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
-        
-        span(v-show="mediaPlaying")
-          i.fas.fa-pause
-        span(v-show="!mediaPlaying")
-          i.fas.fa-play
+        icon(:icon="mediaPlaying ? 'pause' : 'play'")
       
       li.experience-control#current-time
         p {{ currentTime }}
@@ -22,10 +17,7 @@
       transition(name="fade" appear mode="out-in")
         li.experience-control.pull-right(v-if="mediaLoaded" @click="toggleComposer")
           onboarding-prompt(identifier="media-toggle" prompt="toggle media" top="-45" left="-132" position="bottom-right" z-index="1")
-          span(v-show="mediaHidden")
-            i.fas.fa-caret-up.fa-2x
-          span(v-show="!mediaHidden")
-            i.fas.fa-caret-down.fa-2x
+          icon(:icon="mediaHidden ? 'caret-up' : 'caret-down'")
 
       .clearfix
 

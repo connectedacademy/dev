@@ -9,7 +9,7 @@
         .replying-to-banner(v-if="replyingTo")
           p {{ $t('composer.replying_to', { name: replyingTo._user.profile.name }) }}
           .dismiss-replying-to.animated.fadeInRight(@click="cancelReply")
-            i.fas.fa-times
+            icon(icon="times")
 
         .message-composer--footer(v-if="isRegistered")
           .textarea-wrapper

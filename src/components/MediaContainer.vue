@@ -5,7 +5,7 @@
     #images-wrapper
       slick#image-swiper(v-if="liveclassMedia" ref="classslick" v-bind:options="slickOptions" v-on:afterChange="afterChange" v-on:swipe="interactionOccured")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
-          img(v-bind:data-lazy="item.text.includes('http') ? item.text : `${CDN}/media/${item.text}`" @click="setLightboxMedia(index)")
+          img(v-bind:data-lazy="imageUrl(item)" @click="setLightboxMedia(item)")
 
 </template>
 
@@ -17,7 +17,7 @@ import { EventBus } from '@/event-bus.js'
 
 import _get from 'lodash/get'
 import throttle from 'lodash/throttle'
-import inRange from 'lodash/inRange'
+import _inRange from 'lodash/inRange'
 
 // import VueYouTubeEmbed from 'vue-youtube-embed'
 import Slick from 'vue-slick'
@@ -112,8 +112,10 @@ export default {
         (response) => {
           this.liveclassMedia = response
           if (this.liveclassMedia) {
-            EventBus.$emit('mediaLoaded')
-            this.$store.commit('SHOW_MEDIA')
+            if (Object.keys(response).length > 0) {
+              EventBus.$emit('mediaLoaded')
+              this.$store.commit('SHOW_MEDIA')
+            }
           }
         },
         (response) => {
@@ -138,28 +140,25 @@ export default {
         this.userInteracting = false
       }, 10000)
     },
-    setLightboxMedia(index) {
-      const media = this.liveclassMedia[index]
-      if (index === this.currentIndex) {
-        this.$store.commit('SET_LIGHTBOX_MEDIA', media.text)
-      }
+    imageUrl (item) {
+      return item.text.includes('http') ? item.text : `${this.CDN}/media/${item.text}`
+    },
+    setLightboxMedia(item) {
+      this.$store.commit('SET_LIGHTBOX_MEDIA', this.imageUrl(item))
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
       if (!self.liveclassMedia) return
-      let index = 0
-      let potentials = []
-      for (const i in self.liveclassMedia) {
-        
-        const media = self.liveclassMedia[i]
-        console.log('self.scrollStatus', self.scrollStatus)
-        
-        if (self.scrollStatus.currentTime > i) {
-          self.currentIndex = index
-          // self.nextIndex = (index < self.liveclassMedia.length) ? (i + 1) : undefined
-        }
-        index = index + 1
-      }
+
+      let media = Object.keys(self.liveclassMedia)
+      let target = self.scrollStatus.currentSegmentGroup
+
+      const closest = media.reduce(function(prev, curr) {
+        return (Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
+      })
+
+      self.currentIndex = media.indexOf(closest)
+      
       self.$refs.classslick.goTo(self.currentIndex)
     }, 500, { 'leading': false })
   }
