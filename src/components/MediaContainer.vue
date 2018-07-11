@@ -141,10 +141,10 @@ export default {
       }, 10000)
     },
     imageUrl (item) {
-      return item.text.includes('http') ? item.text : `${this.CDN}/media/${item.text}`
+      return `https://d3duklpulopo9e.cloudfront.net/fit-in/300x200/${item.text}`
     },
     setLightboxMedia(item) {
-      this.$store.commit('SET_LIGHTBOX_MEDIA', this.imageUrl(item))
+      this.$store.commit('SET_LIGHTBOX_MEDIA', `https://d3duklpulopo9e.cloudfront.net/fit-in/1200x1200/${item.text}`)
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return

@@ -14,7 +14,7 @@
 
   .course-content--container
 
-    admin-tools(v-if="isAdmin && !isEditing" :liveclass="liveClass")
+    admin-tools(v-if="isAdmin && !isEditing && editingMode" :liveclass="liveClass")
 
     #editingstate(v-if="isEditing" @click="finishEditing")
       | Finished Editing?
