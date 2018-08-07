@@ -65,17 +65,18 @@ export default {
   h1, textarea
     font-size 1.2em
     font-weight bold
+    font-style italic
     font-family 'Avenir', Helvetica, Arial, sans-serif
     @media(max-width: 600px)
       text-align center
   h1
     reset()
-    color $color-text-dark-grey
+    color $color-text-grey
     text-align center
   textarea
     reset()
     border none
-    color $color-text-dark-grey
+    color $color-text-grey
     height 114px 
     resize none
     width 100%
