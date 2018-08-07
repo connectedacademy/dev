@@ -2,7 +2,7 @@
 
   .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
     
-    .message-count(v-if="!isEditing && message && message.total > 1") {{ message.total }}
+    .message-count(v-if="!isEditing && message && message.total > 0") {{ message.total }}
     .subscribed-status(v-if="!isEditing && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
