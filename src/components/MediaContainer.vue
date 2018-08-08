@@ -141,9 +141,10 @@ export default {
       }, 10000)
     },
     imageUrl (item) {
-      return `https://d3duklpulopo9e.cloudfront.net/fit-in/300x200/${item.text}`
+      return item ? `https://d3duklpulopo9e.cloudfront.net/fit-in/300x200/${item.text}` : ''
     },
     setLightboxMedia(item) {
+      if (!item) return
       this.$store.commit('SET_LIGHTBOX_MEDIA', `https://d3duklpulopo9e.cloudfront.net/fit-in/1200x1200/${item.text}`)
     },
     updateCarousel: throttle(function (self) {
