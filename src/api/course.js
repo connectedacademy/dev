@@ -10,7 +10,7 @@ export default {
     })
   },
   getClass(classSlug, cb, errorCb) {
-    if (typeof classSlug === 'undefined') return
+    if (!classSlug) return
     if (classSlug === 'intro') return
     Vue.http.get(`${config.API}/class/${classSlug}`).then((response) => {
       cb(response.body)
