@@ -9,6 +9,7 @@
 
       .admin-actions#media-actions(v-if="editingMode === 'media' && isEditing" @click="showEditModal(index)")
         icon(icon="plus")
+      img.segment-media(v-if="editingMode === 'media' && isEditing" :src="segmentMedia")
 
       .transcript-wrapper(@click="openSegment()")
         transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
@@ -126,6 +127,9 @@
         'isEditing',
         'editingMode'
       ]),
+      segmentMedia () {
+        return 'https://d3duklpulopo9e.cloudfront.net/fit-in/300x200/media/template-introduction-1533720368578-media.jpg'
+      },
       quickNoteTop () {
         return `${158 + 32}px`
       },
@@ -145,9 +149,6 @@
       }
     },
     methods: {
-      savePrompt (index) {
-        
-      },
       showEditModal (index) {
         // alert(index)
         this.$store.dispatch('showMediaUploadModal', { segment: index })
@@ -395,6 +396,12 @@
       .admin-actions
         display block
 
+    img.segment-media
+      max-height 80px
+      max-width 80px
+      position absolute
+      bottom 10px
+      right 10px
     .message-wrapper
       position absolute
       top 50%
