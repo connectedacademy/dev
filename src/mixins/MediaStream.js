@@ -21,7 +21,6 @@ export default {
     if (!this.content.audio) return
     
     let src = []
-    console.log('this.content.audio', this.content.audio)
     
     for (const url of this.content.audio) {
       src.push(url)
