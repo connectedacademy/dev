@@ -30,7 +30,7 @@
 <script>
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 import ActionSelector from '@/components/profile/ActionSelector'
@@ -51,7 +51,7 @@ export default {
   },
   mounted() {
     this.getClassrooms()
-    EventBus.$on('profileClassUpdated', () => {
+    Events.$on('profileClassUpdated', () => {
       this.getClassrooms()
     })
   },

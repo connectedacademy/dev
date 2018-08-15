@@ -19,14 +19,8 @@ const Feedback = () => import('@/components/feedback/Feedback')
 const FourCornersOnboarding = () => import('@/components/fourcorners/FourCornersOnboarding')
 
 const Home = () => import('@/components/pages/Home')
-const About = () => import('@/components/pages/About')
-const Faq = () => import('@/components/pages/Faq')
 const Schedule = () => import('@/components/pages/Schedule')
-
-const Cookies = () => import('@/components/pages/Cookies')
-const Research = () => import('@/components/pages/Research')
-const Privacy = () => import('@/components/pages/Privacy')
-const Terms = () => import('@/components/pages/Terms')
+const Page = () => import('@/components/pages/Page')
 
 Vue.use(Router)
 
@@ -37,6 +31,11 @@ const router = new Router({
       name: 'schedule',
       path: '/schedule',
       component: Schedule,
+      meta: {
+        editable: {
+          type: 'schedule'
+        }
+      }
     },
     {
       path: '/class/:classSlug',
@@ -45,17 +44,32 @@ const router = new Router({
         {
           name: 'content',
           path: '',
-          component: Content
+          component: Content,
+          meta: {
+            editable: {
+              type: 'content'
+            }
+          }
         },
         {
           name: 'markdown',
           path: 'content/:url*',
           component: Markdown,
+          meta: {
+            editable: {
+              type: 'markdown'
+            }
+          }
         },
         {
           name: 'live',
           path: 'live/:segmentId?',
-          component: Live
+          component: Live,
+          meta: {
+            editable: {
+              type: 'live'
+            }
+          }
         }
       ]
     },
@@ -68,13 +82,19 @@ const router = new Router({
       name: 'registration',
       path: '/registration',
       component: Registration,
-      meta: { ensureNotRegistered: true }
+      meta: {
+        pageStyle: { type: 'registration', visible: false },
+        ensureNotRegistered: true
+      }
     },
     {
       name: 'feedback',
       path: '/feedback/browse/:classSlug/:contentSlug',
       component: Feedback,
-      // meta: { ensureRegistered: true }
+      meta: {
+        pageStyle: { type: 'homework', minimized: true },
+        // ensureRegistered: true
+      }
     },
     {
       name: 'feedback_view',
@@ -86,28 +106,27 @@ const router = new Router({
       name: 'fourcorners',
       path: '/fourcorners',
       component: FourCornersOnboarding,
-    },
-    {
-      name: 'about',
-      path: '/about',
-      component: About,
-    },
-    {
-      name: 'faq',
-      path: '/faq',
-      component: Faq,
+      meta: {
+        pageStyle: { type: 'fourcorners' }
+      }
     },
     {
       name: 'profile',
       path: '/profile',
       component: Profile,
-      meta: { ensureRegistered: true }
+      meta: {
+        pageStyle: { type: 'profile' },
+        ensureRegistered: true
+      }
     },
     {
       name: 'survey',
       path: '/survey',
       component: Survey,
-      meta: { ensureRegistered: true }
+      meta: {
+        pageStyle: { type: 'survey', minimized: true },
+        ensureRegistered: true
+      }
     },
     {
       name: 'githubauth',
@@ -119,27 +138,74 @@ const router = new Router({
     {
       name: 'home',
       path: '/',
-      component: Home
+      component: Home,
+      meta: {
+        title: 'Welcome',
+        subtitle: '',
+        editable: { type: 'page', path: 'content/welcome.md' }
+      }
     },
     {
       name: 'cookies',
       path: '/cookies',
-      component: Cookies,
+      component: Page,
+      meta: {
+        title: 'Cookies Policy',
+        subtitle: 'How we use cookies on the site',
+        path: 'content/cookies.md'
+      }
+    },
+    {
+      name: 'faq',
+      path: '/faq',
+      component: Page,
+      meta: {
+        title: 'FAQ',
+        subtitle: 'Frequently asked questions about the site.',
+        path: 'content/faq.md',
+        editable: { type: 'page' }
+      }
     },
     {
       name: 'research',
       path: '/research',
-      component: Research,
+      component: Page,
+      meta: {
+        title: 'Research Policy',
+        subtitle: 'How we collect and use your data in research',
+        path: 'content/research.md'
+      }
     },
     {
       name: 'privacy',
       path: '/privacy',
-      component: Privacy,
+      component: Page,
+      meta: {
+        title: 'Privacy Policy',
+        subtitle: 'How we handle your privacy and personal data',
+        path: 'content/privacy.md'
+      }
     },
     {
       name: 'terms',
       path: '/terms',
-      component: Terms,
+      component: Page,
+      meta: {
+        title: 'Terms of Use',
+        subtitle: 'The terms of use when using this website',
+        path: 'content/terms.md'
+      }
+    },
+    {
+      name: 'about',
+      path: '/about',
+      component: Page,
+      meta: {
+        title: 'About',
+        subtitle: 'Learn about Connected Academy',
+        path: 'content/about.md',
+        editable: { type: 'page' }
+      }
     },
     {
       path: '*',
@@ -149,6 +215,10 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+
+  // Reset editable content
+  store.dispatch('dismissDrawers')
+  store.dispatch('dismissOverlay')
 
   // Ensure registered
   if (to.matched.some(record => record.meta.ensureRegistered)) {

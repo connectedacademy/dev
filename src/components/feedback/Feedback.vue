@@ -29,7 +29,7 @@
 import Vue from 'vue'
 
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import API from '@/api'
 import Auth from '@/mixins/Auth'
@@ -64,7 +64,7 @@ export default {
     this.getFeedbackItems()
   },
   mounted() {
-    EventBus.$on('homework', (homework) => {
+    Events.$on('homework', (homework) => {
       console.log('homework')
       // Update homework
       this.getFeedbackItems()
@@ -90,8 +90,6 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'homework', visible: true, minimized: true },
-      navTitle: 'Connected Academy - Feedback',
       currentFeedbackId: '',
       myFeedbackItems: [],
       feedbackItems: [],

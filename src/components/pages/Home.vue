@@ -7,27 +7,29 @@
     .main-container
 
       .content-block.header-block.unpadded-block.white-block
-        video-embed(v-if="course.video" v-bind:video-src="`${course.video}?modestbranding=1&autohide=1&showinfo=0&controls=1&rel=0&playsinline=1`" autoLoad)
+        video-embed(v-if="course.video" :video-src="`${course.video}?modestbranding=1&autohide=1&showinfo=0&controls=1&rel=0&playsinline=1`" autoLoad)
         .lead-image(v-if="course.image" :style="{ 'background-image': `url(${course.image})` }")
           .credit(v-if="course.imagecredit") Photo Credit: {{ course.imagecredit }}
 
         #details-container
           h2 {{ course.title }}
-          markdown-renderer(v-bind:markdown-url="markdownUrl")
-          router-link.pure-button.pure-button-info.rounded-tall(v-bind:to="{ name: 'schedule' }") Explore course
+          markdown-renderer(:markdown-url="`${CDN}/content/welcome.md`")
+          router-link.pure-button.pure-button-info.rounded-tall(:to="{ name: 'schedule' }") Explore course
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { Events } from '@/events.js'
+
 import _get from 'lodash/get'
 
 // Mixins
 import PageStyle from '@/mixins/PageStyle'
 
 // Components
-import VideoEmbed from '@/components/VideoEmbed'
 import MarkdownRenderer from '@/components/markdown/MarkdownRenderer'
+import VideoEmbed from '@/components/VideoEmbed'
 
 export default {
   name: 'home',
@@ -36,17 +38,8 @@ export default {
     VideoEmbed,
     MarkdownRenderer
   },
-  data() {
-    return {
-      navTitle: 'Home - Connected Academy',
-      pageStyle: { type: undefined, visible: true, minimized: false }
-    }
-  },
   computed: {
-    ...mapGetters(['course', 'CDN']),
-    markdownUrl() {
-      return `${this.CDN}/content/welcome.md`
-    }
+    ...mapGetters(['course', 'CDN'])
   }
 }
 

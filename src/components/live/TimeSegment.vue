@@ -128,7 +128,7 @@
         'editingMode'
       ]),
       segmentMedia () {
-        return 'https://d3duklpulopo9e.cloudfront.net/fit-in/300x200/media/template-introduction-1533720368578-media.jpg'
+        return ''
       },
       quickNoteTop () {
         return `${158 + 32}px`

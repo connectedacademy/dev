@@ -1,0 +1,60 @@
+@import '~stylus/shared'
+@import '~stylus/buttons'
+
+.editable-section
+  radius(6px)
+  position relative
+  &:not(:first-child)
+    margin-top 20px
+  .editable-header
+    color $color-text-grey
+    font-weight bold
+    line-height: 20px
+    padding 15px
+    text-align left
+    text-transform capitalize
+    svg
+      float right
+  &.expanded
+    background-color: white
+    box-shadow-dark()
+    .editable-header
+      color $color-text-dark-grey
+  &:not(.expanded)
+    .editable-content, .editable-controls
+      display none
+    &:hover
+      background-color $color-lightest-grey
+      cursor pointer
+  .editable-content
+    padding 0px 15px 15px 15px
+    label
+      color $color-text-grey
+      display block
+      font-size 0.7em
+      font-weight bold
+      margin-bottom 4px
+    input
+      padding 10px
+      &.full-width
+        box-sizing bored-box
+        width 100%
+    textarea
+      min-height 40px
+      padding 10px
+      resize none
+      width calc(100% - 20px)
+      &.tall
+        min-height 140px
+    textarea, input
+      radius(4px)
+      border $color-border 1px solid
+      margin-bottom 10px
+      outline 0
+    p
+      color $color-text-grey
+      font-size 0.9em
+      margin-top 0
+  .editable-controls
+    padding 15px
+    padding-top 0

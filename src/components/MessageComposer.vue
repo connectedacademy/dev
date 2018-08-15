@@ -32,7 +32,7 @@
 import Vue from 'vue'
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 import VueTextareaAutosize from 'vue-textarea-autosize'
 
 import Auth from '@/mixins/Auth'

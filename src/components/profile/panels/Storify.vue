@@ -23,7 +23,7 @@
 import API from '@/api'
 import * as config from '@/api/config'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 
@@ -38,7 +38,7 @@ export default {
   },
   mounted() {
     this.getClassrooms()
-    EventBus.$on('profileClassUpdated', () => {
+    Events.$on('profileClassUpdated', () => {
       this.getClassrooms()
     })
   },

@@ -1,15 +1,16 @@
 <template lang="pug">
 
 .schedule-page(name="schedule-page")
+
   .col#col-main
     .main-container(v-if="course")
-      narrow-page-header(v-bind:title="course.title" subtitle="Dive in to incredible live classes")
+      narrow-page-header(:title="course.title" subtitle="Dive in to incredible live classes")
       .content-block.header-block.unpadded-block.white-block
         ul(name="class-list")
-          router-link(tag="li" v-for="(theClass, index) in course.classes" v-bind:key="index" v-bind:to="canView(theClass) ? { name: 'content', params: { classSlug: theClass.slug } } : {}" v-bind:class="{ released: canView(theClass), 'has-release': theClass.releaseAt }")
+          router-link(tag="li" v-for="(theClass, index) in course.classes" :key="index" :to="canView(theClass) ? { name: 'content', params: { classSlug: theClass.slug } } : {}" :class="{ released: canView(theClass), 'has-release': theClass.releaseAt }")
             .state-tags
               .state-tag.active(v-if="theClass.active") Live
-              .state-tag(v-bind:class="{ released: isReleased(theClass) }" :title="`${isReleased(theClass) ? 'Released on' : 'Will be released'} - ${prettyDate(theClass.date)}`") {{ isReleased(theClass) ? 'Open' : 'Closed' }}
+              .state-tag(:class="{ released: isReleased(theClass) }" :title="`${isReleased(theClass) ? 'Released on' : 'Will be released'} - ${prettyDate(theClass.date)}`") {{ isReleased(theClass) ? 'Open' : 'Closed' }}
               .clearfix
             h3 {{ (index + 1) + ': ' + theClass.title }}
             h5 {{ (!theClass.description) ? 'No description provided was for this class' : theClass.description }}
@@ -22,26 +23,16 @@ import Moment from 'moment-mini'
 
 import * as types from '@/store/mutation-types'
 import { mapGetters } from 'vuex'
+import { Events } from '@/events.js'
+
 import _get from 'lodash/get'
 
 // Mixins
 import PageStyle from '@/mixins/PageStyle'
 
-// Components
-import NarrowPageHeader from '@/components/NarrowPageHeader'
-
 export default {
   name: 'schedule',
   mixins: [ PageStyle ],
-  components: {
-    NarrowPageHeader
-  },
-  data() {
-    return {
-      navTitle: 'Course - Connected Academy',
-      pageStyle: { type: undefined, visible: true, minimized: false }
-    }
-  },
   computed: {
     ...mapGetters(['course', 'user'])
   },

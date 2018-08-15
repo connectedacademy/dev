@@ -40,7 +40,9 @@ export default {
   },
   beforeDestroy() {
     try {
-      this.sound.unload()
+      if (this.sound) {
+        this.sound.unload()
+      }
     } catch (error) {
       console.error(error);
     }

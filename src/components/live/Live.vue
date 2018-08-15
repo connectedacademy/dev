@@ -12,7 +12,7 @@
 <script>
 const numberToWords = require('number-to-words')
 
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 import { mapGetters } from 'vuex'
 import Moment from 'moment-mini'
 
@@ -40,7 +40,7 @@ export default {
     if (this.$route.params.segmentId) {
       this.jumpToSegment(this.$route.params.segmentId)
     }
-    EventBus.$on('mention', (message) => {
+    Events.$on('mention', (message) => {
       console.log('mention', message)
       this.mentions.push(message)
       setTimeout(() => {
@@ -50,7 +50,6 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: undefined, visible: true, minimized: false },
       mentions: []
     }
   },

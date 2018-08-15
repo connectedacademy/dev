@@ -7,7 +7,7 @@
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import _take from 'lodash/take'
 import _reverse from 'lodash/reverse'
@@ -27,7 +27,7 @@ export default {
       this.fetchMessages()
     }, 2500)
 
-    EventBus.$on('socketWebinarMessage', (obj) => {
+    Events.$on('socketWebinarMessage', (obj) => {
       Vue.$log.debug('socketWebinarMessage')
 
       if (obj.msg.tag === `${this.classSlug}/${this.contentSlug}`) {

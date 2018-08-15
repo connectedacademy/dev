@@ -7,7 +7,7 @@
     #login-button(v-if="!isRegistered" name="nav-login-button" @click="showAuth") Login
 
     navigation-button
-    
+
     profile-icon(v-if="isRegistered")
 
 
@@ -92,5 +92,4 @@ export default {
     font-weight bold
     line-height $navigation-height
     margin 0 10px
-
 </style>

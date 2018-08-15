@@ -3,9 +3,9 @@
   transition(name="slide-right")
     .drawer#drawer-right(v-if="isVisible")
 
-      user-card(v-bind:visible="isVisible")
-      //- profile-card(v-bind:visible="isVisible")
-      classroom-card(v-bind:visible="isVisible")
+      user-card(:visible="isVisible")
+      classroom-card(:visible="isVisible")
+      //- profile-card(:visible="isVisible")
 
 </template>
 

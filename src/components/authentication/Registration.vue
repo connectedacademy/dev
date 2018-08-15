@@ -56,7 +56,6 @@
     },
     data() {
       return {
-        pageStyle: { type: 'registration', visible: false, minimized: false },
         currentStep: 1,
         loadingQuestions: true,
         release: '',

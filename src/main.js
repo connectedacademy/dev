@@ -21,23 +21,15 @@ import router from '@/router'
 import App from '@/App'
 import Lang from '@/Lang'
 
-import { EventBus } from '@/event-bus.js'
-
+// Global components
+import NarrowPageHeader from '@/components/NarrowPageHeader'
 import OnboardingPrompt from '@/components/shared/OnboardingPrompt'
 
-// Font Awesome
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPause, faPlay, faCaretUp, faCaretDown, faCoffee, faStepBackward, faStepForward, faComment, faQuoteLeft, faLock, faEllipsisH, faTimes, faWrench, faPlus, faReply, faHeart, faAngleLeft, faAngleDown, faCircle, faExpand, faSync, faArrowLeft, faCheck, faStar, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-import { faTwitter } from '@fortawesome/fontawesome-free-brands'
-
-library.add(faPause, faPlay, faCaretUp, faCaretDown, faCoffee, faStepBackward, faStepForward, faComment, faQuoteLeft, faLock, faEllipsisH, faTimes, faWrench, faPlus, faReply, faHeart, faAngleLeft, faAngleDown, faCircle, faExpand, faSync, faArrowLeft, faCheck, faStar, faCircleNotch)
-
-library.add(faTwitter)
-
-Vue.component('icon', FontAwesomeIcon)
+// Icons
+require('./icons.js')
 
 // Global components
+Vue.component('narrow-page-header', NarrowPageHeader)
 Vue.component('onboarding-prompt', OnboardingPrompt)
 
 Vue.prototype.$app = app_config
@@ -103,15 +95,15 @@ new Vue({
     },
     message: function (val) {
       console.log('SOCKET - message', val)
-      EventBus.$emit('message', val)
+      Events.$emit('message', val)
     },
     homeworkmessage: function (val) {
       console.log('SOCKET - homeworkmessage', val)
-      EventBus.$emit('homeworkmessage', val)
+      Events.$emit('homeworkmessage', val)
     },
     homework: function (val) {
       console.log('SOCKET - homework', val)
-      EventBus.$emit('homework', val)
+      Events.$emit('homework', val)
     },
   },
   components: {

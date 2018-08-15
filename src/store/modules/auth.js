@@ -50,8 +50,6 @@ const mutations = {
   [types.CHECK_AUTH_SUCCESS](initialState, {
     response,
   }) {
-    Vue.$log.info('Auth success')
-    Vue.$log.info(response)
     // Save user in session
     state.user = response.user
   },

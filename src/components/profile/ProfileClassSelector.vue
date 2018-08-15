@@ -14,7 +14,7 @@
 <script>
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 import _get from 'lodash/get'
 
 export default {
@@ -44,7 +44,7 @@ export default {
       if (!this.selecting) {
         this.selecting = true
       }
-      EventBus.$emit('redrawMasonry')
+      Events.$emit('redrawMasonry')
     },
     setClass(theClass) {
 
@@ -53,7 +53,7 @@ export default {
         setTimeout(() => {
           this.selecting = false
         }, 200)
-        EventBus.$emit('profileClassUpdated')
+        Events.$emit('profileClassUpdated')
       }
     }
   }

@@ -31,7 +31,7 @@ import VideoEmbed from '@/components/VideoEmbed'
 import WebinarMessageTicker from '@/components/webinar/WebinarMessageTicker'
 
 export default {
-  name: 'deep-dive',
+  name: 'content-tile',
   props: ['content'],
   components: {
     LikeIndicator,

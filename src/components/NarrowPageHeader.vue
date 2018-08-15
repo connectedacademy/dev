@@ -13,7 +13,8 @@ export default {
   props: ['title', 'subtitle', 'link', 'route'],
   computed: {
     prettyTitle () {
-      return _capitalize(this.title)
+      return this.title
+      // return _capitalize(this.title)
     }
   }
 }

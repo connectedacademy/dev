@@ -11,7 +11,7 @@
 <script>
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 export default {
   name: 'transcript',
@@ -46,7 +46,7 @@ export default {
       },
       response => {
         // Pull new transcript
-        // EventBus.$emit('transcriptUpdated')
+        // Events.$emit('transcriptUpdated')
       },
       response => {
         console.log('Failed to save!')

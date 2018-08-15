@@ -14,7 +14,7 @@
 import Vue from 'vue'
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 import StudentTile from '@/components/profile/tiles/StudentTile'
@@ -28,12 +28,12 @@ export default {
   },
   mounted() {
     this.loadData()
-    EventBus.$on('profileClassUpdated', () => {
+    Events.$on('profileClassUpdated', () => {
       this.loadData()
     })
 
     // New student added, push to list
-    EventBus.$on('profileClassroomReceived', (student) => {
+    Events.$on('profileClassroomReceived', (student) => {
       Vue.$log.info(student)
       this.students.push(student)
     })
@@ -57,7 +57,7 @@ export default {
         this.profileClassSlug,
         (response) => {
           this.students = response
-          EventBus.$emit('redrawMasonry')
+          Events.$emit('redrawMasonry')
         },
         (response) => {
           // TODO: Handle failed request

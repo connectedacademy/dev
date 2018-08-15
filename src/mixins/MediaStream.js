@@ -1,7 +1,7 @@
 const SYNC_THRESHOLD = 2.0
 
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import _get from 'lodash/get'
 import _inRange from 'lodash/inRange'
@@ -12,7 +12,9 @@ require('howler')
 export default {
   beforeDestroy() {
     try {
-      this.sound.unload()
+      if (this.sound) {
+        this.sound.unload()
+      }
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +39,7 @@ export default {
       })
 
       // Update scroll status and keep audio in sync
-      EventBus.$on('scrollStatus', (scrollStatus) => {
+      Events.$on('scrollStatus', (scrollStatus) => {
         this.scrollStatus = scrollStatus
 
         this.attemptSync(this)
@@ -75,9 +77,7 @@ export default {
   },
   watch: {
     mediaPlaying(nV) {
-      console.log('mediaPlaying', nV)
-      
-      console.log('this.sound', this.sound)
+      if (!this.sound) return
       
       if (nV) {
         this.mainSoundId = this.sound.play('full')
@@ -92,14 +92,14 @@ export default {
     },
     editingSegment(nV) {
       
+      if (!this.sound) return
+
       this.sound.stop()
       
       console.log('editingSegment', this.editingSegment)
       
       if (typeof nV === 'undefined') {
-        
         this.sound.pause()
-
       } else {
         
         const loop = true

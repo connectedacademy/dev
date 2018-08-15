@@ -70,8 +70,6 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'fourcorners', visible: true, minimized: false },
-      navTitle: 'Connected Academy - FourCorners',
       currentProvider: undefined,
       providers: [
         {

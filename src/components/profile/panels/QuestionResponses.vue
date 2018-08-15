@@ -28,7 +28,7 @@
 
 <script>
 import API from '@/api'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import ProfilePanelHeader from '@/components/profile/ProfilePanelHeader'
 
@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     if (this.expandedView) { this.loadData() }
-    EventBus.$on('profileClassUpdated', () => {
+    Events.$on('profileClassUpdated', () => {
       this.loadData()
     })
   },

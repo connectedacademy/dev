@@ -119,7 +119,7 @@ export default {
   top 0
   right 0
   height 50px
-  width 80px
+  width 50px
   .heart
     height 50px
     width 50px

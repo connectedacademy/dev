@@ -39,7 +39,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { TweenLite } from 'gsap'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import Visualisation from '@/mixins/Visualisation'
 
@@ -70,7 +70,7 @@ export default {
   mounted() {
     this.loadVisualisation()
 
-    EventBus.$on('scrollStatus', (scrollStatus) => {
+    Events.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
     })
   },

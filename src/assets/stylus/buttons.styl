@@ -7,6 +7,15 @@ button()
   background-color arguments[0]
   color arguments[1]
   border-color arguments[2]
+  
+subtlebutton()
+  background-color white
+  color arguments[0]
+  border-color transparent
+  &:hover
+    cursor pointer
+    background-color alpha(arguments[0], 0.1)
+    border-color arguments[0]
 
 .pure-button
   animate()
@@ -23,6 +32,8 @@ button()
   padding 0.4em 1em
   text-align center
   text-decoration none
+  &.subtle
+    subtlebutton($color-primary)
   svg
     margin-right 6px
 
@@ -43,18 +54,28 @@ button()
 
   &.pure-button-primary
     button(darken($color-primary, 10%), white, $color-primary)
+    &.subtle
+      subtlebutton($color-primary)
 
   &.pure-button-info
     button($color-info, white, $color-info)
+    &.subtle
+      subtlebutton($color-info)
 
   &.pure-button-success
     button($color-success, white, $color-success)
+    &.subtle
+      subtlebutton($color-success)
 
   &.pure-button-warning
     button($color-warning, white, $color-warning)
+    &.subtle
+      subtlebutton($color-warning)
 
   &.pure-button-danger
     button($color-danger, white, $color-danger)
+    &.subtle
+      subtlebutton($color-danger)
 
   &.pure-button-subtle
     hover($color-light-grey, $color-text-dark-grey)

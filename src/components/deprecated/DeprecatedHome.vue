@@ -55,8 +55,6 @@ export default {
   mixins: [ PageStyle ],
   data() {
     return {
-      // pageStyle: { type: 'home', visible: false, minimized: true },
-      pageStyle: { type: undefined, visible: true, minimized: false },
       email: ''
     }
   },

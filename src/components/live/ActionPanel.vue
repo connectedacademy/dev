@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { EventBus } from '@/event-bus.js'
+  import { Events } from '@/events.js'
   import { mapGetters } from 'vuex'
   import Moment from 'moment-mini'
   
@@ -50,7 +50,7 @@
       MediaStream
     ],
     mounted() {
-      EventBus.$on('scrollStatus', (scrollStatus) => {
+      Events.$on('scrollStatus', (scrollStatus) => {
         if (scrollStatus.currentTime <= 0) {
           this.currentTime = '0:00'
         } else {
@@ -58,7 +58,7 @@
           this.currentTime = `${Math.floor(time / 60)}:${(time % 60).toString().padStart(2, '0')}`
         }
       })
-      EventBus.$on('mediaLoaded', () => {
+      Events.$on('mediaLoaded', () => {
         this.mediaLoaded = true
       })
     },

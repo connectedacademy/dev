@@ -5,6 +5,7 @@ import admin from '@/api/admin'
 import auth from '@/api/auth'
 import classroom from '@/api/classroom'
 import course from '@/api/course'
+import editor from '@/api/editor'
 import homework from '@/api/homework'
 import like from '@/api/like'
 import logging from '@/api/logging'
@@ -20,6 +21,7 @@ export default {
   auth,
   classroom,
   course,
+  editor,
   homework,
   like,
   logging,

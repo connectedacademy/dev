@@ -1,7 +1,5 @@
-import Vue from 'vue'
 import * as types from '@/store/mutation-types'
 import API from '@/api'
-import _filter from 'lodash/filter'
 import _find from 'lodash/find'
 
 // initial state
@@ -12,6 +10,7 @@ const state = {
     loaded: false
   },
   hubs: {},
+  editableContent: undefined
 }
 
 // getters
@@ -35,6 +34,9 @@ const getters = {
   liveClass() {
     if (!state.current_class) return {}
     return _find(state.current_class.content, { type: 'liveclass' })
+  },
+  editableContent() {
+    return state.editableContent
   }
 }
 

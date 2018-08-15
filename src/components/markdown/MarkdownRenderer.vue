@@ -1,15 +1,15 @@
 <template lang="pug">
 
-.markdown-wrapper
-
-  .rendered-markdown(ref="renderedmarkdown" v-bind:class="{ loading: loading }")
+.markdown-wrapper(v-if="renderedMarkdown")
+  .rendered-markdown(ref="renderedmarkdown" :class="{ loading: loading }")
     .loading-symbol
-      icon(:icon="['fas', 'circle-notch', 'spin']")
+      icon(icon="circle-notch")
 
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
+  import { Events } from '@/events.js'
   
   import Auth from '@/mixins/Auth'
   
@@ -45,6 +45,13 @@
     },
     mounted() {
       this.loadMarkdown()
+      Events.$on('contentUpdated', (type) => {
+        if (type !== 'page') return
+        this.loadMarkdown()
+      })
+    },
+    beforeDestroy() {
+      Events.$off('contentUpdated')
     },
     props: ['markdownUrl'],
     data() {

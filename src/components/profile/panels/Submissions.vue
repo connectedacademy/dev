@@ -22,7 +22,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 import API from '@/api'
 import filter from 'lodash/filter'
 
@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     if (this.expandedView) { this.loadData() }
-    EventBus.$on('profileClassUpdated', () => {
+    Events.$on('profileClassUpdated', () => {
       this.loadData()
     })
   },
@@ -75,7 +75,7 @@ export default {
         this.profileClassSlug,
         (response) => {
           this.submissions = response
-          EventBus.$emit('redrawMasonry')
+          Events.$emit('redrawMasonry')
         },
         (response) => {
           // TODO: Handle failed request

@@ -18,6 +18,9 @@ const state = {
   rightDrawer: {
     visible: false
   },
+  editingDrawer: {
+    visible: false
+  },
   pageStyles: undefined
 }
 
@@ -28,6 +31,9 @@ const getters = {
   },
   pageStyles() {
     return state.pageStyles
+  },
+  editingDrawerVisible() {
+    return state.editingDrawer.visible
   }
 }
 
@@ -43,6 +49,7 @@ const actions = {
     commit('DISMISS_MEDIA_UPLOAD_MODAL')
     commit('DISMISS_LEFT_DRAWER')
     commit('DISMISS_RIGHT_DRAWER')
+    commit('DISMISS_EDITING_DRAWER')
     commit('DISMISS_PROFILE_ACTION')
   }
 }
@@ -59,14 +66,20 @@ const mutations = {
   },
   [types.TOGGLE_LEFT_DRAWER](initialState) {
     state.leftDrawer.visible = !state.leftDrawer.visible
+    state.editingDrawer.visible = false
     state.overlayVisible = state.leftDrawer.visible
     state.burger.state = (state.leftDrawer.visible) ? BURGER_CLOSE : BURGER_DEFAULT
   },
   [types.TOGGLE_RIGHT_DRAWER](initialState) {
     state.rightDrawer.visible = !state.rightDrawer.visible
+    state.editingDrawer.visible = false
     state.overlayVisible = state.rightDrawer.visible
   },
+  [types.TOGGLE_EDITING_DRAWER](initialState) {
+    state.editingDrawer.visible = !state.editingDrawer.visible
+  },
   [types.DISMISS_DRAWERS](initialState) {
+    state.editingDrawer.visible = false
     state.leftDrawer.visible = false
     state.rightDrawer.visible = false
     state.overlayVisible = false
@@ -79,6 +92,10 @@ const mutations = {
   },
   [types.DISMISS_RIGHT_DRAWER](initialState) {
     state.rightDrawer.visible = false
+    state.overlayVisible = false
+  },
+  [types.DISMISS_EDITING_DRAWER](initialState) {
+    state.editingDrawer.visible = false
     state.overlayVisible = false
   },
 }

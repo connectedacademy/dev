@@ -3,8 +3,6 @@
 .course-content#liveclass(name="section-liveclass" v-if="liveClass")
   
   .course-content--header.block
-    #adminAction(v-if="isAdmin && !isEditing" @click="toggleAdminTools")
-      icon(icon="wrench")
     #engineType
       icon(:icon="['fab', 'twitter']" v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
       icon(icon="comment" v-if="course.engine === 'local'" title="Messages are stored on Connected Academy")
@@ -14,16 +12,11 @@
 
   .course-content--container
 
-    admin-tools(v-if="isAdmin && !isEditing && editingMode" :liveclass="liveClass")
-
-    #editingstate(v-if="isEditing" @click="finishEditing")
-      | Finished Editing?
-    
     #audio-snippets(v-if="liveClass.intros && (!editingMode || editingMode === 'intro')" :class="{ editing: editingMode }")
       audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode")
       .clearfix
 
-    action-panel(v-show="!isEditing" v-bind:content="liveClass" v-bind:current-class="currentClass")
+    action-panel(v-show="!editingDrawerVisible" v-bind:content="liveClass" v-bind:current-class="currentClass")
 
     conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
 
@@ -38,11 +31,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import ActionPanel from '@/components/live/ActionPanel'
 import AudioSnippet from '@/components/AudioSnippet'
-import AdminTools from '@/components/AdminTools'
 import ConversationContainer from '@/components/ConversationContainer'
 
 import _find from 'lodash/find'
@@ -54,11 +46,10 @@ export default {
   components: {
     ActionPanel,
     AudioSnippet,
-    AdminTools,
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingMode', 'isAdmin', 'isEditing']),
+    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingMode', 'editingDrawerVisible']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
     }
@@ -69,28 +60,6 @@ export default {
       setTimeout(() => {
         this.$store.commit('PLAY_MEDIA')
       }, 100)
-    },
-    toggleAdminTools() {
-      this.$store.commit('EDITING_MODE', this.editingMode ? undefined : 'intro')
-    },
-    finishEditing () {
-      switch (this.editingMode) {
-        case 'prompts':
-          // Pull new prompts
-          EventBus.$emit('promptsUpdated')
-          break
-        case 'transcript':
-          // Pull new transcript
-          EventBus.$emit('transcriptUpdated')
-          break
-        case 'media':
-          // Pull new media
-          EventBus.$emit('mediaUpdated')
-          break
-      }
-      this.$store.commit('IS_EDITING', false)
-      this.$store.commit('EDITING_MODE', undefined)
-      this.$store.commit('EDITING_SEGMENT', undefined)
     }
   }
 }
@@ -112,13 +81,6 @@ export default {
     svg
       color white
       font-size 1.2em
-
-    #adminAction
-      position absolute
-      top 10px
-      left 10px
-      &:hover
-        cursor pointer
 
     #engineType
       position absolute

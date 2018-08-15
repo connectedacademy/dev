@@ -2,7 +2,7 @@
 
 <template lang="pug">
 
-#app(v-bind:class="pageStyles")
+#app(v-bind:class="[{ editing: editingDrawerVisible }, pageStyles]")
 
   //- Modals
   info-modal
@@ -16,6 +16,9 @@
   //- Navigation
   left-drawer
   right-drawer
+
+  //- Editing
+  editing-drawer
 
   transition(name="slide-top" appear mode="out-in")
     .warning-banner(v-if="!course.loaded")
@@ -33,14 +36,17 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  
+  import { Events } from '@/events.js'
+
   // Components
   import Navigation from '@/components/navigation/Navigation'
   import LeftDrawer from '@/components/navigation/drawers/LeftDrawer'
   import RightDrawer from '@/components/navigation/drawers/RightDrawer'
+  import EditingDrawer from '@/components/EditingDrawer'
   import AuthenticationFlow from '@/components/authentication/AuthenticationFlow'
-  import MediaLightbox from '@/components/modals/MediaLightbox'
   
+  // Modals
+  import MediaLightbox from '@/components/modals/MediaLightbox'
   import InfoModal from '@/components/modals/InfoModal'
   import QuestionModal from '@/components/modals/QuestionModal'
   import MediaUploadModal from '@/components/modals/MediaUploadModal'
@@ -51,12 +57,13 @@
   export default {
     name: 'app',
     mixins: [
-      Overlay,
+      Overlay
     ],
     components: {
       Navigation,
       LeftDrawer,
       RightDrawer,
+      EditingDrawer,
       AuthenticationFlow,
       MediaLightbox,
       InfoModal,
@@ -64,19 +71,6 @@
       MediaUploadModal
     },
     watch: {
-      '$route': {
-        handler: function(nV, oV) {
-          this.$store.dispatch('dismissDrawers')
-          this.$store.dispatch('dismissOverlay')
-
-          // Check for flash messages
-          if (this.$route.query.flash) {
-            // TODO: Make a modal with use of this.$route.query.flash.type
-            // alert(this.$route.query.flash.msg)
-          }
-        },
-        deep: true
-      },
       '$route.params.classSlug': {
         handler: function(nV, oV) {
           if (nV && nV !== oV) {
@@ -86,28 +80,27 @@
         deep: true
       },
       activeSegment(nV) {
-        if (nV) {
-          // Segment visible, disable scroll on window
-          document.body.className = "disable-scroll"
-        } else {
-          document.body.className = "allow-scroll"
-        }
+        // Segment visible, disable scroll on window
+        document.body.className = nV ? 'disable-scroll' : 'allow-scroll'
       }
     },
     mounted() {
       this.$store.dispatch('checkAuth')
-
       this.$store.dispatch('getClass', this.$route.params.classSlug)
+    
+      Events.$on('contentUpdated', (type) => {
+        if (['course', 'schedule'].indexOf(type) !== -1) {
+          this.$store.dispatch('getCourse')
+        }
+      })
     },
-    data() {
-      return {
-        navTitle: 'Connected Academy'
-      }
+    beforeDestroy() {
+      Events.$off('contentUpdated')
     },
     computed: {
       ...mapGetters([
-        'course', 'activeSegment', 'pageStyles', 'navigation', 'modalVisible',
-      ]),
+        'course', 'activeSegment', 'pageStyles', 'navigation', 'modalVisible', 'editingDrawerVisible'
+      ])
     }
   }
 </script>
@@ -132,8 +125,24 @@ body.disable-scroll
   right 0
   bottom 0
 
-.main-page
+#app
+  animate()
+  min-width 280px
+  width 100%
+  &.editing
+    @media(min-width: 600px)
+      padding-left 400px
+      width calc(100% - 400px)
+      min-width 400px
+    @media(min-width: 1198px)
+      width calc(100% - 400px)
+    @media(max-width: 1200px)
+      min-width 800px
 
+    .navigation-button
+      left 410px
+
+.main-page
   .col
     box-sizing()
     padding 0

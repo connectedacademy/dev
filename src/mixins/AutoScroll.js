@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import app from '@/config'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import _get from 'lodash/get'
 import _round from 'lodash/round'
@@ -36,7 +36,7 @@ export default {
       // window.addEventListener('touchend', this.onMouseup, { passive: true }) // Passive to improve mobile performance
     }, 2000)
 
-    EventBus.$on('setPlaybackSpeed', (speed) => {
+    Events.$on('setPlaybackSpeed', (speed) => {
       this.durationRate = 5000 / speed
     })
   },
@@ -200,7 +200,7 @@ export default {
 
       // Update scrollStatus
       self.scrollStatus = scrollStatus
-      EventBus.$emit('scrollStatus', scrollStatus)
+      Events.$emit('scrollStatus', scrollStatus)
 
     }, SCROLL_UPDATE_INTERVAL, { 'leading': false, 'trailing': true })
   }

@@ -51,7 +51,6 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'survey', visible: true, minimized: true },
       currentStep: 0,
       answers: {},
       questions: [],

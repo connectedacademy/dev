@@ -9,6 +9,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Events } from '@/events.js'
 
 // Mixins
 import PageStyle from '@/mixins/PageStyle'
@@ -24,11 +25,6 @@ export default {
   },
   mounted() {
     this.$logging.logEvent('markdown', 'rendered', window.location.href)
-  },
-  data() {
-    return {
-      pageStyle: { type: undefined, visible: true, minimized: false }
-    }
   }
 }
 </script>
@@ -37,6 +33,8 @@ export default {
 
 @import '~stylus/buttons'
 
-.pure-button
-  margin-top 20px
+.markdown-page
+  .markdown-wrapper
+    margin-bottom 20px
+
 </style>

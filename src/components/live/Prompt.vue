@@ -11,7 +11,7 @@
 <script>
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 export default {
   name: 'prompt',
@@ -46,7 +46,7 @@ export default {
       },
       response => {
         // Pull new prompt
-        // EventBus.$emit('promptsUpdated')
+        // Events.$emit('promptsUpdated')
       },
       response => {
         console.log('Failed to save!')

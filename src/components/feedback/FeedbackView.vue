@@ -23,11 +23,11 @@
           transition(name="fade" appear)
             .feedback-message--bubble
               p(v-if="message.hidden")
-                icon(name="lock" style="height: 12px;margin: 0 7px 0 0")
+                icon(icon="lock" style="height: 12px;margin: 0 7px 0 0")
                 | Message locked (click here)
               p(v-if="!message.hidden") {{ message.text }}
               .feedback-message--action(@click="reportItem(message._id)")
-                icon(name="ellipsis-h")
+                icon(icon="ellipsis-h")
               .clearfix
             .feedback-message--author
               p by {{ message._user.profile.name }}
@@ -47,7 +47,7 @@
 <script>
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import _orderBy from 'lodash/orderBy'
 import _get from 'lodash/get'
@@ -66,7 +66,7 @@ export default {
   mounted() {
     // Get homework
     this.getHomework()
-    EventBus.$on('homeworkmessage', (message) => {
+    Events.$on('homeworkmessage', (message) => {
       // Update messages
       if (message._target === this.$route.params.id) {
         console.log('homeworkmessage')
@@ -87,7 +87,6 @@ export default {
   },
   data() {
     return {
-      navTitle: 'Connected Academy - View Feedback',
       loading: true,
       feedbackItem: undefined,
       comment: ''

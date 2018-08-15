@@ -17,7 +17,7 @@
 
 <script>
 import API from '@/api'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -47,7 +47,7 @@ export default {
         formData,
         (response) => {
           this.state = 'waiting'
-          EventBus.$emit('mediaUpdated')
+          Events.$emit('mediaUpdated')
           this.$store.commit('DISMISS_MEDIA_UPLOAD_MODAL')
         },
         (response) => {

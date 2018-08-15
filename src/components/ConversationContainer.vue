@@ -22,7 +22,7 @@
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 // Mixins
 import Messages from '@/mixins/Messages'
@@ -47,15 +47,15 @@ export default {
     this.loadTranscript(this.content)
     this.loadSegmentSummary(0, true)
 
-    EventBus.$on('scrollStatus', (scrollStatus) => {
+    Events.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
     })
 
-    EventBus.$on('promptsUpdated', () => {
+    Events.$on('promptsUpdated', () => {
       this.loadPrompts(this.content)
     })
 
-    EventBus.$on('transcriptUpdated', () => {
+    Events.$on('transcriptUpdated', () => {
       this.loadTranscript(this.content)
     })
 
@@ -92,7 +92,7 @@ export default {
       if (typeof nV !== 'undefined') {
         this.loadSegmentSummary(nV, true)
       } else {
-        EventBus.$emit('segmentClosed')
+        Events.$emit('segmentClosed')
       }
     },
     scrollStatus(nV, oV) {
@@ -174,7 +174,7 @@ export default {
   top 8px
   left 50%
   margin-left -60px
-  z-index 55
+  z-index 54
   &:hover
     cursor pointer
   @media(max-width: 600px)

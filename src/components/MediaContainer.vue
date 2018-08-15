@@ -13,7 +13,7 @@
 import Vue from 'vue'
 import API from '@/api'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import _get from 'lodash/get'
 import throttle from 'lodash/throttle'
@@ -35,7 +35,7 @@ export default {
     this.$store.commit('HIDE_MEDIA')
   },
   mounted() {
-    EventBus.$on('scrollStatus', (scrollStatus) => {
+    Events.$on('scrollStatus', (scrollStatus) => {
       this.scrollStatus = scrollStatus
     })
 
@@ -43,7 +43,7 @@ export default {
 
     this.getMedia()
 
-    EventBus.$on('mediaUpdated', () => {
+    Events.$on('mediaUpdated', () => {
       this.getMedia()
     })
   },
@@ -113,7 +113,7 @@ export default {
           this.liveclassMedia = response
           if (this.liveclassMedia) {
             if (Object.keys(response).length > 0) {
-              EventBus.$emit('mediaLoaded')
+              Events.$emit('mediaLoaded')
               this.$store.commit('SHOW_MEDIA')
             }
           }
@@ -149,7 +149,7 @@ export default {
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
-      if (!self.liveclassMedia) return
+      if (!self.liveclassMedia || self.liveclassMedia.length == 0) return
 
       let media = Object.keys(self.liveclassMedia)
       let target = self.scrollStatus.currentSegmentGroup

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import API from '@/api'
 import * as types from '@/store/mutation-types'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 import store from '@/store'
 
 import _clamp from 'lodash/clamp'
@@ -26,11 +26,11 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on('message', (message) => {
+    Events.$on('message', (message) => {
       // Check if message is a reply to current user
       if (this.user) {
         if (message.text.indexOf(`@${this.user.twitter.username}`) !== -1) {
-          EventBus.$emit('mention', message)
+          Events.$emit('mention', message)
         }
       }
 

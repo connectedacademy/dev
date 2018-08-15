@@ -17,7 +17,7 @@
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { EventBus } from '@/event-bus.js'
+import { Events } from '@/events.js'
 
 import _each from 'lodash/each'
 import _filter from 'lodash/filter'
@@ -52,7 +52,7 @@ export default {
     }, 2000)
 
     // Listen for redraw event
-    EventBus.$on('redrawMasonry', () => {
+    Events.$on('redrawMasonry', () => {
       this.$redrawVueMasonry()
       setTimeout(() => {
         this.$redrawVueMasonry()
@@ -64,7 +64,6 @@ export default {
   },
   data() {
     return {
-      pageStyle: { type: 'profile', visible: true, minimized: false },
       adminView: false,
       contentPanelVisible: false,
       panelMargin: 10,
