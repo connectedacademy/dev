@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import API from '@/api'
 import Editor from '@/mixins/Editor'
 
 export default {

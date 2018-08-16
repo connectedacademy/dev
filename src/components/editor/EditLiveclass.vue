@@ -9,6 +9,7 @@
       .editable-content
         p {{ mode }}
       .editable-controls
+        .pure-button.pure-button-small.pure-button-danger.subtle.pull-left(v-if="editingMode === 'transcript'" @click="fetchTranscription()") Fetch
         .pure-button.pure-button-small.pure-button-success.subtle.pull-right(@click="setEditMode(key)") Done
         .clearfix
           
@@ -49,6 +50,16 @@ export default {
     }
   },
   methods: {
+    fetchTranscription () {
+      API.course.fetchTranscript(
+        this.$route.params.classSlug,
+        (response) => {
+          Events.$emit('transcriptUpdated')
+        },
+        (response) => {
+          console.log(response)
+        })
+    },
     finishEditing () {
       switch (this.editingMode) {
         case 'prompts':
