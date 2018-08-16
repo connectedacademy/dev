@@ -10,6 +10,7 @@ import VueResource from 'vue-resource'
 import VueSocketio from 'vue-socket.io'
 
 import { sync } from 'vuex-router-sync'
+import { Events } from '@/events.js'
 
 import app_config from '@/config'
 import * as api_config from '@/api/config'
