@@ -36,6 +36,16 @@ export default {
   computed: {
     ...mapGetters(['course', 'user'])
   },
+  mounted() {
+    Events.$on('contentUpdated', (type) => {
+      if (['schedule'].indexOf(type) !== -1) {
+        this.$store.dispatch('getCourse')
+      }
+    })
+  },
+  beforeDestroy() {
+    Events.$off('contentUpdated')
+  },
   methods: {
     prettyDate(date) {
       return Moment(date).format('DD MMM YYYY')

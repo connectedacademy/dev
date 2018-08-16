@@ -13,7 +13,9 @@
       .container
         edit-course(v-if="$route.name === 'home'")
 
-        edit-page(v-if="type === 'page'" v-for="(page, index) in editableContent.pages" :key="index" :index="index" :page="page")
+        edit-markdown(v-if="type === 'page'" :type="type" :page="editableContent.page")
+        
+        edit-markdown(v-if="type === 'markdown'" :type="type" :page="editableContent.page")
 
         edit-liveclass(v-if="type === 'live'" :liveclass="liveClass")
         
@@ -31,7 +33,7 @@ import { Events } from '@/events.js'
 
 import EditCourse from '@/components/editor/EditCourse'
 import EditLiveclass from '@/components/editor/EditLiveclass'
-import EditPage from '@/components/editor/EditPage'
+import EditMarkdown from '@/components/editor/EditMarkdown'
 import EditSchedule from '@/components/editor/EditSchedule'
 import EditContent from '@/components/editor/EditContent'
 
@@ -42,7 +44,7 @@ export default {
   components: {
     EditCourse,
     EditLiveclass,
-    EditPage,
+    EditMarkdown,
     EditSchedule,
     EditContent
   },
@@ -53,6 +55,9 @@ export default {
         this.recentlyUpdated = false
       }, 1500)
     })
+  },
+  beforeDestroy() {
+    Events.$off('contentUpdated')
   },
   data() {
     return {
@@ -84,15 +89,15 @@ export default {
           return { ...content, content: this.currentClass.content }
         
         case 'page':
-          return { ...content, pages: [{
+          return { ...content, page: {
             title: this.$route.name,
             path: path || `content/${this.$route.name}.md`
-          }]}
+          }}
         
         case 'markdown':
-          return { ...content, pages: [{
+          return { ...content, page: {
             path: `classes/${this.$route.params.classSlug}/${this.$route.params.url}.md`
-          }]}
+          }}
 
         default:
           return undefined

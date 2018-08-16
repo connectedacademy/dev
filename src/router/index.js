@@ -57,8 +57,7 @@ const router = new Router({
           component: Markdown,
           meta: {
             editable: {
-              type: 'page',
-              path: undefined
+              type: 'markdown'
             }
           }
         },
@@ -164,7 +163,7 @@ const router = new Router({
         title: 'FAQ',
         subtitle: 'Frequently asked questions about the site.',
         path: 'content/faq.md',
-        editable: { type: 'page' }
+        editable: { type: 'page', path: 'content/faq.md' }
       }
     },
     {
@@ -205,7 +204,7 @@ const router = new Router({
         title: 'About',
         subtitle: 'Learn about Connected Academy',
         path: 'content/about.md',
-        editable: { type: 'page' }
+        editable: { type: 'page', path: 'content/about.md' }
       }
     },
     {

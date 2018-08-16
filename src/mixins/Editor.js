@@ -102,9 +102,15 @@ export default {
           break
         
         case 'page':
+          let path = ''
+          if (typeof this.page.path === 'undefined') {
+            path = `classes/${this.$route.params.classSlug}/${this.$route.params.url}.md`
+          } else {
+            path = `${this.page.path}`
+          }
           request = Object.assign(request, {
             markdown: this.markdown,
-            path: this.page.path
+            path: path
           })
           break
 

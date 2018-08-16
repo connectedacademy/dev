@@ -15,14 +15,17 @@ import { mapGetters } from 'vuex'
 import Editor from '@/mixins/Editor'
 
 export default {
-  name: 'edit-page',
-  props: ['page'],
+  name: 'edit-markdown',
+  props: ['type', 'page'],
   mixins: [ Editor ],
   mounted () {
-    if (!this.page.path) {
-      this.page.path = `classes/${this.$route.params.classSlug}/${this.$route.params.url}.md`
+    this.expanded = true
+    if (this.type === 'markdown') {
+      this.loadMarkdown(`${this.CDN}/classes/${this.$route.params.classSlug}/${this.$route.params.url}.md`)
     }
-    this.loadMarkdown(`${this.CDN}/${this.page.path}`)
+    if (this.type === 'page') {
+      this.loadMarkdown(`${this.CDN}/${this.page.path}`)
+    }
   },
   data () {
     return {

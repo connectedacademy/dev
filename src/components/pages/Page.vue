@@ -15,18 +15,6 @@ import StaticPage from '@/mixins/StaticPage'
 export default {
   name: 'page',
   mixins: [ StaticPage ],
-  data() {
-    return {
-      editableContent: {
-        pages: [
-          {
-            title: this.$route.meta.title,
-            path: this.$route.meta.path
-          }
-        ]
-      }
-    }
-  }
 }
 </script>
 

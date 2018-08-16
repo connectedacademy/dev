@@ -46,7 +46,7 @@
     mounted() {
       this.loadMarkdown()
       Events.$on('contentUpdated', (type) => {
-        if (type !== 'page') return
+        if (['page', 'markdown'].indexOf(type) === -1) return
         this.loadMarkdown()
       })
     },

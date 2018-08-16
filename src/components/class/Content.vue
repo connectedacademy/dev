@@ -41,6 +41,9 @@ export default {
       }
     })
   },
+  beforeDestroy() {
+    Events.$off('contentUpdated')
+  },
   methods: {
     contentComponent (type) {
       return {
