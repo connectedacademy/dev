@@ -19,6 +19,9 @@ export default {
   props: ['page'],
   mixins: [ Editor ],
   mounted () {
+    if (!this.page.path) {
+      this.page.path = `classes/${this.$route.params.classSlug}/${this.$route.params.url}.md`
+    }
     this.loadMarkdown(`${this.CDN}/${this.page.path}`)
   },
   data () {

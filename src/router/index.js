@@ -57,7 +57,8 @@ const router = new Router({
           component: Markdown,
           meta: {
             editable: {
-              type: 'markdown'
+              type: 'page',
+              path: undefined
             }
           }
         },

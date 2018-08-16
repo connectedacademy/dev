@@ -100,7 +100,7 @@ export default {
             }
           })
           break
-
+        
         case 'page':
           request = Object.assign(request, {
             markdown: this.markdown,
