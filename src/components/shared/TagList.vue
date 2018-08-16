@@ -1,9 +1,8 @@
 <template lang="pug">
 
 ul.tag-list
-  a(v-for="(tag, index) in tags" v-bind:key="index" v-bind:href="getLink(tag)" target="_blank" v-bind:style="{ 'pointer-events': (linked ? 'all' : 'none') }")
-    li
-      | {{ linked ? tag.label : tag }}
+  a(v-for="(val, tag) in tags" :key="index" v-if="val")
+    li(v-text="tag")
   .clearfix
 
 </template>
@@ -13,12 +12,7 @@ import _get from 'lodash/get';
 
 export default {
   name: 'tag-list',
-  props: ['tags', 'linked'],
-  methods: {
-    getLink(tag) {
-      return (this.linked) ? _get(tag, 'link') : '#';
-    }
-  }
+  props: ['tags']
 }  
 </script>
 
@@ -28,15 +22,15 @@ export default {
 
 ul.tag-list
   cleanlist()
-  display inline-block
+  margin 0 -5px 0 -5px
   li
     cleanlist()
-    radius(4px)
-    background-color $color-info
+    radius(15px)
+    background-color $color-success
     color white
     float left
     line-height 30px
-    margin 5px
-    padding 0 12px
+    margin 15px 5px 0 5px
+    padding 0 15px
 
 </style>

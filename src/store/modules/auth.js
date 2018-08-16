@@ -17,7 +17,7 @@ const getters = {
     return typeof initialState.user !== 'undefined'
   },
   isAdmin: (initialState) => {
-    return initialState.user && initialState.user.isAdmin
+    return initialState.user && initialState.user.roles.admin
   }
 }
 

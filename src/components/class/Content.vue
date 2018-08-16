@@ -6,6 +6,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Events } from '@/events.js'
 import _filter from 'lodash/filter'
 
 // Mixins
@@ -32,6 +33,13 @@ export default {
   },
   computed: {
     ...mapGetters(['classContent'])
+  },
+  mounted() {
+    Events.$on('contentUpdated', (type) => {
+      if (['content'].indexOf(type) !== -1) {
+        this.$store.dispatch('getClass', this.$route.params.classSlug)
+      }
+    })
   },
   methods: {
     contentComponent (type) {

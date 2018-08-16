@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapGetters(['editingMode']),
     enabled () {
-      return _get(this.user, 'isAdmin', false)
+      return this.user.roles.admin
     }
   },
   methods: {

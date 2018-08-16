@@ -6,24 +6,15 @@
   profile-class-selector
 
   .profile-panel--content
-
     
     .pure-button.pure-button-info.full-width.no-margin#generate-code(v-if="classrooms.length === 0" @click.once="generateCode")
       | Generate Code
-    .classroom-tile(v-else v-for="(classroom, index) in classrooms" v-bind:key="index")
+    .classroom-tile(v-else v-for="(classroom, index) in classrooms" :key="index")
       | {{ classroom.code }}
     
-    h3 Roles
-    tag-list(v-bind:tags="userRoles")
+    tag-list(:tags="userRoles")
 
     .clearfix
-
-    //- #admin-mode-button.pure-button.pure-button-subtle.pure-button-small(@click="toggleAdminView" v-bind:class="{ active: adminView }") Admin View
-    
-    .clearfix
-
-    //- h3 Linked Accounts
-    //- tag-list(v-bind:tags="[{ label: user.account, link: user.link }]" linked)
 
 </template>
 
@@ -42,7 +33,7 @@ import _filter from 'lodash/filter'
 
 export default {
   name: 'user',
-  props: ['label', 'adminView'],
+  props: ['label'],
   components: {
     ProfilePanelHeader,
     ActionSelector,
@@ -76,9 +67,6 @@ export default {
     }
   },
   methods: {
-    toggleAdminView() {
-      this.$emit('update:adminView', !this.adminView)
-    },
     getClassrooms() {
       this.classrooms = []
 

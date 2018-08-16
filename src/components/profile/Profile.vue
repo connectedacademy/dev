@@ -3,14 +3,14 @@
 .profile-page
 
   .profile-action(v-if="(typeof profileAction !== 'undefined')")
-    component(v-bind:is="profileAction.component" v-bind:label="profileAction.label" v-bind:role="profileAction.role" v-bind:panel="profileAction" v-bind:limitHeight="false" v-bind:can-expand="false" v-bind:expanded-view="true")
+    component(:is="profileAction.component" :label="profileAction.label" :role="profileAction.role" :panel="profileAction" :limitHeight="false" :can-expand="false" :expanded-view="true")
   
   .dashboard(transition-duration="0.3s" item-selector=".dashboard--item" gutter=".gutter-block-selector")&attributes({'v-masonry': 'true'})
     .gutter-block-selector
-    .dashboard--item()&attributes({'v-masonry-tile': 'true'})
-      user(v-bind:style="panelStyle()" label="Profile" role="user" v-bind:admin-view.sync="adminView")
-    .dashboard--item(v-for="(panel, index) in panels" v-bind:key="index" v-if="isVisible(panel)")&attributes({'v-masonry-tile': 'true'})
-      component(v-bind:is="panel.component" v-bind:style="panelStyle()" v-bind:label="panel.label" v-bind:role="panel.role" v-bind:panel="panel" v-bind:limitHeight="true" v-bind:can-expand="true")
+    .dashboard--item(v-masonry-tile="true")
+      user(:style="panelStyle()" label="Profile" role="user")
+    .dashboard--item(v-for="(panel, index) in panels" :key="index" v-if="isVisible(panel)" v-masonry-tile="true")
+      component(:is="panel.component" :style="panelStyle()" :label="panel.label" :role="panel.role" :panel="panel" :limitHeight="true" :can-expand="true")
 
 </template>
 
@@ -56,7 +56,7 @@ export default {
       this.$redrawVueMasonry()
       setTimeout(() => {
         this.$redrawVueMasonry()
-      }, 1000);
+      }, 1000)
     })
   },
   unmounted() {
@@ -64,7 +64,6 @@ export default {
   },
   data() {
     return {
-      adminView: false,
       contentPanelVisible: false,
       panelMargin: 10,
       panelWidth: 340,
@@ -135,12 +134,12 @@ export default {
   },
   methods: {
     isVisible(panel) {
-      return true
+      // No user
       if (!this.user) return false
-      if (panel.role === 'admin' && !this.adminView) return false
-      if (panel.role !== 'admin' && this.adminView) return false
-
-      return (_indexOf(this.user.roles, panel.role) >= 0)
+      // User has role
+      if (this.user.roles[panel.role]) return true
+      // Panel role is user
+      if (panel.role === 'user') return true
     },
     panelStyle() {
       return {

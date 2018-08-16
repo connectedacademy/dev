@@ -5,16 +5,20 @@
     #toggle-button(@click="toggleEditor")
       icon(:icon="isVisible ? 'arrow-left' : 'cog'")
 
+    transition(name="slide-top" type="in out")
+      .flash-message(v-if="recentlyUpdated") Content Updated
+
     .wrapper(v-if="editableContent && isVisible")
+
       .container
         edit-course(v-if="$route.name === 'home'")
 
-        edit-page(v-if="type === 'pages'" v-for="(page, index) in editableContent.pages" :key="index" :index="index" :page="page")
+        edit-page(v-if="type === 'page'" v-for="(page, index) in editableContent.pages" :key="index" :index="index" :page="page")
 
         edit-liveclass(v-if="type === 'live'" :liveclass="liveClass")
         
         edit-schedule(v-if="type === 'schedule'" v-for="(item, index) in editableContent.schedule" :key="index" :index="index" :item="item")
-        .subtle-text(v-if="type === 'content'") Support for adding and reordering of classes will be available soon
+        .subtle-text(v-if="type === 'schedule'") *Support for adding and reordering of classes will be available soon
         
         edit-content(v-if="type === 'content'" v-for="(item, index) in editableContent.content" :key="index" :index="index" :item="item")
         .subtle-text(v-if="type === 'content'") *Support for adding and reordering of content will be available soon
@@ -42,10 +46,23 @@ export default {
     EditSchedule,
     EditContent
   },
+  mounted() {
+    Events.$on('contentUpdated', (type) => {
+      this.recentlyUpdated = true
+      setTimeout(() => {
+        this.recentlyUpdated = false
+      }, 1500)
+    })
+  },
+  data() {
+    return {
+      recentlyUpdated: false
+    }
+  },
   computed: {
     ...mapGetters(['user', 'course', 'currentClass', 'liveClass']),
     enabled () {
-      return _get(this.user, 'isAdmin', false)
+      return this.user && this.user.roles.admin
     },
     isVisible() {
       return this.$store.state.navigation.editingDrawer.visible
@@ -106,11 +123,32 @@ $drawer-width = 400px
   left -400px
   top 0
   bottom 0
-  overflow-y scroll
   max-width 100%
   width $drawer-width
   z-index 56
 
+  .flash-message
+    animate()
+    // radius(6px)
+    background-color alpha($color-success, 1)
+    color white
+    font-weight bold
+    line-height 60px
+    padding 0 10px
+    position fixed
+    top 0
+    left 0
+    right 0
+    z-index 9
+    text-align center
+  .wrapper
+    overflow-y scroll
+    padding-bottom 100px
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    right 0
   .wrapper .container
     padding 15px
     text-align left

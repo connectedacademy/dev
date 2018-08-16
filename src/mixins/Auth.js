@@ -4,7 +4,7 @@ export default {
   computed: {
     ...mapGetters(['user']),
     isAdmin() {
-      return this.user && this.user.admin
+      return this.user && this.user.roles.admin
     }
   },
   methods: {

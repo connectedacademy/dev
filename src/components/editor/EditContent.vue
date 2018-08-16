@@ -6,10 +6,9 @@
         li.tag(:class="[item.type]") {{ item.type }}
         .clearfix
     .editable-content
-      label Title
-      input.full-width(v-model="item.title")
-      label Description
-      textarea.tall(v-model="item.description")
+      span.editable-property(v-for="(property, index) in properties")
+        label {{ property.label }}
+        input.full-width(v-if="property.type === 'text'" v-model="property.value")
     .editable-controls
       .pure-button.pure-button-small.pure-button-success.subtle.pull-right(v-if="expanded" @click="update('content', index)") {{ updating ? 'Updating...' : 'Update' }}
       .pure-button.pure-button-small.pure-button-warning.subtle.pull-left(v-if="expanded" @click="expanded = false") Cancel
@@ -22,7 +21,26 @@ import Editor from '@/mixins/Editor'
 export default {
   name: 'edit-content',
   props: ['item', 'index'],
-  mixins: [ Editor ]
+  mixins: [ Editor ],
+  data() {
+    return {
+      properties: {
+        title: {
+          label: 'Title',
+          type: 'text',
+          value: undefined
+        },
+        description: {
+          label: 'Description',
+          type: 'text',
+          value: undefined
+        }
+      }
+    }
+  },
+  mounted() {
+    this.loadProperties(this.item)
+  }
 }
 </script>
 

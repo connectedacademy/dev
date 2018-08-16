@@ -94,8 +94,10 @@ export default {
           request = Object.assign(request, {
             index: index,
             class: this.$route.params.classSlug,
-            title: this.item.title,
-            description: this.item.description
+            properties: {
+              title: this.properties.title.value,
+              description: this.properties.description.value
+            }
           })
           break
 
@@ -126,7 +128,6 @@ export default {
           // this.$log.info(response)
           Events.$emit('contentUpdated', request.type)
           this.updating = false
-          this.expanded = false
         },
         (response) => {
           // this.$log.error(response)
