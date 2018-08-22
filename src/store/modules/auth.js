@@ -71,7 +71,7 @@ const mutations = {
     // error in response
   },
   attemptAuth({ commit }) {
-    document.location = `${config.AUTH_URL}/${store.getters.course.slug}`
+    document.location = `${config.TWITTER_AUTH_URL}/${store.getters.course.slug}`
   },
 }
 
