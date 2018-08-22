@@ -55,7 +55,7 @@ export default {
     },
     canView(theClass) {
       // Can view if class is released or user is admin
-      return this.isReleased(theClass) || this.user.roles.admin
+      return this.isReleased(theClass) || (this.user && this.user.roles.admin)
     }
   }
 }
