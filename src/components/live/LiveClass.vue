@@ -16,12 +16,16 @@
       audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode")
       .clearfix
 
-    action-panel(v-show="!editingDrawerVisible" v-bind:content="liveClass" v-bind:current-class="currentClass")
+    action-panel(v-if="liveClass.audio" v-show="!editingDrawerVisible" :content="liveClass" :current-class="currentClass")
 
-    conversation-container(v-bind:content="liveClass" v-bind:collapsed="isCollapsed")
+    conversation-container(v-if="liveClass.audio" :content="liveClass" :collapsed="isCollapsed")
 
-  #continue-listening(v-show="isCollapsed" name="continue-listening")
+  #continue-listening(v-if="liveClass.audio" v-show="isCollapsed" name="continue-listening")
     .pure-button.pure-button-info.rounded-tall(@click="continueListening()") Continue Listening
+
+  #no-audio(v-else)
+    .pure-button.pure-button-success.rounded-tall(v-if="isAdmin" @click="toggleEditor()") Upload Primary Audio
+    span(v-else) This class has no primary audio
 
   .course-content--footer(v-show="!isCollapsed")
     p {{ footerMessage }}
@@ -49,7 +53,7 @@ export default {
     ConversationContainer,
   },
   computed: {
-    ...mapGetters(['currentClass', 'liveClass', 'isCollapsed', 'course', 'editingMode', 'editingDrawerVisible']),
+    ...mapGetters(['currentClass', 'liveClass', 'isAdmin', 'isCollapsed', 'course', 'editingMode', 'editingDrawerVisible']),
     footerMessage () {
       return `Thanks for listening ${emoji.get('tada')}`
     }
@@ -60,6 +64,10 @@ export default {
       setTimeout(() => {
         this.$store.commit('PLAY_MEDIA')
       }, 100)
+    },
+    toggleEditor() {
+      Events.$emit('editorOpened')
+      this.$store.commit('TOGGLE_EDITING_DRAWER')
     }
   }
 }
@@ -73,7 +81,7 @@ export default {
 
 .course-content
   background-color white !important
-  margin-bottom 60px
+  margin-bottom 320px
   position relative
 
   .course-content--header.block
@@ -129,16 +137,22 @@ export default {
     margin-left -160px
     width 320px
 
-  #continue-listening
+  #no-audio, #continue-listening
     pinned()
     border-bottom-left-radius $corner-radius
     border-bottom-right-radius $corner-radius
     background-color white
-    height 160px
     position relative
     text-align center
     @media(max-width: 600px)
       radius(0)
+  
+  #no-audio
+    color $color-text-grey
+    padding 60px 30px
+
+  #continue-listening
+    height 160px
     .pure-button
       box-sizing()
       left 50%

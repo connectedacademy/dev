@@ -5,10 +5,11 @@
   .editable-content
     p Add a new introduction to the class
     .form
-      input(ref="introAudioFile" type="file" name="upload")
+      input.full-width(v-model="audioDescription" ref="title" type="text" name="title" placeholder="Describe your audio")
+      input.full-width(ref="introAudioFile" type="file" name="upload")
       .clearfix
   .editable-controls
-    .pure-button.pure-button-small.pure-button-success.subtle.pull-right(@click="uploadFile('introAudioFile')") {{ state.audio.introAudioFile === 'waiting' ? 'Upload' : 'Uploading...' }}
+    .pure-button.pure-button-small.pure-button-success.subtle.pull-right(@click="uploadAudioFile('introAudioFile')") {{ state.audio.introAudioFile === 'waiting' ? 'Upload' : 'Uploading...' }}
     .pure-button.pure-button-small.pure-button-warning.subtle.pure-button-warning.pull-left(@click="expanded = false") Cancel
     .clearfix  
 </template>
@@ -28,28 +29,6 @@ export default {
           introAudioFile: 'waiting'
         }
       }
-    }
-  },
-  methods: {
-    uploadFile (identifer) {
-      const formData = new FormData()
-
-      formData.append('theClass', this.$route.params.classSlug)
-      formData.append('upload', this.$refs[identifer].files[0])
-      formData.append('type', identifer)
-
-      this.state.audio[identifer] = 'processing'
-      
-      API.course.uploadAudio(
-        formData,
-        (response) => {
-          this.state.audio[identifer] = 'waiting'
-        },
-        (response) => {
-          console.log(response)
-          this.state.audio[identifer] = 'waiting'
-        }
-      )
     }
   }
 }

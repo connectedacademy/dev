@@ -11,6 +11,7 @@ export default {
     return {
       expanded: false,
       updating: false,
+      audioDescription: undefined,
       state: {
         audio: {
           introAudioFile: 'waiting',
@@ -35,11 +36,13 @@ export default {
       }
     },
     uploadAudioFile(identifer) {
+
       const formData = new FormData()
 
       formData.append('theClass', this.$route.params.classSlug)
       formData.append('upload', this.$refs[identifer].files[0])
       formData.append('type', identifer)
+      formData.append('title', this.audioDescription)
 
       this.state.audio[identifer] = 'processing'
 

@@ -5,7 +5,8 @@
   .editable-content
     p Replace primary audio for the class
     .form
-      input(ref="mainAudioFile" type="file" name="upload")
+      input.full-width(v-model="audioDescription" type="text" name="title" placeholder="Describe your audio")
+      input.full-width(ref="mainAudioFile" type="file" name="upload")
       .clearfix
   .editable-controls
     .pure-button.pure-button-small.pure-button-success.subtle.pull-right(@click="uploadAudioFile('mainAudioFile')") {{ state.audio.mainAudioFile === 'waiting' ? 'Upload' : 'Uploading...' }}
@@ -28,28 +29,6 @@ export default {
           mainAudioFile: 'waiting'
         }
       }
-    }
-  },
-  methods: {
-    uploadAudioFile (identifer) {
-      const formData = new FormData()
-
-      formData.append('theClass', this.$route.params.classSlug)
-      formData.append('upload', this.$refs[identifer].files[0])
-      formData.append('type', identifer)
-
-      this.state.audio[identifer] = 'processing'
-      
-      API.course.uploadAudio(
-        formData,
-        (response) => {
-          this.state.audio[identifer] = 'waiting'
-        },
-        (response) => {
-          console.log(response)
-          this.state.audio[identifer] = 'waiting'
-        }
-      )
     }
   }
 }
