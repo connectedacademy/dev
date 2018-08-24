@@ -22,9 +22,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['course', 'CDN'])
+    ...mapGetters(['course', 'CDN', 'editingMode'])
   },
   methods: {
+    setEditingMode(mode) {
+      this.$store.commit('IS_EDITING', true)
+      this.$store.commit('EDITING_MODE', mode)
+      this.$store.commit('EDITING_SEGMENT', undefined)
+    },
     loadProperties(source) {
       if (!source) return
       console.log('source', source)
@@ -49,11 +54,31 @@ export default {
       API.course.uploadAudio(
         formData,
         (response) => {
+          Events.$emit('audioUploaded')
           this.state.audio[identifer] = 'waiting'
         },
         (response) => {
           console.log(response)
           this.state.audio[identifer] = 'waiting'
+        }
+      )
+    },
+    removeAudio(type, filename) {
+
+      const formData = new FormData()
+
+      formData.append('theClass', this.$route.params.classSlug)
+      formData.append('type', type)
+      formData.append('filename', filename)
+
+      API.course.removeAudio(
+        formData,
+        (response) => {
+          Events.$emit('audioRemoved')
+        },
+        (response) => {
+          console.log(response)
+          alert('Failed to remove audio')
         }
       )
     },

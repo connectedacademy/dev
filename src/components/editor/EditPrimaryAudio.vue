@@ -1,6 +1,6 @@
 <template lang="pug">
-.editable-section(:class="{ expanded: expanded }")
-  .editable-header(@click="expanded = true")
+.editable-section(:class="{ expanded: (editingMode == 'primary') }")
+  .editable-header(@click="setEditingMode('primary')")
     | Primary Audio
   .editable-content
     p Replace primary audio for the class
@@ -10,7 +10,7 @@
       .clearfix
   .editable-controls
     .pure-button.pure-button-small.pure-button-success.subtle.pull-right(@click="uploadAudioFile('mainAudioFile')") {{ state.audio.mainAudioFile === 'waiting' ? 'Upload' : 'Uploading...' }}
-    .pure-button.pure-button-small.pure-button-warning.subtle.pull-left(@click="expanded = false") Cancel
+    .pure-button.pure-button-small.pure-button-warning.subtle.pull-left(@click="setEditingMode(undefined)") Cancel
     .clearfix  
 </template>
 

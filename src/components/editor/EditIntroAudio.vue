@@ -1,6 +1,6 @@
 <template lang="pug">
-.editable-section(:class="{ expanded: expanded }")
-  .editable-header(@click="expanded = true")
+.editable-section(:class="{ expanded: (editingMode == 'intro') }")
+  .editable-header(@click="setEditingMode('intro')")
     | Introductions
   .editable-content
     p Add a new introduction to the class
@@ -10,7 +10,7 @@
       .clearfix
   .editable-controls
     .pure-button.pure-button-small.pure-button-success.subtle.pull-right(@click="uploadAudioFile('introAudioFile')") {{ state.audio.introAudioFile === 'waiting' ? 'Upload' : 'Uploading...' }}
-    .pure-button.pure-button-small.pure-button-warning.subtle.pure-button-warning.pull-left(@click="expanded = false") Cancel
+    .pure-button.pure-button-small.pure-button-warning.subtle.pure-button-warning.pull-left(@click="setEditingMode(undefined)") Cancel
     .clearfix  
 </template>
 

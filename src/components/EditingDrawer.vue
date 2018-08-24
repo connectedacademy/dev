@@ -6,7 +6,7 @@
       icon(:icon="isVisible ? 'arrow-left' : 'cog'")
 
     transition(name="slide-top" type="in out")
-      .flash-message(v-if="recentlyUpdated") Content Updated
+      .flash-message(v-if="recentlyUpdated" v-text="flashMessage || 'Content Updated'")
 
     .wrapper(v-if="editableContent && isVisible")
 
@@ -49,11 +49,19 @@ export default {
     EditContent
   },
   mounted() {
+    Events.$on('audioUploaded', (type) => {
+      this.flashMessage = 'Audio Uploaded'
+      this.showFlashMessage()
+      this.$store.dispatch('getClass', this.$route.params.classSlug)
+    })
+    Events.$on('audioRemoved', (type) => {
+      this.flashMessage = 'Audio Removed'
+      this.showFlashMessage()
+      this.$store.dispatch('getClass', this.$route.params.classSlug)
+    })
     Events.$on('contentUpdated', (type) => {
-      this.recentlyUpdated = true
-      setTimeout(() => {
-        this.recentlyUpdated = false
-      }, 1500)
+      this.flashMessage = `Content Updated (${type})`
+      this.showFlashMessage()
     })
   },
   beforeDestroy() {
@@ -61,7 +69,8 @@ export default {
   },
   data() {
     return {
-      recentlyUpdated: false
+      recentlyUpdated: false,
+      flashMessage: null
     }
   },
   computed: {
@@ -108,6 +117,12 @@ export default {
     toggleEditor() {
       Events.$emit('editorOpened')
       this.$store.commit('TOGGLE_EDITING_DRAWER')
+    },
+    showFlashMessage() {
+      this.recentlyUpdated = true
+      setTimeout(() => {
+        this.recentlyUpdated = false
+      }, 1500)
     }
   }
 }

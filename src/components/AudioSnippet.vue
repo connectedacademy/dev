@@ -1,6 +1,6 @@
 <template lang="pug">
-  .snippet(v-if="sound" :class="{ playing: playing, editing: editing }" @click="playAudio")
-    #controls
+  .snippet(v-if="sound" :class="{ playing: playing, editing: editing }" :title="intro.title")
+    #controls(@click="playAudio")
       span.rewind(@click="rewindAudio")
         icon(icon="step-backward")
       span.pause(v-show="playing" @click="pauseAudio")
@@ -12,7 +12,7 @@
     #meta
       p.title {{ intro.title }}
     #manage(v-if="editing")
-      .pure-button.pure-button-transparent.full-width Remove
+      .pure-button.pure-button-danger.full-width(@click="removeIntroduction()") Remove
     .clearfix
 </template>
 
@@ -20,9 +20,12 @@
 require('howler')
 import { mapGetters } from 'vuex'
 
+import Editor from '@/mixins/Editor'
+
 export default {
   name: 'audio-snippet',
   props: ['intro', 'editing'],
+  mixins: [Editor],
   data() {
     return {
       sound: undefined,
@@ -72,6 +75,9 @@ export default {
     },
     rewindAudio() {
       this.sound.seek(0)
+    },
+    removeIntroduction() {
+      this.removeAudio('intro', this.intro.audio)
     }
   }
 }
@@ -85,7 +91,6 @@ export default {
 .snippet
   radius(10px)
   background-color $color-info
-  cursor pointer
   float left
   height 100px
   margin 5px
@@ -95,9 +100,16 @@ export default {
   width 200px
   &.editing
     height 140px
+    #manage
+      position absolute
+      bottom 0
+      left 10px
+      right 10px
   @media(max-width: 470px)
     height auto
     width calc(100% - 30px)
+  #controls
+    cursor pointer
   p
     reset()
     color white

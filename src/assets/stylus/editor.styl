@@ -2,13 +2,14 @@
 @import '~stylus/buttons'
 
 .editable-section
-  animate(.2s)
+  animate()
   radius(6px)
   position relative
   &:not(:first-child)
     margin-top 20px
   .editable-header
-    color $color-text-grey
+    animate()
+    color $color-text-light-grey
     font-weight bold
     line-height: 20px
     padding 15px
@@ -17,16 +18,16 @@
     svg
       float right
   &.expanded
-    background-color: white
-    box-shadow-dark()
+    background-color white
+    shadow(0.1)
     .editable-header
-      color $color-text-dark-grey
+      color $color-text-grey
   &:not(.expanded)
     .editable-content, .editable-controls
       display none
     &:hover
-      background-color $color-lightest-grey
       cursor pointer
+      shadow(0.1)
   .editable-content
     padding 0px 15px 15px 15px
     label

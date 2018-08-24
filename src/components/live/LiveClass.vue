@@ -12,8 +12,8 @@
 
   .course-content--container
 
-    #audio-snippets(v-if="liveClass.intros && (!editingMode || editingMode === 'intro')" :class="{ editing: editingMode }")
-      audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode")
+    #audio-snippets(v-if="liveClass.intros")
+      audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode == 'intro'")
       .clearfix
 
     action-panel(v-if="liveClass.audio" v-show="!editingDrawerVisible" :content="liveClass" :current-class="currentClass")
@@ -112,8 +112,6 @@ export default {
       min-height 60px
       padding 5px
       position relative
-      &.editing
-        background-color $color-tools
 
   .course-content--footer
     background-color white

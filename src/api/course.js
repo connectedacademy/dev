@@ -48,6 +48,14 @@ export default {
       errorCb(response)
     })
   },
+  removeAudio(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' }
+    Vue.http.post(`${config.API}/audio/remove`, postData).then((response) => {
+      cb(response)
+    }, (response) => {
+      errorCb(response)
+    })
+  },
   fetchTranscript(classSlug, cb, errorCb) {
     Vue.http.get(`${config.API}/transcription/fetch/${classSlug}`).then((response) => {
       cb(response)
