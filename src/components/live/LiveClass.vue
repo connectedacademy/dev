@@ -12,7 +12,7 @@
 
   .course-content--container
 
-    #audio-snippets(v-if="liveClass.intros")
+    #audio-snippets(v-if="liveClass.intros && liveClass.intros.length > 0")
       audio-snippet(v-if="liveClass.intros" v-for="(intro, index) in liveClass.intros" :key="index" :intro="intro" :editing="editingMode == 'intro'")
       .clearfix
 
