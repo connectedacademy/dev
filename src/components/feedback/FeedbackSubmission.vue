@@ -4,9 +4,9 @@
 
   .feedback-submission.feedback-submission-submit
     label
-      | Copy an image address below
-    input(type="text" name="link" placeholder="E.g. https://example.com/my-image.jpg" v-model="submissionLink")
-    textarea(name="description" placeholder="Explain your submission here" v-model="submissionDescription")
+      | Paste the link to your image below
+    input(type="text" name="link" placeholder="e.g. https://example.com/my-image.jpg" v-model="submissionLink")
+    textarea(name="description" placeholder="Add a description to your submission..." v-model="submissionDescription")
     .pure-button.pure-button-transparent.pull-right(v-on:click="postSubmission") Submit
     .clearfix
   

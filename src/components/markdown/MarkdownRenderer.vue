@@ -190,7 +190,14 @@
               const image = (parts.length > 1) ? parts[1].trim() : 'default'
               const imageElement = (image !== 'default') ? `<img class="md-bio--image" src="${image}" />` : '<div class="md-bio--image"></div>'
               const bioElement = (parts.length > 2) ? `<p class="md-bio--bio">${parts[2].trim()}</p>` : ''
-              const linkElement = (parts.length > 3) ? `<a href="${parts[3].trim()}" target="_blank" class="md-bio--link">${parts[3].trim()}</a>` : ''
+              const linkElement = function(){
+                if (parts.length <= 3) return ''
+                let links = ''
+                for (let index = 3; index < parts.length; index++) {
+                  links += `<a href="${parts[index].trim()}" target="_blank" class="md-bio--link">${parts[index].trim()}</a>`
+                }
+                return links
+              }()
               
               if (parts.length > 2) {
                 return `

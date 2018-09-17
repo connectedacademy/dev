@@ -197,5 +197,4 @@ html.profile #navigation { background-color: $color-profile }
   line-height $navigation-height
   position fixed
   text-align center
-
 </style>

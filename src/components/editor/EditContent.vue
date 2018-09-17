@@ -9,6 +9,7 @@
       span.editable-property(v-for="(property, index) in properties")
         label {{ property.label }}
         input.full-width(v-if="property.type === 'text'" v-model="property.value")
+        textarea.tall(v-if="property.type === 'textarea'" v-model="property.value" placeholder="Description")
     .editable-controls
       .pure-button.pure-button-small.pure-button-success.subtle.pull-right(v-if="expanded" @click="update('content', index)") {{ updating ? 'Updating...' : 'Update' }}
       .pure-button.pure-button-small.pure-button-warning.subtle.pull-left(v-if="expanded" @click="expanded = false") Cancel
@@ -32,7 +33,7 @@ export default {
         },
         description: {
           label: 'Description',
-          type: 'text',
+          type: 'textarea',
           value: undefined
         }
       }

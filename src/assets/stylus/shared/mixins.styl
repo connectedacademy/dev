@@ -107,6 +107,15 @@ shadow(opacity)
   -moz-box-shadow: 0 0 10px 5px alpha(black, opacity);
   -webkit-box-shadow: 0 0 10px 5px alpha(black, opacity);
 
+gradient(leftColor, rightColor)
+  background: -moz-linear-gradient(left, darken(leftColor, 10%) 0%, lighten(rightColor, 10%) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, darken(leftColor, 10%) 0%, lighten(rightColor, 10%) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, darken(leftColor, 10%) 0%, lighten(rightColor, 10%) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+vertical-gradient(topColor, bottomColor)
+  background: -moz-linear-gradient(top, topColor 0%, bottomColor 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, topColor 0%, bottomColor 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, topColor 0%, bottomColor 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
 placeholderColor()
   &::-webkit-input-placeholder { /* Chrome */
