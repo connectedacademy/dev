@@ -13,16 +13,25 @@
 
         .message-composer--footer(v-if="isRegistered")
           .textarea-wrapper
-            .textarea-inner-wrapper(v-bind:class="{ focussed: (composerFocussed || showAction) }")
-              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @keydown.native.enter.prevent.stop="sendMessage" @blur.native="composerFocussed = false" v-bind:placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" v-bind:min-height="10" v-bind:max-height="200")
-              .appended-contents(v-if="showAction") {{ hashtags }} {{ shortenedUrl }}
+            .textarea-inner-wrapper(:class="{ focussed: (composerFocussed || showAction) }")
+              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @keydown.native.enter.prevent.stop="sendMessage" @blur.native="composerFocussed = false" :placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" :min-height="10" :max-height="200")
+              .appended-contents(v-if="showAction")
+                | {{ hashtags }}
+                //- | {{ shortenedUrl }}
 
           .composer-actions(v-if="showAction" ref="composeractions")
-            #character-count.pull-left(v-bind:class="{ warn: (messageLength > (maxCharacterCount - 20)), danger: (messageLength > maxCharacterCount) }") {{ maxCharacterCount - messageLength }}
-            button#send-button.pure-button.pure-button-info.pull-right(@click="sendMessage" v-bind:class="{ disabled: (messageLength > maxCharacterCount) }")
-              span(v-if="infoLabel") {{ infoLabel }}
-              span(v-else) {{ submitText }}
-            .clearfix
+            #character-count.pull-left(:class="characterCountClasses")
+              | {{ maxCharacterCount - messageLength }}
+            #action-buttons
+              button#send-button.pure-button.pure-button-twitter.pull-right(@click="sendMessage" :class="{ disabled: overCharacterLimit }")
+                span(v-if="infoLabel") {{ infoLabel }}
+                span(v-else)
+                  | {{ submitText }}
+              #share-toggle.pull-right(v-if="course.engine === 'twitter'" :class="{ active: twitterEnabled }" @click="twitterEnabled = !twitterEnabled")
+                icon(v-show="twitterEnabled" :icon="{ prefix: 'fab', iconName: 'twitter' }")
+                icon(v-show="twitterEnabled" icon="check")
+                span(v-show="!twitterEnabled") Post to twitter?
+              .clearfix
 
         .login-warning(v-else @click="showAuth()") {{ $t('composer.login_required') }}
 
@@ -51,6 +60,7 @@ export default {
   },
   data() {
     return {
+      twitterEnabled: false,
       composerFocussed: false,
       minCharacterCount: 5,
       maxCharacterCount: 140,
@@ -97,6 +107,7 @@ export default {
         currentClass: this.classSlug,
         currentSection: 'liveclass',
         currentSegmentGroup: this.currentSegmentGroup,
+        twitterEnabled: this.twitterEnabled
       }
       // If this is a reply then append message id
       if (this.replyingTo) { postData.replyTo = this.replyingTo._id }
@@ -107,14 +118,14 @@ export default {
         postData,
         (response, postData) => {
           this.message.text = ''
-          this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Posted note'
+          this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Sent note'
           setTimeout(() => { this.infoLabel = ""}, 2000)
           this.sending = false
           this.$store.commit('SET_REPLYING_TO', undefined)
         },
         (response, postData) => {
           alert('Failed to send message')
-          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Failed to post'
+          this.infoLabel = (this.replyingTo) ? 'Failed to reply' : 'Failed to send'
           setTimeout(() => { this.infoLabel = ""}, 2000)
           this.sending = false
           this.$store.commit('SET_REPLYING_TO', undefined)
@@ -141,8 +152,8 @@ export default {
       return `${this.url.substring(0, 20)}...${this.url.substring(this.url.length - 20, this.url.length)}`
     },
     submitText() {
-      if (this.sending) return 'Sending..'
-      return (this.replyingTo) ? 'Reply' : 'Post'
+      if (this.sending) return 'Sending...'
+      return (this.replyingTo) ? 'Reply' : 'Send'
     },
     showAction() {
       // return true // TODO // Remove this line
@@ -151,6 +162,15 @@ export default {
     messageLength() {
       return this.message.text.length
     },
+    characterCountClasses() {
+      return {
+        warn: this.messageLength > (this.maxCharacterCount - 20),
+        danger: this.overCharacterLimit
+      }
+    },
+    overCharacterLimit() {
+      return this.messageLength > this.maxCharacterCount
+    }
   },
 }
 </script>
@@ -244,6 +264,7 @@ export default {
           #character-count
             color $color-text-grey
             font-size 0.9em
+            font-weight bold
             line-height 26px
             padding 0 6px
             &.warn
@@ -251,17 +272,45 @@ export default {
             &.danger
               color $color-danger
 
-          button#send-button
-            radius(13px)
-            line-height 26px
-            margin 0
-            padding 0 15px
-            &.disabled
-              background-color white
-              border-color white
-              color $color-text-grey
-              text-decoration line-through
-              pointer-events none
+          #action-buttons
+            #share-toggle
+              animate()
+              radius(13px)
+              border transparent 1px solid
+              color $color-text-light-grey
+              font-size 0.9em
+              font-weight bold
+              line-height 26px
+              margin 0
+              padding 0 12px
+              position relative
+              svg:first-child
+                border-right alpha(white, 0.3) 2px solid
+                padding-right 8px
+                margin-right 8px
+              &:hover
+                cursor pointer
+                border-color $color-border
+              &.active
+                background-color $color-success
+                border-color $color-success
+                color white
+                .toggle
+                  background-color white
+            button#send-button
+              radius(13px)
+              font-size 0.9em
+              font-weight bold
+              line-height 26px
+              margin 0
+              margin-left 8px
+              padding 0 12px
+              &.disabled
+                background-color white
+                border-color white
+                color $color-text-grey
+                text-decoration line-through
+                pointer-events none
               
           .info-label
             reset()
