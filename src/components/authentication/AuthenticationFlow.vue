@@ -71,7 +71,7 @@ export default {
       font-size 1.2em
   .auth-modal--container
     radius($corner-radius)
-    box-shadow()
+    box-shadow-dark()
     background-color white
     padding 20px 30px
     text-align center
