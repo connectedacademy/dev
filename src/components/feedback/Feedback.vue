@@ -1,25 +1,24 @@
 <template lang="pug">
 
-.feedback-page(name="feedback-page" v-bind:class="{ 'show-messages': (myFeedbackItems.length || feedbackItems.length || availableFeedbackItems.length) }")
+.feedback-page(name="feedback-page" :class="{ 'show-messages': (myFeedbackItems.length || feedbackItems.length || availableFeedbackItems.length) }")
   
   page-header(title="Homework Area" identifier="homework")
 
   #chat-list-container
-    feedback-list(header="Your Conversations" v-bind:classSlug="classSlug" v-bind:contentSlug="contentSlug" v-bind:feedbackItems="myFeedbackItems" noContent="You are not in any conversations" v-bind:currentFeedbackId="currentFeedbackId")
+    feedback-list(header="Your Conversations" :classSlug="classSlug" :contentSlug="contentSlug" :feedbackItems="myFeedbackItems" noContent="You are not in any conversations" :currentFeedbackId="currentFeedbackId")
     
   #conversation-container.background-white
 
     .homework-details(v-if="!currentFeedbackId")
       .markdown-wrapper
-        markdown-renderer(v-bind:markdown-url="markdownUrl")
+        markdown-renderer(:markdown-url="markdownUrl")
 
-      h2 Submit homework
-      feedback-submission(v-bind:the-class="classSlug" v-bind:the-content="contentSlug" v-on:reloadchats="reloadChats")
+      feedback-submission(:the-class="classSlug" :the-content="contentSlug" v-on:reloadchats="reloadChats")
 
       #login-notice(v-if="!isRegistered" @click="showAuth") Please login to submit a response
 
     transition(name="fade" type="in out")
-      feedback-view(v-bind:currentFeedbackId.sync="currentFeedbackId" v-bind:discussion.sync="discussion" v-bind:class-slug="classSlug" v-bind:content-slug="contentSlug" v-on:reloadchats="reloadChats")
+      feedback-view(:currentFeedbackId.sync="currentFeedbackId" :discussion.sync="discussion" :class-slug="classSlug" :content-slug="contentSlug" v-on:reloadchats="reloadChats")
 
   .clearfix
 
@@ -108,7 +107,7 @@ export default {
       return this.$route.params.contentSlug
     },
     markdownUrl() {
-      return `${this.CDN}/content/${this.currentClass.slug}/${this.contentSlug}.md`
+      return `${this.CDN}/classes/${this.currentClass.slug}/${this.contentSlug}.md`
     },
   },
   methods: {
