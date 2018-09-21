@@ -37,7 +37,7 @@
         textarea(v-autosize="comment" placeholder="Leave some feedback..." v-model="comment" @keydown.enter.prevent.stop="postFeedbackComment")
         .feedback-submission--footer
           .pure-button(v-on:click="postFeedbackComment") Send
-          p.feedback-submission-note Your comments are private and will not be posted to Twitter.
+          p.feedback-submission-note Your comments will not be posted to Twitter.
           .clearfix
       .clearfix
     .clearfix
