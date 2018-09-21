@@ -8,8 +8,7 @@
   h5.user-account {{ user.twitter.username }}
 
   router-link.pure-button.pure-button-info.full-width(v-bind:to="{ name: 'profile' }") {{ $t('auth.dashboard') }}
-  //- .pure-button.pure-button-action.full-width(@click="showHints") {{ $t('auth.show_hints') }}
-  .pure-button.pure-button-action(@click="logout") {{ $t('auth.logout') }}
+  .pure-button.pure-button-action.full-width(@click="showHints") {{ $t('auth.show_hints') }}
 
 </template>
 
@@ -21,10 +20,6 @@ export default {
   name: 'user-card',
   props: ['visible'],
   methods: {
-    logout() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER')
-      this.$store.dispatch('logout')
-    },
     showHints() {
       const hints = ['profile-button', 'intro-button', 'section-navigator', 'media-toggle', 'play-pause-toggle', 'view-toggle']
       for (const hint in hints) {
@@ -56,6 +51,8 @@ export default {
     font-size 1em
     font-weight bold
     padding 13px 0
+    &:last-child
+      margin-bottom 0
   img.user-profile
     radius(50%)
     background-color alpha(black, 0.1)
