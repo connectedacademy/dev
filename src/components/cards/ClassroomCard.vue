@@ -91,8 +91,9 @@ export default {
   radius(6px)
   background-color $color-info
   color white
-  margin 0 15px 15px 15px
-  padding 0
+  display block
+  margin 0 15px
+  padding 15px 0
   text-align center
   // position absolute
   // bottom 15px
