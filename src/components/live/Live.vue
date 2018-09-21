@@ -37,9 +37,6 @@ export default {
     next()
   },
   mounted() {
-    if (this.$route.params.segmentId) {
-      this.jumpToSegment(this.$route.params.segmentId)
-    }
     Events.$on('mention', (message) => {
       console.log('mention', message)
       this.mentions.push(message)
@@ -60,18 +57,7 @@ export default {
     viewMention(mention) {
       this.$router.push({ name: 'live', params: { classSlug: mention.class, contentSlug: 'liveclass', segmentId: mention.segment } })
       const segmentGroup = parseInt(mention.segment)
-      this.jumpToSegment(segmentGroup)
-    },
-    jumpToSegment(segmentId) {
-      this.$store.commit('EXPAND_CONVERSATION')
-      // Scroll to segment group
-      const segmentGroup = parseInt(segmentId)
-      setTimeout(() => {
-        this.$store.commit('SET_PEEK_SEGMENT', segmentGroup)
-        var el = document.querySelector(".peek")
-        if (typeof this.$refs.innerwrapper === 'undefined') return
-        window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
-      }, 500)
+      Events.$emit('jumpToSegment', segmentGroup)
     }
   }
 }

@@ -5,7 +5,8 @@
     #view-toggle(v-if="$route.name === 'live' && !activeSegment" @click="messagePriority = !messagePriority" v-bind:class="{ 'message-priority': messagePriority, peeking: peekSegment}")
       onboarding-prompt(identifier="view-toggle" prompt="transcript/notes" top="50" left="-70" position="top-right" z-index="1")
       icon(icon="quote-left")
-      icon(:icon="{ prefix: 'fab', iconName: 'twitter' }" v-if="course.engine === 'twitter'" title="Messages are published on Twitter")
+      icon(:icon="{ prefix: 'fab', iconName: 'twitter' }" v-if="course.engine === 'twitter'")
+      icon(icon="comment" v-else)
 
     .inner-wrapper(ref="innerwrapper" v-bind:style="{ height: containerHeight }" v-bind:class="{ 'message-priority': messagePriority }")
       time-segment(v-for="(message, index) in conversationMessages"
@@ -59,6 +60,10 @@ export default {
       this.loadTranscript(this.content)
     })
 
+    Events.$on('jumpToSegment', (segmentId) => {
+      this.jumpToSegment(segmentId)
+    })
+
     window.addEventListener('keydown', (event) => {
       // ESC
       if (event.keyCode === 27) {
@@ -66,6 +71,10 @@ export default {
         this.$store.commit('SET_PEEK_SEGMENT', undefined)
       }
     })
+
+    if (this.$route.params.segmentId) {
+      this.jumpToSegment(this.$route.params.segmentId)
+    }
   },
   data() {
     return {
@@ -106,7 +115,25 @@ export default {
     isCurrent(index) {
       return this.scrollStatus && (this.scrollStatus.currentSegmentGroup === parseInt(index))
     },
-  },
+    jumpToSegment(segmentId) {
+      this.$store.commit('EXPAND_CONVERSATION')
+      // Scroll to segment group
+      const segmentGroup = parseInt(segmentId)
+      console.log(`Jumping to segment ${segmentId}`)
+      // Load segment summary
+      this.loadSegmentSummary(segmentGroup, true)
+
+      setTimeout(() => {
+        this.$store.commit('SET_PEEK_SEGMENT', segmentGroup)
+        var el = document.querySelector(".peek")
+        if (typeof this.$refs.innerwrapper === 'undefined') {
+          console.log('No peeking segment found')
+          return
+        }
+        window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
+      }, 1)
+    }
+  }
 }
 </script>
 
