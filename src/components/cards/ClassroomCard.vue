@@ -95,11 +95,6 @@ export default {
   margin 0 15px
   padding 15px 0
   text-align center
-  // position absolute
-  // bottom 15px
-  // left 15px
-  // right 15px
-  // top auto
   &.active
     background-color $color-success
     color white
