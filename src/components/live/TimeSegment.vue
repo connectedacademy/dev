@@ -32,7 +32,7 @@
       .status-indicator(v-if="!loadingMessages && (activeSegmentMessages.length === 0)" @click="loadSegmentMessages") Nothing here yet.
 
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in activeSegmentMessages")
-        message(:user="user" :message="segmentMessage")
+        message(:user="user" :message="segmentMessage" :truncate="false")
 
     .quick-note(v-if="segmentPeeking || segmentOpened" :class="{ replying: replyingTo }" :style="{ top: segmentOpened ? 'auto' : quickNoteTop }")
       message-composer(:contentSlug="$route.params.contentSlug" :classSlug="$route.params.classSlug" :currentSegmentGroup="index" :quick-note-height.sync="quickNoteHeight")
@@ -375,7 +375,6 @@
     z-index 2
     &:hover
       cursor pointer
-
     .admin-actions
       radius(50%)
       background-color $color-pink
@@ -463,8 +462,8 @@
     overflow auto
     .message-wrapper
       left 50%
-      transform translate(0, 0) !important
       position relative
+      transform translate(0, 0) !important
       width 50%
       @media(max-width: 600px)
         display block !important

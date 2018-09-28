@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .single-message-wrapper(:class="{ opened: segmentOpened }")
+  .single-message-wrapper(:class="{ opened: segmentOpened, truncate: truncate }")
 
     .message
       img.profile-image(v-if="message._user" :src="message._user.profile.avatar")
@@ -66,7 +66,7 @@ export default {
       // Open hashtag links in new tab
       html = html.replace(/(">)/g, '" target="_blank">')
       // Return formatted message text
-      return html;
+      return html
     },
     showInfoModal() {
       this.$store.commit('SHOW_INFO_MODAL', { title: this.$t('demo.unavailable_title'), body: this.$t('demo.unavailable_description'), action: this.$t('common.okay') })
@@ -101,10 +101,8 @@ export default {
 
 .single-message-wrapper
   position relative
-
   .message
     box-sizing()
-    max-height 128px
     margin 10px 15px
     padding 0 10px 40px 10px
     padding-left 50px
@@ -121,7 +119,6 @@ export default {
     p.message-content
       reset()
       color $color-text-dark-grey
-      max-height 70px
       display -webkit-box
       overflow hidden
       pointer-events none
@@ -185,6 +182,13 @@ export default {
     .message
       p.message-content
         pointer-events all
+  
+  &.truncate
+    .message
+      max-height 128px
+      .message-content
+        max-height 70px !important
+        overflow hidden
 
   .replies-wrapper
     margin-left 20px

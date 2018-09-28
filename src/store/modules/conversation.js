@@ -11,6 +11,7 @@ const state = {
   activeSegmentMessages: [],
   replyingTo: undefined,
   subscribedTo: undefined,
+  twitterEnabled: false,
   infoModal: {
     visible: false,
     content: {
@@ -44,6 +45,7 @@ const state = {
 const getters = {
   isCollapsed: (initialState) => initialState.isCollapsed,
   subscribedTo: (initialState) => initialState.subscribedTo,
+  twitterEnabled: (initialState) => initialState.twitterEnabled,
   activeSegment: (initialState) => initialState.activeSegment,
   peekSegment: (initialState) => initialState.peekSegment,
   activeSegmentMessages: (initialState) => initialState.activeSegmentMessages,
@@ -119,6 +121,9 @@ const mutations = {
   },
   [types.SET_REPLYING_TO](initialState, message) {
     state.replyingTo = message
+  },
+  [types.SET_TWITTER_ENABLED](initialState, enabled) {
+    state.twitterEnabled = enabled
   },
   [types.SHOW_INFO_MODAL](initialState, params) {
     state.infoModal.content = params

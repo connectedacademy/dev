@@ -14,7 +14,7 @@
         .message-composer--footer(v-if="isRegistered")
           .textarea-wrapper
             .textarea-inner-wrapper(:class="{ focussed: (composerFocussed || showAction) }")
-              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @keydown.native.enter.prevent.stop="sendMessage" @blur.native="composerFocussed = false" :placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message.text" :min-height="10" :max-height="200")
+              textarea-autosize(name="composer-textarea" ref="textarea" rows="1" v-on:input="inputChanged" @focus.native="composerFocussed = true" @keydown.native.enter.prevent.stop="sendMessage" @blur.native="composerFocussed = false" :placeholder="replyingTo ? $t('composer.reply_placeholder') : $t('composer.message_placeholder')" v-model="message" :min-height="10" :max-height="200")
               .appended-contents(v-if="showAction")
                 | {{ hashtags }}
                 //- | {{ shortenedUrl }}
@@ -27,10 +27,12 @@
                 span(v-if="infoLabel") {{ infoLabel }}
                 span(v-else)
                   | {{ submitText }}
-              #share-toggle.pull-right(v-if="course.engine === 'twitter'" :class="{ active: twitterEnabled }" @click="twitterEnabled = !twitterEnabled")
+              #share-toggle.pull-right(v-if="course.engine === 'twitter'" :class="{ active: twitterEnabled, inactive: !twitterEnabled }" @click="toggleTwitterEnabled")
                 icon(v-show="twitterEnabled" :icon="{ prefix: 'fab', iconName: 'twitter' }")
                 icon(v-show="twitterEnabled" icon="check")
-                span(v-show="!twitterEnabled") Post to twitter?
+                //- icon(v-show="twitterEnabled" :icon="twitterEnabled ? 'check' : 'times'")
+                //- span(v-show="twitterEnabled") Posting to Twitter
+                span(v-show="!twitterEnabled") Share to Twitter?
               .clearfix
 
         .login-warning(v-else @click="showAuth()") {{ $t('composer.login_required') }}
@@ -43,6 +45,7 @@ import API from '@/api'
 import { mapGetters } from 'vuex'
 import { Events } from '@/events.js'
 import VueTextareaAutosize from 'vue-textarea-autosize'
+import TwitterText from 'twitter-text'
 
 import Auth from '@/mixins/Auth'
 
@@ -60,14 +63,11 @@ export default {
   },
   data() {
     return {
-      twitterEnabled: false,
       composerFocussed: false,
       minCharacterCount: 5,
-      maxCharacterCount: 140,
+      maxCharacterCount: 280,
       infoLabel: '',
-      message: {
-        text: '',
-      },
+      message: '',
       windowWidth: 0,
       sending: false,
     }
@@ -100,10 +100,12 @@ export default {
     cancelReply() {
       this.$store.commit('SET_REPLYING_TO', undefined)
     },
+    toggleTwitterEnabled() {
+      this.$store.commit('SET_TWITTER_ENABLED', !this.twitterEnabled)
+    },
     sendMessage() {
-      let composedMessage = `${this.message.text} ${this.hashtags} ${this.url}`
       let postData = {
-        text: composedMessage,
+        text: this.composedMessage,
         currentClass: this.classSlug,
         currentSection: 'liveclass',
         currentSegmentGroup: this.currentSegmentGroup,
@@ -117,7 +119,7 @@ export default {
       API.message.sendMessage(
         postData,
         (response, postData) => {
-          this.message.text = ''
+          this.message = ''
           this.infoLabel = (this.replyingTo) ? 'Replied to note' : 'Sent note'
           setTimeout(() => { this.infoLabel = ""}, 2000)
           this.sending = false
@@ -139,8 +141,13 @@ export default {
       'peekSegment',
       'isRegistered',
       'course',
-      'replyingTo'
+      'replyingTo',
+      'twitterEnabled'
     ]),
+    composedMessage() {
+      let message = `${this.message} ${this.meta}`
+      return message
+    },
     hashtags() {
       return this.course.hashtag
     },
@@ -156,11 +163,18 @@ export default {
       return (this.replyingTo) ? 'Reply' : 'Send'
     },
     showAction() {
-      // return true // TODO // Remove this line
-      return (this.messageLength > this.minCharacterCount)
+      return ((this.messageLength - this.metaLength) > this.minCharacterCount)
+    },
+    meta() {
+      return `${this.hashtags} ${this.url}`
+    },
+    metaLength() {
+      return (this.messageLength - this.message.length)
     },
     messageLength() {
-      return this.message.text.length
+      const res = TwitterText.parseTweet(this.composedMessage)
+      console.log('Tweet length', res.weightedLength)
+      return res.weightedLength
     },
     characterCountClasses() {
       return {
@@ -291,12 +305,14 @@ export default {
               &:hover
                 cursor pointer
                 border-color $color-border
+              &.inactive
+                background-color $color-warning
+                border-color $color-warning
+                color white
               &.active
                 background-color $color-success
                 border-color $color-success
                 color white
-                .toggle
-                  background-color white
             button#send-button
               radius(13px)
               font-size 0.9em
