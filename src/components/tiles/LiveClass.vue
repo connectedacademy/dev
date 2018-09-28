@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return moment(date).format('HH:mm on dddd do MMMM')
+      return moment(date, 'MM-DD-YYYY HH:mm').format('HH:mm on dddd DD MMMM')
     }
   }
 }
