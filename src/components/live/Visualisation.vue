@@ -1,38 +1,41 @@
 <template lang="pug">
 
 #vis-container
+    
+  // Vis
+  g(id="primaryVis")
+    rect(v-for="(val, index) in visualisation" :key="index" v-if="(typeof val === 'number')" :x="`${(index > 99) ? 99 : index}%`" width="6px" rx="3px" ry="3px" :y="`${(100 - parseInt(val * 80)) / 2}%`" :height="`${parseInt(val * 80)}%`" :style="{ fill: '#1864ef' }")
+
+  // Track
+  g(id="primaryTrack")
+    rect(x="0%" width="100%" :y="'27px'" height="6px" :style="{ fill: '#1864ef' }")
 
   // Visualisation
-  svg#visualisation(v-if="visualisation" v-bind:height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
+  svg#visualisation(v-if="visualisation" :height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
     defs
       filter(id="bandw")
         feColorMatrix(type="matrix" values="0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 1 0")
 
     clipPath(id="progress")
-      rect(v-bind:x="`${playheadPos}%`" y="0" v-bind:width="`${100 - playheadPos}%`" height="100%" fill="black" filter="url(#bandw)")
+      rect(:x="`0%`" y="0" :width="`${playheadPos}%`" height="100%" fill="black" filter="url(#bandw)")
     
-    // clipPath(id="mask")
-      rect(v-for="(segment, index) in buffered" v-bind:key="index" v-bind:x="`${segment.start}%`" y="0" v-bind:width="`${segment.end}%`" height="60" fill="black")
+    //- clipPath(id="mask")
+      rect(v-for="(segment, index) in buffered" :key="index" :x="`${segment.start}%`" y="0" :width="`${segment.end}%`" height="60" fill="black")
+
+    //- // Buffer
+      g(id="buffer")
+        rect(x="0%" width="100%" y="39px" height="2px" :style="{ fill: 'orange' }" opacity="1.0")
+        rect(clip-path="url(#mask)" x="0%" width="100%" y="38px" height="4px" :style="{ fill: 'white' }")
+
+    use(xlink:href="#primaryTrack" style="opacity: 0.2")
+    use(xlink:href="#primaryTrack" clip-path="url(#progress)")
     
-    // Vis
-    g(id="primaryVis")
-      rect(v-for="(val, index) in visualisation" v-bind:key="index" v-if="(typeof val === 'number')" v-bind:x="`${(index > 99) ? 99 : index}%`" width="2px" rx="1" ry="1" v-bind:y="`${(100 - parseInt(val * 80)) / 2}%`" v-bind:height="`${parseInt(val * 80)}%`" v-bind:style="{ fill: '#1864ef' }")
-    use(x="0" y="0" href="#primaryVis" clip-path="url(#progress)" filter="url(#bandw)")
-
-    // Track
-    g(id="primaryTrack")
-      rect(x="0%" width="100%" v-bind:y="'29px'" v-bind:height="'2px'" v-bind:style="{ fill: '#1864ef' }")
-    use(x="0" y="0" href="#primaryTrack" clip-path="url(#progress)" filter="url(#bandw)")
-
-    // Buffer
-    // - g(id="buffer")
-      rect(x="0%" width="100%" y="39px" height="2px" v-bind:style="{ fill: 'orange' }" opacity="1.0")
-      rect(clip-path="url(#mask)" x="0%" width="100%" y="38px" height="4px" v-bind:style="{ fill: 'white' }")
-
+    use(xlink:href="#primaryVis" style="opacity: 0.2")
+    use(xlink:href="#primaryVis" clip-path="url(#progress)")
   // Animations
-  svg#animations(v-if="visualisation" v-bind:height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
+  svg#animations(v-if="visualisation" :height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
     g(id="animations")
-      circle(v-for="(animation, index) in animations" v-bind:key="animation.x"  v-bind:cx="`${animation.x}%`" cy="30px" r="5px" v-bind:style="{ fill: '#FF01A0' }")
+      circle(v-for="(animation, index) in animations" :key="animation.x"  :cx="`${animation.x}%`" cy="30px" r="5px" :style="{ fill: '#FF01A0' }")
 
 </template>
 
