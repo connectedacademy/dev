@@ -5,13 +5,14 @@
     ul#experience-controls
     
       li.experience-control(name="play-pause-button" @click="toggleMediaPlayback")
-        //- onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
+        onboarding-prompt(identifier="play-pause-toggle" prompt="play/pause" top="-45" left="10" position="bottom-left" z-index="1")
         icon(:icon="mediaPlaying ? 'pause' : 'play'")
       
       li.experience-control#current-time
         p {{ currentTime }}
       
-      li.experience-control#progress-bar(ref="progressbar" :class="{ 'has-media': mediaLoaded }" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub" @mousemove="scrubMove")
+      li.experience-control#progress-bar(ref="progressbar" :class="{ 'has-media': mediaLoaded }" @mousedown="startScrub" @mouseup="endScrub" @mousecancel="endScrub")
+        //- @mousemove="scrubMove"
         visualisation(v-bind:bufferedSegments="bufferedSegments" v-bind:contentSlug="content.slug" v-bind:classSlug="currentClass.slug" v-bind:contentDuration="content.duration" v-bind:showReflections="false" v-bind:classView="true" visHeight="60px")
       
       transition(name="fade" appear mode="out-in")
