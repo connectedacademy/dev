@@ -149,7 +149,7 @@ export default {
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
-      if (!self.liveclassMedia || self.liveclassMedia.length == 0) return
+      if (!self.liveclassMedia ||  Object.keys(self.liveclassMedia).length == 0) return
 
       let media = Object.keys(self.liveclassMedia)
       let target = self.scrollStatus.currentSegmentGroup
