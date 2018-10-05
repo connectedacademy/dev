@@ -8,7 +8,7 @@
 
   // Track
   g(id="primaryTrack")
-    rect(x="0%" width="100%" :y="'27px'" height="6px" :style="{ fill: '#1864ef' }")
+    rect(x="0%" width="100%" :y="'27px'" height="6px" rx="3px" ry="3px" :style="{ fill: '#1864ef' }")
 
   // Visualisation
   svg#visualisation(v-if="visualisation" :height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
