@@ -125,13 +125,15 @@ export default {
 
       setTimeout(() => {
         this.$store.commit('SET_PEEK_SEGMENT', segmentGroup)
-        var el = document.querySelector(".peek")
-        if (typeof this.$refs.innerwrapper === 'undefined') {
-          console.log('No peeking segment found')
-          return
-        }
-        window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
-      }, 1)
+        setTimeout(() => {
+          var el = document.querySelector(".peek")
+          if (typeof this.$refs.innerwrapper === 'undefined') {
+            console.log('No peeking segment found')
+            return
+          }
+          window.scroll(0, this.$refs.innerwrapper.offsetTop + parseInt(el.getAttribute('data-top')))
+        }, 200)
+      }, 200)
     }
   }
 }
