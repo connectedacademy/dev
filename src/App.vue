@@ -21,8 +21,8 @@
   editing-drawer
 
   transition(name="slide-top" appear mode="out-in")
-    .warning-banner(v-if="!course.loaded")
-      | Site is currently offline
+    #warning-banner(v-if="!course.loaded")
+      | Service is unavailable
 
   .main-page(v-if="course.loaded")
     navigation
@@ -187,14 +187,20 @@ html.homework #navigation { background-color: $color-homework }
 html.fourcorners #navigation { background-color: $color-fourcorners }
 html.profile #navigation { background-color: $color-profile }
 
-.warning-banner
-  pinned()
+#warning-banner
   animate()
+  radius(10px)
   background $color-danger
-  bottom auto
+  bottom 20px
   color white
-  height $navigation-height
-  line-height $navigation-height
+  left 50%
+  transform translateX(-50%)
+  right 20px
+  height auto
+  line-height 20px
+  padding 10px
   position fixed
   text-align center
+  max-width calc(100% - 20px)
+  z-index 999
 </style>
