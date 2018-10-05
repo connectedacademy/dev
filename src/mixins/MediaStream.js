@@ -1,4 +1,4 @@
-const SYNC_THRESHOLD = 2.0
+const SYNC_THRESHOLD = 3.0
 
 import { mapGetters } from 'vuex'
 import { Events } from '@/events.js'
@@ -14,6 +14,7 @@ export default {
     try {
       if (this.sound) {
         this.sound.unload()
+
       }
     } catch (error) {
       console.error(error);
@@ -46,14 +47,8 @@ export default {
       })
 
       // If the audio seeks then check it is buffered
-      this.sound.on('load', () => {
-
+      this.sound.once('load', function () {
         console.log('Sound has loaded')
-
-        // Set sprites
-        this.sound._sprite = {
-          'full': [0, (this.sound._duration * 5000), false]
-        }
       })
 
       // If the audio seeks then check it is buffered
@@ -62,17 +57,17 @@ export default {
       })
 
       // Each time a sound loops, reduce speed
-      // this.sound.on('end', (id) => {
-      //   if (id  === 'full') return
-      //   const adjustment = 1.2
-      //   let newRate = this.sound.rate() / adjustment
-      //   if (newRate < 1.0) {
-      //     this.sound.rate(1.0, id)
-      //   } else {
-      //     this.sound.rate(newRate, id)
-      //   }
-      // })
-
+      this.sound.on('end', (id) => {
+        if (id  === 'segment') {
+          const adjustment = 1.2
+          let newRate = this.sound.rate() / adjustment
+          if (newRate < 1.0) {
+            this.sound.rate(1.0, id)
+          } else {
+            this.sound.rate(newRate, id)
+          }
+        }
+      })
     }
   },
   watch: {
@@ -80,10 +75,17 @@ export default {
       if (!this.sound) return
       
       if (nV) {
-        this.mainSoundId = this.sound.play('full')
+        if (!this.editingSegment) {
+          this.sound.play()
+        } else {
+          console.log('Editing segment')
+          
+        }
       }
       else {
-        this.sound.pause(this.mainSoundId)
+        if (!this.editingSegment) {
+          this.sound.pause()
+        }
       }
     },
     peekSegment(nV) {
@@ -122,8 +124,7 @@ export default {
       scrollStatus: undefined,
       mediaBuffering: false,
       bufferInterval: false,
-      bufferedSegments: undefined,
-      mainSoundId: undefined
+      bufferedSegments: undefined
     }
   },
   computed: {
@@ -170,14 +171,13 @@ export default {
         return
       }
 
-      const playerTime = self.sound.seek(this.mainSoundId)
+      const playerTime = self.sound.seek()
       
       const inSync = _inRange(self.scrollStatus.currentTime, playerTime - SYNC_THRESHOLD, playerTime + SYNC_THRESHOLD)
 
-      if (!inSync) {
-        self.$log.info(`Audio not in sync, seeking to ${self.scrollStatus.currentTime}`)
-        self.sound.seek(parseInt(self.scrollStatus.currentTime), this.mainSoundId)
-      }
+      if (inSync) return
+      self.$log.info(`Audio not in sync, seeking to ${self.scrollStatus.currentTime}`)
+      self.sound.seek(self.scrollStatus.currentTime)
     }, 1000)
   }
 }
