@@ -1,8 +1,9 @@
 <template lang="pug">
 
 .home-page(name="home-page")
+  iframe#remote(v-if="course.promo" :src="course.promo" frameborder="0" seamless="seamless" scrolling="yes" )
 
-  .col#col-main
+  .col#col-main(v-else)
     
     .main-container
 
@@ -10,7 +11,6 @@
         video-embed(v-if="course.video" :video-src="`${course.video}?modestbranding=1&autohide=1&showinfo=0&controls=1&rel=0&playsinline=1`" autoLoad)
         .lead-image(v-if="course.image" :style="{ 'background-image': `url(${course.image})` }")
           .credit(v-if="course.imagecredit") Photo Credit: {{ course.imagecredit }}
-
         #details-container
           h2 {{ course.title }}
           markdown-renderer(:markdown-url="`${CDN}/content/welcome.md`")
@@ -48,6 +48,17 @@ export default {
 <style lang="stylus" scoped>
 
 @import '~stylus/buttons'
+
+iframe#remote
+  display block
+  top 0
+  left 0
+  right -40px
+  bottom 0
+  position fixed
+  width 100%
+  height 100vh
+  overflow hidden
 
 .home-page
   .lead-image
