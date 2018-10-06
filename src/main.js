@@ -45,6 +45,13 @@ Vue.use(Vuex)
 Vue.use(VueConfig, Vue.config)
 Vue.use(VueMasonryPlugin)
 
+import * as Sentry from '@sentry/browser'
+
+Sentry.init({
+  dsn: app_config.sentry_dsn,
+  integrations: [new Sentry.Integrations.Vue({ Vue })]
+})
+
 const options = {
   logLevel: 'info', // error
   stringifyArguments: false,

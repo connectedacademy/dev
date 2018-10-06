@@ -2,7 +2,7 @@
 
   .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
     
-    .message-count(v-if="!isEditing && message && message.total > 0") {{ message.total }}
+    .message-count(v-if="!isEditing && message && message.total > 0" @click="openSegment()") {{ message.total }}
     .subscribed-status(v-if="!isEditing && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
@@ -25,10 +25,13 @@
       .clearfix
 
     .segment-expansion-bar(@click="openSegment()" v-if="segmentPeeking")
-      | Show discussion
+      span(v-if="message && message.total")
+        | Click to show {{ message.total }} notes
+      span(v-else)
+        | Be the first to make a note
 
     .meta-container(v-if="segmentOpened" :class="{ active: segmentOpened }" :style="{ bottom: `${quickNoteHeight}px` }")
-      .status-indicator(v-if="loadingMessages") Fetching discussion...
+      .status-indicator(v-if="loadingMessages") Fetching notes...
       .status-indicator(v-if="!loadingMessages && (activeSegmentMessages.length === 0)" @click="loadSegmentMessages") Nothing here yet.
 
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in activeSegmentMessages")
@@ -41,6 +44,7 @@
 </template>
 
 <script>
+  import * as Sentry from '@sentry/browser'
   import _orderBy from 'lodash/orderBy'
   import _get from 'lodash/get'
 
@@ -158,6 +162,8 @@
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return
         
+        Sentry.captureMessage('Segment peeked!');
+
         // Cancel peek if editing
         if (this.isEditing) return
 
@@ -198,7 +204,11 @@
 
         // Cancel open if another segment is open
         if (typeof this.activeSegment !== 'undefined') return
-        if (!this.segmentPeeking) return
+        
+        if (!this.segmentPeeking) {
+          this.peek()
+          return
+        }
   
         if (this.segmentOpened) return
   
@@ -321,6 +331,7 @@
     radius(50%)
     background-color $color-pink
     color white
+    cursor pointer
     font-size 0.8em
     font-weight bold
     line-height 20px
@@ -329,7 +340,6 @@
     top 10px
     right 5px
     min-width 20px
-    pointer-events none
     text-align center
     z-index 51
     @media(max-width: 800px)

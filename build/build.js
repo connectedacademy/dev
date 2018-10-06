@@ -11,24 +11,29 @@ var config = require('../config')
 var webpackConfig = require('./webpack.prod.conf');
 var fs = require('fs');
 
-var spinner = ora('Building Connected Academy...')
+if (process.env.API_ROUTE) {
+  console.log(chalk.cyan(`  API route set - .\n${process.env.API_ROUTE}`))
+} else {
+  console.log(chalk.red(`  There is a configuration issue!`))
+  console.log(chalk.red(`  Please pass 'API_ROUTE' environment variable.`))
+  return false
+}
+
+let package_version = require('../package.json');
+
+console.log(`SETTING VERSION TO ${package_version.version}\n`);
+
+let settings = fs.readFileSync('src/config/index.js').toString();
+let vpattern = /version: '(.*)'/;
+let bpattern = /built: '(.*)'/;
+
+settings = settings.replace(vpattern, `version: '${package_version.version}'`);
+settings = settings.replace(bpattern, `built: '${new Date().toLocaleString()}'`);
+
+fs.writeFileSync('src/config/index.js', settings);
+
+var spinner = ora('  Building Connected Academy...')
 spinner.start()
-
-//processing version into correct file:
-
-// let package_version = require('../package.json');
-
-// console.log(`SETTING VERSION TO ${package_version.version}\n`);
-
-// let settings = fs.readFileSync('src/config/index.js').toString();
-// let vpattern = /version: '(.*)'/;
-// let bpattern = /built: '(.*)'/;
-
-
-// settings = settings.replace(vpattern, `version: '${package_version.version}'`);
-// settings = settings.replace(bpattern, `built: '${new Date().toLocaleString()}'`);
-
-// fs.writeFileSync('src/config/index.js', settings);
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err

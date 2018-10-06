@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  API_ROUTE: '"https://api.connectedacademy.io/v1"'
+  API_ROUTE: `"${process.env.API_ROUTE}"`
 }
