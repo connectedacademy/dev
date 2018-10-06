@@ -12,7 +12,7 @@ var webpackConfig = require('./webpack.prod.conf');
 var fs = require('fs');
 
 if (process.env.API_ROUTE) {
-  console.log(chalk.cyan(`  API route set - .\n${process.env.API_ROUTE}`))
+  console.log(chalk.cyan(`  API route set - ${process.env.API_ROUTE}`))
 } else {
   console.log(chalk.red(`  There is a configuration issue!`))
   console.log(chalk.red(`  Please pass 'API_ROUTE' environment variable.`))

@@ -5,7 +5,9 @@ WORKDIR /app
 COPY package.json /app
 RUN npm install
 COPY . /app
-RUN npm run build
+ARG api
+RUN API_ROUTE="$api" npm run build
+RUN echo "Building with API_ROUTE=$api"
 
 # nginx
 FROM nginx:latest
