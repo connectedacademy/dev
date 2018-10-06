@@ -162,8 +162,6 @@
         // Cancel peek if another segment is open
         if (typeof this.peekSegment !== 'undefined') return
         
-        Sentry.captureMessage('Segment peeked!');
-
         // Cancel peek if editing
         if (this.isEditing) return
 
