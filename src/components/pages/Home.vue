@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .home-page(name="home-page")
-  iframe#remote(v-if="course.promo" :src="course.promo" frameborder="0" seamless="seamless" scrolling="yes" )
+  iframe#remote(v-if="course.promo" :src="course.promo" frameborder="0" seamless="seamless" scrolling="yes" height="100%" width="100%")
 
   .col#col-main(v-else)
     
@@ -50,15 +50,15 @@ export default {
 @import '~stylus/buttons'
 
 iframe#remote
-  display block
-  top 0
-  left 0
-  right -40px
-  bottom 0
-  position fixed
-  width 100%
-  height 100vh
+  pinned()
   overflow hidden
+  overflow-x hidden
+  overflow-y hidden
+  height 100%
+  width 100%
+  position absolute
+  @media(max-width: ($col-width + 120px))
+    top $navigation-height
 
 .home-page
   .lead-image
