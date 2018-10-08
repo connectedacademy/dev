@@ -6,6 +6,7 @@
       slick#image-swiper(v-if="liveclassMedia" ref="classslick" v-bind:options="slickOptions" v-on:afterChange="afterChange" v-on:swipe="interactionOccured")
         .img-wrapper(v-for="(item, index) in liveclassMedia" v-bind:key="index" )
           img(v-bind:data-lazy="imageUrl(item)" @click="setLightboxMedia(item)")
+          #current Current
 
 </template>
 
@@ -112,6 +113,7 @@ export default {
         (response) => {
           this.liveclassMedia = response
           if (this.liveclassMedia) {
+            this.$store.commit('UPDATE_MEDIA', this.liveclassMedia)
             if (Object.keys(response).length > 0) {
               Events.$emit('mediaLoaded')
               this.$store.commit('SHOW_MEDIA')
@@ -145,7 +147,7 @@ export default {
     },
     setLightboxMedia(item) {
       if (!item) return
-      this.$store.commit('SET_LIGHTBOX_MEDIA', `https://d3duklpulopo9e.cloudfront.net/fit-in/1200x1200/${item.text}`)
+      this.$store.commit('SET_LIGHTBOX_MEDIA', `https://d3duklpulopo9e.cloudfront.net/fit-in/800x800/${item.text}`)
     },
     updateCarousel: throttle(function (self) {
       if (!self.scrollStatus) return
@@ -206,10 +208,26 @@ export default {
 
 .slick-slide
   outline 0
+  position relative
+  border-right white 10px solid
   img
     height ($media-height - $media-margin)
     max-height ($media-height - $media-margin)
     max-width 100%
+  #current
+    radius(5px)
+    display none
+    background $color-pink
+    color white
+    font-weight bold
+    font-size 0.6em
+    padding 3px 6px
+    position absolute
+    top 5px
+    left 5px
+  &.slick-current
+    #current
+      display block
   &:hover
     cursor pointer
 </style>

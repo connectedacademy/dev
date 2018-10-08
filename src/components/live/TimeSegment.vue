@@ -7,9 +7,10 @@
 
     .primary-wrapper(@click="peek")
 
-      .admin-actions#media-actions(v-if="editingMode === 'media' && isEditing" @click="showEditModal(index)")
-        icon(icon="plus")
-      img.segment-media(v-if="editingMode === 'media' && isEditing" :src="segmentMedia")
+      .admin-actions#media-actions(v-if="isAdmin && segmentPeeking" @click="showEditModal(index)")
+        icon(icon="image")
+      
+      #segment-media(v-if="isAdmin && segmentMedia" :style="{ 'background-image': `url(https://d3duklpulopo9e.cloudfront.net/fit-in/100x100/${segmentMedia.text})`}" @click="setLightboxMedia(segmentMedia)")
 
       .transcript-wrapper(@click="openSegment()")
         transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
@@ -18,7 +19,7 @@
         transition(v-if="prompt || editingMode === 'prompts'" name="fade" mode="out-in")
           prompt(:prompt="prompt" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
 
-        transition(v-else-if="!isEditing" appear name="fade" mode="out-in")
+        transition(v-else-if="!isEditing || editingMode !== 'prompts'" appear name="fade" mode="out-in")
           mock-message(v-if="isLoading" :loading="message.loading")
           message(v-if="!isLoading" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
 
@@ -59,7 +60,7 @@
   
   export default {
     name: 'time-segment',
-    props: ['index', 'message', 'prompt', 'transcript', 'isCurrent'],
+    props: ['index', 'message', 'prompt', 'transcript', 'isCurrent', 'isEditing'],
     components: {
       MessageComposer,
       Message,
@@ -121,6 +122,7 @@
     },
     computed: {
       ...mapGetters([
+        'isAdmin',
         'activeSegment',
         'peekSegment',
         'activeSegmentMessages',
@@ -128,11 +130,11 @@
         'replyingTo',
         'subscribedTo',
         'user',
-        'isEditing',
-        'editingMode'
+        'editingMode',
+        'liveclassMedia'
       ]),
       segmentMedia () {
-        return ''
+        return this.liveclassMedia[this.index]
       },
       quickNoteTop () {
         return `${158 + 32}px`
@@ -153,6 +155,10 @@
       }
     },
     methods: {
+      setLightboxMedia(item) {
+        if (!item) return
+        this.$store.commit('SET_LIGHTBOX_MEDIA', `https://d3duklpulopo9e.cloudfront.net/fit-in/800x800/${item.text}`)
+      },
       showEditModal (index) {
         // alert(index)
         this.$store.dispatch('showMediaUploadModal', { segment: index })
@@ -385,6 +391,7 @@
       cursor pointer
     .admin-actions
       radius(50%)
+      animate()
       background-color $color-pink
       display none
       height 40px
@@ -393,6 +400,9 @@
       top 10px
       right 10px
       z-index 999
+      &:hover
+        cursor pointer
+        background-color darken($color-pink, 10%)
       svg
         color white
         height 20px
@@ -403,12 +413,18 @@
       .admin-actions
         display block
 
-    img.segment-media
-      max-height 80px
-      max-width 80px
+    #segment-media
+      radius(10px)
+      background-image()
+      background-size cover
+      height 40px
+      width 50px
       position absolute
       bottom 10px
       right 10px
+      z-index 50
+      &:hover
+        cursor pointer
     .message-wrapper
       position absolute
       top 50%

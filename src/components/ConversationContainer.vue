@@ -16,7 +16,8 @@
         v-bind:message="message"
         v-bind:prompt="prompts[index]"
         v-bind:transcript="transcript[index]"
-        v-bind:isCurrent="isCurrent(index)")
+        v-bind:isCurrent="isCurrent(index)"
+        v-bind:isEditing="isEditing")
 
 </template>
 
@@ -83,7 +84,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying', 'editingSegment']),
+    ...mapGetters(['peekSegment', 'activeSegment', 'course', 'mediaPlaying', 'editingSegment', 'isEditing']),
     containerHeight() {
       return `${((this.content.duration * 0.2) + 3) * this.$app.segmentHeight - 160}px`
     },

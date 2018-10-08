@@ -2,16 +2,19 @@
 
   #media-upload-modal(v-bind:class="{ visible: mediaUploadModalVisible }")
     #media-upload-modal--header
-      h1 Add Media
+      h1 Add Image
     #media-upload-modal--container
-      p {{ `Upload an image or GIF below to add it to this segment (${mediaUploadModal.segment})` }}
+      p {{ `Choose a file then click upload to add it to this segment (${mediaUploadModal.segment})` }}
       form
         input(ref="mediaUpload" type="file" name="upload")
       br
-      button.pure-button.pure-button-warning(v-on:click="closeModal")
-        | Cancel
+      button.pure-button.pure-button-warning(v-if="state === 'waiting'" v-on:click="closeModal") Cancel
+
+      button.pure-button.pure-button-danger(v-if="state === 'waiting'" @click="removeMedia") Remove
+      button.pure-button.pure-button-success(v-else-if="state === 'removing'") Removing...
+
       button.pure-button.pure-button-success(v-if="state === 'waiting'" @click="uploadFile") Upload
-      button.pure-button.pure-button-success(v-else) Uploading...
+      button.pure-button.pure-button-success(v-else-if="state === 'uploading'") Uploading...
     
 </template>
 
@@ -34,6 +37,27 @@ export default {
     closeModal() {
       this.$store.commit('DISMISS_MEDIA_UPLOAD_MODAL')
     },
+    removeMedia () {
+      const formData = new FormData()
+
+      formData.append('theClass', this.$route.params.classSlug)
+      formData.append('theSegment', this.mediaUploadModal.segment)
+
+      this.state = 'removing'
+      
+      API.course.removedMedia(
+        formData,
+        (response) => {
+          this.state = 'waiting'
+          Events.$emit('mediaUpdated')
+          this.$store.commit('DISMISS_MEDIA_UPLOAD_MODAL')
+        },
+        (response) => {
+          console.log(response)
+          this.state = 'waiting'
+        }
+      )
+    },
     uploadFile () {
       const formData = new FormData()
 
@@ -41,7 +65,7 @@ export default {
       formData.append('theSegment', this.mediaUploadModal.segment)
       formData.append('upload', this.$refs.mediaUpload.files[0])
 
-      this.state = 'processing'
+      this.state = 'uploading'
       
       API.course.uploadMedia(
         formData,
@@ -96,6 +120,8 @@ export default {
     p
       margin 0 0 20px 0
     button
+      font-size 0.9em
       margin 0 5px
+      padding 5px 10px
 
 </style>

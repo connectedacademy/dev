@@ -40,6 +40,14 @@ export default {
       errorCb(response)
     })
   },
+  removedMedia(postData, cb, errorCb) {
+    Vue.http.options = { credentials: true, responseType: 'json' }
+    Vue.http.post(`${config.API}/media/remove`, postData).then((response) => {
+      cb(response)
+    }, (response) => {
+      errorCb(response)
+    })
+  },
   uploadMedia(postData, cb, errorCb) {
     Vue.http.options = { credentials: true, responseType: 'json' }
     Vue.http.post(`${config.API}/media/upload`, postData).then((response) => {

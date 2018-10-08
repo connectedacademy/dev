@@ -98,11 +98,15 @@ export default {
 
       this.sound.stop()
       
-      console.log('editingSegment', this.editingSegment)
-      
+      if (this.editingMode === 'media') {
+        console.log('this.sound.stop()')
+
+        return
+      }
+
       if (typeof nV === 'undefined') {
         this.sound.pause()
-      } else {
+      } else if (this.editingMode === 'transcript') {
         
         const loop = true
         const bleed = 1000 // Sound to play before and after segment
@@ -128,7 +132,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['CDN', 'mediaPlaying', 'editingSegment'])
+    ...mapGetters(['CDN', 'mediaPlaying', 'editingSegment', 'editingMode'])
   },
   methods: {
     checkBufferStatus: _throttle(function (self) {    

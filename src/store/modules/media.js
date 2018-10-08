@@ -3,13 +3,15 @@ import * as types from '@/store/mutation-types'
 // initial state
 const state = {
   hidden: true,
-  playing: false
+  playing: false,
+  liveclassMedia: undefined
 }
 
 // getters
 const getters = {
   mediaHidden: (initialState) => initialState.hidden,
-  mediaPlaying: (initialState) => initialState.playing
+  mediaPlaying: (initialState) => initialState.playing,
+  liveclassMedia: (initialState) => initialState.liveclassMedia
 }
 
 // actions
@@ -29,6 +31,9 @@ const mutations = {
   },
   [types.PLAY_MEDIA](initialState) {
     state.playing = true
+  },
+  [types.UPDATE_MEDIA](initialState, media) {
+    state.liveclassMedia = media
   }
 }
 

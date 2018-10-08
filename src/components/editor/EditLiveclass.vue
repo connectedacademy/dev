@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       editModes: {
-        media: 'Start making edits to the media inline, when you have finished click \'Done\'.',
         transcript: 'Start making edits to the transcript inline, when you have finished click \'Done\'.',
         prompts: 'Start making edits to the prompts inline, when you have finished click \'Done\'.'
       }
@@ -83,6 +82,8 @@ export default {
       if (mode === this.editingMode) {
         this.finishEditing()
       } else {
+        this.$store.commit('SET_ACTIVE_SEGMENT', undefined)
+        this.$store.commit('SET_PEEK_SEGMENT', undefined)
         this.$store.commit('IS_EDITING', true)
         this.$store.commit('EDITING_MODE', mode)
         this.$store.commit('EDITING_SEGMENT', undefined)

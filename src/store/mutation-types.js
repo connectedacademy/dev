@@ -81,6 +81,7 @@ export const DISMISS_PROFILE_ACTION = 'DISMISS_PROFILE_ACTION'
 // Action Panel
 export const SHOW_MEDIA = 'SHOW_MEDIA'
 export const HIDE_MEDIA = 'HIDE_MEDIA'
+export const UPDATE_MEDIA = 'UPDATE_MEDIA'
 
 // Media
 export const SET_LIGHTBOX_MEDIA = 'SET_LIGHTBOX_MEDIA'

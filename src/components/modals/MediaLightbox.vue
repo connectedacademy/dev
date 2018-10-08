@@ -3,6 +3,9 @@
   #media-lightbox.animated.fadeIn(v-bind:class="{ active: lightboxVisible }" @click="toggleLightbox()")
     #lightbox--close(@click="toggleLightbox()")
       icon(icon="times")
+    #loading
+      icon(icon="image")
+      span Loading Image
     .image-wrapper.animated.fadeIn(v-bind:style="{ 'background-image': `url('${currentLightboxMedia}')` }")
 
 </template>
@@ -30,7 +33,7 @@ export default {
 
 #media-lightbox
   pinned()
-  background-color alpha(black, 0.9)
+  background-color white
   display none
   pointer-events none
   position fixed
@@ -39,9 +42,21 @@ export default {
   &.active
     display block
     pointer-events all
+  
+  #loading
+    opacity 0.2
+    font-size 10em
+    position fixed
+    top 50%
+    left 50%
+    transform translateX(-50%) translateY(-50%)
+    text-align center
+    span
+      display block
+      font-size .2em
 
   #lightbox--close
-    color white
+    color black
     cursor pointer
     position fixed
     top 0
