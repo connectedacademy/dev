@@ -24,7 +24,7 @@
 
         transition(v-else-if="!isEditing || editingMode !== 'prompts'" appear name="fade" mode="out-in")
           mock-message(v-if="isLoading" :loading="message.loading")
-          message(v-if="!isLoading" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened")
+          message(v-if="!isLoading" :user="user" :message="message" :truncate="true" :segment-opened="segmentOpened" :segment-peeking="segmentPeeking")
 
       .clearfix
 

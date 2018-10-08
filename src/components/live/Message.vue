@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  .single-message-wrapper(:class="{ opened: segmentOpened, truncate: truncate }")
+  .single-message-wrapper(:class="{ opened: segmentOpened, peeked: segmentPeeking, truncate: truncate }")
 
     .message
       img.profile-image(v-if="message._user" :src="message._user.profile.avatar")
@@ -47,7 +47,7 @@ import Report from '@/mixins/Report'
 
 export default {
   name: 'message',
-  props: ['message', 'parent', 'truncate', 'canJump', 'segmentOpened', 'moderate', 'user'],
+  props: ['message', 'parent', 'truncate', 'canJump', 'segmentOpened', 'segmentPeeking', 'moderate', 'user'],
   mixins: [Report],
   computed: {
     authorLink() { return `https://twitter.com/${this.message._user.account}` },
@@ -60,7 +60,8 @@ export default {
   methods: {
     parseText() {
       // Remove links
-      let html = this.message.text.replace(/(https?:\/\/[^\s]+)/g, '')
+      let html = this.message.text.replace(/(https?:\/\/[\w]+.connectedacademy.[\w]+.+)/g, '')
+      // html = this.message.text
       // Add linked hashtags
       html = TweetPatch(html, { hrefProps: { class: 'tweet-link', target: '_blank' } })
       // Open hashtag links in new tab
@@ -121,7 +122,6 @@ export default {
       color $color-text-dark-grey
       display -webkit-box
       overflow hidden
-      pointer-events none
       text-overflow ellipsis
       word-wrap break-word
       -webkit-line-clamp 3
@@ -182,18 +182,20 @@ export default {
             font-size 0.8em
             float right
             max-width 55%
-
-  &.opened
-    .message
-      p.message-content
-        pointer-events all
   
   &.truncate
     .message
       max-height 128px
+      pointer-events none
       .message-content
         max-height 70px !important
         overflow hidden
+
+  &.opened, &.peeked
+    .message
+      pointer-events all
+      p.message-content
+        pointer-events all
 
   .replies-wrapper
     margin-left 20px
