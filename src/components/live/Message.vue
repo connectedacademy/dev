@@ -130,6 +130,11 @@ export default {
         color $color-text-light-grey
         text-decoration none
 
+    span#timestamp
+      color $color-info
+      font-size 0.8em
+      font-weight normal
+      margin-left 5px
     .author-label
       color $color-text-dark-grey
       font-weight bold
@@ -173,8 +178,8 @@ export default {
             color $color-primary
 
           &.message-timestamp
-            color #CCC
-            font-size 0.9em
+            color $color-text-light-grey
+            font-size 0.8em
             float right
             max-width 55%
 

@@ -2,15 +2,18 @@
 
   .time-segment(ref="timeSegment" :data-top="`${158.0 * index}`" :class="segmentClasses" :style="[{ top: `${158.0 * index}px`, height: segmentOpened ? 'auto' : segmentPeekHeight }, segmentStyle]")
     
-    .message-count(v-if="!isEditing && message && message.total > 0" @click="openSegment()") {{ message.total }}
+    .message-count(v-if="!isEditing && message && message.total > 0" @click="openSegment()")
+      span {{ message.total }}
     .subscribed-status(v-if="!isEditing && showSubscribedStatus && subscribedTo && ((index >= subscribedTo.start) && (index <= subscribedTo.end))")
 
     .primary-wrapper(@click="peek")
 
       .admin-actions#media-actions(v-if="isAdmin && segmentPeeking" @click="showEditModal(index)")
-        icon(icon="image")
+        icon(icon="wrench")
+        span Manage media
       
-      #segment-media(v-if="isAdmin && segmentMedia" :style="{ 'background-image': `url(https://d3duklpulopo9e.cloudfront.net/fit-in/100x100/${segmentMedia.text})`}" @click="setLightboxMedia(segmentMedia)")
+      #has-media(v-if="segmentMedia" @click="setLightboxMedia(segmentMedia)")
+        icon(icon="images")
 
       .transcript-wrapper(@click="openSegment()")
         transcript(:transcript="transcript" :segmentGroup="message.segmentGroup" :isCurrent="isCurrent")
@@ -34,7 +37,7 @@
     .meta-container(v-if="segmentOpened" :class="{ active: segmentOpened }" :style="{ bottom: `${quickNoteHeight}px` }")
       .status-indicator(v-if="loadingMessages") Fetching notes...
       .status-indicator(v-if="!loadingMessages && (activeSegmentMessages.length === 0)" @click="loadSegmentMessages") Nothing here yet.
-
+      
       .message-wrapper.animated.fadeIn(v-for="segmentMessage in activeSegmentMessages")
         message(:user="user" :message="segmentMessage" :truncate="false")
 
@@ -332,14 +335,14 @@
   .message-count
     transition(right 0.2s ease)
     box-sizing()
-    radius(50%)
+    radius(10px)
     background-color $color-pink
     color white
     cursor pointer
     font-size 0.8em
     font-weight bold
     line-height 20px
-    padding 0
+    padding 0 6px
     position absolute
     top 10px
     right 5px
@@ -390,41 +393,41 @@
     &:hover
       cursor pointer
     .admin-actions
-      radius(50%)
+      radius(6px)
       animate()
-      background-color $color-pink
-      display none
-      height 40px
-      width 40px
+      background-color $color-info
+      color white
+      font-size .9em
+      font-weight bold
+      opacity 1
+      height 26px
+      line-height 26px
+      padding 0 10px
       position absolute
       top 10px
-      right 10px
+      left 10px
       z-index 999
       &:hover
         cursor pointer
-        background-color darken($color-pink, 10%)
+        background-color darken($color-info, 10%)
       svg
         color white
-        height 20px
-        margin 10px
-        width 20px
+        margin-right 6px
     &:hover
       cursor pointer
       .admin-actions
-        display block
+        opacity 1
 
-    #segment-media
-      radius(10px)
-      background-image()
-      background-size cover
-      height 40px
-      width 50px
+    #has-media
       position absolute
-      bottom 10px
-      right 10px
-      z-index 50
+      left 0
+      bottom 0
+      padding 10px 20px
+      color $color-dark-grey
       &:hover
         cursor pointer
+        color darken($color-dark-grey, 10%)
+      
     .message-wrapper
       position absolute
       top 50%

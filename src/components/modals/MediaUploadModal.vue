@@ -1,10 +1,8 @@
 <template lang="pug">
 
   #media-upload-modal(v-bind:class="{ visible: mediaUploadModalVisible }")
-    #media-upload-modal--header
-      h1 Add Image
     #media-upload-modal--container
-      p {{ `Choose a file then click upload to add it to this segment (${mediaUploadModal.segment})` }}
+      p {{ `Choose an image file then click upload to add it to this segment (${mediaUploadModal.segment})` }}
       form
         input(ref="mediaUpload" type="file" name="upload")
       br
