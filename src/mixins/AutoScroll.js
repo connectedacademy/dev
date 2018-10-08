@@ -9,7 +9,7 @@ import _throttle from 'lodash/throttle'
 
 const AUTO_SCROLL_ATTEMPT = 1500 // Interval at which to attempt auto scroll
 const WHEEL_TIMEOUT = 1000 // Interval before assumed no longer manually scrolling
-const SCROLL_UPDATE_INTERVAL = 200 // Interval at which scroll position should be updated
+const SCROLL_UPDATE_INTERVAL = 1000 // Interval at which scroll position should be updated
 
 export default {
   mounted() {
@@ -174,9 +174,9 @@ export default {
       if (!element) return
 
       // Offset
-      const bottomPadding = 280 + 100
+      const topPadding = 280
       const actionPanelHeight = self.mediaHidden ? 60 : 260
-      const pageOffset = document.documentElement.scrollHeight - element.offsetHeight - bottomPadding
+      const pageOffset = document.documentElement.scrollHeight - element.offsetHeight - topPadding
       const offset = actionPanelHeight + pageOffset // element.offsetTop
       
 
