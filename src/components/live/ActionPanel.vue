@@ -171,9 +171,6 @@
       float left
       position relative
       text-align center
-      @media(max-width: 568px)        
-        &#twitter-control
-          display none
       &.pull-right
         float right
         border none
@@ -203,6 +200,8 @@
       position absolute
       left (38px * 2) + 10px
       right (38px * 0) + 10px
+      @media(max-width: 780px)
+        left (38px * 2) + 20px
       &.has-media
         right (38px * 1) + 10px
 
