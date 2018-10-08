@@ -3,7 +3,8 @@
   .single-message-wrapper(:class="{ opened: segmentOpened, peeked: segmentPeeking, truncate: truncate }")
 
     .message
-      img.profile-image(v-if="message._user" :src="message._user.profile.avatar")
+      a(:href="`https://twitter.com/${message._user.twitter.username}`" target="_blank")
+        img.profile-image(v-if="message._user" :src="message._user.profile.avatar")
 
       .author-label(v-if="message._user")
         | {{ message._user.profile.name }}
