@@ -11,7 +11,7 @@ const state = {
   activeSegmentMessages: [],
   replyingTo: undefined,
   subscribedTo: undefined,
-  twitterEnabled: false,
+  twitterEnabled: true,
   infoModal: {
     visible: false,
     content: {

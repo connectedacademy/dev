@@ -28,11 +28,16 @@
                 span(v-else)
                   | {{ submitText }}
               #share-toggle.pull-right(v-if="course.engine === 'twitter'" :class="{ active: twitterEnabled, inactive: !twitterEnabled }" @click="toggleTwitterEnabled")
-                icon(v-show="twitterEnabled" :icon="{ prefix: 'fab', iconName: 'twitter' }")
-                icon(v-show="twitterEnabled" icon="check")
-                //- icon(v-show="twitterEnabled" :icon="twitterEnabled ? 'check' : 'times'")
-                //- span(v-show="twitterEnabled") Posting to Twitter
-                span(v-show="!twitterEnabled") Share to Twitter?
+                span(v-show="twitterEnabled")
+                  //- icon(:icon="{ prefix: 'fab', iconName: 'twitter' }")
+                  span Share to Twitter
+                  span Yes
+                  //- icon(icon="check")
+                span(v-show="!twitterEnabled")
+                  //- icon(:icon="{ prefix: 'fab', iconName: 'twitter' }")
+                  span Share to Twitter
+                  span No
+                  //- icon(icon="times")
               .clearfix
 
         .login-warning(v-else @click="showAuth()") {{ $t('composer.login_required') }}
@@ -299,16 +304,19 @@ export default {
               padding 0 12px
               position relative
               svg:first-child
-                border-right alpha(white, 0.3) 2px solid
-                padding-right 8px
-                margin-right 8px
+                display none
+                margin-right 5px
+              span span:last-child
+                border-left alpha(white, 0.3) 2px solid
+                padding-left 8px
+                margin-left 8px
               &:hover
                 cursor pointer
                 border-color $color-border
               &.inactive
-                background-color $color-warning
-                border-color $color-warning
-                color white
+                background-color $color-light-grey
+                border-color $color-light-grey
+                color $color-text-grey
               &.active
                 background-color $color-success
                 border-color $color-success
