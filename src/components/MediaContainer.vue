@@ -87,7 +87,7 @@ export default {
         slidesToScroll: 1,
         focusOnSelect: true,
         variableWidth: true,
-        infinite: false,
+        infinite: true,
         swipe: true,
         swipeToSlide: true,
         // touchMove: false,
@@ -155,9 +155,9 @@ export default {
 
       let media = Object.keys(self.liveclassMedia)
       let target = self.scrollStatus.currentSegmentGroup
-
+      
       const closest = media.reduce(function(prev, curr) {
-        return (Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
+        return curr <= target ? curr : prev;
       })
 
       self.currentIndex = media.indexOf(closest)
