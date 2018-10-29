@@ -32,7 +32,7 @@
 
           .clearfix
     
-    .replies-wrapper
+    .replies-wrapper(v-if="!hideReplies")
       .reply-wrapper(v-for="(reply, index) in message._replies" :key="index")
         message(:user="user" :message="reply" :parent="message")
 
@@ -48,7 +48,7 @@ import Report from '@/mixins/Report'
 
 export default {
   name: 'message',
-  props: ['message', 'parent', 'truncate', 'canJump', 'segmentOpened', 'segmentPeeking', 'moderate', 'user'],
+  props: ['message', 'parent', 'truncate', 'canJump', 'segmentOpened', 'segmentPeeking', 'moderate', 'user', 'hideReplies'],
   mixins: [Report],
   computed: {
     authorLink() { return `https://twitter.com/${this.message._user.account}` },

@@ -8,7 +8,8 @@ export default {
   data() {
     return {
       visualisation: undefined,
-      animations: []
+      animations: [],
+      maxAnimations: 30
     }
   },
   methods: {
@@ -22,7 +23,7 @@ export default {
       this.animations.unshift(animation)
 
       // Limit number of animations
-      if (this.animations.length > 10) this.animations.pop()
+      if (this.animations.length > this.maxAnimations) this.animations.pop()
     },
     loadVisualisation() {
       const theRequest = {

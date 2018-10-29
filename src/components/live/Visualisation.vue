@@ -1,41 +1,41 @@
 <template lang="pug">
 
 #vis-container
-    
-  // Vis
-  g(id="primaryVis")
-    rect(v-for="(val, index) in visualisation" :key="index" v-if="(typeof val === 'number')" :x="`${(index > 99) ? 99 : index}%`" width="6px" rx="3px" ry="3px" :y="`${(100 - parseInt(val * 80)) / 2}%`" :height="`${parseInt(val * 80)}%`" :style="{ fill: '#1864ef' }")
+  #vis-scroller
+    #vis-wrapper
+        
+      // Vis
+      g(id="primaryVis")
+        g(v-for="(val, index) in visualisation" v-if="(typeof val === 'number')" :key="index")
+          rect(:x="`${(index > 99) ? 99 : index}%`" width="6px" rx="3px" ry="3px" :y="val < .1 ? '45%' : `${(100 - parseInt(val * 85)) / 2}%`" :height="val < .1 ? '10%' : `${parseInt(val * 85)}%`" :style="{ fill: '#1864ef' }")
 
-  // Track
-  g(id="primaryTrack")
-    rect(x="0%" width="100%" :y="'27px'" height="6px" rx="3px" ry="3px" :style="{ fill: '#1864ef' }")
+      // Track
+      g(id="primaryTrack")
+        rect(x="0%" width="100%" :y="'27px'" height="6px" rx="3px" ry="3px" :style="{ fill: '#1864ef' }")
 
-  // Visualisation
-  svg#visualisation(v-if="visualisation" :height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
-    defs
-      filter(id="bandw")
-        feColorMatrix(type="matrix" values="0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 1 0")
+      // Visualisation
+      svg#visualisation(v-if="visualisation" :height="visHeight" viewBox="0 0 646 60" preserveAspectRatio="xMinYMax meet")
 
-    clipPath(id="progress")
-      rect(:x="`0%`" y="0" :width="`${playheadPos}%`" height="100%" fill="black" filter="url(#bandw)")
-    
-    //- clipPath(id="mask")
-      rect(v-for="(segment, index) in buffered" :key="index" :x="`${segment.start}%`" y="0" :width="`${segment.end}%`" height="60" fill="black")
+        clipPath(id="progress")
+          rect(:x="`0%`" y="0" :width="`${playheadPos + 1}%`" height="100%" fill="black")
+        
+        //- clipPath(id="mask")
+          rect(v-for="(segment, index) in buffered" :key="index" :x="`${segment.start}%`" y="0" :width="`${segment.end}%`" height="60" fill="black")
 
-    //- // Buffer
-      g(id="buffer")
-        rect(x="0%" width="100%" y="39px" height="2px" :style="{ fill: 'orange' }" opacity="1.0")
-        rect(clip-path="url(#mask)" x="0%" width="100%" y="38px" height="4px" :style="{ fill: 'white' }")
+        //- // Buffer
+          g(id="buffer")
+            rect(x="0%" width="100%" y="39px" height="2px" :style="{ fill: 'orange' }" opacity="1.0")
+            rect(clip-path="url(#mask)" x="0%" width="100%" y="38px" height="4px" :style="{ fill: 'white' }")
 
-    use(xlink:href="#primaryTrack" style="opacity: 0.2")
-    use(xlink:href="#primaryTrack" clip-path="url(#progress)")
-    
-    use(xlink:href="#primaryVis" style="opacity: 0.2")
-    use(xlink:href="#primaryVis" clip-path="url(#progress)")
-  // Animations
-  svg#animations(v-if="visualisation" :height="visHeight" width="100%" viewBox="0 0 646 60" preserveAspectRatio="none")
-    g(id="animations")
-      circle(v-for="(animation, index) in animations" :key="animation.x"  :cx="`${animation.x}%`" cy="30px" r="5px" :style="{ fill: '#FF01A0' }")
+        //- use(xlink:href="#primaryTrack" style="opacity: 0.2")
+        //- use(xlink:href="#primaryTrack" clip-path="url(#progress)")
+        
+        use(xlink:href="#primaryVis" style="opacity: 0.2")
+        use(xlink:href="#primaryVis" clip-path="url(#progress)")
+      // Animations
+      svg#animations(v-if="visualisation" :height="visHeight" viewBox="0 0 646 60" preserveAspectRatio="xMinYMax meet")
+        g(id="animations")
+          circle(v-for="(animation, index) in animations" :key="animation.x"  :cx="`${animation.x + 1}%`" cy="30px" r="5px" :style="{ fill: '#FF01A0' }")
 
 </template>
 
@@ -114,21 +114,30 @@ export default {
 @import '~stylus/shared'
 
 #vis-container
-  margin 0
-  pointer-events none
-  position relative
-  svg
-    pinned()    
-    position absolute
-  svg#visualisation
-    rect
-      transform translateX(-2px)
-  svg#animations
-    circle
-      animation fade-out 4s ease
-      opacity 0
-      pointer-events none
-      transform translateX(-1px)
+  height 60px
+  overflow hidden
+  #vis-scroller
+    margin 0
+    pointer-events all
+    position relative
+    overflow-x auto
+    overflow-y hidden
+    height 90px
+    #vis-wrapper
+      height 60px
+      width 646px
+      svg
+        pinned()    
+        position absolute
+      svg#visualisation
+        rect
+          transform translateX(-2px)
+      svg#animations
+        circle
+          animation fade-out 4s ease
+          opacity 0
+          pointer-events none
+          transform translateX(-1px)
 
 .slide-fade-enter-active
   transition all 0.3s ease
